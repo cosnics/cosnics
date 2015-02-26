@@ -1,0 +1,53 @@
+@CHARSET "ISO-8859-1";
+
+ul.tree-menu li div a.survey_order_question {
+	background-image: url(../../images/aqua/logo/16.png);
+}
+
+ul.tree-menu li div a.type_survey_order_question {
+	background-image: url(../../images/aqua/logo/16.png);
+}
+
+ul.tree-menu li div a.survey_order_question_checked {
+	background-image: url(../../images/aqua/logo/16_checked.png);
+}
+
+ul.tree-menu li div a.type_survey_order_question_checked {
+	background-image: url(../../images/aqua/logo/16_checked.png);
+}
+
+th.info {
+	font-size: 9px;
+	color: gray;
+}
+
+/* .ranking_row { 
+	width: 120px; 
+} */
+#sortable1,#sortable2 {
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 2.5em;
+	float: left;
+	margin-right: 10px;
+}
+
+#sortable1 li,#sortable2 li {
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	font-size: 1.2em;
+	width: 240px;
+}
+
+.ui-state-highlight {
+	height: 1.5em;
+	line-height: 1.2em;
+}
+
+/* .ui-state-default {
+	width: 120px;
+}  */
+html>body #sortable1 li,#sortable2 li {
+	height: 1.5em;
+	line-height: 1.2em;
+}

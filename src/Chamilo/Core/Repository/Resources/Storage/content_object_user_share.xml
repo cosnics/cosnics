@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="content_object_user_share">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="content_object_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="user_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="right_id" type="boolean" default="0" />
+	</properties>
+	<index name="co_user" type="unique">
+		<indexproperty name="content_object_id" />
+		<indexproperty name="user_id" />
+	</index>
+	<index name="user_id">
+		<indexproperty name="user_id" />
+	</index>
+	<index name="content_object_id">
+		<indexproperty name="content_object_id" />
+	</index>
+</object>

@@ -1,0 +1,26 @@
+{
+    "name": "chamilo/ext-repo-bitbucket",
+    "description": "Chamilo Bitbucket External Repository",
+    "keywords": [],
+    "homepage": "http://chamilo.com",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.3.0",
+        "chamilo/composer-installer": "v1.0.0",
+        "chamilo/core": "*@dev"
+    },
+    "extra": {
+        "install-path": "common/extensions/external_repository_manager/implementation/bitbucket"
+    }
+}
