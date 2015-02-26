@@ -1,8 +1,8 @@
-@import url('Plugin/jquery/jquery.css');
+@import url('plugin/jquery/jquery.css');
 
-@import url('Plugin/projekktor/projekktor.style.css');
+@import url('plugin/projekktor/projekktor.style.css');
 
-@import url('../../../Plugin/jquery/uploadify/uploadify.css');
+@import url('../../../plugin/jquery/uploadify/uploadify.css');
 
 @import url('common_general.css');
 
