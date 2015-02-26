@@ -1,0 +1,590 @@
+/* 
+    Document   : vub.css
+    Created on : Jun 10, 2010, 3:14:38 PM
+    Author     : brdooms
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+@import url('../aqua/aqua.css');
+
+/*************************
+* VUB COLORS
+**************************/
+body {
+	margin: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	background-color: #FFFFFF
+}
+
+a:link,a:visited,#breadcrumbtrail li a:hover {
+	color: #999900;
+	text-decoration: none;
+}
+
+#main a {
+	font-weight: normal;
+}
+
+a:hover {
+	color: #999900;
+	text-decoration: underline;
+}
+
+a:active {
+	color: #999900;
+	text-decoration: underline;
+}
+
+a.button,a.normal_button,a.button:hover,button.normal:hover,a.normal_button:hover
+	{
+	color: #8F8665;
+	text-decoration: none;
+}
+
+.e {
+	padding-right: 10px;
+	background: transparent url("../../images/vub/images-vub/aoutside.gif")
+		100% 50% no-repeat;
+}
+
+.pdf {
+	padding-right: 10px;
+	background: transparent url("../../images/vub/images-vub/apdf.gif") 100%
+		50% no-repeat;
+}
+
+.doc {
+	padding-right: 10px;
+	background: transparent url("../../images/vub/images-vub/adoc.gif") 100%
+		50% no-repeat;
+}
+
+.email {
+	padding-right: 10px;
+	background: transparent url("../../images/vub/images-vub/aemail.gif")
+		100% 50% no-repeat;
+}
+
+.normal-message {
+	background-color: #C2EA95;
+	color: #365512;
+	border: 1px solid #5E941F;
+}
+
+/*WIKI*/
+.wiki-pane-actions li a {
+	color: #999900 !important;
+	background: #fff !important;
+}
+
+.wiki-pane-actions li a.current {
+	color: #999900 !important;
+	border-color: #ccc #ccc white !important;
+}
+
+.wiki-pane-content,.wiki-menu-section {
+	border-top: 1px solid #ccc !important;
+}
+
+.wiki-pane {
+	border-left: 1px solid #ccc !important;
+}
+
+.wiki-pane-content-head,.wiki-pane-content-title,.wiki-pane-content-feedback h3,.wiki-pane-content h2
+	{
+	border-bottom: 1px solid #999 !important;
+}
+
+/*FORUM*/
+table.forum {
+	/*border:1px solid #666;*/
+	background-color: #fff !important;
+}
+
+table.forum th {
+	background-color: #83833C !important;
+	color: #EEEED0 !important;
+}
+
+table.forum td.category {
+	background-color: #EEEED0 !important;
+}
+
+table.forum td.row1 {
+	background-color: #FBFBF6;
+	background-color: #FBFBF6;
+}
+
+table.forum td.row2 {
+	background-color: #EEEED0;
+}
+
+table.forum td.spacer {
+	background-color: #fff !important;
+}
+/*************************
+* HEADER
+**************************/
+div.configuration_form span.category {
+	color: #766F53;
+}
+
+/*modifications to Chamilo Aqua theme*/
+#header1 {
+	background: #BCBF00;
+	height: 100px;
+}
+
+#header1 div.banner {
+	height: 68px !important;
+}
+
+#header1 div.banner span.logo {
+	background-image:
+		url("./configuration/resources/images/vub/logo_header.png");
+	height: 61px;
+	width: 270px;
+}
+
+/*fixes bug in IE8*/
+#header1 div.applications ul li ul {
+	position: absolute;
+	visibility: hidden;
+}
+/*fixes dropdowns in IE8*/
+#header1 div.applications ul li:hover ul,#header1 div.applications ul li.current:hover ul
+	{
+	visibility: visible;
+}
+
+#header1 div.applications ul li {
+	font-size: 11px;
+}
+
+#header1 div.applications ul li,.tabbed-pane-tabs li a {
+	/*CLR deze kleur overnemen in kleinere tabs*/
+	background-color: #716A50; /*dark brown*/
+}
+
+#header1 div.applications ul li:hover,#header1 div.applications ul li li a
+	{
+	background-color: #534E3B; /*extra-dark brown*/
+}
+
+input[type="text"],input[type="password"],select {
+	border: 1px solid #8F8665 !important; /*medium-dark brown*/
+	color: #534E3B;
+}
+
+input:focus,input:hover,.element_finder_elements *:focus,.element_finder_elements *:hover,select:hover
+	{
+	background-color: #FFF !important;
+}
+
+.element_finder_elements>div>div:hover {
+	border: 1px solid #8F8665 !important; /*medium-dark brown*/
+	color: #534E3B;
+}
+
+div.formw input:hover {
+	background-color: #FBFBF6 !important;
+}
+
+#header1 div.applications ul li a,#header1 div.applications ul li li a,#header1 div.applications ul li:hover ul li a,#header1 div.applications ul li.current:hover ul li a,.tabbed-pane-tabs li a
+	{
+	color: #FBFBF6; /*light brown*/
+}
+
+#header1 div.applications ul li a:hover,#header1 div.applications ul li li a:hover,#header1 div.applications ul li:hover ul li a:hover,#header1 div.applications ul li.current:hover ul li a:hover,.tabbed-pane-tabs li a:hover
+	{
+	color: #D0CCBD; /*medium brown*/
+}
+
+.ui-tabs-nav a {
+	/*CLR nieuwe kleuren*/
+	background-color: #716A50; /*dark brown*/
+	/*border: 1px solid #716A50; */ /*dark brown*/
+	color: #FBFBF6 !important;
+	color: #FFFFFF !important;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	cursor: pointer !important;
+}
+
+.ui-tabs-nav a:hover {
+	color: #D0CCBD !important; /*medium brown*/
+	background-color: #FBFBF6;
+	background-color: #534E3B !important;
+}
+
+body .ui-tabs-selected a,body .ui-tabs-selected a:hover {
+	color: #000 !important;
+	background-color: #FBFBF6 !important;
+}
+
+/*CLR hover is bruine kleur, dit moet weg*/
+.ui-tabs {
+	/*background-color:#E5E3DB;*/
+	
+}
+
+.ui-tabs-panel {
+	background: #FBFBF6 !important;
+}
+
+/*************************
+* PAGE
+**************************/
+body.popup {
+	background-color: #EDE8CF;
+}
+
+#modalContainer .simplemodal-data {
+	background: #EDE8CF;
+}
+
+.action_bar,.data_table th,div.header {
+	background: #EEEED0 !important; /*grey*/
+}
+
+.action_bar,.data_table,.data_table td,.data_table th,div.table,.tabbed-pane-content,div.action_bar_text,.tabbed-pane-content,.tabbed-pane-tabs li a,div.formw input:hover
+	{
+	border: 1px solid #8F8665 !important; /*medium-dark brown*/
+}
+
+.data_table,div.table {
+	border: 0 !important;
+	border-left: 0px solid #8F8665 !important; /*medium-dark brown*/
+	border-bottom: 0px solid #8F8665 !important; /*medium-dark brown*/
+	border-right: 1px solid #8F8665 !important; /*medium-dark brown*/
+}
+
+.data_table th,div.header {
+	border: 0 !important;
+	border-top: 1px solid #8F8665 !important; /*medium-dark brown*/
+	border-right: 0px solid #8F8665 !important; /*medium-dark brown*/
+	border-left: 1px solid #8F8665 !important; /*medium-dark brown*/
+	border-bottom: 1px solid #999 !important; /*medium-dark brown*/
+}
+
+.data_table td,div.cell {
+	border-right: 0px solid #8F8665 !important; /*medium-dark brown*/
+	border-top: 0px solid #8F8665 !important; /*medium-dark brown*/
+}
+
+.action_bar {
+	background: #FCFDDB !important;
+}
+
+div.action_bar table {
+	width: 100%;
+}
+
+.search_form {
+	float: right;
+}
+
+.tabbed-pane-tabs li a:hover,.tabbed-pane-tabs li a.current {
+	border-bottom-color: white !important;
+}
+
+.data_table th {
+	color: #716A50;
+	font-size: larger;
+}
+
+a.button:hover,button.normal:hover,a.normal_button:hover {
+	background-color: #D0CCBD !important;
+	border: 1px solid #8F8665 !important; /*medium-dark brown*/
+}
+
+.data_table tr.row_odd td {
+	color: #797268;
+	background: #F9F8F6;
+}
+
+div.tool_bar {
+	background-color: #E2E1DE;
+	background-color: #E2E1DE;
+	border: 1px solid #CAC8C3;
+}
+/*************************
+* FOOTER
+**************************/
+#footer {
+	background: #FFFFFF;
+	background-position: 10px;
+	height: 55px;
+	border-top: 1px solid #766F53;
+	font-size: 10px;
+	color: #766F53;
+	text-align: center;
+	padding-left: 80px;
+}
+
+#footer #copyright {
+	margin-top: 20px;
+	color: #766F53;
+}
+
+#footer #copyright a {
+	color: #333333;
+}
+
+div.block div.title {
+	color: #766F53 !important;
+}
+
+ul.tree-menu li.current>div a {
+	text-decoration: underline;
+}
+
+ul.tree-menu li.current>div a {
+	text-decoration: underline overline;
+	font-weight: bold;
+	/*        background-color: #990;*/
+	color: #5F604A;
+}
+
+/*VUB ASSESSMENTS*/
+div.assessment div.description {
+	/*border: 1px solid #ABA677 !important;*/
+	background-color: #ABA677 !important;
+}
+
+div.assessment div.information {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+	background-color: #f4f4f4;
+}
+
+div.question div.title {
+	color: #5F604A !important;
+}
+
+div.question div.title div.number,div.question div.title div.text {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #ccc !important;
+	background: #ABA677 url(../../images/vub/background_table_header.png)
+		repeat-x !important;
+}
+
+div.question div.answer div.description {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+}
+
+div.question div.answer div.with_borders {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+}
+
+div.question div.answer div.splitter {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+	background: #ABA677 !important;
+	color: #fff !important;
+}
+
+div.question div.answer div.slider {
+	background-color: #EEF5FA;
+}
+
+div.question div.answer div.caption {
+	color: #4171b5;
+}
+
+.hotspot_image_display {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+}
+
+#hotspot_container,.hotspot_container {
+	background-color: #b5cae7;
+}
+
+div.description_hotspot {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+}
+
+div.time_left {
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+	background-color: #eef5fa;
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+}
+
+/*VUB FORMS*/
+div.row div.formc,div.row div.formc_no_margin {
+	background-color: #7F7358 !important;
+	/*border: 1px solid #ABA677 !important;*/
+	border: 1px solid #fff !important;
+	color: #fff !important;
+}
+/*****************************************************
+ *  GALLERY TABLE STYLES                            *
+ *****************************************************/
+.gallery_table {
+	border-left: 1px solid #8F8665;
+	border-bottom: 1px solid #8F8665;
+}
+
+.gallery_table th {
+	border: 1px solid gray;
+	background-color: #f4eaeb;
+}
+
+.gallery_table tr.row_odd {
+	background-color: #fafafa;
+}
+
+.gallery_table tr.row_odd:hover,.gallery_table tr.row_even:hover {
+	background-color: #f0f0f0;
+}
+
+.gallery_table tr.row_even {
+	background-color: #fff;
+}
+
+.gallery_table td {
+	border-right: 1px solid #8F8665;
+	border-top: 1px solid #8F8665;
+	color: #797268;
+}
+
+.gallery_table tr.row_even td.col_odd {
+	background-color: #fafafa;
+}
+
+.gallery_table tr.row_even td.col_odd:hover,.gallery_table tr.row_even td.col_even:hover
+	{
+	background-color: #f0f0f0;
+}
+
+.gallery_table tr.row_even td.col_even {
+	background-color: #fff;
+}
+
+.gallery_table tr.row_odd td.col_even {
+	background-color: #fafafa;
+}
+
+.gallery_table tr.row_odd td.col_even:hover,.gallery_table tr.row_odd td.col_odd:hover
+	{
+	background-color: #f0f0f0;
+}
+
+.gallery_table tr.row_odd td.col_odd {
+	background-color: #fff;
+}
+
+.gallery_table td img.thumbnail {
+	border: 1px solid #c0c0c0;
+}
+
+/*****************************************************
+ *  CALENDAR TABLE STYLES                            *
+ *****************************************************/
+.calendar_table {
+	border-left: 1px solid #8F8665;;
+	border-top: 1px solid #8F8665;;
+	border-bottom: 1px solid #8F8665;
+}
+
+.calendar_table td {
+	border-right: 1px solid #8F8665;
+	border-top: 1px solid #8F8665;
+}
+
+.calendar_table td.week_hours {
+	color: #4171b5;
+	background-color: #d4e0f1;
+}
+
+.calendar_table th {
+	color: #777777;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid #8F8665;
+	background: #ABA677 url(../../images/vub/background_table_header.png)
+		repeat-x;
+}
+
+.calendar_table td.highlight {
+	border: 2px solid #ffb257;
+	background-color: #FFCA8D;
+}
+
+.calendar_table td.weekend {
+	background-color: #FFFFDB;
+}
+
+.calendar_table td.disabled_month {
+	background-color: #EEEED0;
+}
+
+div.event {
+	border: 1px solid #b5cae7;
+	background-color: #F3F4F6;
+}
+
+div.event:hover {
+	background-color: #DDFFDD;
+}
+
+div.event_fade {
+	background-color: #f1f1f1;
+	color: #757575;
+}
+
+div.event_fade a {
+	color: #7b7b7b;
+}
+
+.calendar_navigation {
+	background-color: #EEEED0;
+	border: 1px solid #ccc;
+}
+/*****************************************************
+ *  DATA TABLE STYLES                            *
+ *****************************************************/
+.data_table td.header {
+	background-color: #EEEED0 !important;
+	color: #999900;
+	background-image: none !important;
+}
+
+.data_table_no_header {
+	border-top: 1px solid #8F8665 !important;
+}
+
+/***************************************************
+ *  QUICK LANGUAGE STYLES
+ ***************************************************/
+#header_quick_language {
+	position: absolute;
+	right: 1em;
+	list-style: none;
+	font-weight: bold;
+	color: white;
+}
+
+#header_quick_language li {
+	display: inline;
+	margin-left: 0.3em;
+}
+
+#header_quick_language li a {
+	color: #716A50;
+}

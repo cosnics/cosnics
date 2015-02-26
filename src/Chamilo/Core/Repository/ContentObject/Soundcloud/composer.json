@@ -1,0 +1,28 @@
+{
+    "name": "chamilo/co-soundcloud",
+    "description": "Chamilo Soundcloud Content Object",
+    "keywords": [],
+    "homepage": "http://chamilo.com",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.3.0",
+        "chamilo/composer-installer": "v1.0.0",
+        "chamilo/core": "*@dev",
+        "chamilo/core-repository": "*@dev"
+    },
+    "extra": {
+        "install-path": "repository/content_object/soundcloud"
+    }
+
+}

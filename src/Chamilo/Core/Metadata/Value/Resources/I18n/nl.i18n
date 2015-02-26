@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\value
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Value Manager"
+Value = "Waarde"
+EditorComponent = "Wijzig metadata waarden"
+FixedElements = "Vast gedefinieerde elementen"
+Elements = "Elementen"
+MetadataValuesUpdated = "De metadata waarden zijn succesvol geupdatet"
