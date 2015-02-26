@@ -1040,7 +1040,7 @@ input.height {
  * Collapsible
 */
 div .expanded a {
-	background-image: url(../../images/aqua/action_toggle_show.png);
+	background-image: url(../../Images/Aqua/action_toggle_show.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 16px;
@@ -1056,7 +1056,7 @@ div .collapsed .row {
 }
 
 div .collapsed a {
-	background-image: url(../../images/aqua/action_toggle_hide.png);
+	background-image: url(../../Images/Aqua/action_toggle_hide.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 10px;

@@ -35,7 +35,7 @@ div.admin_header span.category {
 	-moz-border-radius-topright: 10px;
 	-webkit-border-top-right-radius: 10px;
 	/*
-	background-image: url('../../images/aqua/admin/background_tab.png');
+	background-image: url('../../Images/Aqua/admin/background_tab.png');
 	background-repeat: repeat-x;
 	*/
 }
@@ -226,7 +226,7 @@ a.prev, a.next, a.prevPage, a.nextPage {
 	width: 16px;
 	height: 16px;
 	background:
-		url(../../../../../configuration/resources/images/aqua/plugin/jquery/scrollable/top.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/top.png)
 		no-repeat;
 	background-position: 0px -16px;
 	float: left;
@@ -260,7 +260,7 @@ a.disabled:hover {
 /* next button uses another background image */
 a.next, a.nextPage {
 	background-image:
-		url(../../../../../configuration/resources/images/aqua/plugin/jquery/scrollable/bottom.png);
+		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/bottom.png);
 	clear: right;
 }
 
@@ -279,7 +279,7 @@ div.navi a {
 	float: left;
 	margin: 3px;
 	background:
-		url(../../../../../configuration/resources/images/aqua/plugin/jquery/scrollable/navigator.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/navigator.png)
 		0 0 no-repeat;
 	cursor: pointer;
 }
@@ -310,13 +310,13 @@ div.navi a.active {
 	height: 16px;
 	background-color: transparent;
 	background:
-		url(../../../../../configuration/resources/images/aqua/plugin/jquery/scrollable/left.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/left.png)
 		no-repeat;
 }
 
 .ui-tabs-paging-next {
 	background:
-		url(../../../../../configuration/resources/images/aqua/plugin/jquery/scrollable/right.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/right.png)
 		no-repeat;
 }
 
@@ -368,7 +368,7 @@ div.navi a.active {
 	display: block;
 	padding: 0 15px 0 15px;
 	background-image:
-		url(../../../../../configuration/resources/images/aqua/background_breadcrumb.png);
+		url(../../../../../Configuration/Resources/Images/Aqua/background_breadcrumb.png);
 	background-repeat: no-repeat;
 	background-position: right center;
 	color: #a8a8a8;

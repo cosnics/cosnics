@@ -358,7 +358,7 @@ div#emulator {
 }
 
 .confirm-message {
-	background-image: url('../../images/aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/status_confirm_mini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -416,28 +416,28 @@ div#emulator {
 }
 
 .notification-4 {
-	background-image: url('../../images/aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/status_normal_mini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .notification-1 {
-	background-image: url('../../images/aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/status_error_mini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
 
 .notification-2 {
-	background-image: url('../../images/aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/status_warning_mini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .notification-3 {
-	background-image: url('../../images/aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/status_confirm_mini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -1727,7 +1727,7 @@ div.padding_10 {
 }
 
 a.help-modal-close {
-	background: url(../../images/aqua/action_close_modal.png) no-repeat;
+	background: url(../../Images/Aqua/action_close_modal.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;

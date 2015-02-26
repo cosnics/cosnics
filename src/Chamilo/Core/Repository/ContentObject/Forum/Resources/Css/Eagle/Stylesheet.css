@@ -20,7 +20,7 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #C7D0D7;
-	background-image: url('../../images/aqua/backgrounds/cellpic1.gif');
+	background-image: url('../../Images/Aqua/Backgrounds/cellpic1.gif');
 	height: 28px;
 	border: 0 none;
 	margin: 0;
@@ -29,13 +29,13 @@ table.forum td.category {
 }
 
 table.forum td.category_right {
-	background-image: url('../../images/aqua/backgrounds/cellpic2.jpg');
+	background-image: url('../../Images/Aqua/Backgrounds/cellpic2.jpg');
 	height: 28px;
 }
 
 table.forum th {
 	background-color: #006699;
-	background-image: url(../../images/aqua/cellpic3.gif);
+	background-image: url(../../Images/Aqua/cellpic3.gif);
 	color: #FFA34F;
 	font-weight: bold;
 	padding: 7px 5px;
@@ -70,7 +70,7 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #aec7e4;
-	/*background-image: url('../../images/aqua/backgrounds/cellpic1.png');*/
+	/*background-image: url('../../Images/Aqua/Backgrounds/cellpic1.png');*/
 	background-image: none;
 	height: 28px;
 	border: 0 none;
@@ -80,13 +80,13 @@ table.forum td.category {
 }
 
 table.forum td.category_right {
-	background-image: url('../../images/aqua/backgrounds/cellpic2.png');
+	background-image: url('../../Images/Aqua/Backgrounds/cellpic2.png');
 	height: 28px;
 }
 
 table.forum th {
 	background-color: #6694cc;
-	/*background-image:url('../../images/aqua/backgrounds/cellpic3.png');*/
+	/*background-image:url('../../Images/Aqua/Backgrounds/cellpic3.png');*/
 	background-image: none;
 	color: #2b3f57;
 	font-weight: bold;
@@ -128,9 +128,9 @@ table.forum .quotecontent,.attachcontent {
 }
 
 ul.tree-menu li div a.forum {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_forum {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }

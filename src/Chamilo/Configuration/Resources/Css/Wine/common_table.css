@@ -25,7 +25,7 @@
 	text-transform: uppercase;
 	text-align: left;
 	padding: 6px 10px 6px 10px;
-	background: #d4e0f1 url(../../images/aqua/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Aqua/background_table_header.png)
 		repeat-x;
 	overflow: hidden;
 }
@@ -40,13 +40,13 @@
 	padding: 6px 10px 6px 10px;
 	vertical-align: top;
 	width: 10%;
-	background: #C6D6ED url(../../images/aqua/background_table_header.png)
+	background: #C6D6ED url(../../Images/Aqua/background_table_header.png)
 		repeat-x;
 }
 
 .data_table tr.row_even td.header {
 	background: #EBEBEB
-		url(../../images/aqua/background_table_header_grey.png) repeat-x;
+		url(../../Images/Aqua/background_table_header_grey.png) repeat-x;
 	color: #7b7b7b;
 }
 
@@ -243,7 +243,7 @@
 	text-transform: uppercase;
 	text-align: center;
 	padding: 2px;
-	background: #d4e0f1 url(../../images/aqua/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Aqua/background_table_header.png)
 		repeat-x;
 }
 

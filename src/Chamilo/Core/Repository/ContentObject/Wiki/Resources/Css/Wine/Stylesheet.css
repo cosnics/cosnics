@@ -40,7 +40,7 @@
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 	background:
-		url("../../../../../../configuration/resources/images/aqua/plugin/jquery/images/ui-bg_glass_85_dfeffc_1x400.png")
+		url("../../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/images/ui-bg_glass_85_dfeffc_1x400.png")
 		repeat-x scroll 50% 50% #DFEFFC;
 }
 
@@ -48,7 +48,7 @@
 	color: #1d5987;
 	background-color: #ddecf7;
 	background:
-		url("../../../../../../configuration/resources/images/aqua/plugin/jquery/images/ui-bg_glass_75_d0e5f5_1x400.png")
+		url("../../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/images/ui-bg_glass_75_d0e5f5_1x400.png")
 		repeat-x scroll 50% 50% #DFEFFC;
 }
 
@@ -111,7 +111,7 @@
 	float: left;
 	padding-top: 88px;
 	background-position: 50% 20px;
-	background-image: url(../../images/aqua/logo/48.png);
+	background-image: url(../../Images/Aqua/Logo/48.png);
 	background-repeat: no-repeat;
 }
 
@@ -278,7 +278,7 @@ table.collapsed tr.collapsable {
 	padding: 10px 36px 10px 36px;
 	text-align: justify;
 	background-image:
-		url('../../../../../../configuration/resources/images/aqua/status_warning_mini.png');
+		url('../../../../../../Configuration/Resources/Images/Aqua/status_warning_mini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
@@ -290,9 +290,9 @@ table.collapsed tr.collapsable {
 }
 
 ul.tree-menu li div a.wiki {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_wiki {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
