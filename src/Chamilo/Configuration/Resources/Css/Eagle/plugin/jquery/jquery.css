@@ -108,7 +108,7 @@
 .ui-widget-content {
 	border: 1px solid #a6c9e2;
 	background: #fcfdfd
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_inset-hard_100_fcfdfd_1x100.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_inset-hard_100_fcfdfd_1x100.png)
 		50% bottom repeat-x;
 	color: #222222;
 }
@@ -120,7 +120,7 @@
 .ui-widget-header {
 	border: 1px solid #4297d7;
 	background: #5c9ccc
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png)
 		50% 50% repeat-x;
 	color: #ffffff;
 	font-weight: bold;
@@ -187,7 +187,7 @@
 .ui-state-highlight,.ui-widget-content .ui-state-highlight {
 	border: 1px solid #fad42e;
 	background: #fbec88
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_flat_55_fbec88_40x100.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_flat_55_fbec88_40x100.png)
 		50% 50% repeat-x;
 	color: #363636;
 }
@@ -199,7 +199,7 @@
 .ui-state-error,.ui-widget-content .ui-state-error {
 	border: 1px solid #cd0a0a;
 	background: #fef1ec
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_glass_95_fef1ec_1x400.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_glass_95_fef1ec_1x400.png)
 		50% 50% repeat-x;
 	color: #cd0a0a;
 }
@@ -234,42 +234,42 @@
 	width: 16px;
 	height: 16px;
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_469bdd_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_469bdd_256x240.png);
 }
 
 .ui-widget-content .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_469bdd_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_469bdd_256x240.png);
 }
 
 .ui-widget-header .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_d8e7f3_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_d8e7f3_256x240.png);
 }
 
 .ui-state-default .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_6da8d5_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_6da8d5_256x240.png);
 }
 
 .ui-state-hover .ui-icon,.ui-state-focus .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_217bc0_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_217bc0_256x240.png);
 }
 
 .ui-state-active .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_f9bd01_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_f9bd01_256x240.png);
 }
 
 .ui-state-highlight .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_2e83ff_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_2e83ff_256x240.png);
 }
 
 .ui-state-error .ui-icon,.ui-state-error-text .ui-icon {
 	background-image:
-		url(../../../../images/aqua/plugin/jquery/images/ui-icons_cd0a0a_256x240.png);
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-icons_cd0a0a_256x240.png);
 }
 
 /* positioning */
@@ -1006,7 +1006,7 @@
 /* Overlays */
 .ui-widget-overlay {
 	background: #aaaaaa
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_flat_0_aaaaaa_40x100.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_flat_0_aaaaaa_40x100.png)
 		50% 50% repeat-x;
 	opacity: .30;
 	filter: Alpha(Opacity =                   30);
@@ -1016,7 +1016,7 @@
 	margin: -8px 0 0 -8px;
 	padding: 8px;
 	background: #aaaaaa
-		url(../../../../images/aqua/plugin/jquery/images/ui-bg_flat_0_aaaaaa_40x100.png)
+		url(../../../../Images/Aqua/plugin/jquery/images/ui-bg_flat_0_aaaaaa_40x100.png)
 		50% 50% repeat-x;
 	opacity: .30;
 	filter: Alpha(Opacity =                   30);
@@ -1654,25 +1654,25 @@ div.jpassword-flat {
 
 div.jpassword-righttop {
 	background: transparent
-		url(../../../../images/aqua/plugin/jquery/jpassword/jpassword-righttop.png)
+		url(../../../../Images/Aqua/plugin/jquery/jpassword/jpassword-righttop.png)
 		no-repeat left top;
 }
 
 div.jpassword-rightbottom {
 	background: transparent
-		url(../../../../images/aqua/plugin/jquery/jpassword/jpassword-rightbottom.png)
+		url(../../../../Images/Aqua/plugin/jquery/jpassword/jpassword-rightbottom.png)
 		no-repeat left top;
 }
 
 div.jpassword-lefttop {
 	background: transparent
-		url(../../../../images/aqua/plugin/jquery/jpassword/jpassword-lefttop.png)
+		url(../../../../Images/Aqua/plugin/jquery/jpassword/jpassword-lefttop.png)
 		no-repeat left top;
 }
 
 div.jpassword-leftbottom {
 	background: transparent
-		url(../../../../images/aqua/plugin/jquery/jpassword/jpassword-leftbottom.png)
+		url(../../../../Images/Aqua/plugin/jquery/jpassword/jpassword-leftbottom.png)
 		no-repeat left top;
 }
 
@@ -1684,7 +1684,7 @@ div.jpassword p {
 div.jpassword p.jpassword-meter {
 	height: 10px;
 	background: transparent
-		url(../../../../images/aqua/plugin/jquery/jpassword/jpassword-meter.png)
+		url(../../../../Images/Aqua/plugin/jquery/jpassword/jpassword-meter.png)
 		no-repeat left top;
 }
 

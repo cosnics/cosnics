@@ -23,7 +23,7 @@ general
 }
 
 .pptestcard {
-	background: url(../../../../images/aqua/plugin/projekktor/noise.gif)
+	background: url(../../../../Images/Aqua/plugin/projekktor/noise.gif)
 		center center repeat;
 	width: 100%;
 	height: 100%;
@@ -73,17 +73,17 @@ display plugin
 	width: 84px;
 	display: block;
 	padding: 0px;
-	background: url(../../../../images/aqua/plugin/projekktor/start.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/start.png)
 		no-repeat left top transparent;
 }
 
 .ppstart:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/start.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/start.png)
 		no-repeat left bottom transparent;
 }
 
 .ppstart:active {
-	background: url(../../../../images/aqua/plugin/projekktor/start.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/start.png)
 		no-repeat left -169px transparent;
 }
 
@@ -96,7 +96,7 @@ display plugin
 	display: block;
 	z-index: 9010;
 	padding: 0px;
-	background: url(../../../../images/aqua/plugin/projekktor/buffering.gif)
+	background: url(../../../../Images/Aqua/plugin/projekktor/buffering.gif)
 		no-repeat center center #000;
 	height: 84px;
 	width: 84px;
@@ -208,7 +208,7 @@ controlbar plugin
 /* PLAY / PAUSE - left */
 .ppplay,.pppause {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/play_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/play_off.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -219,27 +219,27 @@ controlbar plugin
 
 .ppplay:hover {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/play_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/play_on.png);
 }
 
 .ppplay:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/play_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/play_on.png);
 }
 
 .pppause {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/pause_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/pause_off.png);
 }
 
 .pppause:hover {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/pause_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/pause_on.png);
 }
 
 .pppause:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/pause_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/pause_on.png);
 }
 
 /* Enter / Exit Fullscreen - right */
@@ -251,7 +251,7 @@ controlbar plugin
 	width: 30px;
 	height: 27px;
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/full_screen_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/full_screen_off.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -262,17 +262,17 @@ controlbar plugin
 
 .ppfsenter:hover {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/full_screen_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/full_screen_on.png);
 }
 
 .ppfsenter:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/full_screen_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/full_screen_on.png);
 }
 
 .ppfsexit {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/windowed_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/windowed_off.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -280,29 +280,29 @@ controlbar plugin
 
 .ppfsexit:hover {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/windowed_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/windowed_on.png);
 }
 
 .ppfsexit:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/windowed_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/windowed_on.png);
 }
 
 /* Unmute / Max volume - right */
 .ppvmax {
 	width: 30px;
 	height: 27px;
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -842px top transparent;
 }
 
 .ppvmax:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -842px -35px transparent;
 }
 
 .ppvmax:active {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -842px -36px transparent;
 }
 
@@ -356,13 +356,13 @@ controlbar plugin
 
 /* special for single
 .pptimeleft {
-background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat -91px top transparent;
+background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png) no-repeat -91px top transparent;
 }
 */
 
 /* lo / hi quality toggle */
 .pploquality,.pphiquality {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -60px -72px transparent;
 	width: 30px;
 	height: 27px;
@@ -370,29 +370,29 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 }
 
 .pphiquality:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -106px transparent;
 }
 
 .pploquality {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -72px transparent;
 }
 
 .pploquality:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -106px transparent;
 }
 
 .pphiquality:active,.pploquality:active {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -105px transparent;
 }
 
 /* previous / next item */
 .ppnext,.ppprev {
 	display: block;
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -59px top transparent;
 	width: 30px;
 	height: 27px;
@@ -400,27 +400,27 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 }
 
 .ppnext:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -59px -35px transparent;
 }
 
 .ppnext:active {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -59px -36px transparent;
 }
 
 .ppprev {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px top transparent;
 }
 
 .ppprev:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -35px transparent;
 }
 
 .ppprev:active {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -32px -36px transparent;
 }
 
@@ -648,7 +648,7 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 }
 
 .pptracksbtn.on,.pptracksbtn.off {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -120px -72px transparent;
 	width: 30px;
 	height: 27px;
@@ -656,12 +656,12 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 }
 
 .pptracksbtn.on {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -92px -72px transparent;
 }
 
 .pptracksbtn:hover {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -118px -106px transparent;
 }
 
@@ -691,7 +691,7 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 /* Toggle Quality - left */
 .ppqualitysmall,.ppqualitymedium,.ppqualitylarge,.ppqualityhd,.ppqualityfullhd
 	{
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat left top transparent;
 	width: 50px;
 	height: 27px;
@@ -699,52 +699,52 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 }
 
 .ppqualitysmall {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -92px -32px transparent;
 }
 
 .ppqualitymedium {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -137px -32px transparent;
 }
 
 .ppqualitylarge {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -182px -32px transparent;
 }
 
 .ppqualityhd {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -230px -32px transparent;
 }
 
 .ppqualityfullhd {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -274px -32px transparent;
 }
 
 .ppqualitysmall.dimmed {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -92px 0px transparent;
 }
 
 .ppqualitymedium.dimmed {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -137px 0px transparent;
 }
 
 .ppqualitylarge.dimmed {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -182px 0px transparent;
 }
 
 .ppqualityhd.dimmed {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -230px 0px transparent;
 }
 
 .ppqualityfullhd.dimmed {
-	background: url(../../../../images/aqua/plugin/projekktor/maccaco.png)
+	background: url(../../../../Images/Aqua/plugin/projekktor/maccaco.png)
 		no-repeat -274px 0px transparent;
 }
 
@@ -770,7 +770,7 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 	height: 27px;
 	cursor: pointer;
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/quality_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/quality_off.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -778,7 +778,7 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 
 .ppquality:hover {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/quality_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/quality_on.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -786,7 +786,7 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 
 .ppquality:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/quality_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/quality_on.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -818,40 +818,40 @@ background: url(../../../../images/aqua/plugin/projekktor/maccaco.png) no-repeat
 
 .volumeMute {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_mute_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_mute_off.png);
 }
 
 .volumeMute:hover,.volumeMute:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_mute_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_mute_on.png);
 }
 
 .volumeLow {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_low_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_low_off.png);
 }
 
 .volumeLow:hover,.volumeLow:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_low_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_low_on.png);
 }
 
 .volumeNormal {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_normal_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_normal_off.png);
 }
 
 .volumeNormal:hover,.volumeNormal:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_normal_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_normal_on.png);
 }
 
 .volumeFull {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_full_off.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_full_off.png);
 }
 
 .volumeFull:hover,.volumeFull:active {
 	background-image:
-		url(../../../../images/aqua/plugin/projekktor/button/volume_full_on.png);
+		url(../../../../Images/Aqua/plugin/projekktor/button/volume_full_on.png);
 }

@@ -354,7 +354,7 @@ div#portal-block-container div#list div#packages input {
 	margin: 0px;
 	height: 20px;
 	color: #bbbbbb;
-	background: white url(../../images/aqua/action_search_widget.png)
+	background: white url(../../Images/Aqua/action_search_widget.png)
 		no-repeat 2px 2px;
 }
 
@@ -389,7 +389,7 @@ div#portal-block-container div#list div#packages div#packages-list span.package#
 	{
 	text-transform: uppercase;
 	font-size: 10px;
-	/*	background-image: url(../../images/aqua/block_show_all.png);*/
+	/*	background-image: url(../../Images/Aqua/block_show_all.png);*/
 	line-height: 16px;
 }
 
@@ -411,7 +411,7 @@ div#portal-block-container div#list div#packages div#packages-list span.selected
 	float: right;
 	width: 16px;
 	height: 16px;
-	background: url(../../images/aqua/action_selected_package.png) no-repeat
+	background: url(../../Images/Aqua/action_selected_package.png) no-repeat
 		center center;
 }
 
@@ -420,7 +420,7 @@ div#portal-block-container div#list div#packages div#packages-list span.selected
 	float: right;
 	width: 16px;
 	height: 16px;
-	background: url(../../images/aqua/action_remove_package_filter.png)
+	background: url(../../Images/Aqua/action_remove_package_filter.png)
 		no-repeat center center;
 }
 
@@ -469,19 +469,19 @@ div#portal-block-container div#list div#components div.component div.button
 	height: 26px;
 	background-position: top left;
 	background-repeat: no-repeat;
-	background-image: url(../../images/aqua/block_add.png);
+	background-image: url(../../Images/Aqua/block_add.png);
 }
 
 div#portal-block-container div#list div#components div.component div.button:hover
 	{
-	background-image: url(../../images/aqua/block_add_hover.png);
+	background-image: url(../../Images/Aqua/block_add_hover.png);
 }
 
 div#portal-block-container div#list div#components div.component div.content
 	{
 	width: 64px;
 	height: 64px;
-	background-image: url(../../images/aqua/block_background.png);
+	background-image: url(../../Images/Aqua/block_background.png);
 	background-position: top center;
 	background-repeat: no-repeat;
 }
@@ -508,7 +508,7 @@ div#portal-block-container div#list div#components div.component div.title
 div#portal-block-container div#remove-block-container {
 	width: 100%;
 	background: #bbbbbb
-		url(../../images/aqua/background_block_add_close.png) no-repeat center
+		url(../../Images/Aqua/background_block_add_close.png) no-repeat center
 		center;
 	border-top: 1px solid #b1b1b1;
 	border-bottom: 1px solid #b1b1b1;
@@ -536,7 +536,7 @@ div#portal-block-container div#remove-block-container {
 }
 
 a.home-modal-close {
-	background: url(../../images/aqua/action_close_form.png) no-repeat;
+	background: url(../../Images/Aqua/action_close_form.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;

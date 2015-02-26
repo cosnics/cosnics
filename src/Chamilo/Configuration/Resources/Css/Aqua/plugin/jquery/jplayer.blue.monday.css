@@ -158,26 +158,26 @@ a.jp-play,a.jp-pause {
 
 a.jp-play {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 0 no-repeat;
 }
 
 a.jp-play:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-41px 0 no-repeat;
 }
 
 a.jp-pause {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -42px no-repeat;
 	display: none;
 }
 
 a.jp-pause:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-41px -42px no-repeat;
 }
 
@@ -189,38 +189,38 @@ a.jp-stop,a.jp-previous,a.jp-next {
 
 a.jp-stop {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -83px no-repeat;
 	margin-left: 10px;
 }
 
 a.jp-stop:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-29px -83px no-repeat;
 }
 
 a.jp-previous {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -112px no-repeat;
 }
 
 a.jp-previous:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-29px -112px no-repeat;
 }
 
 a.jp-next {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -141px no-repeat;
 }
 
 a.jp-next:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-29px -141px no-repeat;
 }
 
@@ -257,7 +257,7 @@ div.jp-video div.jp-progress {
 
 div.jp-seek-bar {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -202px repeat-x;
 	width: 0px;
 	height: 100%;
@@ -266,7 +266,7 @@ div.jp-seek-bar {
 
 div.jp-play-bar {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -218px repeat-x;
 	width: 0px;
 	height: 100%;
@@ -275,7 +275,7 @@ div.jp-play-bar {
 /* The seeking class is added/removed inside jPlayer */
 div.jp-seeking-bg {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.seeking.gif");
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.seeking.gif");
 }
 
 /* @end */
@@ -323,38 +323,38 @@ div.jp-video a.jp-volume-max {
 
 a.jp-mute {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -170px no-repeat;
 }
 
 a.jp-mute:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-19px -170px no-repeat;
 }
 
 a.jp-unmute {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-60px -170px no-repeat;
 	display: none;
 }
 
 a.jp-unmute:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-79px -170px no-repeat;
 }
 
 a.jp-volume-max {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -186px no-repeat;
 }
 
 a.jp-volume-max:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-19px -186px no-repeat;
 }
 
@@ -362,7 +362,7 @@ div.jp-volume-bar {
 	position: absolute;
 	overflow: hidden;
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -250px repeat-x;
 	width: 46px;
 	height: 5px;
@@ -386,7 +386,7 @@ div.jp-video div.jp-volume-bar {
 
 div.jp-volume-bar-value {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -256px repeat-x;
 	width: 0px;
 	height: 5px;
@@ -569,14 +569,14 @@ a.jp-video-play-icon {
 	left: 50%;
 	top: 50%;
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.video.play.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.video.play.png")
 		0 0 no-repeat;
 	text-indent: -9999px;
 }
 
 div.jp-video-play:hover a.jp-video-play-icon {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.video.play.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.video.play.png")
 		0 -100px no-repeat;
 }
 
@@ -631,77 +631,77 @@ ul.jp-toggles li a {
 
 a.jp-full-screen {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -310px no-repeat;
 	margin-left: 20px;
 }
 
 a.jp-full-screen:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-30px -310px no-repeat;
 }
 
 a.jp-restore-screen {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-60px -310px no-repeat;
 	margin-left: 20px;
 }
 
 a.jp-restore-screen:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-90px -310px no-repeat;
 }
 
 a.jp-repeat {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -290px no-repeat;
 }
 
 a.jp-repeat:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-30px -290px no-repeat;
 }
 
 a.jp-repeat-off {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-60px -290px no-repeat;
 }
 
 a.jp-repeat-off:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-90px -290px no-repeat;
 }
 
 a.jp-shuffle {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		0 -270px no-repeat;
 	margin-left: 5px;
 }
 
 a.jp-shuffle:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-30px -270px no-repeat;
 }
 
 a.jp-shuffle-off {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-60px -270px no-repeat;
 	margin-left: 5px;
 }
 
 a.jp-shuffle-off:hover {
 	background:
-		url("../../../../images/aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
+		url("../../../../Images/Aqua/plugin/jquery/jplayer/jplayer.blue.monday.png")
 		-90px -270px no-repeat;
 }
 

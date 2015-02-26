@@ -2,13 +2,13 @@
 
 ul.tree-menu li div a.survey_description,ul.tree-menu li div a.type_survey_description,ul.tree-menu li div a.type_survey_description_default
 	{
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.survey_description_checked {
-	background-image: url(../../images/aqua/logo/16_checked.png);
+	background-image: url(../../Images/Aqua/Logo/16_checked.png);
 }
 
 ul.tree-menu li div a.type_survey_description_checked {
-	background-image: url(../../images/aqua/logo/16_checked.png);
+	background-image: url(../../Images/Aqua/Logo/16_checked.png);
 }

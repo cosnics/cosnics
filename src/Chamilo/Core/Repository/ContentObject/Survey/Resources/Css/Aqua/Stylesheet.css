@@ -54,7 +54,7 @@ div.question div.title {
 div.question div.title div.number,div.question div.title div.text {
 	border: 1px solid #b5cae7;
 	background: #4171b5
-		url(../../../../../../common/libraries/resources/images/aqua/background_table_header.png)
+		url(../../../../../../common/libraries/resources/Images/Aqua/background_table_header.png)
 		repeat-x;
 }
 
@@ -158,15 +158,15 @@ div.question div.answer div.caption {
 
 ul.tree-menu li div a.survey,ul.tree-menu li div a.type_survey,ul.tree-menu li div a.type_survey_default
 	{
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.survey_context {
-	background-image: url(../../images/aqua/context_logo/16.png);
+	background-image: url(../../Images/Aqua/context_logo/16.png);
 }
 
 ul.tree-menu li div a.type_survey_context {
-	background-image: url(../../images/aqua/context_logo/16.png);
+	background-image: url(../../Images/Aqua/context_logo/16.png);
 }
 
 .tab {

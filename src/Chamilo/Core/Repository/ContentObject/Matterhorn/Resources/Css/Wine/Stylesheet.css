@@ -1,11 +1,11 @@
 @CHARSET "ISO-8859-1";
 
 ul.tree-menu li div a.matterhorn {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_matterhorn {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 .timeline-segment-preview {
@@ -99,7 +99,7 @@ ul.tree-menu li div a.type_matterhorn {
 
 /* prev, next, prevPage and nextPage buttons */
 a.scrollable-segments-browse {
-	background: url(../../images/aqua/action_scrollable.png) no-repeat;
+	background: url(../../Images/Aqua/action_scrollable.png) no-repeat;
 	display: block;
 	width: 30px;
 	height: 30px;

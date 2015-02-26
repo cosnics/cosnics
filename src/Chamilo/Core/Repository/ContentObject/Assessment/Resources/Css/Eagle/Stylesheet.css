@@ -52,7 +52,7 @@ div.question div.title {
 div.question div.title div.number,div.question div.title div.text {
 	border: 1px solid #b5cae7;
 	background: #4171b5
-		url(../../../../../../configuration/resources/images/aqua/background_table_header.png)
+		url(../../../../../../Configuration/Resources/Images/Aqua/background_table_header.png)
 		repeat-x;
 }
 
@@ -227,15 +227,15 @@ div.time {
 }
 
 ul.tree-menu li div a.assessment {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_assessment {
-	background-image: url(../../images/aqua/logo/16.png);
+	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
 button.hint,a.hint_button {
-	background-image: url(../../images/aqua/buttons/button_hint.png);
+	background-image: url(../../Images/Aqua/Buttons/button_hint.png);
 }
 
 img.hint,img.hint_disabled {

@@ -107,7 +107,7 @@ a.prev,a.next,a.prevPage,a.nextPage {
 	display: none;
 	width: 16px;
 	height: 16px;
-	background: url(../../images/aqua/plugin/jquery/scrollable/top.png)
+	background: url(../../Images/Aqua/plugin/jquery/scrollable/top.png)
 		no-repeat;
 	background-position: 0px -16px;
 	float: left;
@@ -119,7 +119,7 @@ a.prev,a.next,a.prevPage,a.nextPage {
 }
 
 .hover,div.vertical_action:hover { /*background-color: #f2f4f4;*/
-	background-image: url(../../images/aqua/background_vertical_action.png);
+	background-image: url(../../Images/Aqua/background_vertical_action.png);
 	background-repeat: no-repeat;
 	background-position: 0px center;
 }
@@ -143,13 +143,13 @@ a.disabled:hover {
 /* next button uses another background image */
 a.next,a.nextPage {
 	background-image:
-		url(../../images/aqua/plugin/jquery/scrollable/bottom.png);
+		url(../../Images/Aqua/plugin/jquery/scrollable/bottom.png);
 	clear: right;
 }
 
 .ui-tabs ul li.dynamic_visual_tab {
 	background-image:
-		url(../../images/aqua/background_dynamic_visual_tab.png);
+		url(../../Images/Aqua/background_dynamic_visual_tab.png);
 	background-position: center center;
 	background-repeat: repeat-x;
 }
@@ -173,7 +173,7 @@ div.navi a {
 	float: left;
 	margin: 3px;
 	background:
-		url(../../images/aqua/plugin/jquery/scrollable/navigator.png) 0 0
+		url(../../Images/Aqua/plugin/jquery/scrollable/navigator.png) 0 0
 		no-repeat;
 	cursor: pointer;
 }
@@ -203,12 +203,12 @@ div.navi a.active {
 	width: 16px;
 	height: 16px;
 	background-color: transparent;
-	background: url(../../images/aqua/plugin/jquery/scrollable/left.png)
+	background: url(../../Images/Aqua/plugin/jquery/scrollable/left.png)
 		no-repeat;
 }
 
 .ui-tabs-paging-next {
-	background: url(../../images/aqua/plugin/jquery/scrollable/right.png)
+	background: url(../../Images/Aqua/plugin/jquery/scrollable/right.png)
 		no-repeat;
 }
 

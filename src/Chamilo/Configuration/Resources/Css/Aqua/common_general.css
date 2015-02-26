@@ -66,7 +66,7 @@ div#emulator {
 }
 
 #header1 div.banner span.logo {
-	background-image: url('../../images/aqua/logo_header.png');
+	background-image: url('../../Images/Aqua/logo_header.png');
 	background-repeat: no-repeat;
 	height: 32px;
 	width: 84px;
@@ -159,7 +159,7 @@ div#emulator {
 #breadcrumbtrail li a {
 	display: block;
 	padding: 0 15px 0 0;
-	background: url(../../images/aqua/background_breadcrumb.png) no-repeat
+	background: url(../../Images/Aqua/background_breadcrumb.png) no-repeat
 		right center;
 	color: #444444;
 }
@@ -196,7 +196,7 @@ div#emulator {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	background-color: #264269;
-	background-image: url('../../images/aqua/background_footer.png');
+	background-image: url('../../Images/Aqua/background_footer.png');
 	background-repeat: repeat-x;
 }
 
@@ -350,14 +350,14 @@ div#emulator {
 }
 
 .normal-message {
-	background-image: url('../../images/aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/status_normal_mini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .error-message,.fatal-message {
-	background-image: url('../../images/aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/status_error_mini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
@@ -369,14 +369,14 @@ div#emulator {
 }
 
 .warning-message {
-	background-image: url('../../images/aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/status_warning_mini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .confirm-message {
-	background-image: url('../../images/aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/status_confirm_mini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -434,28 +434,28 @@ div#emulator {
 }
 
 .notification-4 {
-	background-image: url('../../images/aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/status_normal_mini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .notification-1 {
-	background-image: url('../../images/aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/status_error_mini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
 
 .notification-2 {
-	background-image: url('../../images/aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/status_warning_mini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .notification-3 {
-	background-image: url('../../images/aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/status_confirm_mini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -736,7 +736,7 @@ div.attachments {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
-	background: url(../../images/aqua/place_attachment.png) no-repeat 10px
+	background: url(../../Images/Aqua/place_attachment.png) no-repeat 10px
 		10px;
 }
 
@@ -821,12 +821,12 @@ div.versions,div.versions_na {
 }
 
 div.versions {
-	background: url(../../images/aqua/place_versions.png) no-repeat 10px
+	background: url(../../Images/Aqua/place_versions.png) no-repeat 10px
 		10px;
 }
 
 div.versions_na {
-	background: url(../../images/aqua/place_versions_na.png) no-repeat 10px
+	background: url(../../Images/Aqua/place_versions_na.png) no-repeat 10px
 		10px;
 }
 
@@ -855,12 +855,12 @@ div.version_stats,div.version_stats_na {
 }
 
 div.version_stats {
-	background: url(../../images/aqua/place_version_quota.png) no-repeat
+	background: url(../../Images/Aqua/place_version_quota.png) no-repeat
 		10px 10px;
 }
 
 div.version_stats_na {
-	background: url(../../images/aqua/place_version_quota_na.png) no-repeat
+	background: url(../../Images/Aqua/place_version_quota_na.png) no-repeat
 		10px 10px;
 }
 
@@ -905,12 +905,12 @@ div.publications,div.publications_na {
 }
 
 div.publications {
-	background: url(../../images/aqua/place_publications.png) no-repeat 10px
+	background: url(../../Images/Aqua/place_publications.png) no-repeat 10px
 		10px;
 }
 
 div.publications_na {
-	background: url(../../images/aqua/place_publications_na.png) no-repeat
+	background: url(../../Images/Aqua/place_publications_na.png) no-repeat
 		10px 10px;
 }
 
@@ -1310,7 +1310,7 @@ div.action_bar_text {
 	-moz-border-radius-bottomright: 15px;
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
-	background: #d4e0f1 url(../../images/aqua/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Aqua/background_action_bar.png)
 		no-repeat;
 }
 
@@ -1327,7 +1327,7 @@ div.action_bar {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
-	background: #d4e0f1 url(../../images/aqua/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Aqua/background_action_bar.png)
 		no-repeat;
 }
 
@@ -1380,7 +1380,7 @@ div.action_bar .action_bar_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../images/aqua/background_ajax_hide.png);
+	background-image: url(../../Images/Aqua/background_ajax_hide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1452,7 +1452,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .hide
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../images/aqua/action_action_bar_hide_background.png);
+		url(../../Images/Aqua/action_action_bar_hide_background.png);
 }
 
 div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
@@ -1460,7 +1460,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../images/aqua/action_action_bar_show_background.png);
+		url(../../Images/Aqua/action_action_bar_show_background.png);
 }
 
 .action_bar_left_show {
@@ -1486,7 +1486,7 @@ div.reporting_filter_text {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	background: #d4e0f1
-		url(../../images/aqua/background_reporting_filter.png) no-repeat;
+		url(../../Images/Aqua/background_reporting_filter.png) no-repeat;
 }
 
 div.reporting_filter_text img {
@@ -1503,7 +1503,7 @@ div.reporting_filter {
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
 	background: #d4e0f1
-		url(../../images/aqua/background_reporting_filter.png) no-repeat;
+		url(../../Images/Aqua/background_reporting_filter.png) no-repeat;
 }
 
 .reporting_filter_text {
@@ -1555,7 +1555,7 @@ div.reporting_filter .reporting_filter_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../images/aqua/background_ajax_hide.png);
+	background-image: url(../../Images/Aqua/background_ajax_hide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1627,7 +1627,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.areporting_f
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../images/aqua/reporting_filter_hide_background.png);
+		url(../../Images/Aqua/reporting_filter_hide_background.png);
 }
 
 div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_filter_left .show
@@ -1635,7 +1635,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_fi
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../images/aqua/reporting_filter_show_background.png);
+		url(../../Images/Aqua/reporting_filter_show_background.png);
 }
 
 .reporting_filter_left_show {
@@ -1745,7 +1745,7 @@ div.padding_10 {
 }
 
 a.help-modal-close {
-	background: url(../../images/aqua/action_close_modal.png) no-repeat;
+	background: url(../../Images/Aqua/action_close_modal.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;
@@ -1807,7 +1807,7 @@ a.help-modal-close {
 }
 
 .togglePlus {
-	background: url(../../images/aqua/treemenu/bullet_toggle_plus.png)
+	background: url(../../Images/Aqua/treemenu/bullet_toggle_plus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1817,7 +1817,7 @@ a.help-modal-close {
 }
 
 .toggleMinus {
-	background: url(../../images/aqua/treemenu/bullet_toggle_minus.png)
+	background: url(../../Images/Aqua/treemenu/bullet_toggle_minus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1838,7 +1838,7 @@ a.help-modal-close {
  * AJAX loading... icons
  **********************************/
 .loadingMini {
-	background-image: url(../../images/aqua/action_loading_mini.gif);
+	background-image: url(../../Images/Aqua/action_loading_mini.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
@@ -1847,7 +1847,7 @@ a.help-modal-close {
 }
 
 .loadingSmall {
-	background-image: url(../../images/aqua/action_loading_small.gif);
+	background-image: url(../../Images/Aqua/action_loading_small.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 22px;
@@ -1856,7 +1856,7 @@ a.help-modal-close {
 }
 
 .loadingMedium {
-	background-image: url(../../images/aqua/action_loading_medium.gif);
+	background-image: url(../../Images/Aqua/action_loading_medium.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 32px;
@@ -1865,7 +1865,7 @@ a.help-modal-close {
 }
 
 .loadingLarge {
-	background-image: url(../../images/aqua/action_loading_large.gif);
+	background-image: url(../../Images/Aqua/action_loading_large.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 48px;
@@ -1874,7 +1874,7 @@ a.help-modal-close {
 }
 
 .loadingHuge {
-	background-image: url(../../images/aqua/action_loading_huge.gif);
+	background-image: url(../../Images/Aqua/action_loading_huge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1883,7 +1883,7 @@ a.help-modal-close {
 }
 
 .statusConfirmation {
-	background-image: url(../../images/aqua/status_confirmation_huge.png);
+	background-image: url(../../Images/Aqua/status_confirmation_huge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1892,7 +1892,7 @@ a.help-modal-close {
 }
 
 .statusError {
-	background-image: url(../../images/aqua/status_error_huge.png);
+	background-image: url(../../Images/Aqua/status_error_huge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1914,40 +1914,40 @@ a.help-modal-close {
 }
 
 .close_message {
-	background: url(../../images/aqua/action_close_message.png) no-repeat;
+	background: url(../../Images/Aqua/action_close_message.png) no-repeat;
 }
 
 .close_normal_message {
-	background: url(../../images/aqua/action_close_normal_message.png)
+	background: url(../../Images/Aqua/action_close_normal_message.png)
 		no-repeat;
 }
 
 .close_error_message {
-	background: url(../../images/aqua/action_close_error_message.png)
+	background: url(../../Images/Aqua/action_close_error_message.png)
 		no-repeat;
 }
 
 .close_warning_message {
-	background: url(../../images/aqua/action_close_warning_message.png)
+	background: url(../../Images/Aqua/action_close_warning_message.png)
 		no-repeat;
 }
 
 .rightTrue {
-	background: url(../../images/aqua/action_setting_true.png) no-repeat;
+	background: url(../../Images/Aqua/action_setting_true.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightFalse {
-	background: url(../../images/aqua/action_setting_false.png) no-repeat;
+	background: url(../../Images/Aqua/action_setting_false.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightInheritTrue {
-	background: url(../../images/aqua/action_setting_true_inherit.png)
+	background: url(../../Images/Aqua/action_setting_true_inherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -1955,7 +1955,7 @@ a.help-modal-close {
 }
 
 .rightInheritFalse {
-	background: url(../../images/aqua/action_setting_false_inherit.png)
+	background: url(../../Images/Aqua/action_setting_false_inherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -2193,7 +2193,7 @@ li.buddyDrop {
  * ADDITIONAL ELEMENT FINDER STYLES *
  ************************************/
 .element_finder_loading {
-	background-image: url(../../images/aqua/action_loading_huge.gif);
+	background-image: url(../../Images/Aqua/action_loading_huge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 100%;
@@ -2256,7 +2256,7 @@ div.question div.title {
 
 div.question div.title div.number,div.question div.title div.text {
 	border: 1px solid #b5cae7;
-	background: #4171b5 url(../../images/aqua/background_table_header.png)
+	background: #4171b5 url(../../Images/Aqua/background_table_header.png)
 		repeat-x;
 }
 
@@ -2606,7 +2606,7 @@ div.no_thumbnail div.background,div.no_preview div.background {
 	background-color: #efefef;
 	padding: 15px;
 	width: 268px;
-	background-image: url(../../images/aqua/background_no_thumbnail.png);
+	background-image: url(../../Images/Aqua/background_no_thumbnail.png);
 	background-position: top center;
 	background-repeat: repeat-x;
 }

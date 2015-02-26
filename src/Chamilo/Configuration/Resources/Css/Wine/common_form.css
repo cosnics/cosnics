@@ -31,7 +31,7 @@ div.row div.formw {
 
 div.formw input[type=text],div.row div.formw input[type=password],div.row div.formw select
 	{ /*
-	background-image: url(../../images/aqua/buttons/button_link.png);
+	background-image: url(../../Images/Aqua/Buttons/button_link.png);
 	background-repeat: no-repeat;
 	background-position: 2px center;
 	padding-left: 20px;
@@ -54,7 +54,7 @@ div.row div.forme,div.row div.forme_no_margin {
 	border-style: solid;
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
-	/*background-image: url('../../images/aqua/status_warning.png');*/
+	/*background-image: url('../../Images/Aqua/status_warning.png');*/
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
@@ -68,7 +68,7 @@ div.row div.formc,div.row div.formc_no_margin {
 	border-style: solid;
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
-	/*background-image: url('../../images/aqua/status_confirmation_medium.png');*/
+	/*background-image: url('../../Images/Aqua/status_confirmation_medium.png');*/
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #212467;
@@ -164,14 +164,14 @@ textarea.answer {
 }
 
 input.rating_question_low_value,input.rating_question_high_value {
-	background-image: url(../../images/aqua/buttons/button_low.png);
+	background-image: url(../../Images/Aqua/Buttons/button_low.png);
 	background-position: 4px center;
 	background-repeat: no-repeat;
 	padding-left: 24px;
 }
 
 input.rating_question_high_value {
-	background-image: url(../../images/aqua/buttons/button_high.png);
+	background-image: url(../../Images/Aqua/Buttons/button_high.png);
 }
 
 .select_question {
@@ -212,12 +212,12 @@ input.rating_question_high_value {
 
 .advanced_select_question input.add {
 	background-image:
-		url('../../images/aqua/buttons/button_activate_element.png');
+		url('../../Images/Aqua/Buttons/button_activate_element.png');
 }
 
 .advanced_select_question input.remove {
 	background-image:
-		url('../../images/aqua/buttons/button_deactivate_element.png');
+		url('../../Images/Aqua/Buttons/button_deactivate_element.png');
 }
 
 /*********************************************************
@@ -256,7 +256,7 @@ a.button {
 }
 
 button.positive,a.positive_button {
-	background-image: url(../../images/aqua/buttons/button_confirm.png);
+	background-image: url(../../Images/Aqua/Buttons/button_confirm.png);
 	color: #529214;
 }
 
@@ -273,7 +273,7 @@ button.positive:active,a.positive_button:active {
 }
 
 button.negative,a.negative_button {
-	background-image: url(../../images/aqua/buttons/button_cancel.png);
+	background-image: url(../../Images/Aqua/Buttons/button_cancel.png);
 	color: #d12f19;
 }
 
@@ -290,7 +290,7 @@ button.negative:active,a.negative_button:active {
 }
 
 button.normal,a.normal_button {
-	background-image: url(../../images/aqua/buttons/button_next.png);
+	background-image: url(../../Images/Aqua/Buttons/button_next.png);
 }
 
 a.normal_button:hover,button.normal:hover {
@@ -321,168 +321,168 @@ button.mini,a.mini_button {
 }
 
 button.next,a.next_button {
-	background-image: url(../../images/aqua/buttons/button_next.png);
+	background-image: url(../../Images/Aqua/Buttons/button_next.png);
 }
 
 button.previous,a.previous_button {
-	background-image: url(../../images/aqua/buttons/button_previous.png);
+	background-image: url(../../Images/Aqua/Buttons/button_previous.png);
 }
 
 button.empty,a.empty_button {
-	background-image: url(../../images/aqua/buttons/button_empty.png);
+	background-image: url(../../Images/Aqua/Buttons/button_empty.png);
 }
 
 button.select,a.select_button {
-	background-image: url(../../images/aqua/buttons/button_select.png);
+	background-image: url(../../Images/Aqua/Buttons/button_select.png);
 }
 
 button.join,a.join_button {
-	background-image: url(../../images/aqua/buttons/button_join.png);
+	background-image: url(../../Images/Aqua/Buttons/button_join.png);
 }
 
 button.create,a.create_button {
-	background-image: url(../../images/aqua/buttons/button_create.png);
+	background-image: url(../../Images/Aqua/Buttons/button_create.png);
 }
 
 button.login,a.login_button {
-	background-image: url(../../images/aqua/buttons/button_login.png);
+	background-image: url(../../Images/Aqua/Buttons/button_login.png);
 	float: left;
 	margin-bottom: 7px;
 }
 
 button.logout,a.logout_button {
-	background-image: url(../../images/aqua/buttons/button_logout.png);
+	background-image: url(../../Images/Aqua/Buttons/button_logout.png);
 }
 
 button.search,a.search_button {
-	background-image: url(../../images/aqua/buttons/button_search.png);
+	background-image: url(../../Images/Aqua/Buttons/button_search.png);
 }
 
 button.filter,a.filter_button {
-	background-image: url(../../images/aqua/buttons/button_filter.png);
+	background-image: url(../../Images/Aqua/Buttons/button_filter.png);
 }
 
 button.save,a.save_button {
-	background-image: url(../../images/aqua/buttons/button_save.png);
+	background-image: url(../../Images/Aqua/Buttons/button_save.png);
 }
 
 button.update,a.update_button {
-	background-image: url(../../images/aqua/buttons/button_update.png);
+	background-image: url(../../Images/Aqua/Buttons/button_update.png);
 }
 
 button.publish,a.publish_button {
-	background-image: url(../../images/aqua/buttons/button_publish.png);
+	background-image: url(../../Images/Aqua/Buttons/button_publish.png);
 }
 
 button.send,a.send_button {
-	background-image: url(../../images/aqua/buttons/button_send.png);
+	background-image: url(../../Images/Aqua/Buttons/button_send.png);
 }
 
 button.import,a.import_button {
-	background-image: url(../../images/aqua/buttons/button_import.png);
+	background-image: url(../../Images/Aqua/Buttons/button_import.png);
 }
 
 button.export,a.export_button {
-	background-image: url(../../images/aqua/buttons/button_export.png);
+	background-image: url(../../Images/Aqua/Buttons/button_export.png);
 }
 
 button.subscribe,a.subscribe_button {
-	background-image: url(../../images/aqua/buttons/button_subscribe.png);
+	background-image: url(../../Images/Aqua/Buttons/button_subscribe.png);
 }
 
 button.unsubscribe,a.unsubscribe_button {
-	background-image: url(../../images/aqua/buttons/button_unsubscribe.png);
+	background-image: url(../../Images/Aqua/Buttons/button_unsubscribe.png);
 }
 
 button.move,a.move_button {
-	background-image: url(../../images/aqua/buttons/button_move.png);
+	background-image: url(../../Images/Aqua/Buttons/button_move.png);
 }
 
 button.compare,a.compare_button {
-	background-image: url(../../images/aqua/buttons/button_compare.png);
+	background-image: url(../../Images/Aqua/Buttons/button_compare.png);
 }
 
 button.register,a.register_button {
-	background-image: url(../../images/aqua/buttons/button_register.png);
+	background-image: url(../../Images/Aqua/Buttons/button_register.png);
 	float: left;
 	padding-bottom: 11px;
 	margin-bottom: 7px;
 }
 
 button.switch,a.switch_button {
-	background-image: url(../../images/aqua/buttons/button_switch.png);
+	background-image: url(../../Images/Aqua/Buttons/button_switch.png);
 }
 
 button.add,a.add_button {
-	background-image: url(../../images/aqua/buttons/button_add.png);
+	background-image: url(../../Images/Aqua/Buttons/button_add.png);
 }
 
 button.low,a.low_button {
-	background-image: url(../../images/aqua/buttons/button_low.png);
+	background-image: url(../../Images/Aqua/Buttons/button_low.png);
 }
 
 button.high,a.high_button {
-	background-image: url(../../images/aqua/buttons/button_high.png);
+	background-image: url(../../Images/Aqua/Buttons/button_high.png);
 }
 
 button.refresh,a.refresh_button {
-	background-image: url(../../images/aqua/buttons/button_refresh.png);
+	background-image: url(../../Images/Aqua/Buttons/button_refresh.png);
 }
 
 button.upload,a.upload_button {
-	background-image: url(../../images/aqua/buttons/button_upload.png);
+	background-image: url(../../Images/Aqua/Buttons/button_upload.png);
 }
 
 button.left,a.left_button {
-	background-image: url(../../images/aqua/buttons/button_left.png);
+	background-image: url(../../Images/Aqua/Buttons/button_left.png);
 }
 
 button.right,a.right_button {
-	background-image: url(../../images/aqua/buttons/button_right.png);
+	background-image: url(../../Images/Aqua/Buttons/button_right.png);
 }
 
 button.start,a.start_button {
-	background-image: url(../../images/aqua/buttons/button_start.png);
+	background-image: url(../../Images/Aqua/Buttons/button_start.png);
 }
 
 button.read,a.read_button {
-	background-image: url(../../images/aqua/buttons/button_read.png);
+	background-image: url(../../Images/Aqua/Buttons/button_read.png);
 }
 
 button.surf,a.surf_button {
-	background-image: url(../../images/aqua/buttons/button_surf.png);
+	background-image: url(../../Images/Aqua/Buttons/button_surf.png);
 }
 
 button.help,a.help_button {
-	background-image: url(../../images/aqua/buttons/button_help.png);
+	background-image: url(../../Images/Aqua/Buttons/button_help.png);
 }
 
 button.email,a.email_button {
-	background-image: url(../../images/aqua/buttons/button_email.png);
+	background-image: url(../../Images/Aqua/Buttons/button_email.png);
 }
 
 button.email_go,a.email_go_button {
-	background-image: url(../../images/aqua/buttons/button_email_go.png);
+	background-image: url(../../Images/Aqua/Buttons/button_email_go.png);
 }
 
 button.build,a.build_button {
-	background-image: url(../../images/aqua/buttons/button_build.png);
+	background-image: url(../../Images/Aqua/Buttons/button_build.png);
 }
 
 button.quickstart,a.quickstart_button {
-	background-image: url(../../images/aqua/buttons/button_quickstart.png);
+	background-image: url(../../Images/Aqua/Buttons/button_quickstart.png);
 }
 
 button.continue,a.continue_button {
-	background-image: url(../../images/aqua/buttons/button_continue.png);
+	background-image: url(../../Images/Aqua/Buttons/button_continue.png);
 }
 
 button.hide,a.hide_button {
-	background-image: url(../../images/aqua/buttons/button_hide.png);
+	background-image: url(../../Images/Aqua/Buttons/button_hide.png);
 }
 
 button.loading,a.loading_button {
-	background-image: url(../../images/aqua/action_loading_mini.gif);
+	background-image: url(../../Images/Aqua/action_loading_mini.gif);
 }
 
 /*IE-fix to avoid adding unwanted margins to the form*/
@@ -540,7 +540,7 @@ input[type=text].element_query { /*****************
 	 * width: 278px; *
 	 *****************/
 	width: 276px;
-	background-image: url('../../images/aqua/buttons/button_search.png');
+	background-image: url('../../Images/Aqua/Buttons/button_search.png');
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
 	padding: 2px 4px 2px 20px;
@@ -568,12 +568,12 @@ input[type=button].activate_elements,input[type=button].deactivate_elements
 
 input[type=button].activate_elements {
 	background-image:
-		url('../../images/aqua/buttons/button_activate_element.png');
+		url('../../Images/Aqua/Buttons/button_activate_element.png');
 }
 
 input[type=button].deactivate_elements {
 	background-image:
-		url('../../images/aqua/buttons/button_deactivate_element.png');
+		url('../../Images/Aqua/Buttons/button_deactivate_element.png');
 }
 
 input[type=button].activate_elements:hover,input[type=button].deactivate_elements:hover
@@ -636,7 +636,7 @@ div.element_finder button.hide {
 div.element_finder div.inactive_elements div.previous_elements {
 	height: 20px;
 	border-bottom: 1px solid #B9D0EF;
-	background: url('../../images/aqua/action_up.png') center center
+	background: url('../../Images/Aqua/action_up.png') center center
 		no-repeat #E5EDF9;
 	margin: -2px -4px 5px -4px;
 	cursor: pointer;
@@ -645,7 +645,7 @@ div.element_finder div.inactive_elements div.previous_elements {
 div.element_finder div.inactive_elements div.next_elements {
 	height: 20px;
 	border-top: 1px solid #B9D0EF;
-	background: url('../../images/aqua/action_down.png') center center
+	background: url('../../Images/Aqua/action_down.png') center center
 		no-repeat #E5EDF9;
 	margin: 5px -4px -2px -4px;
 	cursor: pointer;
@@ -700,7 +700,7 @@ div.jump_form div.row div.formw {
 }
 
 input.search_query {
-	background: url(../../images/aqua/action_search.png) 1px 50% no-repeat;
+	background: url(../../Images/Aqua/action_search.png) 1px 50% no-repeat;
 	padding: 0 0 0 21px;
 }
 
@@ -711,7 +711,7 @@ input.search_query_no_icon {
 input#attachments_expand_button {
 	border: 0;
 	background: transparent;
-	background-image: url(../../images/aqua/action_attachment.png);
+	background-image: url(../../Images/Aqua/action_attachment.png);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	padding: 0 0 0 18px;
@@ -730,7 +730,7 @@ input#attachments_expand_button :hover {
 input#attachments_collapse_button {
 	border: 0;
 	background: transparent;
-	background-image: url(../../images/aqua/action_attachment.png);
+	background-image: url(../../Images/Aqua/action_attachment.png);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	padding: 0 0 0 18px;
@@ -749,7 +749,7 @@ input#attachments_collapse_button :hover {
 input#rights_templates_expand_button {
 	border: 0;
 	background: transparent;
-	background-image: url(../../images/aqua/action_rights.png);
+	background-image: url(../../Images/Aqua/action_rights.png);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	padding: 0 0 0 18px;
@@ -768,7 +768,7 @@ input#rights_templates_expand_button :hover {
 input#rights_templates_collapse_button {
 	border: 0;
 	background: transparent;
-	background-image: url(../../images/aqua/action_rights.png);
+	background-image: url(../../Images/Aqua/action_rights.png);
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	padding: 0 0 0 18px;
@@ -841,25 +841,25 @@ div.search_form button.search img {
 }
 
 input.visual_input {
-	background-image: url(../../images/aqua/buttons/button_right.png);
+	background-image: url(../../Images/Aqua/Buttons/button_right.png);
 	background-repeat: no-repeat;
 	background-position: 4px 50%;
 	padding-left: 24px;
 }
 
 input.width {
-	background-image: url(../../images/aqua/buttons/button_width.png);
+	background-image: url(../../Images/Aqua/Buttons/button_width.png);
 }
 
 input.height {
-	background-image: url(../../images/aqua/buttons/button_height.png);
+	background-image: url(../../Images/Aqua/Buttons/button_height.png);
 }
 
 /*
  * Collapsible
 */
 div .expanded a {
-	background-image: url(../../images/aqua/action_toggle_show.png);
+	background-image: url(../../Images/Aqua/action_toggle_show.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 16px;
@@ -875,7 +875,7 @@ div .collapsed .row {
 }
 
 div .collapsed a {
-	background-image: url(../../images/aqua/action_toggle_hide.png);
+	background-image: url(../../Images/Aqua/action_toggle_hide.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 10px;
