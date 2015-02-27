@@ -43,6 +43,6 @@ class FullTypeSelectorRenderer extends TypeSelectorRenderer
         $html[] = $this->form_renderer->render();
         $html[] = $this->tabs_renderer->render();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

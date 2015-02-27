@@ -93,7 +93,7 @@ class FillInBlanksQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_question_feedback($index, $answer, $multiple_answers)
@@ -266,6 +266,6 @@ class FillInBlanksQuestionResultDisplay extends QuestionResultDisplay
                 break;
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

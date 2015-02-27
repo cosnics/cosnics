@@ -197,7 +197,7 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
         // Display the page footer
         $html[] = $this->parent->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -251,7 +251,7 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
         $html[] = '<div class="title">' . Translation :: get('Event') . ' ' . $eventname . '</div>';
         $html[] = '<div class="description">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_event_footer()
@@ -261,6 +261,6 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

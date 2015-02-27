@@ -143,7 +143,7 @@ abstract class Manager extends Application
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -154,7 +154,7 @@ abstract class Manager extends Application
         $html[] = $this->tabs->footer();
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

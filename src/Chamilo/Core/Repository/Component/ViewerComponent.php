@@ -179,7 +179,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         'versions',
                         Translation :: get('Versions'),
                         Theme :: getInstance()->getImagePath() . 'place_mini_versions.png',
-                        implode("\n", $version_tab_content)));
+                        implode(PHP_EOL, $version_tab_content)));
             }
             elseif (count($publication_attr) > 0)
             {
@@ -208,7 +208,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $html[] = $this->tabs->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -604,7 +604,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $html[] = '</a>';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($table_class_name)

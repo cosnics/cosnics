@@ -221,7 +221,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -297,7 +297,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $html[] = $this->get_reporting_block_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -402,7 +402,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
             $html[] = $count_late_submissions . '/' . count($submitters) . '<br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -565,7 +565,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
             $html[] = $this->action_bar->as_html();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_additional_parameters()

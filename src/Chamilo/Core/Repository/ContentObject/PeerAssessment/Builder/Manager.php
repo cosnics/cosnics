@@ -125,7 +125,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $html[] = $this->wizard->display(Request :: get(self :: PARAM_ACTION), self :: DEFAULT_ACTION);
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -138,7 +138,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $html[] = parent :: render_header();
         $html[] = $this->wizard->display(Request :: get(self :: PARAM_ACTION), self :: DEFAULT_ACTION);
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_action_bar(\Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object)

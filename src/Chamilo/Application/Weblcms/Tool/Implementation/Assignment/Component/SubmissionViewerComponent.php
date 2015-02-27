@@ -70,7 +70,7 @@ class SubmissionViewerComponent extends SubmissionsManager
         $html[] = $this->display_submission_details();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -371,7 +371,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = $this->display_section('PersonalNote', $this->get_notes_section_content());
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -391,7 +391,7 @@ class SubmissionViewerComponent extends SubmissionsManager
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp;</div><br/>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -432,7 +432,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png"/>';
         }
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -510,7 +510,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png"/>';
         }
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -610,7 +610,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -631,7 +631,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = $this->feedback_section->toHtml();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -657,7 +657,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             }
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -732,7 +732,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = '</div><div class="clear">&nbsp;</div><br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -746,7 +746,7 @@ class SubmissionViewerComponent extends SubmissionsManager
 
         $html[] = $this->notes_section->toHtml();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -761,7 +761,7 @@ class SubmissionViewerComponent extends SubmissionsManager
 
         $html[] = $this->set_section_content($title, $content);
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -788,7 +788,7 @@ class SubmissionViewerComponent extends SubmissionsManager
         // Closes the section
         $html[] = '</div><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -822,7 +822,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $html[] = $this->action_bar->as_html();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

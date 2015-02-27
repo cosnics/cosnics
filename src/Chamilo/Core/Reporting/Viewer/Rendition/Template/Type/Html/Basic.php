@@ -40,7 +40,7 @@ class Basic extends Html
         $html[] = $this->get_action_bar()->as_html();
         // $html[] = $this->display_filter();
         $html[] = $this->render_block();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_block()
@@ -72,7 +72,7 @@ class Basic extends Html
                     $this->determine_current_block_view($key));
             }
             
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

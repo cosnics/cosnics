@@ -61,7 +61,7 @@ class DynamicContentMenu
         $html[] = $this->render_content();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -90,7 +90,7 @@ class DynamicContentMenu
         $html[] = '</ul>';
         $html[] = $this->render_small_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -111,7 +111,7 @@ class DynamicContentMenu
 
         $html[] = $this->render_small_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -149,7 +149,7 @@ class DynamicContentMenu
 				    selectedItemId: \'' . $selected_item_id . '\'});';
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -32,7 +32,7 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $html[] = '</em>';
         $html[] = '<br />';
         $html[] = $event->get_description();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function as_html()

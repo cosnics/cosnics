@@ -153,7 +153,7 @@ class ManageForm extends FormValidator
         $element_template[] = '<div class="column">';
         $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         
         $this->addElement(
             'select', 

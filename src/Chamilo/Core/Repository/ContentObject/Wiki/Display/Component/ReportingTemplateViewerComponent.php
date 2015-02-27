@@ -61,7 +61,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
                 'From',
                 null,
                 Utilities :: COMMON_LIBRARIES) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

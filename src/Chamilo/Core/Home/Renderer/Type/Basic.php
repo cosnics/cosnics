@@ -47,7 +47,7 @@ class Basic extends Renderer
         $html[] = $this->render_homepage();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_homepage()
@@ -305,7 +305,7 @@ class Basic extends Renderer
                  'Resources/Javascript/HomeAjax.js' . '"></script>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function create_user_home()

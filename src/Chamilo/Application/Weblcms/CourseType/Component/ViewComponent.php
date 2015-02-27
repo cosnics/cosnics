@@ -42,7 +42,7 @@ class ViewComponent extends Manager
         $html[] = $this->get_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -103,7 +103,7 @@ class ViewComponent extends Manager
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

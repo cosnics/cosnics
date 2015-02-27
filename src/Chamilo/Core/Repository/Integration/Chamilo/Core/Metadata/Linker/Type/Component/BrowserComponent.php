@@ -43,7 +43,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -59,7 +59,7 @@ class BrowserComponent extends Manager implements TableSupport
         $table = new ContentObjectRelMetadataElementTable($this);
         $html[] = $table->as_html();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -46,6 +46,6 @@ class RemoverComponent extends Manager implements DelegateComponent
         $html[] = $toolbar->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -28,7 +28,7 @@ class NewAssignments extends NewBlock
         {
             return Translation :: get('NoNewAssignmentsSinceLastVisit');
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_new_items($publications)

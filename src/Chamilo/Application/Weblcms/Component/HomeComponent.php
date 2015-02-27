@@ -62,7 +62,7 @@ class HomeComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_menu()
@@ -184,7 +184,7 @@ class HomeComponent extends Manager implements DelegateComponent
                     Translation :: get('RequestList')) . '</a></li>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_edit_course_list_links()

@@ -30,6 +30,6 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         
         $html = array();
         $html[] = '<img class="' . $class . '" src="' . $image_path . '" />';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

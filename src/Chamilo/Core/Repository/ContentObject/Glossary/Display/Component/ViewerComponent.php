@@ -46,7 +46,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = $this->to_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = $this->action_bar->as_html();
         $html[] = GlossaryRendererFactory :: launch($this->get_view(), $this, $object, $query);
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -55,6 +55,6 @@ class AssessmentViewerWizardDisplay extends HTML_QuickForm_Action_Display
         $html[] = '</div>';
         $html[] = $this->parent->get_parent()->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

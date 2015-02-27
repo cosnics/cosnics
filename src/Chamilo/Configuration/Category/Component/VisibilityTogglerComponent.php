@@ -83,7 +83,7 @@ class VisibilityTogglerComponent extends Manager
             $html[] = Translation :: get("NoObjectSelected");
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

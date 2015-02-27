@@ -176,6 +176,6 @@ $html[] = 'table th {width: 70px; text-align: center !important;}';
 $html[] = 'table th:first-child {width: auto; text-align: left !important;}';
 $html[] = '</style>';
 
-echo implode("\n", $html);
+echo implode(PHP_EOL, $html);
 
 Display :: small_footer();

@@ -35,6 +35,6 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
                  $translation . '</div>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

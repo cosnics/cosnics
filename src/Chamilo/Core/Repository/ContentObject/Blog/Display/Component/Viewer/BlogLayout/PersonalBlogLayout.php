@@ -60,7 +60,7 @@ class PersonalBlogLayout extends BlogLayout
         $html[] = '<div class="clear">&nbsp</div>';
         $html[] = '</div><br />';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -101,7 +101,7 @@ class PersonalBlogLayout extends BlogLayout
             $html[] = '</ul>';
             $html[] = '</div>';
             
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         
         return '';

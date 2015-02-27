@@ -223,7 +223,7 @@ abstract class ContentObjectPublicationListRenderer
             $html[] = '(' . $this->render_publication_period($publication) . ')';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -458,7 +458,7 @@ abstract class ContentObjectPublicationListRenderer
                          '"/> ' . $attachment->get_title() . '</a></li>';
                 }
                 $html[] = '</ul>';
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         return '';

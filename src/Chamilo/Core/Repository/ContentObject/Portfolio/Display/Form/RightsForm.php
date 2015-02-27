@@ -119,7 +119,7 @@ class RightsForm extends FormValidator
             $html[] = '</ul>';
             
             $this->addElement('category', Translation :: get('SelectedPortfolioItems'));
-            $this->addElement('html', implode("\n", $html));
+            $this->addElement('html', implode(PHP_EOL, $html));
             $this->addElement('category');
         }
     }

@@ -320,7 +320,7 @@ class ExportJobManager
         $message[] = '<br/><a href=' . $url . '>' . $url . '</a>';
         $message[] = '</p>';
         
-        return implode("\n", $message);
+        return implode(PHP_EOL, $message);
     }
 
     static public function update_tracker_data($publication_id)

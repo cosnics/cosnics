@@ -72,7 +72,7 @@ class SubmissionDetailGeneralInfoSection
             $html[] = $this->get_group_members_html();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -94,7 +94,7 @@ class SubmissionDetailGeneralInfoSection
         $html[] = $this->format_date($date_submitted) . '<br />';
         $html[] = '</div><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -127,7 +127,7 @@ class SubmissionDetailGeneralInfoSection
 
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -149,7 +149,7 @@ class SubmissionDetailGeneralInfoSection
         $html[] = $this->get_submitter() . '<br />';
         $html[] = '</div><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -171,7 +171,7 @@ class SubmissionDetailGeneralInfoSection
         $html[] = $this->get_group_members() . '<br />';
         $html[] = '</div><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

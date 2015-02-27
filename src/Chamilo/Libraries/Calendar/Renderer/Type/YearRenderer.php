@@ -74,6 +74,6 @@ class YearRenderer extends TableRenderer
         $html = array();
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

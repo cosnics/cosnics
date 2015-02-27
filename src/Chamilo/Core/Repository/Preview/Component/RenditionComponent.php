@@ -56,7 +56,7 @@ class RenditionComponent extends Manager
         $html[] = $tabs->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

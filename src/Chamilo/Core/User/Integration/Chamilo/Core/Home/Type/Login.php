@@ -74,7 +74,7 @@ class Login extends Block
             $html[] = '<br /><br />';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function handle_login_failed()

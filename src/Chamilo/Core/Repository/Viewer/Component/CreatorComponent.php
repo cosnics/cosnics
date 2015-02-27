@@ -65,7 +65,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                     $html[] = $type_selector_renderer->render();
                     $html[] = $this->render_footer();
 
-                    return implode("\n", $html);
+                    return implode(PHP_EOL, $html);
                 }
             }
         }
@@ -220,7 +220,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

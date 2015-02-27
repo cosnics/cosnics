@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements TableSupport
                     'personal',
                     Translation :: get('Personal'),
                     Theme :: getInstance()->getImagePath() . 'tab/personal.png',
-                    implode("\n", $user_quota)));
+                    implode(PHP_EOL, $user_quota)));
 
             if ($user_requests > 0)
             {
@@ -112,7 +112,7 @@ class BrowserComponent extends Manager implements TableSupport
                         'platform',
                         Translation :: get('Platform'),
                         Theme :: getInstance()->getImagePath() . 'tab/platform.png',
-                        implode("\n", $platform_quota)));
+                        implode(PHP_EOL, $platform_quota)));
 
                 $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
                     $this->get_user());
@@ -205,12 +205,12 @@ class BrowserComponent extends Manager implements TableSupport
         }
         else
         {
-            $html[] = implode("\n", $user_quota);
+            $html[] = implode(PHP_EOL, $user_quota);
         }
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_statistics()
@@ -292,7 +292,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = '<div class="quota_statistics">';
         $html[] = $table->toHTML();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

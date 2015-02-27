@@ -30,7 +30,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

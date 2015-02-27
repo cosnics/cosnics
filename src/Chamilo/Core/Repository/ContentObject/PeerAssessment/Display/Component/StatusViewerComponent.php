@@ -37,7 +37,7 @@ class StatusViewerComponent extends Manager
         $html[] = $this->render_tabs();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_tabs()
@@ -117,7 +117,7 @@ class StatusViewerComponent extends Manager
         $html[] = '</tbody>';
         $html[] = '</table>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_status($user, $attempt)
@@ -132,7 +132,7 @@ class StatusViewerComponent extends Manager
         $html[] = $this->render_closed_status($status, $attempt);
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

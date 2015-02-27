@@ -25,6 +25,6 @@ class HtmlInlineMp3RenditionImplementation extends HtmlInlineRenditionImplementa
              '&amp;width=300&amp;showstop=1&amp;showinfo=1&amp;showvolume=1&amp;volumewidth=40&amp;bgcolor=9f0616&amp;bgcolor1=c00c2a&amp;bgcolor2=9f0616&amp;sliderovercolor=abb0b3&amp;buttonovercolor=abb0b3" />';
         $html[] = '</object>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

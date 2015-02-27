@@ -61,6 +61,6 @@ class PublisherWizardDisplay extends HTML_QuickForm_Action_Display
         $html[] = $current_page->toHtml();
         $html[] = $this->parent->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

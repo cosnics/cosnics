@@ -30,7 +30,7 @@ class ListRenderer extends Renderer
         $recent_events = $this->get_events($this, strtotime('-2 Months', time()), time());
         $html[] = $this->render_events($recent_events, 'RecentEvents');
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_events($events, $type)
@@ -54,7 +54,7 @@ class ListRenderer extends Renderer
 
             foreach ($html_events as $time => $content)
             {
-                $output[] = implode("\n", $content);
+                $output[] = implode(PHP_EOL, $content);
             }
         }
         else

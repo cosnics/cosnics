@@ -39,7 +39,7 @@ class ResultsViewerComponent extends Manager
         $html[] = $this->render_tabs();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_tabs()
@@ -213,7 +213,7 @@ class ResultsViewerComponent extends Manager
         $html[] = '</tbody>';
         $html[] = '</table>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_total($user_id, $status_array, $attempts)

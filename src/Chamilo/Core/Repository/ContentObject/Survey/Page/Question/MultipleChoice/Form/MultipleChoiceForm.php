@@ -228,7 +228,7 @@ class MultipleChoiceForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         $number_of_options = $this->determine_number_of_options();
         $skipped_options = $this->determine_skipped_options();
@@ -291,7 +291,7 @@ class MultipleChoiceForm extends ContentObjectForm
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, self :: PROPERTY_OPTION_BUTTONS, null, '', false);
         

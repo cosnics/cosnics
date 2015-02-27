@@ -96,7 +96,7 @@ class AttachmentViewerComponent extends Manager
             $html[] = Display :: small_footer();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_additional_parameters()

@@ -35,7 +35,7 @@ class PublisherComponent extends Manager
             $html[] = $this->render_header();
             $html[] =  $this->get_tabs(self :: ACTION_PUBLISHER, $form->toHtml())->render();
             $html[] = $this->render_footer();
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
            
         }
     }

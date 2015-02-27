@@ -69,7 +69,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 }
                 $answer_select[] = '</select>';
                 
-                $html[] = implode("\n", $answer_select);
+                $html[] = implode(PHP_EOL, $answer_select);
             }
             else
             {
@@ -88,6 +88,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $i ++;
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

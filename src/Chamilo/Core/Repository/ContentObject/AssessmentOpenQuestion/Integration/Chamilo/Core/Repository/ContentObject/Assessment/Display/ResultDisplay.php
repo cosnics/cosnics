@@ -55,7 +55,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $html[] = $object_renderer->run();
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_borders()
@@ -83,7 +83,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         $html[] = '<div class="clear"></div>';
         $html[] = '<br />';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_document_box($answer, $with_open = false)
@@ -125,6 +125,6 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         $html[] = '</div>';
         $html[] = '<br />';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

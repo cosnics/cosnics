@@ -51,6 +51,6 @@ class BrowserComponent extends Manager
         $html[] = parent :: render_header();
         $html[] = '<div class="context_info notification-2">' . Translation :: get('IndicatorInfoMessage') . '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

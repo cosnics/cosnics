@@ -92,7 +92,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                 $html[] = $result_processor->get_results();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
             else
             {
@@ -105,7 +105,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
                     true);
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
 
@@ -117,7 +117,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $html[] = $result_processor->get_results();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -129,7 +129,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $html[] = $this->question_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

@@ -22,7 +22,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_description()
@@ -38,7 +38,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
         $html[] = $this->get_attachments();
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_attachments()
@@ -72,6 +72,6 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
                 $html[] = '</div>';
             }
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

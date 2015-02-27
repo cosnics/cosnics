@@ -149,7 +149,7 @@ abstract class Renderer
 
         $html[] = $this->display_menu_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     abstract public function display_menu_header($current_section);

@@ -61,7 +61,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -109,7 +109,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
             $html[] = $this->display_entity_table($selected_entity);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -178,7 +178,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . '/Resources/Javascript/ConfigureEntity.js');
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -191,7 +191,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $tree = new LocationEntityBrowserTreeMenu($this, $this->get_selected_entity());
         $html[] = $tree->render_as_tree();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

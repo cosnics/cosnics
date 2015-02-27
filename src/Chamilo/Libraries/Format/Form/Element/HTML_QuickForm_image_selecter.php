@@ -275,7 +275,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function setDefaults($defaults)

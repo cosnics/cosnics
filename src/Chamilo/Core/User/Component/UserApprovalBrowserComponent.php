@@ -46,7 +46,7 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         $html[] = $this->get_user_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_user_html()

@@ -61,7 +61,7 @@ class LogViewerComponent extends Manager
         $html[] = $this->display_logfile_table($type, $chamilo_type, $server_type, $lines);
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function build_form()

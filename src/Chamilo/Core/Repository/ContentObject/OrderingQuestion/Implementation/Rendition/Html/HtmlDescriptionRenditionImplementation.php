@@ -48,7 +48,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         }
         $html[] = '</tbody>';
         $html[] = '</table>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_order_options()
@@ -61,6 +61,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $options[] = '<option>' . $i . '</option>';
         }
         
-        return implode("\n", $options);
+        return implode(PHP_EOL, $options);
     }
 }

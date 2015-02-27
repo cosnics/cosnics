@@ -54,7 +54,7 @@ class BrowserComponent extends Manager implements TableSupport
             $html[] = 'NO ACTIVE SOURCE REPOSITORIES';
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         $current_source_id = Request :: get(\Chamilo\Core\Lynx\Source\Manager :: PARAM_SOURCE_ID);
@@ -147,7 +147,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $tabs->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($object_table_class_name)

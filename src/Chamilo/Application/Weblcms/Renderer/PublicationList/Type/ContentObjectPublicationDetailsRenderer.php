@@ -35,7 +35,7 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
         
         $html[] = $this->render_publication($publication);
         $html[] = '<br />';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -99,6 +99,6 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
         $html[] = '</div>';
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

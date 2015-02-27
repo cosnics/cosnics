@@ -51,7 +51,7 @@ class UserComponent extends Manager implements DelegateComponent, TableSupport
             $html[] = $this->get_tabs_renderer()->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         // If a virtual user is currently configured, clear it
@@ -93,7 +93,7 @@ class UserComponent extends Manager implements DelegateComponent, TableSupport
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $table->as_html();
 
-        $this->get_tabs_renderer()->set_content(implode("\n", $html));
+        $this->get_tabs_renderer()->set_content(implode(PHP_EOL, $html));
 
         $html = array();
 
@@ -101,7 +101,7 @@ class UserComponent extends Manager implements DelegateComponent, TableSupport
         $html[] = $this->get_tabs_renderer()->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

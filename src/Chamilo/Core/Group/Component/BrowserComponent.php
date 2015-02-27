@@ -73,7 +73,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $output;
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_user_html()
@@ -378,7 +378,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = '<br />';
         $html[] = $toolbar->as_html();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

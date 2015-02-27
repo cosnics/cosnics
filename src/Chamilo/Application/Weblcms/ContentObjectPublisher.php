@@ -249,6 +249,6 @@ class ContentObjectPublisher
         $html[] = $this->content_object_publication_form->toHtml();
         $html[] = '<div style="clear: both;"></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

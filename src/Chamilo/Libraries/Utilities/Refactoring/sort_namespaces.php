@@ -76,7 +76,7 @@ function process_folder($folder)
                     $use_statements = explode("\n", $use_statements);
                     sort($use_statements);
 
-                    $use_statements = implode("\n", $use_statements);
+                    $use_statements = implode(PHP_EOL, $use_statements);
 
                     for ($index = $first_token; $index <= $last_token; $index ++)
                     {

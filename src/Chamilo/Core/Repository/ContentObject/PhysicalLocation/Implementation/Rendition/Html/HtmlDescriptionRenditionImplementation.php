@@ -28,7 +28,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $replace[] = '</div>';
         $replace[] = '</div>';
         
-        return implode("\n", $replace);
+        return implode(PHP_EOL, $replace);
     }
 
     public function get_javascript($object)
@@ -44,6 +44,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = 'codeAddress(\'' . $object->get_location() . '\', \'' . $object->get_title() . '\');';
         $html[] = '</script>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

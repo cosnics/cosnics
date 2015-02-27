@@ -15,6 +15,6 @@ class StreamingMediaExternalObjectGalleryTableCellRenderer extends DefaultExtern
         $html[] = '<a href="' . $this->browser->get_external_repository_object_viewing_url($object) .
              '"><img class="thumbnail" src="' . $object->get_thumbnail() . '"/></a> <br/>';
         $html[] = '<i>' . Utilities :: truncate_string($object->get_description(), 100) . '</i><br/>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

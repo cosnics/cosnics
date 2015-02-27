@@ -172,7 +172,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
         $this->forum_topic_viewed($this->get_complex_content_object_item_id());
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function retrieve_children($topic, $patterncondition)
@@ -317,7 +317,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             $table->setCellContents($row, 0, '<a href="#top"><small>' . Translation :: get('Top') . '</small></a>');
             $table->setCellAttributes($row, 0, array('class' => $class, 'style' => 'padding: 5px;'));
-            $table->setCellContents($row, 1, implode("\n", $bottom_bar));
+            $table->setCellContents($row, 1, implode(PHP_EOL, $bottom_bar));
             $table->setCellAttributes($row, 1, array('class' => $class, 'align' => 'right', 'style' => 'padding: 5px;'));
 
             $row ++;

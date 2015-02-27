@@ -16,7 +16,7 @@ class CourseList extends Block
         $renderer->show_new_publication_icons();
         $html[] = $renderer->as_html();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

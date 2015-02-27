@@ -48,6 +48,6 @@ class Manager implements UserInterface
         
         $html[] = $table->toHtml();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -50,7 +50,7 @@ class Display extends QuestionDisplay
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         
         $question_name = $question_id . '_0';
         
@@ -102,7 +102,7 @@ class Display extends QuestionDisplay
             $instruction = array();
         }
         
-        return implode("\n", $instruction);
+        return implode(PHP_EOL, $instruction);
     }
 
     public function add_footer($formvalidator)
@@ -117,7 +117,7 @@ class Display extends QuestionDisplay
             $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="button hint_button">' .
                  Translation :: get('GetAHint') . '</a></div>';
             
-            $footer = implode("\n", $html);
+            $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
         

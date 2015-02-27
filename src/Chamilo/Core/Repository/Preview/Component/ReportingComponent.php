@@ -51,7 +51,7 @@ class ReportingComponent extends Manager implements PreviewSupport
             $html[] = '<main class="reporting-content">';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -96,7 +96,7 @@ class ReportingComponent extends Manager implements PreviewSupport
 
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_preview_context()

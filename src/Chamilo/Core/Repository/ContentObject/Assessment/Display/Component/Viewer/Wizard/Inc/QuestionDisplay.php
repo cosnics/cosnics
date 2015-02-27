@@ -87,7 +87,7 @@ abstract class QuestionDisplay
             $header[] = $this->get_instruction();
             $header[] = '<div class="with_borders">';
 
-            $formvalidator->addElement('html', implode("\n", $header));
+            $formvalidator->addElement('html', implode(PHP_EOL, $header));
         }
 
         $formvalidator->addElement(
@@ -102,7 +102,7 @@ abstract class QuestionDisplay
             $footer = array();
             $footer[] = '<div class="clear"></div>';
             $footer[] = '</div>';
-            $formvalidator->addElement('html', implode("\n", $footer));
+            $formvalidator->addElement('html', implode(PHP_EOL, $footer));
         }
 
         $this->add_footer();
@@ -136,7 +136,7 @@ abstract class QuestionDisplay
         $html[] = $this->get_description();
         $html[] = '<div class="clear"></div>';
 
-        $header = implode("\n", $html);
+        $header = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $header);
     }
 
@@ -159,7 +159,7 @@ abstract class QuestionDisplay
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_footer($formvalidator)
@@ -169,7 +169,7 @@ abstract class QuestionDisplay
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $footer = implode("\n", $html);
+        $footer = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $footer);
     }
 

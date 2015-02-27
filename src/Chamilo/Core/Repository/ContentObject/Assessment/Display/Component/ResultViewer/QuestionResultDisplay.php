@@ -98,7 +98,7 @@ abstract class QuestionResultDisplay
             $header = array();
             $header[] = '<div class="with_borders">';
 
-            $this->form->addElement('html', implode("\n", $header));
+            $this->form->addElement('html', implode(PHP_EOL, $header));
         }
 
         $this->form->addElement('html', $this->display_question_result());
@@ -108,7 +108,7 @@ abstract class QuestionResultDisplay
             $footer = array();
             $footer[] = '<div class="clear"></div>';
             $footer[] = '</div>';
-            $this->form->addElement('html', implode("\n", $footer));
+            $this->form->addElement('html', implode(PHP_EOL, $footer));
         }
 
         $this->display_feedback();
@@ -138,7 +138,7 @@ abstract class QuestionResultDisplay
         $html[] = $this->question->get_title();
         $html[] = '</div>';
         $html[] = '<div class="bevel" style="text-align: right;">';
-        $this->form->addElement('html', implode("\n", $html));
+        $this->form->addElement('html', implode(PHP_EOL, $html));
         $html = array();
 
         if ($this->hints > 0)
@@ -200,7 +200,7 @@ abstract class QuestionResultDisplay
 
         $html[] = '<div class="clear"></div>';
 
-        $this->form->addElement('html', implode("\n", $html));
+        $this->form->addElement('html', implode(PHP_EOL, $html));
     }
 
     public function display_feedback()
@@ -215,14 +215,14 @@ abstract class QuestionResultDisplay
             {
                 $html[] = '<div class="warning-message">' . Translation :: get('NotYetRatedWarning') . '</div>';
             }
-            $this->form->addElement('html', implode("\n", $html));
+            $this->form->addElement('html', implode(PHP_EOL, $html));
             $html = array();
             if ($this->feedback)
             {
                 $html[] = $this->feedback;
             }
             $html[] = '</div>';
-            $this->form->addElement('html', implode("\n", $html));
+            $this->form->addElement('html', implode(PHP_EOL, $html));
         }
         else
         {
@@ -236,7 +236,7 @@ abstract class QuestionResultDisplay
                 $html[] = '<div class="warning-message">' . Translation :: get('NotYetRatedWarning') . '</div>';
             }
 
-            $this->form->addElement('html', implode("\n", $html));
+            $this->form->addElement('html', implode(PHP_EOL, $html));
             $html = array();
 
             $this->form->add_html_editor($this->complex_content_object_question->get_id() . '_feedback', '', false);
@@ -244,7 +244,7 @@ abstract class QuestionResultDisplay
             $this->form->setDefaults($defaults);
 
             $html[] = '</div>';
-            $this->form->addElement('html', implode("\n", $html));
+            $this->form->addElement('html', implode(PHP_EOL, $html));
         }
     }
 
@@ -253,7 +253,7 @@ abstract class QuestionResultDisplay
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $footer = implode("\n", $html);
+        $footer = implode(PHP_EOL, $html);
         return $footer;
     }
 

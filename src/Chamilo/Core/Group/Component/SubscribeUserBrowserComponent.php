@@ -64,7 +64,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         $html[] = $output;
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_user_subscribe_html()

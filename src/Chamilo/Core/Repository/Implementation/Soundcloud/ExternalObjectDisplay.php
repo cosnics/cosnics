@@ -54,7 +54,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             
             $html = array();
             $html[] = '<img class="' . $class . '" src="' . $object->get_artwork() . '" />';
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         elseif (! $is_thumbnail)
         {

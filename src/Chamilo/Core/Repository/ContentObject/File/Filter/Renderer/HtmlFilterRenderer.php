@@ -86,6 +86,6 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
                  '">' . FileType :: get_type_string($extension_type) . '</div>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

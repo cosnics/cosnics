@@ -29,7 +29,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $source_table->as_html();
         $html[] = $this->render_footer();
 
-        implode("\n", $html);
+        implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($object_table_class_name)

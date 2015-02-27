@@ -23,7 +23,7 @@ class Display extends QuestionDisplay
         $table_header[] = '<tbody>';
         $table_header[] = '<tr>';
         $table_header[] = '<td>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         $this->add_html_editor($question, $formvalidator);
         
@@ -31,7 +31,7 @@ class Display extends QuestionDisplay
         $table_footer[] = '</tr>';
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $table_footer));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
     function add_html_editor($question, $formvalidator)
@@ -46,7 +46,7 @@ class Display extends QuestionDisplay
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         $renderer = $this->get_renderer();
         
         $name = $question->get_id();

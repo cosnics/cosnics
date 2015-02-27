@@ -35,6 +35,6 @@ class CategoryItem extends Renderer
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

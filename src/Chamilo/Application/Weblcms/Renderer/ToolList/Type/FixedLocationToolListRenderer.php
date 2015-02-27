@@ -205,7 +205,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
              Path :: getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
              'Resources/Javascript/course_home.js' . '"></script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_publication_links()
@@ -391,7 +391,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $cell_contents[] = $title;
                 $cell_contents[] = '</a>';
 
-                $table->setCellContents($row, $col, implode("\n", $cell_contents));
+                $table->setCellContents($row, $col, implode(PHP_EOL, $cell_contents));
                 $table->updateColAttributes($col, 'style="width: ' . floor(100 / $this->number_of_columns) . '%;"');
                 $count ++;
             }
@@ -399,7 +399,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html[] = $table->toHtml();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_block_header($section, $block_name)
@@ -416,7 +416,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '<div class="disabledblock" id="block_' . $section->get_id() . '" style="width:100%;">';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_block_footer($section)
@@ -430,7 +430,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function show_section_tools($section, $tools)
@@ -533,6 +533,6 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html[] = ' ';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

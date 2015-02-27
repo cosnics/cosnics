@@ -36,7 +36,7 @@ class PreviewComponent extends Manager
         $html[] = Translation :: get('PreviewModeWarning');
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function getPreview()

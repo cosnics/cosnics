@@ -85,7 +85,7 @@ class MessageLogger
 
     public function render_for_cli()
     {
-        $message = strip_tags(implode("\n", $this->get_messages()));
+        $message = strip_tags(implode(PHP_EOL, $this->get_messages()));
         $this->truncate();
         return $message;
     }

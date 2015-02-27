@@ -22,7 +22,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div style="border: 1px solid whitesmoke; padding: 10px; margin-bottom: 10px;">';
         $html[] = $this->get_question_preview();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_question_preview($nr = null, $complex_question_id = null)
@@ -69,7 +69,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $html[] = implode("\n", $table_header);
+        $html[] = implode(PHP_EOL, $table_header);
         
         $match_label = 'A';
         
@@ -89,7 +89,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $html[] = implode("\n", $table_footer);
+        $html[] = implode(PHP_EOL, $table_footer);
         
         $html[] = '<br />';
         
@@ -103,7 +103,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $html[] = implode("\n", $table_header);
+        $html[] = implode(PHP_EOL, $table_header);
         
         $answer_count = 0;
         $index = 0;
@@ -131,13 +131,13 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         
-        $html[] = implode("\n", $table_footer);
+        $html[] = implode(PHP_EOL, $table_footer);
         
         $html[] = '</div>';
         $html[] = '</div>';
         
         $html[] = '<div class="clear"></div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }
 ?>

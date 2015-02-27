@@ -346,7 +346,7 @@ class GalleryHTMLTable extends HTML_Table
                 $html[] = '</form>';
             }
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -523,7 +523,7 @@ class GalleryHTMLTable extends HTML_Table
             $result[] = '</noscript>';
             $result[] = '</form>';
         }
-        return implode("\n", $result);
+        return implode(PHP_EOL, $result);
     }
 
     /**
@@ -572,7 +572,7 @@ class GalleryHTMLTable extends HTML_Table
             $result[] = '</noscript>';
             $result[] = '</form>';
         }
-        return implode("\n", $result);
+        return implode(PHP_EOL, $result);
     }
 
     /**
@@ -615,7 +615,7 @@ class GalleryHTMLTable extends HTML_Table
             $result[] = '</noscript>';
             $result[] = '</form>';
         }
-        return implode("\n", $result);
+        return implode(PHP_EOL, $result);
     }
 
     /**

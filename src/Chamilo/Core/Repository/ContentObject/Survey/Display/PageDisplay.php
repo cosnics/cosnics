@@ -47,7 +47,7 @@ abstract class PageDisplay
     {
         $formvalidator = $this->formvalidator;
         $html = array();
-        $header = implode("\n", $html);
+        $header = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $header);
     }
 
@@ -55,7 +55,7 @@ abstract class PageDisplay
     {
         $formvalidator = $this->formvalidator;
         $html = array();
-        $footer = implode("\n", $html);
+        $footer = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $footer);
     }
 

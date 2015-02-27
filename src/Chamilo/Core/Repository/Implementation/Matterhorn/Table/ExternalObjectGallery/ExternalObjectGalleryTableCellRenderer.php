@@ -23,6 +23,6 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
         $html[] = '<a href="' . $this->get_component()->get_external_repository_object_viewing_url($object) . '">' . $display->get_preview(
             true) . '</a><br/>';
         $html[] = '<i>' . Utilities :: truncate_string($object->get_description(), 100) . '</i><br/>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

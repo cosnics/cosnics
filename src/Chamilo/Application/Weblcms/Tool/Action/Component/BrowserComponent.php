@@ -216,7 +216,7 @@ class BrowserComponent extends Manager
         }
         $content[] = '</div>';
 
-        $tabs->set_content(implode("\n", $content));
+        $tabs->set_content(implode(PHP_EOL, $content));
 
         if ($this->get_publication_count() > 0 &&
              $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection :: TYPE_DISABLED)
@@ -228,7 +228,7 @@ class BrowserComponent extends Manager
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -23,6 +23,6 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
             $html[] = '<br/>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

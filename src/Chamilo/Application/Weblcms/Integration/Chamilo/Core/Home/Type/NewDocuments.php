@@ -27,7 +27,7 @@ class NewDocuments extends NewBlock
         {
             return Translation :: get('NoNewDocumentsSinceLastVisit');
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_new_items($publications)

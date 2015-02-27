@@ -358,7 +358,7 @@ class SortableTable extends HTML_Table
                 $html[] = '</script>';
             }
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -470,7 +470,7 @@ class SortableTable extends HTML_Table
             $result[] = '</noscript>';
             $result[] = '</form>';
         }
-        return implode("\n", $result);
+        return implode(PHP_EOL, $result);
     }
 
     /**

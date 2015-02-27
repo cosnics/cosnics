@@ -151,7 +151,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '</div>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function handle_table_action()
@@ -269,7 +269,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html[] = '</div>';
         $html[] = '</div><br />';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

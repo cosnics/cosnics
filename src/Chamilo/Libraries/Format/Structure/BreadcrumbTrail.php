@@ -164,7 +164,7 @@ class BreadcrumbTrail
         $html[] = $this->render_help();
         $html[] = $this->render_extra();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -188,7 +188,7 @@ class BreadcrumbTrail
 
         $html[] = '</ul>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -219,7 +219,7 @@ class BreadcrumbTrail
             }
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -251,7 +251,7 @@ class BreadcrumbTrail
         $html[] = $toolbar->as_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

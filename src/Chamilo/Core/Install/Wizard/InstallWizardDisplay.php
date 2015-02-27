@@ -79,7 +79,7 @@ EOT;
         $element_template[] = '</div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
 
         $renderer->setElementTemplate($element_template);
         // $header_template = "\n\t<tr>\n\t\t<td valign=\"top\" colspan=\"2\">{header}</td>\n\t</tr>";
@@ -87,7 +87,7 @@ EOT;
         $header_template[] = '<div class="row">';
         $header_template[] = '<div class="form_header">{header}</div>';
         $header_template[] = '</div>';
-        $header_template = implode("\n", $header_template);
+        $header_template = implode(PHP_EOL, $header_template);
 
         $renderer->setHeaderTemplate($header_template);
         HTML_QuickForm :: setRequiredNote(
@@ -229,6 +229,6 @@ EOT;
 
         $html[] = $this->parent->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

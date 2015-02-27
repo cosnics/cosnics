@@ -22,7 +22,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div style="border: 1px solid whitesmoke; padding: 10px; margin-bottom: 10px;">';
         $html[] = $this->get_question_preview();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_question_preview($nr = null)
@@ -42,7 +42,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         
         $html[] = '<div class="clear"></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }
 ?>

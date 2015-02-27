@@ -47,7 +47,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
             $table = new RequestTable($this);
             $html[] = $table->as_html();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

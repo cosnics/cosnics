@@ -115,6 +115,6 @@ class WikiActionbar extends ActionBarRenderer
             Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) .
                  'Resources/Javascript/ActionBarVertical.js');
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

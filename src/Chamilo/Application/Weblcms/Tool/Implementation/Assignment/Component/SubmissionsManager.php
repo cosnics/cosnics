@@ -437,7 +437,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
              '\'); return false;" href="#">';
         $html[] = $attachment->get_title();
         $html[] = '</a>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -549,7 +549,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -593,7 +593,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
             $html[] = '<br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

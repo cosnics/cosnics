@@ -36,7 +36,7 @@ class EventListRenderer extends EventRenderer
         $html[] = $this->get_actions();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -51,7 +51,7 @@ class EventListRenderer extends EventRenderer
         $html[] = $this->get_content();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -80,7 +80,7 @@ class EventListRenderer extends EventRenderer
                 $this->get_event()->get_start_date()) . '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -117,6 +117,6 @@ class EventListRenderer extends EventRenderer
         $html[] = $toolbar->as_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

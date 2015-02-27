@@ -146,7 +146,7 @@ class AttemptResultViewerComponent extends Manager
             $html[] = '<div class="warning-message">' . Translation :: get('AttemptNotCompleted') . '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

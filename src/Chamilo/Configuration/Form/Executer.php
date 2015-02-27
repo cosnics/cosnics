@@ -64,7 +64,7 @@ class Executer
             $html[] = $form->toHtml();
             $html[] = $this->application->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

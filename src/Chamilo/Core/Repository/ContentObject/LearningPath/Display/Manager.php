@@ -425,7 +425,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html[] = '</div>';
         $html[] = '<div style="width: 81%; float: right; padding-left: 10px; min-height: 500px;">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -440,7 +440,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -45,7 +45,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
                 $complex_content_object_item);
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -80,7 +80,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
         
         $html[] = '</div><br />';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

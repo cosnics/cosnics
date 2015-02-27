@@ -36,7 +36,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = $blog_layout->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_action_bar()

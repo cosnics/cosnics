@@ -39,7 +39,7 @@ class ResultViewerComponent extends Manager
             $html[] = $result_to_html_converter->convert_to_html($request_id);
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

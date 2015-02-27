@@ -70,6 +70,6 @@ class DayRenderer extends TableRenderer
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

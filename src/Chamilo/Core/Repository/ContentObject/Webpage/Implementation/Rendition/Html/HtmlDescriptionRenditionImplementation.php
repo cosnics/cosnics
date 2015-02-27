@@ -25,6 +25,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 width="100%" height="500"  src="' . $url .
              '&display=1"></iframe></div></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

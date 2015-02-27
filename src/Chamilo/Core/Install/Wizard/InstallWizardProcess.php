@@ -68,7 +68,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
             $html[] = $this->parent->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         catch (InstallFailedException $exception)
         {
@@ -141,7 +141,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getConfigurationPath(true) . 'Resources/Javascript/InstallProcess.js');
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function process_result($title, $result, $message, $image)
@@ -152,7 +152,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html[] = $message;
         $html[] = $this->display_install_block_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_install_block_header($title, $result, $image)
@@ -167,7 +167,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html[] = '<div class="title">' . $title . '</div>';
         $html[] = '<div class="description">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_install_block_footer()
@@ -175,7 +175,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html = array();
         $html[] = '</div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function before_filesystem_prepared()

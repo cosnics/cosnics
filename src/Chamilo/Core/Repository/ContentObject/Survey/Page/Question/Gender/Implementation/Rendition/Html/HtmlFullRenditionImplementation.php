@@ -19,7 +19,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div style="border: 1px solid whitesmoke; padding: 10px; margin-bottom: 10px;">';
         $html[] = $this->get_question_preview();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_question_preview($nr = null, $complex_question_id = null)
@@ -92,7 +92,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = $this->get_javascript($question_id);
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_includes()
@@ -103,7 +103,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/adapters/jquery.js');
         
-        return implode("\n", $scripts);
+        return implode(PHP_EOL, $scripts);
     }
 
     function get_javascript($question_id)
@@ -127,7 +127,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $javascript[] = '});';
         $javascript[] = '</script>';
         
-        return implode("\n", $javascript);
+        return implode(PHP_EOL, $javascript);
     }
 }
 ?>

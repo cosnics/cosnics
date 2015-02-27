@@ -179,6 +179,6 @@ class BatcherComponent extends Manager
         $html[] = '<b>FINISHED</b> processing all repositories' . "\n";
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -56,7 +56,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = $this->get_group_subscribe_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_group_subscribe_html()

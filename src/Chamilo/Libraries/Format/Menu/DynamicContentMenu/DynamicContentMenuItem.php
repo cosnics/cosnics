@@ -80,7 +80,7 @@ class DynamicContentMenuItem
         $html[] = $this->get_name();
         $html[] = '</li>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -96,7 +96,7 @@ class DynamicContentMenuItem
         $html[] = call_user_func($this->get_content_function(), $this);
         $html[] = $this->render_content_footer();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -117,7 +117,7 @@ class DynamicContentMenuItem
         $html[] = '<div id="' . $this->get_id() . '" class="dynamic_content_menu_item_content">';
         $html[] = '<div class="dynamic_content_menu_item_content_header"><h3>' . $this->get_name() . '</h3></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

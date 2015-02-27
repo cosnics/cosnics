@@ -103,7 +103,7 @@ abstract class Embedder
             Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
                  'Resources/Javascript/learning_path_item.js');
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class Embedder
         $html[] = $this->track();
         $html[] = $this->render();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

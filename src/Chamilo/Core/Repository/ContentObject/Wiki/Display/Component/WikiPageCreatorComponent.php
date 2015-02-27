@@ -93,7 +93,7 @@ class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Reposito
         $html[] = '<div class="wiki-pane-content-subtitle">' . Translation :: get('In') . ' ' .
              $this->get_root_content_object()->get_title() . '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_allowed_content_object_types()

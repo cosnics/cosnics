@@ -146,7 +146,7 @@ class AssessmentResultViewerForm extends FormValidator
     public function add_results()
     {
         $question_results = $this->assessment_result_processor->get_question_results();
-        $question_results = implode("\n", $question_results);
+        $question_results = implode(PHP_EOL, $question_results);
         $this->addElement('html', $question_results);
     }
 }

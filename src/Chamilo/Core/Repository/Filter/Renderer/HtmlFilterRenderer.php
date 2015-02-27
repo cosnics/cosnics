@@ -45,7 +45,7 @@ class HtmlFilterRenderer extends FilterRenderer
             $html[] = $this->add_footer();
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_properties()
@@ -198,7 +198,7 @@ class HtmlFilterRenderer extends FilterRenderer
                  Translation :: get('UserViewFilter', array('VIEW' => $user_view->get_name())) . '</div>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -210,7 +210,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html = array();
         $html[] = '<div id="search_parameters"><h4>' . Translation :: get('SearchParameters') . '</h4>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -229,7 +229,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->namespaceToFullPath(Manager :: context(), true) . 'Resources/Javascript/Search.js');
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

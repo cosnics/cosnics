@@ -100,7 +100,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $html[] = $result;
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_header()
@@ -118,7 +118,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
             $html[] = '<h4>' . Translation :: get('Feedbacks') . '</h4>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -133,7 +133,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $html[] = '</div>';
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_publication_id()

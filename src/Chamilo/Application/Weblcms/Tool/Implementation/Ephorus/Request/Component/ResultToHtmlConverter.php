@@ -69,10 +69,10 @@ class ResultToHtmlConverter
         {
             $diffs[] = $this->show_result($result);
         }
-        $html[] = implode("\n", $diffs);
+        $html[] = implode(PHP_EOL, $diffs);
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function format_date($date)
@@ -176,7 +176,7 @@ class ResultToHtmlConverter
         $html[] = "</tr>";
         $html[] = "</table>";
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_chamilo_list($chamilo)
@@ -223,7 +223,7 @@ class ResultToHtmlConverter
         }
         $html[] = '</ol>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -265,7 +265,7 @@ class ResultToHtmlConverter
         }
         $html[] = '</ol>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_internet_list($internet)
@@ -285,7 +285,7 @@ class ResultToHtmlConverter
         }
         $html[] = '</ol>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -306,7 +306,7 @@ class ResultToHtmlConverter
             $html[] = $this->show_result($result);
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -365,7 +365,7 @@ class ResultToHtmlConverter
         $html[] = "</tr>";
         $html[] = "</table>";
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }
 

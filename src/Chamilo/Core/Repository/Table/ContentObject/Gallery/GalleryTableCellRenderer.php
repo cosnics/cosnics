@@ -20,7 +20,7 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
         $html[] = $this->get_modification_links($content_object);
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_cell_content(ContentObject $content_object)
@@ -35,7 +35,7 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
         $html[] = '<a href="' . htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
              '">' . $display->render() . '</a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_modification_links($content_object)

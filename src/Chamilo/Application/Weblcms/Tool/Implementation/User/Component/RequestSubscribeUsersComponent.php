@@ -69,7 +69,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $html[] = $this->form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -134,7 +134,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $html[] = '</ul>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

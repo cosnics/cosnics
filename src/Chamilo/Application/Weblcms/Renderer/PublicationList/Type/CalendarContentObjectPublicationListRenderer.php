@@ -207,7 +207,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $html[] = $this->render_upcoming_events();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_filter_targets()
@@ -322,7 +322,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_upcoming_events()
@@ -351,7 +351,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         // $html[] = '</div>';
         // }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_small_event($event)

@@ -66,7 +66,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $tabs->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_table($type)

@@ -75,7 +75,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $html[] = '</div>';
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -126,7 +126,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_info();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_info()
@@ -143,7 +143,7 @@ class ViewerComponent extends Manager implements DelegateComponent
              $this->render_publication_targets();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -213,7 +213,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             }
 
             $target_list[] = '</select>';
-            return implode("\n", $target_list);
+            return implode(PHP_EOL, $target_list);
         }
     }
 

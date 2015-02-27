@@ -91,7 +91,7 @@ abstract class QuestionDisplay
             $html[] = '<div class="clear"></div>';
         }
         
-        $header = implode("\n", $html);
+        $header = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $header);
     }
 
@@ -102,7 +102,7 @@ abstract class QuestionDisplay
         $html[] = '</div>';
         $html[] = '</div>';
         
-        $footer = implode("\n", $html);
+        $footer = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $footer);
     }
 

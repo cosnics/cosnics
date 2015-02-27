@@ -111,7 +111,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_action_bar()

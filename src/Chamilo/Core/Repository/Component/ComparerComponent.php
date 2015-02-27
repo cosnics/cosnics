@@ -55,7 +55,7 @@ class ComparerComponent extends Manager
             $html[] = $object->get_difference($version_id)->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

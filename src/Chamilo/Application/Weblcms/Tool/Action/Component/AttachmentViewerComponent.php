@@ -100,7 +100,7 @@ class AttachmentViewerComponent extends Manager
                 $this);
             $html[] = $this->small_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -110,7 +110,7 @@ class AttachmentViewerComponent extends Manager
             $html[] = $this->display_error_message($error_message);
             $html[] = $this->small_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

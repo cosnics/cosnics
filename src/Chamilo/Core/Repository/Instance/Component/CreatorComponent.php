@@ -59,7 +59,7 @@ class CreatorComponent extends Manager
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         else
@@ -73,7 +73,7 @@ class CreatorComponent extends Manager
                 $html[] = $this->display_warning_message(Translation :: get('NoExternalInstancesAvailable'));
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
 
             $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
@@ -101,7 +101,7 @@ class CreatorComponent extends Manager
                             ClassnameUtilities :: getInstance()->getNamespaceParent(
                                 ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context())) .
                                  '\external') . 'category_' . $category . '.png',
-                        implode("\n", $types_html)));
+                        implode(PHP_EOL, $types_html)));
             }
 
             $html = array();
@@ -110,7 +110,7 @@ class CreatorComponent extends Manager
             $html[] = $tabs->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

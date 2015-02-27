@@ -55,14 +55,14 @@ class Display extends QuestionDisplay
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         $this->add_options();
         
         $table_header = array();
         $table_header[] = '</tbody>';
         $table_header[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
     }
 
     public function add_options()

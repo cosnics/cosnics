@@ -68,7 +68,7 @@ class PackageDisplay
             $html[] = $this->get_install_problems();
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_dependencies_table()
@@ -126,7 +126,7 @@ class PackageDisplay
             $html[] = '</table><br/>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_update_problems()
@@ -164,7 +164,7 @@ class PackageDisplay
             $html[] = $package_update_dependency->get_logger()->render();
             $html[] = '</div>';
             $html[] = '</div>';
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -191,7 +191,7 @@ class PackageDisplay
         $html[] = $package_dependency->get_logger()->render();
         $html[] = '</div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_cycle_table()
@@ -213,7 +213,7 @@ class PackageDisplay
              '</td></tr>';
         $html[] = '</table><br/>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_properties_table()
@@ -261,7 +261,7 @@ class PackageDisplay
         
         $html[] = '</table><br/>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_stability_information()

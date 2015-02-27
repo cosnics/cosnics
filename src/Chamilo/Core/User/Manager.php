@@ -222,7 +222,7 @@ abstract class Manager extends Application
      */
     public static function get_terms_and_conditions()
     {
-        return implode("\n", file(Path :: getInstance()->getBasePath() . 'files/documentation/license.txt'));
+        return implode(PHP_EOL, file(Path :: getInstance()->getBasePath() . 'files/documentation/license.txt'));
     }
 
     /**

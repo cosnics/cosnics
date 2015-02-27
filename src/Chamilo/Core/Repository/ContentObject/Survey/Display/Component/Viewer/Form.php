@@ -55,7 +55,7 @@ class Form extends FormValidator
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
     }
 
     public function add_buttons()

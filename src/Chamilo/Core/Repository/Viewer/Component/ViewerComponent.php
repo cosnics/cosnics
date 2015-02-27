@@ -66,7 +66,7 @@ class ViewerComponent extends Manager
             $html[] = '<div class="clear"></div>';
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

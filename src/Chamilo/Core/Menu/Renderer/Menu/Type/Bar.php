@@ -19,7 +19,7 @@ class Bar extends Renderer
         $html = array();
         $html[] = '<div class="navbar">';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_menu_footer()

@@ -247,7 +247,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html[] = '</div>';
         $html[] = '<br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

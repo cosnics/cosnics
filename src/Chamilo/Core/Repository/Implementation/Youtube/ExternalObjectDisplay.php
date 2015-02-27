@@ -30,6 +30,6 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
         $html = array();
         $html[] = '<embed height="344" width="425" type="application/x-shockwave-flash" src="' . $object->get_video_url() .
              '"></embed>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

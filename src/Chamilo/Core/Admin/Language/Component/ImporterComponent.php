@@ -216,7 +216,7 @@ class ImporterComponent extends Manager
             $html[] = $this->process();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -226,7 +226,7 @@ class ImporterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -348,7 +348,7 @@ class ImporterComponent extends Manager
                     $translation_content[] = $variable . ' = "' . str_replace('"', '\"', $value) . '"';
                 }
 
-                Filesystem :: write_to_file($language_path, implode("\n", $translation_content));
+                Filesystem :: write_to_file($language_path, implode(PHP_EOL, $translation_content));
             }
         }
 

@@ -45,6 +45,6 @@ class HtmlContentObjectRendition extends ContentObjectRendition
         $html[] = '</div>';
         $html[] = '<div class="usage_status">' . $status . ' &ndash; ' . round($percent, 2) . ' %</div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -40,7 +40,7 @@ class MiniListRenderer extends Renderer
         $html[] = $this->render_events($events, 'Soon', $from_time, $to_time);
         $html[] = $this->build_legend();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_events($events, $type, $from_time, $to_time)
@@ -63,7 +63,7 @@ class MiniListRenderer extends Renderer
 
             foreach ($html_events as $time => $content)
             {
-                $output[] = implode("\n", $content);
+                $output[] = implode(PHP_EOL, $content);
             }
         }
 

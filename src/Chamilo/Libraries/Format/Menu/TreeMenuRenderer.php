@@ -97,6 +97,6 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
         $html[] = '$("#' . $this->tree_name . '").tree_menu({search: "' . $this->search_url . '", item_url: "' . $this->item_url . '", collapsed: "'. $this->collapsed .'" });';
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

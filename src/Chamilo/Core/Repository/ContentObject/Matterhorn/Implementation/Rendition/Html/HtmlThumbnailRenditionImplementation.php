@@ -17,6 +17,6 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div>' . $object->get_description() . '</div>';
         $html[] = $this->get_properties_table();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

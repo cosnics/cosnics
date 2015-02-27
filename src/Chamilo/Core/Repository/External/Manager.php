@@ -219,7 +219,7 @@ abstract class Manager extends Application implements NoContextComponent
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -269,7 +269,7 @@ abstract class Manager extends Application implements NoContextComponent
             $html[] = parent :: render_small_footer();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function get_object_viewing_parameters($external_instance_sync)

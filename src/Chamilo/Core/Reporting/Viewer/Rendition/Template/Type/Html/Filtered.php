@@ -73,7 +73,7 @@ class Filtered extends Basic
                     $this->determine_current_block_view($key));
             }
             
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -100,7 +100,7 @@ class Filtered extends Basic
             {
                 $tabs = new DynamicVisualTabsRenderer(
                     ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template(), true), 
-                    implode("\n", $html));
+                    implode(PHP_EOL, $html));
                 
                 $context_parameters = $this->get_context()->get_parameters();
                 
@@ -137,7 +137,7 @@ class Filtered extends Basic
             }
             else
             {
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
     }

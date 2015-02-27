@@ -105,7 +105,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = $this->course_emptier_form->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         else
@@ -116,7 +116,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = $this->course_emptier_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

@@ -48,7 +48,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         }
         $html[] = '</ul>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function footer()
@@ -66,7 +66,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         </script>
         ';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render()
@@ -79,7 +79,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         $html[] = self :: body_footer();
         $html[] = $this->footer();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function body_header()
@@ -89,7 +89,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         $html[] = '<div class="admin_tab ui-tabs-panel ui-widget-content ui-corner-bottom dynamic_visual_tab">';
         $html[] = '<a class="prev"></a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function body_footer()
@@ -100,6 +100,6 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

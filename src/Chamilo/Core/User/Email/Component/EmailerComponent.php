@@ -46,7 +46,7 @@ class EmailerComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -75,6 +75,6 @@ class EmailerComponent extends Manager
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -36,7 +36,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $html[] = Display :: normal_message(
                 Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES), 
                 true);
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         
         $first = ($slideshow_index == 0);
@@ -179,7 +179,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $html[] = '<meta http-equiv="Refresh" content="10; url=' . $autoplay_url . '" />';
         }
         
-        $html[] = implode("\n", $table);
-        return implode("\n", $html);
+        $html[] = implode(PHP_EOL, $table);
+        return implode(PHP_EOL, $html);
     }
 }

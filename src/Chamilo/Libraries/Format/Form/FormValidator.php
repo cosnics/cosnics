@@ -217,7 +217,7 @@ EOT;
         $element_template[] = '<div class="form_feedback"></div></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
 
         $this->renderer->setElementTemplate($element_template);
 
@@ -225,7 +225,7 @@ EOT;
         $header_template[] = '<div class="row">';
         $header_template[] = '<div class="form_header">{header}</div>';
         $header_template[] = '</div>';
-        $header_template = implode("\n", $header_template);
+        $header_template = implode(PHP_EOL, $header_template);
 
         $this->renderer->setHeaderTemplate($header_template);
 
@@ -838,7 +838,7 @@ EOT;
         $html[] = '});';
         $html[] = '</script>';
 
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
     }
 
     /**
@@ -1065,7 +1065,7 @@ EOT;
 
         if (isset($html))
         {
-            $this->addElement('html', implode("\n", $html));
+            $this->addElement('html', implode(PHP_EOL, $html));
         }
     }
 

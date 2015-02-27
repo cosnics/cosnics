@@ -44,7 +44,7 @@ class ViewerComponent extends Manager
                 $html[] = $this->get_finish_html();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
 
             $this->set_parameter(self :: PARAM_STEP, $this->current_step);
@@ -60,7 +60,7 @@ class ViewerComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -99,7 +99,7 @@ class ViewerComponent extends Manager
         $html[] = '<div style="width: 82%; float: right; padding-left: 10px; min-height: 500px;">';
         $html[] = $this->get_progress_bar();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -112,7 +112,7 @@ class ViewerComponent extends Manager
         $html[] = $this->get_hidden_fields();
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_progress_bar()
@@ -123,7 +123,7 @@ class ViewerComponent extends Manager
         $html[] = '</div>';
         $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round(25) .
              '%</div></div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_current_step()
@@ -172,7 +172,7 @@ class ViewerComponent extends Manager
         {
             $html[] = '<input type="hidden" value="' . $value . '" name="param_' . $name . '">';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_finish_html()
@@ -191,7 +191,7 @@ class ViewerComponent extends Manager
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_answer($complex_question_id)

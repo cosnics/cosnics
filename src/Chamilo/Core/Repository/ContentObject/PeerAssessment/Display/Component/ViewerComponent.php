@@ -79,7 +79,7 @@ class ViewerComponent extends Manager
                      '</p>';
             }
 
-            $html[] = '<h2>' . $attempt->get_title() . '</h2>' . implode("\n", $html);
+            $html[] = '<h2>' . $attempt->get_title() . '</h2>' . implode(PHP_EOL, $html);
             $html[] = $form->toHtml();
             $html[] = parent :: render_footer();
         }
@@ -96,6 +96,6 @@ class ViewerComponent extends Manager
             $this->redirect(Translation :: get('NoGroupSubscription'), 1, $params);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

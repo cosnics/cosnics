@@ -79,6 +79,6 @@ class UserCourseGroups
         $html[] = '</div>';
         $html[] = '<div style="clear:both;"><span></span></div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

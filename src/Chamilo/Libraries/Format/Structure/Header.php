@@ -189,7 +189,7 @@ class Header
             $output[] = '  ' . $html_header;
         }
         $output[] = ' </head>';
-        return implode("\n", $output);
+        return implode(PHP_EOL, $output);
     }
 
     public function get_section()

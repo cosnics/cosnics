@@ -224,7 +224,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
             
             $html[] = '<div>' . $graph . '</div>';
             
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

@@ -34,7 +34,7 @@ class EditorComponent extends Manager
             $html[] = $group_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

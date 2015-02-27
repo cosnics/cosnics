@@ -100,7 +100,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $html[] = $this->display_assignment();
         $html[] = $this->display_submissions_tabs();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -117,7 +117,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
             $html[] = $this->action_bar->as_html();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -131,7 +131,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_as_html();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -299,7 +299,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $html[] = $this->get_reporting_data_as_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -354,7 +354,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
             $html[] = round($total_score / $count, 2) . '%<br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

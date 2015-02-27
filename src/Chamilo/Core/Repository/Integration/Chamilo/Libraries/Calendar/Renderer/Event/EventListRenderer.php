@@ -30,7 +30,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
         $html[] = $this->get_event()->get_content();
         $html[] = $this->render_attachments();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
 
                     $html[] = '</ul></div>';
 
-                    return implode("\n", $html);
+                    return implode(PHP_EOL, $html);
                 }
             }
         }

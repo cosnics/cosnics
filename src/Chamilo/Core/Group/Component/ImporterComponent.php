@@ -47,7 +47,7 @@ class ImporterComponent extends Manager
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

@@ -194,7 +194,7 @@ class ActionBarRenderer
 
         $html[] = '<div class="clear"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_vertical()
@@ -271,7 +271,7 @@ class ActionBarRenderer
 
         $html[] = '<div class="clear"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_query()

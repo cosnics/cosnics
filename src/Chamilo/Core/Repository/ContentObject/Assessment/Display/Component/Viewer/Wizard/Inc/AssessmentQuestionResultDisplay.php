@@ -101,7 +101,7 @@ abstract class AssessmentQuestionResultDisplay
         }
 
         $html[] = $this->footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_question_result()
@@ -164,7 +164,7 @@ abstract class AssessmentQuestionResultDisplay
 
         $html[] = '<div class="clear"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function footer()
@@ -172,7 +172,7 @@ abstract class AssessmentQuestionResultDisplay
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_borders()

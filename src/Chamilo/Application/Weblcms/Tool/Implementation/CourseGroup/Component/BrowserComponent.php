@@ -92,7 +92,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $html[] = $this->get_table_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_menu_html()
@@ -105,7 +105,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $html[] = $group_menu->render_as_tree();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_table_html()
@@ -234,7 +234,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      * PARAM_PUBLICATION_ID => $introduction_text->get_id())), ToolbarItem::DISPLAY_ICON, true )); $html[] = '<div
      * class="content_object">'; $html[] = '<div class="description">'; $html[] =
      * $introduction_text->get_content_object()->get_description(); $html[] = '</div>'; $html[] = $toolbar->as_html() .
-     * '<div class="clear"></div>'; $html[] = '</div>'; $html[] = '<br />'; } return implode("\n", $html); }
+     * '<div class="clear"></div>'; $html[] = '</div>'; $html[] = '<br />'; } return implode(PHP_EOL, $html); }
      */
     public function get_group_id()
     {

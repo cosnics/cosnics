@@ -132,7 +132,7 @@ class Publisher
             $html[] = '<div style="clear: both;"></div>';
             $html[] = $this->application->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

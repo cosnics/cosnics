@@ -67,7 +67,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = $this->menu->render_as_tree();
             $html[] = '</div>';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function run()
@@ -105,7 +105,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_condition()

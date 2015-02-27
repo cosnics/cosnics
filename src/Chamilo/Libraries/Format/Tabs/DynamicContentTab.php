@@ -53,6 +53,6 @@ class DynamicContentTab extends DynamicTab
         $html[] = $this->body_header();
         $html[] = $this->content;
         $html[] = $this->body_footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

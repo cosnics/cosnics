@@ -213,7 +213,7 @@ class ManagerSendMailComponent extends Manager
         }
         $html[] = $survey_publication->get_title() . '<br/>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function parse_values($values, $filter_user_ids)
@@ -335,7 +335,7 @@ class ManagerSendMailComponent extends Manager
             $fullbody[] = '<br/><a href=' . $url . '>' . $url . '</a>';
             $fullbody[] = '</p>';
             
-            $body = implode("\n", $fullbody);
+            $body = implode(PHP_EOL, $fullbody);
             
             $email_header = $values[MailForm :: EMAIL_HEADER];
             $email_from_address = $values[MailForm :: FROM_ADDRESS];

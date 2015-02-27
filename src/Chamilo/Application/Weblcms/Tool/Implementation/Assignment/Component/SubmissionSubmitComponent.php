@@ -118,7 +118,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
                     $html[] = $form->toHtml();
                     $html[] = $this->render_footer();
 
-                    return implode("\n", $html);
+                    return implode(PHP_EOL, $html);
                 }
             }
             else
@@ -286,7 +286,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             $html[] = Translation :: get('AssignmentNotStarted') . Translation :: get('StartTime') . ': ' . $date;
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         if ($this->assignment->get_end_time() < time() && $this->assignment->get_allow_late_submissions() == 0)
@@ -301,7 +301,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             $html[] = Translation :: get('AssignmentEnded') . Translation :: get('EndTime') . ': ' . $date;
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         return true;
@@ -381,7 +381,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
         {
             foreach ($copier->get_messages() as $type)
             {
-                $messages .= implode("\n", $type);
+                $messages .= implode(PHP_EOL, $type);
             }
 
             $this->redirect(

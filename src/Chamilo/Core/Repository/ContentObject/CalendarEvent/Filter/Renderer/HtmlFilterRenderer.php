@@ -88,6 +88,6 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
             }
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

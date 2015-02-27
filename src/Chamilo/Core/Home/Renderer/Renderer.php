@@ -106,7 +106,7 @@ abstract class Renderer
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = Display :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_current_tab()

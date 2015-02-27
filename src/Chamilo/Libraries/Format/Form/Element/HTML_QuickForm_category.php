@@ -40,7 +40,7 @@ class HTML_QuickForm_category extends HTML_QuickForm_html
             $html[] = '</div>';
         }
         
-        $html = implode("\n", $html);
+        $html = implode(PHP_EOL, $html);
         
         parent :: __construct($html);
     }

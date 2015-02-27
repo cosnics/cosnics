@@ -19,7 +19,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         {
             $html = array();
             $html[] = '<iframe class="preview" src="' . $url . '"></iframe>';
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

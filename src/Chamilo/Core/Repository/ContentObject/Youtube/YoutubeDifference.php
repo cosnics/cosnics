@@ -25,6 +25,6 @@ class YoutubeDifference extends ContentObjectDifference
         
         $html[] = $difference->Render($renderer);
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

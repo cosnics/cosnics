@@ -41,7 +41,7 @@ class DefaultMail extends Mail
         }
 
         $headers[] = 'Content-type: text/html; charset="utf8"';
-        $headers = implode("\n", $headers);
+        $headers = implode(PHP_EOL, $headers);
         return mail(implode(',', $this->get_to()), $this->get_subject(), $this->get_message(), $headers);
     }
 }

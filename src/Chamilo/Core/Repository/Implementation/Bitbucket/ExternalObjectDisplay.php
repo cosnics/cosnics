@@ -36,7 +36,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             $class = ($is_thumbnail ? 'thumbnail' : 'with_border');
             $html = array();
             $html[] = '<img class="' . $class . '" src="' . $object->get_logo() . '" />';
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -116,6 +116,6 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             $html[] = $table->as_html();
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -29,6 +29,6 @@ class Processor extends HtmlEditorProcessor
 
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

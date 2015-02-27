@@ -29,7 +29,7 @@ class BuilderComponent extends Manager implements TableSupport
         $html[] = $this->display_element_table();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_element_table()
@@ -59,7 +59,7 @@ class BuilderComponent extends Manager implements TableSupport
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

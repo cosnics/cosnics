@@ -106,7 +106,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_question_feedback($index, $answer, $multiple_answers)
@@ -312,6 +312,6 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 break;
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

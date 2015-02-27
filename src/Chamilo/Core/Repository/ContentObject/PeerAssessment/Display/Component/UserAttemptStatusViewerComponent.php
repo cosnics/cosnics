@@ -59,7 +59,7 @@ class UserAttemptStatusViewerComponent extends Manager implements TableSupport
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_attempts(array $attempts)
@@ -136,7 +136,7 @@ class UserAttemptStatusViewerComponent extends Manager implements TableSupport
             $html[] = $this->render_list_item($title, $description, $info, $actions, $level, $disabled);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_status($status, $attempt)

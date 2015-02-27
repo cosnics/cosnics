@@ -139,13 +139,13 @@ class Display extends QuestionDisplay
             $hint_table[] = '</tbody>';
             $hint_table[] = '</table>';
             
-            $this->add_html(implode("\n", $hint_table));
+            $this->add_html(implode(PHP_EOL, $hint_table));
         }
     }
 
     public function add_html($html)
     {
-        $html = is_array($html) ? implode("\n", $html) : $html;
+        $html = is_array($html) ? implode(PHP_EOL, $html) : $html;
         $formvalidator = $this->get_formvalidator();
         $formvalidator->addElement('html', $html);
     }
@@ -305,6 +305,6 @@ class Display extends QuestionDisplay
             $instruction = array();
         }
         
-        return implode("\n", $instruction);
+        return implode(PHP_EOL, $instruction);
     }
 }

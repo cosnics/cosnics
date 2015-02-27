@@ -36,7 +36,7 @@ class GeolocationDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $html[] = 'codeAddress(\'' . $lo->get_location() . '\', \'' . $lo->get_title() . '\');';
         $html[] = '</script>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
     
     /*

@@ -229,6 +229,6 @@ class SimpleTable extends HTML_Table
         else
             $html[] = parent :: toHTML();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -52,7 +52,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
             \Chamilo\Core\Repository\Manager :: context());
         $html[] = '</h4><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function run()

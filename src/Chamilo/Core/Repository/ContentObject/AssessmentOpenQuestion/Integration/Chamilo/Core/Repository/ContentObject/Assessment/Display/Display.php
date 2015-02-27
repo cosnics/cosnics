@@ -50,7 +50,7 @@ class Display extends QuestionDisplay
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         $renderer = $this->get_renderer();
         
         $name = $clo_question->get_id() . '_0';
@@ -66,7 +66,7 @@ class Display extends QuestionDisplay
             $html[] = '<div class="splitter" style="margin: 10px -10px 10px -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
             $html[] = Translation :: get('SelectDocument');
             $html[] = '</div>';
-            $formvalidator->addElement('html', implode("\n", $html));
+            $formvalidator->addElement('html', implode(PHP_EOL, $html));
         }
         
         $name_1 = $clo_question->get_id() . '_1';
@@ -125,7 +125,7 @@ class Display extends QuestionDisplay
             $instruction = array();
         }
         
-        return implode("\n", $instruction);
+        return implode(PHP_EOL, $instruction);
     }
 
     public function add_footer($formvalidator)
@@ -140,7 +140,7 @@ class Display extends QuestionDisplay
             $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="button hint_button">' . Translation :: get(
                 'GetAHint') . '</a></div>';
             
-            $footer = implode("\n", $html);
+            $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
         

@@ -192,7 +192,7 @@ class RightsEditorComponent extends Manager
         // remove last separator, or '<br/>' if no objects were found
         array_pop($info);
 
-        return implode("\n", $info);
+        return implode(PHP_EOL, $info);
     }
 
     public function add_category_string($category, $array)
