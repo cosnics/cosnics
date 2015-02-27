@@ -133,6 +133,8 @@ class AccountComponent extends Manager implements NoContextComponent
             }
 
             $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
         }
     }
 
