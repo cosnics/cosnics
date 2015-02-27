@@ -34,6 +34,6 @@ class Bar extends Renderer
             $html[] = '</ul>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

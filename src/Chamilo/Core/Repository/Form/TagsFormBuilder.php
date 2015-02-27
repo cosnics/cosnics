@@ -77,7 +77,7 @@ class TagsFormBuilder
         $dependencies[] = $resource_manager->get_resource_html(
             Theme :: getInstance()->getCssPath('Chamilo\Core\Repository', true) . 'tags.css');
         
-        $this->form->addElement('html', implode("\n", $dependencies));
+        $this->form->addElement('html', implode(PHP_EOL, $dependencies));
     }
 
     /**
@@ -101,7 +101,7 @@ class TagsFormBuilder
         $html[] = '});';
         $html[] = '</script>';
         
-        $this->form->addElement('html', implode("\n", $html));
+        $this->form->addElement('html', implode(PHP_EOL, $html));
     }
 
     /**

@@ -73,7 +73,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $this->get_tabs();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     // **************************************************************************
@@ -92,7 +92,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $this->get_tabs_content();
         $html[] = $this->get_tabs_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -152,7 +152,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -185,7 +185,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html = array();
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_all_users_tab()
@@ -221,7 +221,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $html[] = Translation :: get('NoGroupsSubscribed');
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     // **************************************************************************
@@ -300,7 +300,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $tabs->header();
         $html[] = DynamicVisualTabsRenderer :: body_header();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -329,7 +329,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html = array();
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_platformgroups_subgroups_tab()

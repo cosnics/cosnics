@@ -39,13 +39,13 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<tr>';
         $html[] = '<td>';
         $html[] = '<select style="width: 200px;"' . ($type == 'checkbox' ? ' multiple="true"' : '') . '>';
-        $html[] = implode("\n", $select_options);
+        $html[] = implode(PHP_EOL, $select_options);
         $html[] = '</select>';
         $html[] = '</td>';
         $html[] = '</tr>';
         
         $html[] = '</tbody>';
         $html[] = '</table>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

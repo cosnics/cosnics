@@ -82,7 +82,7 @@ abstract class Action extends MessageLogger
     {
         if ($as_string)
         {
-            return implode("\n", $this->result);
+            return implode(PHP_EOL, $this->result);
         }
         else
         {
@@ -128,6 +128,6 @@ abstract class Action extends MessageLogger
         $html[] = '</div>';
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

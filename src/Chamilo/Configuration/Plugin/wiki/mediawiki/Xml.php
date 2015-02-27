@@ -171,7 +171,7 @@ class Xml
         $ret = Xml :: openElement(
             'select', 
             array('id' => 'namespace', 'name' => $element_name, 'class' => 'namespaceselector')) . "\n" .
-             implode("\n", $options) . "\n" . Xml :: closeElement('select');
+             implode(PHP_EOL, $options) . "\n" . Xml :: closeElement('select');
         if (! is_null($label))
         {
             $ret = Xml :: label($label, $element_name) . '&nbsp;' . $ret;
@@ -198,7 +198,7 @@ class Xml
         for ($i = 1; $i < 13; $i ++)
             $options[] = self :: option($wgLang->getMonthName($i), $i, $selected === $i);
         return self :: openElement('select', array('id' => $id, 'name' => 'month', 'class' => 'mw-month-selector')) .
-             implode("\n", $options) . self :: closeElement('select');
+             implode(PHP_EOL, $options) . self :: closeElement('select');
     }
 
     /**
@@ -857,6 +857,6 @@ class XmlSelect
 
     public function getHTML()
     {
-        return Xml :: tags('select', $this->attributes, implode("\n", $this->options));
+        return Xml :: tags('select', $this->attributes, implode(PHP_EOL, $this->options));
     }
 }

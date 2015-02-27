@@ -49,7 +49,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
             $html[] = $output;
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {
@@ -66,7 +66,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $html = array();
         $html[] = $table->as_html();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($class_name)
@@ -112,7 +112,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $html[] = '<img src="' . $user->get_full_picture_url() . '" />';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

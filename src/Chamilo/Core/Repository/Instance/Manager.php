@@ -179,7 +179,7 @@ abstract class Manager extends Application
                     $html[] = '</script>';
                 }
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
     }

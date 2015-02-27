@@ -82,7 +82,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
 
         $html[] = '<div class="wiki-pane-content-feedback">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -93,7 +93,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
         $html[] = '</div>';
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

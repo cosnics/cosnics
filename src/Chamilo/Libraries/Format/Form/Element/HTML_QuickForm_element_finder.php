@@ -266,7 +266,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
              '"' . $load_elements . $default_query . ' });';
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function setDefaults($defaults)

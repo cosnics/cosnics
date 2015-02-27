@@ -51,7 +51,7 @@ class CourseUserImporterComponent extends Manager
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -77,7 +77,7 @@ class CourseUserImporterComponent extends Manager
         $html[] = '<br />5: ' . Translation :: get('Student');
         $html[] = '</blockquote>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

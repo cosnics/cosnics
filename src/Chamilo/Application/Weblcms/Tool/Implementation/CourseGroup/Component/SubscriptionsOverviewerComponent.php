@@ -78,7 +78,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         $html[] = $this->get_tabs();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     // **************************************************************************

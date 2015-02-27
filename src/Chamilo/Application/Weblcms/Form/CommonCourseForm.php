@@ -418,7 +418,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
 
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
 
         $tools_condition = new NotCondition(
             new EqualityCondition(
@@ -450,7 +450,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $table_body[] = '<td>' . $tool_title . '</td>';
 
-            $this->addElement('html', implode("\n", $table_body));
+            $this->addElement('html', implode(PHP_EOL, $table_body));
 
             $tool_element_name = CourseSettingsController :: SETTING_PARAM_TOOL_SETTINGS . '[' . $tool_name . ']';
             $active_element_name = $tool_element_name . '[' . CourseSetting :: COURSE_SETTING_TOOL_ACTIVE . ']';
@@ -529,7 +529,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
 
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
     /**

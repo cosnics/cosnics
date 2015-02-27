@@ -48,7 +48,7 @@ class Display extends QuestionDisplay
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         $question_id = $clo_question->get_id();
         
@@ -103,7 +103,7 @@ class Display extends QuestionDisplay
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $table_footer));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
     public function add_border()

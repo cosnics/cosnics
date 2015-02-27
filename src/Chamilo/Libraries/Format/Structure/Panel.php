@@ -120,7 +120,7 @@ class Panel
             $class = '';
         $html[] = '<div ' . $class . ' id="' . $this->get_id() . '" style="width: ' . $this->get_width() .
              $this->get_unit() . '; float: left;">';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -131,7 +131,7 @@ class Panel
     {
         $html = array();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -146,6 +146,6 @@ class Panel
         $html[] = $this->body_header($last);
         $html[] = $this->content;
         $html[] = $this->body_footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -31,6 +31,6 @@ class SelecterComponent extends Manager
         $html[] = '</script>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

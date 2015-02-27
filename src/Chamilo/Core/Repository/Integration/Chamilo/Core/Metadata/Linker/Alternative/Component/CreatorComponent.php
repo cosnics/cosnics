@@ -59,7 +59,7 @@ class CreatorComponent extends Manager
         $html[] = parent :: render_header();
         $html[] = $this->display_content_object();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -147,7 +147,7 @@ class CreatorComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -181,7 +181,7 @@ class CreatorComponent extends Manager
         $html[] = '</div></div>';
         $html[] = '<br /><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

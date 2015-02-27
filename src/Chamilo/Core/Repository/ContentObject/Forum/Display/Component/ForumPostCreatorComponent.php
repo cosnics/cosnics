@@ -70,7 +70,7 @@ class ForumPostCreatorComponent extends ForumPostFormActionCreate
                 array(self :: PARAM_ACTION => self :: ACTION_PREVIEW_TOPIC)) . '"></iframe>');
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

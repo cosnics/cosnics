@@ -45,7 +45,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_object_table_condition($object_table_class_name)

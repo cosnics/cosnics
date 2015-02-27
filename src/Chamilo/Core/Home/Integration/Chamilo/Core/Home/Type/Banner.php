@@ -56,7 +56,7 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = $title;
         $html[] = '<div class="entry-content description"' . $description_style . '">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -67,7 +67,7 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_title()
@@ -81,7 +81,7 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_content()

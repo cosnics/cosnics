@@ -41,7 +41,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         if ($content_object_count == 0)
         {
             $html[] = Display :: normal_message(Translation :: get('NoContentObjectsAvailable'), true);
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         
         $is_first = ($slideshow_index == 0);
@@ -188,7 +188,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $html[] = '<meta http-equiv="Refresh" content="10; url=' . $autoplay_url . '" />';
         }
         
-        $html[] = implode("\n", $table);
-        return implode("\n", $html);
+        $html[] = implode(PHP_EOL, $table);
+        return implode(PHP_EOL, $html);
     }
 }

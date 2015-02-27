@@ -39,7 +39,7 @@ class CategoryMoverComponent extends Manager
                 $html[] = $this->display_error_message('CategoryFormCouldNotBeBuild');
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
 
             $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
@@ -148,7 +148,7 @@ class CategoryMoverComponent extends Manager
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
     }

@@ -243,7 +243,7 @@ class Utilities
         $html[] .= '}';
         $html[] .= '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function build_block_hider($id = null, $message = null, $display_block = false)
@@ -271,7 +271,7 @@ class Utilities
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     // 2 simple functions to display an array, a bit prettier as print_r
@@ -305,7 +305,7 @@ class Utilities
             $html[] = "Variabele is geen array";
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function DisplayInlineArray($inlinearray, $depth, $element)
@@ -342,7 +342,7 @@ class Utilities
 
         $html[] = $spaces . ")<br />";
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function format_seconds_to_hours($seconds)

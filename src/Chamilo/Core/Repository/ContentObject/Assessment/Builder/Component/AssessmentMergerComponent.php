@@ -83,10 +83,10 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
             $table = new ObjectTable($this);
 
             $html[] = $table->as_html();
-            $html[] = '<br />' . implode("\n", $html);
+            $html[] = '<br />' . implode(PHP_EOL, $html);
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

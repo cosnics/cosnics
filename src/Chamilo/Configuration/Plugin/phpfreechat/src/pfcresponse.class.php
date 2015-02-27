@@ -60,7 +60,7 @@ class pfcResponse
 
     function getOutput()
     {
-        return implode("\n", $this->_commands);
+        return implode(PHP_EOL, $this->_commands);
     }
 }
 ?>

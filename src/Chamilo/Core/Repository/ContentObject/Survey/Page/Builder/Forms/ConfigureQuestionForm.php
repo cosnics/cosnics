@@ -163,7 +163,7 @@ class ConfigureQuestionForm extends FormValidator
                 $html[] = '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >';
                 $html[] = $question_rendition->get_question_preview('1.' . $sub_nr, $complex_id);
                 $html[] = '</div></div><div class="clear">&nbsp;</div></div>';
-                $this->addElement('html', implode("\n", $html));
+                $this->addElement('html', implode(PHP_EOL, $html));
             }
         }
     }

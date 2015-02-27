@@ -45,7 +45,7 @@ class WebInterfaceInstaller implements InstallerObserver
             $html[] = call_user_func_array(array($observer, $method_name), $parameters);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function before_install()

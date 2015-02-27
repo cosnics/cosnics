@@ -74,7 +74,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clear"></div>';
         $html[] = '<br />';
         $html[] = '<div class="clear"></div>';
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
         
         $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
              'xml_feeds/xml_image_feed.php';
@@ -130,7 +130,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clear"></div>';
         $html[] = '<br />';
         $html[] = '<div class="clear"></div>';
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
         
         $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
              'xml_feeds/xml_image_feed.php';
@@ -298,7 +298,7 @@ class HotspotQuestionForm extends ContentObjectForm
         // $html[] = '<button id="change_image" class="negative delete">' . htmlentities(Translation ::
         // get('SelectAnotherImage')) . '</button>';
         
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
         $this->addElement('category');
     }
 
@@ -384,7 +384,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         $colours = $this->colours;
         
@@ -472,7 +472,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $_SESSION['mc_num_options'] = $number_of_options;
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         

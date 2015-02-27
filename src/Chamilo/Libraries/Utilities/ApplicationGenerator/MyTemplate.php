@@ -446,7 +446,7 @@ class MyTemplate
         }
         
         // Bring it back into a single string of lines of code.
-        $code = implode("\n", $code_lines);
+        $code = implode(PHP_EOL, $code_lines);
         return $code;
     }
 

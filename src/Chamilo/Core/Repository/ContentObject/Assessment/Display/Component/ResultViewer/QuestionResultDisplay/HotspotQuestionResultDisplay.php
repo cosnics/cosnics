@@ -105,7 +105,7 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function is_valid_answer($answer, $user_answer)

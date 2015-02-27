@@ -140,7 +140,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

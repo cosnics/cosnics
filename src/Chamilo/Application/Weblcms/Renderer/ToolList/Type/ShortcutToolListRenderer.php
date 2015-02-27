@@ -74,6 +74,6 @@ class ShortcutToolListRenderer extends ToolListRenderer
             $html[] = '</a>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

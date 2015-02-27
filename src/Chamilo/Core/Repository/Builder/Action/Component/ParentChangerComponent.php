@@ -152,7 +152,7 @@ class ParentChangerComponent extends Manager
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         else

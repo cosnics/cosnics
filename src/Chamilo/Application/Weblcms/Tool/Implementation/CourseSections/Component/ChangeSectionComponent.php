@@ -151,7 +151,7 @@ class ChangeSectionComponent extends Manager
                          '").draggable({ handle: "div", revert: true, helper: "original"});</script>';
                 }
                 
-                $table->setCellContents($row, $col, implode("\n", $html));
+                $table->setCellContents($row, $col, implode(PHP_EOL, $html));
                 $table->updateColAttributes($col, 'style="width: ' . floor(100 / $number_of_columns) . '%;"');
                 $count ++;
             }

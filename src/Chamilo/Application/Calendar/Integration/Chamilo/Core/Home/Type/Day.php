@@ -36,6 +36,6 @@ class Day extends Block
 
         $html[] = $minidaycalendar->render();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

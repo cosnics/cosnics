@@ -230,7 +230,7 @@ class SorterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -327,7 +327,7 @@ class SorterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -365,7 +365,7 @@ class SorterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -393,7 +393,7 @@ class SorterComponent extends Manager
         $html[] = $this->render_header($trail, false, true);
         $html[] = '<div class="clear"></div><br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -411,7 +411,7 @@ class SorterComponent extends Manager
         $html[] = $renderer->as_html();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -35,7 +35,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</div>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function parse_file($url)

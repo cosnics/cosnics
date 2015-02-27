@@ -129,7 +129,7 @@ class ExporterComponent extends Manager
                 $html[] = $export_table->as_html();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
             else
             {
@@ -149,7 +149,7 @@ class ExporterComponent extends Manager
                     Utilities :: COMMON_LIBRARIES));
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

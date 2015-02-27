@@ -264,7 +264,7 @@ class BlockRendition
         $html[] = $title;
         $html[] = '<div class="entry-content description"' . $description_style . '>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_title()
@@ -278,7 +278,7 @@ class BlockRendition
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_actions()
@@ -346,7 +346,7 @@ class BlockRendition
                  '"/></a>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_content()
@@ -362,7 +362,7 @@ class BlockRendition
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

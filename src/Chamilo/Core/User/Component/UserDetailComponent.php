@@ -70,7 +70,7 @@ class UserDetailComponent extends Manager
             $html[] = $this->display_additional_information($id);
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

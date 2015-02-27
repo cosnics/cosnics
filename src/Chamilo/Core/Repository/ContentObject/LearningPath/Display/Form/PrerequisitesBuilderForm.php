@@ -226,7 +226,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $category_html[] = '<div class="prerequisite_group">';
                 $category_html[] = '<div class="header">';
                 $category_html[] = '<div class="operator">';
-                $this->addElement('html', implode("\n", $category_html));
+                $this->addElement('html', implode(PHP_EOL, $category_html));
                 
                 if ($gcounter > 0 && $group_number != 0)
                 {
@@ -239,7 +239,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $category_html[] = '<div class="title">' . Translation :: get('PrerequisiteGroup') . ' ' .
                      ($gcounter + 1) . '</div>';
                 $category_html[] = '<div class="actions">';
-                $this->addElement('html', implode("\n", $category_html));
+                $this->addElement('html', implode(PHP_EOL, $category_html));
                 
                 if ($_SESSION[self :: IDENTIFER . $clpi_id]['number_of_groups'] - count(
                     $_SESSION[self :: IDENTIFER . $clpi_id]['skip_groups']) > 1)
@@ -260,7 +260,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $category_html[] = '</div>';
                 $category_html[] = '</div>';
                 $category_html[] = '<div class="body">';
-                $this->addElement('html', implode("\n", $category_html));
+                $this->addElement('html', implode(PHP_EOL, $category_html));
                 
                 $number_of_items = intval($_SESSION[self :: IDENTIFER . $clpi_id]['number_of_items'][$group_number]);
                 
@@ -332,7 +332,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $category_html[] = '</div>';
                 $category_html[] = '<div style="clear: both;"></div>';
                 $category_html[] = '</div>';
-                $this->addElement('html', implode("\n", $category_html));
+                $this->addElement('html', implode(PHP_EOL, $category_html));
             }
         }
         

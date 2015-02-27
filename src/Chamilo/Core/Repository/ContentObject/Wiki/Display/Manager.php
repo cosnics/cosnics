@@ -416,7 +416,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $html[] = '<div class="wiki-pane-content">';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -435,7 +435,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_search_form()

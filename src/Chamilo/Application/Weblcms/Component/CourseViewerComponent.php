@@ -211,7 +211,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->namespaceToFullPath(self :: context(), true) . 'resources/javascript/course_visit.js');
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

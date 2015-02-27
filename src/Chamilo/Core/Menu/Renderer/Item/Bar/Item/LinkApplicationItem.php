@@ -27,6 +27,6 @@ class LinkApplicationItem extends Bar
              $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
         $html[] = '</a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -44,7 +44,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
             $html[] = $table->as_html();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

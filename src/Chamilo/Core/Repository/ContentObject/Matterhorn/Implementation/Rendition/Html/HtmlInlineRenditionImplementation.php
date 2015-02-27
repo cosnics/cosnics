@@ -19,6 +19,6 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
             $this->get_context());
         $html[] = '</p>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

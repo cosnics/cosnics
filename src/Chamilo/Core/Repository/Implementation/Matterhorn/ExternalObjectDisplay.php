@@ -178,7 +178,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                 })';
                 $video[] = '</script>';
                 
-                $html[] = implode("\n", $video);
+                $html[] = implode(PHP_EOL, $video);
             }
             
             $audio_tracks = $object->get_audio_tracks();
@@ -258,11 +258,11 @@ $(document).ready(function(){
 			</div>
 		</div>';
                 
-                $html[] = implode("\n", $audio);
+                $html[] = implode(PHP_EOL, $audio);
             }
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_title()
@@ -410,6 +410,6 @@ $(document).ready(function(){
         
         $html[] = $tabs->render();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

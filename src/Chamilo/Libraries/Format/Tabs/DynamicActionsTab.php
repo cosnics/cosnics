@@ -76,6 +76,6 @@ class DynamicActionsTab extends DynamicTab
         
         $html[] = $this->body_footer($this->get_id());
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

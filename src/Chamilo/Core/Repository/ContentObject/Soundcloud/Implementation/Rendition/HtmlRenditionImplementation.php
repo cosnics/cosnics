@@ -20,6 +20,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
              '" type="application/x-shockwave-flash" width="' . $width . '"></embed>';
         $html[] = '</object>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

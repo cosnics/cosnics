@@ -37,6 +37,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         }
         $html[] = '</tbody>';
         $html[] = '</table>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

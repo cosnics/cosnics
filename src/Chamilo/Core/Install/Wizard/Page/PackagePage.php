@@ -36,7 +36,7 @@ class PackagePage extends InstallWizardPage
         Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
         'Form/check-unchecked.png" class="package-list-select-none" />';
         $html[] = '</h3>';
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
 
         $packageList = PlatformPackageList :: getInstance()->get_package_list();
         $this->renderPackages($packageList);
@@ -45,7 +45,7 @@ class PackagePage extends InstallWizardPage
         $html[] = '<script type="text/javascript" src="' .
              Path :: getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
         $html[] = '</div>';
-        $this->addElement('html', implode("\n", $html));
+        $this->addElement('html', implode(PHP_EOL, $html));
 
         $buttons = array();
         $buttons[] = $this->createElement(
@@ -90,14 +90,14 @@ class PackagePage extends InstallWizardPage
                  'Form/check-unchecked.png" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
-            $this->addElement('html', implode("\n", $html));
+            $this->addElement('html', implode(PHP_EOL, $html));
 
             foreach ($packages as $title => $package)
             {
                 $html = array();
                 $html[] = '<div class="' . $this->getPackageClasses($package) . '" style="background-image: url(' .
                      Theme :: getInstance()->getImagePath($package->get_context()) . 'Logo/22.png' . ')">';
-                $this->addElement('html', implode("\n", $html));
+                $this->addElement('html', implode(PHP_EOL, $html));
 
                 $checkbox_name = 'install_' .
                      ClassnameUtilities :: getInstance()->getNamespaceId($package->get_context());
@@ -112,7 +112,7 @@ class PackagePage extends InstallWizardPage
                 $html = array();
                 $html[] = $title;
                 $html[] = '</div>';
-                $this->addElement('html', implode("\n", $html));
+                $this->addElement('html', implode(PHP_EOL, $html));
 
                 $extra = $package->get_extra();
 
@@ -128,7 +128,7 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
             $html[] = '</div>';
-            $this->addElement('html', implode("\n", $html));
+            $this->addElement('html', implode(PHP_EOL, $html));
         }
 
         foreach ($packageList->get_children() as $child)
@@ -210,6 +210,6 @@ class PackagePage extends InstallWizardPage
         $html[] = Translation :: get('SelectedPackage');
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

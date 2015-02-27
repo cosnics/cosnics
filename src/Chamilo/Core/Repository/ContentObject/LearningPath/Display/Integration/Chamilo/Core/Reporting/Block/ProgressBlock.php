@@ -99,7 +99,7 @@ class ProgressBlock extends ReportingBlock
                 }
             }
             
-            $reporting_data->add_data_category_row($category, Translation :: get('Action'), implode("\n", $actions));
+            $reporting_data->add_data_category_row($category, Translation :: get('Action'), implode(PHP_EOL, $actions));
             
             $attempt_count += count($node->get_data());
             $total_time += $node->get_total_time();

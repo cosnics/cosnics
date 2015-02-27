@@ -143,7 +143,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             }
             
             $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PROPERTY_HTML, implode("\n", $html));
+            $result->set_property(self :: PROPERTY_HTML, implode(PHP_EOL, $html));
             $result->set_property(self :: PROPERTY_WIDTH, $widths);
             $result->display();
         }

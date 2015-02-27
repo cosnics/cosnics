@@ -68,7 +68,7 @@ class NewAnnouncements extends NewBlock
             return Translation :: get('NoNewAnnouncementsSinceLastVisit');
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_new_announcements_icon()

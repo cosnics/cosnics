@@ -20,7 +20,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = $this->get_question_preview();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_question_preview($nr = null, $complex_question_id = null)
@@ -67,7 +67,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<tbody>';
         $table_header[] = '<tr>';
         $table_header[] = '<td>';
-        $html[] = implode("\n", $table_header);
+        $html[] = implode(PHP_EOL, $table_header);
 
         $html[] = '<select class="rating_slider" name="' . $complex_question_id . '" >';
         $html[] = '</option>';
@@ -89,12 +89,12 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_footer[] = '</tr>';
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $html[] = implode("\n", $table_footer);
+        $html[] = implode(PHP_EOL, $table_footer);
 
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -44,7 +44,7 @@ class HtmlFormTwoColumnRenditionImplementation extends HtmlFormRenditionImplemen
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         $html = array();
         
@@ -68,7 +68,7 @@ class HtmlFormTwoColumnRenditionImplementation extends HtmlFormRenditionImplemen
         
         $html[] = '</tbody>';
         $html[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $html));
+        $formvalidator->addElement('html', implode(PHP_EOL, $html));
         
         $formvalidator->addElement(
             'hidden', 
@@ -91,7 +91,7 @@ class HtmlFormTwoColumnRenditionImplementation extends HtmlFormRenditionImplemen
         $instruction[] = Translation :: get('YourRanking');
         $instruction[] = '</div>';
         
-        return implode("\n", $instruction);
+        return implode(PHP_EOL, $instruction);
     }
 }
 ?>

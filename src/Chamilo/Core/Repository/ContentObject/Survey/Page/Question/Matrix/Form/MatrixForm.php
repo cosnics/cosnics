@@ -423,7 +423,7 @@ class MatrixForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
@@ -482,7 +482,7 @@ class MatrixForm extends ContentObjectForm
         }
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         
@@ -524,7 +524,7 @@ class MatrixForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
@@ -600,7 +600,7 @@ class MatrixForm extends ContentObjectForm
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         

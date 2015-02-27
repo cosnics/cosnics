@@ -238,7 +238,7 @@ abstract class Renderer
             }
         }
 
-        return implode("\n", $result);
+        return implode(PHP_EOL, $result);
     }
 
     /**

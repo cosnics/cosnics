@@ -65,6 +65,6 @@ class MonthRenderer extends TableRenderer
             $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

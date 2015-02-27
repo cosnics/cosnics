@@ -51,7 +51,7 @@ class BrowserComponent extends Manager
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

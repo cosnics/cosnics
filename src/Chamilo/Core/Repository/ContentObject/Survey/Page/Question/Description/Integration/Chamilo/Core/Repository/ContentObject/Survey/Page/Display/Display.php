@@ -23,7 +23,7 @@ class Display extends QuestionDisplay
             $html[] = '<div class="clear">&nbsp;</div>';
         }
         
-        $detail = implode("\n", $html);
+        $detail = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $detail);
     }
     /*

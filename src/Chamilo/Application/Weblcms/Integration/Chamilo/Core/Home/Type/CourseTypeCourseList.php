@@ -26,7 +26,7 @@ class CourseTypeCourseList extends Block
         $renderer->show_new_publication_icons();
         $html[] = $renderer->as_html(false);
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_title()

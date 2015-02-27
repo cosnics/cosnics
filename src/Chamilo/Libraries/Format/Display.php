@@ -50,7 +50,7 @@ class Display
         $html[] = self :: normal_message($message);
         $html[] = self :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -75,7 +75,7 @@ class Display
         $html[] = self :: error_message($message);
         $html[] = self :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -103,7 +103,7 @@ class Display
         $html[] = '<div class="close_message" id="closeMessage"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -187,7 +187,7 @@ class Display
         $html[] = '<!--   Begin Of script Output   -->';
         $html[] = '<div id="helpbox" class="helpdialog"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -233,7 +233,7 @@ class Display
         $html[] = $header->toHtml();
         $html[] = '<body dir="' . $text_dir . '">' . "\n";
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -257,7 +257,7 @@ class Display
         $html[] = '</body>' . "\n";
         $html[] = '</html>' . "\n";
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -275,7 +275,7 @@ class Display
         $html[] = self :: error_message(Translation :: get('NotAllowed', null, Utilities :: COMMON_LIBRARIES));
         $html[] = self :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -290,7 +290,7 @@ class Display
         $html[] = self :: error_message(Translation :: get('MaintenanceModeMessage'));
         $html[] = self :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -350,7 +350,7 @@ class Display
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -371,6 +371,6 @@ class Display
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

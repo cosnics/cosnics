@@ -291,7 +291,7 @@ abstract class Application
             $html[] = $this->display_warning_message($message);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -326,7 +326,7 @@ abstract class Application
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = Display :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_small_header()
@@ -348,7 +348,7 @@ abstract class Application
             $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -394,7 +394,7 @@ abstract class Application
         $html[] = NotificationMessage :: normal($message)->to_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -413,7 +413,7 @@ abstract class Application
         }
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -429,7 +429,7 @@ abstract class Application
         $html[] = NotificationMessage :: error($message)->to_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -445,7 +445,7 @@ abstract class Application
         $html[] = NotificationMessage :: warning($message)->to_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -466,7 +466,7 @@ abstract class Application
         $html[] = $this->display_error_message($message);
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -487,7 +487,7 @@ abstract class Application
         $html[] = $this->display_warning_message($message);
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

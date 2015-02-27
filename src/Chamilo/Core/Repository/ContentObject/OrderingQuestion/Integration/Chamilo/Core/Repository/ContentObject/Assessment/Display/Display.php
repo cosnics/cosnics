@@ -38,7 +38,7 @@ class Display extends QuestionDisplay
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         $question_id = $clo_question->get_id();
         $order_options = $this->get_order_options();
@@ -70,7 +70,7 @@ class Display extends QuestionDisplay
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $table_footer));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
     public function add_border()
@@ -118,7 +118,7 @@ class Display extends QuestionDisplay
             $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="button hint_button">' .
                  Translation :: get('GetAHint') . '</a></div>';
             
-            $footer = implode("\n", $html);
+            $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
         

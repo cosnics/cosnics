@@ -34,7 +34,7 @@ class AccessorComponent extends Manager
             $html[] = $this->get_tabs(self :: ACTION_CREATE, $form->toHtml())->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

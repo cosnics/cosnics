@@ -38,7 +38,7 @@ class PrerequisitesBuilderComponent extends Manager implements DelegateComponent
                 Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES));
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         $form = new PrerequisitesBuilderForm($this);
@@ -63,7 +63,7 @@ class PrerequisitesBuilderComponent extends Manager implements DelegateComponent
             $html[] = $this->get_tabs_renderer()->render();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

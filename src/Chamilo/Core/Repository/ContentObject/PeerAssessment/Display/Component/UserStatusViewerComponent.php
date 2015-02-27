@@ -55,7 +55,7 @@ class UserStatusViewerComponent extends Manager
         $html[] = $this->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render()
@@ -129,7 +129,7 @@ class UserStatusViewerComponent extends Manager
         $html[] = '</tbody>';
         $html[] = '</table>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_feedback()
@@ -163,7 +163,7 @@ class UserStatusViewerComponent extends Manager
         $html[] = '</tbody>';
         $html[] = '</table>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

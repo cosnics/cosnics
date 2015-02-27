@@ -76,7 +76,7 @@ class RightsTreeRenderer extends HTML_Menu
         $html[] = '<div class="active_elements" style="overflow: auto; height: 300px; width: 310px;">';
         $html[] = $renderer->toHTML();
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public static function get_tree_name()

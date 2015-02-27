@@ -105,7 +105,7 @@ class UserResultsViewerComponent extends Manager
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_action_bar()
@@ -202,7 +202,7 @@ class UserResultsViewerComponent extends Manager
         $html[] = '</tbody>';
         $html[] = '</table>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_graph()

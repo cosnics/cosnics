@@ -202,7 +202,7 @@ class MailJobManager
         $message[] = '<br/><a href=' . $url . '>' . $url . '</a>';
         $message[] = '</p>';
         
-        return implode("\n", $message);
+        return implode(PHP_EOL, $message);
     }
 }
 ?>

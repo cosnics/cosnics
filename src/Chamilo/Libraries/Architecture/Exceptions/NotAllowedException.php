@@ -29,7 +29,7 @@ class NotAllowedException extends \Exception
             $html[] = $this->getLoginForm()->toHtml();
         }
 
-        parent :: __construct(implode("\n", $html));
+        parent :: __construct(implode(PHP_EOL, $html));
     }
 
     public function getLoginForm()

@@ -52,7 +52,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
             }
         }
-        return count($html) > 0 ? '<div class="home_actions">' . implode("\n", $html) . '</div>' : '';
+        return count($html) > 0 ? '<div class="home_actions">' . implode(PHP_EOL, $html) . '</div>' : '';
     }
 
     public function render_header($visible_tools = null, $show_introduction_text = false)
@@ -62,6 +62,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = parent :: render_header($visible_tools, $show_introduction_text);
         $html[] = $this->add_general_info();
 
-        return \implode("\n", $html);
+        return \implode(PHP_EOL, $html);
     }
 }

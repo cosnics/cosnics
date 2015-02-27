@@ -120,7 +120,7 @@ class ScormImporterComponent extends Manager
                 $html[] = $publisher->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         else
@@ -131,7 +131,7 @@ class ScormImporterComponent extends Manager
             $html[] = $import_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

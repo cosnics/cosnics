@@ -77,7 +77,7 @@ class CalendarListRenderer extends ListContentObjectPublicationListRenderer
                 $html[] = '<h3>' . Translation :: get(date('F', $start_time) . 'Long') . ' ' . date('Y', $start_time) .
                      '</h3>';
             }
-            $html[] = implode("\n", $rendered_publication_start_time);
+            $html[] = implode(PHP_EOL, $rendered_publication_start_time);
         }
         
         if ($this->get_actions() && count($publications) > 0 && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
@@ -116,7 +116,7 @@ class CalendarListRenderer extends ListContentObjectPublicationListRenderer
             $html[] = '</div>';
             $html[] = '</form>';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -136,7 +136,7 @@ class CalendarListRenderer extends ListContentObjectPublicationListRenderer
         $html[] = '</em>';
         $html[] = '<br />';
         $html[] = $event->get_description();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

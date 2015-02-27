@@ -53,7 +53,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         
         $html[] = $tabs->render();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_display_properties()

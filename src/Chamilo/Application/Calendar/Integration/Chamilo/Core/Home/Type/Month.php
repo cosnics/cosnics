@@ -23,6 +23,6 @@ class Month extends Block
         $minimonthcalendar = new MiniMonthRenderer($this, $time, $this->get_link_target());
         $html[] = $minimonthcalendar->render();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

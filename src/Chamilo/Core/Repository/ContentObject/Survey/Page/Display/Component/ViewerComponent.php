@@ -19,7 +19,7 @@ class ViewerComponent extends Manager
         $html[] = $this->get_hidden_fields();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_hidden_fields()
@@ -32,7 +32,7 @@ class ViewerComponent extends Manager
         {
             $html[] = '<input type="hidden" value="' . $value . '" name="param_' . $name . '">';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_answer($complex_question_id)

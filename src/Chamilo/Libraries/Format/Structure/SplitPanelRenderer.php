@@ -89,7 +89,7 @@ class SplitPanelRenderer
         
         $html[] = '<div id="' . $this->name . '_panels">';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -180,7 +180,7 @@ class SplitPanelRenderer
         }';
         $html[] = '</script>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -222,6 +222,6 @@ class SplitPanelRenderer
         }
         
         $html[] = $this->footer();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

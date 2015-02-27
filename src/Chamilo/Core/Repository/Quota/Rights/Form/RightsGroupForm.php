@@ -39,7 +39,7 @@ class RightsGroupForm extends FormValidator
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         
         $this->addElement('category', Translation :: get('RightsGroupAccess'));
         $types = new AdvancedElementFinderElementTypes();

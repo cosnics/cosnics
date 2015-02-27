@@ -176,7 +176,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'ADMINFIRSTNAME' => PlatformSetting :: get('administrator_firstname'),
                 'ADMINLASTNAME' => PlatformSetting :: get('administrator_surname'))) . '</p>';
         $mail_body[] = '</div>';
-        $mail_body = implode("\n", $mail_body);
+        $mail_body = implode(PHP_EOL, $mail_body);
         $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
             'no_reply_email') : PlatformSetting :: get('administrator_email');
         $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);
@@ -211,7 +211,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'ADMINFIRSTNAME' => PlatformSetting :: get('administrator_firstname'),
                 'ADMINLASTNAME' => PlatformSetting :: get('administrator_surname'))) . '</p>';
         $mail_body[] = '</div>';
-        $mail_body = implode("\n", $mail_body);
+        $mail_body = implode(PHP_EOL, $mail_body);
         $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
             'no_reply_email') : PlatformSetting :: get('administrator_email');
         $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);

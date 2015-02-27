@@ -232,7 +232,7 @@ class WeblcmsRights extends RightsUtil
             $target_list[] = '</select>';
         }
         
-        return implode("\n", $target_list);
+        return implode(PHP_EOL, $target_list);
     }
 
     public function create_subtree_root_location($tree_identifier, $tree_type, $return_location = false)

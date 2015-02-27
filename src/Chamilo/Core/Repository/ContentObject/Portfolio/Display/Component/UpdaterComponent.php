@@ -133,7 +133,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $html[] = $this->get_tabs_renderer()->render();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
         else

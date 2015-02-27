@@ -92,7 +92,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
         $html[] = $html_editor->render();
         $html[] = '</div>';
         $html[] = $this->getElementJS();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

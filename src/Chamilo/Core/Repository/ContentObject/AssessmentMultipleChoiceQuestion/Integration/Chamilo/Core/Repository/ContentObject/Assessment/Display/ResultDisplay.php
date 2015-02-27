@@ -166,6 +166,6 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

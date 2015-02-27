@@ -93,8 +93,8 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title[] = '</li>';
         
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_HTML, implode("\n", $html));
-        $result->set_property(self :: PROPERTY_TITLE, implode("\n", $title));
+        $result->set_property(self :: PROPERTY_HTML, implode(PHP_EOL, $html));
+        $result->set_property(self :: PROPERTY_TITLE, implode(PHP_EOL, $title));
         $result->display();
     }
 }

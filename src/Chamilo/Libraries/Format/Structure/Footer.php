@@ -156,6 +156,6 @@ class Footer
         // hidden memory usage in source
         $output[] = '<!-- Memory Usage: ' . memory_get_peak_usage(1) . ' bytes -->';
 
-        return implode("\n", $output);
+        return implode(PHP_EOL, $output);
     }
 }

@@ -106,7 +106,7 @@ abstract class DynamicTab
         }
         $html[] = '</span>';
         $html[] = '</a></li>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -127,7 +127,7 @@ abstract class DynamicTab
         
         $html[] = '<div class="admin_tab" id="' . $this->get_id() . '">';
         $html[] = '<a class="prev"></a>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class DynamicTab
         $html[] = '<a class="next"></a>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

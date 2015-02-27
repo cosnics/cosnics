@@ -59,7 +59,7 @@ class ImporterComponent extends Manager
             Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Admin\\') . 'Resources/Javascript/AdminBrowser.js');
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_menu()

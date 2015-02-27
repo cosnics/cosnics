@@ -140,7 +140,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $html[] = '</div></div></div>';
             $html[] = '<div class="clear"></div>';
 
-            $form->addElement('html', implode("\n", $html));
+            $form->addElement('html', implode(PHP_EOL, $html));
         }
 
         $buttons[] = $form->createElement(
@@ -165,6 +165,6 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $html[] = $form->toHtml();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

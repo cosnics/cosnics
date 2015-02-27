@@ -56,7 +56,7 @@ abstract class ExternalObjectDisplay
         $html[] = $this->get_preview() . '<br/>';
         $html[] = $this->get_properties_table();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -149,6 +149,6 @@ abstract class ExternalObjectDisplay
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

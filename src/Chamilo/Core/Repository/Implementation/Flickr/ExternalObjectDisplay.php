@@ -27,6 +27,6 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         
         $html = array();
         $html[] = '<img class="' . $class . '" src="' . $object->get_url($size) . '" />';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

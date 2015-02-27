@@ -118,6 +118,6 @@ class MiniMonthRenderer extends TableRenderer
 
         $calendar->add_navigation_links($this->get_application()->get_url($parameters));
         $html[] = $calendar->render();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

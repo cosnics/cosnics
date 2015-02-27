@@ -83,6 +83,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             Path :: getInstance()->getBasePath(true) .
                  'repository/content_object/hotspot_question/resources/javascript/rendition.js');
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

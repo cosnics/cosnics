@@ -101,7 +101,7 @@ abstract class BlogLayout
             $html[] = $this->display_blog_item($complex_blog_item);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

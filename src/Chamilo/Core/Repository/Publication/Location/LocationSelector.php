@@ -94,7 +94,7 @@ abstract class LocationSelector
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         
-        $form_validator->addElement('html', implode("\n", $table_header));
+        $form_validator->addElement('html', implode(PHP_EOL, $table_header));
         
         $renderer = $form_validator->defaultRenderer();
         
@@ -126,7 +126,7 @@ abstract class LocationSelector
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $form_validator->addElement('html', implode("\n", $table_footer));
+        $form_validator->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
     /**

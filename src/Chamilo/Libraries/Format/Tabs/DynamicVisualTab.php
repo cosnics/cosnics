@@ -267,7 +267,7 @@ class DynamicVisualTab extends DynamicTab
         $html[] = '</span>';
         $html[] = '</a>';
         $html[] = '</li>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

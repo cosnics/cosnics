@@ -278,7 +278,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
         }
         
         $html[] = '</select>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_target_entities($content_object)

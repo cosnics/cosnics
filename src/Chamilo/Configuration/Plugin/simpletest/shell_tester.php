@@ -62,7 +62,7 @@ class SimpleShell
      */
     function getOutput()
     {
-        return implode("\n", $this->_output);
+        return implode(PHP_EOL, $this->_output);
     }
 
     /**

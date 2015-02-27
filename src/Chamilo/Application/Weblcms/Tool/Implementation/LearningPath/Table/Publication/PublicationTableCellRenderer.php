@@ -127,6 +127,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($progress) .
              '%</div></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

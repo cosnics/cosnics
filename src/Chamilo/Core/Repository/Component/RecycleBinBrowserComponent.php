@@ -47,7 +47,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $html[] = $this->display_content_objects();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

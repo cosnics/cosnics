@@ -26,7 +26,7 @@ class LocationSelector extends LocationSelector
              '</th>';
         $table_header[] = '<th>' . Translation :: get('Tool', null, \Chamilo\Application\Weblcms\Manager :: context()) .
              '</th>';
-        return implode("\n", $table_header);
+        return implode(PHP_EOL, $table_header);
     }
 
     /**

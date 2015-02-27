@@ -38,7 +38,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $html[] = $this->display_error_message(Translation :: get('NoObjectSelected'));
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         // Process some tracking
@@ -62,7 +62,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $html[] = '<div class="error-message">' . Translation :: get('NotYetAllowedToView') . '</div>';
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
 
         $learning_path_item_attempt = $this->get_current_node()->get_current_attempt();
@@ -88,7 +88,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = $this->get_tabs_renderer()->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -334,7 +334,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

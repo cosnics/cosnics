@@ -60,7 +60,7 @@ class GroupUpdaterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = parent :: render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

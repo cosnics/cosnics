@@ -63,6 +63,6 @@ class EventDayRenderer extends HourStepEventRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

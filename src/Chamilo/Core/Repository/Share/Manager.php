@@ -104,7 +104,7 @@ abstract class Manager extends Application
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

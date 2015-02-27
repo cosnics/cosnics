@@ -124,7 +124,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
             $html[] = '<option>...</option>';
         }
         $html[] = '</select>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

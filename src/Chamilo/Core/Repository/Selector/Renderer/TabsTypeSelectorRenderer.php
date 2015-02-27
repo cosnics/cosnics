@@ -216,7 +216,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $html[] = $this->render_option($type_option, $url);
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -235,7 +235,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $html[] = $this->render_option($option, $url);
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -253,7 +253,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
         $html[] = '</div>';
         $html[] = '</a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -270,6 +270,6 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $html[] = $this->render_option($link, $link->get_url());
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

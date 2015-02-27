@@ -67,7 +67,7 @@ class Display extends QuestionDisplay
         }
         
         $html[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $html));
+        $formvalidator->addElement('html', implode(PHP_EOL, $html));
     }
 
     function get_instruction()

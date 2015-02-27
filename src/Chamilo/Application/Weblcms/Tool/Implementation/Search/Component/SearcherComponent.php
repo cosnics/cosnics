@@ -147,12 +147,12 @@ class SearcherComponent extends Manager
 
             $html[] = $results . ' ' . Translation :: get('ResultsFoundFor') .
                  ' <span style="background-color: yellow;">' . $query . '</span>';
-            $html[] = implode("\n", $resultsHtml);
+            $html[] = implode(PHP_EOL, $resultsHtml);
         }
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_action_bar()

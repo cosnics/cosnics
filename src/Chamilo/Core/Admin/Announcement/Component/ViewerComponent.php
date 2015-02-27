@@ -49,7 +49,7 @@ class ViewerComponent extends Manager implements NoContextComponent
                 $this);
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
         else
         {

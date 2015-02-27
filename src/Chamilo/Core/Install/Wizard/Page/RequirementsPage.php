@@ -196,7 +196,7 @@ class RequirementsPage extends InstallWizardPage
         $script[] = '	});';
         $script[] = '});';
         $script[] = '</script>';
-        $this->addElement('html', implode("\n", $script));
+        $this->addElement('html', implode(PHP_EOL, $script));
         $this->get_data();
         if ($this->fatal)
         {

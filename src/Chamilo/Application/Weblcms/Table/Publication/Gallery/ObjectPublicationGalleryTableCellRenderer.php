@@ -48,7 +48,7 @@ class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRe
         
         $html[] = '<a href="' . $details_url . '">' . $thumbnail . '</a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

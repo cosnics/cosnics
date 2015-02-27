@@ -83,7 +83,7 @@ class NotificationMessage
         $html[] = '<div class="close_message" id="closeMessage"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

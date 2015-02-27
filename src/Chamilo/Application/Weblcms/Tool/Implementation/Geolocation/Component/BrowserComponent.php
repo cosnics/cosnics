@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $html[] = '</script>';
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

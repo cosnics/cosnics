@@ -228,7 +228,7 @@ abstract class Manager extends Application
         $html[] = parent :: render_header();
         $html[] = $this->display_course_menus($visible_tools, $show_introduction_text);
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
@@ -238,7 +238,7 @@ abstract class Manager extends Application
         $html[] = '</div>';
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -381,7 +381,7 @@ abstract class Manager extends Application
 
         $html[] = '<div class="clear"></div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_user_info($user_id)
@@ -689,7 +689,7 @@ abstract class Manager extends Application
             $html[] = '<br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private $introduction_cache;

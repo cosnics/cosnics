@@ -42,7 +42,7 @@ class HtmlFormSelectRenditionImplementation extends HtmlFormRenditionImplementat
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
-        $element_template = implode("\n", $element_template);
+        $element_template = implode(PHP_EOL, $element_template);
         
         $question_name = $complex_content_object_item->get_id();
         
@@ -109,7 +109,7 @@ class HtmlFormSelectRenditionImplementation extends HtmlFormRenditionImplementat
             $instruction = array();
         }
         
-        return implode("\n", $instruction);
+        return implode(PHP_EOL, $instruction);
     }
 }
 ?>

@@ -57,7 +57,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 $html[] = $publisher->toHtml();
                 $html[] = $this->render_footer();
 
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
             }
         }
     }

@@ -38,6 +38,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             Path :: getInstance()->namespaceToFullPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', 
                 true) . 'Resources/Javascript/assessment_rating_question.js');
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

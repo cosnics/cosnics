@@ -168,7 +168,7 @@ class MenuToolListRenderer extends ToolListRenderer
 
         $html[] = '<div class="clear">&nbsp;</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_tool($tool)
@@ -221,7 +221,7 @@ class MenuToolListRenderer extends ToolListRenderer
         $html[] = '</a>';
         $html[] = '</li>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function load_menu_properties()

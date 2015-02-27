@@ -80,11 +80,11 @@ class CategoryItem extends Renderer
         $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';
         $html[] = '<!--[if lte IE 6]><table><tr><td><![endif]-->';
 
-        $html[] = implode("\n", $sub_html);
+        $html[] = implode(PHP_EOL, $sub_html);
 
         $html[] = '</li>';
         $html[] = '</ul>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

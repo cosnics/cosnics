@@ -83,7 +83,7 @@ class ContentObjectPropertyRelMetadataElementFormBuilder
             Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
                  '/resources/javascript/content_object_property_rel_metadata_element_form.js');
         
-        $form->addElement('html', implode("\n", $javascript));
+        $form->addElement('html', implode(PHP_EOL, $javascript));
         
         $form->addElement(
             'select', 

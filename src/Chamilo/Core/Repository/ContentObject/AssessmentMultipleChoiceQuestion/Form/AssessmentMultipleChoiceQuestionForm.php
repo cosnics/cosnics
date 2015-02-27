@@ -270,7 +270,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
@@ -364,7 +364,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         

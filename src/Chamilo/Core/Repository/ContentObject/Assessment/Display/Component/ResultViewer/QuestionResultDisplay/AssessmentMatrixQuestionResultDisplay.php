@@ -156,6 +156,6 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

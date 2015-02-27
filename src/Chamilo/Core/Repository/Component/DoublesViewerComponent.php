@@ -64,7 +64,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
         
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_full_table_html()

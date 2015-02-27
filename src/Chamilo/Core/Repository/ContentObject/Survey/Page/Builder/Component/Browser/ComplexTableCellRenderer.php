@@ -67,7 +67,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
                 }
                 
                 $html[] = '</select>';
-                return implode("\n", $html);
+                return implode(PHP_EOL, $html);
                 break;
         }
         

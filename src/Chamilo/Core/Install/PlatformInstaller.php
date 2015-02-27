@@ -141,7 +141,7 @@ class PlatformInstaller
         $html[] = $this->perform_config();
         $html[] = $this->observers->after_install();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function initialize_install()
@@ -179,7 +179,7 @@ class PlatformInstaller
         $html[] = $this->create_folders();
         $html[] = $this->observers->after_preprod();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function perform_config()
@@ -230,7 +230,7 @@ class PlatformInstaller
             $content[] = '';
         }
 
-        $write_status = Filesystem :: write_to_file($this->config_file_destination, implode("\n", $content));
+        $write_status = Filesystem :: write_to_file($this->config_file_destination, implode(PHP_EOL, $content));
 
         if ($write_status === false)
         {
@@ -268,7 +268,7 @@ class PlatformInstaller
 
         $html[] = $this->observers->after_packages_install();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function create_folders()
@@ -306,6 +306,6 @@ class PlatformInstaller
         $step_result = new StepResult(true, Translation :: get('FoldersCreatedSuccess'));
         $html[] = $this->observers->after_filesystem_prepared($step_result);
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

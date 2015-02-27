@@ -79,7 +79,7 @@ class FilteredCourseList extends Block
         
         $html[] = $renderer->as_html();
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

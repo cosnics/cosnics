@@ -90,7 +90,7 @@ class DynamicTabsRenderer
         }
         $html[] = '</ul>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_selected_tab()
@@ -145,7 +145,7 @@ class DynamicTabsRenderer
 
         $html[] = '</script>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render()
@@ -163,6 +163,6 @@ class DynamicTabsRenderer
 
         $html[] = $this->footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

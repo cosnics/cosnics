@@ -133,6 +133,6 @@ class AssessmentMatchTextQuestionResultDisplay extends QuestionResultDisplay
             $html[] = '</table>';
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

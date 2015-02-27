@@ -22,6 +22,6 @@ class LinkItem extends SiteMap
         
         $html[] = '</a>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -30,7 +30,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/display_order.js');
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     function get_additional_links()

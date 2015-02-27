@@ -58,7 +58,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
         $html[] = '</div>';
         $html[] = '<br />';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

@@ -34,7 +34,7 @@ class SelectedCourseTypeCourseListRenderer extends CourseTypeCourseListRenderer
             $html[] = $this->display_courses_for_course_type_user_category($course_user_category);
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }
 ?>

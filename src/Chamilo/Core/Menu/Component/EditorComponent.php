@@ -102,7 +102,7 @@ class EditorComponent extends Manager implements DelegateComponent
             $html[] = $item_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

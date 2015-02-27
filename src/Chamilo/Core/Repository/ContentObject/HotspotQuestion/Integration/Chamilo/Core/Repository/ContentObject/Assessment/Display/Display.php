@@ -80,7 +80,7 @@ class Display extends QuestionDisplay
         $image_html[] = '</div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '</div>';
-        $formvalidator->addElement('html', implode("\n", $image_html));
+        $formvalidator->addElement('html', implode(PHP_EOL, $image_html));
         
         $table_header = array();
         $table_header[] = '<table class="data_table take_assessment">';
@@ -92,7 +92,7 @@ class Display extends QuestionDisplay
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode("\n", $table_header));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
         
         foreach ($answers as $i => $answer)
         {
@@ -133,7 +133,7 @@ class Display extends QuestionDisplay
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $formvalidator->addElement('html', implode("\n", $table_footer));
+        $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
         
         // $this->add_scripts_element($clo_question->get_id(), $formvalidator);
         // //$formvalidator->addElement('html', '<br/>');

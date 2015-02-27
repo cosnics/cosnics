@@ -28,7 +28,7 @@ class MultiGranterComponent extends Manager
             $html[] = $privilege_form->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

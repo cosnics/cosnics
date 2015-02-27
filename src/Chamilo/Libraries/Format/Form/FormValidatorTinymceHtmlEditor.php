@@ -21,7 +21,7 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
             }
         }
 
-        $form->addElement('html', implode("\n", $this->get_javascript()));
+        $form->addElement('html', implode(PHP_EOL, $this->get_javascript()));
 
         return parent :: create();
     }
@@ -30,9 +30,9 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
     {
         $html = array();
         $html[] = parent :: render();
-        $html[] = implode("\n", $this->get_javascript());
+        $html[] = implode(PHP_EOL, $this->get_javascript());
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_includes()

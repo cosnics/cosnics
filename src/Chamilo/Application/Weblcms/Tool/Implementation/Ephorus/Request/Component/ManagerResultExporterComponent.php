@@ -46,7 +46,7 @@ class ManagerResultExporterComponent extends Manager
 
             $full_file_name = Path :: getInstance()->getTemporaryPath() . $unique_file_name;
             \Chamilo\Libraries\File\Filesystem :: create_dir(dirname($full_file_name));
-            \Chamilo\Libraries\File\Filesystem :: write_to_file($full_file_name, implode("\n", $html));
+            \Chamilo\Libraries\File\Filesystem :: write_to_file($full_file_name, implode(PHP_EOL, $html));
             \Chamilo\Libraries\File\Filesystem :: file_send_for_download($full_file_name, true);
             \Chamilo\Libraries\File\Filesystem :: remove($full_file_name);
         }

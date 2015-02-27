@@ -227,7 +227,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $this->addElement('html', implode("\n", $table_header));
+        $this->addElement('html', implode(PHP_EOL, $table_header));
         
         $select_options = array();
         for ($i = 1; $i <= $number_of_options; $i ++)
@@ -305,7 +305,7 @@ class OrderingQuestionForm extends ContentObjectForm
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $this->addElement('html', implode("\n", $table_footer));
+        $this->addElement('html', implode(PHP_EOL, $table_footer));
         
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         

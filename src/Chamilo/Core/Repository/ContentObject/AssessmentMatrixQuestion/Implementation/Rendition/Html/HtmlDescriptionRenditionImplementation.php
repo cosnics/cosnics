@@ -39,7 +39,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $html[] = implode("\n", $table_header);
+        $html[] = implode(PHP_EOL, $table_header);
         
         foreach ($options as $index => $option)
         {
@@ -69,8 +69,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $html[] = implode("\n", $table_footer);
+        $html[] = implode(PHP_EOL, $table_footer);
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

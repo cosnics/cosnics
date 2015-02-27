@@ -62,7 +62,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
 
         $html[] = Display :: footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render_upgrade_step($image, $title, $result)
@@ -76,7 +76,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

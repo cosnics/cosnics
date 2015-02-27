@@ -250,7 +250,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         $html[] = $tabs_renderer->header();
         $html[] = $tabs_renderer :: body_header();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -266,6 +266,6 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         $html[] = $tabs_renderer->footer();
         $html[] = parent :: render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

@@ -32,6 +32,6 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         {
             $html[] = $object->get_embed();
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

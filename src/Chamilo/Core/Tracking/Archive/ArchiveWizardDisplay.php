@@ -139,6 +139,6 @@ class ArchiveWizardDisplay extends HTML_QuickForm_Action_Display
 
         $html[] = $this->parent->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

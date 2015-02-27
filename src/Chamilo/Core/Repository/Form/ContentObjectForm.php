@@ -566,7 +566,7 @@ EOT;
             $html[] = '<script type="text/javascript">';
             $html[] = 'var support_attachments = true';
             $html[] = '</script>';
-            $this->addElement('html', implode("\n", $html));
+            $this->addElement('html', implode(PHP_EOL, $html));
             if ($this->form_type != self :: TYPE_REPLY)
             {
                 $attached_objects = $object->get_attachments();

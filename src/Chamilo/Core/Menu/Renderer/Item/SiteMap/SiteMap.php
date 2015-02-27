@@ -30,6 +30,6 @@ class SiteMap extends Renderer
         {
             $html[] = '<div class="item">' . $this->get_item_url() . '</div>';
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

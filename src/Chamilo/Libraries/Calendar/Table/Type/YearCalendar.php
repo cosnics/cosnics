@@ -178,7 +178,7 @@ class YearCalendar extends Calendar
         }
 
         $html[] = parent :: toHtml();
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function render()

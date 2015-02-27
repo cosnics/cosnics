@@ -25,7 +25,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
         $html[] = $this->get_attachments();
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_attachments()
@@ -60,6 +60,6 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                 $html[] = '</div>';
             }
         }
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

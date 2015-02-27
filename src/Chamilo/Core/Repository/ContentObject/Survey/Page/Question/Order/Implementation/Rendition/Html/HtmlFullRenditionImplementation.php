@@ -36,7 +36,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = $this->get_formvalidator()->toHtml();
         $html[] = '</div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_complex_content_object_item()

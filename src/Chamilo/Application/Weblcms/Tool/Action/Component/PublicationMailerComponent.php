@@ -59,7 +59,7 @@ class PublicationMailerComponent extends Manager
             $html[] = $this->display_error_message(Translation :: get('NoObjectsSelected'));
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 }

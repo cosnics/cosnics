@@ -314,7 +314,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function generate_navigation_bar_html()
@@ -329,7 +329,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         }
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp;</div><br/>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function generate_submitters_navigator()
@@ -365,7 +365,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png"/>';
         }
         $html[] = '</div>';
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function get_previous_submitter_url()
@@ -515,7 +515,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         $html[] = $this->get_reporting_data_as_html();
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -576,7 +576,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $html[] = round($score / $count_score, 2) . '%<br />';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -670,7 +670,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $html[] = $this->action_bar->as_html();
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function get_additional_parameters()

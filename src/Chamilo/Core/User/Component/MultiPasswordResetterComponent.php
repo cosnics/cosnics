@@ -63,7 +63,7 @@ class MultiPasswordResetterComponent extends Manager
                          Path :: getInstance()->getBasePath(true);
                     $mail_body[] = Translation :: get('UserName') . ' :' . $user->get_username();
                     $mail_body[] = Translation :: get('Password') . ' :' . $password;
-                    $mail_body = implode("\n", $mail_body);
+                    $mail_body = implode(PHP_EOL, $mail_body);
                     $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
                         'no_reply_email') : PlatformSetting :: get('administrator_email');
                     $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);

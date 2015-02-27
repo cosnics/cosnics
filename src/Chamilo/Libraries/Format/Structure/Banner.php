@@ -154,6 +154,6 @@ class Banner
         $output[] = '<div class="clear">&nbsp;</div>';
         $output[] = '</div> <!-- end of the whole #header section -->';
 
-        return implode("\n", $output);
+        return implode(PHP_EOL, $output);
     }
 }

@@ -45,7 +45,7 @@ class CourseDeleterComponent extends Manager implements DelegateComponent
             $html[] = $this->delete_page->toHtml();
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 

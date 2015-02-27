@@ -39,7 +39,7 @@ class AttemptBrowserComponent extends Manager
             $html[] = $this->render_attempts($attempts);
             $html[] = $this->render_footer();
 
-            return implode("\n", $html);
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -77,7 +77,7 @@ class AttemptBrowserComponent extends Manager
                 $image);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_toolbar($attempt)

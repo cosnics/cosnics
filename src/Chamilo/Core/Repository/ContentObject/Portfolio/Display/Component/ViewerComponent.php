@@ -55,12 +55,12 @@ class ViewerComponent extends Manager implements DelegateComponent
             $content[] = $this->render_statistics($this->get_current_content_object());
         }
 
-        $this->get_tabs_renderer()->set_content(implode("\n", $content));
+        $this->get_tabs_renderer()->set_content(implode(PHP_EOL, $content));
 
         $html[] = $this->get_tabs_renderer()->render();
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -101,7 +101,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -159,6 +159,6 @@ class ViewerComponent extends Manager implements DelegateComponent
             $html[] = '</div>';
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

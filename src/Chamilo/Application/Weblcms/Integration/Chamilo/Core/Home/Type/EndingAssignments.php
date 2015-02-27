@@ -107,7 +107,7 @@ class EndingAssignments extends Block
             return Translation :: get('NoAssignmentsEndComingWeek');
         }
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function display_new_items($items)

@@ -122,7 +122,7 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
         // Display the page footer
         $html[] = $this->parent->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     public function process_result(LocationResult $result)
@@ -145,6 +145,6 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }

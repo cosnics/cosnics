@@ -48,7 +48,7 @@ class UserGroupUnSubscriberComponent extends Manager
 
         $html[] = $this->render_footer();
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_groups(array $groups)
@@ -90,7 +90,7 @@ class UserGroupUnSubscriberComponent extends Manager
             $html[] = $this->render_list_item($title, $description, '$info', $actions, $level, false, $image);
         }
 
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 
     private function render_toolbar($group)

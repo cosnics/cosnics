@@ -18,6 +18,6 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         $html[] = '<div style="border: 1px solid grey;"><iframe border="0" style="border: 0;"
                 width="100%" height="500"  src="' . $url . '"></iframe></div>';
         
-        return implode("\n", $html);
+        return implode(PHP_EOL, $html);
     }
 }
