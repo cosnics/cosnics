@@ -3,7 +3,7 @@ body {
 	padding: 0;
 	margin: 0;
 	font-size: 11px;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 }
 
 p {
@@ -135,7 +135,7 @@ a img {
 }
 
 select {
-	font-family: "lucida grande", tahoma, verdana, arial, sans-sarif;
+	font-family: Ubuntu, "lucida grande", tahoma, verdana, arial, sans-sarif;
 	font-size: 11px;
 	background-color: #FFFFFF;
 	border: 1px solid #8FB6BD;
@@ -161,7 +161,7 @@ textarea:focus {
 	border-right-color: #0e1f5b;
 	color: #FFFFFF;
 	font-size: 11px;
-	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+	font-family: Ubuntu, "lucida grande", tahoma, verdana, arial, sans-serif;
 	text-align: center;
 	cursor: pointer;
 	/*cursor:hand;*/

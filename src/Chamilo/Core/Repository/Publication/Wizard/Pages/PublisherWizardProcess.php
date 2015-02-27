@@ -130,7 +130,7 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
         $package_context = ClassnameUtilities :: getInstance()->getNamespaceParent($result->get_context(), 4);
 
         $category = Theme :: getInstance()->getImage(
-            'logo/22',
+            'Logo/22',
             'png',
             Translation :: get('TypeName', null, $package_context),
             null,

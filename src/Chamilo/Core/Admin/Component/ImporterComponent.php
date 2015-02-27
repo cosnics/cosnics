@@ -116,7 +116,7 @@ class ImporterComponent extends Manager
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package),
                     Translation :: get('TypeName', null, $package),
-                    Theme :: getInstance()->getImagePath($package) . 'logo/22.png');
+                    Theme :: getInstance()->getImagePath($package) . 'Logo/22.png');
 
                 foreach ($links as $action)
                 {

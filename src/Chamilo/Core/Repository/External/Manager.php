@@ -460,7 +460,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_title())),
-                                    Theme :: getInstance()->getImagePath($object :: context()) . 'logo/16.png',
+                                    Theme :: getInstance()->getImagePath($object :: context()) . 'Logo/16.png',
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
@@ -483,7 +483,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_name())),
-                                    Theme :: getInstance()->getImagePath($object :: context()) . 'logo/16.png',
+                                    Theme :: getInstance()->getImagePath($object :: context()) . 'Logo/16.png',
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,

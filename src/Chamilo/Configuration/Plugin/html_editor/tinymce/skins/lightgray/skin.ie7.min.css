@@ -7,7 +7,7 @@
 	background: 0 0;
 	text-decoration: none;
 	color: #333;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	text-shadow: none;
 	float: none;
@@ -1814,7 +1814,7 @@ i.mce-i-resize {
 }
 
 @font-face {
-	font-family: tinymce;
+	font-family: Ubuntu, tinymce;
 	src: url(fonts/tinymce.eot);
 	src: url(fonts/tinymce.eot?#iefix) format('embedded-opentype'),
 		url(fonts/tinymce.woff) format('woff'), url(fonts/tinymce.ttf)
@@ -1824,7 +1824,7 @@ i.mce-i-resize {
 }
 
 @font-face {
-	font-family: tinymce-small;
+	font-family: Ubuntu, tinymce-small;
 	src: url(fonts/tinymce-small.eot);
 	src: url(fonts/tinymce-small.eot?#iefix) format('embedded-opentype'),
 		url(fonts/tinymce-small.woff) format('woff'),
@@ -1835,7 +1835,7 @@ i.mce-i-resize {
 }
 
 .mce-ico {
-	font-family: tinymce;
+	font-family: Ubuntu, tinymce;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 16px;
@@ -1851,7 +1851,7 @@ i.mce-i-resize {
 }
 
 .mce-btn-small .mce-ico {
-	font-family: tinymce-small
+	font-family: Ubuntu, tinymce-small
 }
 
 .mce-ico,i.mce-i-checkbox {

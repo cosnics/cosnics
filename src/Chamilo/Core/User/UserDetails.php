@@ -50,7 +50,7 @@ class UserDetails
         }
         
         $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath() .
-             'logo/22.png);">';
+             'Logo/22.png);">';
         $html[] = '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
              '" style="margin: 10px;max-height: 150px; border:1px solid black;float: right; display: inline;"/>';
         $html[] = '<div class="title">';

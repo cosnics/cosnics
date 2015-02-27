@@ -267,7 +267,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
                 $tab_name,
-                Theme :: getInstance()->getImagePath('group') . 'logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagePath('group') . 'Logo/' . Theme :: ICON_MINI . '.png',
                 $link,
                 $tab_selected));
 
@@ -282,7 +282,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 new DynamicVisualTab(
                     self :: TAB_PLATFORM_GROUPS_USERS,
                     $tab_name,
-                    Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'logo/' .
+                    Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
                          Theme :: ICON_MINI . '.png',
                         $link,
                         $this->current_tab == self :: TAB_PLATFORM_GROUPS_USERS));

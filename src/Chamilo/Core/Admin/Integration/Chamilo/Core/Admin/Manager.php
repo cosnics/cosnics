@@ -54,7 +54,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('TranslationsImport'), 
             Translation :: get('TranslationsImportDescription'), 
-            Theme :: getInstance()->getImagePath(\Chamilo\Core\Admin\Language\Manager :: context()) . 'logo/32.png', 
+            Theme :: getInstance()->getImagePath(\Chamilo\Core\Admin\Language\Manager :: context()) . 'Logo/32.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 

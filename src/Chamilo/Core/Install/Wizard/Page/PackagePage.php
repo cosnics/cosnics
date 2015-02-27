@@ -96,7 +96,7 @@ class PackagePage extends InstallWizardPage
             {
                 $html = array();
                 $html[] = '<div class="' . $this->getPackageClasses($package) . '" style="background-image: url(' .
-                     Theme :: getInstance()->getImagePath($package->get_context()) . 'logo/22.png' . ')">';
+                     Theme :: getInstance()->getImagePath($package->get_context()) . 'Logo/22.png' . ')">';
                 $this->addElement('html', implode("\n", $html));
 
                 $checkbox_name = 'install_' .

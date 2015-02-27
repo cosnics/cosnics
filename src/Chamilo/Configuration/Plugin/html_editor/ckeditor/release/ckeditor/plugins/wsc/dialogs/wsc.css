@@ -14,7 +14,7 @@ body {
 
 body,td,input,select,textarea {
 	font-size: 11px;
-	font-family: 'Microsoft Sans Serif', Arial, Helvetica, Verdana;
+	font-family: Ubuntu, 'Microsoft Sans Serif', Arial, Helvetica, Verdana;
 }
 
 .midtext {

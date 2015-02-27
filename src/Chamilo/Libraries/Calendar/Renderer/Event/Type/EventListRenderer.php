@@ -30,7 +30,7 @@ class EventListRenderer extends EventRenderer
         $html = array();
 
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath($this->get_event()->get_context()) . 'logo/22.png);">';
+             Theme :: getInstance()->getImagePath($this->get_event()->get_context()) . 'Logo/22.png);">';
         $html[] = '<div class="title">' . htmlentities($this->get_event()->get_title()) . '</div>';
         $html[] = $this->get_description();
         $html[] = $this->get_actions();

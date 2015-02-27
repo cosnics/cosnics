@@ -268,13 +268,13 @@ abbr,acronym,.explain {
 }
 
 q {
-	font-family: Times, "Times New Roman", serif;
+	font-family: Ubuntu, Times, "Times New Roman", serif;
 	font-style: italic;
 }
 
 /* disabled for now
 blockquote {
-	font-family: Times, "Times New Roman", serif;
+	font-family: Ubuntu, Times, "Times New Roman", serif;
 	font-style: italic;
 }*/
 code {

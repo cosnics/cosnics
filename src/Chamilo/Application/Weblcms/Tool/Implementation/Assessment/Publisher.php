@@ -100,7 +100,7 @@ class Publisher
                 if ($content_object->has_right(RepositoryRights :: USE_RIGHT, $this->parent->get_user_id()))
                 {
                     
-                    // $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'logo/' .
+                    // $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'Logo/' .
                     // Theme :: ICON_MINI . '.png" alt="' . htmlentities(
                     // Translation :: get('TypeName', null, $namespace)
                     // ) . '"/> ' . $content_object->get_title() . '</li>';
@@ -119,7 +119,7 @@ class Publisher
                 }
                 else
                 {
-                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'logo/' .
+                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'Logo/' .
                          Theme :: ICON_MINI . '.png" alt="' .
                          htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
                          $content_object->get_title() . ' <span style="color:red;font-style:italic">' . Translation :: get(

@@ -79,18 +79,17 @@ class BlockRendition
         }
         else
         {
-            $image_path = Theme :: getInstance()->getImagePath($context, false) . 'blocks/' . $type . '.png';
+            $image_path = Theme :: getInstance()->getImagePath($context, false) . 'Blocks/' . $type . '.png';
 
             if (! file_exists($image_path) || ! is_file($image_path))
             {
                 return Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent(
-                        ClassnameUtilities :: getInstance()->getNamespaceParent($context))) . 'logo/' .
-                     Theme :: ICON_MEDIUM . '.png';
+                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 3)) . 'Logo/' . Theme :: ICON_MEDIUM .
+                     '.png';
             }
             else
             {
-                return Theme :: getInstance()->getImagePath($context) . 'blocks/' . $type . '.png';
+                return Theme :: getInstance()->getImagePath($context) . 'Blocks/' . $type . '.png';
             }
         }
     }
@@ -218,10 +217,8 @@ class BlockRendition
     public function get_icon()
     {
         return Theme :: getInstance()->getImagePath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_block_info()->get_context())))) .
-             'logo/' . Theme :: ICON_MEDIUM . '.png';
+            ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_block_info()->get_context(), 4)) . 'Logo/' .
+             Theme :: ICON_MEDIUM . '.png';
     }
 
     public function as_html($view = '')

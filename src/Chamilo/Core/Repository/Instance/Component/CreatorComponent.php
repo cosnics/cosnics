@@ -88,7 +88,7 @@ class CreatorComponent extends Manager
                     $types_html[] = '<a href="' . $this->get_url(
                         array(self :: PARAM_IMPLEMENTATION => $registration->get_context())) .
                          '"><div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagePath(
-                            $registration->get_context()) . 'logo/48.png);">';
+                            $registration->get_context()) . 'Logo/48.png);">';
                     $types_html[] = Translation :: get('TypeName', null, $registration->get_context());
                     $types_html[] = '</div></a>';
                 }

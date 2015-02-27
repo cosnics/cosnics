@@ -26,7 +26,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         {
             case \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_IMPLEMENTATION :
                 return Theme :: getInstance()->getImage(
-                    'logo/' . Theme :: ICON_MINI, 
+                    'Logo/' . Theme :: ICON_MINI, 
                     'png', 
                     Translation :: get('TypeName', null, $external_instance->get_implementation()), 
                     null, 

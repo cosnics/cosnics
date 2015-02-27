@@ -33,7 +33,7 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 }
                 
                 return Theme :: getInstance()->getImage(
-                    'logo/16', 
+                    'Logo/16', 
                     'png', 
                     Translation :: get('TypeName', null, $context), 
                     null, 

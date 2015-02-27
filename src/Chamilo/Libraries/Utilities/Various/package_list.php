@@ -342,7 +342,7 @@ foreach ($packages as $key => $package)
     $row = array();
     $row[] = $key + 1 . '.';
     $row[] = $package;
-    $row[] = '<img src="' . Theme :: getInstance()->getImagePath($package) . 'logo/16.png" />';
+    $row[] = '<img src="' . Theme :: getInstance()->getImagePath($package) . 'Logo/16.png" />';
 
     $rows[] = $row;
 }

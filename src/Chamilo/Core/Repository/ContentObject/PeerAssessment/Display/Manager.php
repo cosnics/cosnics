@@ -225,7 +225,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     static public function render_list_item($title, $description, $info, $actions, $level, $invisible = false, $image = null)
     {
         if (is_null($image))
-            $image = Theme :: getInstance()->getImagePath() . 'logo/22.png';
+            $image = Theme :: getInstance()->getImagePath() . 'Logo/22.png';
 
         $html = array();
 

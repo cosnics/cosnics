@@ -38,7 +38,7 @@ div.package_upgrade div.package {
 }
 
 div.package_upgrade div.package div.title {
-	font-family: Georgia, "Times New Roman", serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", serif;
 	font-weight: bold;
 	width: 100%;
 	font-size: 18px;

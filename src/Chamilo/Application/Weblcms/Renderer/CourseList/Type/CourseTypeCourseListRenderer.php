@@ -397,7 +397,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     if ($course_admin)
                     {
                         $icon = Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) .
-                             'logo/16.png';
+                             'Logo/16.png';
                     }
                     
                     $html[] = '<li style="list-style: none; margin-bottom: 5px; list-style-image: url(' . $icon . ');">';

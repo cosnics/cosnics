@@ -720,14 +720,14 @@ body.mediawiki table.mbox-small-left {
    to [[Template:IPA fonts]] and [[Template:Unicode fonts]].
 */
 .IPA {
-	font-family: "Charis SIL", "Doulos SIL", Gentium, GentiumAlt,
+	font-family: Ubuntu, "Charis SIL", "Doulos SIL", Gentium, GentiumAlt,
 		"DejaVu Sans", Code2000, "TITUS Cyberbit Basic", "Arial Unicode MS",
 		"Lucida Sans Unicode", "Chrysanthi Unicode";
 	font-family /**/: inherit;
 }
 
 .Unicode {
-	font-family: Code2000, Code2001, "Free Serif", "TITUS Cyberbit Basic",
+	font-family: Ubuntu, Code2000, Code2001, "Free Serif", "TITUS Cyberbit Basic",
 		"Doulos SIL", "Chrysanthi Unicode", "Bitstream Cyberbit",
 		"Bitstream CyberBase", Thryomanes, Gentium, GentiumAlt,
 		"Lucida Grande", "Free Sans", "Arial Unicode MS",
@@ -736,13 +736,13 @@ body.mediawiki table.mbox-small-left {
 }
 
 .latinx {
-	font-family: Code2000, Code2001, "TITUS Cyberbit Basic",
+	font-family: Ubuntu, Code2000, Code2001, "TITUS Cyberbit Basic",
 		"Microsoft Sans Serif";
 	font-family /**/: inherit;
 }
 
 .polytonic {
-	font-family: "Athena Unicode", Gentium, "Palatino Linotype",
+	font-family: Ubuntu, "Athena Unicode", Gentium, "Palatino Linotype",
 		"Arial Unicode MS", "Lucida Sans Unicode", "Lucida Grande", Code2000;
 	font-family /**/: inherit;
 }
@@ -1013,7 +1013,7 @@ sup,sub {
 } /* hide things that should only display outside shells */
 /* Styling for Abuse Filter tags */
 .mw-tag-markers {
-	font-family: sans-serif;
+	font-family: Ubuntu, sans-serif;
 	font-style: italic;
 	font-size: 90%;
 }
@@ -1021,6 +1021,6 @@ sup,sub {
 /* Fix so <tt> tags get normal text size also in some
    versions of Firefox, Safari, Konqueror, Chrome etc. */
 tt {
-	font-family: monospace, sans-serif;
+	font-family: Ubuntu, monospace, sans-serif;
 }
 /* </source> */

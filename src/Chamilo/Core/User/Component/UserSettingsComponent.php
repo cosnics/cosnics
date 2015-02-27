@@ -84,7 +84,7 @@ class UserSettingsComponent extends Manager
                 $tab = new DynamicVisualTab(
                     $setting_context,
                     Translation :: get('TypeName', null, $setting_context),
-                    Theme :: getInstance()->getImagePath($setting_context) . 'logo/22.png',
+                    Theme :: getInstance()->getImagePath($setting_context) . 'Logo/22.png',
                     $package_url,
                     $is_current_tab);
                 $tabs->add_tab($tab);

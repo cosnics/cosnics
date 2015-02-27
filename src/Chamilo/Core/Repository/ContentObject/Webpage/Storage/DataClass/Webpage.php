@@ -333,7 +333,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
         $icon_name = $size . '_' . $icon_name;
         $icon_path = Theme :: getInstance()->getImagePath(
             ContentObject :: get_content_object_type_namespace($this->get_type()),
-            false) . 'logo/' . $icon_name . '.png';
+            false) . 'Logo/' . $icon_name . '.png';
 
         if (! file_exists($icon_path))
         {
@@ -355,7 +355,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
         else
         {
             return Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type())) . 'logo/' . $size .
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type())) . 'Logo/' . $size .
                  ($this->is_current() ? '' : '_na') . '.png';
         }
     }

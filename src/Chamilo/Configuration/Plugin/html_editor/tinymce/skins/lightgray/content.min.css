@@ -1,7 +1,7 @@
 body {
 	background-color: #FFF;
 	color: #000;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	scrollbar-3dlight-color: #F0F0EE;
 	scrollbar-arrow-color: #676662;
@@ -14,7 +14,7 @@ body {
 }
 
 td,th {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px
 }
 

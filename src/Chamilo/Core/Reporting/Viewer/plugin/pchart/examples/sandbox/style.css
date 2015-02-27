@@ -1,7 +1,7 @@
 body {
 	margin: 4px;
 	text-align: left;
-	font-family: tahoma;
+	font-family: Ubuntu, tahoma;
 	background-color: #FFFFFF;
 	background-image: url('graphix/background.console.png');
 }
@@ -22,7 +22,7 @@ tr {
 }
 
 td.topMenu {
-	font-family: tahoma;
+	font-family: Ubuntu, tahoma;
 	font-size: 11px;
 }
 
@@ -38,7 +38,7 @@ div.topMenu {
 }
 
 input {
-	font-family: tahoma;
+	font-family: Ubuntu, tahoma;
 	font-size: 10px;
 }
 

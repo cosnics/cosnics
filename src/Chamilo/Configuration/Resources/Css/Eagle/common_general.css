@@ -9,7 +9,7 @@ html {
 }
 
 body {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
 	margin: 0px;
@@ -161,7 +161,7 @@ div#emulator a {
 	color: #444444;
 	background: url(../../images/eagle/background_breadcrumb.png) no-repeat
 		right center;
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	font-size: 1em;
 	font-style: italic;
 	font-weight: normal !important;
@@ -544,7 +544,7 @@ p,blockquote,ol,ul {
 }
 
 h1,h2,h3,h4,h5,h6 {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 }
 
 h1 {
@@ -571,7 +571,7 @@ h4 {
 }
 
 h5,h6 {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
 a:link {
@@ -656,7 +656,7 @@ div.content_object {
 }
 
 div.content_object div.title {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	color: #880000;
 	font-size: 1.2em;
 	font-weight: bold;
@@ -1620,7 +1620,7 @@ div.block {
 }
 
 div.block div.title {
-	font-family: verdana, sans-serif;
+	font-family: Ubuntu, verdana, sans-serif;
 	font-weight: bold;
 	font-size: 140%;
 	border-bottom: 1px dotted #D3D3D3;
@@ -1976,7 +1976,7 @@ div.reporting_template_menu #nav a {
 	display: block;
 	margin: 2px 5px 3px 5px;
 	text-decoration: none;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Verdana, Arial, Helvetica, sans-serif;
 	font-size: 1em;
 }
 
@@ -2252,7 +2252,7 @@ div.question div.answer div.splitter {
 	color: #9e021b;
 	font-weight: bold;
 	font-size: 11px;
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	padding: 3px 10px 3px 10px;

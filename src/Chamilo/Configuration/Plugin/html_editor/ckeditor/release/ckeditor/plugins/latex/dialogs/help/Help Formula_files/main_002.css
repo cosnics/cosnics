@@ -6,7 +6,7 @@
 ** Loosely based on Monobook by Gabriel Wicke
 */
 body {
-	font-family: sans-serif;
+	font-family: Ubuntu, sans-serif;
 	color: Black;
 	margin: 0;
 	padding: 0.3em;
@@ -219,7 +219,7 @@ abbr,acronym,.explain {
 }
 
 q {
-	font-family: Times, "Times New Roman", serif;
+	font-family: Ubuntu, Times, "Times New Roman", serif;
 	font-style: italic;
 }
 

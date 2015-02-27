@@ -94,7 +94,7 @@ class ConfigurerComponent extends Manager
                         new DynamicVisualTab(
                             $package,
                             Translation :: get('TypeName', null, $package),
-                            Theme :: getInstance()->getImagePath($package) . 'logo/22.png',
+                            Theme :: getInstance()->getImagePath($package) . 'Logo/22.png',
                             $this->get_url(
                                 array(self :: PARAM_TAB => $this->get_tab(), self :: PARAM_CONTEXT => $package)),
                             $this->get_context() == $package));

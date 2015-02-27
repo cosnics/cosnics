@@ -87,7 +87,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_PARTICIPANTS, 
                 Translation :: get('Participants'), 
-                Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $table = new UserTable($this);
@@ -95,7 +95,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_USERS, 
                 Translation :: get('Users'), 
-                Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $table = new GroupTable($this);
@@ -103,7 +103,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_GROUPS, 
                 Translation :: get('Groups'), 
-                Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $html[] = $tabs->render();
