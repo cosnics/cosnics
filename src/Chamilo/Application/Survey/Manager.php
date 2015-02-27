@@ -416,7 +416,7 @@ abstract class Manager extends Application
         $package_list = new PackageList(
             self :: context(),
             Translation :: get('TypeName', null, __NAMESPACE__),
-            Theme :: getInstance()->getImagePath() . 'logo/16.png');
+            Theme :: getInstance()->getImagePath() . 'Logo/16.png');
 
         $integration_list = new \Chamilo\Configuration\Package\PackageList(
             self :: context() . '\integration',

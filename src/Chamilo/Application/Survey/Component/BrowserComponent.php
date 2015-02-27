@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicVisualTab(
                     self :: TAB_MY_PUBLICATIONS, 
                     Translation :: get('MyPublications'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey\\') . 'logo/16.png', 
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey\\') . 'Logo/16.png', 
                     $this->get_url($params), 
                     $this->get_table_type() == self :: TAB_MY_PUBLICATIONS));
         }

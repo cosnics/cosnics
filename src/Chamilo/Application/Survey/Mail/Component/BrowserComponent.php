@@ -76,7 +76,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_MAILS_TO_PARTICIPANTS, 
                 Translation :: get('MailsToParticipants'), 
-                Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                 $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_MAILS_TO_PARTICIPANTS));
         

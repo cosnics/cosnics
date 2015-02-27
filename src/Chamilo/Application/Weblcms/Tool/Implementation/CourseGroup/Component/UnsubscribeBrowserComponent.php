@@ -217,7 +217,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TypeName', null, $namespace),
-                    Theme :: getInstance()->getImagePath($namespace) . 'logo/16.png',
+                    Theme :: getInstance()->getImagePath($namespace) . 'Logo/16.png',
                     $url,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -238,7 +238,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TypeName', null, $namespace),
-                    Theme :: getInstance()->getImagePath($namespace) . 'logo/16.png',
+                    Theme :: getInstance()->getImagePath($namespace) . 'Logo/16.png',
                     $url,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

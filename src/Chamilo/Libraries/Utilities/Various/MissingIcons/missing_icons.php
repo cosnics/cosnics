@@ -46,11 +46,11 @@ foreach ($package_list as $category => $packages)
         foreach ($sizes as $size)
         {
             // Regular
-            $size_icon_path = $image_sys_path . $target . '/logo/' . $size . '.png';
+            $size_icon_path = $image_sys_path . $target . '/Logo/' . $size . '.png';
 
             if ($source && $source != $target)
             {
-                $source_size_icon_path = $image_sys_path . $source . '/logo/' . $size . '.png';
+                $source_size_icon_path = $image_sys_path . $source . '/Logo/' . $size . '.png';
 
                 if (file_exists($source_size_icon_path))
                 {
@@ -66,15 +66,15 @@ foreach ($package_list as $category => $packages)
             }
             else
             {
-                $data_row[] = '<img src="' . $image_web_path . $target . '/logo/' . $size . '.png" />';
+                $data_row[] = '<img src="' . $image_web_path . $target . '/Logo/' . $size . '.png" />';
             }
 
             // Not available
-            $icon_path = $image_sys_path . $target . '/logo/' . $size . '_na.png';
+            $icon_path = $image_sys_path . $target . '/Logo/' . $size . '_na.png';
 
             if ($source && $source != $target)
             {
-                $source_icon_path = $image_sys_path . $source . '/logo/' . $size . '_na.png';
+                $source_icon_path = $image_sys_path . $source . '/Logo/' . $size . '_na.png';
 
                 if (file_exists($source_icon_path))
                 {
@@ -94,15 +94,15 @@ foreach ($package_list as $category => $packages)
             }
             else
             {
-                $data_row[] = '<img src="' . $image_web_path . $target . '/logo/' . $size . '_na.png" />';
+                $data_row[] = '<img src="' . $image_web_path . $target . '/Logo/' . $size . '_na.png" />';
             }
 
             // New
-            $icon_path = $image_sys_path . $target . '/logo/' . $size . '_new.png';
+            $icon_path = $image_sys_path . $target . '/Logo/' . $size . '_new.png';
 
             if ($source && $source != $target)
             {
-                $source_icon_path = $image_sys_path . $source . '/logo/' . $size . '_new.png';
+                $source_icon_path = $image_sys_path . $source . '/Logo/' . $size . '_new.png';
 
                 if (file_exists($source_icon_path))
                 {
@@ -122,7 +122,7 @@ foreach ($package_list as $category => $packages)
             }
             else
             {
-                $data_row[] = '<img src="' . $image_web_path . $target . '/logo/' . $size . '_new.png" />';
+                $data_row[] = '<img src="' . $image_web_path . $target . '/Logo/' . $size . '_new.png" />';
             }
         }
 

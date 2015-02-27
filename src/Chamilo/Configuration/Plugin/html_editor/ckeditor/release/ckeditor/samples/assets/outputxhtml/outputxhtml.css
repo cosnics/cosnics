@@ -9,7 +9,7 @@
  * Basic definitions for the editing area.
  */
 body {
-	font-family: Arial, Verdana, sans-serif;
+	font-family: Ubuntu, Arial, Verdana, sans-serif;
 	font-size: 80%;
 	color: #000000;
 	background-color: #ffffff;
@@ -50,15 +50,15 @@ body {
  * Font faces.
  */
 .FontComic {
-	font-family: 'Comic Sans MS';
+	font-family: Ubuntu, 'Comic Sans MS';
 }
 
 .FontCourier {
-	font-family: 'Courier New';
+	font-family: Ubuntu, 'Courier New';
 }
 
 .FontTimes {
-	font-family: 'Times New Roman';
+	font-family: Ubuntu, 'Times New Roman';
 }
 
 /**
@@ -149,7 +149,7 @@ body {
  * Other.
  */
 code {
-	font-family: courier, monospace;
+	font-family: Ubuntu, courier, monospace;
 	background-color: #eeeeee;
 	padding-left: 1px;
 	padding-right: 1px;

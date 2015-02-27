@@ -16,7 +16,7 @@ input,textarea,select,option,optgroup,button,td,th {
 }
 
 pre,code,kbd,samp,tt {
-	font-family: monospace, monospace;
+	font-family: Ubuntu, monospace, monospace;
 	font-size: 1em;
 }
 
@@ -101,7 +101,7 @@ fieldset {
 
 body,input,textarea {
 	color: #333333;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -256,7 +256,7 @@ dl.samples>dd {
 /* Used on inline samples */
 blockquote {
 	font-style: italic;
-	font-family: Georgia, Times, "Times New Roman", serif;
+	font-family: Ubuntu, Georgia, Times, "Times New Roman", serif;
 	padding: 2px 0;
 	border-style: solid;
 	border-color: #ccc;

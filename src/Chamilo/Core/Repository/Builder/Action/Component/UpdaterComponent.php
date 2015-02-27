@@ -138,7 +138,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
                         array(
                             'CONTENT_OBJECT' => $content_object->get_title(),
                             'ICON' => Theme :: getInstance()->getImage(
-                                'logo/16',
+                                'Logo/16',
                                 'png',
                                 Translation :: get(
                                     'TypeName',

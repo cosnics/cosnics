@@ -136,7 +136,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             Translation :: get(count($this->content_objects) > 1 ? 'LocationSelectionsInfo' : 'LocationSelectionInfo'));
 
         $category = Theme :: getInstance()->getImage(
-            'logo/22',
+            'Logo/22',
             'png',
             $category_title,
             null,
@@ -254,7 +254,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
         $package_context = ClassnameUtilities :: getInstance()->getNamespaceParent($locations->get_context(), 4);
 
         $category = Theme :: getInstance()->getImage(
-            'logo/22',
+            'Logo/22',
             'png',
             Translation :: get('TypeName', null, $package_context),
             null,

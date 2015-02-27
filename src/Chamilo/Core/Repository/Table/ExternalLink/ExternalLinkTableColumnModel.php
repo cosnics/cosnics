@@ -18,7 +18,7 @@ class ExternalLinkTableColumnModel extends DataClassTableColumnModel implements 
                 \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(), 
                 \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_IMPLEMENTATION, 
                 Theme :: getInstance()->getImage(
-                    'logo/' . Theme :: ICON_MINI, 
+                    'Logo/' . Theme :: ICON_MINI, 
                     'png', 
                     Translation :: get('RepositoryType'), 
                     null, 

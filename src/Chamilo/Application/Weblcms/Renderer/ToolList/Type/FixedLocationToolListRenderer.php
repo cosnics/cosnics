@@ -385,7 +385,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $cell_contents[] = '<img src="' .
                      Theme :: getInstance()->getImagePath(
                         \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool())) .
-                     'logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
+                     'Logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
                      Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
                 $cell_contents[] = '&nbsp;';
                 $cell_contents[] = $title;
@@ -510,7 +510,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
             // Show tool-icon + name
             $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath($tool_namespace) .
-                 'logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
+                 'Logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
                  Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
             $html[] = '&nbsp;';
             $html[] = '<a id="tool_text" href="' . $parent->get_url(

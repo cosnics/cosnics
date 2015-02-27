@@ -27,7 +27,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
         foreach ($feed['items'] as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath() . 'logo/22_item.png);">';
+                 Theme :: getInstance()->getImagePath() . 'Logo/22_item.png);">';
             $html[] = '<div class="title">' . $item['title'] . '</div>';
             $html[] = html_entity_decode($item['description']);
             $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($item['link']) . '">' .

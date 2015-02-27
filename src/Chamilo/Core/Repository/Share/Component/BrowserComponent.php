@@ -83,7 +83,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'logo/' .
+                Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
                      Theme :: ICON_SMALL . '.png',
                     $link,
                     ($this->type == self :: TYPE_USER)));
@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\Group\Manager :: context()) . 'logo/' .
+                Theme :: getInstance()->getImagePath(\Chamilo\Core\Group\Manager :: context()) . 'Logo/' .
                      Theme :: ICON_SMALL . '.png',
                     $link,
                     ($this->type == self :: TYPE_GROUP)));

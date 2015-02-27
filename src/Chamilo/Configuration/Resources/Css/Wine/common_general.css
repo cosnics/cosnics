@@ -2,7 +2,7 @@
  *  MAIN STYLES FILE                                 *
  *****************************************************/
 body {
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
 	margin: 0px;
@@ -528,7 +528,7 @@ h4 {
 }
 
 h5,h6 {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
 a:link {
@@ -1594,7 +1594,7 @@ div.block {
 }
 
 div.block div.title {
-	font-family: verdana, sans-serif;
+	font-family: Ubuntu, verdana, sans-serif;
 	font-weight: bold;
 	font-size: 140%;
 	border-bottom: 1px dotted #D3D3D3;
@@ -1981,7 +1981,7 @@ div.reporting_template_menu #nav a {
 	display: block;
 	margin: 2px 5px 3px 5px;
 	text-decoration: none;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Verdana, Arial, Helvetica, sans-serif;
 	font-size: 1em;
 }
 
@@ -2257,7 +2257,7 @@ div.question div.answer div.splitter {
 	color: #4171b5;
 	font-weight: bold;
 	font-size: 11px;
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	padding: 3px 10px 3px 10px;

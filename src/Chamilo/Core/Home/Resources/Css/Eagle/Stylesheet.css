@@ -43,7 +43,7 @@ div.portal_block {
 }
 
 div.portal_block div.title {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	width: 100%;
 	color: #880000;
 	font-size: 1.167em;
@@ -253,7 +253,7 @@ div.portal_column div.portal_banner div.title {
 	width: 250px;
 	height: 85px;
 	overflow: hidden;
-	/* 	font-family: "Lucida Grande", verdana, arial, helvetica, clean, sans-serif; */
+	/* 	font-family: Ubuntu, "Lucida Grande", verdana, arial, helvetica, clean, sans-serif; */
 	color: white;
 	font-weight: bold;
 	text-transform: uppercase;
@@ -271,7 +271,7 @@ div.portal_column div.portal_banner div.description {
 	height: 215px;
 	width: 250px;
 	background-image: none !important;
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	color: white;
 	font-size: 14px;
 	line-height: 18px !important;

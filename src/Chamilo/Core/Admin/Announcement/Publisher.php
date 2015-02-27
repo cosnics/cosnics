@@ -95,7 +95,7 @@ class Publisher
                 }
                 else
                 {
-                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'logo/' .
+                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace) . 'Logo/' .
                          Theme :: ICON_MINI . '.png" alt="' .
                          htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
                          $content_object->get_title() . ' <span style="color:red;font-style:italic">' . Translation :: get(

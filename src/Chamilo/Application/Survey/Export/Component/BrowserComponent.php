@@ -80,7 +80,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_EXPORT_TEMPLATES, 
                 Translation :: get('ExportTemplates'), 
-                Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                 $table->as_html()));
         
         if (Rights :: is_right_granted(Rights :: RIGHT_ADD_EXPORT_TEMPLATE, $this->publication_id))
@@ -90,7 +90,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     self :: TAB_EXPORT_REGISTRATIONS, 
                     Translation :: get('AddExportTemplate'), 
-                    Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                    Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                     $table->as_html()));
         }
         
@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     self :: TAB_EXPORT_TACKERS, 
                     Translation :: get('ExportTrackers'), 
-                    Theme :: getInstance()->getImagePath() . 'logo/16.png', 
+                    Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
                     $table->as_html()));
         }
         

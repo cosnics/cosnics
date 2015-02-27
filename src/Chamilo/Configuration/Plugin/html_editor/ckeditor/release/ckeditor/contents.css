@@ -4,7 +4,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 body {
 	/* Font */
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+	font-family: Ubuntu, sans-serif, Arial, Verdana, "Trebuchet MS";
 	font-size: 12px;
 	/* Text color */
 	color: #333;
@@ -24,7 +24,7 @@ body p {
 
 blockquote {
 	font-style: italic;
-	font-family: Georgia, Times, "Times New Roman", serif;
+	font-family: Ubuntu, Georgia, Times, "Times New Roman", serif;
 	padding: 2px 0;
 	border-style: solid;
 	border-color: #ccc;

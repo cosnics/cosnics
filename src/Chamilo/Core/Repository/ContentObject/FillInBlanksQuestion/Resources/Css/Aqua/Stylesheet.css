@@ -9,7 +9,7 @@ span.fill_in_the_blanks_gap {
 	padding: 2px 10px 2px 10px;
 	font-weight: bold;
 	font-size: 11px;
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	color: #4171b5;
@@ -21,7 +21,7 @@ div.fill_in_the_blanks_text {
 }
 
 .fill_in_the_blanks_input_field {
-	font-family: monospace;
+	font-family: Ubuntu, monospace;
 }
 
 button.blanks_hint,a.blanks_hint_button {

@@ -34,7 +34,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
             case Instance :: PROPERTY_IMPLEMENTATION :
                 $name = htmlentities(Translation :: get('ImplementationName', null, $result->get_implementation()));
                 return '<img src="' . Theme :: getInstance()->getImagePath($result->get_implementation()) .
-                     '/logo/22.png" alt="' . $name . '" title="' . $name . '"/>';
+                     '/Logo/22.png" alt="' . $name . '" title="' . $name . '"/>';
                 break;
         }
         

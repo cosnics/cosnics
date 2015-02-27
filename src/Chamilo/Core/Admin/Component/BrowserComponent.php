@@ -107,7 +107,7 @@ class BrowserComponent extends Manager
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package->get_context()),
                     Translation :: get('TypeName', null, $package->get_context()),
-                    Theme :: getInstance()->getImagePath($package->get_context()) . 'logo/22.png');
+                    Theme :: getInstance()->getImagePath($package->get_context()) . 'Logo/22.png');
 
                 if ($links->get_search())
                 {

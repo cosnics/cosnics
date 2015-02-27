@@ -161,7 +161,7 @@ class PackageUpgrader extends Action
             'Upgrade', 
             array('PACKAGE' => Translation :: get('TypeName', null, $context)), 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath($context) . 'logo/48.png';
+        $image = Theme :: getInstance()->getImagePath($context) . 'Logo/48.png';
         
         $upgrader = \Chamilo\Configuration\Package\Action\Upgrader :: factory($context);
         

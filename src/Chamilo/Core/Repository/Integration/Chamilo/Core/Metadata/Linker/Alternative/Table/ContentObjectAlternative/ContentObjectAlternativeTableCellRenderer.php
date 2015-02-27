@@ -41,7 +41,7 @@ class ContentObjectAlternativeTableCellRenderer extends RecordTableCellRenderer 
                 $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type);
                 
                 return Theme :: getInstance()->getImage(
-                    'logo/16', 
+                    'Logo/16', 
                     'png', 
                     Translation :: get('TypeName', null, $context), 
                     null, 

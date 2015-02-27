@@ -111,7 +111,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         array(
                             'CONTENT_OBJECT' => $object->get_title(),
                             'ICON' => Theme :: getInstance()->getImage(
-                                'logo/16',
+                                'Logo/16',
                                 'png',
                                 Translation :: get(
                                     'TypeName',

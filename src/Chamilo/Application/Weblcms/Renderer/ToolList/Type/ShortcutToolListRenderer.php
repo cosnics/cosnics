@@ -69,7 +69,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
                  $title . '">';
             $html[] = '<img src="' .
                  Theme :: getInstance()->getImagePath(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())) . 'logo/' .
+                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())) . 'Logo/' .
                  $tool_image . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
             $html[] = '</a>';
         }

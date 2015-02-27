@@ -460,7 +460,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                         Translation :: get('EphorusOverview'),
                         Theme :: getInstance()->getImagePath(
                             \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace('ephorus')) .
-                             'logo/16.png',
+                             'Logo/16.png',
                             $this->get_url(
                                 array(
                                     \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'ephorus',

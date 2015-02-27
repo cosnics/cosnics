@@ -20,7 +20,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 
 /* Editable regions */
 .cke_source {
-	font-family: 'Courier New', Monospace;
+	font-family: Ubuntu, 'Courier New', Monospace;
 	font-size: small;
 	background-color: #fff;
 	white-space: pre;

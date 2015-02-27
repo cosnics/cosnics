@@ -1357,7 +1357,7 @@ img.tex {
 }
 
 span.texhtml {
-	font-family: serif;
+	font-family: Ubuntu, serif;
 }
 
 /* add a bit of margin space between the preview and the toolbar */
@@ -2268,7 +2268,7 @@ td.mw-enhanced-rc {
 	white-space: nowrap;
 	padding: 0;
 	vertical-align: top;
-	font-family: monospace
+	font-family: Ubuntu, monospace
 }
 
 #mw-addcategory-prompt {

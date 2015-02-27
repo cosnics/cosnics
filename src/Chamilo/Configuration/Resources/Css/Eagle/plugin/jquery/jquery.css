@@ -93,14 +93,14 @@
 */ /* Component containers
 ----------------------------------*/
 .ui-widget {
-	/*font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	/*font-family: Ubuntu, Lucida Grande, Lucida Sans, Arial, sans-serif;
 	font-size: 1.1em;*/
 	
 }
 
 .ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button
 	{
-	/*font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	/*font-family: Ubuntu, Lucida Grande, Lucida Sans, Arial, sans-serif;
 	font-size: 1em;*/
 	
 }
@@ -133,12 +133,12 @@
 /* Interaction states
 ----------------------------------*/
 .ui-state-default {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	font-size: 1em;
 }
 
 .ui-state-default,.ui-widget-content .ui-state-default {
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 	border: 1px solid #c5dbec;
 	background: #F0F0F0;
 	font-weight: bold;
@@ -1556,7 +1556,7 @@
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected {
 	padding-bottom: 1px;
 	border-bottom-width: 0;
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Ubuntu, Georgia, "Times New Roman", Times, serif;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,.ui-tabs .ui-tabs-nav li.ui-state-disabled a,.ui-tabs .ui-tabs-nav li.ui-state-processing a
@@ -1690,7 +1690,7 @@ div.jpassword p.jpassword-meter {
 
 div.jpassword p.jpassword-info {
 	padding: 4px 0;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #FFF;
 	text-align: left;
@@ -1764,7 +1764,7 @@ THE SOFTWARE.
 	top: 0px;
 	padding: 10px;
 	background-color: white;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-style: normal;
 	line-height: 1;

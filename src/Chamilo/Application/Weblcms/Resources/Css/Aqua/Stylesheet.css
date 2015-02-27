@@ -181,7 +181,7 @@ div.questionform input[type=text]:hover,div.row div.questionform input[type=text
 }
 
 .head5,.head6 {
-	font-family: verdana, arial, helvetica, sans-serif;
+	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
 /*****************************************************
@@ -200,7 +200,7 @@ div.questionform input[type=text]:hover,div.row div.questionform input[type=text
 
 #contentbox {
 	align: center;
-	font-family: Arial;
+	font-family: Ubuntu, Arial;
 	font-size: 13px;
 	display: inline;
 	font-weight: bold;
@@ -208,7 +208,7 @@ div.questionform input[type=text]:hover,div.row div.questionform input[type=text
 
 #show {
 	align: center;
-	font-family: Arial;
+	font-family: Ubuntu, Arial;
 	font-size: 13px;
 	font-weight: bold;
 	display: none;

@@ -717,7 +717,7 @@ input#attachments_expand_button {
 	padding: 0 0 0 18px;
 	height: 16px;
 	font-weight: bold;
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #4171b5;
 	cursor: pointer;
@@ -736,7 +736,7 @@ input#attachments_collapse_button {
 	padding: 0 0 0 18px;
 	height: 16px;
 	font-weight: bold;
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #4171b5;
 	cursor: pointer;
@@ -755,7 +755,7 @@ input#rights_templates_expand_button {
 	padding: 0 0 0 18px;
 	height: 16px;
 	font-weight: bold;
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #4171b5;
 	cursor: pointer;
@@ -774,7 +774,7 @@ input#rights_templates_collapse_button {
 	padding: 0 0 0 18px;
 	height: 16px;
 	font-weight: bold;
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #4171b5;
 	cursor: pointer;

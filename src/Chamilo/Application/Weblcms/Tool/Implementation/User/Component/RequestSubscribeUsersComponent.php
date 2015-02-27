@@ -127,7 +127,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         foreach ($users as $user)
         {
             $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($user->class_name())) . 'logo/' .
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($user->class_name())) . 'Logo/' .
                  Theme :: ICON_MINI . '.png" alt="' . htmlentities(Translation :: get('TypeName')) . '"/> ' .
                  $user->get_fullname() . '(' . $user->get_official_code() . ')' . '</li>';
         }

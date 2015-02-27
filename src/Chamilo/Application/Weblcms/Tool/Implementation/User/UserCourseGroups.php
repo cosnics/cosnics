@@ -55,7 +55,7 @@ class UserCourseGroups
         }
         $html[] = 'style="clear: both;background-image: url(' .
              Theme :: getInstance()->getImagePath(
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager :: context()) . 'logo/22.png);">';
+                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager :: context()) . 'Logo/22.png);">';
         $html[] = '<div class="title">';
         $html[] = Translation :: get('Coursegroups');
         $html[] = '</div>';

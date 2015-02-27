@@ -88,7 +88,7 @@ class PersonalBlogLayout extends BlogLayout
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
                 $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' .
                      Theme :: getInstance()->getImagePath(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) . 'logo/' .
+                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) . 'Logo/' .
                      Theme :: ICON_MINI . '.png" alt="' .
                      htmlentities(
                         Translation :: get(

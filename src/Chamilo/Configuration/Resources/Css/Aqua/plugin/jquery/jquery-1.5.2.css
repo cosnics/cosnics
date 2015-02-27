@@ -93,14 +93,14 @@
 */ /* Component containers
 ----------------------------------*/
 .ui-widget {
-	/*font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	/*font-family: Ubuntu, Lucida Grande, Lucida Sans, Arial, sans-serif;
 	font-size: 1.1em;*/
 	
 }
 
 .ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button
 	{
-	/*font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	/*font-family: Ubuntu, Lucida Grande, Lucida Sans, Arial, sans-serif;
 	font-size: 1em;*/
 	
 }
@@ -1708,7 +1708,7 @@ div.jpassword p.jpassword-meter {
 
 div.jpassword p.jpassword-info {
 	padding: 4px 0;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #FFF;
 	text-align: left;
@@ -1782,7 +1782,7 @@ THE SOFTWARE.
 	top: 0px;
 	padding: 10px;
 	background-color: white;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-style: normal;
 	line-height: 1;

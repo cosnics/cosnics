@@ -48,7 +48,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                     $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' .
                          Theme :: getInstance()->getImagePath(
                             ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) .
-                         'logo/' . Theme :: ICON_MINI . '.png" alt="' .
+                         'Logo/' . Theme :: ICON_MINI . '.png" alt="' .
                          htmlentities(
                             Translation :: get(
                                 'TypeName', 

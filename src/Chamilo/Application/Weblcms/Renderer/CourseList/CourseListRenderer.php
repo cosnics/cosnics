@@ -238,7 +238,7 @@ class CourseListRenderer
                  '><img src="' .
                  htmlspecialchars(
                     Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()))) . 'logo/' .
+                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()))) . 'Logo/' .
                  Theme :: ICON_MINI . '_new.png" alt="' .
                  htmlspecialchars(Translation :: get('New', null, Utilities :: COMMON_LIBRARIES)) . '"/></a>';
         }

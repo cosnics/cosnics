@@ -164,7 +164,7 @@ class PackageListBuilder
         $this->packageLists[$packageNamespace] = new PackageList(
             $packageNamespace,
             $typeName,
-            Theme :: getInstance()->getImagePath($packageImageNamespace) . 'logo/16.png');
+            Theme :: getInstance()->getImagePath($packageImageNamespace) . 'Logo/16.png');
     }
 
     /**

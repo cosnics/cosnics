@@ -661,7 +661,7 @@ abstract class Manager extends Application
             }
 
             $html[] = '<div class="announcements level_1" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath(Introduction :: context()) . 'logo/' . Theme :: ICON_SMALL .
+                 Theme :: getInstance()->getImagePath(Introduction :: context()) . 'Logo/' . Theme :: ICON_SMALL .
                  '.png);">';
             $html[] = '<div class="title" style="border-bottom: 1px dotted #D3D3D3; width:100%;">';
             $html[] = $introduction_text->get_content_object()->get_title();

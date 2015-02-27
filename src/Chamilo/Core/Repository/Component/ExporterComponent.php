@@ -170,7 +170,7 @@ class ExporterComponent extends Manager
             $type_namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type);
             $table_row = array();
             $table_row[] = Theme :: getInstance()->getImage(
-                'logo/16',
+                'Logo/16',
                 'png',
                 Translation :: get('TypeName', null, $type_namespace),
                 null,

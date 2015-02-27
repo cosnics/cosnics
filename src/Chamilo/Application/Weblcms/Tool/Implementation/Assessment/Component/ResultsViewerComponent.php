@@ -73,7 +73,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
         }
 
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath(Assessment :: context()) . 'logo/22.png);">';
+             Theme :: getInstance()->getImagePath(Assessment :: context()) . 'Logo/22.png);">';
         $html[] = '<div class="title">';
         $html[] = $assessment->get_title();
         $html[] = '</div>';
