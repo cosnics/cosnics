@@ -102,7 +102,7 @@ class MergerComponent extends Manager implements ViewerInterface
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddAllQuestions'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
                 $this->get_question_selector_url(null, $selected_survey_page->get_id())));
 
         return $action_bar;

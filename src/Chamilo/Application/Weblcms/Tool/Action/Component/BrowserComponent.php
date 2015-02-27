@@ -181,7 +181,7 @@ class BrowserComponent extends Manager
                 new DynamicVisualTab(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL,
                     Translation :: get('AllPublications'),
-                    Theme :: getInstance()->getCommonImagePath() . 'treemenu/shared_objects.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'treemenu/shared_objects.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL)),
@@ -192,7 +192,7 @@ class BrowserComponent extends Manager
             new DynamicVisualTab(
                 \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME,
                 Translation :: get('PublishedForMe'),
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/shared_objects.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/shared_objects.png',
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME)),
@@ -202,7 +202,7 @@ class BrowserComponent extends Manager
             new DynamicVisualTab(
                 \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME,
                 Translation :: get('MyPublications'),
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/publication.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/publication.png',
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME)),
@@ -328,7 +328,7 @@ class BrowserComponent extends Manager
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('QuickPublish', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH,
@@ -344,7 +344,7 @@ class BrowserComponent extends Manager
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
@@ -363,7 +363,7 @@ class BrowserComponent extends Manager
                                     null,
                                     'application\weblcms\tool\\' . $tool)),
                             Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
@@ -376,7 +376,7 @@ class BrowserComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS,
@@ -388,7 +388,7 @@ class BrowserComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -397,7 +397,7 @@ class BrowserComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageCategories', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_category.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_category.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MANAGE_CATEGORIES)),
@@ -413,7 +413,7 @@ class BrowserComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_introduce.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_introduce.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
@@ -438,7 +438,7 @@ class BrowserComponent extends Manager
                                  'View',
                                 null,
                                 Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'view_' . $browser_type . '.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'view_' . $browser_type . '.png',
                         $this->get_url(
                             array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => $browser_type)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));

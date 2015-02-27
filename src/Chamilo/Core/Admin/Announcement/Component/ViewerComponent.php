@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EDIT,
@@ -82,7 +82,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_DELETE,
@@ -105,7 +105,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . $visibility_img,
+                    Theme :: getInstance()->getCommonImagesPath() . $visibility_img,
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_HIDE,

@@ -33,7 +33,7 @@ class PackageRemover extends Action
                 'Finished', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/finished.png';
             return $this->action_successful($title, $image, Translation :: get('PackageCompletelyRemoved'));
         }
@@ -43,7 +43,7 @@ class PackageRemover extends Action
                 'Failed', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/failed.png';
             return $this->action_failed($title, $image, Translation :: get('PackageRemoveFailed'));
         }
@@ -60,7 +60,7 @@ class PackageRemover extends Action
             'Initialization', 
             null, 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath(
+        $image = Theme :: getInstance()->getImagesPath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/initialization.png';
         
         if (! $this->get_package() instanceof \Chamilo\Configuration\Package\Storage\DataClass\Package)
@@ -122,7 +122,7 @@ class PackageRemover extends Action
             'Removal', 
             array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())), 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath(
+        $image = Theme :: getInstance()->getImagesPath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/removal.png';
         
         if (! $remover->run())

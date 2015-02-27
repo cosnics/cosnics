@@ -30,7 +30,7 @@ abstract class Manager extends Application
         $tabs[] = new DynamicVisualTab(
             self :: ACTION_MASTERY,
             Translation :: get('SetMasteryScore'),
-            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MASTERY . '.png',
+            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MASTERY . '.png',
             $this->get_url(
                 array(
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: ACTION_TYPE_SPECIFIC,
@@ -46,7 +46,7 @@ abstract class Manager extends Application
         $tabs[] = new DynamicVisualTab(
             self :: ACTION_CONFIGURE,
             Translation :: get('ConfigureAssessment'),
-            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_CONFIGURE . '.png',
+            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_CONFIGURE . '.png',
             $this->get_url(
                 array(
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: ACTION_TYPE_SPECIFIC,
@@ -67,7 +67,7 @@ abstract class Manager extends Application
         $tabs[] = new DynamicVisualTab(
             'builder',
             Translation :: get('BuilderComponent'),
-            Theme :: getInstance()->getImagePath() . 'tab/builder.png',
+            Theme :: getInstance()->getImagesPath() . 'tab/builder.png',
             $url,
             false,
             false,

@@ -47,7 +47,7 @@ class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Unsubscribe'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_unsubscribe.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png', 
                     $unsubscribe_url, 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));
@@ -65,7 +65,7 @@ class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Unsubscribe'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_unsubscribe.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png', 
                     $unsubscribe_url, 
                     ToolbarItem :: DISPLAY_ICON));
         }

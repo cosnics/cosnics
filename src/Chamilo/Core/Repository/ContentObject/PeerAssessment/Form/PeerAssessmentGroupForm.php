@@ -115,14 +115,14 @@ class PeerAssessmentGroupForm extends FormValidator
             $legend_items = array();
             $legend_items[] = new ToolbarItem(
                 Translation :: get('User'), 
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/user.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/user.png', 
                 null, 
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
                 false, 
                 'legend');
             $legend_items[] = new ToolbarItem(
                 Translation :: get('Group'), 
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/group.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/group.png', 
                 null, 
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
                 false, 

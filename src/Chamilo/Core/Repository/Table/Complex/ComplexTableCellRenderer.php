@@ -96,7 +96,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -105,7 +105,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -113,7 +113,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));
@@ -121,7 +121,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ChangeParent', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_move.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
                 $this->get_component()->get_complex_content_object_parent_changer_url($cloi->get_id()), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -132,7 +132,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $cloi->get_id(), 
                         Manager :: PARAM_DIRECTION_UP), 
@@ -143,7 +143,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -153,7 +153,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $cloi->get_id(), 
                         Manager :: PARAM_DIRECTION_DOWN), 
@@ -164,7 +164,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

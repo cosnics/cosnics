@@ -62,7 +62,7 @@ class ConfigureComponent extends Manager
             new DynamicContentTab(
                 self :: PAGE_CONFIGS_TAB,
                 Translation :: get('PageConfigs'),
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png',
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png',
                 $table->as_html()));
 
         $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = self :: PAGE_QUESTIONS_TAB;
@@ -71,7 +71,7 @@ class ConfigureComponent extends Manager
             new DynamicContentTab(
                 self :: PAGE_QUESTIONS_TAB,
                 Translation :: get('PageQuestions'),
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png',
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png',
                 $table->as_html()));
 
         return $tabs->render();

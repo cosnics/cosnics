@@ -48,7 +48,7 @@ class SlideshowRenderer extends Renderer
             $play_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Stop'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_stop.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_stop.png', 
                     $this->get_url(
                         array(
                             self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
@@ -60,7 +60,7 @@ class SlideshowRenderer extends Renderer
             $play_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Play'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_play.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_play.png', 
                     $this->get_url(
                         array(
                             self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
@@ -74,13 +74,13 @@ class SlideshowRenderer extends Renderer
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('First'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_first.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_first.png', 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => 0)), 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Previous'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_prev.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png', 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index - 1)), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -89,13 +89,13 @@ class SlideshowRenderer extends Renderer
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('First'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_first_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_first_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Previous'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_prev_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -105,13 +105,13 @@ class SlideshowRenderer extends Renderer
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Next'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_next.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_next.png', 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index + 1)), 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Last'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_last.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_last.png', 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $external_repository_object_count - 1)), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -120,13 +120,13 @@ class SlideshowRenderer extends Renderer
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Next'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Last'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_last_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_last_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

@@ -61,7 +61,7 @@ class Filtered extends Basic
                 
                 $html[] = '<h2>';
                 $html[] = '<img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
+                     Theme :: getInstance()->getImagesPath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
                         $block, 
                         true) . '.png' . '"/> ';
                 $html[] = $title;
@@ -126,7 +126,7 @@ class Filtered extends Basic
                         new DynamicVisualTab(
                             $key, 
                             $title, 
-                            Theme :: getInstance()->getImagePath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
+                            Theme :: getInstance()->getImagesPath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
                                 $block, 
                                 true) . '.png', 
                             $this->get_context()->get_url($block_parameters), 

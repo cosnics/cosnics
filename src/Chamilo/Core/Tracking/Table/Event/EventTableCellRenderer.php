@@ -39,7 +39,7 @@ class EventTableCellRenderer extends DataClassTableCellRenderer implements Table
             $toolbar->add_item(
                 new ToolbarItem(
                     ($event->get_active() == 1) ? Translation :: get('Deactivate') : Translation :: get('Activate'), 
-                    ($event->get_active() == 1) ? Theme :: getInstance()->getCommonImagePath() . 'action_visible.png' : Theme :: getInstance()->getCommonImagePath() .
+                    ($event->get_active() == 1) ? Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png' : Theme :: getInstance()->getCommonImagesPath() .
                          'action_invisible.png', 
                         $this->get_component()->get_change_active_url('event', $event->get_id()), 
                         ToolbarItem :: DISPLAY_ICON));
@@ -47,7 +47,7 @@ class EventTableCellRenderer extends DataClassTableCellRenderer implements Table
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Empty_event'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_recycle_bin.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin.png', 
                     $this->get_component()->get_empty_tracker_url('event', $event->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         }

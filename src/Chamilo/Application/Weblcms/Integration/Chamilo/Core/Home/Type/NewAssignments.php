@@ -23,7 +23,7 @@ class NewAssignments extends NewBlock
     {
         $publications = $this->get_content(self :: TOOL_ASSIGNMENT);
         $html = $this->display_new_items($publications);
-        
+
         if (count($html) < 3)
         {
             return Translation :: get('NoNewAssignmentsSinceLastVisit');
@@ -35,7 +35,7 @@ class NewAssignments extends NewBlock
     {
         ksort($publications);
         $icon = '<img src="' . $this->get_new_assignments_icon() . '"/>';
-        
+
         $html = array();
         $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
         $current_course_id = - 1;
@@ -43,36 +43,36 @@ class NewAssignments extends NewBlock
         {
             $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
             $id = $publication[ContentObjectPublication :: PROPERTY_ID];
-            
+
             if ($publication[ContentObject :: PROPERTY_TYPE] != Assignment :: class_name())
                 continue;
-            
+
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID], 
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
                 Assignment :: class_name());
-            
+
             if ($course_id != $current_course_id)
             {
                 $current_course_id = $course_id;
                 $html[] = '<li>' . $this->get_course_by_id($current_course_id)->get_title() . '</li>';
             }
-            
+
             $parameters = array(
-                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course_id, 
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE, 
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(), 
-                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => NewBlock :: TOOL_ASSIGNMENT, 
-                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE, 
+                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course_id,
+                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
+                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => NewBlock :: TOOL_ASSIGNMENT,
+                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS,
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $id);
-            
+
             $link = Redirect :: get_link($parameters);
-            
+
             $start_date = DatetimeUtilities :: format_locale_date(
-                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES), 
+                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES),
                 $content_object->get_start_time());
             $end_date = DatetimeUtilities :: format_locale_date(
-                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES), 
+                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES),
                 $content_object->get_end_time());
             $html[] = '<a href="' . $link . '">' . $icon . ' ' . $content_object->get_title() . '</a>: ' . Translation :: get(
                 'From') . ' ' . $start_date . ' ' . Translation :: get('Until') . ' ' . $end_date . '<br />';
@@ -84,7 +84,7 @@ class NewAssignments extends NewBlock
     private function get_new_assignments_icon()
     {
         return Theme :: getInstance()->getImagePath(
-            \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ASSIGNMENT)) . 'Logo/' .
-             Theme :: ICON_MINI . '_new.png';
+            \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ASSIGNMENT),
+            'Logo/' . Theme :: ICON_MINI . '_new');
     }
 }

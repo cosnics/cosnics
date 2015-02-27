@@ -73,7 +73,7 @@ class UserRightsTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ContentObjectUserShareEditor'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE_ENTITY, 
@@ -84,7 +84,7 @@ class UserRightsTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ContentObjectUserShareDeleter'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_REMOVE_ENTITY, 

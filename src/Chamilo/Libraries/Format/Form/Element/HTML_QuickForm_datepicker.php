@@ -35,7 +35,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->_appendName = true;
         $this->_type = 'datepicker';
         $popup_link = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() . 'action_calendar_select.png" style="vertical-align:middle;"/></a>';
+             Theme :: getInstance()->getCommonImagesPath() . 'action_calendar_select.png" style="vertical-align:middle;"/></a>';
         $special_chars = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
         $hour_minute_devider = Translation :: get('HourMinuteDivider', null, Utilities :: COMMON_LIBRARIES);
         foreach ($special_chars as $index => $char)

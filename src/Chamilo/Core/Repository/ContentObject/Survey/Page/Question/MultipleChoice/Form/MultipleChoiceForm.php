@@ -79,7 +79,7 @@ class MultipleChoiceForm extends ContentObjectForm
                 self :: TAB_QUESTION, 
                 Translation :: get(
                     (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: TAB_QUESTION . '.png', 
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: TAB_QUESTION . '.png', 
                 'build_question_form'));
         
         $tabs_generator->add_tab(
@@ -87,7 +87,7 @@ class MultipleChoiceForm extends ContentObjectForm
                 self :: TAB_OPTION, 
                 Translation :: get(
                     (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: TAB_OPTION . '.png', 
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: TAB_OPTION . '.png', 
                 'build_option_form'));
         
         $tabs_generator->add_tab(
@@ -95,7 +95,7 @@ class MultipleChoiceForm extends ContentObjectForm
                 self :: TAB_GENERAL, 
                 Translation :: get(
                     (string) StringUtilities :: getInstance()->createString(self :: TAB_GENERAL)->upperCamelize()), 
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: TAB_GENERAL . '.png', 
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: TAB_GENERAL . '.png', 
                 'build_general_form'));
         
         $tabs_generator->render();

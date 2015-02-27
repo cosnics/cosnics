@@ -164,7 +164,7 @@ class File extends ContentObject implements Versionable, Includeable
         $parts = explode('.', $filename);
         $icon_name = strtolower($parts[count($parts) - 1]);
         $icon_name = $size . '_' . $icon_name;
-        $icon_path = Theme :: getInstance()->getImagePath(
+        $icon_path = Theme :: getInstance()->getImagesPath(
             ContentObject :: get_content_object_type_namespace($this->get_type()),
             false) . 'Logo/' . $icon_name . '.png';
 
@@ -192,7 +192,7 @@ class File extends ContentObject implements Versionable, Includeable
         }
         else
         {
-            return Theme :: getInstance()->getImagePath(
+            return Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type())) . 'Logo/' . $size .
                  ($this->is_current() ? '' : '_na') . '.png';
         }

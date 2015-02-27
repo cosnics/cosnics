@@ -28,7 +28,7 @@ class UsersTrackingBlock extends CourseBlock
                 Translation :: get('UserDetail')));
         
         $course_id = $this->get_course_id();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png" title="' .
              Translation :: get('Details') . '" />';
         
         $count = 1;

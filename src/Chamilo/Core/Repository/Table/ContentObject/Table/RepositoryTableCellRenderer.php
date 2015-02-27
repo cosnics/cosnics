@@ -45,7 +45,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     if ($content_object->has_versions())
                     {
                         $number = $content_object->get_version_count();
-                        return '<img src="' . Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\\') . 'versions_multiple.png" alt="' . Translation :: get(
+                        return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_multiple.png" alt="' . Translation :: get(
                             'VersionsAvailable', 
                             array('NUMBER' => $number)) . '" title="' . Translation :: get(
                             'VersionsAvailable', 
@@ -53,14 +53,14 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     }
                     else
                     {
-                        return '<img src="' . Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' .
+                        return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' .
                              Translation :: get('NoVersionsAvailable') . '" title="' .
                              Translation :: get('NoVersionsAvailable') . '" />';
                     }
                 }
                 else
                 {
-                    return '<img src="' . Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' . Translation :: get(
+                    return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' . Translation :: get(
                         'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
                 }
         }

@@ -84,7 +84,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_delete_link_url(
                         $this->type, 
                         $this->get_component()->get_object()->get_id(), 

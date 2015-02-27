@@ -164,7 +164,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         
         $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() . 'action_delete.png"  alt="' . $title . '" title="' . $title .
+             Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png"  alt="' . $title . '" title="' . $title .
              '"/></a>';
         
         return $delete_link;
@@ -178,7 +178,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Manager :: PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
         
         $title = Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES);
-        $update_link = '<a href="' . $update_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        $update_link = '<a href="' . $update_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_edit.png"  alt="' . $title . '" title="' . $title . '"/></a>';
         
         return $update_link;

@@ -208,7 +208,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('SimpleRightsEditor'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_config.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_SIMPLE_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -216,7 +216,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -235,7 +235,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('NoInherit'),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_setting_false_inherit.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_setting_false_inherit.png',
                             $url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                 }
@@ -245,7 +245,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('Inherit'),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_setting_true_inherit.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_setting_true_inherit.png',
                             $url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                 }

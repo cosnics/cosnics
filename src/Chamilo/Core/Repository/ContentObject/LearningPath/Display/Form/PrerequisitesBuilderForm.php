@@ -249,7 +249,7 @@ class PrerequisitesBuilderForm extends FormValidator
                     $group[] = $this->addElement(
                         'image', 
                         'remove_group[' . $group_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         array(
                             'title' => Translation :: get('RemoveGroup'), 
                             'class' => 'remove_group', 
@@ -297,7 +297,7 @@ class PrerequisitesBuilderForm extends FormValidator
                             $group[] = & $this->createElement(
                                 'image', 
                                 'remove_item[' . $group_number . '][' . $item_number . ']', 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                                 array(
                                     'title' => Translation :: get('RemoveItem'), 
                                     'class' => 'remove_item', 
@@ -320,7 +320,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $this->addElement(
                     'image', 
                     'add_item[' . $group_number . ']', 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_add.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_add.png', 
                     array(
                         'title' => Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
                         'class' => 'add_item', 

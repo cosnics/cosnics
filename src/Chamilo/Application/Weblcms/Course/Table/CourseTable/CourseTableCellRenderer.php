@@ -86,21 +86,21 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewCourseHome'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_home.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_home.png', 
                 $this->get_component()->get_view_course_home_url($course[Course :: PROPERTY_ID]), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_update_course_url($course[Course :: PROPERTY_ID]), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->get_component()->get_delete_course_url($course[Course :: PROPERTY_ID]), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

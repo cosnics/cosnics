@@ -417,14 +417,14 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
             $download_url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($attachment->get_id());
 
             $html[] = '<a href="' . $download_url . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_download.png" title="' . Translation :: get(
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_download.png" title="' . Translation :: get(
                 'Download') . '"/>';
             $html[] = '</a>';
         }
         else
         {
             $html[] = '<a>';
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_download_na.png" title="' . Translation :: get(
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_download_na.png" title="' . Translation :: get(
                 'DownloadNotPossible') . '"/>';
             $html[] = '</a>';
         }

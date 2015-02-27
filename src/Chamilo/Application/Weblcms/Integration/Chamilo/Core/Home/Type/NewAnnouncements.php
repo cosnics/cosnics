@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: new_announcements.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.block
  */
 
@@ -24,24 +24,24 @@ class NewAnnouncements extends NewBlock
     public function display_content()
     {
         $publications = $this->get_content(self :: TOOL_ANNOUNCEMENT);
-        
+
         if ($publications === self :: OVERSIZED_WARNING)
         {
             return $this->get_oversized_warning();
         }
-        
+
         ksort($publications);
         $icon = $this->get_new_announcements_icon();
-        
+
         $html = array();
         $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
-        
+
         $current_course_id = - 1;
         foreach ($publications as $publication)
         {
             $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
             $title = $publication[ContentObject :: PROPERTY_TITLE];
-            
+
             if ($course_id != $current_course_id)
             {
                 if ($current_course_id != - 1)
@@ -62,26 +62,26 @@ class NewAnnouncements extends NewBlock
             $html[] = '</ul>';
         }
         $html[] = '</ul>';
-        
+
         if (count($html) < 3)
         {
             return Translation :: get('NoNewAnnouncementsSinceLastVisit');
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     private function get_new_announcements_icon()
     {
         return Theme :: getInstance()->getImagePath(
-            \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ANNOUNCEMENT)) . 'Logo/' .
-             Theme :: ICON_MINI . '_new.png';
+            \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ANNOUNCEMENT),
+            'Logo/' . Theme :: ICON_MINI . '_new');
     }
 
     private function get_course_viewer_link($course, $publication)
     {
         $id = $publication[ContentObjectPublication :: PROPERTY_ID];
-        
+
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course->get_id();

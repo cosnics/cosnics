@@ -320,7 +320,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_option[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         array('class' => self :: PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number));
                 }
                 else
@@ -329,7 +329,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagePath() .
+                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagesPath() .
                              'action_delete_na.png" class="remove_option" />');
                 }
                 
@@ -441,7 +441,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_match[' . $match_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         array('class' => self :: PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number));
                 }
                 else
@@ -450,7 +450,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png" />');
+                        '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png" />');
                 }
                 
                 $this->addGroup($group, 'match_' . $match_number, null, '', false);

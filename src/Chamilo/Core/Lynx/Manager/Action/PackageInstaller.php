@@ -34,7 +34,7 @@ class PackageInstaller extends Action
                 'Finished', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/finished.png';
             return $this->action_successful($title, $image, Translation :: get('PackageCompletelyInstalled'));
         }
@@ -44,7 +44,7 @@ class PackageInstaller extends Action
                 'Failed', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/failed.png';
             return $this->action_failed($title, $image, Translation :: get('PackageInstallFailed'));
         }
@@ -61,7 +61,7 @@ class PackageInstaller extends Action
             'Initialization', 
             null, 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath(
+        $image = Theme :: getInstance()->getImagesPath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/initialization.png';
         
         if (! $this->get_package() instanceof \Chamilo\Configuration\Package\Storage\DataClass\Package)
@@ -107,7 +107,7 @@ class PackageInstaller extends Action
             'Installation', 
             array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())), 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath(
+        $image = Theme :: getInstance()->getImagesPath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/installation.png';
         
         $installer = \Chamilo\Configuration\Package\Action\Installer :: factory(
@@ -130,7 +130,7 @@ class PackageInstaller extends Action
             'AdditionalPackages', 
             null, 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath(
+        $image = Theme :: getInstance()->getImagesPath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) .
              'package_action/additional_packages.png';
         
@@ -156,7 +156,7 @@ class PackageInstaller extends Action
             'Installation', 
             array('PACKAGE' => Translation :: get('TypeName', null, $context)), 
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagePath($context) . 'Logo/48.png';
+        $image = Theme :: getInstance()->getImagesPath($context) . 'Logo/48.png';
         
         $installer = \Chamilo\Configuration\Package\Action\Installer :: factory($context, array());
         

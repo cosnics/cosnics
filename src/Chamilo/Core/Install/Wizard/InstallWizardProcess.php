@@ -76,7 +76,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
                 Translation :: get('PlatformInstallFailed') . ' - ' . $exception->get_package(),
                 false,
                 $exception->getMessage(),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Install\\') . 'place_failed.png');
+                Theme :: getInstance()->getImagesPath('Chamilo\Core\Install\\') . 'place_failed.png');
         }
     }
 
@@ -184,7 +184,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function after_filesystem_prepared(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install\\') . 'place_folder.png';
+        $image = Theme :: getInstance()->getImagesPath('Chamilo\Core\Install\\') . 'place_folder.png';
         return $this->process_result(
             Translation :: get('Folders'),
             $result->get_success(),
@@ -205,7 +205,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
     {
         $message = '<a href="' . Path :: getInstance()->getBasePath(true) . '">' .
              Translation :: get('GoToYourNewlyCreatedPortal') . '</a>';
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install\\') . 'place_finished.png';
+        $image = Theme :: getInstance()->getImagesPath('Chamilo\Core\Install\\') . 'place_finished.png';
         return $this->process_result(Translation :: get('InstallationFinished'), true, $message, $image);
     }
 
@@ -225,7 +225,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function after_package_install(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath($result->get_context()) . 'Logo/22.png';
+        $image = Theme :: getInstance()->getImagesPath($result->get_context()) . 'Logo/22.png';
         $title = Translation :: get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
 
         return $this->process_result(
@@ -242,7 +242,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function preprod_config_file_written(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install\\') . 'place_config.png';
+        $image = Theme :: getInstance()->getImagesPath('Chamilo\Core\Install\\') . 'place_config.png';
         return $this->process_result(
             Translation :: get('Configuration'),
             $result->get_success(),
@@ -252,7 +252,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function preprod_db_created(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install\\') . 'place_database.png';
+        $image = Theme :: getInstance()->getImagesPath('Chamilo\Core\Install\\') . 'place_database.png';
         return $this->process_result(
             Translation :: get('Database'),
             $result->get_success(),

@@ -97,7 +97,7 @@ class MiniMonthRenderer extends TableRenderer
                     if (! $calendar->contains_events_for_time($table_date))
                     {
                         $marker = '<br /><div class="event_marker" style="width: 14px; height: 15px;"><img src="' . htmlspecialchars(
-                            Theme :: getInstance()->getCommonImagePath()) . 'action_marker.png"/></div>';
+                            Theme :: getInstance()->getCommonImagesPath()) . 'action_marker.png"/></div>';
                         $calendar->add_event($table_date, $marker);
                     }
 

@@ -75,7 +75,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $html[] = '<div class="empty_portal_column" style="display:block;">';
         $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-        $img = Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'action_remove_column.png';
+        $img = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'action_remove_column.png';
         $html[] = '<div class="deleteColumn"><a href="#"><img src="' . $img . '" alt="' .
              Translation :: get('RemoveColumn') . '"/></a></div>';
         $html[] = '</div>';
@@ -88,7 +88,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title = array();
         $title[] = '<li class="normal" id="tab_select_' . $tab->get_id() . '">';
         $title[] = '<a class="tabTitle" href="#">' . $tab->get_title() . '</a>';
-        $title[] = '<a class="deleteTab"><img src="' . Theme :: getInstance()->getImagePath() .
+        $title[] = '<a class="deleteTab"><img src="' . Theme :: getInstance()->getImagesPath() .
              'action_delete_tab.png" /></a>';
         $title[] = '</li>';
         

@@ -131,7 +131,7 @@ class Attachment
     {
         $result = str_replace(array('/', '+', ' '), '_', $this->get_type());
         // $result = str_replace('+', '_', $result);
-        $image_path = Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'attachments/' . $result . '.png';
+        $image_path = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'attachments/' . $result . '.png';
         return '<img src="' . $image_path . '" title="' . $this->get_type() . '"/>';
     }
 

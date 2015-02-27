@@ -85,7 +85,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_complex_content_object_item_edit_url(
                         $complex_content_object_item->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
@@ -95,7 +95,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -103,7 +103,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->get_component()->get_complex_content_object_item_delete_url(
                     $complex_content_object_item->get_id()), 
                 ToolbarItem :: DISPLAY_ICON, 
@@ -116,7 +116,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $complex_content_object_item->get_id(), 
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_UP), 
@@ -127,7 +127,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -137,7 +137,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $complex_content_object_item->get_id(), 
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_DOWN), 
@@ -148,7 +148,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

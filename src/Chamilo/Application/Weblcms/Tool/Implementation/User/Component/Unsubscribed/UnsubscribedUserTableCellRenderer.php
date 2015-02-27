@@ -17,20 +17,20 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed
  * course user browser table.
- * 
+ *
  * @author Stijn Van Hoecke ****************************************************************************
  */
-class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer implements 
+class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
-    
+
     // **************************************************************************
     // GENERAL FUNCTIONS
     // **************************************************************************
     // Inherited
     /**
      * Renders a given cell.
-     * 
+     *
      * @param type $column
      * @param type $user_with_subscription_status User from the advanced join query in weblcms database class that
      *        includes his subscription status.
@@ -70,7 +70,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
 
     /**
      * Gets the action links to display
-     * 
+     *
      * @param User $user The user for which the action links should be returned
      * @return string A HTML representation of the action links
      */
@@ -78,14 +78,14 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
     {
         // construct
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         if ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
             WeblcmsRights :: EDIT_RIGHT) && CourseManagementRights :: get_instance()->is_allowed(
-            CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT, 
-            $this->get_component()->get_course_id(), 
-            CourseManagementRights :: TYPE_COURSE, 
+            CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+            $this->get_component()->get_course_id(),
+            CourseManagementRights :: TYPE_COURSE,
             $user_with_subscription_status->get_id())))
-        
+
         {
             // subscribe regular student
             $parameters = array();
@@ -93,40 +93,40 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBE;
             $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
             $subscribe_url = $this->get_component()->get_url($parameters);
-            
+
             $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager :: context();
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('SubscribeAsStudent'), 
-                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace) . 'action_subscribe_student.png', 
-                    $subscribe_url, 
+                    Translation :: get('SubscribeAsStudent'),
+                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_student'),
+                    $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             // subscribe as course admin
             $parameters = array();
             $parameters[Manager :: PARAM_OBJECTS] = $user_with_subscription_status->get_id();
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBE_AS_ADMIN;
             $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
             $subscribe_url = $this->get_component()->get_url($parameters);
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('SubscribeAsTeacher'), 
-                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace) . 'action_subscribe_teacher.png', 
-                    $subscribe_url, 
+                    Translation :: get('SubscribeAsTeacher'),
+                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_teacher'),
+                    $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
         elseif ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
             WeblcmsRights :: EDIT_RIGHT) && CourseManagementRights :: get_instance()->is_allowed(
-            CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT, 
-            $this->get_component()->get_course_id(), 
-            CourseManagementRights :: TYPE_COURSE, 
+            CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT,
+            $this->get_component()->get_course_id(),
+            CourseManagementRights :: TYPE_COURSE,
             $user_with_subscription_status->get_id())))
-        
+
         {
             if (! \Chamilo\Application\Weblcms\Storage\DataManager :: is_user_requested_for_course(
-                $user_with_subscription_status->get_id(), 
+                $user_with_subscription_status->get_id(),
                 $this->get_component()->get_course_id()))
             {
                 $parameters = array();
@@ -134,21 +134,23 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_REQUEST_SUBSCRIBE_USER;
                 $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
                 $subscribe_request_url = $this->get_component()->get_url($parameters);
-                
+
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('RequestUser'), 
-                        Theme :: getInstance()->getImagePath() . 'action_request_subscribe_user.png', 
-                        $subscribe_request_url, 
+                        Translation :: get('RequestUser'),
+                        Theme :: getInstance()->getImagePath(
+                            'Chamilo\Application\Weblcms\Tool\Implementation\User',
+                            'action_request_subscribe_user.png'),
+                        $subscribe_request_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('UserRequestPending'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_period.png', 
-                        null, 
+                        Translation :: get('UserRequestPending'),
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_period.png',
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
@@ -156,12 +158,12 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('SubscribeNA'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_subscribe_na.png', 
-                    null, 
+                    Translation :: get('SubscribeNA'),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe_na.png',
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         // return
         return $toolbar->as_html();
     }

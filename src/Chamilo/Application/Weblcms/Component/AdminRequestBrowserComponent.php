@@ -108,7 +108,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -93,7 +93,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_confirm.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_confirm.png', 
                     $this->browser->get_course_request_allowing_url(
                         $request, 
                         $this->browser->get_request_type(), 
@@ -105,7 +105,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_refuse.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_refuse.png', 
                     $this->browser->get_course_request_refuse_url(
                         $request, 
                         $this->browser->get_request_type(), 
@@ -116,7 +116,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->browser->get_course_request_deleting_url(
                     $request, 
                     $this->browser->get_request_type(), 
@@ -127,7 +127,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('View', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_view.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_view.png', 
                 $this->browser->get_course_request_viewing_url(
                     $request, 
                     $this->browser->get_request_type(), 

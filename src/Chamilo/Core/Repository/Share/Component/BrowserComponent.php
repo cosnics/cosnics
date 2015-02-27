@@ -83,7 +83,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
+                Theme :: getInstance()->getImagesPath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
                      Theme :: ICON_SMALL . '.png',
                     $link,
                     ($this->type == self :: TYPE_USER)));
@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\Group\Manager :: context()) . 'Logo/' .
+                Theme :: getInstance()->getImagesPath(\Chamilo\Core\Group\Manager :: context()) . 'Logo/' .
                      Theme :: ICON_SMALL . '.png',
                     $link,
                     ($this->type == self :: TYPE_GROUP)));
@@ -131,7 +131,7 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShareWithOtherUsersGroups'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADD_ENTITIES))),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 

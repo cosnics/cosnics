@@ -41,7 +41,7 @@ class TableCellRenderer extends DataClassTableCellRenderer implements TableCellR
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('SelectQuestion'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_right.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_right.png', 
                 $this->get_component()->get_question_selector_url($content_object->get_id()), 
                 ToolbarItem :: DISPLAY_ICON));
         

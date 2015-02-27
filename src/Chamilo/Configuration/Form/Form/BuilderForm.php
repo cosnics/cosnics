@@ -156,7 +156,7 @@ class BuilderForm extends FormValidator
                     $group[] = $this->createElement(
                         'image', 
                         'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_list_remove.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_list_remove.png', 
                         array('style="border: 0px;"'));
                 }
                 $this->addGroup(
@@ -175,7 +175,7 @@ class BuilderForm extends FormValidator
         $this->addElement(
             'image', 
             'add[]', 
-            Theme :: getInstance()->getCommonImagePath() . 'action_list_add.png', 
+            Theme :: getInstance()->getCommonImagesPath() . 'action_list_add.png', 
             array('style="border: 0px;"'));
         
         $this->addElement('category');

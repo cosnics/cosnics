@@ -423,7 +423,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_option[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number));
                 }
                 else
@@ -432,7 +432,7 @@ class MatchingForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagePath() .
+                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagesPath() .
                              'action_delete_na.png" />');
                 }
                 
@@ -530,7 +530,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image', 
                         'remove_match[' . $match_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number));
                 }
                 else
@@ -539,7 +539,7 @@ class MatchingForm extends ContentObjectForm
                         'static', 
                         null, 
                         null, 
-                        '<img class="remove_match" src="' . Theme :: getInstance()->getCommonImagePath() .
+                        '<img class="remove_match" src="' . Theme :: getInstance()->getCommonImagesPath() .
                              'action_delete_na.png" />');
                 }
                 

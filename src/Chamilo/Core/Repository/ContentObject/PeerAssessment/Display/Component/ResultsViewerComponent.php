@@ -235,7 +235,7 @@ class ResultsViewerComponent extends Manager
     {
         $item = new ToolbarItem(
             Translation :: get('Details'),
-            Theme :: getInstance()->getCommonImagePath() . ($complete ? 'action_details.png' : 'action_details_na.png'),
+            Theme :: getInstance()->getCommonImagesPath() . ($complete ? 'action_details.png' : 'action_details_na.png'),
             $this->get_url(
                 array(
                     self :: PARAM_ACTION => self :: ACTION_VIEW_USER_RESULTS,
@@ -255,14 +255,14 @@ class ResultsViewerComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'export_ods.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'export_ods.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT,
                             self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_ODS))));
             // $action_bar->add_common_action(new ToolbarItem(
             // Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath() . 'export_csv.png',
+            // Theme :: getInstance()->getCommonImagesPath() . 'export_csv.png',
             // $this->get_url(
             // array(
             // self :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT,

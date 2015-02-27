@@ -18,7 +18,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('MetadataNamespacesBrowser'), 
             Translation :: get('MetadataNamespacesDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 
@@ -29,7 +29,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('MetadataElementsBrowser'), 
             Translation :: get('MetadataElementsDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 
@@ -40,7 +40,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('MetadataAttributesBrowser'), 
             Translation :: get('MetadataAttributesDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 
@@ -51,7 +51,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ControlledVocabularyBrowser'), 
             Translation :: get('ControlledVocabularyBrowserDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 
@@ -63,7 +63,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ExportMetadaTitle'), 
             Translation :: get('ExportMetadataDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/export.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/export.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 
@@ -74,7 +74,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportMetadaTitle'), 
             Translation :: get('ImportMetadataDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(), 

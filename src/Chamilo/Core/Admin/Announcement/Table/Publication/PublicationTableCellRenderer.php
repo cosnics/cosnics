@@ -67,7 +67,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             case PublicationTableColumnModel :: COLUMN_PUBLISHED_FOR :
                 if ($publication[Publication :: PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_email.png" alt=""
+                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_email.png" alt=""
                         style="vertical-align: middle;" title="' .
                          Translation :: get('SentByEmail') . '"/>';
                 }
@@ -104,7 +104,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_EDIT, 
@@ -114,7 +114,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
@@ -139,7 +139,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . $visibility_img, 
+                    Theme :: getInstance()->getCommonImagesPath() . $visibility_img, 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_HIDE, 

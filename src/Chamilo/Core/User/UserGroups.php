@@ -47,7 +47,7 @@ class UserGroups
         {
             $html[] = 'class="vertical_space"';
         }
-        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
+        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagesPath(
             \Chamilo\Core\Group\Manager :: context()) . 'Logo/22.png);">';
         $html[] = '<div class="title">';
         $html[] = Translation :: get('PlatformGroups', null, Utilities :: COMMON_LIBRARIES);

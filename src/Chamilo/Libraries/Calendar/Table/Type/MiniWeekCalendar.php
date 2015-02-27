@@ -183,7 +183,7 @@ class MiniWeekCalendar extends Calendar
             0,
             0,
             '<a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath() . 'action_prev.png" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
+                 Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(
             0,
             1,
@@ -194,7 +194,7 @@ class MiniWeekCalendar extends Calendar
             0,
             2,
             ' <a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath() . 'action_next.png" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
+                 Theme :: getInstance()->getCommonImagesPath() . 'action_next.png" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }
 

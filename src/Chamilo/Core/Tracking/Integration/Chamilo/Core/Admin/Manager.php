@@ -18,7 +18,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('List'), 
             Translation :: get('ListDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(), 
@@ -29,7 +29,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Archive'), 
             Translation :: get('ArchiveDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/archive.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/archive.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(), 

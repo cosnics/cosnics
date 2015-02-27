@@ -148,7 +148,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('EditPrerequisites'), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_edit_prerequisites.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_edit_prerequisites.png', 
                             $this->get_component()->get_prerequisites_url($complex_content_object_item->get_id()), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -157,7 +157,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('BuildPrerequisites'), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_build_prerequisites.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_build_prerequisites.png', 
                             $this->get_component()->get_prerequisites_url($complex_content_object_item->get_id()), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -168,13 +168,13 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('SetMasteryScore'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_quota.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_quota.png', 
                         $this->get_component()->get_mastery_score_url($complex_content_object_item->get_id()), 
                         ToolbarItem :: DISPLAY_ICON));
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ConfigureAssessment'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_config.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
                         $this->get_component()->get_configuration_url($complex_content_object_item->get_id()), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -183,7 +183,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_complex_content_object_item_edit_url($complex_content_object_item->get_id()), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -204,14 +204,14 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $delete_url, 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_move.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
                     $change_parent_url, 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -222,7 +222,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                         $moveup_url, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -231,7 +231,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -241,7 +241,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                         $movedown_url, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -250,7 +250,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }

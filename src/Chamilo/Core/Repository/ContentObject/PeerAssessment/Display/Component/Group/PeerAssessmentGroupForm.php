@@ -97,7 +97,7 @@ class PeerAssessmentGroupForm extends FormValidator
          * $legend_items = array(); $legend_items[] = new ToolbarItem(Translation :: get('CourseUser'), Theme ::
          * get_common_image_path() . 'treemenu/user.png', null, ToolbarItem :: DISPLAY_ICON_AND_LABEL, false, 'legend');
          * $legend_items[] = new ToolbarItem(Translation :: get('LinkedUser'), Theme ::
-         * getInstance()->getCommonImagePath() . 'treemenu/user_platform.png', null, ToolbarItem ::
+         * getInstance()->getCommonImagesPath() . 'treemenu/user_platform.png', null, ToolbarItem ::
          * DISPLAY_ICON_AND_LABEL, false, 'legend'); $legend = new Toolbar(); $legend->set_items($legend_items);
          * $legend->set_type(Toolbar :: TYPE_HORIZONTAL);
          */

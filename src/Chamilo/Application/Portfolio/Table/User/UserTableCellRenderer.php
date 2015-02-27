@@ -41,7 +41,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ShowPortfolio', array('USER' => $result->get_fullname())), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_browser.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_HOME, 
@@ -53,7 +53,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ShowPortfolioNotAllowed', array('USER' => $result->get_fullname())), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_browser_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

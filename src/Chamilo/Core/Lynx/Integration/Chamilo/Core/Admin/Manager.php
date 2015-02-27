@@ -24,7 +24,7 @@ class Manager implements ActionsSupportInterface
             $links[] = new DynamicAction(
                 Translation :: get('ManagePackages'), 
                 Translation :: get('ManagePackagesDescription'), 
-                Theme :: getInstance()->getImagePath() . 'admin/build.png', 
+                Theme :: getInstance()->getImagesPath() . 'admin/build.png', 
                 Redirect :: get_link(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Lynx\Manager :: context())));
         }
         

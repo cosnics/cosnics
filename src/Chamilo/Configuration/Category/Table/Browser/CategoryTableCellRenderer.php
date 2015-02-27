@@ -34,7 +34,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         switch ($column->get_name())
         {
             case CategoryTableColumnModel :: CATEGORY :
-                $img = Theme :: getInstance()->getCommonImagePath() . 'treemenu_types/category.png';
+                $img = Theme :: getInstance()->getCommonImagesPath() . 'treemenu_types/category.png';
                 return '<img src="' . $img . '"alt="category" />';
             case PlatformCategory :: PROPERTY_NAME :
                 $url = $this->get_component()->get_browse_categories_url($category->get_id());
@@ -76,7 +76,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get($text, null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . $image, 
+                        Theme :: getInstance()->getCommonImagesPath() . $image, 
                         $this->get_component()->get_toggle_visibility_category_url($category->get_id()), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -85,7 +85,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('VisibleNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_visible_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_visible_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -96,7 +96,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_update_category_url($category->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -105,7 +105,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -115,7 +115,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_impact_view_url($category->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -126,7 +126,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         $this->get_component()->get_delete_category_url($category->get_id()), 
                         ToolbarItem :: DISPLAY_ICON, 
                         true));
@@ -136,7 +136,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON, 
                         true));
@@ -148,7 +148,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_move_category_url($category->get_id(), - 1), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -157,7 +157,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -167,7 +167,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_move_category_url($category->get_id(), 1), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -176,7 +176,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -188,7 +188,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_move.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
                         $this->get_component()->get_change_category_parent_url($category->get_id()), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -197,7 +197,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_move_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_move_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }

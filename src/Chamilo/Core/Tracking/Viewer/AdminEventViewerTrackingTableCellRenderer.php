@@ -53,14 +53,14 @@ class AdminEventViewerTrackingTableCellRenderer
                     'Visible', 
                     null, 
                     Utilities :: COMMON_LIBRARIES), 
-                ($tracker->get_active() == 1) ? (Theme :: getInstance()->getCommonImagePath() . 'action_visible.png') : (Theme :: getInstance()->getCommonImagePath() .
+                ($tracker->get_active() == 1) ? (Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png') : (Theme :: getInstance()->getCommonImagesPath() .
                      'action_invisible.png'), 
                     $this->eventviewer->get_change_active_url('tracker', $this->event->get_id(), $tracker->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Empty_Tracker'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->eventviewer->get_empty_tracker_url($this->event->get_id(), $tracker->get_id()), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

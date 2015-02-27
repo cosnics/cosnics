@@ -20,7 +20,7 @@ class HelpItemTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_url(
                     array(
                         Application :: PARAM_ACTION => Manager :: ACTION_UPDATE_HELP_ITEM, 

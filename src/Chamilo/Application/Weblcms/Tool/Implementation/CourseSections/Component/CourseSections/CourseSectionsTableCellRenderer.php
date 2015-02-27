@@ -38,7 +38,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE_COURSE_SECTION, 
@@ -48,7 +48,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_REMOVE_COURSE_SECTION, 
@@ -59,7 +59,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SelectTools'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_move.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_SELECT_TOOLS_COURSE_SECTION, 
@@ -71,19 +71,19 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SelectToolsNA'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_move_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_move_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -95,7 +95,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -104,7 +104,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE_COURSE_SECTION, 
@@ -118,7 +118,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -127,7 +127,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE_COURSE_SECTION, 
@@ -143,7 +143,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ChangeVisible'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_visible.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png', 
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_COURSE_SECTION_VISIBILITY, 
@@ -155,7 +155,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ChangeVisible'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_invisible.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_invisible.png', 
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_COURSE_SECTION_VISIBILITY, 

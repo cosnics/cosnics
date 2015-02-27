@@ -22,7 +22,7 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->browser->get_export_tracker_delete_url($object), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));

@@ -82,7 +82,7 @@ abstract class ContentObjectImportForm extends FormValidator
             $category_group[] = $this->createElement(
                 'image', 
                 'add_category', 
-                Theme :: getInstance()->getCommonImagePath() . 'action_add.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png', 
                 array('id' => 'add_category', 'style' => 'display:none'));
             $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
             

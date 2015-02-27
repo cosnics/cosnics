@@ -75,7 +75,7 @@ class ReportingComponent extends Manager implements PreviewSupport
                                  'Component',
                                 null,
                                 $preview_context),
-                        Theme :: getInstance()->getImagePath($preview_context) . 'type/' . $available_action . '.png',
+                        Theme :: getInstance()->getImagesPath($preview_context) . 'type/' . $available_action . '.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager :: PARAM_ACTION => $available_action))));

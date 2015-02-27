@@ -21,7 +21,7 @@ class PackageActivator extends Action
                 'Failed', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/failed.png';
             return $this->action_failed($title, $image);
         }
@@ -32,7 +32,7 @@ class PackageActivator extends Action
                 'Finished', 
                 null, 
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagePath(
+            $image = Theme :: getInstance()->getImagesPath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/finished.png';
             return $this->action_successful($title, $image);
         }

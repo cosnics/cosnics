@@ -44,19 +44,19 @@ class AssessmentMatchNumericQuestionResultDisplay extends QuestionResultDisplay
         {
             if ($valid_answer && $best_option->matches($user_answer[0], $this->get_question()->get_tolerance_type()))
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                      'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                      Translation :: get('Correct') . '" style="" />';
             }
             elseif ($valid_answer)
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                      'answer_warning.png" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
                      Translation :: get('CorrectButNotBest') . '" style="" />';
             }
             else
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                      'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                      '" />';
             }
@@ -65,7 +65,7 @@ class AssessmentMatchNumericQuestionResultDisplay extends QuestionResultDisplay
         }
         else
         {
-            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                  'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                  '" />';
             $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';

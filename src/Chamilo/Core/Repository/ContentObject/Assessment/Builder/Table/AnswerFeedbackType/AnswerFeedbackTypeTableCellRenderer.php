@@ -58,7 +58,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
     public function get_actions($complex_content_object_item)
     {
         $toolbar = new Toolbar();
-        $image_path = Theme :: getInstance()->getImagePath($this->get_component()->get_root_content_object()->context());
+        $image_path = Theme :: getInstance()->getImagesPath($this->get_component()->get_root_content_object()->context());
         
         $types = array(
             Configuration :: ANSWER_FEEDBACK_TYPE_NONE, 

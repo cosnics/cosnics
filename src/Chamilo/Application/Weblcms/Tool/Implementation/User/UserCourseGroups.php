@@ -25,7 +25,7 @@ class UserCourseGroups
 
     /**
      * Constructor
-     * 
+     *
      * @param $user_id int
      * @param $border boolean Indicates if a border should be included
      */
@@ -38,7 +38,7 @@ class UserCourseGroups
 
     /**
      * Returns a HTML representation of the user details
-     * 
+     *
      * @return string
      * @todo Implement further details
      */
@@ -53,9 +53,9 @@ class UserCourseGroups
         {
             $html[] = 'class="vertical_space"';
         }
-        $html[] = 'style="clear: both;background-image: url(' .
-             Theme :: getInstance()->getImagePath(
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager :: context()) . 'Logo/22.png);">';
+        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager :: context(),
+            'Logo/22') . ');">';
         $html[] = '<div class="title">';
         $html[] = Translation :: get('Coursegroups');
         $html[] = '</div>';

@@ -45,7 +45,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_preview.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_preview.png', 
                 'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) . '\');void(0);', 
                 ToolbarItem :: DISPLAY_ICON));
         return $toolbar->as_html();
@@ -55,11 +55,11 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     {
         if (! DataManager :: content_object_deletion_allowed($content_object))
         {
-            return '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'status_warning_mini.png' . '" />';
+            return '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'status_warning_mini.png' . '" />';
         }
         else
         {
-            return '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'status_ok_mini.png' . '" />';
+            return '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'status_ok_mini.png' . '" />';
         }
     }
 

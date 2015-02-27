@@ -34,50 +34,50 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     function get_actions($object)
     {
         $toolbar = new Toolbar();
-        
+
         if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
         {
             if (! $object->was_granted())
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Grant'), 
-                        Theme :: getInstance()->getImagePath() . 'action/grant.png', 
+                        Translation :: get('Grant'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/grant'),
                         $this->get_component()->get_url(
                             array(
-                                Manager :: PARAM_ACTION => Manager :: ACTION_GRANT, 
-                                Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                                Manager :: PARAM_ACTION => Manager :: ACTION_GRANT,
+                                Manager :: PARAM_REQUEST_ID => $object->get_id())),
                         ToolbarItem :: DISPLAY_ICON));
             }
-            
+
             if ($object->is_pending())
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Deny'), 
-                        Theme :: getInstance()->getImagePath() . 'action/deny.png', 
+                        Translation :: get('Deny'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/deny'),
                         $this->get_component()->get_url(
                             array(
-                                Manager :: PARAM_ACTION => Manager :: ACTION_DENY, 
-                                Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                                Manager :: PARAM_ACTION => Manager :: ACTION_DENY,
+                                Manager :: PARAM_REQUEST_ID => $object->get_id())),
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         if ($this->get_component()->get_user()->is_platform_admin() ||
              ($this->get_component()->get_user_id() == $object->get_user_id() && $object->is_pending()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                            Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                            Manager :: PARAM_REQUEST_ID => $object->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddApplicationItem'),
-                Theme :: getInstance()->getImagePath() . 'types/' . Item :: TYPE_APPLICATION . '.png',
+                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_APPLICATION . '.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_CREATE,
@@ -78,7 +78,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddCategoryItem'),
-                Theme :: getInstance()->getImagePath() . 'types/' . Item :: TYPE_CATEGORY . '.png',
+                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_CATEGORY . '.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_CREATE,
@@ -87,7 +87,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddLinkItem'),
-                Theme :: getInstance()->getImagePath() . 'types/' . Item :: TYPE_LINK . '.png',
+                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_LINK . '.png',
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_CREATE, self :: PARAM_TYPE => LinkItem :: class_name())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
@@ -95,7 +95,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

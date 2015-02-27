@@ -217,28 +217,28 @@ class UserDetailComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_user_editing_url($user),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_user_delete_url($user),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ViewQuota'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('LoginAsUser'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_login.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_login.png',
                 $this->get_change_user_url($user),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

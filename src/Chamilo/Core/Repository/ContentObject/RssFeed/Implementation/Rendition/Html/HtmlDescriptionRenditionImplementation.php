@@ -32,7 +32,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         foreach ($feed['items'] as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getCommonImagePath() . 'content_object/rss_feed_item.png);">';
+                 Theme :: getInstance()->getCommonImagesPath() . 'content_object/rss_feed_item.png);">';
             $html[] = '<div class="title">' . $item['title'] . '</div>';
             $html[] = html_entity_decode($item['description']);
             $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($item['link']) . '">' .

@@ -143,7 +143,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'content_object/assessment.png);">';
+             Theme :: getInstance()->getCommonImagesPath() . 'content_object/assessment.png);">';
         $html[] = '<div class="title">';
         $html[] = $this->assessment->get_title();
         $html[] = '</div>';
@@ -300,7 +300,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('DownloadDocuments'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_save.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_save.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENTS,
@@ -316,7 +316,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('DeleteResult'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_ASSESSMENT_RESULTS,
@@ -334,7 +334,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('DeleteAllResults'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_STATISTICS,

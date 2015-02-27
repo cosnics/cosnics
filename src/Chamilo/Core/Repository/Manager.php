@@ -215,7 +215,7 @@ abstract class Manager extends Application
             new DynamicContentTab(
                 self :: TAB_CATEGORY,
                 '',
-                Theme :: getInstance()->getImagePath() . 'menu/' . self :: TAB_CATEGORY . '.png',
+                Theme :: getInstance()->getImagesPath() . 'menu/' . self :: TAB_CATEGORY . '.png',
                 $this->get_category_menu()->render_as_tree() . '<br />' . $shared_category_menu));
 
         $filter_form = FormFilterRenderer :: factory(
@@ -232,7 +232,7 @@ abstract class Manager extends Application
             new DynamicContentTab(
                 self :: TAB_SEARCH,
                 '',
-                Theme :: getInstance()->getImagePath() . 'menu/' . self :: TAB_SEARCH . '.png',
+                Theme :: getInstance()->getImagesPath() . 'menu/' . self :: TAB_SEARCH . '.png',
                 $filter_form->render()));
 
         $selected_type = FilterData :: get_instance()->get_type();
@@ -261,7 +261,7 @@ abstract class Manager extends Application
             new DynamicContentTab(
                 self :: TAB_OBJECT_TYPE,
                 '',
-                Theme :: getInstance()->getImagePath() . 'menu/' . self :: TAB_OBJECT_TYPE . '.png',
+                Theme :: getInstance()->getImagesPath() . 'menu/' . self :: TAB_OBJECT_TYPE . '.png',
                 $object_type->render_as_tree()));
 
         $current_user_view_id = FilterData :: get_instance()->get_user_view();
@@ -276,7 +276,7 @@ abstract class Manager extends Application
             new DynamicContentTab(
                 self :: TAB_USERVIEW,
                 '',
-                Theme :: getInstance()->getImagePath() . 'menu/' . self :: TAB_USERVIEW . '.png',
+                Theme :: getInstance()->getImagesPath() . 'menu/' . self :: TAB_USERVIEW . '.png',
                 $user_view->render_as_tree()));
 
         $html[] = ($tabs->render());

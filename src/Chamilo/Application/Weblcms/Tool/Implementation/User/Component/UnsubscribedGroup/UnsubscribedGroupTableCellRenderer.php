@@ -82,7 +82,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('SubscribeUsersFromGroup'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_copy.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_copy.png', 
                         $this->get_component()->get_url($parameters), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -95,7 +95,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SubscribeGroup'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
                     $this->get_component()->get_url($parameters), 
                     ToolbarItem :: DISPLAY_ICON));
         }

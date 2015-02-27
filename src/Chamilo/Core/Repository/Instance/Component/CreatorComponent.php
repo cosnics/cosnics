@@ -87,7 +87,7 @@ class CreatorComponent extends Manager
                 {
                     $types_html[] = '<a href="' . $this->get_url(
                         array(self :: PARAM_IMPLEMENTATION => $registration->get_context())) .
-                         '"><div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagePath(
+                         '"><div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagesPath(
                             $registration->get_context()) . 'Logo/48.png);">';
                     $types_html[] = Translation :: get('TypeName', null, $registration->get_context());
                     $types_html[] = '</div></a>';
@@ -97,7 +97,7 @@ class CreatorComponent extends Manager
                     new DynamicContentTab(
                         $category,
                         $category_name,
-                        Theme :: getInstance()->getImagePath(
+                        Theme :: getInstance()->getImagesPath(
                             ClassnameUtilities :: getInstance()->getNamespaceParent(
                                 ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context())) .
                                  '\external') . 'category_' . $category . '.png',

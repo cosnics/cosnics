@@ -31,7 +31,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
              * SystemAnnouncement may not be available if not installed.
              * Therefore do not use SystemAnnouncement::...
              */
-            return Theme :: getInstance()->getImagePath(
+            return Theme :: getInstance()->getImagesPath(
                 ContentObject :: get_content_object_type_namespace('system_announcement')) . 'Logo/' . $size . '.png';
         }
     }

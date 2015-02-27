@@ -49,7 +49,8 @@ class BuilderComponent extends Manager implements TableSupport
                     self :: PARAM_ACTION => self :: ACTION_ADD_FORM_ELEMENT,
                     self :: PARAM_DYNAMIC_FORM_ELEMENT_TYPE => $typevalue));
             $html[] = '<a href="' . $link . '"><div class="create_block" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath() . 'elements/form_type_' . $typevalue . '.png);">';
+                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Elements/form_type_' . $typevalue) .
+                 ');">';
             $html[] = $typename;
             $html[] = '<div class="clear">&nbsp;</div>';
             $html[] = '</div></a>';

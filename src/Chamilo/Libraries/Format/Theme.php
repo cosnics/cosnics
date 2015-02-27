@@ -226,7 +226,7 @@ class Theme
      * @param boolean $web
      * @return string
      */
-    public function getImagePath($context = null, $web = true)
+    public function getImagesPath($context = null, $web = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
 
@@ -259,9 +259,9 @@ class Theme
      *
      * @return string
      */
-    public function getCommonImagePath($web = true)
+    public function getCommonImagesPath($web = true)
     {
-        return $this->getImagePath('Chamilo\Configuration', $web);
+        return $this->getImagesPath('Chamilo\Configuration', $web);
     }
 
     /**
@@ -308,7 +308,7 @@ class Theme
 
         $icon = new ToolbarItem(
             $label,
-            $this->getImagePath($context) . $image . '.' . $extension,
+            $this->getImagePath($context, $image, $extension),
             $href,
             $display,
             $confirmation);
@@ -328,5 +328,23 @@ class Theme
         $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false)
     {
         return $this->getImage($image, $extension, $label, $href, $display, $confirmation, 'Chamilo\Configuration');
+    }
+
+    /**
+     *
+     * @param string $context
+     * @param string $image
+     * @param string $extension
+     * @param boolean $web
+     * @return string
+     */
+    public function getImagePath($context, $image, $extension = 'png', $web = true)
+    {
+        return $this->getImagesPath($context, $web) . $image . '.' . $extension;
+    }
+
+    public function getCommonImagePath($image, $extension = 'png', $web = true)
+    {
+        return $this->getImagePath('Chamilo\Configuration', $image, $extension, $web);
     }
 }

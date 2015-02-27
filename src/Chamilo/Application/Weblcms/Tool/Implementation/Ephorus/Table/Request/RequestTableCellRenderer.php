@@ -72,7 +72,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewResult'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png', 
                 $this->get_component()->get_ephorus_request_url($object->get_id()), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -92,7 +92,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     $translation, 
-                    Theme :: getInstance()->getCommonImagePath() . $icon, 
+                    Theme :: getInstance()->getCommonImagesPath() . $icon, 
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_INDEX_VISIBILITY_CHANGER, 

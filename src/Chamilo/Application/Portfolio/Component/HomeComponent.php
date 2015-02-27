@@ -20,8 +20,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -32,6 +30,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  * Main portfolio viewing component
@@ -321,7 +321,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
             new DynamicVisualTab(
                 self :: ACTION_BROWSE,
                 Translation :: get('BrowserComponent'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_BROWSE . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Portfolio', 'Tab/' . self :: ACTION_BROWSE),
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_BROWSE),
                     array(
@@ -561,7 +561,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_notification()
      */
     public function retrieve_portfolio_notification(
-        \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
+       \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node)
     {
         // TODO Auto-generated method stub
     }

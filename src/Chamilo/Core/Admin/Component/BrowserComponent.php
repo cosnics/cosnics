@@ -107,7 +107,7 @@ class BrowserComponent extends Manager
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package->get_context()),
                     Translation :: get('TypeName', null, $package->get_context()),
-                    Theme :: getInstance()->getImagePath($package->get_context()) . 'Logo/22.png');
+                    Theme :: getInstance()->getImagesPath($package->get_context()) . 'Logo/22.png');
 
                 if ($links->get_search())
                 {
@@ -116,7 +116,7 @@ class BrowserComponent extends Manager
                         new DynamicAction(
                             null,
                             $search_form->render(),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\\') . 'Admin/search.png'));
+                            Theme :: getInstance()->getImagesPath('Chamilo\Core\Admin\\') . 'Admin/search.png'));
                 }
 
                 foreach ($links->get_links() as $action)

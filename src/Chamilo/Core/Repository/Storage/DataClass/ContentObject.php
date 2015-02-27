@@ -1446,7 +1446,7 @@ class ContentObject extends CompositeDataClass
 
     public static function icon_path($context, $size = Theme :: ICON_SMALL, $is_current = true)
     {
-        return Theme :: getInstance()->getImagePath($context) . 'Logo/' . $size . ($is_current ? '' : '_na') . '.png';
+        return Theme :: getInstance()->getImagesPath($context) . 'Logo/' . $size . ($is_current ? '' : '_na') . '.png';
     }
 
     /**
@@ -1664,7 +1664,7 @@ class ContentObject extends CompositeDataClass
 
     public static function get_version_header()
     {
-        return '<img src="' . Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\\') .
+        return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') .
              'versions_header.png" alt="' . Translation :: get('Versions') . '" title="' . Translation :: get(
                 'Versions') . '" />';
     }

@@ -68,7 +68,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     'personal',
                     Translation :: get('Personal'),
-                    Theme :: getInstance()->getImagePath() . 'tab/personal.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/personal.png',
                     implode(PHP_EOL, $user_quota)));
 
             if ($user_requests > 0)
@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'personal_request',
                         Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagePath() . 'tab/personal_request.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/personal_request.png',
                         $table->as_html()));
             }
 
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'platform',
                         Translation :: get('Platform'),
-                        Theme :: getInstance()->getImagePath() . 'tab/platform.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/platform.png',
                         implode(PHP_EOL, $platform_quota)));
 
                 $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
@@ -148,7 +148,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_PENDING,
                             Translation :: get('PendingRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_PENDING .
+                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_PENDING .
                                  '.png',
                                 $table->as_html()));
                 }
@@ -170,7 +170,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_GRANTED,
                             Translation :: get('GrantedRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_GRANTED .
+                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_GRANTED .
                                  '.png',
                                 $table->as_html()));
                 }
@@ -193,7 +193,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_DENIED,
                             Translation :: get('DeniedRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_DENIED . '.png',
+                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_DENIED . '.png',
                             $table->as_html()));
                 }
             }
@@ -363,7 +363,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('UpgradeQuota'),
-                    Theme :: getInstance()->getImagePath() . 'action/upgrade.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/upgrade.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
@@ -372,7 +372,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestUpgrade'),
-                    Theme :: getInstance()->getImagePath() . 'action/request.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/request.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
@@ -381,13 +381,13 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagePath() . 'action/rights.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/rights.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ResetTotal'),
-                    Theme :: getInstance()->getImagePath() . 'action/reset.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/reset.png',
                     $this->get_url(array(self :: PARAM_RESET_CACHE => 1))));
         }
 

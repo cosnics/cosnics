@@ -54,7 +54,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Grant'), 
-                        Theme :: getInstance()->getImagePath() . 'action/grant.png', 
+                        Theme :: getInstance()->getImagesPath() . 'action/grant.png', 
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_GRANT, 
@@ -69,7 +69,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Deny'), 
-                        Theme :: getInstance()->getImagePath() . 'action/deny.png', 
+                        Theme :: getInstance()->getImagesPath() . 'action/deny.png', 
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_DENY, 
@@ -84,7 +84,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 

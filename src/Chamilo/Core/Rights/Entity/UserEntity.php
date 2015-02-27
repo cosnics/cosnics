@@ -117,7 +117,7 @@ class UserEntity implements RightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath('core\rights\editor') . 'place_user.png';
+        return Theme :: getInstance()->getImagesPath('core\rights\editor') . 'place_user.png';
     }
 
     /**

@@ -56,19 +56,19 @@ class GroupsViewerComponent extends Manager
 
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('Delete'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_external_repository_group_deleting_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('AddUser'),
-                    Theme :: getInstance()->getImagePath() . 'action_add_user.png',
+                    Theme :: getInstance()->getImagesPath() . 'action_add_user.png',
                     $this->get_external_repository_adding_user_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('DeleteUser'),
-                    Theme :: getInstance()->getImagePath() . 'action_delete_user.png',
+                    Theme :: getInstance()->getImagesPath() . 'action_delete_user.png',
                     $this->get_external_repository_deleting_user_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
@@ -101,7 +101,7 @@ class GroupsViewerComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('CreateGroup'),
-                Theme :: getInstance()->getImagePath() . 'action_create.png',
+                Theme :: getInstance()->getImagesPath() . 'action_create.png',
                 $this->get_external_repository_group_creating_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

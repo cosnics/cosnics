@@ -63,7 +63,7 @@ class Html extends BlockRendition
                         $view, 
                         Translation :: get(
                             (string) StringUtilities :: getInstance()->createString(self :: FORMAT . '_' . $view)->upperCamelize()), 
-                        Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'rendition/block/' . self :: FORMAT . '/' .
+                        Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'rendition/block/' . self :: FORMAT . '/' .
                              $view . '.png', 
                             $this->get_context()->get_context()->get_url($view_parameters), 
                             $is_current_view));

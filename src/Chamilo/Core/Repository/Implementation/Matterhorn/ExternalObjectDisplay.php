@@ -304,7 +304,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadTrack'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_download.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
                     $track->get_url(), 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -338,7 +338,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadAttachment'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_download.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
                     $attachment->get_url(), 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -370,7 +370,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadMetadata'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_download.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
                     $metadata->get_url(), 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -399,13 +399,13 @@ $(document).ready(function(){
             new DynamicContentTab(
                 self :: TAB_GENERAL, 
                 Translation :: get('General'), 
-                Theme :: getInstance()->getImagePath() . 'tabs/' . self :: TAB_GENERAL . '.png', 
+                Theme :: getInstance()->getImagesPath() . 'tabs/' . self :: TAB_GENERAL . '.png', 
                 $this->get_properties_table()));
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_TRACKS, 
                 Translation :: get('Tracks'), 
-                Theme :: getInstance()->getImagePath() . 'tabs/' . self :: TAB_TRACKS . '.png', 
+                Theme :: getInstance()->getImagesPath() . 'tabs/' . self :: TAB_TRACKS . '.png', 
                 $this->get_tracks_table()));
         
         $html[] = $tabs->render();

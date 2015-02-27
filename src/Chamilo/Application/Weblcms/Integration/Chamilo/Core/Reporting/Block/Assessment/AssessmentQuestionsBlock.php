@@ -43,7 +43,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         
         $questions = $this->get_questions();
         
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png" title="' .
              Translation :: get('Details') . '" />';
         
         $count = 0;

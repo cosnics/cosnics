@@ -79,17 +79,17 @@ class BlockRendition
         }
         else
         {
-            $image_path = Theme :: getInstance()->getImagePath($context, false) . 'Blocks/' . $type . '.png';
+            $image_path = Theme :: getInstance()->getImagesPath($context, false) . 'Blocks/' . $type . '.png';
 
             if (! file_exists($image_path) || ! is_file($image_path))
             {
-                return Theme :: getInstance()->getImagePath(
+                return Theme :: getInstance()->getImagesPath(
                     ClassnameUtilities :: getInstance()->getNamespaceParent($context, 3)) . 'Logo/' . Theme :: ICON_MEDIUM .
                      '.png';
             }
             else
             {
-                return Theme :: getInstance()->getImagePath($context) . 'Blocks/' . $type . '.png';
+                return Theme :: getInstance()->getImagesPath($context) . 'Blocks/' . $type . '.png';
             }
         }
     }
@@ -216,9 +216,8 @@ class BlockRendition
      */
     public function get_icon()
     {
-        return Theme :: getInstance()->getImagePath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_block_info()->get_context(), 4)) . 'Logo/' .
-             Theme :: ICON_MEDIUM . '.png';
+        $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_block_info()->get_context(), 4);
+        return Theme :: getInstance()->getImagePath($context, 'Logo/' . Theme :: ICON_MEDIUM);
     }
 
     public function as_html($view = '')
@@ -292,7 +291,7 @@ class BlockRendition
 
         $user_home_allowed = PlatformSetting :: get('allow_user_home', Manager :: context());
 
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
 
         if ($this->get_user() instanceof User && ($user_home_allowed || $this->get_user()->is_platform_admin()) &&
              ! $this->get_user()->is_anonymous_user())

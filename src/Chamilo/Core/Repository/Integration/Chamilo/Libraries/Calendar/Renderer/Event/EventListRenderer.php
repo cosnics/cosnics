@@ -73,7 +73,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                                  $url . '">';
                         }
 
-                        $render[] = '<img src="' . Theme :: getInstance()->getImagePath($attachment->context()) .
+                        $render[] = '<img src="' . Theme :: getInstance()->getImagesPath($attachment->context()) .
                              'Logo/16.png" alt="' . htmlentities(
                                 Translation :: get('TypeName', null, $attachment->context())) . '"/>';
                         $render[] = ' ';

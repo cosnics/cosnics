@@ -56,7 +56,7 @@ class UserGroupUnSubscriberComponent extends Manager
         // @TODO date locale doesn't work
         $html = array();
 
-        $image = Theme :: getInstance()->getCommonImagePath() . 'treemenu/group.png';
+        $image = Theme :: getInstance()->getCommonImagesPath() . 'treemenu/group.png';
 
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -100,7 +100,7 @@ class UserGroupUnSubscriberComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER,

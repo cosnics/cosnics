@@ -88,12 +88,12 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         if ($course_type->is_active())
         {
             $activation_translation = Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES);
-            $activation_image = Theme :: getInstance()->getCommonImagePath() . 'action_visible.png';
+            $activation_image = Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png';
         }
         else
         {
             $activation_translation = Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES);
-            $activation_image = Theme :: getInstance()->getCommonImagePath() . 'action_invisible.png';
+            $activation_image = Theme :: getInstance()->getCommonImagesPath() . 'action_invisible.png';
         }
         
         $toolbar->add_item(
@@ -106,7 +106,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_update_course_type_url($course_type->get_id()), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -115,7 +115,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->get_component()->get_delete_course_type_url($course_type->get_id()), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));
@@ -125,7 +125,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -137,7 +137,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_move_course_type_url(
                         $course_type->get_id(), 
                         Manager :: MOVE_DIRECTION_UP), 
@@ -148,7 +148,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -160,7 +160,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_move_course_type_url(
                         $course_type->get_id(), 
                         Manager :: MOVE_DIRECTION_DOWN), 
@@ -171,7 +171,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

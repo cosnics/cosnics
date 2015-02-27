@@ -439,8 +439,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool_name);
             $tool_title = Translation :: get('TypeName', null, $tool_namespace);
-            $tool_image_src = Theme :: getInstance()->getImagePath($tool_namespace) . '/Logo/' . Theme :: ICON_MINI .
-                 '.png';
+            $tool_image_src = Theme :: getInstance()->getImagePath($tool_namespace, 'Logo/' . Theme :: ICON_MINI);
             $tool_image = $tool_name . "_image";
 
             $table_body = array();

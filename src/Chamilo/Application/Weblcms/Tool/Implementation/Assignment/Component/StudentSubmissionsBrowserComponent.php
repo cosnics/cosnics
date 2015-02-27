@@ -127,7 +127,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         $html = array();
         $html[] = '<div class="announcements level_1" style="background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'content_object/introduction.png)">';
+             Theme :: getInstance()->getCommonImagesPath() . 'content_object/introduction.png)">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_as_html();
         $html[] = '</div>';
@@ -368,7 +368,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('SubmissionSubmit'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
                 $this->get_url($this->generate_add_submission_url(), ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
         $search_url = $this->get_url(
             array(
@@ -378,7 +378,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $search_url,
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false));

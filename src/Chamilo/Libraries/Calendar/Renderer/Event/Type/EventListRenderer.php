@@ -30,7 +30,7 @@ class EventListRenderer extends EventRenderer
         $html = array();
 
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath($this->get_event()->get_context()) . 'Logo/22.png);">';
+             Theme :: getInstance()->getImagePath($this->get_event()->get_context(), 'Logo/22') . ');">';
         $html[] = '<div class="title">' . htmlentities($this->get_event()->get_title()) . '</div>';
         $html[] = $this->get_description();
         $html[] = $this->get_actions();
@@ -101,7 +101,7 @@ class EventListRenderer extends EventRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 html_entity_decode($this->get_event()->get_url()),
                 ToolbarItem :: DISPLAY_ICON));
 

@@ -27,7 +27,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 abstract class Renderer
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Parameters
     const PARAM_TIME = 'time';
@@ -334,13 +334,13 @@ abstract class Renderer
 
             $items[] = new ToolbarItem(
                 Translation :: get($type_name . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'renderer/type/' . $type . '.png',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Type/' . $type),
                 str_replace(self :: MARKER_TYPE, $type, $type_url));
         }
 
         $items[] = new ToolbarItem(
             Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath() . 'renderer/today.png',
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/today'),
             $today_url);
 
         return $items;

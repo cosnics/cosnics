@@ -81,7 +81,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $this->action_bar->as_html();
 
         $html[] = '<div class="clear"></div><div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'place_group.png);">';
+             Theme :: getInstance()->getCommonImagesPath() . 'place_group.png);">';
         $html[] = '<div class="title">' . $course_group->get_name() . '</div>';
         $html[] = '<div class="description">' . $course_group->get_description() . '</div>';
         $html[] = '<div class="clear"></div>';
@@ -103,7 +103,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = '</div>';
 
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'place_users.png);">';
+             Theme :: getInstance()->getCommonImagesPath() . 'place_users.png);">';
         $html[] = '<div class="title">' . Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context()) .
              '</div>';
         $html[] = $table->as_html();
@@ -125,7 +125,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -146,7 +146,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('SubscribeToGroup'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png',
                         $subscribe_url,
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
@@ -161,7 +161,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('UnSubscribeFromGroup'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_unsubscribe.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png',
                         $unsubscribe_url,
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
@@ -176,7 +176,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SubscribeUsers'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png',
                     $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -187,18 +187,18 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_backup.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_backup.png',
                     $this->get_url($parameters_export_subscriptions_overview),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
 
         // $action_bar->add_tool_action(new ToolbarItem(Translation ::
-        // get('Edit'), Theme :: getInstance()->getCommonImagePath().'action_edit.png',
+        // get('Edit'), Theme :: getInstance()->getCommonImagesPath().'action_edit.png',
         // $this->get_url(array(CourseGroupTool :: PARAM_ACTION =>
         // CourseGroupTool :: ACTION_PUBLISH)), ToolbarItem ::
         // DISPLAY_ICON_AND_LABEL));
         // $action_bar->add_tool_action(new ToolbarItem(Translation ::
-        // get('Delete'), Theme :: getInstance()->getCommonImagePath().'action_delete.png',
+        // get('Delete'), Theme :: getInstance()->getCommonImagesPath().'action_delete.png',
         // $this->get_url(), ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         if ($course_group->get_document_category_id())
@@ -217,7 +217,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TypeName', null, $namespace),
-                    Theme :: getInstance()->getImagePath($namespace) . 'Logo/16.png',
+                    Theme :: getInstance()->getImagePath($namespace, 'Logo/16'),
                     $url,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -238,7 +238,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TypeName', null, $namespace),
-                    Theme :: getInstance()->getImagePath($namespace) . 'Logo/16.png',
+                    Theme :: getInstance()->getImagePath($namespace, 'Logo/16'),
                     $url,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

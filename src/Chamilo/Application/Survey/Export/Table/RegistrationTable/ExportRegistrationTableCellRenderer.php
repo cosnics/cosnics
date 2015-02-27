@@ -18,7 +18,7 @@ class ExportRegistrationTableCellRenderer extends DataClassTableCellRenderer imp
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Activate'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_confirm.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_confirm.png', 
                 $this->component->get_export_template_create_url($object), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

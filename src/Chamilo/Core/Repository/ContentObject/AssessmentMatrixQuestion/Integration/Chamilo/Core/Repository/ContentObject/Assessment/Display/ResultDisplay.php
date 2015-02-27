@@ -70,13 +70,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if ($option->get_matches() == $j)
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                                      Translation :: get('Correct') . '" />';
                             }
                             else
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' .
                                      Translation :: get('Wrong') . '" />';
                             }
@@ -94,7 +94,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if ($option->get_matches() == $j)
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                                      Translation :: get('Correct') . '" />';
                             }
@@ -124,13 +124,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if (in_array($j, $option->get_matches()))
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                                      Translation :: get('Correct') . '" style="" />';
                             }
                             else
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' .
                                      Translation :: get('Wrong') . '" />';
                             }
@@ -148,7 +148,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if (in_array($j, $option->get_matches()))
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                                $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                                      'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                                      Translation :: get('Correct') . '" style="" />';
                             }

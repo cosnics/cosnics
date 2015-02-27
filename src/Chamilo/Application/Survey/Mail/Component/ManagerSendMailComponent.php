@@ -197,7 +197,7 @@ class ManagerSendMailComponent extends Manager
     {
         $html = array();
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('application\survey') . 'survey_22.png);">';
+             Theme :: getInstance()->getImagesPath('application\survey') . 'survey_22.png);">';
         
         switch ($this->type)
         {
