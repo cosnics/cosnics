@@ -32,8 +32,8 @@ class PortfolioConnector implements WeblcmsUserToolConnector
         // $portfoliomanager :: PARAM_PORTFOLIO_OWNER_ID => $user_id));
         // $toolbar_item = new ToolbarItem(
         // Translation :: get('Portfolio'),
-        // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio')) .
-    // 'Logo/22.png',
+        // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio'),
+    // 'Logo/22'),
         // $portfolio_url,
         // ToolbarItem :: DISPLAY_ICON);
         // }
@@ -41,12 +41,12 @@ class PortfolioConnector implements WeblcmsUserToolConnector
         // {
         // $toolbar_item = new ToolbarItem(
         // Translation :: get('NoPortfolio'),
-        // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio')) .
-        // 'Logo/22_na.png',
+        // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio'),
+    // 'Logo/22_na'),
         // null,
         // ToolbarItem :: DISPLAY_ICON);
         // }
-        
+
         // return array($toolbar_item);
     }
 }

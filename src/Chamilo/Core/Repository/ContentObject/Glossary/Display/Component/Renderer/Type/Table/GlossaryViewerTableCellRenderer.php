@@ -45,7 +45,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $component->get_complex_content_object_item_update_url($glossary_item), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -55,7 +55,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $component->get_complex_content_object_item_delete_url($glossary_item), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));

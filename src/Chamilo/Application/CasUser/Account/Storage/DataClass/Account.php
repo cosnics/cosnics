@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Account extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-    
+
     /**
      * CasAccount properties
      */
@@ -33,22 +33,22 @@ class Account extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_FIRST_NAME, 
-                self :: PROPERTY_LAST_NAME, 
-                self :: PROPERTY_EMAIL, 
-                self :: PROPERTY_AFFILIATION, 
-                self :: PROPERTY_PASSWORD, 
-                self :: PROPERTY_GROUP, 
-                self :: PROPERTY_STATUS, 
-                self :: PROPERTY_VALID_FROM, 
-                self :: PROPERTY_VALID_UNTIL, 
+                self :: PROPERTY_FIRST_NAME,
+                self :: PROPERTY_LAST_NAME,
+                self :: PROPERTY_EMAIL,
+                self :: PROPERTY_AFFILIATION,
+                self :: PROPERTY_PASSWORD,
+                self :: PROPERTY_GROUP,
+                self :: PROPERTY_STATUS,
+                self :: PROPERTY_VALID_FROM,
+                self :: PROPERTY_VALID_UNTIL,
                 self :: PROPERTY_PERSON_ID));
     }
 
@@ -177,13 +177,17 @@ class Account extends DataClass
         switch ($this->get_status())
         {
             case self :: STATUS_ENABLED :
-                $path = Theme :: getInstance()->getImagePath() . self :: PROPERTY_STATUS . '/enabled.png';
+                $path = Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\CasUser\Account',
+                    self :: PROPERTY_STATUS . '/enabled');
                 break;
             case self :: STATUS_DISABLED :
-                $path = Theme :: getInstance()->getImagePath() . self :: PROPERTY_STATUS . '/disabled.png';
+                $path = Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\CasUser\Account',
+                    self :: PROPERTY_STATUS . '/disabled');
                 break;
         }
-        
+
         return '<img src="' . $path . '" />';
     }
 

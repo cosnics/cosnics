@@ -99,7 +99,7 @@ class BrowserComponent extends Manager
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('StopReceivingNotifications'), 
-                            Theme :: getInstance()->getImagePath() . 'action/unsubscribe.png', 
+                            Theme :: getInstance()->getImagesPath() . 'action/unsubscribe.png', 
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBER))));
                 }
                 else
@@ -107,7 +107,7 @@ class BrowserComponent extends Manager
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('ReceiveNotifications'), 
-                            Theme :: getInstance()->getImagePath() . 'action/subscribe.png', 
+                            Theme :: getInstance()->getImagesPath() . 'action/subscribe.png', 
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBER))));
                 }
                 
@@ -239,7 +239,7 @@ class BrowserComponent extends Manager
         
         $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() . 'action_delete.png"  alt="' . $title . '" title="' . $title .
+             Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png"  alt="' . $title . '" title="' . $title .
              '"/></a>';
         
         return $delete_link;
@@ -258,7 +258,7 @@ class BrowserComponent extends Manager
                 Manager :: PARAM_FEEDBACK_ID => $feedback->get_id()));
         
         $title = Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES);
-        $update_link = '<a href="' . $update_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        $update_link = '<a href="' . $update_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_edit.png"  alt="' . $title . '" title="' . $title . '"/></a>';
         
         return $update_link;

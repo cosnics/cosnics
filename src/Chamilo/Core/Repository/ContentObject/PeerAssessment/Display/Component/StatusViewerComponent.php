@@ -167,7 +167,7 @@ class StatusViewerComponent extends Manager
     {
         $item = new ToolbarItem(
             Translation :: get('Details'),
-            Theme :: getInstance()->getCommonImagePath() .
+            Theme :: getInstance()->getCommonImagesPath() .
                  (($status->get_progress() > 0) ? 'action_details.png' : 'action_details_na.png'),
                 $this->get_url(
                     array(
@@ -193,7 +193,7 @@ class StatusViewerComponent extends Manager
         if ($status->get_closed() === null)
         {
             $item->set_label(Translation :: get('StatusOpen') . ' ' . Translation :: get('CloseStatus'));
-            $item->set_image(Theme :: getInstance()->getCommonImagePath() . 'action_lock_na.png');
+            $item->set_image(Theme :: getInstance()->getCommonImagesPath() . 'action_lock_na.png');
         }
         else
         {
@@ -202,13 +202,13 @@ class StatusViewerComponent extends Manager
                 $item->set_label(
                     Translation :: get('AttemptClosed') . ': ' . date('d/m/Y', $status->get_closed()) . '. ' .
                          Translation :: get('OpenStatus'));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath() . 'action_setting_true_locked.png');
+                $item->set_image(Theme :: getInstance()->getCommonImagesPath() . 'action_setting_true_locked.png');
             }
             else
             {
                 $item->set_label(
                     Translation :: get('AttemptClosedAfterDeadline') . ': ' . date('d/m/Y', $status->get_closed()));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath() . 'action_setting_false_locked.png');
+                $item->set_image(Theme :: getInstance()->getCommonImagesPath() . 'action_setting_false_locked.png');
                 $item->set_href(null);
             }
         }
@@ -223,7 +223,7 @@ class StatusViewerComponent extends Manager
         // $action_bar->add_common_action(
         // new ToolbarItem(
         // Translation :: get('ToggleStatus'),
-        // Theme :: getInstance()->getCommonImagePath() . 'action_setting_true_locked.png',
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_setting_true_locked.png',
         // $this->get_url(
         // array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_RESULTS))));
         //

@@ -35,13 +35,13 @@ class AssessmentRatingQuestionResultDisplay extends QuestionResultDisplay
         
         if ($correct_answer)
         {
-            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                  'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
                  Translation :: get('Correct') . '" style="" />';
         }
         else
         {
-            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath() .
+            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
                  'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                  '" />';
         }

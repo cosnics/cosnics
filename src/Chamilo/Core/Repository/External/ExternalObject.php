@@ -328,7 +328,7 @@ abstract class ExternalObject
      */
     public function get_icon_image()
     {
-        $source = Theme :: getInstance()->getImagePath(static :: context()) . 'types/' . $this->get_icon_name() . '.png';
+        $source = Theme :: getInstance()->getImagesPath(static :: context()) . 'types/' . $this->get_icon_name() . '.png';
         $name = Translation :: get(
             'Type' . StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(), 
             null, 

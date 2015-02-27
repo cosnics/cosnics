@@ -71,7 +71,7 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = '<div id="tool_bar" class="tool_bar tool_bar_right">';
 
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
         $html[] = '<div id="tool_bar_hide_container" class="hide">';
         $html[] = '<a id="tool_bar_hide" href="#"><img src="' . $img_path . 'action_action_bar_right_hide.png" /></a>';
         $html[] = '<a id="tool_bar_show" href="#"><img src="' . $img_path . 'action_action_bar_right_show.png" /></a>';
@@ -122,7 +122,7 @@ class HomeComponent extends Manager implements DelegateComponent
     {
         $html = array();
 
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
 
         $course_management_rights = CourseManagementRights :: get_instance();
 
@@ -190,7 +190,7 @@ class HomeComponent extends Manager implements DelegateComponent
     public function display_edit_course_list_links()
     {
         $html = array();
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
         $html[] = '<li class="tool_list_menu" style="background-image: url(' . $img_path .
              'action_reset.png)"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))) . '">' .
@@ -222,7 +222,7 @@ class HomeComponent extends Manager implements DelegateComponent
     public function display_platform_admin_course_list_links()
     {
         $html = array();
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
         $html[] = '<li class="tool_list_menu" style="background-image: url(' . $img_path .
              'action_create.png)"><a style="top: -3px; position: relative;" href="' .
              htmlspecialchars(
@@ -270,7 +270,7 @@ class HomeComponent extends Manager implements DelegateComponent
     public function get_course_user_category_actions(CourseUserCategory $course_user_category, CourseType $course_type,
         $offset, $count)
     {
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagePath());
+        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
         return '<a href="#" class="closeEl"><img class="visible" src="' . $img_path .
              'action_visible.png"/><img class="invisible" style="display: none;" src="' . $img_path .
              'action_invisible.png" /></a>';

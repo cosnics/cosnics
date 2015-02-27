@@ -122,7 +122,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath('core\rights\editor') . 'place_group.png';
+        return Theme :: getInstance()->getImagesPath('core\rights\editor') . 'place_group.png';
     }
 
     /**

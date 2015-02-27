@@ -121,7 +121,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_REPORTING,
                     Translation :: get('ReportingComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_REPORTING . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_REPORTING . '.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_REPORTING)),
                     $this->get_action() == self :: ACTION_REPORTING,
                     false,
@@ -135,7 +135,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                     Translation :: get('ViewerComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
@@ -146,7 +146,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
             $edit_title = Translation :: get('UpdaterComponent');
-            $edit_image = Theme :: getInstance()->getImagePath() . 'tab/' .
+            $edit_image = Theme :: getInstance()->getImagesPath() . 'tab/' .
                  self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM . '.png';
 
             $current_content_object = $this->get_current_node()->get_content_object();
@@ -175,7 +175,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_BUILD_PREREQUISITES,
                         Translation :: get('BuildPrerequisites'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_BUILD_PREREQUISITES . '.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_BUILD_PREREQUISITES . '.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_BUILD_PREREQUISITES,
@@ -195,7 +195,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_ACTIVITY,
                     Translation :: get('ActivityComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_ACTIVITY . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_ACTIVITY . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_ACTIVITY,
@@ -209,7 +209,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_REPORTING,
                     Translation :: get('ReportingComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_REPORTING . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_REPORTING . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_REPORTING,
@@ -228,7 +228,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                         Translation :: get($variable),
-                        Theme :: getInstance()->getImagePath() . 'tab/' .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' .
                              self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM . '.png',
                             $this->get_url(
                                 array(
@@ -249,7 +249,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_MANAGE,
                             Translation :: get('ManagerComponent'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MANAGE . '.png',
+                            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MANAGE . '.png',
                             $this->get_url(
                                 array(
                                     self :: PARAM_ACTION => self :: ACTION_MANAGE,
@@ -270,7 +270,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_MOVE,
                         Translation :: get($variable),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MOVE . '.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MOVE . '.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_MOVE,
@@ -297,7 +297,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                             Translation :: get('CreatorComponent'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' .
+                            Theme :: getInstance()->getImagesPath() . 'tab/' .
                                  self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM . '.png',
                                 $this->get_url(
                                     array(
@@ -315,7 +315,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                             Translation :: get('AddFolder'),
-                            Theme :: getInstance()->getImagePath() . 'tab/folder.png',
+                            Theme :: getInstance()->getImagesPath() . 'tab/folder.png',
                             $this->get_url(
                                 array(
                                     self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -338,7 +338,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_SORT,
                             Translation :: get('MoveDown'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' .
+                            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' .
                              self :: SORT_DOWN . '.png',
                             $this->get_url(
                                 array(
@@ -356,7 +356,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_SORT,
                             Translation :: get('MoveDownNotAvailable'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' .
+                            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' .
                                  self :: SORT_DOWN . '_na.png',
                                 null,
                                 false,
@@ -371,7 +371,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_SORT,
                             Translation :: get('MoveUp'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
+                            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
                                  '.png',
                                 $this->get_url(
                                     array(
@@ -389,7 +389,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_SORT,
                             Translation :: get('MoveUpNotAvailable'),
-                            Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
+                            Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
                                  '_na.png',
                                 null,
                                 false,
@@ -601,7 +601,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Previous'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_prev.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png',
                         $previous_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -610,7 +610,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('PreviousNA'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_prev_na.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png',
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -627,7 +627,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Previous'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_next.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_next.png',
                         $next_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -636,7 +636,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('PreviousNA'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png',
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }

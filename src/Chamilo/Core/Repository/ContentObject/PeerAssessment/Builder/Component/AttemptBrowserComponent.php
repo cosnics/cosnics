@@ -48,7 +48,7 @@ class AttemptBrowserComponent extends Manager
         // TODO date locale doesn't work
         $html = array();
 
-        $image = Theme :: getInstance()->getCommonImagePath() . 'action_period.png';
+        $image = Theme :: getInstance()->getCommonImagesPath() . 'action_period.png';
 
         // loop through all the attempts and render them
         foreach ($attempts as $a)
@@ -87,7 +87,7 @@ class AttemptBrowserComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_EDIT_ATTEMPT,
@@ -106,7 +106,7 @@ class AttemptBrowserComponent extends Manager
         }
         // $toolbar->add_item(new ToolbarItem(
         // $label,
-        // Theme :: getInstance()->getCommonImagePath() . $image,
+        // Theme :: getInstance()->getCommonImagesPath() . $image,
         // $this->get_url(array(
         // self :: PARAM_ACTION => self :: ACTION_TOGGLE_ATTEMPT_VISIBILITY,
         // self :: PARAM_ATTEMPT => $attempt->get_id()
@@ -116,7 +116,7 @@ class AttemptBrowserComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_DELETE_ATTEMPT,
@@ -134,7 +134,7 @@ class AttemptBrowserComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('CreateAttempt'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_ATTEMPT))));
 
         return $action_bar->as_html();

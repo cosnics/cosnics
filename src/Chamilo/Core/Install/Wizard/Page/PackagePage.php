@@ -31,9 +31,9 @@ class PackagePage extends InstallWizardPage
         $html = array();
         $html[] = '<h3>';
         $html[] = Translation :: get('AllPackages');
-        $html[] = '<img src = "' . Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+        $html[] = '<img src = "' . Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
         'Form/check-checked.png" class="package-list-select-all" /><img src = "' .
-        Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+        Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
         'Form/check-unchecked.png" class="package-list-select-none" />';
         $html[] = '</h3>';
         $this->addElement('html', implode(PHP_EOL, $html));
@@ -84,9 +84,9 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="package-list">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' . Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+            $html[] = '<img src = "' . Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
                  'Form/check-checked.png" class="package-list-select-all" /><img src = "' .
-                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+                 Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
                  'Form/check-unchecked.png" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
@@ -96,7 +96,7 @@ class PackagePage extends InstallWizardPage
             {
                 $html = array();
                 $html[] = '<div class="' . $this->getPackageClasses($package) . '" style="background-image: url(' .
-                     Theme :: getInstance()->getImagePath($package->get_context()) . 'Logo/22.png' . ')">';
+                     Theme :: getInstance()->getImagesPath($package->get_context()) . 'Logo/22.png' . ')">';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
                 $checkbox_name = 'install_' .
@@ -193,19 +193,19 @@ class PackagePage extends InstallWizardPage
         $html[] = '<br /><br />';
 
         $html[] = '<div style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+             Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
              'Logo/22.png)" class="package-list-item-core">';
         $html[] = Translation :: get('CorePackage');
         $html[] = '</div>';
 
         $html[] = '<div style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+             Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
              'Logo/22.png)" class="package-list-item">';
         $html[] = Translation :: get('AvailablePackage');
         $html[] = '</div>';
 
         $html[] = '<div style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('Chamilo\Configuration', true) .
+             Theme :: getInstance()->getImagesPath('Chamilo\Configuration', true) .
              'Logo/22.png)" class="package-list-item package-list-item-selected">';
         $html[] = Translation :: get('SelectedPackage');
         $html[] = '</div>';

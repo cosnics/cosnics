@@ -106,7 +106,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                     new DynamicContentTab(
                         self :: TAB_MOST_USED, 
                         Translation :: get('MostUsed'), 
-                        Theme :: getInstance()->getImagePath(Manager :: context()) . 'TypeSelector/Tab/most_used.png', 
+                        Theme :: getInstance()->getImagesPath(Manager :: context()) . 'TypeSelector/Tab/most_used.png', 
                         $most_used_content));
             }
         }
@@ -117,7 +117,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 new DynamicContentTab(
                     $category->get_type(), 
                     $category->get_name(), 
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'TypeSelector/Tab/' .
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'TypeSelector/Tab/' .
                          $category->get_type() . '.png', 
                         $this->render_category($category)));
         }
@@ -128,7 +128,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 new DynamicContentTab(
                     self :: TAB_EXTRA, 
                     Translation :: get('Extra'), 
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'TypeSelector/Tab/extra.png', 
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'TypeSelector/Tab/extra.png', 
                     $this->render_additional_links()));
         }
         

@@ -493,7 +493,7 @@ class User extends DataClass
         }
         else
         {
-            return Theme :: getInstance()->getCommonImagePath() . 'unknown.png';
+            return Theme :: getInstance()->getCommonImagesPath() . 'unknown.png';
         }
     }
 
@@ -505,7 +505,7 @@ class User extends DataClass
         }
         else
         {
-            return Theme :: getInstance()->getCommonImagePath(false) . 'unknown.png';
+            return Theme :: getInstance()->getCommonImagesPath(false) . 'unknown.png';
         }
     }
 

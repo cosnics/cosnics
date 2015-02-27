@@ -67,7 +67,7 @@ class ResultViewerComponent extends Manager
                     'PrintReport',
                     array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())),
-                Theme :: getInstance()->getCommonImagePath() . 'action_item.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_item.png',
                 '#',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,
@@ -79,7 +79,7 @@ class ResultViewerComponent extends Manager
                     'ExportReport',
                     array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())),
-                Theme :: getInstance()->getCommonImagePath() . 'action_export.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_export.png',
                 $this->get_url(array(Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false));

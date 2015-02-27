@@ -233,7 +233,7 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $info = '<br /><img style="max-width: 100px;" src="' . Theme :: getInstance()->getCommonImagePath() .
+                $info = '<br /><img style="max-width: 100px;" src="' . Theme :: getInstance()->getCommonImagesPath() .
                      'unknown.png' . '" /><br /><br />' .
                      DatetimeUtilities :: format_locale_date(null, $post->get_creation_date());
             }
@@ -368,13 +368,13 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_last.png"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';

@@ -124,7 +124,7 @@ class ElementEntity implements RightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath() . 'Logo/16.png';
+        return Theme :: getInstance()->getImagesPath() . 'Logo/16.png';
     }
 
     /**

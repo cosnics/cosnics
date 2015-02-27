@@ -97,12 +97,11 @@ class Header
         $context = http_build_query($parameters);
 
         $this->add_css_file_header(Path :: getInstance()->getBasePath(true) . 'index.php?' . $context);
-        $this->add_css_file_header('http://fonts.googleapis.com/css?family=Ubuntu:400');
 
         $this->add_link_header(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
         $this->add_link_header('http://help.chamilo.org/', 'help');
         $this->add_link_header(
-            Theme :: getInstance()->getCommonImagePath() . 'favicon.ico',
+            Theme :: getInstance()->getCommonImagesPath() . 'favicon.ico',
             'shortcut icon',
             null,
             'image/x-icon');

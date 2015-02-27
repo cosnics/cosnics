@@ -205,7 +205,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
         {
-            $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_email.png" alt=""' .
+            $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_email.png" alt=""' .
                  'style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
         }
 
@@ -244,12 +244,12 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
                 array(),
                 true);
-            $up_link = '<a href="' . $up_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() . $up_img .
+            $up_link = '<a href="' . $up_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() . $up_img .
                  '" alt=""/></a>';
         }
         else
         {
-            $up_link = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png"  alt=""/>';
+            $up_link = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png"  alt=""/>';
         }
         return $up_link;
     }
@@ -272,12 +272,12 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
                 array(),
                 true);
-            $down_link = '<a href="' . $down_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $down_link = '<a href="' . $down_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  $down_img . '"  alt=""/></a>';
         }
         else
         {
-            $down_link = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png"  alt=""/>';
+            $down_link = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png"  alt=""/>';
         }
         return $down_link;
     }
@@ -311,7 +311,7 @@ abstract class ContentObjectPublicationListRenderer
             $visibility_img = 'action_period.png';
             $visibility_url = 'javascript:void(0)';
         }
-        $visibility_link = '<a href="' . $visibility_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        $visibility_link = '<a href="' . $visibility_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              $visibility_img . '"  alt=""/></a>';
         return $visibility_link;
     }
@@ -330,14 +330,14 @@ abstract class ContentObjectPublicationListRenderer
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
             array(),
             true);
-        $edit_link = '<a href="' . $edit_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        $edit_link = '<a href="' . $edit_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_edit.png"  alt=""/></a>';
         return $edit_link;
     }
 
     public function render_top_action($publication)
     {
-        return '<a href="#top"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        return '<a href="#top"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_ajax_add.png"  alt=""/></a>';
     }
 
@@ -357,7 +357,7 @@ abstract class ContentObjectPublicationListRenderer
             true);
         $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(htmlentities(Translation :: get('ConfirmYourChoice'))) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() . 'action_delete.png"  alt=""/></a>';
+             Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png"  alt=""/></a>';
         return $delete_link;
     }
 
@@ -374,7 +374,7 @@ abstract class ContentObjectPublicationListRenderer
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => 'view'),
             array(),
             true);
-        $feedback_link = '<a href="' . $feedback_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+        $feedback_link = '<a href="' . $feedback_url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_browser.png" alt=""/></a>';
         return $feedback_link;
     }
@@ -414,12 +414,12 @@ abstract class ContentObjectPublicationListRenderer
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
                     array(),
                     true);
-                $link = '<a href="' . $url . '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+                $link = '<a href="' . $url . '"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                      'action_move.png"  alt=""/></a>';
             }
             else
             {
-                $link = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_move_na.png"  alt=""/>';
+                $link = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_move_na.png"  alt=""/>';
             }
             return $link;
         }
@@ -744,7 +744,7 @@ abstract class ContentObjectPublicationListRenderer
             // $toolbar->add_item(
             // new ToolbarItem(
             // Translation :: get('SendByEMail'),
-            // Theme :: getInstance()->getCommonImagePath() . 'action_email.png', $email_url,
+            // Theme :: getInstance()->getCommonImagesPath() . 'action_email.png', $email_url,
             // ToolbarItem :: DISPLAY_ICON, true
             // )
             // );
@@ -758,7 +758,7 @@ abstract class ContentObjectPublicationListRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_details.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_details.png',
                 $details_url,
                 ToolbarItem :: DISPLAY_ICON));
 
@@ -767,7 +767,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DisplayComplex'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                     $this->get_complex_display_url($publication_id),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -785,7 +785,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_CONTENT_OBJECT,
@@ -806,7 +806,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath() . 'action_edit_publication.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'action_edit_publication'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
@@ -823,7 +823,7 @@ abstract class ContentObjectPublicationListRenderer
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_build.png',
+                        Theme :: getInstance()->getCommonImagePath('action_build'),
                         $this->get_complex_builder_url($publication_id),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -853,7 +853,7 @@ abstract class ContentObjectPublicationListRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_up.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_up.png',
                             $this->get_url(
                                 array(
                                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
@@ -867,7 +867,7 @@ abstract class ContentObjectPublicationListRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png',
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -877,7 +877,7 @@ abstract class ContentObjectPublicationListRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_down.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_down.png',
                             $this->get_url(
                                 array(
                                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
@@ -891,7 +891,7 @@ abstract class ContentObjectPublicationListRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png',
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -920,7 +920,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . $visibility_image,
+                    Theme :: getInstance()->getCommonImagesPath() . $visibility_image,
                     $visibility_url,
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -929,7 +929,7 @@ abstract class ContentObjectPublicationListRenderer
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_move.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_move.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY,
@@ -943,7 +943,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS,
@@ -956,7 +956,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ShareContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath() . 'action_manage_share_rights.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'action_manage_share_rights'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_SHARE_CONTENT_OBJECTS,
@@ -969,7 +969,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,

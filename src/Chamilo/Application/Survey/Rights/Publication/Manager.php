@@ -33,7 +33,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_INVITEE,
                 Translation :: get('Invitee'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_INVITEE . '.png',
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_INVITEE . '.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_INVITEE)),
                 ($current_tab == self :: ACTION_INVITEE ? true : false)));
 
@@ -41,7 +41,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_ADMINISTRATOR,
                 Translation :: get('Administrator'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_ADMINISTRATOR . '.png',
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_ADMINISTRATOR . '.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADMINISTRATOR)),
                 ($current_tab == self :: ACTION_ADMINISTRATOR ? true : false)));
 
@@ -49,7 +49,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_MAILER,
                 Translation :: get('Mailer'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MAILER . '.png',
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MAILER . '.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_MAILER)),
                 ($current_tab == self :: ACTION_MAILER ? true : false)));
 

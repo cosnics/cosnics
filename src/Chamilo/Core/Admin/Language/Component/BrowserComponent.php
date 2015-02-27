@@ -30,7 +30,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         foreach ($types as $type)
         {
             $html[] = '<a href="' . $this->get_url(array(self :: PARAM_ACTION => $type)) . '">';
-            $html[] = '<div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagePath() .
+            $html[] = '<div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagesPath() .
                  'component/' . $type . '.png);">';
             $html[] = Translation :: get(
                 (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'Component');

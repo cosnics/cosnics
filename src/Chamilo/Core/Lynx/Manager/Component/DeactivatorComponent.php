@@ -47,7 +47,7 @@ class DeactivatorComponent extends Manager implements DelegateComponent
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('BackToPackageOVerview'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_back.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_back.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
 
         $html[] = $toolbar->as_html();

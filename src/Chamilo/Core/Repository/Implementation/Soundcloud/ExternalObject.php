@@ -47,7 +47,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         $icon = new ToolbarItem(
             $this->get_license(), 
-            Theme :: getInstance()->getImagePath() . 'licenses/' . $this->get_license() . '.png', 
+            Theme :: getInstance()->getImagesPath() . 'licenses/' . $this->get_license() . '.png', 
             null, 
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();

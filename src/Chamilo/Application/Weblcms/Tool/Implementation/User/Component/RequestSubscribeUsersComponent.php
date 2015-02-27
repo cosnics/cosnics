@@ -112,7 +112,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $html = array();
 
         $html[] = '<div class="attachments" style="margin-top: 1em; background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'place_selected.png' . ')">';
+             Theme :: getInstance()->getCommonImagesPath() . 'place_selected.png' . ')">';
 
         if (count($users) > 1)
         {
@@ -127,8 +127,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         foreach ($users as $user)
         {
             $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($user->class_name())) . 'Logo/' .
-                 Theme :: ICON_MINI . '.png" alt="' . htmlentities(Translation :: get('TypeName')) . '"/> ' .
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($user->class_name()),
+                'Logo/' . Theme :: ICON_MINI) . '" alt="' . htmlentities(Translation :: get('TypeName')) . '"/> ' .
                  $user->get_fullname() . '(' . $user->get_official_code() . ')' . '</li>';
         }
         $html[] = '</ul>';

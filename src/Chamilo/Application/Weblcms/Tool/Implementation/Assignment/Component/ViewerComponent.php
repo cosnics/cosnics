@@ -34,7 +34,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
         $actions[] = new ToolbarItem(
             Translation :: get('SubmissionSubmit'),
-            Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+            Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION,

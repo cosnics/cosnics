@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestAccount'),
-                    Theme :: getInstance()->getImagePath() . 'action/request.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/request'),
                     $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_CREATE))));
 
             if ($this->get_user()->is_platform_admin())
@@ -104,17 +104,17 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageAccounts'),
-                        Theme :: getInstance()->getImagePath() . 'action/manage_accounts.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/manage_accounts'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_ACCOUNT))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageServices'),
-                        Theme :: getInstance()->getImagePath() . 'action/manage_services.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/manage_services'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_SERVICE))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ConfigureManagementRights'),
-                        Theme :: getInstance()->getImagePath() . 'action/rights.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/rights'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_RIGHTS))));
             }
         }

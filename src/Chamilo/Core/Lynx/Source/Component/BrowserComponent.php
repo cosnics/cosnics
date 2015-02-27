@@ -51,12 +51,12 @@ class BrowserComponent extends Manager implements TableSupport
 
         // $action_bar->add_common_action(
         // new ToolbarItem(Translation :: get('InstallLocal'),
-        // Theme :: getInstance()->getImagePath() . 'action_install_local.png',
+        // Theme :: getInstance()->getImagesPath() . 'action_install_local.png',
         // $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_LOCAL_PACKAGE)),
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // $action_bar->add_common_action(
         // new ToolbarItem(Translation :: get('InstallRemote'),
-        // Theme :: getInstance()->getImagePath() . 'action_install_remote.png',
+        // Theme :: getInstance()->getImagesPath() . 'action_install_remote.png',
         // $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_REMOTE_PACKAGE)),
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -91,7 +91,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     ClassnameUtilities :: getInstance()->getNamespaceParent($context)));
             
             $blocks[$context]['name'] = Translation :: get('TypeName', null, $parent);
-            $blocks[$context]['image'] = Theme :: getInstance()->getImagePath($parent) . 'Logo/16.png';
+            $blocks[$context]['image'] = Theme :: getInstance()->getImagesPath($parent) . 'Logo/16.png';
             $blocks[$context]['components'][] = array(
                 BlockRendition :: BLOCK_PROPERTY_ID => $block, 
                 BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get(

@@ -19,7 +19,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         {
             $toolbar_item = new ToolbarItem(
                 Translation :: get('Download'), 
-                Theme :: getInstance()->getImagePath() . 'action_download.png', 
+                Theme :: getInstance()->getImagesPath() . 'action_download.png', 
                 $object->get_download_link(), 
                 ToolbarItem :: DISPLAY_ICON);
             
@@ -65,7 +65,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $row[] = $tag->get_branch();
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('Download'), 
-                    Theme :: getInstance()->getImagePath() . 'action_download.png', 
+                    Theme :: getInstance()->getImagesPath() . 'action_download.png', 
                     $tag->get_download_link(), 
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
@@ -98,7 +98,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $row[] = $changeset->get_branch();
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('Download'), 
-                    Theme :: getInstance()->getImagePath() . 'action_download.png', 
+                    Theme :: getInstance()->getImagesPath() . 'action_download.png', 
                     $changeset->get_download_link(), 
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();

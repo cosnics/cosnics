@@ -329,7 +329,10 @@ foreach ($files as $file)
     // if ($file_properties->get_extension() == 'info' && $file_properties->get_name() == 'package' &&
     // strpos($file_properties->get_path(), '.hg') === false)
     // {
-    $packages[] = str_replace(Path :: getInstance()->getBasePath(), '', str_replace('\php\package\package.info', '', $file));
+    $packages[] = str_replace(
+        Path :: getInstance()->getBasePath(),
+        '',
+        str_replace('\php\package\package.info', '', $file));
     // }
 }
 
@@ -342,7 +345,7 @@ foreach ($packages as $key => $package)
     $row = array();
     $row[] = $key + 1 . '.';
     $row[] = $package;
-    $row[] = '<img src="' . Theme :: getInstance()->getImagePath($package) . 'Logo/16.png" />';
+    $row[] = '<img src="' . Theme :: getInstance()->getImagePath($package, 'Logo/16') . '" />';
 
     $rows[] = $row;
 }

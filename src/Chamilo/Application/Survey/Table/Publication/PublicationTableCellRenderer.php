@@ -85,7 +85,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation :: get('TakeSurvey'), 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_next.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_next.png', 
                                 $this->get_component()->get_survey_publication_taker_url($object), 
                                 ToolbarItem :: DISPLAY_ICON));
                     }
@@ -94,7 +94,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation :: get('TakeSurvey'), 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png', 
                                 null, 
                                 ToolbarItem :: DISPLAY_ICON));
                     }
@@ -108,7 +108,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('ExportToExcel', array(), reporting), 
-                            Theme :: getInstance()->getCommonImagePath() . 'export_excel.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png', 
                             $this->get_component()->get_survey_publication_export_excel_url($object), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -120,7 +120,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('ViewReport', array(), reporting), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
                             $this->get_component()->get_reporting_survey_publication_url($object), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -132,7 +132,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                             $this->get_component()->get_update_survey_publication_url($object), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -141,7 +141,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                             $this->get_component()->get_delete_survey_publication_url($object), 
                             ToolbarItem :: DISPLAY_ICON, 
                             true));
@@ -151,7 +151,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('ViewParticipants'), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
                             $this->get_component()->get_browse_survey_participants_url($object), 
                             ToolbarItem :: DISPLAY_ICON));
                 }

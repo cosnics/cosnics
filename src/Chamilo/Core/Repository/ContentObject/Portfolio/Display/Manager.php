@@ -92,12 +92,12 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         if ($this->get_current_node()->is_root())
         {
             $view_title = $this->get_current_content_object()->get_title();
-            $view_image = Theme :: getInstance()->getImagePath() . 'tab/home.png';
+            $view_image = Theme :: getInstance()->getImagesPath() . 'tab/home.png';
         }
         else
         {
             $view_title = Translation :: get('ViewerComponent');
-            $view_image = Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
+            $view_image = Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
                  '.png';
         }
 
@@ -121,14 +121,14 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             if ($this->get_current_node()->is_root())
             {
                 $edit_title = Translation :: get('ChangeIntroduction');
-                $edit_image = Theme :: getInstance()->getImagePath() . 'tab/introducer.png';
+                $edit_image = Theme :: getInstance()->getImagesPath() . 'tab/introducer.png';
             }
             else
             {
                 $variable = $this->get_current_content_object() instanceof Portfolio ? 'UpdateFolder' : 'UpdaterComponent';
 
                 $edit_title = Translation :: get($variable);
-                $edit_image = Theme :: getInstance()->getImagePath() . 'tab/' .
+                $edit_image = Theme :: getInstance()->getImagesPath() . 'tab/' .
                      self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM . '.png';
             }
 
@@ -166,7 +166,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_FEEDBACK,
                     $title,
-                    Theme :: getInstance()->getImagePath() . 'tab/feedback.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/feedback.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_FEEDBACK,
@@ -183,7 +183,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_BOOKMARK,
                     Translation :: get('BookmarkerComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_BOOKMARK . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_BOOKMARK . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_BOOKMARK,
@@ -198,7 +198,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             new DynamicVisualTab(
                 self :: ACTION_ACTIVITY,
                 Translation :: get('ActivityComponent'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_ACTIVITY . '.png',
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_ACTIVITY . '.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_ACTIVITY,
@@ -224,7 +224,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                     Translation :: get($variable),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM .
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM .
                          '.png',
                         $this->get_url(
                             array(
@@ -245,7 +245,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_MANAGE,
                         Translation :: get('ManagerComponent'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MANAGE . '.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MANAGE . '.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_MANAGE,
@@ -266,7 +266,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_MOVE,
                     Translation :: get($variable),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_MOVE . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MOVE . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_MOVE,
@@ -293,7 +293,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                         Translation :: get('CreatorComponent'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' .
                              self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM . '.png',
                             $this->get_url(
                                 array(
@@ -311,7 +311,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                         Translation :: get('AddFolder'),
-                        Theme :: getInstance()->getImagePath() . 'tab/folder.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/folder.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -331,7 +331,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_USER,
                     Translation :: get('UserComponent'),
-                    Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_USER . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_USER . '.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_USER,
@@ -349,7 +349,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_RIGHTS,
                         Translation :: get($variable),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_RIGHTS . '.png',
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_RIGHTS . '.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_RIGHTS,
@@ -371,7 +371,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_SORT,
                         Translation :: get('MoveDown'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN .
                          '.png',
                         $this->get_url(
                             array(
@@ -389,7 +389,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_SORT,
                         Translation :: get('MoveDownNotAvailable'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN .
                              '_na.png',
                             null,
                             false,
@@ -404,7 +404,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_SORT,
                         Translation :: get('MoveUp'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
                              '.png',
                             $this->get_url(
                                 array(
@@ -422,7 +422,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_SORT,
                         Translation :: get('MoveUpNotAvailable'),
-                        Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
+                        Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP .
                              '_na.png',
                             null,
                             false,
@@ -452,7 +452,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             if ($virtual_user instanceof \Chamilo\Core\User\Storage\DataClass\User)
             {
                 $revert_url = $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_USER));
-                $image_url = Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'action/' . self :: ACTION_USER .
+                $image_url = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'action/' . self :: ACTION_USER .
                      '.png';
 
                 $html[] = '<div class="portfolio-virtual-user">';

@@ -14,7 +14,7 @@ class AccountRequest extends DataClass
 {
     const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'request';
-    
+
     /**
      * AccountRequest properties
      */
@@ -35,22 +35,22 @@ class AccountRequest extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_FIRST_NAME, 
-                self :: PROPERTY_LAST_NAME, 
-                self :: PROPERTY_EMAIL, 
-                self :: PROPERTY_AFFILIATION, 
-                self :: PROPERTY_MOTIVATION, 
-                self :: PROPERTY_REQUESTER_ID, 
-                self :: PROPERTY_REQUEST_DATE, 
-                self :: PROPERTY_STATUS, 
-                self :: PROPERTY_VALID_FROM, 
+                self :: PROPERTY_FIRST_NAME,
+                self :: PROPERTY_LAST_NAME,
+                self :: PROPERTY_EMAIL,
+                self :: PROPERTY_AFFILIATION,
+                self :: PROPERTY_MOTIVATION,
+                self :: PROPERTY_REQUESTER_ID,
+                self :: PROPERTY_REQUEST_DATE,
+                self :: PROPERTY_STATUS,
+                self :: PROPERTY_VALID_FROM,
                 self :: PROPERTY_VALID_UNTIL));
     }
 
@@ -164,16 +164,16 @@ class AccountRequest extends DataClass
         switch ($this->get_status())
         {
             case self :: STATUS_ACCEPTED :
-                $path = Theme :: getInstance()->getImagePath() . 'status_accepted.png';
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_accepted.png');
                 break;
             case self :: STATUS_PENDING :
-                $path = Theme :: getInstance()->getImagePath() . 'status_pending.png';
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_pending.png');
                 break;
             case self :: STATUS_REJECTED :
-                $path = Theme :: getInstance()->getImagePath() . 'status_rejected.png';
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_rejected.png');
                 break;
         }
-        
+
         return '<img src="' . $path . '" />';
     }
 
@@ -190,11 +190,11 @@ class AccountRequest extends DataClass
     public function get_requester_user()
     {
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
-            User :: class_name(), 
+            User :: class_name(),
             (int) $this->get_requester_id());
         return ($user instanceof User ? $user : '');
     }
-    
+
     // function generate_cas_account()
     // {
     // $cas_account = new CasAccount();

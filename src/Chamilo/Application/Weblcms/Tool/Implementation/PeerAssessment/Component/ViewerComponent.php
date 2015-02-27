@@ -18,7 +18,7 @@ class ViewerComponent extends Manager
         {
             $tool_actions[] = new ToolbarItem(
                 Translation :: get('Test'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_import.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_import.png',
                 '#',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL);
         }
@@ -26,7 +26,7 @@ class ViewerComponent extends Manager
         /*
          * if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT)) { $action_name = Translation ::
          * get('ViewResultsSummary'); } else { $action_name = Translation :: get('ViewResults'); } $tool_actions[] = new
-         * ToolbarItem( $action_name, Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', '#',
+         * ToolbarItem( $action_name, Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', '#',
          * ToolbarItem :: DISPLAY_ICON_AND_LABEL );
          */
 

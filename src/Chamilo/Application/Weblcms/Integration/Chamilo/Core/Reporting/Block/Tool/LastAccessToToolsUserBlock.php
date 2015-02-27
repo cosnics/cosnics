@@ -20,7 +20,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
         
         $reporting_data->add_row(Translation :: get('ViewPublications'));
         
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png" title="' .
              Translation :: get('ViewPublications') . '" />';
         
         $tool_names = $reporting_data->get_categories();

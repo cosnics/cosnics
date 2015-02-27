@@ -147,7 +147,7 @@ class Metadata
     {
         $result = str_replace('/', '_', $this->get_type());
         $result = str_replace('+', '_', $result);
-        $image_path = Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'metadata/' . $result . '.png';
+        $image_path = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'metadata/' . $result . '.png';
         return '<img src="' . $image_path . '" title="' . $this->get_type() . '"/>';
     }
 

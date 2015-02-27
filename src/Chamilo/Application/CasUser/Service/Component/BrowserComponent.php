@@ -87,7 +87,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $this->action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('CreateService'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_create.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_create.png',
                         $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_CREATE))));
             }
         }

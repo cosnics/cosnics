@@ -177,13 +177,13 @@ class GalleryHTMLTable extends HTML_Table
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_last.png"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';

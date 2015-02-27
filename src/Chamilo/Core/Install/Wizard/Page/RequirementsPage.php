@@ -28,7 +28,7 @@ class RequirementsPage extends InstallWizardPage
     {
         $array = array();
         $diagnoser = new Diagnoser();
-        $path = Theme :: getInstance()->getImagePath('Chamilo\Configuration');
+        $path = Theme :: getInstance()->getImagesPath('Chamilo\Configuration');
         $files_folder = Path :: getInstance()->getStoragePath();
         if (! file_exists($files_folder))
         {

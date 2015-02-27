@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicVisualTab(
                     self :: TAB_MY_PUBLICATIONS, 
                     Translation :: get('MyPublications'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey\\') . 'Logo/16.png', 
+                    Theme :: getInstance()->getImagesPath('Chamilo\Application\Survey\\') . 'Logo/16.png', 
                     $this->get_url($params), 
                     $this->get_table_type() == self :: TAB_MY_PUBLICATIONS));
         }
@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_PARTICIPATE, 
                 Translation :: get('Participate'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_next.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_next.png', 
                 $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_PARTICIPATE));
         
@@ -88,7 +88,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_EXPORT, 
                 Translation :: get('ExportResults'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_export.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_export.png', 
                 $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_EXPORT));
         
@@ -97,7 +97,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_REPORT, 
                 Translation :: get('Reporting'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
                 $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_REPORT));
         
@@ -122,7 +122,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_publish.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png', 
                     $this->get_create_survey_publication_url(), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -132,7 +132,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('RightsManager', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
                     $this->get_application_rights_url(), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

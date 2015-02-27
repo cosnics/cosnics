@@ -32,70 +32,70 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_EDIT, 
-                        Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_EDIT,
+                        Manager :: PARAM_REQUEST_ID => $object->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                        Manager :: PARAM_REQUEST_ID => $object->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         if ($object->is_pending() || $object->is_rejected())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getImagePath() . 'action/accept.png', 
+                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/accept'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_ACCEPT, 
-                            Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_ACCEPT,
+                            Manager :: PARAM_REQUEST_ID => $object->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('AcceptNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getImagePath() . 'action/accept_na.png', 
-                    null, 
+                    Translation :: get('AcceptNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/accept_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($object->is_pending())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getImagePath() . 'action/reject.png', 
+                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/reject'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_REJECT, 
-                            Manager :: PARAM_REQUEST_ID => $object->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_REJECT,
+                            Manager :: PARAM_REQUEST_ID => $object->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('RejectNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getImagePath() . 'action/reject_na.png', 
-                    null, 
+                    Translation :: get('RejectNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/reject_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

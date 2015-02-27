@@ -80,7 +80,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_EXPORT_TEMPLATES, 
                 Translation :: get('ExportTemplates'), 
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                 $table->as_html()));
         
         if (Rights :: is_right_granted(Rights :: RIGHT_ADD_EXPORT_TEMPLATE, $this->publication_id))
@@ -90,7 +90,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     self :: TAB_EXPORT_REGISTRATIONS, 
                     Translation :: get('AddExportTemplate'), 
-                    Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                    Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                     $table->as_html()));
         }
         
@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     self :: TAB_EXPORT_TACKERS, 
                     Translation :: get('ExportTrackers'), 
-                    Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                    Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                     $table->as_html()));
         }
         
@@ -222,7 +222,7 @@ class BrowserComponent extends Manager implements TableSupport
 //                                 new ToolbarItem(
 //                                     Translation :: get('LastSynchronized') . ' ' .
 //                                          $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                         Theme :: getInstance()->getCommonImagePath() . 'action_config.png', 
+//                                         Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
 //                                         null, 
 //                                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 //                         }
@@ -232,7 +232,7 @@ class BrowserComponent extends Manager implements TableSupport
 //                                 new ToolbarItem(
 //                                     Translation :: get('LastSynchronized') . ' ' .
 //                                          $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                         Theme :: getInstance()->getCommonImagePath() . 'action_config.png', 
+//                                         Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
 //                                         $this->get_convert_answers_url($this->publication_id), 
 //                                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 //                         }
@@ -243,7 +243,7 @@ class BrowserComponent extends Manager implements TableSupport
 //                             new ToolbarItem(
 //                                 Translation :: get('LastSynchronized') . ' ' .
 //                                      $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                     Theme :: getInstance()->getCommonImagePath() . 'action_config.png', 
+//                                     Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
 //                                     $this->get_convert_answers_url($this->publication_id), 
 //                                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 //                     }
@@ -254,7 +254,7 @@ class BrowserComponent extends Manager implements TableSupport
 //                         new ToolbarItem(
 //                             Translation :: get('AnswerSynchronizationInQueue') . ' ' .
 //                                  $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                 Theme :: getInstance()->getCommonImagePath() . 'action_config_na.png', 
+//                                 Theme :: getInstance()->getCommonImagesPath() . 'action_config_na.png', 
 //                                 null, 
 //                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 //                     break;
@@ -265,7 +265,7 @@ class BrowserComponent extends Manager implements TableSupport
 //             $action_bar->add_tool_action(
 //                 new ToolbarItem(
 //                     Translation :: get('SynchronizeAnswers'), 
-//                     Theme :: getInstance()->getCommonImagePath() . 'action_config.png', 
+//                     Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
 //                     $this->get_convert_answers_url($this->publication_id), 
 //                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 //         }

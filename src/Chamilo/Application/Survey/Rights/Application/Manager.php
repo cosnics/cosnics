@@ -26,7 +26,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_PUBLISHER,
                 Translation :: get('Publisher'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_PUBLISHER . '.png',
+                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_PUBLISHER . '.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISHER)),
                 ($current_tab == self :: ACTION_PUBLISHER ? true : false)));
 

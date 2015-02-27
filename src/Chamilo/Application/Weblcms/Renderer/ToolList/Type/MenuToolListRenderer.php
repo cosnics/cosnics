@@ -65,9 +65,9 @@ class MenuToolListRenderer extends ToolListRenderer
         if ($this->get_menu_style() == 'right')
         {
             $html[] = '<div id="tool_bar_hide_container" class="hide">';
-            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_action_bar_' . $menu_style . '_hide.png" /></a>';
-            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_action_bar_' . $menu_style . '_show.png" /></a>';
             $html[] = '</div>';
         }
@@ -145,9 +145,9 @@ class MenuToolListRenderer extends ToolListRenderer
         if ($this->get_menu_style() == 'left')
         {
             $html[] = '<div id="tool_bar_hide_container" class="hide">';
-            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_action_bar_' . $menu_style . '_hide.png" /></a>';
-            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_action_bar_' . $menu_style . '_show.png" /></a>';
             $html[] = '</div>';
         }
@@ -184,7 +184,7 @@ class MenuToolListRenderer extends ToolListRenderer
             $new = '_new';
         }
 
-        $tool_image = Theme :: ICON_MINI . $new . '.png';
+        $tool_image = Theme :: ICON_MINI . $new;
 
         $title = htmlspecialchars(
             Translation :: get(
@@ -207,10 +207,9 @@ class MenuToolListRenderer extends ToolListRenderer
 
         if ($this->display_menu_icons())
         {
-            $html[] = '<img src="' .
-                 Theme :: getInstance()->getImagePath(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())) . 'Logo/' .
-                 $tool_image . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
+            $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
+                'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
         }
 
         if ($this->display_menu_text())

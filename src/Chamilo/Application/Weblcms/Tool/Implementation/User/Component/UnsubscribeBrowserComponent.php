@@ -116,7 +116,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_ALL,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath() . 'place_users.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'place_users.png',
                 $link,
                 $this->current_tab == self :: TAB_ALL));
 
@@ -130,7 +130,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_USERS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath() . 'place_user.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'place_user.png',
                 $link,
                 $this->current_tab == self :: TAB_USERS));
 
@@ -144,7 +144,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath() . 'place_group.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'place_group.png',
                 $link,
                 $selected));
 
@@ -267,7 +267,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
                 $tab_name,
-                Theme :: getInstance()->getImagePath('group') . 'Logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\Group\Manager :: context(),
+                    'Logo/' . Theme :: ICON_MINI),
                 $link,
                 $tab_selected));
 
@@ -282,10 +284,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 new DynamicVisualTab(
                     self :: TAB_PLATFORM_GROUPS_USERS,
                     $tab_name,
-                    Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
-                         Theme :: ICON_MINI . '.png',
-                        $link,
-                        $this->current_tab == self :: TAB_PLATFORM_GROUPS_USERS));
+                    Theme :: getInstance()->getImagePath(
+                        \Chamilo\Core\User\Manager :: context(),
+                        'Logo/' . Theme :: ICON_MINI),
+                    $link,
+                    $this->current_tab == self :: TAB_PLATFORM_GROUPS_USERS));
         }
         else
         {
@@ -393,14 +396,18 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SubscribeUsers'),
-                    Theme :: getInstance()->getImagePath() . 'action_subscribe_user.png',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Application\Weblcms\Tool\Implementation\User',
+                        'action_subscribe_user'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SubscribeGroups'),
-                    Theme :: getInstance()->getImagePath() . 'action_subscribe_group.png',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Application\Weblcms\Tool\Implementation\User',
+                        'action_subscribe_group'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_BROWSER)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -410,7 +417,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ExportUserList'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_backup.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_backup.png',
                     $this->get_url($param_export_subscriptions_overview),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -420,7 +427,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $show_all_item = new ToolbarItem(
             Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
             $show_all_url,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false);

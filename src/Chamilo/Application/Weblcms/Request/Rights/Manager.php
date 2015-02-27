@@ -28,21 +28,21 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_CREATE,
                 Translation :: get('Add'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_CREATE . '.png',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self :: ACTION_CREATE),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
                 ($current_tab == self :: ACTION_CREATE ? true : false)));
         $tabs->add_tab(
             new DynamicVisualTab(
                 self :: ACTION_ACCESS,
                 Translation :: get('GeneralAccess'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_ACCESS . '.png',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self :: ACTION_ACCESS),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ACCESS)),
                 ($current_tab == self :: ACTION_ACCESS ? true : false)));
         $tabs->add_tab(
             new DynamicVisualTab(
                 self :: ACTION_BROWSE,
                 Translation :: get('Targets'),
-                Theme :: getInstance()->getImagePath() . 'tab/' . self :: ACTION_BROWSE . '.png',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . self :: ACTION_BROWSE),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
                 ($current_tab == self :: ACTION_BROWSE ? true : false)));
         return $tabs;

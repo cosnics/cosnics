@@ -102,7 +102,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_SUBGROUPS,
                 Translation :: get('Subgroups'),
-                Theme :: getInstance()->getImagePath(self :: context()) . 'Logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagesPath(self :: context()) . 'Logo/' . Theme :: ICON_MINI . '.png',
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_USERS,
                 Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context()),
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
+                Theme :: getInstance()->getImagesPath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
                      Theme :: ICON_MINI . '.png',
                     $table->as_html()));
 
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_DETAILS,
                 Translation :: get('Details'),
-                Theme :: getInstance()->getImagePath('core\help') . 'Logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagesPath('core\help') . 'Logo/' . Theme :: ICON_MINI . '.png',
                 $this->get_group_info()));
 
         $html[] = $tabs->render();
@@ -281,20 +281,20 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
                 $this->get_create_group_url($this->get_group()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Root', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_home.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_home.png',
                 $this->get_group_viewing_url($this->get_root_group()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(array(self :: PARAM_GROUP_ID => $this->get_group())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -313,7 +313,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_group_editing_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -322,7 +322,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_group_delete_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -330,7 +330,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('AddUsers'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_subscribe.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png',
                 $this->get_group_suscribe_user_browser_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -345,7 +345,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Truncate'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_recycle_bin.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin.png',
                     $this->get_group_emptying_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -354,7 +354,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('TruncateNA'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_recycle_bin_na.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin_na.png',
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -362,7 +362,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_metadata.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_metadata.png',
                 $this->get_group_metadata_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

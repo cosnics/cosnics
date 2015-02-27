@@ -29,7 +29,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             case ItemTitle :: PROPERTY_TITLE :
                 return $item->get_titles()->get_current_translation();
             case 'Type' :
-                return '<img src="' . Theme :: getInstance()->getImagePath() . 'types/' .
+                return '<img src="' . Theme :: getInstance()->getImagesPath() . 'types/' .
                      Item :: type_integer($item->get_type()) . '.png" />';
         }
         
@@ -69,14 +69,14 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                 $this->get_component()->get_item_editing_url($menu), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_rights.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
                 $this->get_component()->get_item_rights_url($menu), 
                 ToolbarItem :: DISPLAY_ICON));
         if ($index == 'first' || $index == 'single')
@@ -84,7 +84,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -93,7 +93,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
                     $this->get_component()->get_item_moving_url($menu, 'up'), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -103,7 +103,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -112,7 +112,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
                     $this->get_component()->get_item_moving_url($menu, 'down'), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -120,7 +120,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                 $this->get_component()->get_item_deleting_url($menu), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

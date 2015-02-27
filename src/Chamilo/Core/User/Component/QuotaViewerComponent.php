@@ -80,7 +80,7 @@ class QuotaViewerComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('EditUser'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_url(
                     array(
                         Application :: PARAM_ACTION => self :: ACTION_UPDATE_USER,

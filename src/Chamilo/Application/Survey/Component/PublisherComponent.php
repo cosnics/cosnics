@@ -63,7 +63,7 @@ class PublisherComponent extends Manager
                 $title = '';
                 while ($content_object = $content_objects->next_result())
                 {
-                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath('application\survey') .
+                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagesPath('application\survey') .
                          'survey-22.png" alt="' .
                          htmlentities(
                             Translation :: get(ContentObject :: type_to_class($content_object->get_type()) . 'TypeName')) .

@@ -73,7 +73,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 new DynamicVisualTab(
                     self :: TYPE_ALL,
                     Translation :: get('AllPublications'),
-                    Theme :: getInstance()->getCommonImagePath() . 'treemenu/shared_objects.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'treemenu/shared_objects.png',
                     $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_ALL)),
                     $type == self :: TYPE_ALL));
         }
@@ -82,7 +82,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             new DynamicVisualTab(
                 self :: TYPE_FROM_ME,
                 Translation :: get('PublishedForMe'),
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/shared_objects.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/shared_objects.png',
                 $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_FOR_ME)),
                 $type == self :: TYPE_FOR_ME));
 
@@ -90,7 +90,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             new DynamicVisualTab(
                 self :: TYPE_FROM_ME,
                 Translation :: get('MyPublications'),
-                Theme :: getInstance()->getCommonImagePath() . 'treemenu/publication.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/publication.png',
                 $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_FROM_ME)),
                 $type == self :: TYPE_FROM_ME));
 
@@ -114,7 +114,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_publish.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -122,28 +122,28 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'filter/day.png',
+                Theme :: getInstance()->getImagesPath() . 'filter/day.png',
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_TODAY)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'filter/week.png',
+                Theme :: getInstance()->getImagesPath() . 'filter/week.png',
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'filter/month.png',
+                Theme :: getInstance()->getImagesPath() . 'filter/month.png',
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

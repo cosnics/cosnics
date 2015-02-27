@@ -283,7 +283,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         $html[] = $this->render_header($display_add);
         $html[] = $this->generate_navigation_bar_html();
         $html[] = '<div class="announcements level_1" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'content_object/introduction.png)">';
+             Theme :: getInstance()->getCommonImagesPath() . 'content_object/introduction.png)">';
         $html[] = $this->generate_assignment_details_html();
 
         // Display group members
@@ -321,7 +321,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
     {
         $html = array();
         $html[] = '<div class="announcements level_2" style="background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath() . 'content_object/introduction.png;width=100%">';
+             Theme :: getInstance()->getCommonImagesPath() . 'content_object/introduction.png;width=100%">';
 
         if ($this->assignment->get_visibility_submissions() || $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
@@ -340,13 +340,13 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         if ($previous_submitter_url)
         {
             $html[] = '<a href="' . $previous_submitter_url . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_prev.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png"/>';
             $html[] = Translation :: get('PreviousSubmitter');
             $html[] = '</a>';
         }
         else
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_prev_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png"/>';
             $html[] = Translation :: get('PreviousSubmitter');
         }
         $html[] = ' [' . $this->get_position_submitter($this->get_submitter_type(), $this->get_target_id()) . '/' .
@@ -356,13 +356,13 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         {
             $html[] = '<a href="' . $next_submitter_url . '">';
             $html[] = Translation :: get('NextSubmitter');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_next.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next.png"/>';
             $html[] = '</a>';
         }
         else
         {
             $html[] = Translation :: get('NextSubmitter');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_next_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png"/>';
         }
         $html[] = '</div>';
         return implode(PHP_EOL, $html);
@@ -596,7 +596,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('DownloadAllSubmissions'),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_download.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_download.png',
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SUBMISSIONS)),
@@ -606,7 +606,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ScoresOverview'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_statistics.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING,
@@ -623,7 +623,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SubmissionSubmit'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION,

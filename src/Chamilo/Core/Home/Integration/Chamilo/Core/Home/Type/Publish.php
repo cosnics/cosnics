@@ -23,7 +23,7 @@ class Publish extends \Chamilo\Core\Home\BlockRendition
         $sid = $user ? $user->get_security_token() : 0;
         $parameters = array('view_type' => 'my_chamilo_os', 'timestamp' => time(), 'sid' => $sid);
         $url = $this->get_url($parameters);
-        $module_path = Theme :: getInstance()->getImagePath() . 'os_module.png';
+        $module_path = Theme :: getInstance()->getImagesPath() . 'os_module.png';
         
         $protocol = Request :: server('SERVER_PROTOCOL') == 'HTTPS/1.1' ? 'https://' : 'http://';
         $server = Request :: server('HTTP_HOST');

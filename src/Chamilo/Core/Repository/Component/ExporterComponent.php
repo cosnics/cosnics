@@ -199,12 +199,12 @@ class ExporterComponent extends Manager
                 {
                     $this->set_export_types_cache($export_type, $ids);
                     $this->is_exportable[$export_type] = true;
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                          'status_confirm_mini.png"/>';
                 }
                 else
                 {
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() .
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
                          'status_error_mini.png"/>';
                 }
             }

@@ -84,7 +84,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
         $submitters = $this->get_submitters();
         
         $this->get_submitters_data();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_statistics.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png" title="' .
              Translation :: get('Details') . '" />';
         $count = 0;
         

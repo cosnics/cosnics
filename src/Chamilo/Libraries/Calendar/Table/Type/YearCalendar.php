@@ -139,14 +139,14 @@ class YearCalendar extends Calendar
             0,
             0,
             '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath()) .
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
                  'action_prev.png" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(0, 1, date('Y', $this->get_display_time()));
         $navigation->setCellContents(
             0,
             2,
             ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath()) .
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
                  'action_next.png" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }

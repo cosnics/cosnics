@@ -352,7 +352,7 @@ abstract class Manager extends Application
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('PublishIntroductionText'),
-                            Theme :: getInstance()->getCommonImagePath() . 'action_introduce.png',
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_introduce.png',
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISH_INTRODUCTION))));
                 }
             }
@@ -633,7 +633,7 @@ abstract class Manager extends Application
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_UPDATE_CONTENT_OBJECT,
@@ -651,7 +651,7 @@ abstract class Manager extends Application
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_DELETE,
@@ -661,8 +661,7 @@ abstract class Manager extends Application
             }
 
             $html[] = '<div class="announcements level_1" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath(Introduction :: context()) . 'Logo/' . Theme :: ICON_SMALL .
-                 '.png);">';
+                 Theme :: getInstance()->getImagePath(Introduction :: context(), 'Logo/' . Theme :: ICON_SMALL) . ');">';
             $html[] = '<div class="title" style="border-bottom: 1px dotted #D3D3D3; width:100%;">';
             $html[] = $introduction_text->get_content_object()->get_title();
             $html[] = '</div><div class="clear">&nbsp;</div>';
@@ -749,7 +748,7 @@ abstract class Manager extends Application
                     self :: PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate :: class_name()));
             return new ToolbarItem(
                 Translation :: get('AccessDetails'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png',
                 $url);
         }
         else

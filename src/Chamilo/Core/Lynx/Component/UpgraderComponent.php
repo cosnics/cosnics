@@ -38,7 +38,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
                 $this->add_packages($upgrader->get_additional_packages());
             }
 
-            $image = Theme :: getInstance()->getImagePath($package) . 'Logo/48.png';
+            $image = Theme :: getInstance()->getImagesPath($package) . 'Logo/48.png';
             $title = Translation :: get('TypeName', null, $package);
             $result = $package_upgrader->get_result(true);
 
@@ -135,7 +135,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'package_action/finished.png';
+        $image = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'package_action/finished.png';
         $title = Translation :: get('PlatformUpgraded');
         $result = Translation :: get(
             'CoreUpgraded',

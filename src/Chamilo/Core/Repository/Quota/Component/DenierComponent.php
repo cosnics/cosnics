@@ -234,7 +234,7 @@ class DenierComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('UpgradeQuota'),
-                    Theme :: getInstance()->getImagePath() . 'action/upgrade.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/upgrade.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
@@ -243,14 +243,14 @@ class DenierComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestUpgrade'),
-                    Theme :: getInstance()->getImagePath() . 'action/request.png',
+                    Theme :: getInstance()->getImagesPath() . 'action/request.png',
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('BackToOverview'),
-                Theme :: getInstance()->getImagePath() . 'action/browser.png',
+                Theme :: getInstance()->getImagesPath() . 'action/browser.png',
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
 
         return $action_bar;

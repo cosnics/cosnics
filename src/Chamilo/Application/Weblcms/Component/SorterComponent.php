@@ -428,7 +428,7 @@ class SorterComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('CreateCourseUserCategory'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_create.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_create.png',
                 $this->get_course_user_category_add_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -467,7 +467,7 @@ class SorterComponent extends Manager
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MoveCourseType'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_left.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_left.png',
                     $this->get_url(
                         array(
                             self :: PARAM_COMPONENT_ACTION => 'move_course_type_up',
@@ -479,7 +479,7 @@ class SorterComponent extends Manager
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MoveCourseTypeNA'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_left_na.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_left_na.png',
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -489,7 +489,7 @@ class SorterComponent extends Manager
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MoveCourseType'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_right.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_right.png',
                     $this->get_url(
                         array(
                             self :: PARAM_COMPONENT_ACTION => 'move_course_type_down',
@@ -501,7 +501,7 @@ class SorterComponent extends Manager
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MoveCourseTypeNA'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_right_na.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_right_na.png',
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -520,7 +520,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_up.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_up.png',
                         $this->get_course_user_move_url($course_type_user_category, $course, 'up'),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -529,7 +529,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png',
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -539,7 +539,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_down.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_down.png',
                         $this->get_course_user_move_url($course_type_user_category, $course, 'down'),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -548,7 +548,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png',
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -556,7 +556,7 @@ class SorterComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_move.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png',
                 $this->get_course_user_edit_url($course_type_user_category, $course),
                 ToolbarItem :: DISPLAY_ICON));
 
@@ -577,7 +577,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png',
                     $this->get_course_user_category_move_url($course_type_user_category, 'up'),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -586,7 +586,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_up_na.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png',
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -596,7 +596,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png',
                     $this->get_course_user_category_move_url($course_type_user_category, 'down'),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -605,7 +605,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_down_na.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png',
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -613,14 +613,14 @@ class SorterComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_course_user_category_edit_url($course_type_user_category),
                 ToolbarItem :: DISPLAY_ICON));
 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_course_user_category_delete_url($course_type_user_category),
                 ToolbarItem :: DISPLAY_ICON,
                 true));

@@ -73,7 +73,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
         }
 
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath(Assessment :: context()) . 'Logo/22.png);">';
+             Theme :: getInstance()->getImagePath(Assessment :: context(), 'Logo/22') . ');">';
         $html[] = '<div class="title">';
         $html[] = $assessment->get_title();
         $html[] = '</div>';
@@ -103,7 +103,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                     $this->get_url(),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -111,7 +111,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('DownloadDocuments'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_download.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SAVE_DOCUMENTS,
@@ -121,7 +121,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('DeleteAllResults'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DELETE_RESULTS,
@@ -132,7 +132,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RawExportResults'),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_export.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_export.png',
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_RAW_EXPORT_RESULTS,

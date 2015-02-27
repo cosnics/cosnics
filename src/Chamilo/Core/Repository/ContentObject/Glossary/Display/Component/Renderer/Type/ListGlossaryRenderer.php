@@ -100,7 +100,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $component->get_complex_content_object_item_update_url($complex_content_object_item), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -110,7 +110,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $component->get_complex_content_object_item_delete_url($complex_content_object_item), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));

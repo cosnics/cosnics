@@ -209,7 +209,7 @@ EOT;
         $element_template[] = '<div class="row">';
         $element_template[] = '<div class="label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() .
+             Theme :: getInstance()->getCommonImagesPath() .
              'action_required.png" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="formw">';
@@ -230,7 +230,7 @@ EOT;
         $this->renderer->setHeaderTemplate($header_template);
 
         HTML_QuickForm :: setRequiredNote(
-            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  '/action_required.png" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
@@ -850,7 +850,7 @@ EOT;
             'static',
             'add_resource_img',
             null,
-            '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'action_attachment.png" alt="' .
+            '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_attachment.png" alt="' .
                  Translation :: get('Attachment') . '"/>');
         $group[] = $this->createElement(
             'submit',
@@ -872,7 +872,7 @@ EOT;
     {
         $this->with_progress_bar = true;
         $this->updateAttributes(
-            "onsubmit=\"javascript: myUpload.start('dynamic_div','" . Theme :: getInstance()->getCommonImagePath() .
+            "onsubmit=\"javascript: myUpload.start('dynamic_div','" . Theme :: getInstance()->getCommonImagesPath() .
                  "action_progress_bar.gif','" . Translation :: get('PleaseStandBy') . "','" . $this->getAttribute('id') .
                  "');\"");
         $this->addElement(

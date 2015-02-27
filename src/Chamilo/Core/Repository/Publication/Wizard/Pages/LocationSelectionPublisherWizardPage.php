@@ -268,9 +268,9 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
         // 'html',
         // '<div style="float:right;position: relative; top: -20px; padding: 0px 5px; background-color: white;width:
         // 16px; height: 16px;"><a href="#" class="closeEl"><img class="visible" src="' .
-        // Theme :: getInstance()->getCommonImagePath() .
+        // Theme :: getInstance()->getCommonImagesPath() .
         // 'action_visible.png" /><img class="invisible" style="display: none;") src="' .
-        // Theme :: getInstance()->getCommonImagePath() . 'action_invisible.png" /></a></div>');
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_invisible.png" /></a></div>');
 
         $renderer_class = $locations->get_context() . '\LocationSelector';
         $renderer = new $renderer_class($this, $locations);

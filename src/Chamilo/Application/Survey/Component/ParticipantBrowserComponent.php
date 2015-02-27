@@ -87,7 +87,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_PARTICIPANTS, 
                 Translation :: get('Participants'), 
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $table = new UserTable($this);
@@ -95,7 +95,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_USERS, 
                 Translation :: get('Users'), 
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $table = new GroupTable($this);
@@ -103,7 +103,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_GROUPS, 
                 Translation :: get('Groups'), 
-                Theme :: getInstance()->getImagePath() . 'Logo/16.png', 
+                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
                 $table->as_html()));
         
         $html[] = $tabs->render();
@@ -125,7 +125,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
                 $this->get_url($parameters), 
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         
@@ -135,14 +135,14 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ManageRights', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
                     $this->get_publication_rights_url($this->survey_publication), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('SubscribeEmails'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'export_excel.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png', 
                     $this->get_subscribe_email_url($this->pid), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -152,7 +152,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MailManager'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_invite_users.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_invite_users.png', 
                     $this->get_mail_survey_participant_url($this->survey_publication), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

@@ -58,7 +58,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->get_component()->get_user_editing_url($user), 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -67,14 +67,14 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolBarItem(
                     Translation :: get('Detail'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_details.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_details.png', 
                     $this->get_component()->get_user_detail_url($user->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
             
             $toolbar->add_item(
                 new ToolBarItem(
                     Translation :: get('Report'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_REPORTING, 
@@ -86,7 +86,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolBarItem(
                     Translation :: get('ViewQuota'), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_browser.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_QUOTA, 
@@ -98,7 +98,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 $toolbar->add_item(
                     new ToolBarItem(
                         Translation :: get('SendEmail'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_email.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_email.png', 
                         $this->get_component()->get_email_user_url($user), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -107,7 +107,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         $toolbar->add_item(
             new ToolBarItem(
                 Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_metadata.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_metadata.png', 
                 $this->get_component()->get_edit_metadata_url($user), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -118,7 +118,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 $toolbar->add_item(
                     new ToolBarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                         $this->get_component()->get_user_delete_url($user), 
                         ToolbarItem :: DISPLAY_ICON, 
                         true));
@@ -128,7 +128,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 $toolbar->add_item(
                     new ToolBarItem(
                         Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -138,7 +138,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 $toolbar->add_item(
                     new ToolBarItem(
                         Translation :: get('LoginAsUser'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_login.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_login.png', 
                         $this->get_component()->get_change_user_url($user), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -148,7 +148,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolBarItem(
                     Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete_na.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

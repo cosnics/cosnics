@@ -76,7 +76,7 @@ class LinkTypeSelectorOption implements TypeSelectorOption
      */
     public function get_image_path()
     {
-        return Theme :: getInstance()->getImagePath($this->get_context()) . '/type_selector/' . $this->get_type() .
+        return Theme :: getInstance()->getImagesPath($this->get_context()) . '/type_selector/' . $this->get_type() .
              '.png';
     }
     

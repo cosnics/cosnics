@@ -62,7 +62,7 @@ foreach ($package_list as $category => $packages)
             {
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
             }
             else
             {
@@ -90,7 +90,7 @@ foreach ($package_list as $category => $packages)
                 }
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
             }
             else
             {
@@ -118,7 +118,7 @@ foreach ($package_list as $category => $packages)
                 }
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
             }
             else
             {

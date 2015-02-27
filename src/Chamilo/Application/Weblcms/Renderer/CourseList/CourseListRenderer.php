@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Course list renderer to render the course list (used in courses home, courses
  * sorter, courses block...)
- * 
+ *
  * @author Sven Vanpoucke
  */
 class CourseListRenderer
@@ -37,14 +37,14 @@ class CourseListRenderer
 
     /**
      * Show the what's new icons or not
-     * 
+     *
      * @var boolean
      */
     private $new_publication_icons;
 
     /**
      * Link target.
-     * 
+     *
      * @var string
      */
     private $target = '';
@@ -121,7 +121,7 @@ class CourseListRenderer
     protected function retrieve_courses()
     {
         return CourseDataManager :: retrieve_all_courses_from_user(
-            $this->get_user(), 
+            $this->get_user(),
             $this->get_retrieve_courses_condition());
     }
 
@@ -146,48 +146,48 @@ class CourseListRenderer
         $html = array();
         $courses = $this->retrieve_courses();
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
-        
+
         $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, __NAMESPACE__));
-        
+
         if ($this->get_new_publication_icons() && $threshold !== 0 &&
              Request :: get(self :: FORCE_OVERSIZED) != self :: DO_FORCE_OVERSIZED && $courses->size() > $threshold)
         {
             $this->hide_new_publication_icons();
             $html[] = $this->get_oversized_warning();
         }
-        
+
         if ($courses->size() > 0)
         {
             $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
-            
+
             $course_settings_controller = CourseSettingsController :: get_instance();
-            
+
             while ($course = $courses->next_result())
             {
                 $id = $course->get_id();
-                
+
                 $course_access = $course_settings_controller->get_course_setting(
-                    $id, 
+                    $id,
                     CourseSettingsConnector :: COURSE_ACCESS);
-                
+
                 $course_visible = $course_settings_controller->get_course_setting(
-                    $id, 
+                    $id,
                     CourseSettingsConnector :: VISIBILITY);
-                
+
                 if (($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED || ! $course_visible) &&
                      ! $course->is_course_admin($this->get_user()))
                 {
                     continue;
                 }
-                
+
                 $html[] = '<li><a href="' . htmlspecialchars($this->get_course_url($course)) . '"' . $target . '>' .
                      htmlspecialchars($course->get_title()) . '</a>';
-                
+
                 if ($this->get_new_publication_icons())
                 {
                     $html[] = $this->display_new_publication_icons($course);
                 }
-                
+
                 $html[] = '</li>';
             }
             $html[] = '</ul>';
@@ -196,7 +196,7 @@ class CourseListRenderer
         {
             $html[] = $this->get_no_courses_message_as_html();
         }
-        
+
         return implode($html, "\n");
     }
 
@@ -210,36 +210,35 @@ class CourseListRenderer
 
     /**
      * Displays the what's new icons
-     * 
+     *
      * @param $course Course
      */
     protected function display_new_publication_icons(Course $course)
     {
         $html = array();
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
-        
+
         $course_settings_controller = CourseSettingsController :: get_instance();
-        
+
         foreach ($this->tools as $tool)
         {
             $active = $course_settings_controller->get_course_setting(
-                $course->get_id(), 
-                CourseSetting :: COURSE_SETTING_TOOL_ACTIVE, 
+                $course->get_id(),
+                CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
                 $tool->get_id());
             $visible = $course_settings_controller->get_course_setting(
-                $course->get_id(), 
-                CourseSetting :: COURSE_SETTING_TOOL_VISIBLE, 
+                $course->get_id(),
+                CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
-            
+
             if ($active && $visible &&
                  DataManager :: tool_has_new_publications($tool->get_name(), $this->get_user(), $course))
             {
                 $html[] = '<a href="' . htmlspecialchars($this->get_tool_url($tool->get_name(), $course)) . '"' . $target .
-                 '><img src="' .
-                 htmlspecialchars(
+                 '><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()))) . 'Logo/' .
-                 Theme :: ICON_MINI . '_new.png" alt="' .
+                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())),
+                    'Logo/' . Theme :: ICON_MINI . '_new') . '" alt="' .
                  htmlspecialchars(Translation :: get('New', null, Utilities :: COMMON_LIBRARIES)) . '"/></a>';
         }
     }
@@ -248,7 +247,7 @@ class CourseListRenderer
 
 /**
  * Gets the url from the given course
- * 
+ *
  * @param $course Course
  */
 public function get_course_url(Course $course)
@@ -262,7 +261,7 @@ public function get_course_url(Course $course)
 
 /**
  * Gets the url from the given tool in the given course
- * 
+ *
  * @param $tool String
  * @param $course Course
  */

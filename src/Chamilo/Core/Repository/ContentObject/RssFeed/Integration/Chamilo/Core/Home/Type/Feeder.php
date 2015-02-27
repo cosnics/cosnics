@@ -47,7 +47,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         {
             $target = $this->get_link_target();
             $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
-            $icon = Theme :: getInstance()->getImagePath('\core\repository\content_object\rss_feed') . 'Logo/' .
+            $icon = Theme :: getInstance()->getImagesPath('\core\repository\content_object\rss_feed') . 'Logo/' .
                  Theme :: ICON_MINI . '.png';
             $html[] = '<div class="tool_menu">';
             $html[] = '<ul>';

@@ -274,7 +274,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('MonthView', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'tool_calendar_month.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'tool_calendar_month'),
                 $this->get_url(
                     array(
                         Renderer :: PARAM_TYPE => \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH,
@@ -283,7 +283,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('WeekView', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'tool_calendar_week.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'tool_calendar_week'),
                 $this->get_url(
                     array(
                         Renderer :: PARAM_TYPE => \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_WEEK,
@@ -292,7 +292,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('DayView', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'tool_calendar_day.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'tool_calendar_day'),
                 $this->get_url(
                     array(
                         Renderer :: PARAM_TYPE => \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_DAY,
@@ -301,7 +301,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('YearView', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'tool_calendar_year.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'tool_calendar_year'),
                 $this->get_url(
                     array(
                         Renderer :: PARAM_TYPE => \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_YEAR,
@@ -310,7 +310,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath() . 'tool_calendar_today.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'tool_calendar_today'),
                 $this->get_url(array(Renderer :: PARAM_TYPE => $this->get_view(), 'time' => time())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -379,13 +379,13 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_publication_editing_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_publication_deleting_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON,
                 true);

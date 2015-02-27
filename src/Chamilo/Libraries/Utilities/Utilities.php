@@ -470,7 +470,7 @@ class Utilities
         {
             $icon = 'action_setting_false.png';
         }
-        return '<img src="' . Theme :: getInstance()->getCommonImagePath() . $icon . '">';
+        return '<img src="' . Theme :: getInstance()->getCommonImagesPath() . $icon . '">';
     }
 
     /**

@@ -32,7 +32,7 @@ class PersonalBlogLayout extends BlogLayout
         else
         {
             $name = Translation :: get('AuthorUnknown');
-            $picture = Theme :: getInstance()->getCommonImagePath() . 'unknown.png';
+            $picture = Theme :: getInstance()->getCommonImagesPath() . 'unknown.png';
         }
         
         $html = array();
@@ -87,7 +87,7 @@ class PersonalBlogLayout extends BlogLayout
                     $complex_blog_item->get_id());
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
                 $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' .
-                     Theme :: getInstance()->getImagePath(
+                     Theme :: getInstance()->getImagesPath(
                         ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) . 'Logo/' .
                      Theme :: ICON_MINI . '.png" alt="' .
                      htmlentities(

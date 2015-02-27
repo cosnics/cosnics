@@ -315,14 +315,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_HIDE_PUBLICATION;
                 $visible_image = 'action_visible.png';
-                $tool_image = Theme :: ICON_MEDIUM . '.png';
+                $tool_image = Theme :: ICON_MEDIUM;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
                 $visible_image = 'action_invisible.png';
-                $tool_image = Theme :: ICON_MEDIUM . '_na.png';
+                $tool_image = Theme :: ICON_MEDIUM . '_na';
                 $link_class = ' class="invisible"';
             }
 
@@ -340,7 +340,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath() . $visible_image .
+                         '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
                          '" style="vertical-align: middle;" alt=""/></a>';
                 }
 
@@ -352,8 +352,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath() .
-                         'action_delete.png" style="vertical-align: middle;" alt=""/></a>';
+                         '"><img src="' . Theme :: getInstance()->getCommonImagePath('action_delete.png') .
+                         '" style="vertical-align: middle;" alt=""/></a>';
                 }
                 $cell_contents[] = '&nbsp;&nbsp;&nbsp;';
                 // Show tool-icon + name
@@ -382,10 +382,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
 
                 $cell_contents[] = '<a href="' . $url . '"' . $target . $link_class . '>';
-                $cell_contents[] = '<img src="' .
-                     Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool())) .
-                     'Logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
+                $cell_contents[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
+                    'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
                      Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
                 $cell_contents[] = '&nbsp;';
                 $cell_contents[] = $title;
@@ -503,14 +502,15 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                         array(
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_ACTION => $lcms_action,
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_TOOL => $tool->get_name())) .
-                     '"><img class="tool_visible" src="' . Theme :: getInstance()->getCommonImagePath() . $visible_image .
+                     '"><img class="tool_visible" src="' . Theme :: getInstance()->getCommonImagesPath() . $visible_image .
                      '" style="vertical-align: middle;" alt="" /></a>';
                 $html[] = '&nbsp;&nbsp;&nbsp;';
             }
 
             // Show tool-icon + name
-            $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath($tool_namespace) .
-                 'Logo/' . $tool_image . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
+            $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath(
+                $tool_namespace,
+                'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
                  Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
             $html[] = '&nbsp;';
             $html[] = '<a id="tool_text" href="' . $parent->get_url(

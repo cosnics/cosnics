@@ -31,7 +31,7 @@ class Basic extends Html
         // $toolbar->add_item(
         // new ToolbarItem(
         // Translation :: get('ShowReportingFilter', null, ReportingManager :: APPLICATION_NAME),
-        // Theme :: getInstance()->getCommonImagePath() . 'reporting_filter.png',
+        // Theme :: getInstance()->getCommonImagesPath() . 'reporting_filter.png',
         // '#',
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL,
         // false,
@@ -60,7 +60,7 @@ class Basic extends Html
                     ClassnameUtilities :: getInstance()->getNamespaceFromObject($block));
                 $html[] = '<h2>';
                 $html[] = '<img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
+                     Theme :: getInstance()->getImagesPath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
                         $block, 
                         true) . '.png' . '"/> ';
                 $html[] = $title;
@@ -116,7 +116,7 @@ class Basic extends Html
                         new DynamicVisualTab(
                             $key, 
                             $title, 
-                            Theme :: getInstance()->getImagePath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
+                            Theme :: getInstance()->getImagesPath($block->context()) . ClassnameUtilities :: getInstance()->getClassnameFromObject(
                                 $block, 
                                 true) . '.png', 
                             $this->get_context()->get_url($block_parameters), 
@@ -171,7 +171,7 @@ class Basic extends Html
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ShowOne'), 
-                        Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'action/show_block.png', 
+                        Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'action/show_block.png', 
                         $this->get_context()->get_url($parameters)));
             }
             elseif ($this->get_template()->count_blocks() > 1)
@@ -181,7 +181,7 @@ class Basic extends Html
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ShowAll'), 
-                        Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'action/show_all.png', 
+                        Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'action/show_all.png', 
                         $this->get_context()->get_url($parameters)));
             }
         }
@@ -194,7 +194,7 @@ class Basic extends Html
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ExportToExcel'), 
-                Theme :: getInstance()->getCommonImagePath() . 'export_excel.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png', 
                 $this->get_context()->get_url($parameters)));
         
         $parameters = $this->get_context()->get_parameters();
@@ -205,7 +205,7 @@ class Basic extends Html
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ExportToOds'), 
-                Theme :: getInstance()->getCommonImagePath() . 'export_ods.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'export_ods.png', 
                 $this->get_context()->get_url($parameters)));
         
         return $action_bar;

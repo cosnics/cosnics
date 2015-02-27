@@ -85,7 +85,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('CreateExport'), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_export.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_export.png', 
                             $this->component->get_export_url($object), 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -94,7 +94,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('CreateExport'), 
-                            Theme :: getInstance()->getCommonImagePath() . 'action_export_na.png', 
+                            Theme :: getInstance()->getCommonImagesPath() . 'action_export_na.png', 
                             null, 
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -104,7 +104,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('CreateExport'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_export_na.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_export_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -118,7 +118,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
                     $this->component->get_export_template_delete_url($object), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));
@@ -126,7 +126,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
                     $this->component->get_export_template_edit_url($object), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -137,7 +137,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png', 
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
                     $this->component->get_export_template_rights_editor_url($object), 
                     ToolbarItem :: DISPLAY_ICON));
         }

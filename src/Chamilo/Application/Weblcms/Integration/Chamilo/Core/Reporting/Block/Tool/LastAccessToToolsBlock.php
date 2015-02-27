@@ -55,7 +55,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ViewPublications'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_reporting.png', 
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png', 
                         $url, 
                         ToolbarItem :: DISPLAY_ICON));
                 
@@ -73,7 +73,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation :: get('ViewScores'), 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
                                 $url_detail, 
                                 ToolbarItem :: DISPLAY_ICON));
                         
@@ -90,7 +90,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation :: get('ViewScores'), 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
                                 $url_detail, 
                                 ToolbarItem :: DISPLAY_ICON));
                         
@@ -107,7 +107,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation :: get('ViewProgressUsers'), 
-                                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
                                 $url_detail, 
                                 ToolbarItem :: DISPLAY_ICON));
                         break;

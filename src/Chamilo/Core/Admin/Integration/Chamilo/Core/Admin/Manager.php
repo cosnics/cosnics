@@ -24,13 +24,13 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Settings'), 
             Translation :: get('SettingsDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/settings.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/settings.png', 
             $settings_url);
         
         $links[] = new DynamicAction(
             Translation :: get('Importer'), 
             Translation :: get('ImporterDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 
@@ -42,7 +42,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('SystemAnnouncements'), 
             Translation :: get('SystemAnnouncementsDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 
@@ -54,7 +54,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('TranslationsImport'), 
             Translation :: get('TranslationsImportDescription'), 
-            Theme :: getInstance()->getImagePath(\Chamilo\Core\Admin\Language\Manager :: context()) . 'Logo/32.png', 
+            Theme :: getInstance()->getImagesPath(\Chamilo\Core\Admin\Language\Manager :: context()) . 'Logo/32.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 
@@ -63,7 +63,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Diagnose'), 
             Translation :: get('DiagnoseDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/information.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/information.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 
@@ -75,7 +75,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('LogsViewer'), 
             Translation :: get('LogsViewerDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/information.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/information.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(), 

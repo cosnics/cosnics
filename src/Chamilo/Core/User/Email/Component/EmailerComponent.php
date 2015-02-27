@@ -67,7 +67,7 @@ class EmailerComponent extends Manager
                 $target_user = $target_user->get_fullname() . ' &lt;' . $target_user->get_email() . '&gt;';
             }
 
-            $html[] = '<li><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            $html[] = '<li><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'treemenu/group.png" alt="user"/> ' . $target_user . '</li>';
         }
 

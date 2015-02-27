@@ -59,7 +59,7 @@ EOT;
         $renderer->setFormTemplate($form_template);
 
         $current_page->setRequiredNote(
-            '<font color="#FF0000"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+            '<font color="#FF0000"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_required.png" alt="*" title ="*"/></font> ' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES));
         // $element_template = "\n\t<tr>\n\t\t<td valign=\"top\"><!-- BEGIN required --><span style=\"color:
@@ -70,7 +70,7 @@ EOT;
         $element_template[] = '<div class="row">';
         $element_template[] = '<div class="label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() .
+             Theme :: getInstance()->getCommonImagesPath() .
              'action_required.png" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="formw">';
@@ -91,7 +91,7 @@ EOT;
 
         $renderer->setHeaderTemplate($header_template);
         HTML_QuickForm :: setRequiredNote(
-            '<span class="form_required"><img src=src="' . Theme :: getInstance()->getCommonImagePath() .
+            '<span class="form_required"><img src=src="' . Theme :: getInstance()->getCommonImagesPath() .
                  'action_required.png" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT

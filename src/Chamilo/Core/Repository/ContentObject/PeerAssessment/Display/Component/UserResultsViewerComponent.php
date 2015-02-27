@@ -123,7 +123,7 @@ class UserResultsViewerComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'export_ods.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'export_ods.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_USER_RESULT,

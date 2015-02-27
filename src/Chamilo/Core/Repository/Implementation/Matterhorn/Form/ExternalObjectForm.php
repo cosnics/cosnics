@@ -157,7 +157,7 @@ class ExternalObjectForm extends FormValidator
         $series_group[] = $this->createElement(
             'image', 
             'add_series', 
-            Theme :: getInstance()->getCommonImagePath() . 'action_add.png', 
+            Theme :: getInstance()->getCommonImagesPath() . 'action_add.png', 
             array('id' => 'add_series', 'style' => 'display:none'));
         $this->addGroup($series_group, null, Translation :: get('Series'));
         

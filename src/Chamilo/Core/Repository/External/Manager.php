@@ -204,14 +204,14 @@ abstract class Manager extends Application implements NoContextComponent
             $link = $this->get_url($parameters);
 
             $icon = 'place_tab_' . $external_repository_action . '.png';
-            $icon_path = Theme :: getInstance()->getImagePath($this->get_external_repository()->get_type()) . $icon;
-            $icon_system_path = Theme :: getInstance()->getImagePath(
+            $icon_path = Theme :: getInstance()->getImagesPath($this->get_external_repository()->get_type()) . $icon;
+            $icon_system_path = Theme :: getInstance()->getImagesPath(
                 $this->get_external_repository()->get_type(),
                 false) . $icon;
 
             if (! file_exists($icon_system_path))
             {
-                $icon_path = Theme :: getInstance()->getCommonImagePath() . $icon;
+                $icon_path = Theme :: getInstance()->getCommonImagesPath() . $icon;
             }
             $this->tabs->add_tab(
                 new DynamicVisualTab($external_repository_action, $label, $icon_path, $link, $selected));
@@ -394,7 +394,7 @@ abstract class Manager extends Application implements NoContextComponent
         {
             $toolbar_items[self :: ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_EDIT_EXTERNAL_REPOSITORY,
@@ -406,7 +406,7 @@ abstract class Manager extends Application implements NoContextComponent
         {
             $toolbar_items[self :: ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_DELETE_EXTERNAL_REPOSITORY,
@@ -419,7 +419,7 @@ abstract class Manager extends Application implements NoContextComponent
             {
                 $toolbar_items[] = new ToolbarItem(
                     Translation :: get('Select', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath() . 'action_publish.png',
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_SELECT_EXTERNAL_REPOSITORY,
@@ -432,7 +432,7 @@ abstract class Manager extends Application implements NoContextComponent
                 {
                     $toolbar_items[self :: ACTION_IMPORT_EXTERNAL_REPOSITORY] = new ToolbarItem(
                         Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath() . 'action_import.png',
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_import.png',
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
@@ -446,7 +446,7 @@ abstract class Manager extends Application implements NoContextComponent
                         case \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: SYNC_STATUS_INTERNAL :
                             $toolbar_items[self :: ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY] = new ToolbarItem(
                                 Translation :: get('UpdateRepositoryObject'),
-                                Theme :: getInstance()->getCommonImagePath() . 'action_synchronize.png',
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_synchronize.png',
                                 $this->get_url(
                                     array(
                                         self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY,
@@ -460,7 +460,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_title())),
-                                    Theme :: getInstance()->getImagePath($object :: context()) . 'Logo/16.png',
+                                    Theme :: getInstance()->getImagesPath($object :: context()) . 'Logo/16.png',
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
@@ -471,7 +471,7 @@ abstract class Manager extends Application implements NoContextComponent
                         case \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: SYNC_STATUS_CONFLICT :
                             $toolbar_items[self :: ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY] = new ToolbarItem(
                                 Translation :: get('UpdateRepositoryObject'),
-                                Theme :: getInstance()->getCommonImagePath() . 'action_synchronize.png',
+                                Theme :: getInstance()->getCommonImagesPath() . 'action_synchronize.png',
                                 $this->get_url(
                                     array(
                                         self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY,
@@ -483,7 +483,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_name())),
-                                    Theme :: getInstance()->getImagePath($object :: context()) . 'Logo/16.png',
+                                    Theme :: getInstance()->getImagesPath($object :: context()) . 'Logo/16.png',
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,

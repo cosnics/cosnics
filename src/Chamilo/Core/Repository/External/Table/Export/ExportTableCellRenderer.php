@@ -40,7 +40,7 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_export.png', 
+                Theme :: getInstance()->getCommonImagesPath() . 'action_export.png', 
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_EXTERNAL_REPOSITORY_MANAGER_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY, 

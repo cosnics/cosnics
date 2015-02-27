@@ -17,11 +17,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Cell renderer for a direct subscribed course group browser table.
- * 
+ *
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
-class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableCellRenderer implements 
+class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -30,10 +30,10 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Renders a single cell
-     * 
+     *
      * @param RecordTableColumn $column
      * @param string[] $group_with_subscription_status
      *
@@ -58,13 +58,13 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                         return Translation :: get('Unknown');
                 }
         }
-        
+
         return parent :: render_cell($column, $group_with_subscription_status);
     }
 
     /**
      * Gets the action links to display
-     * 
+     *
      * @param string[] $group_with_subscription_status
      *
      * @return string
@@ -72,66 +72,64 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
     public function get_actions($group_with_subscription_status)
     {
         $group_id = $group_with_subscription_status[Group :: PROPERTY_ID];
-        
+
         $toolbar = new Toolbar();
-        
+
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             if ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
                 WeblcmsRights :: EDIT_RIGHT) && CourseManagementRights :: get_instance()->is_allowed_for_platform_group(
-                CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT, 
-                $group_id, 
+                CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT,
+                $group_id,
                 $this->get_component()->get_course_id())))
             {
                 // unsubscribe group
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBE_GROUPS;
                 $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
                 $parameters[Manager :: PARAM_OBJECTS] = $group_id;
-                
+
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('UnsubscribeGroup'), 
-                        Theme :: getInstance()->getCommonImagePath() . 'action_unsubscribe.png', 
-                        $this->get_component()->get_url($parameters), 
+                        Translation :: get('UnsubscribeGroup'),
+                        Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png',
+                        $this->get_component()->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
-            
+
             $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager :: context();
-            
+
             // change status
             switch ($group_with_subscription_status[CourseGroupRelation :: PROPERTY_STATUS])
             {
                 case CourseGroupRelation :: STATUS_TEACHER :
                     $status_change_url = $this->get_component()->get_platformgroup_status_changer_url(
-                        $group_id, 
+                        $group_id,
                         CourseGroupRelation :: STATUS_STUDENT);
-                    
+
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MakeStudent'), 
-                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace) .
-                                 'action_subscribe_student.png', 
-                                $status_change_url, 
-                                ToolbarItem :: DISPLAY_ICON));
-                    
+                            Translation :: get('MakeStudent'),
+                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_student'),
+                            $status_change_url,
+                            ToolbarItem :: DISPLAY_ICON));
+
                     break;
                 case CourseGroupRelation :: STATUS_STUDENT :
                     $status_change_url = $this->get_component()->get_platformgroup_status_changer_url(
-                        $group_id, 
+                        $group_id,
                         CourseGroupRelation :: STATUS_TEACHER);
-                    
+
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MakeTeacher'), 
-                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace) .
-                                 'action_subscribe_teacher.png', 
-                                $status_change_url, 
-                                ToolbarItem :: DISPLAY_ICON));
-                    
+                            Translation :: get('MakeTeacher'),
+                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_teacher'),
+                            $status_change_url,
+                            ToolbarItem :: DISPLAY_ICON));
+
                     break;
             }
         }
-        
+
         return $toolbar->as_html();
     }
 }

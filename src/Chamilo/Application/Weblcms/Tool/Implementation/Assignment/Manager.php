@@ -77,7 +77,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('BrowseSubmitters'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMITTERS,
@@ -86,7 +86,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('SubmissionSubmit'),
-                Theme :: getInstance()->getCommonImagePath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION,

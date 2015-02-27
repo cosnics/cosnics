@@ -88,7 +88,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new DynamicContentTab(
                     self :: STATUS_INSTALLED,
                     Translation :: get('InstalledPackages'),
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'Status/' . self :: STATUS_INSTALLED .
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Status/' . self :: STATUS_INSTALLED .
                          '.png',
                         $this->get_registered_packages_table()));
         }
@@ -102,7 +102,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new DynamicContentTab(
                     self :: STATUS_AVAILABLE,
                     Translation :: get('AvailablePackages'),
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'Status/' . self :: STATUS_AVAILABLE .
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Status/' . self :: STATUS_AVAILABLE .
                          '.png',
                         $this->get_available_packages_table()));
         }
@@ -134,7 +134,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewPackageDetails'),
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/view.png',
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/view.png',
                     $this->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_VIEW,
@@ -150,7 +150,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/deactivate.png',
+                            Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/deactivate.png',
                             $this->get_url(
                                 array(
                                     Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
@@ -161,7 +161,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UpgradeNotAllowed', array(), Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/upgrade_na.png',
+                        Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/upgrade_na.png',
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -174,7 +174,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/activate.png',
+                            Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/activate.png',
                             $this->get_url(
                                 array(
                                     Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,
@@ -189,7 +189,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Upgrade', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/upgrade.png',
+                            Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/upgrade.png',
                             $this->get_url(
                                 array(
                                     Manager :: PARAM_ACTION => Manager :: ACTION_UPGRADE,
@@ -201,7 +201,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('UpgradeNotAllowed', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/upgrade_na.png',
+                            Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/upgrade_na.png',
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -212,7 +212,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Remove', array(), Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/remove.png',
+                        Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/remove.png',
                         $this->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_REMOVE,
@@ -247,7 +247,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewPackageDetails'),
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/view.png',
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/view.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_VIEW,
@@ -256,7 +256,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Install'),
-                    Theme :: getInstance()->getImagePath(Manager :: context()) . 'Action/install.png',
+                    Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Action/install.png',
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_INSTALL,
@@ -285,7 +285,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ManageSources'),
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\Lynx\Source\Manager :: context()) . 'Logo/16.png',
+                Theme :: getInstance()->getImagesPath(\Chamilo\Core\Lynx\Source\Manager :: context()) . 'Logo/16.png',
                 $this->get_url(
                     array(
                         \Chamilo\Core\Lynx\Manager :: PARAM_ACTION => \Chamilo\Core\Lynx\Manager :: ACTION_SOURCE,
@@ -295,7 +295,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('BrowseRemote'),
-                Theme :: getInstance()->getImagePath(\Chamilo\Core\Lynx\Remote\Manager :: context()) . 'Logo/16.png',
+                Theme :: getInstance()->getImagesPath(\Chamilo\Core\Lynx\Remote\Manager :: context()) . 'Logo/16.png',
                 $this->get_url(
                     array(
                         \Chamilo\Core\Lynx\Manager :: PARAM_ACTION => \Chamilo\Core\Lynx\Manager :: ACTION_REMOTE,

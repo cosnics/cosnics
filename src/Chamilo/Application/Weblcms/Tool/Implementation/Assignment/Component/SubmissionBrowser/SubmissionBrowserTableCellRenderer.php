@@ -146,7 +146,7 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
         
         return new ToolbarItem(
             Translation :: get('SubmissionSubmit'), 
-            Theme :: getInstance()->getCommonImagePath() . 'action_add.png', 
+            Theme :: getInstance()->getCommonImagesPath() . 'action_add.png', 
             $this->get_component()->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBMIT_SUBMISSION, 
@@ -169,7 +169,7 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
         
         return new ToolbarItem(
             Translation :: get('ViewSubmissions'), 
-            Theme :: getInstance()->getCommonImagePath() . 'action_browser.png', 
+            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
             $this->get_component()->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE_SUBMISSIONS, 
@@ -191,7 +191,7 @@ abstract class SubmissionBrowserTableCellRenderer extends RecordTableCellRendere
         
         return new ToolbarItem(
             Translation :: get('DownloadAllSubmissions'), 
-            Theme :: getInstance()->getCommonImagePath() . 'action_download.png', 
+            Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
             $this->get_component()->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS, 

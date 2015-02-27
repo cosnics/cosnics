@@ -184,7 +184,7 @@ class ActionBarRenderer
         $html[] = '<div class="clear"></div>';
         $html[] = '<div id="' . $this->get_name() . '_action_bar_hide_container" class="action_bar_hide_container">';
         $html[] = '<a id="' . $this->get_name() . '_action_bar_hide" class="action_bar_hide" href="#"><img src="' .
-             Theme :: getInstance()->getCommonImagePath() . 'action_ajax_hide.png" /></a>';
+             Theme :: getInstance()->getCommonImagesPath() . 'action_ajax_hide.png" /></a>';
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -258,10 +258,10 @@ class ActionBarRenderer
         $html[] = '<div id="' . $this->get_name() .
              '_action_bar_left_hide_container" class="action_bar_left_hide_container hide">';
         $html[] = '<a id="' . $this->get_name() .
-             '_action_bar_left_hide" class="action_bar_left_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+             '_action_bar_left_hide" class="action_bar_left_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_action_bar_hide.png" /></a>';
         $html[] = '<a id="' . $this->get_name() .
-             '_action_bar_left_show" class="action_bar_left_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath() .
+             '_action_bar_left_show" class="action_bar_left_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
              'action_action_bar_show.png" /></a>';
         $html[] = '</div>';
         $html[] = '</div>';

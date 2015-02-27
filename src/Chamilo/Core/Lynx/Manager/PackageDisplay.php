@@ -158,7 +158,7 @@ class PackageDisplay
                 'UpdateDependencies', 
                 array('VERSION' => $package_remote->get_version())) . '</h3>';
             $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
-                 Theme :: getInstance()->getImagePath() . 'place/' . $type . '.png);">';
+                 Theme :: getInstance()->getImagesPath() . 'place/' . $type . '.png);">';
             $html[] = '<div class="title">' . Translation :: get(DependenciesResultVerification) . '</div>';
             $html[] = '<div class="description">';
             $html[] = $package_update_dependency->get_logger()->render();
@@ -185,7 +185,7 @@ class PackageDisplay
             'InstallationDependencies', 
             array('VERSION' => $this->get_package_info()->get_version())) . '</h3>';
         $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
-             Theme :: getInstance()->getImagePath() . 'place/' . $type . '.png);">';
+             Theme :: getInstance()->getImagesPath() . 'place/' . $type . '.png);">';
         $html[] = '<div class="title">' . Translation :: get(DependenciesResultVerification) . '</div>';
         $html[] = '<div class="description">';
         $html[] = $package_dependency->get_logger()->render();

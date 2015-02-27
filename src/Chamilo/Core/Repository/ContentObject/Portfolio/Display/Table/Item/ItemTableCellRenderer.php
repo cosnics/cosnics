@@ -66,7 +66,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewerComponent'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
+                    Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
                          '.png', 
                         $this->get_component()->get_url(
                             array(
@@ -79,7 +79,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewNotAllowed'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
+                    Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT .
                          '_na.png', 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
@@ -92,7 +92,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get($variable), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_MOVE . '.png', 
+                    Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_MOVE . '.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE, 
@@ -107,7 +107,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get($variable), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_RIGHTS . '.png', 
+                    Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' . Manager :: ACTION_RIGHTS . '.png', 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS, 
@@ -122,7 +122,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get($variable), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' .
+                    Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') . 'action/' .
                          Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM . '.png', 
                         $this->get_component()->get_url(
                             array(

@@ -137,7 +137,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         if ($last_activity)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') .
+                 Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display\\') .
                  'tab/activity.png)">';
             $html[] = '<div class="description">';
 

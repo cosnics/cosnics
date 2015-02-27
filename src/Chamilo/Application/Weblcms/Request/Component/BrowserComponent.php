@@ -46,7 +46,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     new DynamicContentTab(
                         'personal_request',
                         Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagePath() . 'tab/personal_request.png',
+                        Theme :: getInstance()->getImagePath(
+                            'Chamilo\Application\Weblcms\Request',
+                            'Tab/personal_request'),
                         $table->as_html()));
             }
 
@@ -86,9 +88,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                         new DynamicContentTab(
                             RequestTable :: TYPE_PENDING,
                             Translation :: get('PendingRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_PENDING .
-                                 '.png',
-                                $table->as_html()));
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request',
+                                'Decision/22/' . Request :: DECISION_PENDING),
+                            $table->as_html()));
                 }
 
                 $conditions = array();
@@ -109,9 +112,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                         new DynamicContentTab(
                             RequestTable :: TYPE_GRANTED,
                             Translation :: get('GrantedRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_GRANTED .
-                                 '.png',
-                                $table->as_html()));
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request',
+                                'Decision/22/' . Request :: DECISION_GRANTED),
+                            $table->as_html()));
                 }
 
                 $conditions = array();
@@ -132,7 +136,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                         new DynamicContentTab(
                             RequestTable :: TYPE_DENIED,
                             Translation :: get('DeniedRequests'),
-                            Theme :: getInstance()->getImagePath() . 'decision/22/' . Request :: DECISION_DENIED . '.png',
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request',
+                                'Decision/22/' . Request :: DECISION_DENIED),
                             $table->as_html()));
                 }
             }
@@ -224,7 +230,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestCourse'),
-                    Theme :: getInstance()->getImagePath() . 'action/request.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/request'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
@@ -233,7 +239,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagePath() . 'action/rights.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/rights'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
         }
 

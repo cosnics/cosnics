@@ -20,7 +20,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('ManageExternalInstances'), 
             Translation :: get('ManageExternalInstancesDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/external_instance.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/external_instance.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Instance\Manager :: context(), 
@@ -38,7 +38,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 'ContentObjectRelMetadataElementDescription', 
                 null, 
                 'core\repository\integration\core\metadata\linker\type'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(), 
@@ -56,7 +56,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 'ContentObjectPropertyRelMetadataElementDescription', 
                 null, 
                 'core\repository\integration\core\metadata\linker\property'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(), 
@@ -84,7 +84,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportTemplate'), 
             Translation :: get('ImportTemplateDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(), 

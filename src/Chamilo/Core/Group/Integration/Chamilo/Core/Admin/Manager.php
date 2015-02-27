@@ -19,7 +19,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('List', null, Utilities :: COMMON_LIBRARIES), 
             Translation :: get('ListDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/list.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
@@ -30,7 +30,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
             Translation :: get('CreateDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/add.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/add.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
@@ -42,7 +42,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
             Translation :: get('ExportDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/export.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/export.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
@@ -53,7 +53,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
             Translation :: get('ImportDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
@@ -64,7 +64,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportGroupUsers'), 
             Translation :: get('ImportGroupUsersDescription'), 
-            Theme :: getInstance()->getImagePath() . 'admin/import.png', 
+            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 

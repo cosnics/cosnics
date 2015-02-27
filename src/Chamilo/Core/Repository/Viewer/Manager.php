@@ -135,7 +135,7 @@ abstract class Manager extends Application
                 new DynamicVisualTab(
                     $viewer_action,
                     $label,
-                    Theme :: getInstance()->getImagePath() . 'tab/' . $viewer_action . '.png',
+                    Theme :: getInstance()->getImagesPath() . 'tab/' . $viewer_action . '.png',
                     $link,
                     $selected));
         }

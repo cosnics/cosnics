@@ -583,7 +583,7 @@ class Diagnoser
 
         if (! $img_path)
         {
-            $img_path = Theme :: getInstance()->getCommonImagePath();
+            $img_path = Theme :: getInstance()->getCommonImagesPath();
         }
 
         $image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';

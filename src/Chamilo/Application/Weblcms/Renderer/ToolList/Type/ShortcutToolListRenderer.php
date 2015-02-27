@@ -51,7 +51,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
                 $new = '_new';
             }
 
-            $tool_image = Theme :: ICON_MINI . $new . '.png';
+            $tool_image = Theme :: ICON_MINI . $new;
 
             $title = htmlspecialchars(
                 Translation :: get(
@@ -67,10 +67,9 @@ class ShortcutToolListRenderer extends ToolListRenderer
 
             $html[] = '<a href="' . Redirect :: get_url($params, array(Manager :: PARAM_CATEGORY), true) . '" title="' .
                  $title . '">';
-            $html[] = '<img src="' .
-                 Theme :: getInstance()->getImagePath(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())) . 'Logo/' .
-                 $tool_image . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
+            $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
+                'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
             $html[] = '</a>';
         }
 

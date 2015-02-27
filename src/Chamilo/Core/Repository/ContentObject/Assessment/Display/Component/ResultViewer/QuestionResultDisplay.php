@@ -147,7 +147,7 @@ abstract class QuestionResultDisplay
             $label = Translation :: get($variable, array('COUNT' => $this->hints));
 
             $html[] = '<img style="float: none; vertical-align: baseline;" src="' .
-                 Theme :: getInstance()->getImagePath(__NAMESPACE__) . 'buttons/button_hint.png" alt="' . $label .
+                 Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'buttons/button_hint.png" alt="' . $label .
                  '" title="' . $label . '" />&nbsp;&nbsp;';
         }
 

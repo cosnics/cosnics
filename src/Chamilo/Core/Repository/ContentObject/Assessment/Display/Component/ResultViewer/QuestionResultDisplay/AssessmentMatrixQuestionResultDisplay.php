@@ -60,12 +60,12 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                         
                         if ($option->get_matches() == $j)
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath() . 'answer_correct.png" alt="' . Translation :: get(
+                            $result = '<img src="' . Theme :: getInstance()->getImagesPath() . 'answer_correct.png" alt="' . Translation :: get(
                                 'Correct') . '" title="' . Translation :: get('Correct') . '" />';
                         }
                         else
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath() . 'answer_wrong.png" alt="' . Translation :: get(
+                            $result = '<img src="' . Theme :: getInstance()->getImagesPath() . 'answer_wrong.png" alt="' . Translation :: get(
                                 'Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
                         }
                     }
@@ -74,11 +74,11 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                         $selected = '';
                         if ($option->get_matches() == $j)
                         {
-                            // $result = '<img src="' . Theme :: getInstance()->getImagePath() .
+                            // $result = '<img src="' . Theme :: getInstance()->getImagesPath() .
                             // 'answer_information.png" alt="'.
                             // Translation :: get('Information') .'" title="'. Translation :: get('Information') .'"
                             // />';
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath() . 'answer_correct.png" alt="' . Translation :: get(
+                            $result = '<img src="' . Theme :: getInstance()->getImagesPath() . 'answer_correct.png" alt="' . Translation :: get(
                                 'Correct') . '" title="' . Translation :: get('Correct') . '" />';
                         }
                         else
