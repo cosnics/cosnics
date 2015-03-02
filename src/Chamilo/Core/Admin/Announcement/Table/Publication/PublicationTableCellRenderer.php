@@ -23,37 +23,37 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
     {
         $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
             $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
-        
+
         switch ($column->get_name())
         {
             case PublicationTableColumnModel :: COLUMN_STATUS :
                 return $content_object->get_icon_image(
-                    Theme :: ICON_MINI, 
+                    Theme :: ICON_MINI,
                     ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
                 break;
             case ContentObject :: PROPERTY_TITLE :
                 $title_short = $content_object->get_title();
                 $title_short = Utilities :: truncate_string($title_short, 53, false);
-                
+
                 $style = $publication[Publication :: PROPERTY_HIDDEN] ? ' style="color: gray;"' : '';
-                
+
                 return '<a' . $style . ' href="' .
                      htmlentities(
                         $this->get_component()->get_url(
                             array(
-                                Manager :: PARAM_ACTION => Manager :: ACTION_VIEW, 
+                                Manager :: PARAM_ACTION => Manager :: ACTION_VIEW,
                                 Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID]))) .
                      '" title="' . $content_object->get_title() . '">' . $title_short . '</a>';
                 break;
             case Publication :: PROPERTY_PUBLICATION_DATE :
                 $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
                 $data = DatetimeUtilities :: format_locale_date(
-                    $date_format, 
+                    $date_format,
                     $publication[Publication :: PROPERTY_PUBLICATION_DATE]);
                 break;
             case Publication :: PROPERTY_PUBLISHER_ID :
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                     (int) $publication[Publication :: PROPERTY_PUBLISHER_ID]);
                 if (! $user)
                 {
@@ -67,9 +67,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             case PublicationTableColumnModel :: COLUMN_PUBLISHED_FOR :
                 if ($publication[Publication :: PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_email.png" alt=""
-                        style="vertical-align: middle;" title="' .
-                         Translation :: get('SentByEmail') . '"/>';
+                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('action_email') . '" alt=""
+                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
@@ -78,7 +77,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 $data = $publication[ContentObject :: PROPERTY_DESCRIPTION];
                 $data = Utilities :: truncate_string($data, 100);
         }
-        
+
         if ($data)
         {
             if ($publication[Publication :: PROPERTY_HIDDEN])
@@ -90,60 +89,60 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 return $data;
             }
         }
-        
+
         return parent :: render_cell($column, $publication);
     }
 
     public function get_actions($publication)
     {
         $toolbar = new Toolbar();
-        
+
         if ($this->get_component()->get_user()->is_platform_admin() ||
              $publication[Publication :: PROPERTY_PUBLISHER_ID] == $this->get_component()->get_user()->get_id())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                    Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_EDIT, 
-                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_EDIT,
+                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                    Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
-            
+
             if ($publication[Publication :: PROPERTY_HIDDEN])
             {
-                $visibility_img = 'action_invisible.png';
+                $visibility_img = 'action_invisible';
             }
             elseif ($publication[Publication :: PROPERTY_FROM_DATE] == 0 &&
                  $publication[Publication :: PROPERTY_TO_DATE] == 0)
             {
-                $visibility_img = 'action_visible.png';
+                $visibility_img = 'action_visible';
             }
             else
             {
-                $visibility_img = 'action_period.png';
+                $visibility_img = 'action_period';
             }
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . $visibility_img, 
+                    Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath($visibility_img),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_HIDE, 
-                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_HIDE,
+                            Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID])),
                     ToolbarItem :: DISPLAY_ICON));
         }
         return $toolbar->as_html();
@@ -151,7 +150,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
     /**
      * Renders the publication targets
-     * 
+     *
      * @param Publication $publication
      *
      * @return string
@@ -159,13 +158,13 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
     public function render_publication_targets($publication)
     {
         $target_entities = Rights :: get_instance()->get_target_entities(
-            Rights :: VIEW_RIGHT, 
-            Manager :: context(), 
-            $publication[Publication :: PROPERTY_ID], 
+            Rights :: VIEW_RIGHT,
+            Manager :: context(),
+            $publication[Publication :: PROPERTY_ID],
             Rights :: TYPE_PUBLICATION);
-        
+
         $target_list = array();
-        
+
         if (array_key_exists(0, $target_entities[0]))
         {
             $target_list[] = Translation :: get('Everybody', null, Utilities :: COMMON_LIBRARIES);
@@ -173,7 +172,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         else
         {
             $target_list[] = '<select>';
-            
+
             foreach ($target_entities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
@@ -182,7 +181,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                                \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(), 
+                                \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(),
                                 $group_id);
                             if ($group)
                             {
@@ -194,7 +193,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                         foreach ($entity_ids as $user_id)
                         {
                             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                                 (int) $user_id);
                             if ($user)
                             {
@@ -209,7 +208,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             }
             $target_list[] = '</select>';
         }
-        
+
         return implode(PHP_EOL, $target_list);
     }
 }

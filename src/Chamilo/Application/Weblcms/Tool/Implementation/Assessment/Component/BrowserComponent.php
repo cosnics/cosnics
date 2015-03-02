@@ -23,7 +23,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $tool_actions[] = new ToolbarItem(
                 Translation :: get('Reporting'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png',
+                Theme :: getInstance()->getCommonImagePath('action_view_results'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'reporting',

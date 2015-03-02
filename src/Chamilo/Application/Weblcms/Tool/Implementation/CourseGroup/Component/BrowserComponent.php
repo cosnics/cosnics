@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url($param_show_all),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -153,7 +153,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Create'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_create.png',
+                    Theme :: getInstance()->getCommonImagePath('action_create'),
                     $this->get_url($param_add_course_group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -163,7 +163,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_introduce.png',
+                    Theme :: getInstance()->getCommonImagePath('action_introduce'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
@@ -175,7 +175,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ViewSubscriptions'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser'),
                     $this->get_url(
                         $param_subscriptions_overview,
                         array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP)),
@@ -224,18 +224,6 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
     }
 
-    /*
-     * function display_introduction_text() { $html = array(); $introduction_text = $this->introduction_text; $toolbar =
-     * new Toolbar(); if ($introduction_text) { $toolbar->add_item(new ToolbarItem(Translation :: get('Edit'), Theme ::
-     * get_common_image_path() . 'action_edit.png', $this->get_url(array(Tool :: PARAM_ACTION => Tool :: ACTION_EDIT,
-     * Tool :: PARAM_PUBLICATION_ID => $introduction_text->get_id())), ToolbarItem::DISPLAY_ICON ));
-     * $toolbar->add_item(new ToolbarItem(Translation :: get('Delete'), Theme :: getInstance()->getCommonImagesPath() .
-     * 'action_delete.png', $this->get_url(array(Tool :: PARAM_ACTION => Tool :: ACTION_DELETE, Tool ::
-     * PARAM_PUBLICATION_ID => $introduction_text->get_id())), ToolbarItem::DISPLAY_ICON, true )); $html[] = '<div
-     * class="content_object">'; $html[] = '<div class="description">'; $html[] =
-     * $introduction_text->get_content_object()->get_description(); $html[] = '</div>'; $html[] = $toolbar->as_html() .
-     * '<div class="clear"></div>'; $html[] = '</div>'; $html[] = '<br />'; } return implode(PHP_EOL, $html); }
-     */
     public function get_group_id()
     {
         return Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP);

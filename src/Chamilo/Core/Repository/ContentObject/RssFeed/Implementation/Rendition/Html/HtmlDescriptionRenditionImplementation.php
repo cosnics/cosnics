@@ -18,7 +18,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_content_object();
         $html = array();
-        
+
         $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
         $html[] = '<div class="title">' . Translation :: get('Description') . '</div>';
         // $html[] = ContentObjectRendition ::
@@ -26,20 +26,20 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($object->get_url()) . '">' .
              htmlentities($object->get_url()) . '</a></div>';
         $html[] = '</div>';
-        
+
         $feed = $this->parse_file($object->get_url());
-        
+
         foreach ($feed['items'] as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getCommonImagesPath() . 'content_object/rss_feed_item.png);">';
+                 Theme :: getInstance()->getCommonImagePath('ContentObject/rss_feed_item') . ');">';
             $html[] = '<div class="title">' . $item['title'] . '</div>';
             $html[] = html_entity_decode($item['description']);
             $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($item['link']) . '">' .
                  htmlentities($item['link']) . '</a></div>';
             $html[] = '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

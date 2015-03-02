@@ -58,7 +58,7 @@ class ManagerComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AdvancedRightsEditor'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+                Theme :: getInstance()->getCommonImagePath('action_config'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

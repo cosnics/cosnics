@@ -33,16 +33,16 @@ class MatrixForm extends ContentObjectForm
     {
         $this->addElement('category', Translation :: get('Question'));
         $this->add_textfield(
-            Matrix :: PROPERTY_QUESTION, 
-            Translation :: get('Question'), 
-            true, 
+            Matrix :: PROPERTY_QUESTION,
+            Translation :: get('Question'),
+            true,
             array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
         $this->add_html_editor(Matrix :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
         $this->addElement('category');
-        
+
         $this->build_options_and_matches();
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getBasePath(true) .
                      'repository/content_object/survey_matrix_question/resources/javascript/survey_matrix_question.js'));
@@ -51,14 +51,14 @@ class MatrixForm extends ContentObjectForm
     protected function build_creation_form()
     {
         $this->build_basic_form();
-        
+
         parent :: build_creation_form();
     }
 
     protected function build_editing_form()
     {
         $this->build_basic_form();
-        
+
         parent :: build_editing_form();
     }
 
@@ -75,20 +75,19 @@ class MatrixForm extends ContentObjectForm
     function setDefaults($defaults = array ())
     {
         $object = $this->get_content_object();
-        $defaults[Matrix :: PROPERTY_QUESTION] = $defaults[Matrix :: PROPERTY_QUESTION] ==
-             null ? $object->get_question() : $defaults[Matrix :: PROPERTY_QUESTION];
+        $defaults[Matrix :: PROPERTY_QUESTION] = $defaults[Matrix :: PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Matrix :: PROPERTY_QUESTION];
         $defaults[Matrix :: PROPERTY_INSTRUCTION] = $object->get_instruction();
         if ($object->get_number_of_options() != 0)
         {
             $options = $object->get_options();
-            
+
             while ($option = $options->next_result())
             {
                 $defaults[MatrixOption :: PROPERTY_VALUE . '[' . ($option->get_display_order() - 1) . ']'] = $option->get_value();
             }
-            
+
             $matches = $object->get_matches();
-            
+
             while ($match = $matches->next_result())
             {
                 $defaults[MatrixMatch :: PROPERTY_VALUE . '[' . ($match->get_display_order() - 1) . ']'] = $match->get_value();
@@ -98,14 +97,14 @@ class MatrixForm extends ContentObjectForm
         {
             $number_of_options = intval($_SESSION['mq_number_of_options']);
         }
-        
+
         parent :: setDefaults($defaults);
     }
 
     function create_content_object()
     {
         $values = $this->exportValues();
-        
+
         $object = new Matrix();
         $object->set_matrix_type($_SESSION['mq_matrix_type']);
         $object->set_question($values[Matrix :: PROPERTY_QUESTION]);
@@ -119,7 +118,7 @@ class MatrixForm extends ContentObjectForm
     function update_content_object()
     {
         $values = $this->exportValues();
-        
+
         $object = $this->get_content_object();
         $object->set_question($values[Matrix :: PROPERTY_QUESTION]);
         $object->set_instruction($values[Matrix :: PROPERTY_INSTRUCTION]);
@@ -137,26 +136,20 @@ class MatrixForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        
+
         foreach ($values[MatrixOption :: PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixOption :: class_name(), 
-                    MatrixOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixOption :: class_name(), 
-                    MatrixOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_DISPLAY_ORDER),
                 new StaticConditionVariable($display_order + 1));
             $condition = new AndCondition($conditions);
-            
-            $option = DataManager :: retrieve(
-                MatrixOption :: class_name(), 
-                new DataClassRetrieveParameters($condition));
-            
+
+            $option = DataManager :: retrieve(MatrixOption :: class_name(), new DataClassRetrieveParameters($condition));
+
             if ($option instanceof MatrixOption)
             {
                 $option->set_value($value);
@@ -171,60 +164,50 @@ class MatrixForm extends ContentObjectForm
                 $option->create();
             }
         }
-        
+
         $skip_options = $_SESSION['mq_skip_options'];
-        
+
         if (count($skip_options) > 0)
         {
             $orders = array();
-            
+
             foreach ($skip_options as $skip_option)
             {
                 $orders[] = $skip_option + 1;
             }
-            
+
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixOption :: class_name(), 
-                    MatrixOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(
-                    MatrixOption :: class_name(), 
-                    MatrixOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_DISPLAY_ORDER),
                 $orders);
             $condition = new AndCondition($conditions);
-            
+
             $options = DataManager :: retrieves(
-                MatrixOption :: class_name(), 
+                MatrixOption :: class_name(),
                 new DataClassRetrievesParameters($condition));
-            
+
             while ($option = $options->next_result())
             {
                 $option->delete();
             }
         }
-        
+
         foreach ($values[MatrixMatch :: PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixMatch :: class_name(), 
-                    MatrixMatch :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixMatch :: class_name(), 
-                    MatrixMatch :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_DISPLAY_ORDER),
                 new StaticConditionVariable($display_order + 1));
             $condition = new AndCondition($conditions);
-            
-            $match = DataManager :: retrieve(
-                MatrixMatch :: class_name(), 
-                new DataClassRetrieveParameters($condition));
-            
+
+            $match = DataManager :: retrieve(MatrixMatch :: class_name(), new DataClassRetrieveParameters($condition));
+
             if ($match instanceof MatrixMatch)
             {
                 $match->set_value($value);
@@ -239,41 +222,37 @@ class MatrixForm extends ContentObjectForm
                 $match->create();
             }
         }
-        
+
         $skip_matches = $_SESSION['mq_skip_matches'];
-        
+
         if (count($skip_matches) > 0)
         {
             $orders = array();
-            
+
             foreach ($skip_matches as $skip_match)
             {
                 $orders[] = $skip_match + 1;
             }
-            
+
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    MatrixMatch :: class_name(), 
-                    MatrixMatch :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(
-                    MatrixMatch :: class_name(), 
-                    MatrixMatch :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_DISPLAY_ORDER),
                 $orders);
             $condition = new AndCondition($conditions);
-            
+
             $matches = DataManager :: retrieves(
-                MatrixMatch :: class_name(), 
+                MatrixMatch :: class_name(),
                 new DataClassRetrievesParameters($condition));
-            
+
             while ($match = $matches->next_result())
             {
                 $match->delete();
             }
         }
-        
+
         return true;
     }
 
@@ -289,7 +268,7 @@ class MatrixForm extends ContentObjectForm
 
     /**
      * Updates the session variables to keep track of the current number of options and matches.
-     * 
+     *
      * @todo This code needs some cleaning :)
      */
     function update_number_of_options_and_matches()
@@ -302,59 +281,59 @@ class MatrixForm extends ContentObjectForm
             unset($_SESSION['mq_skip_matches']);
             unset($_SESSION['mq_matrix_type']);
         }
-        
+
         if (! isset($_SESSION['mq_number_of_options']))
         {
             $_SESSION['mq_number_of_options'] = 3;
         }
-        
+
         if (! isset($_SESSION['mq_skip_options']))
         {
             $_SESSION['mq_skip_options'] = array();
         }
-        
+
         if (! isset($_SESSION['mq_matrix_type']))
         {
             $_SESSION['mq_matrix_type'] = Matrix :: MATRIX_TYPE_RADIO;
         }
-        
+
         if (isset($_POST['add_option']))
         {
             $_SESSION['mq_number_of_options'] = $_SESSION['mq_number_of_options'] + 1;
         }
-        
+
         if (isset($_POST['remove_option']))
         {
             $indexes = array_keys($_POST['remove_option']);
             $_SESSION['mq_skip_options'][] = $indexes[0];
         }
-        
+
         if (! isset($_SESSION['mq_number_of_matches']))
         {
             $_SESSION['mq_number_of_matches'] = 3;
         }
-        
+
         if (! isset($_SESSION['mq_skip_matches']))
         {
             $_SESSION['mq_skip_matches'] = array();
         }
-        
+
         if (isset($_POST['add_match']))
         {
             $_SESSION['mq_number_of_matches'] = $_SESSION['mq_number_of_matches'] + 1;
         }
-        
+
         if (isset($_POST['remove_match']))
         {
             $indexes = array_keys($_POST['remove_match']);
             $_SESSION['mq_skip_matches'][] = $indexes[0];
         }
-        
+
         if (isset($_POST['change_matrix_type']))
         {
             $_SESSION['mq_matrix_type'] = $_SESSION['mq_matrix_type'] == Matrix :: MATRIX_TYPE_RADIO ? Matrix :: MATRIX_TYPE_CHECKBOX : Matrix :: MATRIX_TYPE_RADIO;
         }
-        
+
         $object = $this->get_content_object();
         if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
         {
@@ -362,31 +341,31 @@ class MatrixForm extends ContentObjectForm
             $_SESSION['mq_number_of_matches'] = $object->get_number_of_matches();
             $_SESSION['mq_matrix_type'] = $object->get_matrix_type();
         }
-        
+
         $this->addElement(
-            'hidden', 
-            'mq_number_of_options', 
-            $_SESSION['mq_number_of_options'], 
+            'hidden',
+            'mq_number_of_options',
+            $_SESSION['mq_number_of_options'],
             array('id' => 'mq_number_of_options'));
         $this->addElement(
-            'hidden', 
-            'mq_number_of_matches', 
-            $_SESSION['mq_number_of_matches'], 
+            'hidden',
+            'mq_number_of_matches',
+            $_SESSION['mq_number_of_matches'],
             array('id' => 'mq_number_of_matches'));
         $this->addElement('hidden', 'mq_matrix_type', $_SESSION['mq_matrix_type'], array('id' => 'mq_matrix_type'));
     }
 
     /**
      * Adds the form-fields to the form to provide the possible options for this multiple choice question
-     * 
+     *
      * @todo Add rules to require options and matches
      */
     function add_options()
     {
         $number_of_options = intval($_SESSION['mq_number_of_options']);
-        
+
         $this->addElement('category', Translation :: get('Options'));
-        
+
         if ($_SESSION['mq_matrix_type'] == Matrix :: MATRIX_TYPE_RADIO)
         {
             $switch_label = Translation :: get('SwitchToMultipleMatches');
@@ -397,22 +376,22 @@ class MatrixForm extends ContentObjectForm
             $switch_label = Translation :: get('SwitchToSingleMatch');
             $multiple = true;
         }
-        
+
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'change_matrix_type[]', 
-            $switch_label, 
+            'style_submit_button',
+            'change_matrix_type[]',
+            $switch_label,
             array('class' => 'normal switch change_matrix_type'));
         $buttons[] = $this->createElement(
-            'style_button', 
-            'add_option[]', 
-            Translation :: get('AddMatrixOption'), 
+            'style_button',
+            'add_option[]',
+            Translation :: get('AddMatrixOption'),
             array('class' => 'normal add', 'id' => 'add_option'));
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer = $this->defaultRenderer();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table options">';
         $table_header[] = '<thead>';
@@ -424,16 +403,16 @@ class MatrixForm extends ContentObjectForm
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
         $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $visual_number = 0;
-        
+
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
             $group = array();
@@ -442,57 +421,52 @@ class MatrixForm extends ContentObjectForm
                 $visual_number ++;
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = $this->create_html_editor(
-                    MatrixOption :: PROPERTY_VALUE . '[' . $option_number . ']', 
-                    '', 
+                    MatrixOption :: PROPERTY_VALUE . '[' . $option_number . ']',
+                    '',
                     $html_editor_options);
-                
+
                 if ($number_of_options - count($_SESSION['mq_skip_options']) > 1)
                 {
                     $group[] = $this->createElement(
-                        'image', 
-                        'remove_option[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                        'image',
+                        'remove_option[' . $option_number . ']',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number));
                 }
                 else
                 {
                     $group[] = & $this->createElement(
-                        'static', 
-                        null, 
-                        null, 
-                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                             'action_delete_na.png" />');
+                        'static',
+                        null,
+                        null,
+                        '<img class="remove_option" src="' .
+                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
                 }
-                
-                $this->addGroup(
-                    $group, 
-                    MatrixOption :: PROPERTY_VALUE . '_' . $option_number, 
-                    null, 
-                    '', 
-                    false);
-                
+
+                $this->addGroup($group, MatrixOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);
+
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($visual_number % 2 == 0 ? 'row_odd' : 'row_even') .
-                         '">{element}</tr>', 
+                         '">{element}</tr>',
                         MatrixOption :: PROPERTY_VALUE . '_' . $option_number);
                 $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>', 
+                    '<td>{element}</td>',
                     MatrixOption :: PROPERTY_VALUE . '_' . $option_number);
             }
         }
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
-        
+
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
             'question_buttons');
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
-        
+
         $this->addElement('category');
     }
 
@@ -503,17 +477,17 @@ class MatrixForm extends ContentObjectForm
     {
         $number_of_matches = intval($_SESSION['mq_number_of_matches']);
         $this->addElement('category', Translation :: get('Matches'));
-        
+
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button', 
-            'add_match[]', 
-            Translation :: get('AddMatch'), 
+            'style_button',
+            'add_match[]',
+            Translation :: get('AddMatch'),
             array('class' => 'normal add', 'id' => 'add_match'));
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer = $this->defaultRenderer();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table matches">';
         $table_header[] = '<thead>';
@@ -525,92 +499,87 @@ class MatrixForm extends ContentObjectForm
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
         $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
+
         $label = 'A';
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {
             $group = array();
-            
+
             if (! in_array($match_number, $_SESSION['mq_skip_matches']))
             {
                 $defaults['match_label'][$match_number] = $label ++;
                 $element = $this->createElement(
-                    'text', 
-                    'match_label[' . $match_number . ']', 
-                    Translation :: get('Match'), 
+                    'text',
+                    'match_label[' . $match_number . ']',
+                    Translation :: get('Match'),
                     'style="width: 90%;" ');
                 $element->freeze();
                 $group[] = $element;
                 $group[] = $this->create_html_editor(
-                    MatrixMatch :: PROPERTY_VALUE . '[' . $match_number . ']', 
-                    Translation :: get('Match'), 
+                    MatrixMatch :: PROPERTY_VALUE . '[' . $match_number . ']',
+                    Translation :: get('Match'),
                     $html_editor_options);
-                
+
                 if ($number_of_matches - count($_SESSION['mq_skip_matches']) > 2)
                 {
                     $group[] = $this->createElement(
-                        'image', 
-                        'remove_match[' . $match_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                        'image',
+                        'remove_match[' . $match_number . ']',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number));
                 }
                 else
                 {
                     $group[] = & $this->createElement(
-                        'static', 
-                        null, 
-                        null, 
-                        '<img class="remove_match" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                             'action_delete_na.png" />');
+                        'static',
+                        null,
+                        null,
+                        '<img class="remove_match" src="' .
+                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
                 }
-                
-                $this->addGroup(
-                    $group, 
-                    MatrixMatch :: PROPERTY_VALUE . '_' . $match_number, 
-                    null, 
-                    '', 
-                    false);
-                
+
+                $this->addGroup($group, MatrixMatch :: PROPERTY_VALUE . '_' . $match_number, null, '', false);
+
                 $renderer->setElementTemplate(
                     '<tr id="match_' . $match_number . '" class="' .
-                         ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>', 
+                         ($match_number - 1 % 2 == 0 ? 'row_odd' : 'row_even') . '">{element}</tr>',
                         MatrixMatch :: PROPERTY_VALUE . '_' . $match_number);
                 $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>', 
+                    '<td>{element}</td>',
                     MatrixMatch :: PROPERTY_VALUE . '_' . $match_number);
-                
+
                 $this->addGroupRule(
-                    MatrixMatch :: PROPERTY_VALUE . '_' . $match_number, 
+                    MatrixMatch :: PROPERTY_VALUE . '_' . $match_number,
                     array(
                         MatrixMatch :: PROPERTY_VALUE . '[' . $match_number . ']' => array(
                             array(
-                                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                                 'required'))));
             }
-            
+
             $this->setConstants($defaults);
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
-        
+
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
             'question_buttons');
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
-        
+
         $this->addElement('category');
     }
 }

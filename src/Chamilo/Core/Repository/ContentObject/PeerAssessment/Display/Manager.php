@@ -270,7 +270,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentComplexDisplayUserAttemptStatusViewerComponent'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                        Theme :: getInstance()->getCommonImagePath('action_browser'),
                         $this->get_url(array(self :: PARAM_ACTION => null))));
             }
             if ($this->is_allowed(self :: EDIT_RIGHT))
@@ -284,13 +284,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     $this->action_bar->add_tool_action(
                         new ToolbarItem(
                             Translation :: get('PeerAssessmentComplexDisplayStatusViewerComponent'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png',
+                            Theme :: getInstance()->getCommonImagePath('action_reporting'),
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS))));
 
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ToolComplexBuilder'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_build.png',
+                        Theme :: getInstance()->getCommonImagePath('action_build'),
                         $this->get_url($this->get_builder_params())));
             }
 
@@ -298,7 +298,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentComplexDisplayResultsViewerComponent'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png',
+                        Theme :: getInstance()->getCommonImagePath('action_view_results'),
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_RESULTS))));
             $settings = $this->get_settings($this->get_publication_id());
 
@@ -307,7 +307,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_group.png',
+                        Theme :: getInstance()->getCommonImagePath('action_group'),
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
 
             return $this->action_bar;

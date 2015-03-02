@@ -18,13 +18,13 @@ class ParticipantTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewResults'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_next.png', 
+                Theme :: getInstance()->getCommonImagePath('action_next'), 
                 $this->get_component()->get_survey_participant_publication_viewer_url($object), 
                 ToolbarItem :: DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('RemoveSelectedResults'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->get_component()->get_survey_participant_delete_url($object), 
                 ToolbarItem :: DISPLAY_ICON));
         

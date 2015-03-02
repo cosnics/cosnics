@@ -133,7 +133,7 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShareWithOtherUsersGroups'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagePath('action_rights'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADD_ENTITIES))),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 

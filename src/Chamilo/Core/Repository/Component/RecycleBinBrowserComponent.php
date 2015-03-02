@@ -89,7 +89,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('EmptyRecycleBin'),
-                Theme :: getInstance()->getCommonImagesPath() . 'treemenu/trash.png',
+                Theme :: getInstance()->getCommonImagePath('Treemenu/trash'),
                 $this->get_url(array(self :: PARAM_EMPTY_RECYCLE_BIN => 1)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 true));

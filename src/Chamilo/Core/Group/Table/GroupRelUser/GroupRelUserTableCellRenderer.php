@@ -33,7 +33,7 @@ class GroupRelUserTableCellRenderer extends DataClassTableCellRenderer implement
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Unsubscribe'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->get_component()->get_group_rel_user_unsubscribing_url($groupreluser), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

@@ -116,7 +116,7 @@ class Display extends QuestionDisplay
                 null, 
                 null, 
                 '<img id="reset_' . $answer_name . '" class="reset_option" type="image" src="' .
-                     Theme :: getInstance()->getCommonImagesPath() . 'action_reset.png" />');
+                     Theme :: getInstance()->getCommonImagePath('action_reset') . '" />');
             $group[] = $formvalidator->createElement('hidden', $answer_name, '', 'class="hotspot_coordinates"');
             
             // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);

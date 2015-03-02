@@ -379,13 +379,13 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_publication_editing_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagePath('action_delete'),
                 $this->get_publication_deleting_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON,
                 true);

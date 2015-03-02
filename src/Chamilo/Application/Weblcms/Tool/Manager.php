@@ -352,7 +352,7 @@ abstract class Manager extends Application
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('PublishIntroductionText'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_introduce.png',
+                            Theme :: getInstance()->getCommonImagePath('action_introduce'),
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISH_INTRODUCTION))));
                 }
             }
@@ -633,7 +633,7 @@ abstract class Manager extends Application
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                        Theme :: getInstance()->getCommonImagePath('action_edit'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_UPDATE_CONTENT_OBJECT,
@@ -651,7 +651,7 @@ abstract class Manager extends Application
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_DELETE,
@@ -748,7 +748,7 @@ abstract class Manager extends Application
                     self :: PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate :: class_name()));
             return new ToolbarItem(
                 Translation :: get('AccessDetails'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png',
+                Theme :: getInstance()->getCommonImagePath('action_reporting'),
                 $url);
         }
         else

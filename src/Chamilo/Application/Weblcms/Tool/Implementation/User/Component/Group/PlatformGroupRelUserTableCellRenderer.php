@@ -49,7 +49,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Details'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_details.png', 
+                Theme :: getInstance()->getCommonImagePath('action_details'), 
                 $details_url, 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -60,7 +60,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('UnsubscribeNotAvailableForGroups'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -73,7 +73,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Report'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_reporting'), 
                     $reporting_url, 
                     ToolbarItem :: DISPLAY_ICON));
         }

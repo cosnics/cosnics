@@ -85,7 +85,7 @@ class ChangeSectionComponent extends Manager
             if ($tool->visible || $section->get_name() == 'course_admin')
             {
                 $lcms_action = 'make_invisible';
-                $visible_image = 'action_visible.png';
+                $visible_image = 'action_visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->name))
                 {
@@ -97,7 +97,7 @@ class ChangeSectionComponent extends Manager
             else
             {
                 $lcms_action = 'make_visible';
-                $visible_image = 'action_invisible.png';
+                $visible_image = 'action_invisible';
                 $tool_image = 'tool_' . $tool->name . '_na';
                 $link_class = ' class="invisible"';
             }
@@ -127,17 +127,16 @@ class ChangeSectionComponent extends Manager
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_COMPONENT_ACTION => $lcms_action,
                             \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => $tool->name)) . '"><img src="' .
-                         Theme :: getInstance()->getCommonImagesPath() . $visible_image .
+                         Theme :: getInstance()->getCommonImagePath($visible_image) .
                          '" style="vertical-align: middle;" alt=""/></a>';
                     $html[] = '&nbsp;&nbsp;&nbsp;';
                 }
 
                 // Show tool-icon + name
 
-                $html[] = '<img ' . $id . ' src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseSections',
-                        $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/>';
+                $html[] = '<img ' . $id . ' src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseSections',
+                    $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/>';
                 $html[] = '&nbsp;';
                 $html[] = '<a href="' . $parent->get_url(
                     array(

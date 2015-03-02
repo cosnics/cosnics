@@ -69,7 +69,7 @@ class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implemen
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Subscribe'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
+                Theme :: getInstance()->getCommonImagePath('action_subscribe'), 
                 $this->get_component()->get_group_rel_user_subscribing_url($group, $user), 
                 ToolbarItem :: DISPLAY_ICON));
         

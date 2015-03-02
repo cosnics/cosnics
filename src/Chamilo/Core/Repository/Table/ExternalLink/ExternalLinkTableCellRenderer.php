@@ -48,7 +48,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('View', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_details.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_details'), 
                     $this->get_component()->get_external_instance_viewing_url($object), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -57,7 +57,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ExternalInstanceViewNotAllowed'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_details_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_details_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

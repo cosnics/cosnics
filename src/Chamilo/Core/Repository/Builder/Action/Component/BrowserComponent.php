@@ -102,7 +102,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_preview.png',
+                Theme :: getInstance()->getCommonImagePath('action_preview'),
                 $this->get_parent()->get_preview_content_object_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,

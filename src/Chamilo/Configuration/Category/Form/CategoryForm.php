@@ -152,7 +152,7 @@ class CategoryForm extends FormValidator
                     $group[] = $this->createElement(
                         'image', 
                         'remove[' . $category_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_list_remove.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_list_remove'), 
                         array('style' => 'border: 0px;'));
                 }
                 $this->addGroup(
@@ -171,7 +171,7 @@ class CategoryForm extends FormValidator
         $this->addElement(
             'image', 
             'add[]', 
-            Theme :: getInstance()->getCommonImagesPath() . 'action_list_add.png', 
+            Theme :: getInstance()->getCommonImagePath('action_list_add'), 
             array('style' => 'border: 0px;'));
         $this->build_footer('Create');
     }

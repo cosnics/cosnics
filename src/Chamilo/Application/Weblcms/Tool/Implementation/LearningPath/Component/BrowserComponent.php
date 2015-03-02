@@ -17,7 +17,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('ImportScorm'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_import.png',
+                Theme :: getInstance()->getCommonImagePath('action_import'),
                 $this->get_url(
                     array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_IMPORT_SCORM)));
         }

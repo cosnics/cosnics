@@ -61,7 +61,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         if ($publication[ContentObject :: PROPERTY_TYPE] == Assessment :: class_name())
         {
             $complex_display_item = $toolbar->get_item(1);
-            $complex_display_item->set_image(Theme :: getInstance()->getCommonImagesPath() . 'action_next.png');
+            $complex_display_item->set_image(Theme :: getInstance()->getCommonImagePath('action_next'));
             $complex_display_item->set_label(Translation :: get('Take'));
         }
 
@@ -70,7 +70,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $toolbar->insert_item(
                 new ToolbarItem(
                     Translation :: get('Take'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_next.png',
+                    Theme :: getInstance()->getCommonImagePath('action_next'),
                     $this->get_complex_display_url($publication_id),
                     ToolbarItem :: DISPLAY_ICON),
                 1);

@@ -20,7 +20,7 @@ class SourceTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('ViewPackageDetails'),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_details.png',
+        // Theme :: getInstance()->getCommonImagePath('action_details'),
         // $this->get_component()->get_url(
         // array(Manager :: PARAM_ACTION => Manager :: ACTION_VIEW, Manager :: PARAM_CONTEXT =>
         // $registration->get_context())),
@@ -30,7 +30,7 @@ class SourceTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         // {
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('Update', array(), Utilities :: COMMON_LIBRARIES),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_update.png',
+        // Theme :: getInstance()->getCommonImagePath('action_update'),
         // $this->get_component()->get_url(
         // array(Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, Manager :: PARAM_REGISTRATION =>
         // $registration->get_id(), Manager :: PARAM_INSTALL_TYPE => Manager :: INSTALL_REMOTE)),
@@ -40,14 +40,14 @@ class SourceTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         // {
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('PackageIsAlreadyUpToDate'),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_update_na.png', '', ToolbarItem :: DISPLAY_ICON));
+        // Theme :: getInstance()->getCommonImagePath('action_update_na'), '', ToolbarItem :: DISPLAY_ICON));
         // }
         
         // if ($registration->is_active())
         // {
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_deactivate.png',
+        // Theme :: getInstance()->getCommonImagePath('action_deactivate'),
         // $this->get_component()->get_url(
         // array(Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE, Manager :: PARAM_REGISTRATION =>
         // $registration->get_id())),
@@ -57,7 +57,7 @@ class SourceTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         // {
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_activate.png',
+        // Theme :: getInstance()->getCommonImagePath('action_activate'),
         // $this->get_component()->get_url(
         // array(Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE, Manager :: PARAM_REGISTRATION =>
         // $registration->get_id())),
@@ -67,7 +67,7 @@ class SourceTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         
         // $toolbar->add_item(
         // new ToolbarItem(Translation :: get('Deinstall', array(), Utilities :: COMMON_LIBRARIES),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_deinstall.png',
+        // Theme :: getInstance()->getCommonImagePath('action_deinstall'),
         // $this->get_component()->get_url(
         // array(Manager :: PARAM_ACTION => Manager :: ACTION_REMOVE, Manager :: PARAM_SECTION =>
         // $registration->get_type(), Manager :: PARAM_PACKAGE => $registration->get_id())),

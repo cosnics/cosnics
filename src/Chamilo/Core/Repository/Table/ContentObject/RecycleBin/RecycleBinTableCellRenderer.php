@@ -90,14 +90,14 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Restore', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_restore.png', 
+                Theme :: getInstance()->getCommonImagePath('action_restore'), 
                 $this->get_component()->get_content_object_restoring_url($content_object), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->get_component()->get_content_object_deletion_url($content_object), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

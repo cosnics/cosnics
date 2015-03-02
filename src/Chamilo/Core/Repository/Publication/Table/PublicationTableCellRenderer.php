@@ -46,7 +46,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
@@ -60,7 +60,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_revert.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_revert'), 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 

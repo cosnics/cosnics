@@ -206,7 +206,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 ToolbarItem :: DISPLAY_ICON);
             $toolbar_items[self :: ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation :: get('EditRepository'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_external_repository_object_editing_url($object),
                 ToolbarItem :: DISPLAY_ICON);
         }
@@ -215,7 +215,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             $toolbar_items[self :: ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation :: get('DeleteRepository'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagePath('action_delete'),
                 $this->get_external_repository_object_deleting_url($object),
                 ToolbarItem :: DISPLAY_ICON,
                 true);

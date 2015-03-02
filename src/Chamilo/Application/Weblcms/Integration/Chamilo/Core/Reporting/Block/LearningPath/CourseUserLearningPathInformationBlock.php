@@ -33,53 +33,53 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                Translation :: get('Title'), 
-                Translation :: get('Progress'), 
+                Translation :: get('Title'),
+                Translation :: get('Progress'),
                 Translation :: get('LearningPathDetails')));
         $course_id = $this->get_course_id();
         $user_id = $this->get_user_id();
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $condition = new AndCondition($conditions);
-        
+
         $attempts = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            LearningPathAttempt :: class_name(), 
+            LearningPathAttempt :: class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         while ($attempt = $attempts->next_result())
         {
             $learning_paths[$attempt->get_learning_path_id()] = $attempt;
         }
-        
+
         $params = array();
         $params[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = LearningPath :: get_type_name();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-        
+
         $params_detail = $this->get_parent()->get_parameters();
         $params_detail[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptProgressTemplate :: class_name();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
              Translation :: get('Details') . '" />';
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_TOOL), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_TOOL),
             new StaticConditionVariable(
                 ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name(), true)));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_COURSE_ID), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         $condition = new AndCondition($conditions);
         $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
@@ -92,13 +92,13 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
         {
             $progress = $url = $link = null;
             if (! \Chamilo\Application\Weblcms\Storage\DataManager :: is_publication_target_user(
-                $user_id, 
+                $user_id,
                 $publication[ContentObjectPublication :: PROPERTY_ID]))
             {
                 continue;
             }
             ++ $key;
-            
+
             if ($learning_paths[$publication[ContentObjectPublication :: PROPERTY_ID]])
             {
                 $params_detail[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
@@ -107,18 +107,18 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $progress = $this->get_progress_bar(
                     $learning_paths[$publication[ContentObjectPublication :: PROPERTY_ID]]->get_progress());
             }
-            
+
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
             $learning_path = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
             $url = '<a href="' . Redirect :: get_url($params) . '">' . $learning_path->get_title() . '</a>';
-            
+
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation :: get('Title'), $url);
             $reporting_data->add_data_category_row($key, Translation :: get('Progress'), $progress);
             $reporting_data->add_data_category_row($key, Translation :: get('LearningPathDetails'), $link);
         }
-        
+
         $reporting_data->hide_categories();
         return $reporting_data;
     }

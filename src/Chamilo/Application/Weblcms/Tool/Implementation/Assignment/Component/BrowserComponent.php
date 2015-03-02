@@ -29,7 +29,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $tool_actions[] = new ToolbarItem(
                 Translation :: get('ScoresOverview'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png',
+                Theme :: getInstance()->getCommonImagePath('action_statistics'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING,

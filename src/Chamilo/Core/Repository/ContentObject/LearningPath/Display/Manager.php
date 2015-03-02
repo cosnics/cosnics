@@ -610,7 +610,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Previous'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png',
+                        Theme :: getInstance()->getCommonImagePath('action_prev'),
                         $previous_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -619,7 +619,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('PreviousNA'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png',
+                        Theme :: getInstance()->getCommonImagePath('action_prev_na'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -636,7 +636,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Previous'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_next.png',
+                        Theme :: getInstance()->getCommonImagePath('action_next'),
                         $next_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -645,7 +645,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('PreviousNA'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png',
+                        Theme :: getInstance()->getCommonImagePath('action_next_na'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }

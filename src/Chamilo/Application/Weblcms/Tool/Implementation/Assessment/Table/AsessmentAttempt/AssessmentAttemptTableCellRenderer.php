@@ -134,7 +134,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewResults'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser'),
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_ATTEMPT_RESULT_VIEWER,
@@ -147,7 +147,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewResultsNA'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -157,7 +157,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteResult'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_RESULTS,

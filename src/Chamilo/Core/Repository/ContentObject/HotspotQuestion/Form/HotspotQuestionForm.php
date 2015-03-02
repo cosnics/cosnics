@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: hotspot_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.hotspot_question
  */
 
@@ -23,51 +23,51 @@ class HotspotQuestionForm extends ContentObjectForm
 {
 
     private $colours = array(
-        '#ff0000', 
-        '#f2ef00', 
-        '#00ff00', 
-        '#00ffff', 
-        '#0000ff', 
-        '#ff00ff', 
-        '#0080ff', 
-        '#ff0080', 
-        '#00ff80', 
-        '#ff8000', 
+        '#ff0000',
+        '#f2ef00',
+        '#00ff00',
+        '#00ffff',
+        '#0000ff',
+        '#ff00ff',
+        '#0080ff',
+        '#ff0080',
+        '#00ff80',
+        '#ff8000',
         '#8000ff');
 
     protected function build_creation_form()
     {
         parent :: build_creation_form();
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.draw.js'));
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js'));
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getBasePath(true) .
                      'core/repository/content_object/hotspot_question/resources/javascript/hotspot_question_form.js'));
-        
+
         $this->add_warning_message(
-            'hotspot_javascript', 
-            Translation :: get('HotspotJavascriptWarning'), 
-            Translation :: get('HotspotJavascriptRequired'), 
+            'hotspot_javascript',
+            Translation :: get('HotspotJavascriptWarning'),
+            Translation :: get('HotspotJavascriptRequired'),
             true);
-        
+
         $this->addElement('html', '<div id="hotspot_options" style="display: none;">');
         $this->addElement('category', Translation :: get('Hotspots'));
         $this->add_options();
         $this->addElement('category');
         $this->addElement('html', '</div>');
-        
+
         $this->addElement('html', '<div id="hotspot_select">');
         $this->addElement('category', Translation :: get('Image'));
-        
+
         $html = array();
         $html[] = '<div id="hotspot_marking" style="display: none;"><div class="colour_box_label">' . Translation :: get(
             'CurrentlyMarking') . '</div><div class="colour_box"></div></div>';
@@ -75,7 +75,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<br />';
         $html[] = '<div class="clear"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
-        
+
         $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
              'xml_feeds/xml_image_feed.php';
         $locale = array();
@@ -83,47 +83,47 @@ class HotspotQuestionForm extends ContentObjectForm
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
-        
+
         $image_selecter_options = array();
         $image_selecter_options['rescale_image'] = false;
         $image_selecter_options['allow_change'] = false;
-        
+
         $this->addElement(
-            'image_selecter', 
-            'image', 
-            Translation :: get('SelectImage'), 
-            $url, 
-            $locale, 
-            array(), 
+            'image_selecter',
+            'image',
+            Translation :: get('SelectImage'),
+            $url,
+            $locale,
+            array(),
             $image_selecter_options);
         $this->addElement('category');
         $this->addElement('html', '</div>');
-        
+
         $this->set_session_answers();
-        
+
         $this->add_example_box();
     }
 
     protected function build_editing_form()
     {
         parent :: build_creation_form();
-        
+
         $this->addElement('category', Translation :: get('Properties'));
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.draw.js'));
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js'));
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getBasePath(true) .
                      'core/repository/content_object/hotspot_question/resources/javascript/hotspot_question_form.js'));
         $this->add_options();
-        
+
         $html = array();
         $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation :: get('CurrentlyMarking') .
              '</div><div class="colour_box"></div></div>';
@@ -131,7 +131,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<br />';
         $html[] = '<div class="clear"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
-        
+
         $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
              'xml_feeds/xml_image_feed.php';
         $locale = array();
@@ -139,23 +139,23 @@ class HotspotQuestionForm extends ContentObjectForm
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
-        
+
         $image_selecter_options = array();
         $image_selecter_options['rescale_image'] = false;
         $image_selecter_options['allow_change'] = false;
-        
+
         $this->addElement(
-            'image_selecter', 
-            'image', 
-            Translation :: get('SelectImage'), 
-            $url, 
-            $locale, 
-            array(), 
+            'image_selecter',
+            'image',
+            Translation :: get('SelectImage'),
+            $url,
+            $locale,
+            array(),
             $image_selecter_options);
-        
+
         $this->addElement('category');
         $this->set_session_answers();
-        
+
         $this->add_example_box();
     }
 
@@ -174,19 +174,19 @@ class HotspotQuestionForm extends ContentObjectForm
                     $defaults['coordinates'][$i] = $answer->get_hotspot_coordinates();
                     $defaults['option_weight'][$i] = $answer->get_weight();
                 }
-                
+
                 for ($i = count($answers); $i < $_SESSION['mc_number_of_options']; $i ++)
                 {
                     $defaults['option_weight'][$i] = 1;
                 }
-                
+
                 $defaults['image'] = $object->get_image();
                 $this->set_session_answers($defaults);
             }
             else
             {
                 $number_of_options = intval($_SESSION['mc_number_of_options']);
-                
+
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
                     $defaults['option_weight'][$option_number] = 1;
@@ -199,23 +199,23 @@ class HotspotQuestionForm extends ContentObjectForm
     public function create_content_object()
     {
         $values = $this->exportValues();
-        
+
         if ($values['image'] == '')
         {
             return false;
         }
-        
+
         $object = new HotspotQuestion();
         $object->set_image($values['image']);
         $this->set_content_object($object);
         $this->add_options_to_object();
         $success = parent :: create_content_object();
-        
+
         if ($success)
         {
             $object->attach_content_object($values['image']);
         }
-        
+
         return $object;
     }
 
@@ -253,7 +253,7 @@ class HotspotQuestionForm extends ContentObjectForm
             $answers = $_POST['answer'];
             $weights = $_POST['option_weight'];
             $coords = $_POST['coordinates'];
-            
+
             $_SESSION['answers'] = $answers;
             $_SESSION['option_weight'] = $weights;
             $_SESSION['coordinates'] = $coords;
@@ -269,21 +269,21 @@ class HotspotQuestionForm extends ContentObjectForm
     public function add_image()
     {
         $object = $this->get_content_object();
-        
+
         $this->addElement('category', Translation :: get('HotspotImage'));
-        
+
         $html = array();
         $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation :: get('CurrentlyMarking') .
              '</div><div class="colour_box"></div></div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '<br />';
         $html[] = '<div class="clear"></div>';
-        
+
         if ($object->get_image())
         {
             $image_id = $object->get_image();
             $image_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($image_id);
-            
+
             $dimensions = getimagesize($image_object->get_full_path());
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' . $dimensions[0] .
                  'px; height: ' . $dimensions[1] . 'px; background-image: url(' . $image_object->get_url() .
@@ -293,11 +293,11 @@ class HotspotQuestionForm extends ContentObjectForm
         {
             $html[] = '<div id="hotspot_container"><div id="hotspot_image"></div></div>';
         }
-        
+
         // $html[] = '<div class="clear"></div>';
         // $html[] = '<button id="change_image" class="negative delete">' . htmlentities(Translation ::
         // get('SelectAnotherImage')) . '</button>';
-        
+
         $this->addElement('html', implode(PHP_EOL, $html));
         $this->addElement('category');
     }
@@ -332,46 +332,46 @@ class HotspotQuestionForm extends ContentObjectForm
              */
             $indexes = array_keys($_POST['remove']);
             $_SESSION['mc_number_of_options'] = $_SESSION['mc_number_of_options'] - 1;
-            
+
             // $this->move_answer_arrays($indexes[0]);
         }
         $object = $this->get_content_object();
         if (! $this->isSubmitted() && $object->get_number_of_answers() != 0)
         {
             $_SESSION['mc_number_of_options'] = $object->get_number_of_answers();
-            
+
             // $_SESSION['mc_answer_type'] = $object->get_answer_type();
         }
         $number_of_options = intval($_SESSION['mc_number_of_options']);
-        
+
         if (isset($_SESSION['file']))
         {
             $this->addElement('html', '<div class="content_object">');
             $this->addElement('html', '</div>');
         }
-        
+
         $this->addElement(
-            'hidden', 
-            'mc_number_of_options', 
-            $_SESSION['mc_number_of_options'], 
+            'hidden',
+            'mc_number_of_options',
+            $_SESSION['mc_number_of_options'],
             array('id' => 'mc_number_of_options'));
-        
+
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_button', 
-            'add[]', 
-            Translation :: get('AddHotspotOption'), 
+            'style_button',
+            'add[]',
+            Translation :: get('AddHotspotOption'),
             array('class' => 'normal add add_option'));
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer = $this->defaultRenderer();
-        
+
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table">';
         $table_header[] = '<thead>';
@@ -385,102 +385,102 @@ class HotspotQuestionForm extends ContentObjectForm
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $colours = $this->colours;
-        
+
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
             if (! in_array($option_number, $_SESSION['mc_skip_options']))
             {
                 $group = array();
                 $group[] = $this->createElement(
-                    'static', 
-                    null, 
-                    null, 
+                    'static',
+                    null,
+                    null,
                     '<div class="colour_box" style="background-color: ' . $colours[$option_number] . ';"></div>');
                 // $group[] = $this->createElement('hidden', 'type[' . $option_number . ']', '');
                 $group[] = $this->createElement('hidden', 'coordinates[' . $option_number . ']', '');
                 $group[] = $this->create_html_editor(
-                    'answer[' . $option_number . ']', 
-                    Translation :: get('Answer'), 
+                    'answer[' . $option_number . ']',
+                    Translation :: get('Answer'),
                     $html_editor_options);
                 $group[] = $this->create_html_editor(
-                    'comment[' . $option_number . ']', 
-                    Translation :: get('Comment'), 
+                    'comment[' . $option_number . ']',
+                    Translation :: get('Comment'),
                     $html_editor_options);
                 $group[] = $this->createElement(
-                    'text', 
-                    'option_weight[' . $option_number . ']', 
-                    Translation :: get('Weight'), 
+                    'text',
+                    'option_weight[' . $option_number . ']',
+                    Translation :: get('Weight'),
                     'size="2"  class="input_numeric"');
-                
+
                 $hotspot_actions = array();
                 $hotspot_actions[] = $this->createElement(
-                    'image', 
-                    'edit[' . $option_number . ']', 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                    'image',
+                    'edit[' . $option_number . ']',
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     array('class' => 'edit_option', 'id' => 'edit_' . $option_number));
                 $hotspot_actions[] = $this->createElement(
-                    'image', 
-                    'reset[' . $option_number . ']', 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reset.png', 
+                    'image',
+                    'reset[' . $option_number . ']',
+                    Theme :: getInstance()->getCommonImagePath('action_reset'),
                     array('class' => 'reset_option', 'id' => 'reset_' . $option_number));
-                
+
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
                 {
                     $hotspot_actions[] = $this->createElement(
-                        'image', 
-                        'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                        'image',
+                        'remove[' . $option_number . ']',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
                 {
                     $hotspot_actions[] = $this->createElement(
-                        'static', 
-                        null, 
-                        null, 
-                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                             'action_delete_na.png" />');
+                        'static',
+                        null,
+                        null,
+                        '<img class="remove_option" src="' .
+                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
                 }
                 $group[] = $this->createElement(
-                    'static', 
-                    null, 
-                    null, 
+                    'static',
+                    null,
+                    null,
                     $this->createElement('group', null, null, $hotspot_actions, '&nbsp;&nbsp;', false)->toHtml());
-                
+
                 $this->addGroup($group, 'option_' . $option_number, null, '', false);
-                
+
                 $this->addGroupRule(
-                    'option_' . $option_number, 
+                    'option_' . $option_number,
                     array(
                         "option_weight[$option_number]" => array(
                             array(
-                                Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
+                                Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
                                 'numeric'))));
-                
+
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">{element}</tr>', 
+                         '">{element}</tr>',
                         'option_' . $option_number);
                 $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $option_number);
             }
         }
-        
+
         $this->setDefaults();
-        
+
         $_SESSION['mc_num_options'] = $number_of_options;
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
-        
+
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
             'question_buttons');
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
     }
 }

@@ -59,7 +59,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_edit'), 
                     $this->browser->get_complex_content_object_item_edit_url($cloi->get_id()), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -68,7 +68,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_edit_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -76,7 +76,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->browser->get_complex_content_object_item_delete_url($cloi->get_id()), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));
@@ -88,7 +88,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_up'), 
                     $this->browser->get_complex_content_object_item_move_url(
                         $cloi->get_id(), 
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_UP), 
@@ -99,7 +99,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_up_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -109,7 +109,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_down'), 
                     $this->browser->get_complex_content_object_item_move_url(
                         $cloi->get_id(), 
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_DOWN), 
@@ -120,7 +120,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_down_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }

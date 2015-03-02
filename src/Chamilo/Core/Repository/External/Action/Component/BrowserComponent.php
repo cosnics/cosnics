@@ -126,7 +126,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -142,7 +142,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() . 'View',
                             null,
                             Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'view_' . $renderer . '.png',
+                        Theme :: getInstance()->getCommonImagePath('view_' . $renderer),
                         $this->get_url(array(\Chamilo\Core\Repository\External\Manager :: PARAM_RENDERER => $renderer)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }

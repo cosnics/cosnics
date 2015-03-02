@@ -50,7 +50,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $play_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Stop', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_stop.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_stop'), 
                     $this->get_url(
                         array(
                             self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
@@ -62,7 +62,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $play_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Play', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_play.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_play'), 
                     $this->get_url(
                         array(
                             self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
@@ -76,13 +76,13 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('First', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_first.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_first'), 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => 0)), 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_prev'), 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index - 1)), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -91,13 +91,13 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('First', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_first_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_first_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_prev_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -107,13 +107,13 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_next.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_next'), 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index + 1)), 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_last.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_last'), 
                     $this->get_url(array(self :: SLIDESHOW_INDEX => $publication_count - 1)), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -122,13 +122,13 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_next_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_last_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_last_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
