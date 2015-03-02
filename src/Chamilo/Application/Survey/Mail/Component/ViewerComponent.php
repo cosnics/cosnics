@@ -52,7 +52,7 @@ class ViewerComponent extends Manager implements TableSupport
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         $this->mail_id = Request :: get(Manager :: PARAM_PUBLICATION_MAIL_ID);
         $this->selected_tab = Request :: get(DynamicTabsRenderer :: PARAM_SELECTED_TAB);
-        
+
         if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         {
             $this->display_header();
@@ -60,11 +60,11 @@ class ViewerComponent extends Manager implements TableSupport
             $this->display_footer();
             exit();
         }
-        
+
         $this->action_bar = $this->get_action_bar();
-        
+
         $output = $this->get_tabs_html();
-        
+
         $this->display_header();
         echo $this->action_bar->as_html() . '<br />';
         echo $output;
@@ -74,49 +74,49 @@ class ViewerComponent extends Manager implements TableSupport
     function get_tabs_html()
     {
         $html = array();
-        
+
         $renderer_name = Utilities :: get_classname_from_object($this, true);
         $tabs = new DynamicVisualTabsRenderer($renderer_name);
-        
+
         $params = $this->get_parameters();
         $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
-        
+
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAIL_OVERVIEW;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_MAIL_OVERVIEW, 
-                Translation :: get('Overview'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_mail.png', 
-                $this->get_url($params), 
+                self :: TAB_MAIL_OVERVIEW,
+                Translation :: get('Overview'),
+                Theme :: getInstance()->getCommonImagePath('action_mail'),
+                $this->get_url($params),
                 $this->get_table_type() == self :: TAB_MAIL_OVERVIEW));
-        
+
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_RECIPIENTS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_RECIPIENTS, 
-                Translation :: get('Recipients'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_users.png', 
-                $this->get_url($params), 
+                self :: TAB_RECIPIENTS,
+                Translation :: get('Recipients'),
+                Theme :: getInstance()->getCommonImagePath('action_users'),
+                $this->get_url($params),
                 $this->get_table_type() == self :: TAB_RECIPIENTS));
-        
+
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_QUEUED;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_QUEUED, 
-                Translation :: get('QueuedRecipients'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_users.png', 
-                $this->get_url($params), 
+                self :: TAB_QUEUED,
+                Translation :: get('QueuedRecipients'),
+                Theme :: getInstance()->getCommonImagePath('action_users'),
+                $this->get_url($params),
                 $this->get_table_type() == self :: TAB_QUEUED));
-        
+
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_UNREACHED_RECIPIENTS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_UNREACHED_RECIPIENTS, 
-                Translation :: get('UnreachedRecipients'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_users.png', 
-                $this->get_url($params), 
+                self :: TAB_UNREACHED_RECIPIENTS,
+                Translation :: get('UnreachedRecipients'),
+                Theme :: getInstance()->getCommonImagePath('action_users'),
+                $this->get_url($params),
                 $this->get_table_type() == self :: TAB_UNREACHED_RECIPIENTS));
-        
+
         if ($this->table_type == self :: TAB_MAIL_OVERVIEW)
         {
             $tabs->set_content($this->get_mail_overview());
@@ -126,24 +126,24 @@ class ViewerComponent extends Manager implements TableSupport
             $table = new MailRecipientTable($this);
             $tabs->set_content($table->as_html());
         }
-        
+
         $html[] = $tabs->render();
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         return implode($html, "\n");
     }
 
     function get_mail_overview()
     {
         $html = array();
-        
+
         $mail = DataManager :: retrieve_by_id(Mail :: class_name(), $this->mail_id);
-        
+
         $html[] = '<h3>';
         $html[] = $mail->get_mail_header();
         $html[] = '</h3>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('From') . ':&nbsp;';
@@ -153,7 +153,7 @@ class ViewerComponent extends Manager implements TableSupport
         $html[] = $mail->get_from_address();
         $html[] = '</i>&gt;';
         $html[] = '</p>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('Reply') . ':&nbsp;';
@@ -163,12 +163,12 @@ class ViewerComponent extends Manager implements TableSupport
         $html[] = $mail->get_reply_address();
         $html[] = '</i>&gt;';
         $html[] = '</p>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('To') . ':&nbsp;';
         $html[] = '</b>';
-        
+
         switch ($mail->get_type())
         {
             case 1 :
@@ -181,9 +181,9 @@ class ViewerComponent extends Manager implements TableSupport
                 $html[] = Translation :: get("Reporters");
                 break;
         }
-        
+
         $html[] = '</p>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('Sender') . ':&nbsp;';
@@ -191,14 +191,14 @@ class ViewerComponent extends Manager implements TableSupport
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($mail->get_sender_user_id());
         $html[] = $user->get_fullname();
         $html[] = '</p>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('SendDate') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = date("Y-m-d H:i", $mail->get_send_date());
         $html[] = '</p>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('Publication') . ':&nbsp;';
@@ -207,18 +207,18 @@ class ViewerComponent extends Manager implements TableSupport
         $title = $survey_publication->get_title();
         $html[] = $title;
         $html[] = '</p>';
-        
+
         $html[] = '<hr/>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         $html[] = Translation :: get('Message') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = $mail->get_mail_content();
         $html[] = '</p>';
-        
+
         $html[] = '<hr/>';
-        
+
         $html[] = '<p>';
         $html[] = '<b>';
         // $html[] = Translation :: get('SentMails') . ':&nbsp;';
@@ -234,7 +234,7 @@ class ViewerComponent extends Manager implements TableSupport
         // '#survey_mail_manager_viewer_component_3" title="' . $title . '">' . DataManager ::
         // count_survey_publication_unsent_mails($mail->get_id()) . '</a>';
         // $html[] = '</p>';
-        
+
         return implode($html, "\n");
     }
 
@@ -242,9 +242,9 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID), 
+            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID),
             new StaticConditionVariable($this->mail_id));
-        
+
         switch ($this->get_table_type())
         {
             case self :: TAB_RECIPIENTS :
@@ -258,7 +258,7 @@ class ViewerComponent extends Manager implements TableSupport
                 break;
         }
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS), 
+            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS),
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
         return $condition;
@@ -267,13 +267,13 @@ class ViewerComponent extends Manager implements TableSupport
     function get_action_bar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        
+
         $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
-        
+
         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         {
         }
-        
+
         if ($this->get_user()->is_platform_admin())
         {
         }
@@ -286,22 +286,22 @@ class ViewerComponent extends Manager implements TableSupport
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
+                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
                 Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
+                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))), 
+                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
                 Translation :: get('ParticipantBrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
+                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
+                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
                 Translation :: get('BrowserComponent')));
     }
 
