@@ -19,7 +19,7 @@ use Pager;
 
 /**
  * $Id: list_content_object_publication_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.browser.list_renderer
  */
 
@@ -53,7 +53,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      * The total number of items in the list
      */
     private $total_number_of_items;
-    
+
     /**
      * The default number of objects per page
      */
@@ -61,44 +61,44 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
     /**
      * Returns the HTML output of this renderer.
-     * 
+     *
      * @return string The HTML output
      */
     public function as_html()
     {
         // prepares the pager
         $this->prepare_pager();
-        
+
         $publications = $this->get_page_publications();
-        
+
         if (count($publications) == 0)
         {
             return Display :: normal_message(
-                Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES), 
+                Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES),
                 true);
         }
-        
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) .
                  'Resources/Javascript/PublicationsList.js');
-        
+
         if ($this->get_actions() && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $html[] = '<div style="clear: both;">';
             $html[] = '<form class="publication_list" name="publication_list" action="' . $this->get_url() .
                  '" method="POST" >';
         }
-        
+
         // add top page navigation
         $html[] = $this->get_navigation_html();
-        
+
         foreach ($publications as $index => $publication)
         {
             $first = ($index == 0);
             $last = ($index == count($publications) - 1);
             $html[] = $this->render_publication($publication, $first, $last, $index);
         }
-        
+
         if ($this->get_actions() && count($publications) > 0 && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $table_name = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true);
@@ -108,7 +108,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 {
                     continue;
                 }
-                
+
                 $html[] = '<input type="hidden" name="' . $parameter . '" value="' . $value . '" />';
             }
             $html[] = '<script type="text/javascript">
@@ -123,7 +123,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 							}
 							/* ]]> */
 							</script>';
-            
+
             $html[] = '<div style="text-align: right;">';
             $html[] = '<a href="?" onclick="setCheckbox(\'publication_list\', true); return false;">' .
                  Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES) . '</a>';
@@ -144,20 +144,20 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = ' <input type="submit" value="' . Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) .
                  '"/>';
             $html[] = '</div>';
-            
+
             // add bottom page navigation
             $html[] = $this->get_navigation_html();
             $html[] = '</form>';
             $html[] = '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public static function handle_table_action()
     {
         $selected_ids = Request :: post(Manager :: PARAM_PUBLICATION);
-        
+
         if (empty($selected_ids))
         {
             $selected_ids = array();
@@ -171,7 +171,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
     /**
      * Renders a single publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @param $first boolean True if the publication is the first in the list it is a part of.
      * @param $last boolean True if the publication is the last in the list it is a part of.
@@ -199,7 +199,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             // $publication[ContentObjectPublication :: PROPERTY_ID],
             // null,
             // Manager :: APPLICATION_NAME);
-            
+
             // while ($feedback = $feedbacks->next_result())
             // {
             // if ($feedback->get_modification_date() >= $last_visit_date)
@@ -210,7 +210,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             // }
             // }
         }
-        
+
         $left = $position % 2;
         switch ($left)
         {
@@ -221,29 +221,27 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 $level = 'level_2';
                 break;
         }
-        
+
         if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupport)
         {
             $title_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
         }
         else
         {
             $title_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW), 
-                array(), 
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW),
+                array(),
                 true);
         }
-        
-        $html[] = '<div class="announcements ' . $level . '" style="background-image: url(' . str_replace(
-            '.png', 
-            $icon_suffix . '.png', 
-            $this->get_content_object_from_publication($publication)->get_icon_path()) . ');">';
-        
+
+        $html[] = '<div class="announcements ' . $level . '" style="background-image: url(' .
+             $this->get_content_object_from_publication($publication)->get_icon_path() . $icon_suffix . ');">';
+
         $html[] = '<div class="title' . ($this->is_visible_for_target_users($publication) ? '' : ' invisible') . '">';
         $html[] = '<a href="' . $title_url . '">' . $this->render_title($publication) . '</a>';
         $html[] = '</div>';
@@ -268,7 +266,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '</div><br />';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -279,16 +277,16 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     {
         // set the prefix
         $this->param_prefix = ContentObjectPublication :: get_table_name() . '_';
-        
+
         // count the total number of objects
         $this->total_number_of_items = $this->get_publication_count();
-        
+
         // set the page number
         $this->page_nr = isset($_SESSION[$this->param_prefix . 'page_nr']) ? $_SESSION[$this->param_prefix . 'page_nr'] : 1;
         $this->page_nr = Request :: get($this->param_prefix . 'page_nr') ? Request :: get(
             $this->param_prefix . 'page_nr') : $this->page_nr;
         $_SESSION[$this->param_prefix . 'page_nr'] = $this->page_nr;
-        
+
         // set the number of objects per page
         $this->per_page = self :: DEFAULT_PER_PAGE;
     }
@@ -305,14 +303,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_last.png"  style="vertical-align: middle;"/>';
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_first') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_last') .
+                 '"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';
@@ -320,10 +318,10 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
             $params['currentPage'] = $this->page_nr;
-            
+
             $params['extraVars'] = $this->get_tool_browser()->get_parameters();
             $params['excludeVars'] = array('message');
-            
+
             $this->pager = Pager :: factory($params);
         }
         return $this->pager;
@@ -354,7 +352,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $from = 0;
             $count = - 1;
         }
-        
+
         return $this->get_publications($from, $count);
     }
 }

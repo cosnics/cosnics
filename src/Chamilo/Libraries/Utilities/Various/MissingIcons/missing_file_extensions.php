@@ -6,6 +6,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\File\Path;
 
 require_once __DIR__ . '/../../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -17,7 +18,7 @@ $failures = 0;
 $data = array();
 
 $extensions = Filesystem :: get_directory_content(
-    Theme :: getInstance()->getCommonImagesPath(false) . 'file/extension',
+    Path :: getInstance()->getResourcesPath('Chamilo\Configuration', false) . 'File' . DIRECTORY_SEPARATOR . 'Extension',
     Filesystem :: LIST_DIRECTORIES);
 
 foreach ($extensions as $extension)
@@ -33,22 +34,21 @@ foreach ($extensions as $extension)
     foreach ($sizes as $size)
     {
         // Regular
-        $size_icon_path = Theme :: getInstance()->getCommonImagesPath(false) . 'file/extension/' . $extension . '/' . $size . '.png';
+        $size_icon_path = Theme :: getInstance()->getFileExtension($extension, $size, false);
 
         if (! file_exists($size_icon_path))
         {
             $row_failures ++;
             $failures ++;
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
         }
         else
         {
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'file/extension/' . $extension . '/' . $size .
-                 '.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size) . '" />';
         }
 
         // Not available
-        $icon_path = Theme :: getInstance()->getCommonImagesPath(false) . 'file/extension/' . $extension . '/' . $size . '_na.png';
+        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . '_na', false);
 
         if (! file_exists($icon_path))
         {
@@ -58,16 +58,15 @@ foreach ($extensions as $extension)
             }
             $row_failures ++;
             $failures ++;
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
         }
         else
         {
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'file/extension/' . $extension . '/' . $size .
-                 '_na.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . '_na') . '" />';
         }
 
         // New
-        $icon_path = Theme :: getInstance()->getCommonImagesPath(false) . 'file/extension/' . $extension . '/' . $size . '_new.png';
+        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . '_new', false);
 
         if (! file_exists($icon_path))
         {
@@ -77,12 +76,11 @@ foreach ($extensions as $extension)
             }
             $row_failures ++;
             $failures ++;
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
         }
         else
         {
-            $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'file/extension/' . $extension . '/' . $size .
-                 '_new.png" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . '_new') . '" />';
         }
     }
 

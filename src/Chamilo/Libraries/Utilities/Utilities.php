@@ -464,13 +464,13 @@ class Utilities
     {
         if ($value)
         {
-            $icon = 'action_setting_true.png';
+            $icon = 'action_setting_true';
         }
         else
         {
-            $icon = 'action_setting_false.png';
+            $icon = 'action_setting_false';
         }
-        return '<img src="' . Theme :: getInstance()->getCommonImagesPath() . $icon . '">';
+        return '<img src="' . Theme :: getInstance()->getCommonImagePath($icon) . '">';
     }
 
     /**
@@ -608,7 +608,7 @@ class Utilities
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
         	<head>
         		<title>Uncaught exception</title>
-        		<link rel="stylesheet" href="configuration/resources/css/aqua/aqua.css" type="text/css"/>
+        		<link rel="stylesheet" href="Configuration/Resources/Css/Aqua/Stylesheet.css" type="text/css"/>
         	</head>
         	<body dir="ltr">
         		<div id="outerframe">
@@ -633,7 +633,7 @@ class Utilities
         			<div id="footer">
         				<div id="copyright">
         					<div class="logo">
-        					<a href="http://www.chamilo.org"><img src="configuration/resources/images/aqua/logo_footer.png" alt="footer"/></a>
+        					<a href="http://www.chamilo.org"><img src="Configuration/Resources/Images/Aqua/logo_footer.png" alt="footer"/></a>
         					</div>
         					<div class="links">
         						<a href="http://www.chamilo.org">http://www.chamilo.org</a>&nbsp;|&nbsp;&copy;&nbsp;' . @date(

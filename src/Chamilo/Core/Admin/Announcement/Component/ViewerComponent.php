@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EDIT,
@@ -82,7 +82,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_DELETE,
@@ -91,21 +91,21 @@ class ViewerComponent extends Manager implements NoContextComponent
 
             if ($publication->is_hidden())
             {
-                $visibility_img = 'action_invisible.png';
+                $visibility_img = 'action_invisible';
             }
             elseif ($publication->is_forever())
             {
-                $visibility_img = 'action_visible.png';
+                $visibility_img = 'action_visible';
             }
             else
             {
-                $visibility_img = 'action_period.png';
+                $visibility_img = 'action_period';
             }
 
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Hide', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . $visibility_img,
+                    Theme :: getInstance()->getCommonImagePath($visibility_img),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_HIDE,

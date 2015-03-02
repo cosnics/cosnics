@@ -191,7 +191,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $item = new ToolbarItem(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                    Theme :: getInstance()->getCommonImagePath('action_rights'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY => $category->get_id(),
@@ -342,7 +342,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         'Forum/forum_read');
                     if ($forum->get_locked())
                     {
-                        $src = Theme :: getInstance()->getCommonImagesPath() . 'action_lock.png';
+                        $src = Theme :: getInstance()->getCommonImagePath('action_lock');
                     }
 
                     $table->setCellContents(
@@ -456,7 +456,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_invisible.png',
+                        Theme :: getInstance()->getCommonImagePath('action_invisible'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -468,7 +468,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Hide', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png',
+                        Theme :: getInstance()->getCommonImagePath('action_visible'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -481,7 +481,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png',
+                        Theme :: getInstance()->getCommonImagePath('action_up_na'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -490,7 +490,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_up.png',
+                        Theme :: getInstance()->getCommonImagePath('action_up'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -504,7 +504,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png',
+                        Theme :: getInstance()->getCommonImagePath('action_down_na'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -513,7 +513,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_down.png',
+                        Theme :: getInstance()->getCommonImagePath('action_down'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -525,7 +525,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_move.png',
+                    Theme :: getInstance()->getCommonImagePath('action_move'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -535,7 +535,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -557,7 +557,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_build.png',
+                    Theme :: getInstance()->getCommonImagePath('action_build'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -575,7 +575,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Unlock'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_unlock.png',
+                        Theme :: getInstance()->getCommonImagePath('action_unlock'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -587,7 +587,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Lock'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_lock.png',
+                        Theme :: getInstance()->getCommonImagePath('action_lock'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -604,7 +604,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -666,7 +666,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagePath('action_publish'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
@@ -685,7 +685,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                     null,
                                     'application\weblcms\tool\\' . $tool)),
                             Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagePath('action_publish'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
@@ -698,7 +698,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageCategories', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_category.png',
+                    Theme :: getInstance()->getCommonImagePath('action_category'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
@@ -710,7 +710,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                    Theme :: getInstance()->getCommonImagePath('action_rights'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS)),
@@ -726,7 +726,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_introduce.png',
+                    Theme :: getInstance()->getCommonImagePath('action_introduce'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),

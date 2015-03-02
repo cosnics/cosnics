@@ -11,7 +11,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
     /**
      * Returns the list of type names that this block can map to.
-     * 
+     *
      * @return array
      */
     public static function get_supported_types()
@@ -34,49 +34,50 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
     /**
      * Returns the html to display when the block is configured.
-     * 
+     *
      * @return string
      */
     public function display_content()
     {
         $content_object = $this->get_object();
-        
+
         $html = array();
         $feed = RenditionImplementation :: parse_file($content_object->get_url());
         if ($feed)
         {
             $target = $this->get_link_target();
             $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
-            $icon = Theme :: getInstance()->getImagesPath('\core\repository\content_object\rss_feed') . 'Logo/' .
-                 Theme :: ICON_MINI . '.png';
+            $icon = Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\ContentObject\RssFeed',
+                'Logo/' . Theme :: ICON_MINI);
             $html[] = '<div class="tool_menu">';
             $html[] = '<ul>';
-            
+
             $count_valid = 0;
-            
+
             foreach ($feed['items'] as $item)
             {
                 if (! $item['link'] || ! $item['title'])
                 {
                     continue;
                 }
-                
+
                 $count_valid ++;
-                
+
                 $html[] = '<li class="tool_list_menu" style="background-image: url(' . $icon . ')"><a href="' . htmlentities(
                     $item['link']) . '" ' . $target . '>' . $item['title'] . '</a></li>';
             }
-            
+
             $html[] = '</ul>';
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
-        
+
         if (! $feed || $count_valid == 0)
         {
             $html[] = '<span style="font-weight: bold;">' . Translation :: get('NoFeedsFound') . '</span>';
         }
-        
+
         return '<div style="height: 4px;"></div>' . implode(PHP_EOL, $html);
     }
 }

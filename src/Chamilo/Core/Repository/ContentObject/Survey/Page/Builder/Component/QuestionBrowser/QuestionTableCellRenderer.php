@@ -54,7 +54,7 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_visible.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_visible'), 
                     $this->get_component()->get_change_question_visibility_url($complex_item), 
                     ToolbarItem :: DISPLAY_ICON));
             
@@ -65,7 +65,7 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Configure', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_build_prerequisites.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_build_prerequisites'), 
                         $this->get_component()->get_configure_question_url($complex_item), 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -75,7 +75,7 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_visible_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_visible_na'), 
                     $this->get_component()->get_change_question_visibility_url($complex_item), 
                     ToolbarItem :: DISPLAY_ICON));
         }

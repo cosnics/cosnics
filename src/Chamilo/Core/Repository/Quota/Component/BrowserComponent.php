@@ -68,7 +68,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     'personal',
                     Translation :: get('Personal'),
-                    Theme :: getInstance()->getImagesPath() . 'tab/personal.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/personal'),
                     implode(PHP_EOL, $user_quota)));
 
             if ($user_requests > 0)
@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'personal_request',
                         Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagesPath() . 'tab/personal_request.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/personal_request'),
                         $table->as_html()));
             }
 
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'platform',
                         Translation :: get('Platform'),
-                        Theme :: getInstance()->getImagesPath() . 'tab/platform.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/platform'),
                         implode(PHP_EOL, $platform_quota)));
 
                 $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
@@ -148,9 +148,10 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_PENDING,
                             Translation :: get('PendingRequests'),
-                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_PENDING .
-                                 '.png',
-                                $table->as_html()));
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\Quota',
+                                'Decision/22/' . Request :: DECISION_PENDING),
+                            $table->as_html()));
                 }
 
                 $conditions = array();
@@ -170,9 +171,10 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_GRANTED,
                             Translation :: get('GrantedRequests'),
-                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_GRANTED .
-                                 '.png',
-                                $table->as_html()));
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\Quota',
+                                'Decision/22/' . Request :: DECISION_GRANTED),
+                            $table->as_html()));
                 }
 
                 $conditions = array();
@@ -193,7 +195,9 @@ class BrowserComponent extends Manager implements TableSupport
                         new DynamicContentTab(
                             RequestTable :: TYPE_DENIED,
                             Translation :: get('DeniedRequests'),
-                            Theme :: getInstance()->getImagesPath() . 'decision/22/' . Request :: DECISION_DENIED . '.png',
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\Quota',
+                                'Decision/22/' . Request :: DECISION_DENIED),
                             $table->as_html()));
                 }
             }
@@ -363,7 +367,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('UpgradeQuota'),
-                    Theme :: getInstance()->getImagesPath() . 'action/upgrade.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/upgrade'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
@@ -372,7 +376,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestUpgrade'),
-                    Theme :: getInstance()->getImagesPath() . 'action/request.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/request'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
@@ -381,13 +385,13 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagesPath() . 'action/rights.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/rights'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ResetTotal'),
-                    Theme :: getInstance()->getImagesPath() . 'action/reset.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/reset'),
                     $this->get_url(array(self :: PARAM_RESET_CACHE => 1))));
         }
 

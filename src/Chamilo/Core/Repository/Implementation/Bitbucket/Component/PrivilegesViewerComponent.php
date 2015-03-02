@@ -55,7 +55,7 @@ class PrivilegesViewerComponent extends Manager
                     {
                         $toolbar_item = new ToolbarItem(
                             Translation :: get('Delete'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                            Theme :: getInstance()->getCommonImagePath('action_delete'),
                             $this->get_external_repository_privilege_revoking_url($id, $privilege->get_username()),
                             ToolbarItem :: DISPLAY_ICON);
 
@@ -88,7 +88,7 @@ class PrivilegesViewerComponent extends Manager
                     {
                         $toolbar_item = new ToolbarItem(
                             Translation :: get('Delete'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                            Theme :: getInstance()->getCommonImagePath('action_delete'),
                             $this->get_external_repository_group_privilege_revoking_url(
                                 $id,
                                 $privilege->get_owner_username() . '/' . $privilege->get_group()),
@@ -133,7 +133,9 @@ class PrivilegesViewerComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('RevokeAll'),
-                Theme :: getInstance()->getImagesPath() . 'action_revoke.png',
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Bitbucket',
+                    'action_revoke'),
                 $this->get_external_repository_privilege_revoking_url($id),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

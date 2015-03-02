@@ -28,11 +28,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public static function get_default_sizes()
     {
         return array(
-            self :: SIZE_SQUARE, 
-            self :: SIZE_THUMBNAIL, 
-            self :: SIZE_SMALL, 
-            self :: SIZE_MEDIUM, 
-            self :: SIZE_LARGE, 
+            self :: SIZE_SQUARE,
+            self :: SIZE_THUMBNAIL,
+            self :: SIZE_SMALL,
+            self :: SIZE_MEDIUM,
+            self :: SIZE_LARGE,
             self :: SIZE_ORIGINAL);
     }
 
@@ -45,14 +45,14 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         $available_sizes = $this->get_available_sizes();
         $html = array();
-        
+
         foreach ($available_sizes as $available_size)
         {
             $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation :: get(
                 (string) StringUtilities :: getInstance()->createString($available_size)->upperCamelize()) . ' (' .
                  $this->get_available_size_dimensions_string($available_size) . ')</a>';
         }
-        
+
         return implode('<br />' . "\n", $html);
     }
 
@@ -62,13 +62,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         {
             $size = self :: SIZE_MEDIUM;
         }
-        
+
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-        
+
         $urls = $this->get_urls();
         return array('width' => $urls[$size]['width'], 'height' => $urls[$size]['height']);
     }
@@ -76,7 +76,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_available_size_dimensions_string($size = self :: SIZE_MEDIUM)
     {
         $available_size_dimensions = $this->get_available_size_dimensions($size);
-        
+
         return $available_size_dimensions['width'] . ' x ' . $available_size_dimensions['height'];
     }
 
@@ -114,7 +114,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
                 $tags[] = $tag['display'];
             }
         }
-        
+
         return implode(', ', $tags);
     }
 
@@ -124,13 +124,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         {
             $size = self :: SIZE_MEDIUM;
         }
-        
+
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-        
+
         $urls = $this->get_urls();
         return $urls[$size]['source'];
     }
@@ -173,9 +173,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_license_icon()
     {
         $icon = new ToolbarItem(
-            $this->get_license_name(), 
-            Theme :: getInstance()->getImagesPath() . 'licenses/license_' . $this->get_license_id() . '.png', 
-            null, 
+            $this->get_license_name(),
+            Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\Implementation\Flickr',
+                'Licenses/license_' . $this->get_license_id()),
+            null,
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();
     }
@@ -193,11 +195,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public static function get_possible_sizes()
     {
         return array(
-            'sq' => self :: SIZE_SQUARE, 
-            't' => self :: SIZE_THUMBNAIL, 
-            's' => self :: SIZE_SMALL, 
-            'm' => self :: SIZE_MEDIUM, 
-            'l' => self :: SIZE_LARGE, 
+            'sq' => self :: SIZE_SQUARE,
+            't' => self :: SIZE_THUMBNAIL,
+            's' => self :: SIZE_SMALL,
+            'm' => self :: SIZE_MEDIUM,
+            'l' => self :: SIZE_LARGE,
             'o' => self :: SIZE_ORIGINAL);
     }
 
@@ -206,36 +208,36 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         $licenses = array();
         $licenses[0] = array('id' => 0, 'name' => 'All Rights Reserved', 'url' => '');
         $licenses[1] = array(
-            'id' => 1, 
-            'name' => 'Attribution-NonCommercial-ShareAlike License', 
+            'id' => 1,
+            'name' => 'Attribution-NonCommercial-ShareAlike License',
             'url' => 'http://creativecommons.org/licenses/by-nc-sa/2.0/');
         $licenses[2] = array(
-            'id' => 2, 
-            'name' => 'Attribution-NonCommercial License', 
+            'id' => 2,
+            'name' => 'Attribution-NonCommercial License',
             'url' => 'http://creativecommons.org/licenses/by-nc/2.0/');
         $licenses[3] = array(
-            'id' => 3, 
-            'name' => 'Attribution-NonCommercial-NoDerivs License', 
+            'id' => 3,
+            'name' => 'Attribution-NonCommercial-NoDerivs License',
             'url' => 'http://creativecommons.org/licenses/by-nc-nd/2.0/');
         $licenses[4] = array(
-            'id' => 4, 
-            'name' => 'Attribution License', 
+            'id' => 4,
+            'name' => 'Attribution License',
             'url' => 'http://creativecommons.org/licenses/by/2.0/');
         $licenses[5] = array(
-            'id' => 5, 
-            'name' => 'Attribution-ShareAlike License', 
+            'id' => 5,
+            'name' => 'Attribution-ShareAlike License',
             'url' => 'http://creativecommons.org/licenses/by-sa/2.0/');
         $licenses[6] = array(
-            'id' => 6, 
-            'name' => 'Attribution-NoDerivs License', 
+            'id' => 6,
+            'name' => 'Attribution-NoDerivs License',
             'url' => 'http://creativecommons.org/licenses/by-nd/2.0/');
         $licenses[7] = array(
-            'id' => 7, 
-            'name' => 'No known copyright restrictions', 
+            'id' => 7,
+            'name' => 'No known copyright restrictions',
             'url' => 'http://www.flickr.com/commons/usage/');
         $licenses[8] = array(
-            'id' => 8, 
-            'name' => 'United States Government Work', 
+            'id' => 8,
+            'name' => 'United States Government Work',
             'url' => 'http://www.usa.gov/copyright.shtml');
         return $licenses;
     }

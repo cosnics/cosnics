@@ -22,12 +22,12 @@ class AssessmentMatchTextQuestionResultDisplay extends QuestionResultDisplay
         $valid_answer = $this->get_score() > 0;
         $user_answer = $this->get_answers();
         $answer_option = $this->get_question()->get_option(
-            $user_answer[0], 
-            $this->get_question()->get_ignore_case(), 
+            $user_answer[0],
+            $this->get_question()->get_ignore_case(),
             $this->get_question()->get_use_wildcards());
-        
+
         $html = array();
-        
+
         $html[] = '<table class="data_table take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
@@ -40,50 +40,55 @@ class AssessmentMatchTextQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-        
+
         $html[] = '<tr class="row_even">';
-        
+
         if (! is_null($user_answer[0]) && $user_answer[0] != '')
         {
             if ($valid_answer && $best_option->matches(
-                $user_answer[0], 
-                $this->get_question()->get_ignore_case(), 
+                $user_answer[0],
+                $this->get_question()->get_ignore_case(),
                 $this->get_question()->get_use_wildcards()))
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                     'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
                      Translation :: get('Correct') . '" style="" />';
             }
             elseif ($valid_answer)
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                     'answer_warning.png" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'answer_warning') . '" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
                      Translation :: get('CorrectButNotBest') . '" style="" />';
             }
             else
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                     'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                      '" />';
             }
-            
+
             $html[] = '<td>' . $user_answer[0] . $result . '</td>';
         }
         else
         {
-            $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                 'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+            $result = ' <img style="vertical-align: middle;" src="' .
+                 Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                  '" />';
             $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
         }
-        
+
         if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && $feedback_answer &&
              ! $this->can_change())
         {
             if (! is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_results_viewer(), 
+                    $this->get_results_viewer(),
                     $answer_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -92,47 +97,47 @@ class AssessmentMatchTextQuestionResultDisplay extends QuestionResultDisplay
                 $html[] = '<td>-</td>';
             }
         }
-        
+
         $html[] = '</tr>';
-        
+
         $html[] = '</tbody>';
         $html[] = '</table>';
-        
+
         if ($feedback_answer && (! $valid_answer || ($valid_answer && ! $best_option->matches(
-            $user_answer[0], 
-            $this->get_question()->get_ignore_case(), 
+            $user_answer[0],
+            $this->get_question()->get_ignore_case(),
             $this->get_question()->get_use_wildcards()))))
         {
             $html[] = '<table class="data_table take_assessment">';
             $html[] = '<thead>';
             $html[] = '<tr>';
             $html[] = '<th style="width: 50%;">' . Translation :: get('BestPossibleAnswer') . '</th>';
-            
+
             if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
             {
                 $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
             }
-            
+
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tbody>';
-            
+
             $html[] = '<tr class="row_even">';
             $html[] = '<td>' . $best_option->get_value() . '</td>';
-            
+
             if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_results_viewer(), 
+                    $this->get_results_viewer(),
                     $best_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
-            
+
             $html[] = '</tr>';
             $html[] = '</tbody>';
             $html[] = '</table>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

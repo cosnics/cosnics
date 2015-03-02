@@ -83,10 +83,11 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagesPath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
-                     Theme :: ICON_SMALL . '.png',
-                    $link,
-                    ($this->type == self :: TYPE_USER)));
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\User\Manager :: context(),
+                    'Logo/' . Theme :: ICON_SMALL),
+                $link,
+                ($this->type == self :: TYPE_USER)));
 
         $label = htmlentities(Translation :: get('Groups', null, \Chamilo\Core\Group\Manager :: context()));
         $link = $this->get_url(array(self :: PARAM_TYPE => self :: TYPE_GROUP));
@@ -94,10 +95,11 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 'users',
                 $label,
-                Theme :: getInstance()->getImagesPath(\Chamilo\Core\Group\Manager :: context()) . 'Logo/' .
-                     Theme :: ICON_SMALL . '.png',
-                    $link,
-                    ($this->type == self :: TYPE_GROUP)));
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\Group\Manager :: context(),
+                    'Logo/' . Theme :: ICON_SMALL),
+                $link,
+                ($this->type == self :: TYPE_GROUP)));
 
         return $tabs->render();
     }
@@ -131,7 +133,7 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShareWithOtherUsersGroups'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagePath('action_rights'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADD_ENTITIES))),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 

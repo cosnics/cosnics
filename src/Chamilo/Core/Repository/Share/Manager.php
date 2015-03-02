@@ -95,8 +95,8 @@ abstract class Manager extends Application
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type());
 
-            $html[] = '<li><img src="' . Theme :: getInstance()->getImagesPath($namespace) . 'Logo/' . Theme :: ICON_MINI .
-                 '.png" alt="' . htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
+            $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath($namespace, 'Logo/' . Theme :: ICON_MINI) .
+                 '" alt="' . htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
                  $content_object->get_title() . '</li>';
         }
 

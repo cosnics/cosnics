@@ -1,11 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
-
-
-
-
-
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -45,7 +40,8 @@ class YearCalendar extends Calendar
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar. This is always a monday. If the current month
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday. If the current month
      * doesn't start on a monday, the last monday of previous month is returned.
      *
      * @return int
@@ -68,7 +64,8 @@ class YearCalendar extends Calendar
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar. This is always a sunday. Of the current month doesn't
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday. Of the current month doesn't
      * end on a sunday, the first sunday of next month is returned.
      *
      * @return int
@@ -139,15 +136,15 @@ class YearCalendar extends Calendar
             0,
             0,
             '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
-                 'action_prev.png" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_prev')) .
+                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(0, 1, date('Y', $this->get_display_time()));
         $navigation->setCellContents(
             0,
             2,
             ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
-                 'action_next.png" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_next')) .
+                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }
 

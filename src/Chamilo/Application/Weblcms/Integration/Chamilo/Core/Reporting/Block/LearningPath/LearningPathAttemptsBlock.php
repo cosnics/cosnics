@@ -25,50 +25,50 @@ class LearningPathAttemptsBlock extends ToolBlock
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(Translation :: get('Name'), Translation :: get('Progress'), Translation :: get('Details')));
-        
+
         $pid = $this->get_parent()->get_publication_id();
         $course_id = $this->get_course_id();
         $tool = $this->get_tool();
-        
+
         $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_users(
-            $pid, 
+            $pid,
             $course_id);
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: PROPERTY_COURSE_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID),
             new StaticConditionVariable($pid));
         $condition = new AndCondition($conditions);
-        
+
         $attempts = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(), 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt :: class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         while ($attempt = $attempts->next_result())
         {
             $user_progress[$attempt->get_user_id()] = $attempt;
         }
-        
+
         $count = 1;
         $params = $this->get_parent()->get_parameters();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptProgressTemplate :: class_name();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_reporting.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
              Translation :: get('Details') . '" />';
-        
+
         while ($user = $users_resultset->next_result())
         {
             $reporting_data->add_category($count);
             $reporting_data->add_data_category_row($count, Translation :: get('Name'), $user->get_fullname());
-            
+
             $tracker = $user_progress[$user->get_id()];
-            
+
             if ($tracker)
             {
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID] = $tracker->get_id();
@@ -76,10 +76,10 @@ class LearningPathAttemptsBlock extends ToolBlock
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $pid;
                 $params[StatisticsViewerComponent :: PARAM_STAT] = null;
                 $url = Redirect :: get_url($params);
-                
+
                 $params[StatisticsViewerComponent :: PARAM_STAT] = StatisticsViewerComponent :: ACTION_DELETE_LP_ATTEMPT;
                 $delete_url = Redirect :: get_url($params);
-                
+
                 if ($tool == 'reporting')
                 {
                     $action = '<a href="' . $url . '">' . $img . '</a>';
@@ -87,32 +87,32 @@ class LearningPathAttemptsBlock extends ToolBlock
                 else
                 {
                     $action = Text :: create_link(
-                        $url, 
+                        $url,
                         Theme :: getInstance()->getCommonImage(
-                            'action_reporting', 
-                            'png', 
-                            Translation :: get('Details'), 
-                            null, 
+                            'action_reporting',
+                            'png',
+                            Translation :: get('Details'),
+                            null,
                             ToolbarItem :: DISPLAY_ICON));
-                    
+
                     $action .= ' ' . Text :: create_link(
-                        $delete_url, 
+                        $delete_url,
                         Theme :: getInstance()->getCommonImage(
-                            'action_delete', 
-                            'png', 
-                            Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                            null, 
+                            'action_delete',
+                            'png',
+                            Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                            null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
-                
+
                 $progress = $this->get_progress_bar($tracker->get_progress());
-                
+
                 $reporting_data->add_data_category_row($count, Translation :: get('Progress'), $progress);
                 $reporting_data->add_data_category_row($count, Translation :: get('Details'), $action);
             }
             $count ++;
         }
-        
+
         $reporting_data->hide_categories();
         return $reporting_data;
     }

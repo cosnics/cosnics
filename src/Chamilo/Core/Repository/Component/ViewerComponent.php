@@ -178,7 +178,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     new DynamicContentTab(
                         'versions',
                         Translation :: get('Versions'),
-                        Theme :: getInstance()->getImagesPath() . 'place_mini_versions.png',
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_versions'),
                         implode(PHP_EOL, $version_tab_content)));
             }
             elseif (count($publication_attr) > 0)
@@ -245,7 +245,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin.png',
+                            Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
                             $recycle_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             Translation :: get('ConfirmRemove', null, Utilities :: COMMON_LIBRARIES)));
@@ -259,7 +259,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         {
                             $recycle_bin_button = new ToolbarItem(
                                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                                Theme :: getInstance()->getCommonImagePath('action_delete'),
                                 $delete_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 Translation :: get('ConfirmDelete', null, Utilities :: COMMON_LIBRARIES));
@@ -269,7 +269,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         {
                             $recycle_bin_button = new ToolbarItem(
                                 Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin_na.png');
+                                Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'));
                         }
                     }
                 }
@@ -283,7 +283,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         $force_delete_button = new ToolbarItem(
                             Translation :: get('Unlink', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_unlink.png',
+                            Theme :: getInstance()->getCommonImagePath('action_unlink'),
                             $delete_link_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             true);
@@ -296,7 +296,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                                Theme :: getInstance()->getCommonImagePath('action_edit'),
                                 $edit_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                     }
@@ -305,7 +305,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png'));
+                                Theme :: getInstance()->getCommonImagePath('action_edit_na')));
                     }
 
                     if (isset($recycle_bin_button) && $is_owner)
@@ -324,7 +324,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png',
+                                Theme :: getInstance()->getCommonImagePath('action_move'),
                                 $move_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                     }
@@ -337,7 +337,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             $action_bar->add_common_action(
                                 new ToolbarItem(
                                     Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                                    Theme :: getInstance()->getCommonImagesPath() . 'action_share.png',
+                                    Theme :: getInstance()->getCommonImagePath('action_share'),
                                     $this->get_share_content_objects_url($object->get_id()),
                                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                         }
@@ -362,7 +362,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_build.png',
+                                Theme :: getInstance()->getCommonImagePath('action_build'),
                                 $clo_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 false,
@@ -374,7 +374,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_preview.png',
+                                Theme :: getInstance()->getCommonImagePath('action_preview'),
                                 $preview_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 false,
@@ -390,7 +390,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Restore', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagesPath() . 'action_restore.png',
+                                Theme :: getInstance()->getCommonImagePath('action_restore'),
                                 $restore_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 true));
@@ -409,7 +409,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('CopyToTemplates'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'export_template.png',
+                        Theme :: getInstance()->getCommonImagePath('export_template'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
@@ -438,7 +438,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     'external_instances',
                     Translation :: get('ExternalInstances'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_external_instance.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_external_instance'),
                     $browser->as_html()));
         }
 
@@ -451,7 +451,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_PUBLICATIONS,
                     Translation :: get('Publications'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_publications.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_publications'),
                     $browser->as_html()));
         }
         // EXPORT
@@ -460,7 +460,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             new DynamicContentTab(
                 'export',
                 Translation :: get('Export'),
-                Theme :: getInstance()->getImagesPath() . 'place_mini_export.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_export'),
                 $this->get_export_types()));
 
         // LINKS | PARENTS
@@ -472,7 +472,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_PARENTS,
                     Translation :: get('UsedIn'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_parents.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_parents'),
                     $browser->as_html()));
         }
 
@@ -485,7 +485,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_CHILDREN,
                     Translation :: get('Uses'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_children.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_children'),
                     $browser->as_html()));
         }
 
@@ -498,7 +498,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_ATTACHED_TO,
                     Translation :: get('AttachedTo'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_attached_to.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_attached_to'),
                     $browser->as_html()));
         }
 
@@ -511,7 +511,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_ATTACHES,
                     Translation :: get('Attaches'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_attaches.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_attaches'),
                     $browser->as_html()));
         }
 
@@ -524,7 +524,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_INCLUDED_IN,
                     Translation :: get('IncludedIn'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_included_in.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_included_in'),
                     $browser->as_html()));
         }
 
@@ -537,7 +537,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_INCLUDES,
                     Translation :: get('Includes'),
-                    Theme :: getInstance()->getImagesPath() . 'place_mini_includes.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_includes'),
                     $browser->as_html()));
         }
     }
@@ -581,24 +581,27 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         {
             $link = $this->get_content_object_exporting_url($this->object, $type);
             $html[] = '<a href="' . $link . '">';
-            $url = Theme :: getInstance()->getImagesPath(
+            $url = Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
-                false) . 'export/' . $type . '.png';
+                'Export/' . $type,
+                'png',
+                false);
 
             if (file_exists($url))
             {
                 $html[] = '<div class="create_block" style="background-image : url(' .
-                     Theme :: getInstance()->getImagesPath(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . 'export/' . $type .
-                     '.png); ">' . Translation :: get(
+                     Theme :: getInstance()->getImagePath(
+                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
+                        'Export/' . $type) . '); ">' . Translation :: get(
                         'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(),
                         null,
                         ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . '</div>';
             }
             else
             {
-                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagesPath(
-                    __NAMESPACE__) . 'export/' . $type . '.png); ">' . Translation :: get(
+                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository',
+                    'Export/' . $type) . '); ">' . Translation :: get(
                     'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize()) . '</div>';
             }
 

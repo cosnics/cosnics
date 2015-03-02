@@ -209,8 +209,8 @@ EOT;
         $element_template[] = '<div class="row">';
         $element_template[] = '<div class="label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-             Theme :: getInstance()->getCommonImagesPath() .
-             'action_required.png" alt="*" title ="*"/></span> <!-- END required -->';
+             Theme :: getInstance()->getCommonImagePath('action_required') .
+             '" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="formw">';
         $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
@@ -230,8 +230,8 @@ EOT;
         $this->renderer->setHeaderTemplate($header_template);
 
         HTML_QuickForm :: setRequiredNote(
-            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 '/action_required.png" alt="*" title ="*"/>&nbsp;<small>' .
+            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagePath('action_required') .
+                 '" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
 	<div class="row">
@@ -657,8 +657,7 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName .
-                 " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -850,7 +849,7 @@ EOT;
             'static',
             'add_resource_img',
             null,
-            '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_attachment.png" alt="' .
+            '<img src="' . Theme :: getInstance()->getCommonImagePath('action_attachment') . '" alt="' .
                  Translation :: get('Attachment') . '"/>');
         $group[] = $this->createElement(
             'submit',
@@ -872,9 +871,9 @@ EOT;
     {
         $this->with_progress_bar = true;
         $this->updateAttributes(
-            "onsubmit=\"javascript: myUpload.start('dynamic_div','" . Theme :: getInstance()->getCommonImagesPath() .
-                 "action_progress_bar.gif','" . Translation :: get('PleaseStandBy') . "','" . $this->getAttribute('id') .
-                 "');\"");
+            "onsubmit=\"javascript: myUpload.start('dynamic_div','" .
+                 Theme :: getInstance()->getCommonImagePath('action_progress_bar', 'gif') . "','" .
+                 Translation :: get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
         $this->addElement(
             'html',
             '<script src="' . Path :: getInstance()->getConfigurationPath(true) .

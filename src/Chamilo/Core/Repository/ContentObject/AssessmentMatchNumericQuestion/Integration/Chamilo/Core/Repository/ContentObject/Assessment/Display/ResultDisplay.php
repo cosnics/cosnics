@@ -27,62 +27,63 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $user_answer = $this->get_answers();
         $answer_option = $this->get_question()->get_option($user_answer[0], $this->get_question()->get_tolerance_type());
         $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
-        
+
         $html = array();
-        
+
         $html[] = '<table class="data_table take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th style="width: 50%;">' . Translation :: get('YourAnswer') . '</th>';
-        
+
         if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
-        
+
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-        
+
         $html[] = '<tr class="row_even">';
-        
+
         if (! is_null($user_answer[0]) && $user_answer[0] != '')
         {
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 if ($valid_answer && $best_option->matches($user_answer[0], $this->get_question()->get_tolerance_type()))
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                         'answer_correct.png" alt="' . Translation :: get('Correct') . '" title="' .
-                         Translation :: get('Correct') . '" style="" />';
+                    $result = ' <img style="vertical-align: middle;" src="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_correct') . '" alt="' .
+                         Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" style="" />';
                 }
                 elseif ($valid_answer)
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                         'answer_warning.png" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
-                         Translation :: get('CorrectButNotBest') . '" style="" />';
+                    $result = ' <img style="vertical-align: middle;" src="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_warning') . '" alt="' .
+                         Translation :: get('CorrectButNotBest') . '" title="' . Translation :: get('CorrectButNotBest') .
+                         '" style="" />';
                 }
                 else
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                         'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' .
-                         Translation :: get('Wrong') . '" />';
+                    $result = ' <img style="vertical-align: middle;" src="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') . '" alt="' .
+                         Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
                 }
             }
             else
             {
                 $result = '';
             }
-            
+
             $html[] = '<td>' . $user_answer[0] . $result . '</td>';
         }
         else
         {
             if ($configuration->show_correction() || $configuration->show_solution())
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagesPath() .
-                     'answer_wrong.png" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
-                     '" />';
+                $result = ' <img style="vertical-align: middle;" src="' .
+                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') . '" alt="' .
+                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
             }
             else
             {
@@ -90,17 +91,17 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             }
             $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
         }
-        
+
         if (AnswerFeedbackDisplay :: allowed(
-            $configuration, 
-            $this->get_complex_content_object_question(), 
-            true, 
+            $configuration,
+            $this->get_complex_content_object_question(),
+            true,
             $valid_answer))
         {
             if (! is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(), 
+                    $this->get_assessment_result_processor()->get_assessment_viewer(),
                     $answer_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -109,55 +110,55 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td>-</td>';
             }
         }
-        
+
         $html[] = '</tr>';
-        
+
         $html[] = '</tbody>';
         $html[] = '</table>';
-        
+
         if ($configuration->show_solution())
         {
             if (! $valid_answer || ($valid_answer && ! $best_option->matches(
-                $user_answer[0], 
+                $user_answer[0],
                 $this->get_question()->get_tolerance_type())))
             {
                 $html[] = '<table class="data_table take_assessment">';
                 $html[] = '<thead>';
                 $html[] = '<tr>';
                 $html[] = '<th style="width: 50%;">' . Translation :: get('BestPossibleAnswer') . '</th>';
-                
+
                 $answer_feedback_display = AnswerFeedbackDisplay :: allowed(
-                    $configuration, 
-                    $this->get_complex_content_object_question(), 
-                    false, 
+                    $configuration,
+                    $this->get_complex_content_object_question(),
+                    false,
                     true);
-                
+
                 if ($answer_feedback_display)
                 {
                     $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
                 }
-                
+
                 $html[] = '</tr>';
                 $html[] = '</thead>';
                 $html[] = '<tbody>';
-                
+
                 $html[] = '<tr class="row_even">';
                 $html[] = '<td>' . $best_option->get_value() . '</td>';
-                
+
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_assessment_result_processor()->get_assessment_viewer(), 
+                        $this->get_assessment_result_processor()->get_assessment_viewer(),
                         $best_option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }
-                
+
                 $html[] = '</tr>';
                 $html[] = '</tbody>';
                 $html[] = '</table>';
             }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

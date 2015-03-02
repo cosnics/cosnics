@@ -29,18 +29,18 @@ class SelectForm extends ContentObjectForm
     {
         $this->addElement('category', Translation :: get('Question'));
         $this->add_textfield(
-            Select :: PROPERTY_QUESTION, 
-            Translation :: get('Question'), 
-            true, 
+            Select :: PROPERTY_QUESTION,
+            Translation :: get('Question'),
+            true,
             array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
         $this->add_html_editor(Select :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
         $this->addElement('category');
-        
+
         $this->addElement('category', Translation :: get('Options'));
         $this->add_options();
         $this->addElement('category');
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getBasePath(true) .
                      'repository/content_object/survey_select_question/resources/javascript/survey_select_question.js'));
@@ -62,15 +62,14 @@ class SelectForm extends ContentObjectForm
     {
         if (! $this->isSubmitted())
         {
-            
+
             $object = $this->get_content_object();
-            $defaults[Select :: PROPERTY_QUESTION] = $defaults[Select :: PROPERTY_QUESTION] ==
-                 null ? $object->get_question() : $defaults[Select :: PROPERTY_QUESTION];
+            $defaults[Select :: PROPERTY_QUESTION] = $defaults[Select :: PROPERTY_QUESTION] == null ? $object->get_question() : $defaults[Select :: PROPERTY_QUESTION];
             $defaults[Select :: PROPERTY_INSTRUCTION] = $object->get_instruction();
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
-                
+
                 while ($option = $options->next_result())
                 {
                     $defaults[SelectOption :: PROPERTY_VALUE . '[' . $option->get_display_order() . ']'] = $option->get_value();
@@ -87,7 +86,7 @@ class SelectForm extends ContentObjectForm
     function create_content_object()
     {
         $values = $this->exportValues();
-        
+
         $object = new Select();
         $object->set_answer_type($_SESSION['select_answer_type']);
         $object->set_question($values[Select :: PROPERTY_QUESTION]);
@@ -101,7 +100,7 @@ class SelectForm extends ContentObjectForm
     function update_content_object()
     {
         $values = $this->exportValues();
-        
+
         $object = $this->get_content_object();
         $object->set_answer_type($_SESSION['select_answer_type']);
         $object->set_question($values[Select :: PROPERTY_QUESTION]);
@@ -123,25 +122,19 @@ class SelectForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        
+
         foreach ($values[SelectOption :: PROPERTY_VALUE] as $display_order => $value)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    SelectOption :: class_name(), 
-                    SelectOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    SelectOption :: class_name(), 
-                    SelectOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_DISPLAY_ORDER),
                 new StaticConditionVariable($display_order));
             $condition = new AndCondition($conditions);
-            $option = DataManager :: retrieve(
-                SelectOption :: class_name(), 
-                new DataClassRetrieveParameters($condition));
-            
+            $option = DataManager :: retrieve(SelectOption :: class_name(), new DataClassRetrieveParameters($condition));
+
             if ($option)
             {
                 $option->set_value($value);
@@ -156,24 +149,20 @@ class SelectForm extends ContentObjectForm
                 $option->create();
             }
         }
-        
+
         $options = $_SESSION['mq_skip_options'];
         if (count($options) > 0)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    SelectOption :: class_name(), 
-                    SelectOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($object->get_id()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(
-                    SelectOption :: class_name(), 
-                    SelectOption :: PROPERTY_DISPLAY_ORDER), 
+                new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_DISPLAY_ORDER),
                 $options);
             $condition = new AndCondition($conditions);
             $options = DataManager :: retrieve(
-                SelectOption :: class_name(), 
+                SelectOption :: class_name(),
                 new DataClassRetrieveParameters($condition));
             while ($option = $options->next_result())
             {
@@ -188,7 +177,7 @@ class SelectForm extends ContentObjectForm
     function add_options()
     {
         $renderer = $this->defaultRenderer();
-        
+
         if (! $this->isSubmitted())
         {
             unset($_SESSION['select_number_of_options']);
@@ -227,7 +216,7 @@ class SelectForm extends ContentObjectForm
             $_SESSION['select_answer_type'] = $object->get_answer_type();
         }
         $number_of_options = intval($_SESSION['select_number_of_options']);
-        
+
         if ($_SESSION['select_answer_type'] == 'radio')
         {
             $switch_label = Translation :: get('SwitchToMultipleSelect');
@@ -236,38 +225,38 @@ class SelectForm extends ContentObjectForm
         {
             $switch_label = Translation :: get('SwitchToSingleSelect');
         }
-        
+
         $this->addElement(
-            'hidden', 
-            'select_answer_type', 
-            $_SESSION['select_answer_type'], 
+            'hidden',
+            'select_answer_type',
+            $_SESSION['select_answer_type'],
             array('id' => 'select_answer_type'));
         $this->addElement(
-            'hidden', 
-            'select_number_of_options', 
-            $_SESSION['select_number_of_options'], 
+            'hidden',
+            'select_number_of_options',
+            $_SESSION['select_number_of_options'],
             array('id' => 'select_number_of_options'));
-        
+
         $buttons = array();
         // TODO adding fix for multiple select question
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'change_answer_type', 
-            $switch_label, 
+            'style_submit_button',
+            'change_answer_type',
+            $switch_label,
             array('class' => 'normal switch', 'id' => 'change_answer_type'));
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
-            'style_button', 
-            'add[]', 
-            Translation :: get('AddSelectOption'), 
+            'style_button',
+            'add[]',
+            Translation :: get('AddSelectOption'),
             array('class' => 'normal add', 'id' => 'add_option'));
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $html_editor_options = array();
         $html_editor_options['style'] = 'width: 100%; height: 65px;';
         $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table">';
         $table_header[] = '<thead>';
@@ -279,69 +268,64 @@ class SelectForm extends ContentObjectForm
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $visual_number = 0;
-        
+
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
             if (! in_array($option_number, $_SESSION['select_skip_options']))
             {
                 $group = array();
-                
+
                 $visual_number ++;
                 $group[] = $this->createElement('static', null, null, $visual_number);
                 $group[] = & $this->createElement(
-                    'text', 
-                    SelectOption :: PROPERTY_VALUE . '[' . $option_number . ']', 
-                    Translation :: get('Answer'), 
+                    'text',
+                    SelectOption :: PROPERTY_VALUE . '[' . $option_number . ']',
+                    Translation :: get('Answer'),
                     array('style' => 'width: 300px;'));
-                
+
                 if ($number_of_options - count($_SESSION['select_skip_options']) > 2)
                 {
                     $group[] = & $this->createElement(
-                        'image', 
-                        'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                        'image',
+                        'remove[' . $option_number . ']',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
                 {
                     $group[] = & $this->createElement(
-                        'static', 
-                        null, 
-                        null, 
-                        '<img class="remove_option" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                             'action_delete_na.png" />');
+                        'static',
+                        null,
+                        null,
+                        '<img class="remove_option" src="' .
+                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
                 }
-                
-                $this->addGroup(
-                    $group, 
-                    SelectOption :: PROPERTY_VALUE . '_' . $option_number, 
-                    null, 
-                    '', 
-                    false);
-                
+
+                $this->addGroup($group, SelectOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);
+
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">{element}</tr>', 
+                         '">{element}</tr>',
                         SelectOption :: PROPERTY_VALUE . '_' . $option_number);
                 $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>', 
+                    '<td>{element}</td>',
                     SelectOption :: PROPERTY_VALUE . '_' . $option_number);
             }
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
-        
+
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
+
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
             'question_buttons');
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
     }
 }

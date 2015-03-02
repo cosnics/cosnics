@@ -257,15 +257,6 @@ class Theme
 
     /**
      *
-     * @return string
-     */
-    public function getCommonImagesPath($web = true)
-    {
-        return $this->getImagesPath('Chamilo\Configuration', $web);
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function getAvailableThemes()

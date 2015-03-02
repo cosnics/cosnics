@@ -229,7 +229,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 $actions[$export_type] = new ToolbarItem(
                     Translation :: get(
                         'Import' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()),
-                    Theme :: getInstance()->getImagesPath() . 'import/' . $export_type . '.png',
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Import/' . $export_type),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,

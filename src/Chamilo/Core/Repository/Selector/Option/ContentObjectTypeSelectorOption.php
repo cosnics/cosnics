@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * An option in a TypeSelector
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectTypeSelectorOption implements TypeSelectorOption
@@ -75,7 +75,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
 
     /**
      * Get the TemplateRegistration for the option
-     * 
+     *
      * @return use core\repository\common\template\TemplateRegistration
      * @throws \Exception
      */
@@ -97,11 +97,13 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     public function get_image_path()
     {
         $namespace = $this->get_template_registration()->get_content_object_type();
-        
-        return Theme :: getInstance()->getImagesPath($namespace) . 'Logo/' . ($this->get_template_registration_id() ? 'template/' .
-             $this->get_template_registration()->get_name() . '/' : '') . '48.png';
+
+        return Theme :: getInstance()->getImagePath(
+            $namespace,
+            'Logo/' . ($this->get_template_registration_id() ? 'template/' .
+                 $this->get_template_registration()->get_name() . '/' : '') . '48');
     }
-    
+
     /*
      * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_label()
      */

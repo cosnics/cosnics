@@ -101,7 +101,7 @@ class EventListRenderer extends EventRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 html_entity_decode($this->get_event()->get_url()),
                 ToolbarItem :: DISPLAY_ICON));
 

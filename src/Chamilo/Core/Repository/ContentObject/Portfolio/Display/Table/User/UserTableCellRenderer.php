@@ -31,7 +31,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewAsUser', array('USER' => $result->get_fullname())), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_login.png', 
+                Theme :: getInstance()->getCommonImagePath('action_login'), 
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_USER, 

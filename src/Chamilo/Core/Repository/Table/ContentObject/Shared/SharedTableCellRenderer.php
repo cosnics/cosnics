@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class SharedTableCellRenderer extends DataClassTableCellRenderer
 {
-    
+
     // the entities a content object is shared with
     private $target_entities;
 
@@ -48,32 +48,33 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
                     if ($content_object->has_versions())
                     {
                         $number = $content_object->get_version_count();
-                        return '<img src="' . Theme :: getInstance()->getImagesPath() . 'versions_multiple.png" alt="' . Translation :: get(
-                            'VersionsAvailable', 
-                            array('NUMBER' => $number)) . '" title="' . Translation :: get(
-                            'VersionsAvailable', 
-                            array('NUMBER' => $number)) . '" />';
+                        return '<img src="' .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_multiple') .
+                             '" alt="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) .
+                             '" title="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) . '" />';
                     }
                     else
                     {
-                        return '<img src="' . Theme :: getInstance()->getImagesPath() . 'versions_none.png" alt="' .
+                        return '<img src="' .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' .
                              Translation :: get('NoVersionsAvailable') . '" title="' .
                              Translation :: get('NoVersionsAvailable') . '" />';
                     }
                 }
                 else
                 {
-                    return '<img src="' . Theme :: getInstance()->getImagesPath() . 'versions_none.png" alt="' . Translation :: get(
-                        'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
+                    return '<img src="' .
+                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' . Translation :: get(
+                            'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
                 }
             case ContentObject :: PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
                     Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                         Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES), 
+                         Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
                         $content_object->get_modification_date());
             case ContentObject :: PROPERTY_OWNER_ID :
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    User :: class_name(), 
+                    User :: class_name(),
                     (int) $content_object->get_owner_id());
                 if ($user)
                 {
@@ -91,143 +92,143 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
     private function get_sharing_links($content_object)
     {
         $user = $this->get_component()->get_user();
-        
+
         $toolbar = new Toolbar();
-        
+
         $copy_right = RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: COPY_RIGHT, 
-            $content_object->get_id(), 
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
+            RepositoryRights :: COPY_RIGHT,
+            $content_object->get_id(),
+            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
             $content_object->get_owner_id());
-        
+
         $collaborate_right = RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: COLLABORATE_RIGHT, 
-            $content_object->get_id(), 
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
+            RepositoryRights :: COLLABORATE_RIGHT,
+            $content_object->get_id(),
+            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
             $content_object->get_owner_id());
-        
+
         $use_right = RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: USE_RIGHT, 
-            $content_object->get_id(), 
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
+            RepositoryRights :: USE_RIGHT,
+            $content_object->get_id(),
+            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
             $content_object->get_owner_id());
-        
+
         $view_right = RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: VIEW_RIGHT, 
-            $content_object->get_id(), 
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
+            RepositoryRights :: VIEW_RIGHT,
+            $content_object->get_id(),
+            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
             $content_object->get_owner_id());
-        
+
         if ($view_right)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('View', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
-                    $this->get_component()->get_content_object_viewing_url($content_object), 
+                    Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    $this->get_component()->get_content_object_viewing_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ViewNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser_na.png', 
-                    null, 
+                    Translation :: get('ViewNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_browser_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($use_right)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png', 
-                    $this->get_component()->get_publish_content_object_url($content_object), 
+                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_publish'),
+                    $this->get_component()->get_publish_content_object_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('PublishNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish_na.png', 
-                    null, 
+                    Translation :: get('PublishNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_publish_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($collaborate_right)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
-                    $this->get_component()->get_content_object_editing_url($content_object), 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    $this->get_component()->get_content_object_editing_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
-                    null, 
+                    Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($copy_right)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Copy', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reuse.png', 
-                    $this->get_component()->get_copy_content_object_url($content_object->get_id()), 
+                    Translation :: get('Copy', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_reuse'),
+                    $this->get_component()->get_copy_content_object_url($content_object->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('CopyNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reuse_na.png', 
-                    null, 
+                    Translation :: get('CopyNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_reuse_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
-                $this->get_component()->get_shared_content_object_moving_url($content_object), 
+                Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('action_move'),
+                $this->get_component()->get_shared_content_object_moving_url($content_object),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         // only user shares can be deleted
         $target_entities = $this->get_target_entities($content_object);
         if (in_array($this->get_component()->get_user_id(), $target_entities[UserEntity :: ENTITY_TYPE]))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
-                    $this->get_component()->get_shared_content_object_deletion_url($content_object), 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    $this->get_component()->get_shared_content_object_deletion_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 
     private function get_rights_links($content_object)
     {
         $user = $this->get_component()->get_user();
-        
+
         if ($user->get_id() == $content_object->get_owner_id())
         {
             $toolbar = new Toolbar();
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditShareRights'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
-                    $this->get_component()->get_share_content_objects_url($content_object->get_id()), 
+                    Translation :: get('EditShareRights'),
+                    Theme :: getInstance()->getCommonImagePath('action_rights'),
+                    $this->get_component()->get_share_content_objects_url($content_object->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
             return $toolbar->as_html();
         }
@@ -240,13 +241,13 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
     private function get_shared_users_groups($content_object)
     {
         $target_entities = $this->get_target_entities($content_object);
-        
+
         $shared_users = array_unique($target_entities[UserEntity :: ENTITY_TYPE]);
         $shared_groups = array_unique($target_entities[PlatformGroupEntity :: ENTITY_TYPE]);
-        
+
         $html = array();
         $html[] = '<select>';
-        
+
         foreach ($shared_users as $user_id)
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: class_name(), (int) $user_id);
@@ -260,23 +261,23 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             }
             $html[] = '<option value="u_' . $user_id . '">' . $user_name . '</option>';
         }
-        
+
         if (count($shared_users) > 0 && count($shared_groups) > 0)
         {
             $html[] = '<option disabled="disabled">---------------------</option>';
         }
-        
+
         foreach ($shared_groups as $group_id)
         {
             $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
-            
+
             $group_name = $group ? $group->get_name() : Translation :: get('GroupUnknown');
-            
+
             $html[] = '<option value="g_' . $group_id . '">[' .
                  strtoupper(Translation :: get('GroupShort', null, \Chamilo\Core\Group\Manager :: context())) . '] ' .
                  $group_name . '</option>';
         }
-        
+
         $html[] = '</select>';
         return implode(PHP_EOL, $html);
     }
@@ -286,8 +287,8 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
         if (! $this->target_entities[$content_object->get_id()])
         {
             $this->target_entities[$content_object->get_id()] = RepositoryRights :: get_instance()->get_share_target_entities_overview(
-                $content_object->get_id(), 
-                RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
+                $content_object->get_id(),
+                RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
                 $content_object->get_owner_id());
         }
         return $this->target_entities[$content_object->get_id()];

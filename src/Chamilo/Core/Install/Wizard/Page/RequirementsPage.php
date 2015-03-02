@@ -4,7 +4,6 @@ namespace Chamilo\Core\Install\Wizard\Page;
 use Chamilo\Core\Install\Wizard\InstallWizardPage;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Table\SimpleTable;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Support\Diagnoser;
 use Chamilo\Libraries\Support\DiagnoserCellRenderer;
@@ -28,7 +27,6 @@ class RequirementsPage extends InstallWizardPage
     {
         $array = array();
         $diagnoser = new Diagnoser();
-        $path = Theme :: getInstance()->getImagesPath('Chamilo\Configuration');
         $files_folder = Path :: getInstance()->getStoragePath();
 
         if (! file_exists($files_folder))
@@ -58,8 +56,7 @@ class RequirementsPage extends InstallWizardPage
                 Translation :: get(
                     $exists ? 'DirectoryMustBeWritable' : 'DirectoryMustExist',
                     null,
-                    Utilities :: COMMON_LIBRARIES),
-                $path);
+                    Utilities :: COMMON_LIBRARIES));
 
         $version = phpversion();
         $status = $version > '5.3' ? Diagnoser :: STATUS_OK : Diagnoser :: STATUS_ERROR;
@@ -77,8 +74,7 @@ class RequirementsPage extends InstallWizardPage
             phpversion(),
             '>= 5.4',
             null,
-            Translation :: get('PHPVersionInfo', null, Utilities :: COMMON_LIBRARIES),
-            $path);
+            Translation :: get('PHPVersionInfo', null, Utilities :: COMMON_LIBRARIES));
 
         $setting = ini_get('magic_quotes_gpc');
         $req_setting = 0;
@@ -97,8 +93,7 @@ class RequirementsPage extends InstallWizardPage
             $setting,
             $req_setting,
             'on_off',
-            Translation :: get('MagicQuotesGpcInfo', null, Utilities :: COMMON_LIBRARIES),
-            $path);
+            Translation :: get('MagicQuotesGpcInfo', null, Utilities :: COMMON_LIBRARIES));
 
         $extensions = array(
             'gd' => 'http://www.php.net/gd',
@@ -133,8 +128,7 @@ class RequirementsPage extends InstallWizardPage
                 $loaded,
                 1,
                 'yes_no',
-                Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES),
-                $path);
+                Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES));
         }
 
         // ZipArchive
@@ -158,8 +152,7 @@ class RequirementsPage extends InstallWizardPage
             $loaded,
             1,
             'yes_no',
-            Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES),
-            $path);
+            Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES));
 
         // FreeType
         // Fatal error: Call to undefined function imageftbbox() in
@@ -182,8 +175,7 @@ class RequirementsPage extends InstallWizardPage
             $loaded,
             1,
             'yes_no',
-            Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES),
-            $path);
+            Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES));
 
         return $array;
     }

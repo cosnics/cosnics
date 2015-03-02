@@ -147,14 +147,14 @@ class Metadata
     {
         $result = str_replace('/', '_', $this->get_type());
         $result = str_replace('+', '_', $result);
-        $image_path = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'metadata/' . $result . '.png';
+        $image_path = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Metadata/' . $result);
         return '<img src="' . $image_path . '" title="' . $this->get_type() . '"/>';
     }
 
     public function as_string()
     {
         $html = array();
-        
+
         $html[] = Utilities :: mimetype_to_image($this->get_mimetype());
         $html[] = $this->get_type_as_image();
         return implode(" ", $html);

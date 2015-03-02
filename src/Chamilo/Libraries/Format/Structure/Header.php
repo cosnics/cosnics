@@ -101,7 +101,7 @@ class Header
         $this->add_link_header(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
         $this->add_link_header('http://help.chamilo.org/', 'help');
         $this->add_link_header(
-            Theme :: getInstance()->getCommonImagesPath() . 'favicon.ico',
+            Theme :: getInstance()->getCommonImagePath('favicon', 'ico'),
             'shortcut icon',
             null,
             'image/x-icon');

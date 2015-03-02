@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: category_browser_table_cell_renderer.class.php 205 2009-11-13 12:57:33Z vanpouckesven $
- * 
+ *
  * @package application.common.category_manager.component.category_browser
  */
 /**
@@ -24,17 +24,17 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CategoryTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $category)
     {
         $category_class_name = get_class($category);
         $class_name = $category_class_name :: class_name();
-        
+
         switch ($column->get_name())
         {
             case CategoryTableColumnModel :: CATEGORY :
-                $img = Theme :: getInstance()->getCommonImagesPath() . 'treemenu_types/category.png';
+                $img = Theme :: getInstance()->getCommonImagePath('TreemenuTypes/category');
                 return '<img src="' . $img . '"alt="category" />';
             case PlatformCategory :: PROPERTY_NAME :
                 $url = $this->get_component()->get_browse_categories_url($category->get_id());
@@ -42,7 +42,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             case CategoryTableColumnModel :: SUBCATEGORIES :
                 $count = $this->get_component()->get_parent()->count_categories(
                     new EqualityCondition(
-                        new PropertyConditionVariable($class_name, PlatformCategory :: PROPERTY_PARENT), 
+                        new PropertyConditionVariable($class_name, PlatformCategory :: PROPERTY_PARENT),
                         new StaticConditionVariable($category->get_id())));
                 return $count;
         }
@@ -52,12 +52,12 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
     public function get_actions($category)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         $condition = $this->get_component()->get_condition();
-        
+
         $count = $this->get_component()->get_parent()->count_categories($condition);
         $count_all = $this->get_component()->get_parent()->count_categories($condition);
-        
+
         /**
          * Added support for CategoryVisibilitySupported marker interface If present, the visibility attribute should be
          * checked.
@@ -66,57 +66,57 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             if ($this->get_component()->get_parent()->allowed_to_change_category_visibility($category->get_id()))
             {
-                $image = 'action_visible.png';
+                $image = 'action_visible';
                 $text = 'Visible';
                 if (! $category->get_visibility())
                 {
-                    $image = 'action_visible_na.png';
+                    $image = 'action_visible_na';
                     $text = 'Invisible';
                 }
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get($text, null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . $image, 
-                        $this->get_component()->get_toggle_visibility_category_url($category->get_id()), 
+                        Translation :: get($text, null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath($image),
+                        $this->get_component()->get_toggle_visibility_category_url($category->get_id()),
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('VisibleNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_visible_na.png', 
-                        null, 
+                        Translation :: get('VisibleNA', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('action_visible_na'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         if ($this->get_component()->get_parent()->allowed_to_edit_category($category->get_id()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
-                    $this->get_component()->get_update_category_url($category->get_id()), 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    $this->get_component()->get_update_category_url($category->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
-                    null, 
+                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($this->get_component()->supports_impact_view($category->get_id()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
-                    $this->get_component()->get_impact_view_url($category->get_id()), 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    $this->get_component()->get_impact_view_url($category->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
@@ -125,84 +125,84 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
-                        $this->get_component()->get_delete_category_url($category->get_id()), 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        $this->get_component()->get_delete_category_url($category->get_id()),
+                        ToolbarItem :: DISPLAY_ICON,
                         true));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
-                        null, 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('action_delete_na'),
+                        null,
+                        ToolbarItem :: DISPLAY_ICON,
                         true));
             }
         }
-        
+
         if ($category->get_display_order() > 1)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png', 
-                    $this->get_component()->get_move_category_url($category->get_id(), - 1), 
+                    Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_up'),
+                    $this->get_component()->get_move_category_url($category->get_id(), - 1),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png', 
-                    null, 
+                    Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_up_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($category->get_display_order() < $count)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png', 
-                    $this->get_component()->get_move_category_url($category->get_id(), 1), 
+                    Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_down'),
+                    $this->get_component()->get_move_category_url($category->get_id(), 1),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png', 
-                    null, 
+                    Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_down_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($this->get_component()->get_subcategories_allowed())
         {
             if ($count_all > 1)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
-                        $this->get_component()->get_change_category_parent_url($category->get_id()), 
+                        Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('action_move'),
+                        $this->get_component()->get_change_category_parent_url($category->get_id()),
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('MoveNA', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_move_na.png', 
-                        null, 
+                        Translation :: get('MoveNA', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('action_move_na'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         return $toolbar->as_html();
     }
 }

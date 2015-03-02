@@ -164,13 +164,13 @@ class AccountRequest extends DataClass
         switch ($this->get_status())
         {
             case self :: STATUS_ACCEPTED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_accepted.png');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_accepted');
                 break;
             case self :: STATUS_PENDING :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_pending.png');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_pending');
                 break;
             case self :: STATUS_REJECTED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_rejected.png');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'status_rejected');
                 break;
         }
 

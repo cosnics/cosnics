@@ -252,8 +252,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $info = '<br /><img style="max-width: 100px;" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                     'unknown.png' . '" /><br /><br />' .
+                $info = '<br /><img style="max-width: 100px;" src="' .
+                     Theme :: getInstance()->getCommonImagePath('unknown') . '" /><br /><br />' .
                      DatetimeUtilities :: format_locale_date(null, $post->get_creation_date());
             }
 
@@ -357,7 +357,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Quote'),
-                    Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_quote.gif',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'Buttons/icon_post_quote'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -366,7 +368,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Reply'),
-                    Theme :: getInstance()->getImagesPath() . 'buttons/button_pm_reply.gif',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'Buttons/button_pm_reply'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -377,7 +381,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_edit.gif',
+                        Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                            'Buttons/icon_post_edit'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -392,7 +398,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_delete.gif',
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                                'Buttons/icon_post_delete'),
                             $this->get_url($parameters),
                             ToolbarItem :: DISPLAY_ICON,
                             true));
@@ -417,7 +425,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ReplyOnTopic', null, 'core\repository\content_object\forum_topic'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_reply.png',
+                Theme :: getInstance()->getCommonImagePath('action_reply'),
                 $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -428,7 +436,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $action_bar->set_search_url($this->get_url($par));
         $show_all_item = new ToolbarItem(
             Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+            Theme :: getInstance()->getCommonImagePath('action_browser'),
             $this->get_url($par),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
         $action_bar->add_common_action($show_all_item);
@@ -528,14 +536,14 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_last.png"  style="vertical-align: middle;"/>';
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_first') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_last') .
+                 '"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';

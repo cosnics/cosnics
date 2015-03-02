@@ -1,11 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
-
-
-
-
-
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -49,7 +44,8 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar. This is always a monday. If the current month
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday. If the current month
      * doesn't start on a monday, the last monday of previous month is returned.
      *
      * @return int
@@ -68,7 +64,8 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar. This is always a sunday. Of the current month doesn't
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday. Of the current month doesn't
      * end on a sunday, the first sunday of next month is returned.
      *
      * @return int
@@ -200,8 +197,8 @@ class MonthCalendar extends Calendar
             0,
             0,
             '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
-                 'action_prev.png" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_prev')) .
+                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(
             0,
             1,
@@ -211,13 +208,14 @@ class MonthCalendar extends Calendar
             0,
             2,
             ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagesPath()) .
-                 'action_next.png" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_next')) .
+                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }
 
     /**
-     * Sets the daynames. If you don't use this function, the long daynames will be displayed
+     * Sets the daynames.
+     * If you don't use this function, the long daynames will be displayed
      *
      * @param array $daynames An array of 7 elements with keys 0 -> 6 containing the titles to display.
      */

@@ -291,8 +291,6 @@ class BlockRendition
 
         $user_home_allowed = PlatformSetting :: get('allow_user_home', Manager :: context());
 
-        $img_path = htmlspecialchars(Theme :: getInstance()->getCommonImagesPath());
-
         if ($this->get_user() instanceof User && ($user_home_allowed || $this->get_user()->is_platform_admin()) &&
              ! $this->get_user()->is_anonymous_user())
         {
@@ -301,8 +299,8 @@ class BlockRendition
                 $delete_text = Translation :: get('Delete');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_deleting_link($this->get_block_info())) .
                      '" class="deleteEl" title="' . $delete_text . '">';
-                $html[] = '<img src="' . $img_path . 'action_delete.png" alt="' . $delete_text . '" title="' .
-                     $delete_text . '"/></a>';
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_delete')) .
+                     '" alt="' . $delete_text . '" title="' . $delete_text . '"/></a>';
             }
 
             if ($this->block_info->is_configurable())
@@ -310,8 +308,8 @@ class BlockRendition
                 $configure_text = Translation :: get('Configure');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_configuring_link($this->get_block_info())) .
                      '" class="configEl" title="' . $configure_text . '">';
-                $html[] = '<img src="' . $img_path . 'action_config.png" alt="' . $configure_text . '" title="' .
-                     $configure_text . '"/></a>';
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_config')) .
+                     '" alt="' . $configure_text . '" title="' . $configure_text . '"/></a>';
             }
 
             if ($this->is_editable())
@@ -319,8 +317,8 @@ class BlockRendition
                 $edit_text = Translation :: get('Edit');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_editing_link($this->get_block_info())) .
                      '" class="editEl" title="' . $edit_text . '">';
-                $html[] = '<img src="' . $img_path . 'action_edit.png" alt="' . $edit_text . '" title="' . $edit_text .
-                     '"/></a>';
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_edit')) .
+                     '" alt="' . $edit_text . '" title="' . $edit_text . '"/></a>';
             }
 
             if ($this->is_hidable())
@@ -329,20 +327,20 @@ class BlockRendition
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_visibility_link($this->get_block_info())) .
                      '" class="closeEl" title="' . $toggle_visibility_text . '">';
                 $html[] = '<img class="visible"' .
-                     ($this->get_block_info()->is_visible() ? '' : ' style="display: none;"') . ' src="' . $img_path .
-                     'action_visible.png" alt="' . $toggle_visibility_text . '" title="' . $toggle_visibility_text .
-                     '"/>';
+                     ($this->get_block_info()->is_visible() ? '' : ' style="display: none;"') . ' src="' .
+                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_visible')) . '" alt="' .
+                     $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/>';
                 $html[] = '<img class="invisible"' .
-                     ($this->get_block_info()->is_visible() ? ' style="display: none;"' : '') . ' src="' . $img_path .
-                     'action_invisible.png" alt="' . $toggle_visibility_text . '" title="' . $toggle_visibility_text .
-                     '"/></a>';
+                     ($this->get_block_info()->is_visible() ? ' style="display: none;"' : '') . ' src="' .
+                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_invisible')) . '" alt="' .
+                     $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/></a>';
             }
 
             $drag_text = Translation :: get('Drag');
             $html[] = '<a href="#" id="drag_block_' . $this->get_block_info()->get_id() . '" class="dragEl" title="' .
                  $drag_text . '">';
-            $html[] = '<img src="' . $img_path . 'action_drag.png" alt="' . $drag_text . '" title="' . $drag_text .
-                 '"/></a>';
+            $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_drag')) .
+                 '" alt="' . $drag_text . '" title="' . $drag_text . '"/></a>';
         }
 
         return implode(PHP_EOL, $html);

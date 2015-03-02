@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * Umbrella class for WeblcmsAssignmentCourseGroupsReportingBlock and WeblcmsAssignmentPlatformGroupsReportingBlock
  * containing all common code.
  * Implementation specific methods are declared abstract.
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  */
 abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
@@ -48,7 +48,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
 
     /**
      * Instantiates the column headers needed.
-     * 
+     *
      * @param $parent type Pass-through variable. See parent class(es) for more details.
      * @param $vertical type Pass-through variable. See parent class(es) for more details.
      */
@@ -69,42 +69,42 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
             array(
-                self :: $COLUMN_NAME, 
-                self :: $COLUMN_FIRST_SUBMISSION, 
-                self :: $COLUMN_LAST_SUBMISSION, 
-                self :: $COLUMN_NUMBER_OF_SUBMISSIONS, 
-                self :: $COLUMN_NUMBER_OF_FEEDBACKS, 
-                self :: $COLUMN_AVERAGE_SCORE, 
+                self :: $COLUMN_NAME,
+                self :: $COLUMN_FIRST_SUBMISSION,
+                self :: $COLUMN_LAST_SUBMISSION,
+                self :: $COLUMN_NUMBER_OF_SUBMISSIONS,
+                self :: $COLUMN_NUMBER_OF_FEEDBACKS,
+                self :: $COLUMN_AVERAGE_SCORE,
                 self :: $COLUMN_ACTIONS));
-        
+
         $assignment = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             $this->get_publication_id())->get_content_object();
-        
+
         $submitters = $this->get_submitters();
-        
+
         $this->get_submitters_data();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_statistics') . '" title="' .
              Translation :: get('Details') . '" />';
         $count = 0;
-        
+
         foreach ($submitters as $submitter)
         {
             $url_title = null;
             $submissions_count = 0;
             $feedbacks_count = null;
-            
+
             $reporting_data->add_category($count);
             $submitter_statistics = array();
-            
+
             if ($this->submissions[$submitter->get_id()])
             {
                 $submitter_statistics = $this->compile_submitter_statistics($submitter, $assignment);
                 $first_submission = reset($this->submissions);
                 $url_title = $this->generate_submitter_name_link(
-                    $first_submission[AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE], 
+                    $first_submission[AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE],
                     $submitter->get_id());
-                
+
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = CourseSubmitterSubmissionsTemplate :: class_name();
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_SUBMITTER_TYPE] = $first_submission[AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE];
@@ -113,7 +113,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $img . '</a>';
                 $reporting_data->add_data_category_row($count, self :: $COLUMN_ACTIONS, $link);
             }
-            
+
             if ($url_title)
             {
                 $name = $url_title;
@@ -122,39 +122,39 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
             {
                 $name = $this->get_submitter_name($submitter);
             }
-            
+
             $reporting_data->add_data_category_row($count, self :: $COLUMN_NAME, $name);
             $reporting_data->add_data_category_row(
-                $count, 
-                self :: $COLUMN_FIRST_SUBMISSION, 
+                $count,
+                self :: $COLUMN_FIRST_SUBMISSION,
                 $submitter_statistics[self :: STATISTICS_FIRST_SUBMISSION]);
             $reporting_data->add_data_category_row(
-                $count, 
-                self :: $COLUMN_LAST_SUBMISSION, 
+                $count,
+                self :: $COLUMN_LAST_SUBMISSION,
                 $submitter_statistics[self :: STATISTICS_LAST_SUBMISSION]);
             $reporting_data->add_data_category_row(
-                $count, 
-                self :: $COLUMN_NUMBER_OF_SUBMISSIONS, 
+                $count,
+                self :: $COLUMN_NUMBER_OF_SUBMISSIONS,
                 count($submitter_statistics) > 0 ? $submitter_statistics[self :: STATISTICS_NUMBER_OF_SUBMISSIONS] : $submissions_count);
             $reporting_data->add_data_category_row(
-                $count, 
-                self :: $COLUMN_NUMBER_OF_FEEDBACKS, 
+                $count,
+                self :: $COLUMN_NUMBER_OF_FEEDBACKS,
                 count($submitter_statistics) > 0 ? $submitter_statistics[self :: STATISTICS_NUMBER_OF_FEEDBACKS] : $feedbacks_count);
             $reporting_data->add_data_category_row(
-                $count, 
-                self :: $COLUMN_AVERAGE_SCORE, 
+                $count,
+                self :: $COLUMN_AVERAGE_SCORE,
                 $submitter_statistics[self :: STATISTICS_AVERAGE_SCORE]);
-            
+
             $count ++;
         }
-        
+
         $reporting_data->hide_categories();
         return $reporting_data;
     }
 
     /**
      * Obtains the course groups or platform groups registered with the assignment.
-     * 
+     *
      * @return array() The course groups or platform groups registered with the assignment.
      */
     abstract public function get_submitters();
@@ -171,7 +171,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
 
     /**
      * Compiles the statistics for a group and assignment.
-     * 
+     *
      * @param $submitter type The group for which the statistics are wanted.
      * @param $assignment type The assignment for which the statistics are wanted.
      * @return type array() The statistics needed to fill the reporting table. Use the class STATISTICS_* constants for
@@ -181,61 +181,61 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
     {
         $submissions_count = $this->submissions[$submitter->get_id()]['count'];
         $first_submission = $this->format_date_html(
-            $this->submissions[$submitter->get_id()]['first_date'], 
+            $this->submissions[$submitter->get_id()]['first_date'],
             $assignment->get_end_time());
         $last_submission = $this->format_date_html(
-            $this->submissions[$submitter->get_id()]['last_date'], 
+            $this->submissions[$submitter->get_id()]['last_date'],
             $assignment->get_end_time());
-        
+
         if ($submissions_count > 0)
         {
             $conditions = array();
-            
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
-                    AssignmentSubmission :: PROPERTY_SUBMITTER_ID), 
+                    AssignmentSubmission :: class_name(),
+                    AssignmentSubmission :: PROPERTY_SUBMITTER_ID),
                 new StaticConditionVariable(
                     $this->submissions[$submitter->get_id()][AssignmentSubmission :: PROPERTY_SUBMITTER_ID]));
-            
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
-                    AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                    AssignmentSubmission :: class_name(),
+                    AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE),
                 new StaticConditionVariable(
                     $this->submissions[$submitter->get_id()][AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE]));
-            
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
-                    AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                    AssignmentSubmission :: class_name(),
+                    AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->get_publication_id()));
-            
+
             $condition = new AndCondition($conditions);
-            
+
             $submission_trackers = AssignmentSubmission :: get_data(
-                AssignmentSubmission :: CLASS_NAME, 
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
+                AssignmentSubmission :: CLASS_NAME,
+                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
                 $condition)->as_array();
-            
+
             $submission_tracker_ids = array();
             foreach ($submission_trackers as $submission_tracker)
             {
                 $submission_tracker_ids[] = $submission_tracker->get_id();
             }
-            
+
             $condition = new InCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(), 
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID), 
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
                 $submission_tracker_ids);
             $score_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: get_data(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: CLASS_NAME, 
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: CLASS_NAME,
+                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
                 $condition)->as_array();
-            
+
             $average_score = $this->format_score_html($this->get_avg_score($score_trackers));
-            
+
             if ($this->feedbacks[$submitter->get_id()])
             {
                 $feedbacks_count = $this->feedbacks[$submitter->get_id()]['count'];
@@ -244,7 +244,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
             {
                 $feedbacks_count = 0;
             }
-            
+
             $statistics = array();
             $statistics[self :: STATISTICS_FIRST_SUBMISSION] = $first_submission;
             $statistics[self :: STATISTICS_LAST_SUBMISSION] = $last_submission;
@@ -267,7 +267,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
 
     /**
      * Converts the resultset to an array with the submitter_id as index
-     * 
+     *
      * @param $resultset ResultSet
      * @param $array array target array, passed by reference
      */

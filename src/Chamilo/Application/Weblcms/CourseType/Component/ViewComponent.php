@@ -90,13 +90,13 @@ class ViewComponent extends Manager
         $html[] = '<div>';
         $html[] = $this->action_bar->as_html() . '<br />';
         $html[] = '<div class="clear"></div><div class="content_object" style="background-image: url(';
-        $html[] = Theme :: getInstance()->getCommonImagesPath() . 'place_group.png);">';
+        $html[] = Theme :: getInstance()->getCommonImagePath('place_group') . ');">';
         $html[] = '<div class="title">' . Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = $course_type->get_description();
         $html[] = '</div>';
         $html[] = '<div class="content_object" style="background-image: url(';
-        $html[] = Theme :: getInstance()->getCommonImagesPath() . 'place_publications.png);">';
+        $html[] = Theme :: getInstance()->getCommonImagePath('place_publications') . ');">';
         $html[] = '<div class="title">' . Translation :: get('Courses') . '</div>';
         $html[] = $this->get_courses_table_html($course_type);
         $html[] = '</div>';
@@ -133,7 +133,7 @@ class ViewComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_update_course_type_url($course_type->get_id()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -142,7 +142,7 @@ class ViewComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_delete_course_type_url($course_type->get_id()),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                     true));
@@ -152,7 +152,7 @@ class ViewComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

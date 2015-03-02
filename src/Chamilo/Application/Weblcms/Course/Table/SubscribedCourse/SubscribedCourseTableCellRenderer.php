@@ -49,7 +49,7 @@ class SubscribedCourseTableCellRenderer extends CourseTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Unsubscribe', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
                     $this->get_component()->get_unsubscribe_from_course_url($course[Course :: PROPERTY_ID]), 
                     ToolbarItem :: DISPLAY_ICON));
             

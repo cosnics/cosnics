@@ -91,7 +91,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UnsubscribeGroup'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png',
+                        Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
                         $this->get_component()->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }

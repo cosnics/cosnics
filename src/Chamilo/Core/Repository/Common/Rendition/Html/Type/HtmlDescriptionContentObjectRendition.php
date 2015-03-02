@@ -24,7 +24,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
         }
         $html[] = $this->get_attachments();
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -45,14 +45,13 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                 {
                     $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
                     $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                    $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' .
-                         Theme :: getInstance()->getImagesPath(
-                            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) .
-                         'Logo/' . Theme :: ICON_MINI . '.png" alt="' .
+                    $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(
+                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()),
+                        'Logo/' . Theme :: ICON_MINI) . '" alt="' .
                          htmlentities(
                             Translation :: get(
-                                'TypeName', 
-                                null, 
+                                'TypeName',
+                                null,
                                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()))) .
                          '"/> ' . $attachment->get_title() . '</a></li>';
                 }

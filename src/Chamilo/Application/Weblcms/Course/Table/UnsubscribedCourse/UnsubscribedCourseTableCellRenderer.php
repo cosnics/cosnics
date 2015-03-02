@@ -44,7 +44,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewCourseHome'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_home.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_home'), 
                     $this->get_component()->get_view_course_home_url($course[Course :: PROPERTY_ID]), 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -57,7 +57,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Subscribe', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_subscribe'), 
                     $this->get_component()->get_subscribe_to_course_url($course[Course :: PROPERTY_ID]), 
                     ToolbarItem :: DISPLAY_ICON));
         }

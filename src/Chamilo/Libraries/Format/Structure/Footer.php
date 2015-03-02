@@ -65,8 +65,8 @@ class Footer
         $output[] = '<div id="footer"> <!-- start of #footer section -->';
         $output[] = '<div id="copyright">';
         $output[] = '<div class="logo">';
-        $output[] = '<a href="http://www.chamilo.org"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-             'logo_footer.png" alt="footer"/></a>';
+        $output[] = '<a href="http://www.chamilo.org"><img src="' .
+             Theme :: getInstance()->getCommonImagePath('logo_footer') . '" alt="footer"/></a>';
         $output[] = '</div>';
         $output[] = '<div class="links">';
 
@@ -134,9 +134,8 @@ class Footer
 
         if ($world == "1" || (key_exists('_uid', $_SESSION) && $world == "2"))
         {
-            $links[] = '<a href="' .
-                 htmlspecialchars(
-                    Path :: getInstance()->getBasePath(true) . 'index.php?go=whois_online&application=admin') . '">' .
+            $links[] = '<a href="' . htmlspecialchars(
+                Path :: getInstance()->getBasePath(true) . 'index.php?go=whois_online&application=admin') . '">' .
                  Translation :: get('WhoisOnline') . '</a>';
         }
 

@@ -133,8 +133,9 @@ abstract class AssessmentQuestionResultDisplay
             $label = Translation :: get($variable, array('COUNT' => $this->hints));
 
             $html[] = '<img style="float: none; vertical-align: baseline;" src="' .
-                 Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'buttons/button_hint.png" alt="' . $label .
-                 '" title="' . $label . '" />&nbsp;&nbsp;';
+                 Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'Buttons/button_hint') . '" alt="' . $label . '" title="' . $label . '" />&nbsp;&nbsp;';
         }
 
         if ($this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration()->show_score())

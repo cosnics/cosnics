@@ -143,7 +143,7 @@ abstract class Manager extends Application
                      urlencode($instance->get_implementation()) . '&' .
                      \Chamilo\Core\Repository\Manager :: PARAM_EXTERNAL_INSTANCE . '=' . $instance->get_id() . '&' .
                      \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED . '=1';
-                $image = Theme :: getInstance()->getImagesPath($instance->get_implementation()) . 'Logo/16.png';
+                $image = Theme :: getInstance()->getImagePath($instance->get_implementation(), 'Logo/16');
                 $title = Translation :: get(
                     'BrowseObject',
                     array('OBJECT' => $instance->get_title()),

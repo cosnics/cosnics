@@ -1,13 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Support;
 
-
-
-
-
-
-
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Table\SimpleTable;
 use Chamilo\Libraries\Format\Theme;
@@ -568,25 +561,25 @@ class Diagnoser
         switch ($status)
         {
             case self :: STATUS_OK :
-                $img = 'status_ok_mini.png';
+                $img = 'status_ok_mini';
                 break;
             case self :: STATUS_WARNING :
-                $img = 'status_warning_mini.png';
+                $img = 'status_warning_mini';
                 break;
             case self :: STATUS_ERROR :
-                $img = 'status_error_mini.png';
+                $img = 'status_error_mini';
                 break;
             case self :: STATUS_INFORMATION :
-                $img = 'action_details.png';
+                $img = 'action_details';
                 break;
         }
 
         if (! $img_path)
         {
-            $img_path = Theme :: getInstance()->getCommonImagesPath();
+            $img_path = Theme :: getInstance()->getCommonImagePath($img);
         }
 
-        $image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';
+        $image = '<img src="' . $img_path . '" alt="' . $status . '" />';
 
         if ($url)
         {

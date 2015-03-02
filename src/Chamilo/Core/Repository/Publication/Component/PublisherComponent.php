@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * $Id: publisher.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component
  */
 class PublisherComponent extends Manager implements DelegateComponent
@@ -20,7 +20,7 @@ class PublisherComponent extends Manager implements DelegateComponent
     public function run()
     {
         $wizard = new PublisherWizard($this);
-        $wizard->run();
+        return $wizard->run();
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

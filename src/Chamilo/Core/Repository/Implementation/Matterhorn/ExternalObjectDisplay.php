@@ -31,12 +31,12 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     public function get_display_properties()
     {
         $properties = parent :: get_display_properties();
-        
+
         $properties[Translation :: get('Series')] = $this->get_object()->get_series()->get_title();
         $properties[Translation :: get('Contributor')] = $this->get_object()->get_contributors();
         $properties[Translation :: get('Subject')] = $this->get_object()->get_subjects();
         $properties[Translation :: get('License')] = $this->get_object()->get_license();
-        
+
         return $properties;
     }
 
@@ -44,23 +44,23 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     {
         $object = $this->get_object();
         $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'url', 
+            'url',
             $object->get_external_repository_id());
-        
+
         $html = array();
-        
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getPluginPath(__NAMESPACE__, true) . 'projekktor/projekktor.js');
-        
+
         if ($is_thumbnail)
         {
             $search_preview = $object->get_search_preview();
-            
+
             if ($search_preview instanceof Attachment)
             {
                 $width = 320;
                 $height = 356;
-                
+
                 $parameters = array();
                 $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
                 $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_STREAM;
@@ -68,7 +68,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                 $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $object->get_external_repository_id();
                 $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
                 $image_url = Redirect :: get_link($parameters);
-                
+
                 $html[] = '<img class="thumbnail" src="' . $image_url . '"/>';
             }
             else
@@ -81,17 +81,17 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
             $width = 620;
             $height = 596;
             $video_tracks = $object->get_video_tracks();
-            
+
             $tabs = new DynamicTabsRenderer('matterhorn_preview');
-            
+
             if (count($video_tracks) > 0)
             {
                 $video = array();
-                
+
                 $video[] = '<video class="projekktor" title="' . $object->get_title() .
                      '" width="640" height="390" controls>';
                 $video[] = '</video>';
-                
+
                 $video[] = '<script type="text/javascript">';
                 $video[] = '$(document)
         .ready(
@@ -140,10 +140,10 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                                     } ]
                                 } ],
                                 playlist : [ {';
-                
+
                 $track_codes = array();
                 $i = 0;
-                
+
                 foreach ($object->get_tracks() as $track)
                 {
                     if ($track->is_video())
@@ -157,7 +157,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                         $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
                         $track_url = Redirect :: get_link($parameters);
                         $track_url = $track->get_url();
-                        
+
                         $track_code = array();
                         $track_code[] = $i . ' : { src : \'';
                         $track_code[] = $track_url;
@@ -171,21 +171,21 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                         $i ++;
                     }
                 }
-                
+
                 $video[] = implode(', ' . "\n", $track_codes);
                 $video[] = '    } ]
                             });
                 })';
                 $video[] = '</script>';
-                
+
                 $html[] = implode(PHP_EOL, $video);
             }
-            
+
             $audio_tracks = $object->get_audio_tracks();
             if (count($audio_tracks) > 0)
             {
                 $audio = array();
-                
+
                 $audio[] = ResourceManager :: get_instance()->get_resource_html(
                     Path :: getInstance()->getPluginPath(null, true) . 'jquery/jquery.jplayer.js');
                 $audio[] = '<script type="text/javascript">
@@ -196,13 +196,13 @@ $(document).ready(function(){
 		ready: function (event) {
 			$(this).jPlayer("setMedia", {
 				title: "' . htmlentities($object->get_title()) . '",';
-                
+
                 foreach ($object->get_tracks() as $track)
                 {
-                    
+
                     $audio[] = $track->get_extension() . ': "' . $track->get_url() . '",';
                 }
-                
+
                 $audio[] = '});
 		},
 		wmode: "window",
@@ -214,7 +214,7 @@ $(document).ready(function(){
 });
 //]]>
 </script>';
-                
+
                 $audio[] = ' <div id="jquery_jplayer_1" class="jp-jplayer"></div>
 
 		<div id="jp_container_1" class="jp-audio">
@@ -257,11 +257,11 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>';
-                
+
                 $html[] = implode(PHP_EOL, $audio);
             }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -275,13 +275,13 @@ $(document).ready(function(){
     public function get_tracks_table()
     {
         $table_data = array();
-        
+
         foreach ($this->get_object()->get_tracks() as $key => $track)
         {
             $table_row = array();
             $table_row[] = $key + 1;
             $table_row[] = Utilities :: mimetype_to_image($track->get_mimetype());
-            
+
             if ($track->get_video())
             {
                 $table_row[] = $track->get_video()->as_string();
@@ -290,7 +290,7 @@ $(document).ready(function(){
             {
                 $table_row[] = '';
             }
-            
+
             if ($track->get_audio())
             {
                 $table_row[] = $track->get_audio()->as_string();
@@ -299,92 +299,92 @@ $(document).ready(function(){
             {
                 $table_row[] = '';
             }
-            
+
             $actions = new Toolbar();
             $actions->add_item(
                 new ToolbarItem(
-                    Translation :: get('DownloadTrack'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
-                    $track->get_url(), 
+                    Translation :: get('DownloadTrack'),
+                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    $track->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $table_row[] = $actions->as_html();
-            
+
             $table_data[] = $table_row;
         }
-        
+
         $table = new SortableTableFromArray($table_data, 0);
-        
+
         $table->set_header(0, '#', false);
         $table->set_header(1, Translation :: get('Type'), false);
         $table->set_header(2, Translation :: get('Video'), false);
         $table->set_header(3, Translation :: get('Audio'), false);
         $table->set_header(4, '', false);
-        
+
         return $table->as_html();
     }
 
     public function get_attachments_table()
     {
         $table_data = array();
-        
+
         foreach ($this->get_object()->get_attachments() as $attachment)
         {
             $table_row = array();
             $table_row[] = Utilities :: mimetype_to_image($attachment->get_mimetype());
             $table_row[] = $attachment->get_type_as_image();
-            
+
             $actions = new Toolbar();
             $actions->add_item(
                 new ToolbarItem(
-                    Translation :: get('DownloadAttachment'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
-                    $attachment->get_url(), 
+                    Translation :: get('DownloadAttachment'),
+                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    $attachment->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $table_row[] = $actions->as_html();
-            
+
             $table_data[] = $table_row;
         }
-        
+
         $table = new SortableTableFromArray($table_data, 0);
-        
+
         $table->set_header(0, Translation :: get('Type'), false);
         $table->set_header(1, Translation :: get('ContentType'), false);
         $table->set_header(2, '', false);
-        
+
         return $table->as_html();
     }
 
     public function get_metadata_table()
     {
         $table_data = array();
-        
+
         foreach ($this->get_object()->get_metadata() as $metadata)
         {
             $table_row = array();
             $table_row[] = Utilities :: mimetype_to_image($metadata->get_mimetype());
             $table_row[] = $metadata->get_type_as_image();
-            
+
             $actions = new Toolbar();
             $actions->add_item(
                 new ToolbarItem(
-                    Translation :: get('DownloadMetadata'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
-                    $metadata->get_url(), 
+                    Translation :: get('DownloadMetadata'),
+                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    $metadata->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $table_row[] = $actions->as_html();
-            
+
             $table_data[] = $table_row;
         }
-        
+
         $table = new SortableTableFromArray($table_data, 0);
-        
+
         $table->set_header(0, Translation :: get('Type'), false);
         $table->set_header(1, Translation :: get('ContentType'), false);
         $table->set_header(2, '', false);
-        
+
         return $table->as_html();
     }
 
@@ -393,23 +393,27 @@ $(document).ready(function(){
         $html = array();
         $html[] = $this->get_title();
         $html[] = $this->get_preview() . '<br/>';
-        
+
         $tabs = new DynamicTabsRenderer('matterhorn');
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_GENERAL, 
-                Translation :: get('General'), 
-                Theme :: getInstance()->getImagesPath() . 'tabs/' . self :: TAB_GENERAL . '.png', 
+                self :: TAB_GENERAL,
+                Translation :: get('General'),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Matterhorn',
+                    'Tabs/' . self :: TAB_GENERAL),
                 $this->get_properties_table()));
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_TRACKS, 
-                Translation :: get('Tracks'), 
-                Theme :: getInstance()->getImagesPath() . 'tabs/' . self :: TAB_TRACKS . '.png', 
+                self :: TAB_TRACKS,
+                Translation :: get('Tracks'),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Matterhorn',
+                    'Tabs/' . self :: TAB_TRACKS),
                 $this->get_tracks_table()));
-        
+
         $html[] = $tabs->render();
-        
+
         return implode(PHP_EOL, $html);
     }
 }

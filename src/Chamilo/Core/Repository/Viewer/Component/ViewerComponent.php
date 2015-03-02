@@ -30,7 +30,7 @@ class ViewerComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
+                        Theme :: getInstance()->getCommonImagePath('action_publish'),
                         $this->get_url(
                             array_merge(
                                 $this->get_parameters(),
@@ -45,7 +45,7 @@ class ViewerComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('EditAndPublish'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_editpublish.png',
+                        Theme :: getInstance()->getCommonImagePath('action_editpublish'),
                         $this->get_url(
                             array_merge(
                                 $this->get_parameters(),

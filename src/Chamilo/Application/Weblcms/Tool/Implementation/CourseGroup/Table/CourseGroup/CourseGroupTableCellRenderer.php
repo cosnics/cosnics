@@ -15,12 +15,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: course_group_subscribed_user_browser_table_cell_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $course_group)
     {
@@ -33,7 +33,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 {
                     $url = $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE,
                             \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP => $course_group->get_id()));
                     return '<a href="' . $url . '">' . $course_group->get_name() . '</a>';
                 }
@@ -52,12 +52,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar = new Toolbar();
         $parameters = array();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] = $course_group->get_id();
-        // $details_url = $this->course_group_tool->get_url($parameters);
-        // Default functionity achieved by clicking the course_group name, why
-        // add it as an icon ?
-        // $toolbar_data[] = array ('href' => $details_url, 'label' =>
-        // Translation :: get('Details'), 'img' => Theme ::
-        // get_common_image_path().'description.png');
+
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $parameters = array();
@@ -66,16 +61,16 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $edit_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
-                    $edit_url, 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    $edit_url,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $parameters = array();
             $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] = $course_group->get_id();
             $parameters[Manager :: PARAM_COURSE_GROUP_ACTION] = Manager :: ACTION_DELETE_COURSE_GROUP;
             $delete_url = $this->get_component()->get_url($parameters);
-            
+
             $confirm_messages = array();
             $confirm_messages[] = Translation :: get('DeleteConfirm', array('NAME' => $course_group->geT_name())); // TODO
                                                                                                                    // ::
@@ -93,28 +88,28 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 $confirm_messages[] = Translation :: get('DeleteConfirmForum');
             }
             $confirm_message = implode('\\n\\n', $confirm_messages);
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
-                    $delete_url, 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    true, 
-                    null, 
-                    null, 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    $delete_url,
+                    ToolbarItem :: DISPLAY_ICON,
+                    true,
+                    null,
+                    null,
                     $confirm_message));
         }
-        
+
         $user = $this->get_component()->get_user();
-        
+
         if (! $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             if ($course_group->is_self_registration_allowed() && ($course_group->count_members() <
                  $course_group->get_max_number_of_members() || $course_group->get_max_number_of_members() == 0))
             {
                 if (! $course_group->is_member($user) && DataManager :: more_subscriptions_allowed_for_user_in_group(
-                    $course_group->get_parent_id(), 
+                    $course_group->get_parent_id(),
                     $user->get_id()))
                 {
                     $parameters = array();
@@ -123,9 +118,9 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                     $subscribe_url = $this->get_component()->get_url($parameters);
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('Subscribe'), 
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
-                            $subscribe_url, 
+                            Translation :: get('Subscribe'),
+                            Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                            $subscribe_url,
                             ToolbarItem :: DISPLAY_ICON));
                 }
             }
@@ -138,12 +133,12 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $subscribe_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Subscribe'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
-                    $subscribe_url, 
+                    Translation :: get('Subscribe'),
+                    Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                    $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if (! $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT) &&
              $course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
         {
@@ -153,19 +148,12 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $unsubscribe_url = $this->get_component()->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Unsubscribe'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png', 
-                    $unsubscribe_url, 
+                    Translation :: get('Unsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
+                    $unsubscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        /*
-         * else { $parameters = array (); $parameters[\application\weblcms\Manager :: PARAM_COURSE_GROUP] =
-         * $course_group->get_id(); $parameters[oldCourseGroupTool::PARAM_COURSE_GROUP_ACTION] =
-         * oldCourseGroupTool::ACTION_UNSUBSCRIBE; $unsubscribe_url = $this->course_group_tool->get_url($parameters);
-         * $toolbar_data[] = array ('href' => $unsubscribe_url, 'label' => Translation :: get('UnsubscribeUsers'), 'img'
-         * => Theme :: getInstance()->getCommonImagesPath().'action_unsubscribe.png'); }
-         */
-        
+
         return $toolbar->as_html();
     }
 }

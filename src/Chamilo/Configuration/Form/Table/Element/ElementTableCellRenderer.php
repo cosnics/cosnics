@@ -65,14 +65,14 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagePath('action_edit'), 
                 $update_url, 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $delete_url, 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));

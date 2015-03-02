@@ -100,7 +100,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_USERS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagesPath() . 'place_users.png',
+                Theme :: getInstance()->getCommonImagePath('place_users'),
                 $link,
                 $this->current_tab == self :: TAB_USERS));
 
@@ -111,7 +111,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_COURSE_GROUPS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagesPath() . 'place_user.png',
+                Theme :: getInstance()->getCommonImagePath('place_user'),
                 $link,
                 $this->current_tab == self :: TAB_COURSE_GROUPS));
 
@@ -191,7 +191,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_backup.png',
+                    Theme :: getInstance()->getCommonImagePath('action_backup'),
                     $this->get_url($param_export_subscriptions_overview),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
