@@ -203,19 +203,23 @@ abstract class Manager extends Application implements NoContextComponent
                          'Title'));
             $link = $this->get_url($parameters);
 
-            $icon = 'place_tab_' . $external_repository_action . '.png';
-            $icon_path = Theme :: getInstance()->getImagesPath($this->get_external_repository()->get_type()) . $icon;
-            $icon_system_path = Theme :: getInstance()->getImagesPath(
+            $icon = 'place_tab_' . $external_repository_action;
+            $icon_path = Theme :: getInstance()->getImagePath($this->get_external_repository()->get_type(), $icon);
+            $icon_system_path = Theme :: getInstance()->getImagePath(
                 $this->get_external_repository()->get_type(),
-                false) . $icon;
+                $icon,
+                'png',
+                false);
 
             if (! file_exists($icon_system_path))
             {
                 $icon_path = Theme :: getInstance()->getCommonImagesPath() . $icon;
             }
+
             $this->tabs->add_tab(
                 new DynamicVisualTab($external_repository_action, $label, $icon_path, $link, $selected));
         }
+
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
 
@@ -460,7 +464,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_title())),
-                                    Theme :: getInstance()->getImagesPath($object :: context()) . 'Logo/16.png',
+                                    Theme :: getInstance()->getImagePath($object :: context(), 'Logo/16'),
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,
@@ -483,7 +487,7 @@ abstract class Manager extends Application implements NoContextComponent
                                     Translation :: get(
                                         'UpdateExternalObject',
                                         array('TYPE' => $this->get_external_repository()->get_name())),
-                                    Theme :: getInstance()->getImagesPath($object :: context()) . 'Logo/16.png',
+                                    Theme :: getInstance()->getImagePath($object :: context(), 'Logo/16'),
                                     $this->get_url(
                                         array(
                                             self :: PARAM_ACTION => self :: ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY,

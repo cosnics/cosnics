@@ -21,9 +21,9 @@ class PersonalBlogLayout extends BlogLayout
     {
         $blog_item = $complex_blog_item->get_ref_object();
         $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve(
-            User :: class_name(), 
+            User :: class_name(),
             (int) $blog_item->get_owner_id());
-        
+
         if ($owner)
         {
             $name = $owner->get_fullname();
@@ -34,9 +34,9 @@ class PersonalBlogLayout extends BlogLayout
             $name = Translation :: get('AuthorUnknown');
             $picture = Theme :: getInstance()->getCommonImagesPath() . 'unknown.png';
         }
-        
+
         $html = array();
-        
+
         $html[] = '<div class="blog_item">';
         $html[] = '<div class="information_box">';
         $html[] = '<img class="user_image" src="' . $picture . '" /><br /><br />';
@@ -46,10 +46,10 @@ class PersonalBlogLayout extends BlogLayout
         $html[] = '<div class="message_box">';
         $html[] = '<div class="title">' . $blog_item->get_title() . '</div>';
         $html[] = '<div class="description">';
-        
+
         $renderer = new ContentObjectResourceRenderer($blog_item, $blog_item->get_description());
         $html[] = $renderer->run();
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp</div>';
@@ -59,13 +59,13 @@ class PersonalBlogLayout extends BlogLayout
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp</div>';
         $html[] = '</div><br />';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Gets the layout of the attachments list
-     * 
+     *
      * @param BlogItem $blog_item
      */
     public function get_attached_content_objects_as_html($complex_blog_item)
@@ -79,31 +79,29 @@ class PersonalBlogLayout extends BlogLayout
                 Translation :: get('Attachements', null, Utilities :: COMMON_LIBRARIES)) . '</div>';
             Utilities :: order_content_objects_by_title($attachments);
             $html[] = '<ul class="attachments_list">';
-            
+
             foreach ($attachments as $attachment)
             {
                 $url = $this->get_parent()->get_content_object_display_attachment_url(
-                    $attachment, 
+                    $attachment,
                     $complex_blog_item->get_id());
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' .
-                     Theme :: getInstance()->getImagesPath(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type())) . 'Logo/' .
-                     Theme :: ICON_MINI . '.png" alt="' .
-                     htmlentities(
-                        Translation :: get(
-                            'TypeName', 
-                            null, 
-                            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()))) .
-                     '"/> ' . $attachment->get_title() . '</a></li>';
+                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(
+                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()),
+                    'Logo/' . Theme :: ICON_MINI) . '" alt="' . htmlentities(
+                    Translation :: get(
+                        'TypeName',
+                        null,
+                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()))) . '"/> ' .
+                     $attachment->get_title() . '</a></li>';
             }
-            
+
             $html[] = '</ul>';
             $html[] = '</div>';
-            
+
             return implode(PHP_EOL, $html);
         }
-        
+
         return '';
     }
 }

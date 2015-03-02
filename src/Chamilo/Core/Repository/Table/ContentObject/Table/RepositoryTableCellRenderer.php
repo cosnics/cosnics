@@ -33,11 +33,11 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
             case ContentObject :: PROPERTY_CREATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
-                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
                     $content_object->get_creation_date());
             case ContentObject :: PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
-                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
                     $content_object->get_modification_date());
             case RepositoryTableColumnModel :: PROPERTY_VERSION :
                 if ($content_object instanceof Versionable)
@@ -45,26 +45,27 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     if ($content_object->has_versions())
                     {
                         $number = $content_object->get_version_count();
-                        return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_multiple.png" alt="' . Translation :: get(
-                            'VersionsAvailable', 
-                            array('NUMBER' => $number)) . '" title="' . Translation :: get(
-                            'VersionsAvailable', 
-                            array('NUMBER' => $number)) . '" />';
+                        return '<img src="' .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_multiple') .
+                             '" alt="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) .
+                             '" title="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) . '" />';
                     }
                     else
                     {
-                        return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' .
+                        return '<img src="' .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' .
                              Translation :: get('NoVersionsAvailable') . '" title="' .
                              Translation :: get('NoVersionsAvailable') . '" />';
                     }
                 }
                 else
                 {
-                    return '<img src="' . Theme :: getInstance()->getImagesPath('Chamilo\Core\Repository\\') . 'versions_none.png" alt="' . Translation :: get(
-                        'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
+                    return '<img src="' .
+                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' . Translation :: get(
+                            'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
                 }
         }
-        
+
         return parent :: render_cell($column, $content_object);
     }
 

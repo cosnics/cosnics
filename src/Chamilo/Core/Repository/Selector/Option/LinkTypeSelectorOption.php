@@ -70,24 +70,23 @@ class LinkTypeSelectorOption implements TypeSelectorOption
     {
         return $this->url;
     }
-    
+
     /*
      * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
      */
     public function get_image_path()
     {
-        return Theme :: getInstance()->getImagesPath($this->get_context()) . '/type_selector/' . $this->get_type() .
-             '.png';
+        return Theme :: getInstance()->getImagePath($this->get_context(), 'TypeSelector/' . $this->get_type());
     }
-    
+
     /*
      * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_label()
      */
     public function get_label()
     {
         return Translation :: get(
-            (string) StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(), 
-            null, 
+            (string) StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(),
+            null,
             $this->get_context());
     }
 }

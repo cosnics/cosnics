@@ -53,10 +53,8 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                     Utilities :: order_content_objects_by_title($attachments);
 
                     $html[] = '<div class="attachments" style="margin-top: 1em;">';
-                    $html[] = '<div class="attachments_title">' .
-                         htmlentities(
-                            Translation :: get('Attachments', null, \Chamilo\Core\Repository\Manager :: context())) .
-                         '</div>';
+                    $html[] = '<div class="attachments_title">' . htmlentities(
+                        Translation :: get('Attachments', null, \Chamilo\Core\Repository\Manager :: context())) . '</div>';
                     $html[] = '<ul class="attachments_list">';
 
                     foreach ($attachments as $attachment)
@@ -73,9 +71,10 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                                  $url . '">';
                         }
 
-                        $render[] = '<img src="' . Theme :: getInstance()->getImagesPath($attachment->context()) .
-                             'Logo/16.png" alt="' . htmlentities(
-                                Translation :: get('TypeName', null, $attachment->context())) . '"/>';
+                        $render[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                            $attachment->context(),
+                            'Logo/16') . '" alt="' . htmlentities(
+                            Translation :: get('TypeName', null, $attachment->context())) . '"/>';
                         $render[] = ' ';
                         $render[] = $attachment->get_title();
 

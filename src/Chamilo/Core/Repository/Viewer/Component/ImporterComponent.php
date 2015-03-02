@@ -183,8 +183,9 @@ class ImporterComponent extends Manager implements DelegateComponent
             {
 
                 $html[] = '<a href="' . $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
-                $html[] = '<div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagesPath(
-                    \Chamilo\Core\Repository\Manager :: context()) . 'import/' . $type . '.png);">';
+                $html[] = '<div class="create_block" style="background-image: url(' . Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\Repository\Manager :: context(),
+                    'Import/' . $type) . ');">';
                 $html[] = $name;
                 $html[] = '</div>';
                 $html[] = '</a>';

@@ -225,7 +225,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     static public function render_list_item($title, $description, $info, $actions, $level, $invisible = false, $image = null)
     {
         if (is_null($image))
-            $image = Theme :: getInstance()->getImagesPath() . 'Logo/22.png';
+        {
+            $image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Logo/22');
+        }
 
         $html = array();
 
@@ -306,8 +308,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'),
                         Theme :: getInstance()->getCommonImagesPath() . 'action_group.png',
-                        $this->get_url(
-                            array(self :: PARAM_ACTION => self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
+                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
 
             return $this->action_bar;
         }

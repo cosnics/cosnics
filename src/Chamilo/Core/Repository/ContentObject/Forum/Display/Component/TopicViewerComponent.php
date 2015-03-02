@@ -357,7 +357,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Quote'),
-                    Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_quote.gif',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'Buttons/icon_post_quote'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -366,7 +368,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Reply'),
-                    Theme :: getInstance()->getImagesPath() . 'buttons/button_pm_reply.gif',
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'Buttons/button_pm_reply'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -377,7 +381,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_edit.gif',
+                        Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                            'Buttons/icon_post_edit'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -392,7 +398,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagesPath() . 'buttons/icon_post_delete.gif',
+                            Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                                'Buttons/icon_post_delete'),
                             $this->get_url($parameters),
                             ToolbarItem :: DISPLAY_ICON,
                             true));

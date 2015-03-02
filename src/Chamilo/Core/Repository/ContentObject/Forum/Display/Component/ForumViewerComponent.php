@@ -302,17 +302,23 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $last_post = DataManager :: retrieve_by_id(ForumPost :: class_name(), $topic->get_ref()->get_last_post());
 
             $count = $topic->get_ref()->get_total_posts();
-            $src = Theme :: getInstance()->getImagesPath() . 'topic_read.png';
+            $src = Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                'topic_read');
             $hover = 'NoNewPosts';
             switch ($topic->get_forum_type())
             {
                 case 1 :
-                    $src = Theme :: getInstance()->getImagesPath() . 'sticky_read.gif';
+                    $src = Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'sticky_read');
                     $hover = 'Sticky';
 
                     break;
                 case 2 :
-                    $src = Theme :: getInstance()->getImagesPath() . 'important_read.gif';
+                    $src = Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                        'important_read');
                     $hover = 'Important';
                     break;
             }
@@ -402,8 +408,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         $row,
                         5,
                         DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) . '<br />' . $name .
-                             ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' .
-                             Theme :: getInstance()->getImagesPath() . 'icon_topic_latest.gif" /></a>');
+                             ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' . Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                                'icon_topic_latest') . '" /></a>');
                 }
             }
             else
@@ -555,8 +562,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             'Subscribe',
                             null,
                             ContentObject :: get_content_object_type_namespace('forum_topic')),
-                        Theme :: getInstance()->getImagesPath(
-                            ContentObject :: get_content_object_type_namespace('forum')) . 'action_mail.png',
+                        Theme :: getInstance()->getImagePath(
+                            ContentObject :: get_content_object_type_namespace('forum'),
+                            'action_mail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -573,8 +581,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             'UnSubscribe',
                             null,
                             ContentObject :: get_content_object_type_namespace('forum_topic')),
-                        Theme :: getInstance()->getImagesPath(
-                            ContentObject :: get_content_object_type_namespace('forum')) . 'action_unmail.png',
+                        Theme :: getInstance()->getImagePath(
+                            ContentObject :: get_content_object_type_namespace('forum'),
+                            'action_unmail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -658,7 +667,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                      $forum->get_ref()->get_title() . '</a><br />' . strip_tags($forum->get_ref()->get_description());
             }
 
-            $src = Theme :: getInstance()->getImagesPath() . 'forum_read.png';
+            $src = Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                'forum_read');
 
             if ($this->is_locked || $forum->get_ref()->get_locked())
             {
@@ -717,8 +728,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $row,
                     4,
                     DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) . '<br />' . $name .
-                         ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' .
-                         Theme :: getInstance()->getImagesPath() . 'icon_topic_latest.gif" /></a>');
+                         ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' . Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Forum\Display',
+                            'icon_topic_latest') . '" /></a>');
             }
         }
         else
@@ -841,11 +853,12 @@ public function get_forum_actions($forum)
             $tool_bar->add_item(
                 new ToolbarItem(
                     Translation :: get('Subscribe'),
-                    Theme :: getInstance()->getImagesPath(ContentObject :: get_content_object_type_namespace('forum')) .
-                         'action_mail.png',
-                        $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON,
-                        true));
+                    Theme :: getInstance()->getImagePath(
+                        ContentObject :: get_content_object_type_namespace('forum'),
+                        'action_mail'),
+                    $this->get_url($parameters),
+                    ToolbarItem :: DISPLAY_ICON,
+                    true));
         }
         else
         {
@@ -855,11 +868,12 @@ public function get_forum_actions($forum)
             $tool_bar->add_item(
                 new ToolbarItem(
                     Translation :: get('UnSubscribe'),
-                    Theme :: getInstance()->getImagesPath(ContentObject :: get_content_object_type_namespace('forum')) .
-                         'action_unmail.png',
-                        $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON,
-                        true));
+                    Theme :: getInstance()->getImagePath(
+                        ContentObject :: get_content_object_type_namespace('forum'),
+                        'action_unmail'),
+                    $this->get_url($parameters),
+                    ToolbarItem :: DISPLAY_ICON,
+                    true));
         }
     }
     return $tool_bar->as_html();
