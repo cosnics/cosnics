@@ -1,19 +1,24 @@
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic);
+/* External CSS */
+@import
+	url(http://fonts.googleapis.com/css?family=Ubuntu:300,300italic,400,400italic,500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic)
+	;
 
+/* Plugin CSS */
 @import url('plugin/jquery/jquery.css');
 
-@import url('plugin/projekktor/projekktor.style.css');
+@import url('../../../Plugin/projekktor/projekktor.style.css');
 
-@import url('../../../plugin/jquery/uploadify/uploadify.css');
+@import url('../../../Plugin/jquery/uploadify/uploadify.css');
 
-@import url('common_general.css');
+/* Platform CSS */
+@import url('General.css');
 
-@import url('common_form.css');
+@import url('Form.css');
 
-@import url('common_menu.css');
+@import url('Menu.css');
 
-@import url('common_table.css');
+@import url('Table.css');
 
-@import url('common_tabs.css');
+@import url('Tabs.css');
 
-@import url('common_tree.css');
+@import url('Tree.css');
