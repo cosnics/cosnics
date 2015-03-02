@@ -16,28 +16,28 @@ class Manager implements ActionsSupportInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('List'), 
-            Translation :: get('ListDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
+            Translation :: get('List'),
+            Translation :: get('ListDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Tracking\Manager :: ACTION_BROWSE_EVENTS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Tracking\Manager :: ACTION_BROWSE_EVENTS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Archive'), 
-            Translation :: get('ArchiveDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/archive.png', 
+            Translation :: get('Archive'),
+            Translation :: get('ArchiveDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/archive'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Tracking\Manager :: ACTION_ARCHIVE), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Tracking\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Tracking\Manager :: ACTION_ARCHIVE),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return new Actions(\Chamilo\Core\Tracking\Manager :: context(), $links);
     }
 }

@@ -16,17 +16,17 @@ class Manager implements ActionsSupportInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('ManageDefault'), 
-            Translation :: get('ManageDefaultDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/build.png', 
+            Translation :: get('ManageDefault'),
+            Translation :: get('ManageDefaultDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/build'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Home\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Home\Manager :: ACTION_MANAGE_HOME), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Home\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Home\Manager :: ACTION_MANAGE_HOME),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return new Actions(\Chamilo\Core\Home\Manager :: context(), $links);
     }
 }

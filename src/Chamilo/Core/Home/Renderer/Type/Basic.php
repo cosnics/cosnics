@@ -129,9 +129,8 @@ class Basic extends Renderer
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
             {
-                $html[] = '<a class="deleteTab"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_delete_tab.png" /></a>';
+                $html[] = '<a class="deleteTab"><img src="' . htmlspecialchars(
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_delete_tab')) . '" /></a>';
             }
 
             $html[] = '</li>';
@@ -147,15 +146,15 @@ class Basic extends Renderer
 
             if ($user_home_allowed || $general_mode)
             {
-                $html[] = '<a class="addTab" href="#"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_add_tab.png" />&nbsp;' . htmlspecialchars(Translation :: get('NewTab')) . '</a>';
-                $html[] = '<a class="addColumn" href="#"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_add_column.png" />&nbsp;' . htmlspecialchars(Translation :: get('NewColumn')) . '</a>';
-                $html[] = '<a class="addEl" href="#"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_add_block.png" />&nbsp;' . htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
+                $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_add_tab')) . '" />&nbsp;' .
+                     htmlspecialchars(Translation :: get('NewTab')) . '</a>';
+                $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_add_column')) . '" />&nbsp;' .
+                     htmlspecialchars(Translation :: get('NewColumn')) . '</a>';
+                $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_add_block')) . '" />&nbsp;' .
+                     htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
 
                 $reset_url = Redirect :: get_link(
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE),
@@ -167,8 +166,10 @@ class Basic extends Renderer
                 {
                     $html[] = '<a onclick="return confirm(\'' .
                          Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' . $reset_url .
-                         '"><img src="' . htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                         'action_reset.png" />&nbsp;' . htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
+                         '"><img src="' .
+                         htmlspecialchars(
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_reset')) . '" />&nbsp;' .
+                         htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
                 }
             }
 
@@ -181,8 +182,9 @@ class Basic extends Renderer
                     Redirect :: TYPE_CORE);
 
                 $html[] = '<a href="' . $manage_url . '"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_configure.png" />&nbsp;' . htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
+                     htmlspecialchars(
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_configure')) . '" />&nbsp;' .
+                     htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
             }
             elseif ($general_mode && $user->is_platform_admin())
             {
@@ -194,9 +196,9 @@ class Basic extends Renderer
 
                 $title = $user_home_allowed ? 'BackToPersonal' : 'ViewDefault';
 
-                $html[] = '<a href="' . $personal_url . '"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                     'action_home.png" />&nbsp;' . htmlspecialchars(Translation :: get($title)) . '</a>';
+                $html[] = '<a href="' . $personal_url . '"><img src="' . htmlspecialchars(
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_home')) . '" />&nbsp;' .
+                     htmlspecialchars(Translation :: get($title)) . '</a>';
             }
 
             $html[] = '</div>';
@@ -280,9 +282,9 @@ class Basic extends Renderer
                     $footer_style = ($blocks->size() > 0) ? 'style="display:none;"' : '';
                     $html[] = '<div class="empty_portal_column" ' . $footer_style . '>';
                     $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-                    $html[] = '<div class="deleteColumn"><a href="#"><img src="' .
-                         htmlspecialchars(Theme :: getInstance()->getImagesPath('Chamilo\Core\Home')) .
-                         'action_remove_column.png" /></a></div>';
+                    $html[] = '<div class="deleteColumn"><a href="#"><img src="' . htmlspecialchars(
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_remove_column')) .
+                         '" /></a></div>';
                     $html[] = '<div style="clear:both"></div>';
                     $html[] = '</div>';
 

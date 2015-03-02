@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddApplicationItem'),
-                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_APPLICATION . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_APPLICATION),
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_CREATE,
@@ -78,7 +78,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddCategoryItem'),
-                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_CATEGORY . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_CATEGORY),
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_CREATE,
@@ -87,7 +87,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddLinkItem'),
-                Theme :: getInstance()->getImagesPath() . 'types/' . Item :: TYPE_LINK . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_LINK),
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_CREATE, self :: PARAM_TYPE => LinkItem :: class_name())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));

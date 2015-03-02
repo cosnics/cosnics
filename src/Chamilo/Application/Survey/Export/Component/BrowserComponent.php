@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements TableSupport
     function run()
     {
         $this->publication_id = Request :: get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
-        
+
         if (! Rights :: is_right_granted(Rights :: RIGHT_EXPORT_RESULT, $this->publication_id))
         {
             $this->display_header();
@@ -57,11 +57,11 @@ class BrowserComponent extends Manager implements TableSupport
             $this->display_footer();
             exit();
         }
-        
+
         $this->action_bar = $this->get_action_bar();
-        
+
         $output = $this->get_tabs_html();
-        
+
         $this->display_header();
         echo $this->action_bar->as_html() . '<br />';
         echo $output;
@@ -71,46 +71,46 @@ class BrowserComponent extends Manager implements TableSupport
     function get_tabs_html()
     {
         $html = array();
-        
+
         $renderer_name = Utilities :: get_classname_from_object($this, true);
         $tabs = new DynamicTabsRenderer($renderer_name);
-        
+
         $table = new ExportTemplateTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_EXPORT_TEMPLATES, 
-                Translation :: get('ExportTemplates'), 
-                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                self :: TAB_EXPORT_TEMPLATES,
+                Translation :: get('ExportTemplates'),
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
-        
+
         if (Rights :: is_right_granted(Rights :: RIGHT_ADD_EXPORT_TEMPLATE, $this->publication_id))
         {
             $table = new ExportRegistrationTable($this);
             $tabs->add_tab(
                 new DynamicContentTab(
-                    self :: TAB_EXPORT_REGISTRATIONS, 
-                    Translation :: get('AddExportTemplate'), 
-                    Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                    self :: TAB_EXPORT_REGISTRATIONS,
+                    Translation :: get('AddExportTemplate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                     $table->as_html()));
         }
-        
+
         $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'application\survey');
-        
+
         if ($cron_enabled)
         {
             $table = new ExportTable($this);
             $tabs->add_tab(
                 new DynamicContentTab(
-                    self :: TAB_EXPORT_TACKERS, 
-                    Translation :: get('ExportTrackers'), 
-                    Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                    self :: TAB_EXPORT_TACKERS,
+                    Translation :: get('ExportTrackers'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                     $table->as_html()));
         }
-        
+
         $html[] = $tabs->render();
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         return implode($html, "\n");
     }
 
@@ -118,23 +118,23 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_PUBLICATION_ID), 
+            new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->publication_id));
-        
+
         $query = $this->action_bar->get_query();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_NAME), 
+                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_NAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $conditions[] = new OrCondition($or_conditions);
         }
-        
+
         return new AndCondition($conditions);
     }
 
@@ -142,133 +142,133 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $job_condition = new EqualityCondition(
-            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_EXPORT_JOB_ID), 
+            new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_EXPORT_JOB_ID),
             new StaticConditionVariable(0));
         $conditions[] = new NotCondition($job_condition);
-        
+
         $query = $this->action_bar->get_query();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_NAME), 
+                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_NAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_DESCRIPTION), 
+                new PropertyConditionVariable(Export :: class_name(), Export :: PROPERTY_TEMPLATE_DESCRIPTION),
                 '*' . $query . '*');
             $or_condition = new OrCondition($or_conditions);
             $conditions[] = $or_condition;
         }
         $condition = new AndCondition($conditions);
-        
+
         return $condition;
     }
 
     function get_export_registration_condition()
     {
         $query = $this->action_bar->get_query();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions = array();
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ExportRegistration :: class_name(), ExportRegistration :: PROPERTY_NAME), 
+                new PropertyConditionVariable(ExportRegistration :: class_name(), ExportRegistration :: PROPERTY_NAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(
-                    ExportRegistration :: class_name(), 
-                    ExportRegistration :: PROPERTY_DESCRIPTION), 
+                    ExportRegistration :: class_name(),
+                    ExportRegistration :: PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $condition = new OrCondition($or_conditions);
         }
-        
+
         return $condition;
     }
 
     function get_action_bar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        
+
         $action_bar->set_search_url($this->get_url());
-        
+
         $publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                SynchronizeAnswer :: class_name(), 
-                SynchronizeAnswer :: PROPERTY_SURVEY_PUBLICATION_ID), 
+                SynchronizeAnswer :: class_name(),
+                SynchronizeAnswer :: PROPERTY_SURVEY_PUBLICATION_ID),
             new StaticConditionVariable($this->publication_id));
-//         $this->synchronisation_tracker = Tracker :: get_singular_data(
-//             SynchronizeAnswer :: CLASS_NAME, 
-//             \Chamilo\Application\Survey\Manager :: APPLICATION_NAME, 
-//             $condition);
-        
-//         if ($this->synchronisation_tracker)
-//         {
-//             $status = $this->synchronisation_tracker->get_status();
-            
-//             switch ($status)
-//             {
-//                 case SynchronizeAnswer :: STATUS_SYNCHRONIZED :
-//                     if ($publication->get_to_date() > 0)
-//                     {
-//                         if ($this->synchronisation_tracker->get_created() > $publication->get_to_date())
-//                         {
-//                             $action_bar->add_tool_action(
-//                                 new ToolbarItem(
-//                                     Translation :: get('LastSynchronized') . ' ' .
-//                                          $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                         Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
-//                                         null, 
-//                                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//                         }
-//                         else
-//                         {
-//                             $action_bar->add_tool_action(
-//                                 new ToolbarItem(
-//                                     Translation :: get('LastSynchronized') . ' ' .
-//                                          $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                         Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
-//                                         $this->get_convert_answers_url($this->publication_id), 
-//                                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//                         }
-//                     }
-//                     else
-//                     {
-//                         $action_bar->add_tool_action(
-//                             new ToolbarItem(
-//                                 Translation :: get('LastSynchronized') . ' ' .
-//                                      $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                     Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
-//                                     $this->get_convert_answers_url($this->publication_id), 
-//                                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//                     }
-//                     break;
-                
-//                 case SynchronizeAnswer :: STATUS_SYNCHRONISATION_IN_QUEUE :
-//                     $action_bar->add_tool_action(
-//                         new ToolbarItem(
-//                             Translation :: get('AnswerSynchronizationInQueue') . ' ' .
-//                                  $this->get_date($this->synchronisation_tracker->get_created()), 
-//                                 Theme :: getInstance()->getCommonImagesPath() . 'action_config_na.png', 
-//                                 null, 
-//                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//                     break;
-//             }
-//         }
-//         else
-//         {
-//             $action_bar->add_tool_action(
-//                 new ToolbarItem(
-//                     Translation :: get('SynchronizeAnswers'), 
-//                     Theme :: getInstance()->getCommonImagesPath() . 'action_config.png', 
-//                     $this->get_convert_answers_url($this->publication_id), 
-//                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//         }
+        // $this->synchronisation_tracker = Tracker :: get_singular_data(
+        // SynchronizeAnswer :: CLASS_NAME,
+        // \Chamilo\Application\Survey\Manager :: APPLICATION_NAME,
+        // $condition);
+
+        // if ($this->synchronisation_tracker)
+        // {
+        // $status = $this->synchronisation_tracker->get_status();
+
+        // switch ($status)
+        // {
+        // case SynchronizeAnswer :: STATUS_SYNCHRONIZED :
+        // if ($publication->get_to_date() > 0)
+        // {
+        // if ($this->synchronisation_tracker->get_created() > $publication->get_to_date())
+        // {
+        // $action_bar->add_tool_action(
+        // new ToolbarItem(
+        // Translation :: get('LastSynchronized') . ' ' .
+        // $this->get_date($this->synchronisation_tracker->get_created()),
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // null,
+        // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        // }
+        // else
+        // {
+        // $action_bar->add_tool_action(
+        // new ToolbarItem(
+        // Translation :: get('LastSynchronized') . ' ' .
+        // $this->get_date($this->synchronisation_tracker->get_created()),
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // $this->get_convert_answers_url($this->publication_id),
+        // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        // }
+        // }
+        // else
+        // {
+        // $action_bar->add_tool_action(
+        // new ToolbarItem(
+        // Translation :: get('LastSynchronized') . ' ' .
+        // $this->get_date($this->synchronisation_tracker->get_created()),
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // $this->get_convert_answers_url($this->publication_id),
+        // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        // }
+        // break;
+
+        // case SynchronizeAnswer :: STATUS_SYNCHRONISATION_IN_QUEUE :
+        // $action_bar->add_tool_action(
+        // new ToolbarItem(
+        // Translation :: get('AnswerSynchronizationInQueue') . ' ' .
+        // $this->get_date($this->synchronisation_tracker->get_created()),
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_config_na.png',
+        // null,
+        // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        // break;
+        // }
+        // }
+        // else
+        // {
+        // $action_bar->add_tool_action(
+        // new ToolbarItem(
+        // Translation :: get('SynchronizeAnswers'),
+        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // $this->get_convert_answers_url($this->publication_id),
+        // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        // }
         return $action_bar;
     }
 
@@ -295,8 +295,8 @@ class BrowserComponent extends Manager implements TableSupport
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => \Chamilo\Application\Survey\Component\BrowserComponent :: TAB_EXPORT)), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE,
+                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => \Chamilo\Application\Survey\Component\BrowserComponent :: TAB_EXPORT)),
                 Translation :: get('BrowserComponent')));
     }
 

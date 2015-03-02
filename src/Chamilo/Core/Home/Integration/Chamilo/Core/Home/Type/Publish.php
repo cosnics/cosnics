@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * A "Static" block.
  * I.e. a block that display the title and description of an object. Usefull to display free html
  * text.
- * 
+ *
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author laurent.opprecht@unige.ch
@@ -23,15 +23,16 @@ class Publish extends \Chamilo\Core\Home\BlockRendition
         $sid = $user ? $user->get_security_token() : 0;
         $parameters = array('view_type' => 'my_chamilo_os', 'timestamp' => time(), 'sid' => $sid);
         $url = $this->get_url($parameters);
-        $module_path = Theme :: getInstance()->getImagesPath() . 'os_module.png';
-        
+        $module_path = Theme :: getInstance()->getImagePath(
+            'Chamilo\Core\Home\Integration\Chamilo\Core\Home',
+            'os_module');
+
         $protocol = Request :: server('SERVER_PROTOCOL') == 'HTTPS/1.1' ? 'https://' : 'http://';
         $server = Request :: server('HTTP_HOST');
         $url = $protocol . $server . $url;
         $url_encoded = urlencode($url);
         $url = htmlentities($url);
-        // Request::
-        
+
         return <<<EOT
         <a href="http://fusion.google.com/add?source=atgs&amp;moduleurl={$url_encoded}">
             <img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google" />

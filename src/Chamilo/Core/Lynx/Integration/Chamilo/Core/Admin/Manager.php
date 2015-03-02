@@ -16,18 +16,18 @@ class Manager implements ActionsSupportInterface
     public static function get_actions()
     {
         $links = array();
-        
+
         $package_management = PlatformSetting :: get('enable_package_management');
-        
+
         if ($package_management == '1')
         {
             $links[] = new DynamicAction(
-                Translation :: get('ManagePackages'), 
-                Translation :: get('ManagePackagesDescription'), 
-                Theme :: getInstance()->getImagesPath() . 'admin/build.png', 
+                Translation :: get('ManagePackages'),
+                Translation :: get('ManagePackagesDescription'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/build'),
                 Redirect :: get_link(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Lynx\Manager :: context())));
         }
-        
+
         return new Actions(\Chamilo\Core\Lynx\Manager :: context(), $links);
     }
 }

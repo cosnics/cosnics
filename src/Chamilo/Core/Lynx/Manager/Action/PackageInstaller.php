@@ -11,7 +11,7 @@ set_time_limit(0);
 
 /**
  * Package installation
- * 
+ *
  * @author Hans De Bisschop - Erasmus Hogeschool Brussel
  * @author Magali Gillard - Erasmus Hogeschool Brussel
  * @author Sven Vanpoucke - Hogeschool Gent - Cleanup, code refactoring and bugfixes, comments
@@ -23,7 +23,7 @@ class PackageInstaller extends Action
 
     /**
      * Runs the package installer
-     * 
+     *
      * @return boolean
      */
     public function run()
@@ -31,39 +31,42 @@ class PackageInstaller extends Action
         if ($this->initialize() && $this->process())
         {
             $title = Translation :: get(
-                'Finished', 
-                null, 
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/finished.png';
+                'Finished',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+            $image = Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+                'PackageAction/finished');
             return $this->action_successful($title, $image, Translation :: get('PackageCompletelyInstalled'));
         }
         else
         {
             $title = Translation :: get(
-                'Failed', 
-                null, 
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/failed.png';
+                'Failed',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+            $image = Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+                'PackageAction/failed');
             return $this->action_failed($title, $image, Translation :: get('PackageInstallFailed'));
         }
     }
 
     /**
      * Initializes the package installer
-     * 
+     *
      * @return boolean
      */
     public function initialize()
     {
         $title = Translation :: get(
-            'Initialization', 
-            null, 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/initialization.png';
-        
+            'Initialization',
+            null,
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+            'PackageAction/initialization');
+
         if (! $this->get_package() instanceof \Chamilo\Configuration\Package\Storage\DataClass\Package)
         {
             return $this->action_failed($title, $image, Translation :: get('PackageAttributesNotFound'));
@@ -72,7 +75,7 @@ class PackageInstaller extends Action
         {
             $this->add_message(Translation :: get('PackageAttributesFound'));
         }
-        
+
         // Check registration
         if ($this->is_package_registered())
         {
@@ -82,13 +85,13 @@ class PackageInstaller extends Action
         {
             $this->add_message(Translation :: get('PackageNotYetRegistered'));
         }
-        
+
         return $this->action_successful($title, $image, Translation :: get('PackageInstallInitialized'));
     }
 
     /**
      * Checks if the package is registered
-     * 
+     *
      * @return boolean
      */
     public function is_package_registered()
@@ -98,20 +101,21 @@ class PackageInstaller extends Action
 
     /**
      * Installs the package
-     * 
+     *
      * @return boolean
      */
     public function process()
     {
         $title = Translation :: get(
-            'Installation', 
-            array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())), 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/installation.png';
-        
+            'Installation',
+            array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+            'PackageAction/installation');
+
         $installer = \Chamilo\Configuration\Package\Action\Installer :: factory(
-            $this->get_package()->get_context(), 
+            $this->get_package()->get_context(),
             array());
         if (! $installer->run())
         {
@@ -123,17 +127,17 @@ class PackageInstaller extends Action
             $this->add_message($installer->retrieve_message());
             $this->action_successful($title, $image);
         }
-        
+
         $this->add_additional_packages($installer->get_additional_packages());
-        
+
         $title = Translation :: get(
-            'AdditionalPackages', 
-            null, 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) .
-             'package_action/additional_packages.png';
-        
+            'AdditionalPackages',
+            null,
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+            'PackageAction/additional_packages');
+
         while (($additional_package = $this->get_next_additional_package()) != null)
         {
             if (! $this->install_additional_package($additional_package))
@@ -141,25 +145,25 @@ class PackageInstaller extends Action
                 return $this->action_failed($title, $image, Translation :: get('AdditionalPackagesFailed'));
             }
         }
-        
+
         return true;
     }
 
     /**
      * Installs an additional package
-     * 
+     *
      * @param $package_installer \configuration\package\action\Installer
      */
     private function install_additional_package($context)
     {
         $title = Translation :: get(
-            'Installation', 
-            array('PACKAGE' => Translation :: get('TypeName', null, $context)), 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath($context) . 'Logo/48.png';
-        
+            'Installation',
+            array('PACKAGE' => Translation :: get('TypeName', null, $context)),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath($context, 'Logo/48');
+
         $installer = \Chamilo\Configuration\Package\Action\Installer :: factory($context, array());
-        
+
         if (! $installer->run())
         {
             $this->add_message($installer->retrieve_message());
@@ -170,15 +174,15 @@ class PackageInstaller extends Action
             $this->add_message($installer->retrieve_message());
             $this->action_successful($title, $image);
         }
-        
+
         $this->add_additional_packages($installer->get_additional_packages());
-        
+
         return true;
     }
 
     /**
      * Returns the additional packages
-     * 
+     *
      * @return multitype:string
      */
     public static function get_additional_packages()
@@ -188,7 +192,7 @@ class PackageInstaller extends Action
 
     /**
      * Sets the additional packages
-     * 
+     *
      * @param multitype:string
      */
     public function set_additional_packages($additional_packages)
@@ -198,7 +202,7 @@ class PackageInstaller extends Action
 
     /**
      * Adds an additional package to the list of additional packages
-     * 
+     *
      * @param string
      */
     public function add_additional_package($context)
@@ -208,7 +212,7 @@ class PackageInstaller extends Action
 
     /**
      * Adds multiple additional packages to the list of additional packages
-     * 
+     *
      * @param multitype:string
      */
     public function add_additional_packages($additional_packages)
@@ -221,7 +225,7 @@ class PackageInstaller extends Action
 
     /**
      * Removes and returns the first package from the list of additional packages
-     * 
+     *
      * @return string
      */
     public function get_next_additional_package()

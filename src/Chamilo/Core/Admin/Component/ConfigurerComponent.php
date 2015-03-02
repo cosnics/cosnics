@@ -79,7 +79,10 @@ class ConfigurerComponent extends Manager
             {
                 if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package->get_context()))
                 {
-                    $package_names[$package->get_context()] = Translation :: get('TypeName', null, $package->get_context());
+                    $package_names[$package->get_context()] = Translation :: get(
+                        'TypeName',
+                        null,
+                        $package->get_context());
                 }
             }
 
@@ -94,7 +97,7 @@ class ConfigurerComponent extends Manager
                         new DynamicVisualTab(
                             $package,
                             Translation :: get('TypeName', null, $package),
-                            Theme :: getInstance()->getImagesPath($package) . 'Logo/22.png',
+                            Theme :: getInstance()->getImagePath($package, 'Logo/22'),
                             $this->get_url(
                                 array(self :: PARAM_TAB => $this->get_tab(), self :: PARAM_CONTEXT => $package)),
                             $this->get_context() == $package));
@@ -144,7 +147,10 @@ class ConfigurerComponent extends Manager
             {
                 if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package->get_context()))
                 {
-                    $package_names[$package->get_context()] = Translation :: get('TypeName', null, $package->get_context());
+                    $package_names[$package->get_context()] = Translation :: get(
+                        'TypeName',
+                        null,
+                        $package->get_context());
                 }
             }
 

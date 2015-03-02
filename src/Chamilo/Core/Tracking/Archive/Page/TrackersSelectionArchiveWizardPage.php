@@ -10,7 +10,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: trackers_selection_archive_wizard_page.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
- * 
+ *
  * @package tracking.lib.tracking_manager.component.wizards.archive
  */
 /**
@@ -21,7 +21,7 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
 
     /**
      * Returns the title of this page
-     * 
+     *
      * @return string the title
      */
     public function get_title()
@@ -31,7 +31,7 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
 
     /**
      * Returns the info of this page
-     * 
+     *
      * @return string the info
      */
     public function get_info()
@@ -46,74 +46,74 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
     {
         $this->_formBuilt = true;
         $defaults = array();
-        
+
         $events = $this->get_parent()->retrieve_events();
         $previousblock = '';
-        
+
         $this->addElement('html', '<div style="margin-top: 10px;">&nbsp;</div>');
         $this->addElement(
-            'html', 
+            'html',
             '<div id="selectall" style="color: #4171B5; font-weight: bold; cursor: pointer; float: left;">' . Translation :: get(
-                'SelectAll', 
-                null, 
+                'SelectAll',
+                null,
                 Utilities :: COMMON_LIBRARIES) . '</div> &nbsp; | &nbsp; ');
         $this->addElement(
-            'html', 
+            'html',
             '<div id="unselectall" style="color: #4171B5; font-weight: bold; cursor: pointer; display: inline;">' . Translation :: get(
-                'UnselectAll', 
-                null, 
+                'UnselectAll',
+                null,
                 Utilities :: COMMON_LIBRARIES) . '</div>');
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getBasePath(true) . 'common/javascript/checkboxes.js'));
-        
+
         while ($event = $events->next_result())
         {
             if ($event->get_context() != $previousblock)
             {
                 $message = '<div style="float:left;"><img src="' .
-                     Theme :: getInstance()->getImagesPath('Chamilo\Core\Admin') . 'place_' . $event->get_context() .
-                     '.png" alt="' . $event->get_context() . '"></div>';
+                     Theme :: getInstance()->getImagePath('Chamilo\Core\Admin', 'place_' . $event->get_context()) .
+                     '" alt="' . $event->get_context() . '"></div>';
                 $previousblock = $event->get_context();
             }
             else
                 $message = "";
-            
+
             $this->addElement(
-                'checkbox', 
-                $event->get_context() . '_' . $event->get_name() . '_event', 
-                $message, 
-                $event->get_name(), 
+                'checkbox',
+                $event->get_context() . '_' . $event->get_name() . '_event',
+                $message,
+                $event->get_name(),
                 'onclick=\'event_clicked("' . $event->get_context() . '_' . $event->get_name() .
                      '_event", this.form)\' style=\'margin-top: 20px;\' class="chckbox"');
             $defaults[$event->get_name() . 'event'] = 1;
-            
+
             $trackers = $this->get_parent()->retrieve_trackers_from_event($event->get_id());
             foreach ($trackers as $tracker)
             {
                 $this->addElement(
-                    'checkbox', 
-                    $event->get_context() . '_' . $event->get_name() . '_event_' . $tracker->get_id(), 
-                    '', 
-                    $tracker->get_context(), 
+                    'checkbox',
+                    $event->get_context() . '_' . $event->get_name() . '_event_' . $tracker->get_id(),
+                    '',
+                    $tracker->get_context(),
                     'onclick=\'tracker_clicked("' . $event->get_context() . '_' . $event->get_name() .
                          '_event", this)\' style=\'margin-left: 20px;\' class="chckbox"');
-                
+
                 $defaults[$event->get_name() . 'event' . $tracker->get_id()] = 1;
             }
         }
-        
+
         $this->add_js_functions();
         $this->setDefaults($defaults);
-        
+
         $prevnext[] = $this->createElement(
-            'style_submit_button', 
-            $this->getButtonName('next'), 
-            Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES) . ' >>', 
+            'style_submit_button',
+            $this->getButtonName('next'),
+            Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES) . ' >>',
             array('class' => 'next'));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
-        
+
         $this->setDefaultAction('next');
     }
 
@@ -147,7 +147,7 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
         $html[] = '  }';
         $html[] = '}';
         $html[] = '</script>';
-        
+
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 }

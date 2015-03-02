@@ -79,17 +79,17 @@ class BlockRendition
         }
         else
         {
-            $image_path = Theme :: getInstance()->getImagesPath($context, false) . 'Blocks/' . $type . '.png';
+            $image_path = Theme :: getInstance()->getImagePath($context, 'Blocks/' . $type, 'png', false);
 
             if (! file_exists($image_path) || ! is_file($image_path))
             {
-                return Theme :: getInstance()->getImagesPath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 3)) . 'Logo/' . Theme :: ICON_MEDIUM .
-                     '.png';
+                return Theme :: getInstance()->getImagePath(
+                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 3),
+                    'Logo/' . Theme :: ICON_MEDIUM);
             }
             else
             {
-                return Theme :: getInstance()->getImagesPath($context) . 'Blocks/' . $type . '.png';
+                return Theme :: getInstance()->getImagePath($context, 'Blocks/' . $type);
             }
         }
     }

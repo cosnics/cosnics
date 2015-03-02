@@ -19,98 +19,98 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('List'), 
-            Translation :: get('ListDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
+            Translation :: get('List'),
+            Translation :: get('ListDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list.png'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         if (PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()) == 2)
         {
             $links[] = new DynamicAction(
-                Translation :: get('ApproveList'), 
-                Translation :: get('ApproveListDescription'), 
-                Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
+                Translation :: get('ApproveList'),
+                Translation :: get('ApproveListDescription'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
                 Redirect :: get_link(
                     array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                        \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_USER_APPROVAL_BROWSER), 
-                    array(), 
-                    false, 
+                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                        \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_USER_APPROVAL_BROWSER),
+                    array(),
+                    false,
                     Redirect :: TYPE_CORE));
         }
-        
+
         $links[] = new DynamicAction(
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('CreateDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/add.png', 
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('CreateDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/add'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_CREATE_USER), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_CREATE_USER),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ExportDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/export.png', 
+            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ExportDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/export'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_EXPORT_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_EXPORT_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ImportDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
+            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ImportDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_IMPORT_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_IMPORT_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('BuildUserFields'), 
-            Translation :: get('BuildUserFieldsDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/build.png', 
+            Translation :: get('BuildUserFields'),
+            Translation :: get('BuildUserFieldsDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/build'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BUILD_USER_FIELDS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BUILD_USER_FIELDS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('EditTermsConditions'), 
-            Translation :: get('EditTermsConditionsDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/build.png', 
+            Translation :: get('EditTermsConditions'),
+            Translation :: get('EditTermsConditionsDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/build'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_EDIT_TERMSCONDITIONS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_EDIT_TERMSCONDITIONS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         $info = new Actions(\Chamilo\Core\User\Manager :: context(), $links);
         $info->set_search(
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return $info;
     }
 
@@ -118,17 +118,17 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ImportDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
+            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ImportDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(), 
-                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_IMPORT_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                    \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_IMPORT_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return $links;
     }
 }

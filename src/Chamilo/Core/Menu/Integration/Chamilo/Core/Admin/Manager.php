@@ -23,17 +23,17 @@ class Manager implements ActionsSupportInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('Manage'), 
-            Translation :: get('ManageDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/sort.png', 
+            Translation :: get('Manage'),
+            Translation :: get('ManageDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/sort'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Menu\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Menu\Manager :: ACTION_BROWSE), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Menu\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Menu\Manager :: ACTION_BROWSE),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return new Actions(\Chamilo\Core\Menu\Manager :: context(), $links);
     }
 }

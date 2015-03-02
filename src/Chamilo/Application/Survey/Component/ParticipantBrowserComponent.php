@@ -48,7 +48,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
     function run()
     {
         $this->pid = Request :: get(self :: PARAM_PUBLICATION_ID);
-        
+
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->pid))
         {
             $this->display_header();
@@ -56,16 +56,16 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             $this->display_footer();
             exit();
         }
-        
+
         $this->survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->pid);
         $this->survey = $this->survey_publication->get_publication_object();
-        
+
         $this->action_bar = $this->get_action_bar();
-        
+
         $this->display_header();
         echo $this->action_bar->as_html();
         echo '<div id="action_bar_browser">';
-        
+
         echo '<div>';
         echo $this->get_tables();
         echo '</div>';
@@ -77,86 +77,86 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
     {
         $renderer_name = Utilities :: get_classname_from_object($this, true);
         $tabs = new DynamicTabsRenderer($renderer_name);
-        
+
         $parameters = $this->get_parameters();
         $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
         $parameters[self :: PARAM_PUBLICATION_ID] = $this->pid;
-        
+
         $table = new ParticipantTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_PARTICIPANTS, 
-                Translation :: get('Participants'), 
-                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                self :: TAB_PARTICIPANTS,
+                Translation :: get('Participants'),
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
-        
+
         $table = new UserTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_USERS, 
-                Translation :: get('Users'), 
-                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                self :: TAB_USERS,
+                Translation :: get('Users'),
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
-        
+
         $table = new GroupTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_GROUPS, 
-                Translation :: get('Groups'), 
-                Theme :: getInstance()->getImagesPath() . 'Logo/16.png', 
+                self :: TAB_GROUPS,
+                Translation :: get('Groups'),
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
-        
+
         $html[] = $tabs->render();
-        
+
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
-        
+
         return implode($html, "\n");
     }
 
     function get_action_bar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        
+
         $parameters = $this->get_parameters();
         $parameters[self :: PARAM_PUBLICATION_ID] = $this->pid;
-        
+
         $action_bar->set_search_url($this->get_url($parameters));
         $action_bar->add_common_action(
             new ToolbarItem(
-                Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
-                $this->get_url($parameters), 
+                Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        
+
         if ($this->get_user()->is_platform_admin() ||
              $this->get_user()->get_id() == $this->survey_publication->get_publisher())
         {
             $action_bar->add_tool_action(
                 new ToolbarItem(
-                    Translation :: get('ManageRights', array(), Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
-                    $this->get_publication_rights_url($this->survey_publication), 
+                    Translation :: get('ManageRights', array(), Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                    $this->get_publication_rights_url($this->survey_publication),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
+
             $action_bar->add_tool_action(
                 new ToolbarItem(
-                    Translation :: get('SubscribeEmails'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png', 
-                    $this->get_subscribe_email_url($this->pid), 
+                    Translation :: get('SubscribeEmails'),
+                    Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png',
+                    $this->get_subscribe_email_url($this->pid),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
-        
+
         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->pid))
         {
             $action_bar->add_tool_action(
                 new ToolbarItem(
-                    Translation :: get('MailManager'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_invite_users.png', 
-                    $this->get_mail_survey_participant_url($this->survey_publication), 
+                    Translation :: get('MailManager'),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_invite_users.png',
+                    $this->get_mail_survey_participant_url($this->survey_publication),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
-        
+
         return $action_bar;
     }
 
@@ -169,17 +169,17 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
         }
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), 
+            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID),
             new StaticConditionVariable($this->pid));
-        
+
         if (isset($query) && $query != '')
         {
             $user_conditions = array();
             $user_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
                 '*' . $query . '*');
             $user_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
                 '*' . $query . '*');
             $user_condition = new OrCondition($user_conditions);
             $users = \Chamilo\Core\User\Storage\DataManager :: retrieve_users($user_condition);
@@ -188,113 +188,113 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             {
                 $user_ids[] = $user->get_id();
             }
-            
+
             $search_conditions = array();
             $search_conditions[] = new InCondition(
-                new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_USER_ID), 
+                new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_USER_ID),
                 $user_ids);
             $conditions[] = new OrCondition($search_conditions);
         }
-        
+
         return new AndCondition($conditions);
     }
 
     function get_user_condition()
     {
         $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
-        
+
         $target_entities = array();
         $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-            Rights :: PARTICIPATE_RIGHT, 
+            Rights :: PARTICIPATE_RIGHT,
             $publication_id);
         $condition = null;
-        
+
         $invited_users = $target_entities[UserEntity :: ENTITY_TYPE];
-        
+
         if (count($invited_users) > 0)
         {
-            
+
             $condition = new InCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                 $invited_users);
         }
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                 new StaticConditionVariable(0));
         }
-        
+
         $query = $this->action_bar->get_query();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
                 '*' . $query . '*');
             $or_condition = new OrCondition($or_conditions);
         }
-        
+
         if ($or_condition)
         {
             $conditions = array($condition, $or_condition);
             $condition = new AndCondition($conditions);
         }
-        
+
         return $condition;
     }
 
     function get_group_condition()
     {
         $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
-        
+
         $target_entities = array();
         $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-            Rights :: PARTICIPATE_RIGHT, 
+            Rights :: PARTICIPATE_RIGHT,
             $publication_id);
         $condition = null;
-        
+
         $invited_groups = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
-        
+
         if (count($invited_groups) > 0)
         {
-            
+
             $condition = new InCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                 $invited_groups);
         }
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                 new StaticConditionVariable(0));
         }
-        
+
         $query = $this->action_bar->get_query();
-        
+
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME), 
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME),
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_DESCRIPTION), 
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $or_condition = new OrCondition($or_conditions);
         }
-        
+
         if ($or_condition)
         {
             $conditions = array($condition, $or_condition);
             $condition = new AndCondition($conditions);
         }
-        
+
         return $condition;
     }
 

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class that describes the users for the rights editor
- * 
+ *
  * @author Sven Vanpoucke
  */
 class ElementEntity implements RightsEntity
@@ -32,13 +32,13 @@ class ElementEntity implements RightsEntity
         {
             self :: $instance = new static();
         }
-        
+
         return self :: $instance;
     }
 
     /**
      * Retrieves the items for this entity
-     * 
+     *
      * @param $condition Condition
      * @param $offset int
      * @param $count int
@@ -50,13 +50,13 @@ class ElementEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
+
         return DataManager :: retrieves(Element :: class_name(), $parameters);
     }
 
     /**
      * Retrieves the entity item ids relevant for a given user
-     * 
+     *
      * @param $user_id integer
      *
      * @return array
@@ -65,16 +65,16 @@ class ElementEntity implements RightsEntity
     {
         if (is_null($this->element_cache[$user_id]))
         {
-            
+
             $this->element_cache[$user_id] = array($user_id);
         }
-        
+
         return $this->element_cache[$user_id];
     }
 
     /**
      * Counts the items for this entity
-     * 
+     *
      * @param $condition Condition
      *
      * @return int
@@ -82,13 +82,13 @@ class ElementEntity implements RightsEntity
     public function count_entity_items($condition = null)
     {
         $condition = $this->get_condition($condition);
-        
+
         return DataManager :: count(Element :: class_name(), $condition);
     }
 
     /**
      * Returns the name of this entity
-     * 
+     *
      * @return String
      */
     public function get_entity_name()
@@ -98,7 +98,7 @@ class ElementEntity implements RightsEntity
 
     /**
      * Returns the translated name of this entiry for displaying purposes only!
-     * 
+     *
      * @return String Translated name of the entity
      */
     public function get_entity_translated_name()
@@ -109,7 +109,7 @@ class ElementEntity implements RightsEntity
 
     /**
      * Returns the type of this entity
-     * 
+     *
      * @return int
      */
     public function get_entity_type()
@@ -119,17 +119,17 @@ class ElementEntity implements RightsEntity
 
     /**
      * Returns the path to the icon of the entity
-     * 
+     *
      * @return String
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagesPath() . 'Logo/16.png';
+        return Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Logo/16');
     }
 
     /**
      * Returns the properties on which can be searched
-     * 
+     *
      * @return Array
      */
     public function get_search_properties()
@@ -139,7 +139,7 @@ class ElementEntity implements RightsEntity
 
     /**
      * Function that can be filled in extensions of this class to limit the users
-     * 
+     *
      * @return Condition
      */
     public function get_condition($condition)
@@ -153,10 +153,10 @@ class ElementEntity implements RightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'elements', 
-            Translation :: get('Elements'), 
-            Manager :: context(), 
-            'element_entity_feed', 
+            'elements',
+            Translation :: get('Elements'),
+            Manager :: context(),
+            'element_entity_feed',
             array());
     }
 
@@ -166,22 +166,22 @@ class ElementEntity implements RightsEntity
     public function get_element_finder_element($id)
     {
         $element = DataManager :: retrieve_by_id(Element :: class_name(), (int) $id);
-        
+
         if (! $element)
         {
             return null;
         }
-        
+
         return new AdvancedElementFinderElement(
-            self :: ENTITY_TYPE . '_' . $id, 
-            'type type_element', 
-            $element->get_namespace() . ':' . $element->get_name(), 
+            self :: ENTITY_TYPE . '_' . $id,
+            'type type_element',
+            $element->get_namespace() . ':' . $element->get_name(),
             $element->get_namespace() . ':' . $element->get_name());
     }
 
     /**
      * Returns the class name of the data class that is used for this entity
-     * 
+     *
      * @return string
      */
     public static function data_class_class_name()

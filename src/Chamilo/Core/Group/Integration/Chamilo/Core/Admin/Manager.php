@@ -17,73 +17,73 @@ class Manager implements ActionsSupportInterface
     {
         $links = array();
         $links[] = new DynamicAction(
-            Translation :: get('List', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ListDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/list.png', 
+            Translation :: get('List', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ListDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_BROWSE_GROUPS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_BROWSE_GROUPS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('CreateDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/add.png', 
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('CreateDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/add'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_CREATE_GROUP, 
-                    \Chamilo\Core\Group\Manager :: PARAM_GROUP_ID => 0), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_CREATE_GROUP,
+                    \Chamilo\Core\Group\Manager :: PARAM_GROUP_ID => 0),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ExportDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/export.png', 
+            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ExportDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/export'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_EXPORT), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_EXPORT),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
-            Translation :: get('ImportDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
+            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('ImportDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_IMPORT), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_IMPORT),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
         $links[] = new DynamicAction(
-            Translation :: get('ImportGroupUsers'), 
-            Translation :: get('ImportGroupUsersDescription'), 
-            Theme :: getInstance()->getImagesPath() . 'admin/import.png', 
+            Translation :: get('ImportGroupUsers'),
+            Translation :: get('ImportGroupUsersDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_IMPORT_GROUP_USERS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_IMPORT_GROUP_USERS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         $info = new Actions(\Chamilo\Core\Group\Manager :: context());
         $info->set_links($links);
         $info->set_search(
             Redirect :: get_link(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_BROWSE_GROUPS), 
-                array(), 
-                false, 
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_BROWSE_GROUPS),
+                array(),
+                false,
                 Redirect :: TYPE_CORE));
-        
+
         return $info;
     }
 }
