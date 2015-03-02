@@ -126,7 +126,7 @@ abstract class BlogLayout
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     $this->get_parent()->get_complex_content_object_item_update_url($complex_blog_item),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -136,7 +136,7 @@ abstract class BlogLayout
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_parent()->get_complex_content_object_item_delete_url($complex_blog_item),
                     ToolbarItem :: DISPLAY_ICON,
                     true));

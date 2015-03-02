@@ -124,7 +124,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser'),
                     $this->get_component()->get_content_object_viewing_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -133,7 +133,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -143,7 +143,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png',
+                    Theme :: getInstance()->getCommonImagePath('action_publish'),
                     $this->get_component()->get_publish_content_object_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -152,7 +152,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('PublishNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_publish_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_publish_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -162,7 +162,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                    Theme :: getInstance()->getCommonImagePath('action_edit'),
                     $this->get_component()->get_content_object_editing_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -171,7 +171,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_edit_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -181,7 +181,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Copy', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reuse.png',
+                    Theme :: getInstance()->getCommonImagePath('action_reuse'),
                     $this->get_component()->get_copy_content_object_url($content_object->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -190,7 +190,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('CopyNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_reuse_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_reuse_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -198,7 +198,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png',
+                Theme :: getInstance()->getCommonImagePath('action_move'),
                 $this->get_component()->get_shared_content_object_moving_url($content_object),
                 ToolbarItem :: DISPLAY_ICON));
 
@@ -209,7 +209,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_component()->get_shared_content_object_deletion_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -227,7 +227,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditShareRights'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                    Theme :: getInstance()->getCommonImagePath('action_rights'),
                     $this->get_component()->get_share_content_objects_url($content_object->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
             return $toolbar->as_html();

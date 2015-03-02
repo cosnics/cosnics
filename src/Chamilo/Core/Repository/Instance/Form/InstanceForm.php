@@ -71,7 +71,7 @@ class InstanceForm extends FormValidator
             new DynamicFormTab(
                 'general', 
                 'General', 
-                Theme :: getInstance()->getCommonImagesPath() . 'place_tab_view.png', 
+                Theme :: getInstance()->getCommonImagePath('place_tab_view'), 
                 'build_general_form'));
         
         if (count($configuration['settings']) > 0)
@@ -80,7 +80,7 @@ class InstanceForm extends FormValidator
                 new DynamicFormTab(
                     'settings', 
                     'Settings', 
-                    Theme :: getInstance()->getCommonImagesPath() . 'place_tab_settings.png', 
+                    Theme :: getInstance()->getCommonImagePath('place_tab_settings'), 
                     'build_settings_form'));
         }
         

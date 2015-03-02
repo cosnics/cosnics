@@ -149,7 +149,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $html[] = $this->render_header();
 
         $html[] = '<div class="announcements level_1" style="background-image: url(' .
-             Theme :: getInstance()->getCommonImagesPath() . 'content_object/introduction.png);">';
+             Theme :: getInstance()->getCommonImagePath('ContentObject/introduction') . ');">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_html();
         $html[] = '</div><br />';
@@ -420,7 +420,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('DownloadAllSubmissions'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_download.png',
+                        Theme :: getInstance()->getCommonImagePath('action_download'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SUBMISSIONS)),
@@ -430,7 +430,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ScoresOverview'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png',
+                    Theme :: getInstance()->getCommonImagePath('action_statistics'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING,
@@ -441,7 +441,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('SubmissionsOverview'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_statistics.png',
+                    Theme :: getInstance()->getCommonImagePath('action_statistics'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => \Chamilo\Application\Weblcms\Manager :: ACTION_REPORTING,
@@ -473,7 +473,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('SubmissionSubmit'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagePath('action_add'),
                 $this->get_url($this->generate_add_submission_url()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -483,7 +483,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $url,
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false));

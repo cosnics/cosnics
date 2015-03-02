@@ -70,7 +70,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewItem'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
+                Theme :: getInstance()->getCommonImagePath('action_browser'), 
                 $this->get_component()->get_url(array(Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id())), 
                 ToolbarItem :: DISPLAY_ICON));
         return $toolbar->as_html();

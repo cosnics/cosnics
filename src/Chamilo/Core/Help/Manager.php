@@ -64,7 +64,7 @@ abstract class Manager extends Application
         {
             return new ToolbarItem(
                 Translation :: get('Help'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_help.png',
+                Theme :: getInstance()->getCommonImagePath('action_help'),
                 $help_item ? $help_item->get_url() : '',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,

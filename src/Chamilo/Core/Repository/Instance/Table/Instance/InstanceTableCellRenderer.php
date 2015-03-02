@@ -56,7 +56,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_deactivate.png',
+                    Theme :: getInstance()->getCommonImagePath('action_deactivate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
@@ -69,7 +69,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_activate.png',
+                    Theme :: getInstance()->getCommonImagePath('action_activate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,
@@ -81,7 +81,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
@@ -91,7 +91,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagePath('action_delete'),
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
@@ -102,7 +102,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: context()),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagePath('action_rights'),
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,

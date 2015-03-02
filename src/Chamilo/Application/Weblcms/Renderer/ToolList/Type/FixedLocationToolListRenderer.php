@@ -461,20 +461,20 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($tool_visible || $section->get_type() == CourseSection :: TYPE_ADMIN)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_INVISIBLE;
-                $visible_image = 'action_visible.png';
+                $visible_image = 'action_visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
                 {
                     $new = '_new';
                 }
-                $tool_image = Theme :: ICON_MEDIUM . $new . '.png';
+                $tool_image = Theme :: ICON_MEDIUM . $new;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
-                $visible_image = 'action_invisible.png';
-                $tool_image = Theme :: ICON_MEDIUM . '_na.png';
+                $visible_image = 'action_invisible';
+                $tool_image = Theme :: ICON_MEDIUM . '_na';
                 $link_class = ' class="invisible"';
             }
 
@@ -502,7 +502,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                         array(
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_ACTION => $lcms_action,
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_TOOL => $tool->get_name())) .
-                     '"><img class="tool_visible" src="' . Theme :: getInstance()->getCommonImagesPath() . $visible_image .
+                     '"><img class="tool_visible" src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
                      '" style="vertical-align: middle;" alt="" /></a>';
                 $html[] = '&nbsp;&nbsp;&nbsp;';
             }

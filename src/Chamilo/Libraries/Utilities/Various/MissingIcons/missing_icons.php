@@ -20,7 +20,7 @@ $total_missing_icons = 0;
 
 $html = array();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageList::getInstance()->get_type_packages();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
 
 $source = Request :: get('source');
 $target = Theme :: getInstance()->getTheme();
@@ -33,10 +33,8 @@ foreach ($package_list as $category => $packages)
 
     foreach ($packages as $package)
     {
-        $image_web_path = Path :: getInstance()->getBasePath(true) . implode('/', explode('\\', $package)) .
-             '/resources/images/';
-        $image_sys_path = Path :: getInstance()->getBasePath() . implode('/', explode('\\', $package)) .
-             '/resources/images/';
+        $image_web_path = Path :: getInstance()->namespaceToFullPath($package, true) . '/Resources/Images/';
+        $image_sys_path = Path :: getInstance()->namespaceToFullPath($package) . '/Resources/Images/';
 
         $data_row = array();
         $data_row[] = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package);
@@ -62,7 +60,7 @@ foreach ($package_list as $category => $packages)
             {
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
             }
             else
             {
@@ -90,7 +88,7 @@ foreach ($package_list as $category => $packages)
                 }
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
             }
             else
             {
@@ -118,7 +116,7 @@ foreach ($package_list as $category => $packages)
                 }
                 $row_failures ++;
                 $failures ++;
-                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'error/' . $size . '.png" />';
+                $data_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Error/' . $size) . '" />';
             }
             else
             {

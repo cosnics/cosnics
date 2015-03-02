@@ -382,7 +382,7 @@ class SubmissionViewerComponent extends SubmissionsManager
         $html = array();
 
         $html[] = '<div class="announcements level_2" style="background-image:url(' .
-             Theme :: getInstance()->getCommonImagesPath() . 'content_object/introduction.png;width=100%;">';
+             Theme :: getInstance()->getCommonImagePath('ContentObject/introduction') . ';width=100%;">';
         if ($this->assignment->get_visibility_submissions() || $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $html[] = $this->generate_submitters_navigator();
@@ -407,13 +407,13 @@ class SubmissionViewerComponent extends SubmissionsManager
         if ($earlier_submission_url)
         {
             $html[] = '<a href="' . $earlier_submission_url . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') . '"/>';
             $html[] = Translation :: get('EarlierSubmission');
             $html[] = '</a>';
         }
         else
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev_na') . '"/>';
             $html[] = Translation :: get('EarlierSubmission');
         }
         $html[] = ' [' . $this->get_position_submissions($this->get_submission_id()) . '/' .
@@ -423,13 +423,13 @@ class SubmissionViewerComponent extends SubmissionsManager
         {
             $html[] = '<a href="' . $later_submission_url . '">';
             $html[] = Translation :: get('LaterSubmission');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') . '"/>';
             $html[] = '</a>';
         }
         else
         {
             $html[] = Translation :: get('LaterSubmission');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next_na') . '"/>';
         }
         $html[] = '</div>';
         return implode(PHP_EOL, $html);
@@ -484,13 +484,13 @@ class SubmissionViewerComponent extends SubmissionsManager
         if ($previous_submitter_url)
         {
             $html[] = '<a href="' . $previous_submitter_url . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') . '"/>';
             $html[] = Translation :: get('PreviousSubmitter');
             $html[] = '</a>';
         }
         else
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_prev_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev_na') . '"/>';
             $html[] = Translation :: get('PreviousSubmitter');
         }
         $html[] = ' [' .
@@ -501,13 +501,13 @@ class SubmissionViewerComponent extends SubmissionsManager
         {
             $html[] = '<a href="' . $next_submitter_url . '">';
             $html[] = Translation :: get('NextSubmitter');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') . '"/>';
             $html[] = '</a>';
         }
         else
         {
             $html[] = Translation :: get('NextSubmitter');
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() . 'action_next_na.png"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next_na') . '"/>';
         }
         $html[] = '</div>';
         return implode(PHP_EOL, $html);
@@ -705,7 +705,7 @@ class SubmissionViewerComponent extends SubmissionsManager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('EditFeedback'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                        Theme :: getInstance()->getCommonImagePath('action_edit'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EDIT_FEEDBACK,
@@ -717,7 +717,7 @@ class SubmissionViewerComponent extends SubmissionsManager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('DeleteFeedback'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                        Theme :: getInstance()->getCommonImagePath('action_delete'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DELETE_FEEDBACK,
@@ -839,7 +839,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ViewSubmission'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                    Theme :: getInstance()->getCommonImagePath('action_browser'),
                     'javascript:openPopup(\'' . $this->generate_attachment_viewer_url(
                         $this->submission,
                         AttachmentViewerComponent :: TYPE_SUBMISSION) . '\');void(0);',
@@ -853,7 +853,7 @@ class SubmissionViewerComponent extends SubmissionsManager
                 $action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('DownloadSubmission'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_download.png',
+                        Theme :: getInstance()->getCommonImagePath('action_download'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SUBMISSIONS,
@@ -864,7 +864,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('DeleteSubmission'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DELETE_SUBMISSION,

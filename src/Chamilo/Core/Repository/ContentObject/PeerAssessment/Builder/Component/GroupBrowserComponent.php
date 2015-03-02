@@ -47,7 +47,7 @@ class GroupBrowserComponent extends Manager
         // TODO date locale doesn't work
         $html = array();
 
-        $image = Theme :: getInstance()->getCommonImagesPath() . 'treemenu/group.png';
+        $image = Theme :: getInstance()->getCommonImagePath('Treemenu/group');
 
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -98,7 +98,7 @@ class GroupBrowserComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_EDIT_GROUP, self :: PARAM_GROUP => $group->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
@@ -106,7 +106,7 @@ class GroupBrowserComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagePath('action_delete'),
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_DELETE_GROUP, self :: PARAM_GROUP => $group->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
@@ -127,7 +127,7 @@ class GroupBrowserComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('CreateGroup'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_GROUP))));
 
         return $action_bar->as_html();

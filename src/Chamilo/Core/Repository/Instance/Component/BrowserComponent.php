@@ -84,19 +84,19 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddExternalInstance'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_create.png',
+                Theme :: getInstance()->getCommonImagePath('action_create'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: APPLICATION_NAME),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagePath('action_rights'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         return $action_bar;

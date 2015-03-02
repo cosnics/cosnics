@@ -139,7 +139,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ViewSubmission'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_browser'), 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_SUBMISSION => $submission->get_id(), 
@@ -154,7 +154,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('DownloadSubmission'), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_download.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_download'), 
                         $this->get_component()->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS, 
@@ -166,7 +166,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('DownloadNotPossible'), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_download_na.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_download_na'), 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -174,7 +174,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteSubmission'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION, 

@@ -189,14 +189,14 @@ class SortableTable extends HTML_Table
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_last.png"  style="vertical-align: middle;"/>';
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_first') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_last') .
+                 '"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';

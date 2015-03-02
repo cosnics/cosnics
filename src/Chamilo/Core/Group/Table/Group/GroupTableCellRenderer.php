@@ -54,14 +54,14 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                Theme :: getInstance()->getCommonImagePath('action_edit'), 
                 $this->get_component()->get_group_editing_url($group), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('AddUsers'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png', 
+                Theme :: getInstance()->getCommonImagePath('action_subscribe'), 
                 $this->get_component()->get_group_suscribe_user_browser_url($group), 
                 ToolbarItem :: DISPLAY_ICON));
         
@@ -76,7 +76,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Truncate'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin'), 
                     $this->get_component()->get_group_emptying_url($group), 
                     ToolbarItem :: DISPLAY_ICON, 
                     true));
@@ -87,7 +87,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('TruncateNA'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin_na.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'), 
                     null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -95,7 +95,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Theme :: getInstance()->getCommonImagePath('action_delete'), 
                 $this->get_component()->get_group_delete_url($group), 
                 ToolbarItem :: DISPLAY_ICON, 
                 true));
@@ -103,14 +103,14 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_move.png', 
+                Theme :: getInstance()->getCommonImagePath('action_move'), 
                 $this->get_component()->get_move_group_url($group), 
                 ToolbarItem :: DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Metadata'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_metadata.png', 
+                Theme :: getInstance()->getCommonImagePath('action_metadata'), 
                 $this->get_component()->get_group_metadata_url($group), 
                 ToolbarItem :: DISPLAY_ICON));
         

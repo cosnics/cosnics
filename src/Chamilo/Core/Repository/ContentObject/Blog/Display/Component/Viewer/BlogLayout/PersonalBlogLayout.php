@@ -32,7 +32,7 @@ class PersonalBlogLayout extends BlogLayout
         else
         {
             $name = Translation :: get('AuthorUnknown');
-            $picture = Theme :: getInstance()->getCommonImagesPath() . 'unknown.png';
+            $picture = Theme :: getInstance()->getCommonImagePath('unknown');
         }
 
         $html = array();

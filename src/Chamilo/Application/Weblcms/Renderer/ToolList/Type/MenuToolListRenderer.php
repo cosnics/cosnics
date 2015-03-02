@@ -65,10 +65,10 @@ class MenuToolListRenderer extends ToolListRenderer
         if ($this->get_menu_style() == 'right')
         {
             $html[] = '<div id="tool_bar_hide_container" class="hide">';
-            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_action_bar_' . $menu_style . '_hide.png" /></a>';
-            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_action_bar_' . $menu_style . '_show.png" /></a>';
+            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath(
+                'action_action_bar_' . $menu_style . '_hide') . '" /></a>';
+            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath(
+                'action_action_bar_' . $menu_style . '_show') . '" /></a>';
             $html[] = '</div>';
         }
 
@@ -145,10 +145,10 @@ class MenuToolListRenderer extends ToolListRenderer
         if ($this->get_menu_style() == 'left')
         {
             $html[] = '<div id="tool_bar_hide_container" class="hide">';
-            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_action_bar_' . $menu_style . '_hide.png" /></a>';
-            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_action_bar_' . $menu_style . '_show.png" /></a>';
+            $html[] = '<a id="tool_bar_hide" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath(
+                'action_action_bar_' . $menu_style . '_hide') . '" /></a>';
+            $html[] = '<a id="tool_bar_show" href="#"><img src="' . Theme :: getInstance()->getCommonImagePath(
+                'action_action_bar_' . $menu_style . '_show') . '" /></a>';
             $html[] = '</div>';
         }
 

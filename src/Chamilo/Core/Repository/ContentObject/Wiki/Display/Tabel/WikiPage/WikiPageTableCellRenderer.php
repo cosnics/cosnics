@@ -63,7 +63,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
@@ -77,7 +77,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_edit'), 
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 
@@ -89,7 +89,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('SetAsHomepage'), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_home.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_home'), 
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_SET_AS_HOMEPAGE, 
@@ -101,7 +101,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('SetAsHomepage'), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_home_na.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_home_na'), 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }

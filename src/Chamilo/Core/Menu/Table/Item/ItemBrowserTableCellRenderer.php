@@ -70,14 +70,14 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_component()->get_item_editing_url($menu),
                 ToolbarItem :: DISPLAY_ICON));
 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
+                Theme :: getInstance()->getCommonImagePath('action_rights'),
                 $this->get_component()->get_item_rights_url($menu),
                 ToolbarItem :: DISPLAY_ICON));
         if ($index == 'first' || $index == 'single')
@@ -85,7 +85,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_up_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -94,7 +94,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_up.png',
+                    Theme :: getInstance()->getCommonImagePath('action_up'),
                     $this->get_component()->get_item_moving_url($menu, 'up'),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -104,7 +104,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_down_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -113,7 +113,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_down.png',
+                    Theme :: getInstance()->getCommonImagePath('action_down'),
                     $this->get_component()->get_item_moving_url($menu, 'down'),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -121,7 +121,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                Theme :: getInstance()->getCommonImagePath('action_delete'),
                 $this->get_component()->get_item_deleting_url($menu),
                 ToolbarItem :: DISPLAY_ICON,
                 true));

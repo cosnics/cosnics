@@ -28,7 +28,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+            Theme :: getInstance()->getCommonImagePath('action_browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
@@ -37,7 +37,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+            Theme :: getInstance()->getCommonImagePath('action_browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+            Theme :: getInstance()->getCommonImagePath('action_browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,

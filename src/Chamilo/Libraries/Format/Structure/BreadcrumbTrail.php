@@ -236,7 +236,7 @@ class BreadcrumbTrail
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ShowActionBar'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_bar.png',
+                Theme :: getInstance()->getCommonImagePath('action_bar'),
                 '#',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,

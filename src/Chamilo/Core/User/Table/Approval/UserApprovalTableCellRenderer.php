@@ -45,13 +45,13 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Approve'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_activate.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_activate'), 
                     $um->get_approve_user_url($user), 
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Deny'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_deinstall.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_deinstall'), 
                     $um->get_deny_user_url($user), 
                     ToolbarItem :: DISPLAY_ICON));
         }

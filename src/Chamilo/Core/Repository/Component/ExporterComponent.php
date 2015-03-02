@@ -82,17 +82,21 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CONTENT_OBJECT_ID,
-                                $this->get_export_types_cache($export_type),
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CONTENT_OBJECT_ID,
+                                    $this->get_export_types_cache($export_type),
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') .
+                                 '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CATEGORY_ID,
-                                $category_ids,
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CATEGORY_ID,
+                                    $category_ids,
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') .
+                                 '</a>';
                         }
                     }
                     else
@@ -199,13 +203,12 @@ class ExporterComponent extends Manager
                 {
                     $this->set_export_types_cache($export_type, $ids);
                     $this->is_exportable[$export_type] = true;
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                         'status_confirm_mini.png"/>';
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('status_confirm_mini') .
+                         '"/>';
                 }
                 else
                 {
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                         'status_error_mini.png"/>';
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('status_error_mini') . '"/>';
                 }
             }
             $table_data[] = $table_row;

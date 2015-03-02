@@ -183,12 +183,12 @@ class UserAttemptStatusViewerComponent extends Manager implements TableSupport
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('List'),
-                Theme :: getInstance()->getCommonImagesPath() . 'view_list.png',
+                Theme :: getInstance()->getCommonImagePath('view_list'),
                 $this->get_url(array(self :: PARAM_BROWSER => self :: BROWSER_MODE_LIST))));
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('Table'),
-                Theme :: getInstance()->getCommonImagesPath() . 'view_table.png',
+                Theme :: getInstance()->getCommonImagePath('view_table'),
                 $this->get_url(array(self :: PARAM_BROWSER => self :: BROWSER_MODE_TABLE))));
 
         return $action_bar->as_html();

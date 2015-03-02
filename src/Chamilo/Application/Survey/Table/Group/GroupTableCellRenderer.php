@@ -17,7 +17,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('CancelInvitation'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_unsubscribe.png', 
+                Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
                 $this->get_component()->get_survey_cancel_invitation_url(
                     $this->get_component()->get_publication_id(), 
                     $group->get_id()), 

@@ -464,13 +464,13 @@ class Utilities
     {
         if ($value)
         {
-            $icon = 'action_setting_true.png';
+            $icon = 'action_setting_true';
         }
         else
         {
-            $icon = 'action_setting_false.png';
+            $icon = 'action_setting_false';
         }
-        return '<img src="' . Theme :: getInstance()->getCommonImagesPath() . $icon . '">';
+        return '<img src="' . Theme :: getInstance()->getCommonImagePath($icon) . '">';
     }
 
     /**

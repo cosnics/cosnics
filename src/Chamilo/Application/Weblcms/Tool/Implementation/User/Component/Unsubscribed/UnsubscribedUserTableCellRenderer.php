@@ -149,7 +149,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UserRequestPending'),
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_period.png',
+                        Theme :: getInstance()->getCommonImagePath('action_period'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -159,7 +159,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SubscribeNA'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_subscribe_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

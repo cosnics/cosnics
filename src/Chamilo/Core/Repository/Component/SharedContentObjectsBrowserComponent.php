@@ -256,7 +256,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -265,7 +265,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageCategories'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_category.png',
+                    Theme :: getInstance()->getCommonImagePath('action_category'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,

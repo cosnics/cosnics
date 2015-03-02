@@ -55,7 +55,7 @@ class PrivilegesViewerComponent extends Manager
                     {
                         $toolbar_item = new ToolbarItem(
                             Translation :: get('Delete'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                            Theme :: getInstance()->getCommonImagePath('action_delete'),
                             $this->get_external_repository_privilege_revoking_url($id, $privilege->get_username()),
                             ToolbarItem :: DISPLAY_ICON);
 
@@ -88,7 +88,7 @@ class PrivilegesViewerComponent extends Manager
                     {
                         $toolbar_item = new ToolbarItem(
                             Translation :: get('Delete'),
-                            Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                            Theme :: getInstance()->getCommonImagePath('action_delete'),
                             $this->get_external_repository_group_privilege_revoking_url(
                                 $id,
                                 $privilege->get_owner_username() . '/' . $privilege->get_group()),

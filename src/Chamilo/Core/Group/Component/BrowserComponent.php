@@ -282,20 +282,20 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_add.png',
+                Theme :: getInstance()->getCommonImagePath('action_add'),
                 $this->get_create_group_url($this->get_group()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Root', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_home.png',
+                Theme :: getInstance()->getCommonImagePath('action_home'),
                 $this->get_group_viewing_url($this->get_root_group()),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_browser.png',
+                Theme :: getInstance()->getCommonImagePath('action_browser'),
                 $this->get_url(array(self :: PARAM_GROUP_ID => $this->get_group())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -314,7 +314,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
+                Theme :: getInstance()->getCommonImagePath('action_edit'),
                 $this->get_group_editing_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -323,7 +323,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
+                    Theme :: getInstance()->getCommonImagePath('action_delete'),
                     $this->get_group_delete_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -331,7 +331,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('AddUsers'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_subscribe.png',
+                Theme :: getInstance()->getCommonImagePath('action_subscribe'),
                 $this->get_group_suscribe_user_browser_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -346,7 +346,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Truncate'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin.png',
+                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
                     $this->get_group_emptying_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -355,7 +355,7 @@ class BrowserComponent extends Manager implements TableSupport
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('TruncateNA'),
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_recycle_bin_na.png',
+                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -363,7 +363,7 @@ class BrowserComponent extends Manager implements TableSupport
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_metadata.png',
+                Theme :: getInstance()->getCommonImagePath('action_metadata'),
                 $this->get_group_metadata_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -62,7 +62,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_remove.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_remove'), 
                         $remove_url, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -71,7 +71,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('DeleteNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_remove_na.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_remove_na'), 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -91,7 +91,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_revert.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_revert'), 
                         $revert_url, 
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -100,7 +100,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('RevertNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_revert_na.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_revert_na'), 
                         null, 
                         ToolbarItem :: DISPLAY_ICON));
             }

@@ -63,7 +63,7 @@ class AssessmentResultsTableCellRenderer extends DataClassTableCellRenderer impl
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewResults'), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_view_results.png', 
+                Theme :: getInstance()->getCommonImagePath('action_view_results'), 
                 $this->get_component()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_ASSESSMENT_RESULTS, 
@@ -80,7 +80,7 @@ class AssessmentResultsTableCellRenderer extends DataClassTableCellRenderer impl
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteResult'), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_ASSESSMENT_RESULTS, 

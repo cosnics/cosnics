@@ -975,7 +975,7 @@ class CourseGroupForm extends FormValidator
                     $group[] = $this->createElement(
                         'image', 
                         'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagesPath() . 'action_list_remove.png', 
+                        Theme :: getInstance()->getCommonImagePath('action_list_remove'), 
                         array('style="border: 0px;"'));
                 }
                 // numbering of the titels
@@ -1005,7 +1005,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'image', 
             'add[]', 
-            Theme :: getInstance()->getCommonImagesPath() . 'action_list_add.png', 
+            Theme :: getInstance()->getCommonImagePath('action_list_add'), 
             array("title" => Translation :: get('AddGroupExplained')));
         $this->addElement(
             'html', 
@@ -1340,7 +1340,7 @@ class CourseGroupForm extends FormValidator
         // // if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
         // // {
         // $group[] = $this->createElement('image', 'remove[' . $option_number .
-        // ']', Theme :: getInstance()->getCommonImagesPath() . 'action_list_remove.png',
+        // ']', Theme :: getInstance()->getCommonImagePath('action_list_remove'),
         // array('style="border: 0px;"'));
         // // }
         // //numbering of the titels

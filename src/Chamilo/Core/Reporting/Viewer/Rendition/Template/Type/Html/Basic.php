@@ -31,7 +31,7 @@ class Basic extends Html
         // $toolbar->add_item(
         // new ToolbarItem(
         // Translation :: get('ShowReportingFilter', null, ReportingManager :: APPLICATION_NAME),
-        // Theme :: getInstance()->getCommonImagesPath() . 'reporting_filter.png',
+        // Theme :: getInstance()->getCommonImagePath('reporting_filter'),
         // '#',
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL,
         // false,
@@ -193,7 +193,7 @@ class Basic extends Html
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ExportToExcel'),
-                Theme :: getInstance()->getCommonImagesPath() . 'export_excel.png',
+                Theme :: getInstance()->getCommonImagePath('export_excel'),
                 $this->get_context()->get_url($parameters)));
 
         $parameters = $this->get_context()->get_parameters();
@@ -204,7 +204,7 @@ class Basic extends Html
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ExportToOds'),
-                Theme :: getInstance()->getCommonImagesPath() . 'export_ods.png',
+                Theme :: getInstance()->getCommonImagePath('export_ods'),
                 $this->get_context()->get_url($parameters)));
 
         return $action_bar;

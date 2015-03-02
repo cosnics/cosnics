@@ -233,8 +233,8 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $info = '<br /><img style="max-width: 100px;" src="' . Theme :: getInstance()->getCommonImagesPath() .
-                     'unknown.png' . '" /><br /><br />' .
+                $info = '<br /><img style="max-width: 100px;" src="' .
+                     Theme :: getInstance()->getCommonImagePath('unknown') . '' . '" /><br /><br />' .
                      DatetimeUtilities :: format_locale_date(null, $post->get_creation_date());
             }
 
@@ -368,14 +368,14 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_prev.png"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_next.png"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_first.png"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagesPath() .
-                 'action_last.png"  style="vertical-align: middle;"/>';
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_first') .
+                 '"  style="vertical-align: middle;"/>';
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_last') .
+                 '"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';
