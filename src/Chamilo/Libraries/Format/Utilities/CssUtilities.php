@@ -7,6 +7,7 @@ use Assetic\Cache\FilesystemCache;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssMinFilter;
 use Chamilo\Libraries\Protocol\HttpHeader;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -36,20 +37,21 @@ class CssUtilities extends ResourceUtilities
             }
         }
 
-        HttpHeader :: content_type(HttpHeader :: CONTENT_TYPE_CSS, self :: DEFAULT_CHARSET);
-
         if ($this->getCachingEnabled())
         {
             $asset_collection = new AssetCollection($assets, array(new CssImportFilter(), new CssMinFilter()));
-            $asset_cache = new AssetCache(
+            $asset_collection = new AssetCache(
                 $asset_collection,
                 new FilesystemCache($this->getPathUtilities()->getCachePath() . 'resource/'));
-            echo $asset_cache->dump();
         }
         else
         {
             $asset_collection = new AssetCollection($assets, array(new CssImportFilter()));
-            echo $asset_collection->dump();
         }
+
+        $response = new Response();
+        $response->setContent($asset_collection->dump());
+        $response->headers->set('Content-Type', 'text/css');
+        $response->send();
     }
 }
