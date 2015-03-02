@@ -52,7 +52,7 @@ class BrowserComponent extends \Chamilo\Application\Portfolio\Manager implements
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('GoBackHome'),
-                Theme :: getInstance()->getCommonImagesPath() . 'action_home.png',
+                Theme :: getInstance()->getCommonImagePath('action_home'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_HOME)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

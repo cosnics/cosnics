@@ -222,7 +222,7 @@ class BrowserComponent extends Manager implements TableSupport
         // new ToolbarItem(
         // Translation :: get('LastSynchronized') . ' ' .
         // $this->get_date($this->synchronisation_tracker->get_created()),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // Theme :: getInstance()->getCommonImagePath('action_config'),
         // null,
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // }
@@ -232,7 +232,7 @@ class BrowserComponent extends Manager implements TableSupport
         // new ToolbarItem(
         // Translation :: get('LastSynchronized') . ' ' .
         // $this->get_date($this->synchronisation_tracker->get_created()),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // Theme :: getInstance()->getCommonImagePath('action_config'),
         // $this->get_convert_answers_url($this->publication_id),
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // }
@@ -243,7 +243,7 @@ class BrowserComponent extends Manager implements TableSupport
         // new ToolbarItem(
         // Translation :: get('LastSynchronized') . ' ' .
         // $this->get_date($this->synchronisation_tracker->get_created()),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // Theme :: getInstance()->getCommonImagePath('action_config'),
         // $this->get_convert_answers_url($this->publication_id),
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // }
@@ -254,7 +254,7 @@ class BrowserComponent extends Manager implements TableSupport
         // new ToolbarItem(
         // Translation :: get('AnswerSynchronizationInQueue') . ' ' .
         // $this->get_date($this->synchronisation_tracker->get_created()),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_config_na.png',
+        // Theme :: getInstance()->getCommonImagePath('action_config_na'),
         // null,
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // break;
@@ -265,7 +265,7 @@ class BrowserComponent extends Manager implements TableSupport
         // $action_bar->add_tool_action(
         // new ToolbarItem(
         // Translation :: get('SynchronizeAnswers'),
-        // Theme :: getInstance()->getCommonImagesPath() . 'action_config.png',
+        // Theme :: getInstance()->getCommonImagePath('action_config'),
         // $this->get_convert_answers_url($this->publication_id),
         // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         // }

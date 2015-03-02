@@ -18,27 +18,27 @@ class Actions extends \Chamilo\Application\Calendar\Actions
     public function get()
     {
         $actions = array();
-        
+
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_CREATE;
         $link = Redirect :: get_link($parameters);
-        
+
         $actions[] = new ToolbarItem(
-            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
-            Theme :: getInstance()->getCommonImagesPath() . 'action_publish.png', 
+            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('action_publish'),
             $link);
-        
+
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_IMPORT;
         $link = Redirect :: get_link($parameters);
-        
+
         $actions[] = new ToolbarItem(
-            Translation :: get('ImportIcal'), 
-            Theme :: getInstance()->getCommonImagesPath() . 'action_import.png', 
+            Translation :: get('ImportIcal'),
+            Theme :: getInstance()->getCommonImagePath('action_import'),
             $link);
-        
+
         return $actions;
     }
 }
