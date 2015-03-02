@@ -1,0 +1,82 @@
+{
+  "name" : "chamilo/lcms-connect",
+  "description" : "Chamilo LCMS Connect",
+  "require" : {
+    "symfony/form" : "2.3.*",
+    "symfony/validator" : "2.3.*",
+    "symfony/translation" : "2.3.*",
+    "symfony/http-foundation" : "2.3.*",
+    "twig/twig" : "1.*",
+    "symfony/twig-bridge" : "2.*",
+    "sabre/vobject" : "~3.2.0.",
+    "kriswallsmith/assetic" : "=v1.1.2",
+    "natxet/CssMin" : "=3.0.2",
+    "nervo/yuicompressor" : "=2.4.7",
+    "mrclay/minify" : "=2.2.0",
+    "doctrine/cache" : "=v1.3.0",
+    "phpspec/php-diff" : "=v1.0.2",
+    "doctrine/dbal" : "=v2.4.2",
+    "phansys/getid3" : "=2.1.x-dev",
+    "phpmailer/phpmailer" : "=v5.2.8",
+    "phpoffice/phpexcel" : "=1.8.0",
+    "google/apiclient" : "1.0.5-beta",
+    "ensepar/html2pdf" : "=1.0.1",
+    "jasig/phpcas" : "=1.3.3",
+    "pear-pear.php.net/HTML_Common" : "*",
+    "pear-pear.php.net/HTML_Menu" : "*",
+    "pear-pear.php.net/HTML_Table" : "*",
+    "pear-pear.php.net/HTML_QuickForm" : "*",
+    "pear-pear.php.net/HTML_QuickForm_Controller" : "*",
+    "pear-pear.php.net/HTML_QuickForm_advmultiselect" : "*",
+    "pear-pear.php.net/PEAR" : "*",
+    "pear-pear.php.net/XML_Serializer" : "*",
+    "pear-pear.php.net/Pager" : "*",
+    "pear-pear.php.net/Net_URL2" : "*",
+    "pear-pear.php.net/Net_URL" : "*",
+    "pear-pear.php.net/Net_Socket" : "*",
+    "pear-pear.php.net/HTTP_Request" : "*",
+    "pear-pear.php.net/HTTP_Request2" : "*",
+    "pear-pear.php.net/MDB2" : "*",
+    "pear-pear.php.net/MDB2_Driver_mysqli" : "*",
+    "lapinator.net/ods-php-generator" : "dev-master",
+    "fergusean/nusoap" : "*",
+    "pclzip/pclzip" : "dev-master",
+    "symfony/class-loader" : "2.3.*",
+    "fabpot/php-cs-fixer" : "1.*",
+    "zend/gdata" : "1.*",
+    "danielstjules/stringy" : "1.*",
+    "phpunit/phpunit" : "4.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "repositories" : [ {
+    "type" : "pear",
+    "url" : "http://pear.php.net"
+  } ],
+  "require-dev" : {
+    "behat/behat" : "*",
+    "behat/mink" : "*",
+    "behat/mink-extension" : "dev-master",
+    "behat/mink-goutte-driver" : "dev-master",
+    "fabpot/goutte" : "dev-master",
+    "guzzlehttp/guzzle" : "5.*"
+  },
+  "keywords" : [ "ELO", "LCMS" ],
+  "support" : {
+    "forum" : "http://lcms.chamilo.org/phpbbforum",
+    "source" : "https://bitbucket.org/chamilo/lcms-connect/src",
+    "issues" : "https://support.chamilo.org/projects/lcms-backlog"
+  },
+  "minimum-stability" : "stable",
+  "extra" : {
+    "install-path" : ""
+  },
+  "config" : {
+    "bin-dir" : "bin/"
+  },
+  "license" : [ "GPL-3.0" ],
+  "type" : "chamilo-package"
+}

@@ -1,0 +1,27 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\google_docs
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Google Docs"
+MyFolders = ""
+SharedFolders = ""
+AllItems = ""
+OwnedByMe = ""
+OpenedByMe = ""
+SharedWithMe = ""
+Starred = ""
+Hidden = ""
+Trash = ""
+DocumentTypes = ""
+PDFs = ""
+Documents = ""
+Presentations = ""
+Spreadsheets = ""
+NotShared = ""
+Everyone = ""
+LastViewed = ""
+LastModifiedBy = ""
+SharedWith = ""
+Credentials = ""
+SessionToken = ""

@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\file\integration\repository\content_object_metadata_element_linker
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Content Object Eigenschap Metadata Linker"
+ContentObjectTypeName = "Bestand"
+Filename = "Bestandsnaam"
+FileExtension = "Extensie"
+Filesize = "Bestandsgrootte"

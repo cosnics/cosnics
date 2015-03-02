@@ -1,0 +1,27 @@
+{
+    "name": "chamilo/app-weblcms-tool-course-copier",
+    "description": "Course Copier Chamilo Weblcms Tool",
+    "keywords": [],
+    "homepage": "http://chamilo.com",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.3.0",
+        "chamilo/composer-installer": "*",
+        "chamilo/app-weblcms": "*"
+    },
+    "extra": {
+        "install-path": "application/weblcms/tool/course_copier"
+    }
+
+}
