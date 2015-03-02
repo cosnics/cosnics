@@ -18,11 +18,13 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         if ($object->get_download_link())
         {
             $toolbar_item = new ToolbarItem(
-                Translation :: get('Download'), 
-                Theme :: getInstance()->getImagesPath() . 'action_download.png', 
-                $object->get_download_link(), 
+                Translation :: get('Download'),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Bitbucket',
+                    'action_download'),
+                $object->get_download_link(),
                 ToolbarItem :: DISPLAY_ICON);
-            
+
             $properties[Translation :: get('Download')] = $toolbar_item->as_html();
         }
         return $properties;
@@ -48,9 +50,9 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         $html = array();
         $html[] = parent :: as_html();
-        
+
         $object = $this->get_object();
-        
+
         // tags
         $tags = $object->get_tags();
         if ($tags)
@@ -64,14 +66,16 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $row[] = DatetimeUtilities :: format_locale_date(null, $tag->get_time());
                 $row[] = $tag->get_branch();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('Download'), 
-                    Theme :: getInstance()->getImagesPath() . 'action_download.png', 
-                    $tag->get_download_link(), 
+                    Translation :: get('Download'),
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\Implementation\Bitbucket',
+                        'action_download'),
+                    $tag->get_download_link(),
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
                 $data[] = $row;
             }
-            
+
             $table = new SortableTableFromArray($data);
             $table->set_header(0, Translation :: get('Name'));
             $table->set_header(1, Translation :: get('Author'));
@@ -81,7 +85,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             $html[] = '<h3>' . Translation :: get('Tags') . '</h3>';
             $html[] = $table->as_html();
         }
-        
+
         // changesets
         $changesets = $object->get_changesets();
         if ($changesets)
@@ -91,20 +95,22 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             {
                 $row = array();
                 $row[] = $changeset->get_revision();
-                
+
                 $row[] = $changeset->get_author();
                 $row[] = $changeset->get_message();
                 $row[] = DatetimeUtilities :: format_locale_date(null, $changeset->get_time());
                 $row[] = $changeset->get_branch();
                 $toolbar_item = new ToolbarItem(
-                    Translation :: get('Download'), 
-                    Theme :: getInstance()->getImagesPath() . 'action_download.png', 
-                    $changeset->get_download_link(), 
+                    Translation :: get('Download'),
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\Implementation\Bitbucket',
+                        'action_download'),
+                    $changeset->get_download_link(),
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
                 $data[] = $row;
             }
-            
+
             $table = new SortableTableFromArray($data);
             $table->set_header(0, Translation :: get('Revision'));
             $table->set_header(1, Translation :: get('Author'));
@@ -115,7 +121,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             $html[] = '<h3>' . Translation :: get('Changesets') . '</h3>';
             $html[] = $table->as_html();
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

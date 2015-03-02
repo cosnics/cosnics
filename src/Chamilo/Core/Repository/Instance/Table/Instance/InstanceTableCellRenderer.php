@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table cell renderer for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class InstanceTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -21,7 +21,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
     /**
      * Renders a single cell
-     * 
+     *
      * @param TableColumn $column
      * @param mixed $result
      *
@@ -33,17 +33,17 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             case Instance :: PROPERTY_IMPLEMENTATION :
                 $name = htmlentities(Translation :: get('ImplementationName', null, $result->get_implementation()));
-                return '<img src="' . Theme :: getInstance()->getImagesPath($result->get_implementation()) .
-                     '/Logo/22.png" alt="' . $name . '" title="' . $name . '"/>';
+                return '<img src="' . Theme :: getInstance()->getImagePath($result->get_implementation(), 'Logo/22') .
+                     '" alt="' . $name . '" title="' . $name . '"/>';
                 break;
         }
-        
+
         return parent :: render_cell($column, $result);
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $result
      *
      * @return String
@@ -55,60 +55,60 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_deactivate.png', 
+                    Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_deactivate.png',
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE, 
-                            Manager :: PARAM_INSTANCE_ID => $result->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
+                            Manager :: PARAM_INSTANCE_ID => $result->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_activate.png', 
+                    Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_activate.png',
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE, 
-                            Manager :: PARAM_INSTANCE_ID => $result->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,
+                            Manager :: PARAM_INSTANCE_ID => $result->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                        Manager :: PARAM_INSTANCE_ID => $result->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                        Manager :: PARAM_INSTANCE_ID => $result->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_INSTANCE_ID => $result->get_id())), 
-                ToolbarItem :: DISPLAY_ICON, 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                        Manager :: PARAM_INSTANCE_ID => $result->get_id())),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: context()), 
-                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png', 
+                Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: context()),
+                Theme :: getInstance()->getCommonImagesPath() . 'action_rights.png',
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS, 
-                        Manager :: PARAM_INSTANCE_ID => $result->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
+                        Manager :: PARAM_INSTANCE_ID => $result->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

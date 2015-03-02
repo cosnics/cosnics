@@ -106,7 +106,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 $actions[$download_format] = new ToolbarItem(
                     Translation :: get(
                         'Import' . StringUtilities :: getInstance()->createString($download_format)->upperCamelize()),
-                    Theme :: getInstance()->getImagesPath() . 'download/' . $download_format . '.png',
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Download/' . $download_format),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,

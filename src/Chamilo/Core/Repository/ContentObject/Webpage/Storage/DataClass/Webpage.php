@@ -331,9 +331,11 @@ class Webpage extends ContentObject implements Versionable, Includeable
         $parts = explode('.', $filename);
         $icon_name = strtolower($parts[count($parts) - 1]);
         $icon_name = $size . '_' . $icon_name;
-        $icon_path = Theme :: getInstance()->getImagesPath(
+        $icon_path = Theme :: getInstance()->getImagePath(
             ContentObject :: get_content_object_type_namespace($this->get_type()),
-            false) . 'Logo/' . $icon_name . '.png';
+            'Logo/' . $icon_name,
+            'png',
+            false);
 
         if (! file_exists($icon_path))
         {
@@ -354,9 +356,9 @@ class Webpage extends ContentObject implements Versionable, Includeable
         }
         else
         {
-            return Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type())) . 'Logo/' . $size .
-                 ($this->is_current() ? '' : '_na') . '.png';
+            return Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type()),
+                'Logo/' . $size . ($this->is_current() ? '' : '_na'));
         }
     }
 

@@ -70,9 +70,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_license_icon()
     {
         $icon = new ToolbarItem(
-            $this->get_license_name(), 
-            Theme :: getInstance()->getImagesPath() . 'licenses/' . $this->get_license() . '.png', 
-            null, 
+            $this->get_license_name(),
+            Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\Implementation\Scribd',
+                'licenses/' . $this->get_license()),
+            null,
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();
     }
@@ -113,13 +115,15 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         foreach ($this->get_download_formats() as $format)
         {
             $icon = new ToolbarItem(
-                $format, 
-                Theme :: getInstance()->getImagesPath() . 'download/' . $format . '.png', 
-                null, 
+                $format,
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Scribd',
+                    'Download/' . $format),
+                null,
                 ToolbarItem :: DISPLAY_ICON);
             $toolbar->add_item($icon);
         }
-        
+
         return $toolbar->as_html();
     }
 
@@ -131,10 +135,10 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_document($download_format)
     {
         $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $this->get_external_repository_id());
         return DataConnector :: get_instance($external_repository)->download_external_repository_object(
-            $this, 
+            $this,
             $download_format);
     }
 }

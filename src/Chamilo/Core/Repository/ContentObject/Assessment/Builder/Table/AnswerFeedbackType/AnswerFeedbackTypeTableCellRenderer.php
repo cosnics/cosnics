@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer implements 
+class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -29,7 +29,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
     public function render_cell($column, $complex_content_object_item)
     {
         $content_object = $complex_content_object_item->get_ref_object();
-        
+
         switch ($column->get_name())
         {
             case AnswerFeedbackTypeTableColumnModel :: PROPERTY_TYPE :
@@ -39,15 +39,15 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
                 return Utilities :: truncate_string($title, 53, false);
             case AnswerFeedbackTypeTableColumnModel :: PROPERTY_FEEDBACK_TYPE :
                 return Theme :: getInstance()->getImage(
-                    'answer_feedback_type/' . $complex_content_object_item->get_show_answer_feedback(), 
-                    'png', 
-                    Configuration :: answer_feedback_string($complex_content_object_item->get_show_answer_feedback()), 
-                    null, 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    false, 
+                    'answer_feedback_type/' . $complex_content_object_item->get_show_answer_feedback(),
+                    'png',
+                    Configuration :: answer_feedback_string($complex_content_object_item->get_show_answer_feedback()),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
                     $this->get_component()->get_root_content_object()->context());
         }
-        
+
         return parent :: render_cell($column, $complex_content_object_item);
     }
 
@@ -58,42 +58,42 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
     public function get_actions($complex_content_object_item)
     {
         $toolbar = new Toolbar();
-        $image_path = Theme :: getInstance()->getImagesPath($this->get_component()->get_root_content_object()->context());
-        
+        $context = $this->get_component()->get_root_content_object()->context();
+
         $types = array(
-            Configuration :: ANSWER_FEEDBACK_TYPE_NONE, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
+            Configuration :: ANSWER_FEEDBACK_TYPE_NONE,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
+            Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT,
+            Configuration :: ANSWER_FEEDBACK_TYPE_WRONG,
             Configuration :: ANSWER_FEEDBACK_TYPE_ALL);
-        
+
         foreach ($types as $type)
         {
             if ($complex_content_object_item->get_show_answer_feedback() != $type)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Configuration :: answer_feedback_string($type), 
-                        $image_path . 'answer_feedback_type/' . $type . '.png', 
+                        Configuration :: answer_feedback_string($type),
+                        Theme :: getInstance()->getImagePath($context, 'AnswerFeedbackType/' . $type),
                         $this->get_component()->get_url(
                             array(
-                                Manager :: PARAM_ANSWER_FEEDBACK_TYPE => $type, 
-                                Manager :: PARAM_COMPLEX_QUESTION_ID => $complex_content_object_item->get_id())), 
+                                Manager :: PARAM_ANSWER_FEEDBACK_TYPE => $type,
+                                Manager :: PARAM_COMPLEX_QUESTION_ID => $complex_content_object_item->get_id())),
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Configuration :: answer_feedback_string($type), 
-                        $image_path . 'answer_feedback_type/' . $type . '_na.png', 
-                        null, 
+                        Configuration :: answer_feedback_string($type),
+                        Theme :: getInstance()->getImagePath($context, 'AnswerFeedbackType/' . $type . '_na'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         return $toolbar->as_html();
     }
 }

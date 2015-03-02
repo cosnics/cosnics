@@ -20,11 +20,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_ARTWORK, 
-                self :: PROPERTY_GENRE, 
-                self :: PROPERTY_WAVEFORM, 
-                self :: PROPERTY_TRACK_TYPE, 
-                self :: PROPERTY_BPM, 
+                self :: PROPERTY_ARTWORK,
+                self :: PROPERTY_GENRE,
+                self :: PROPERTY_WAVEFORM,
+                self :: PROPERTY_TRACK_TYPE,
+                self :: PROPERTY_BPM,
                 self :: PROPERTY_LABEL));
     }
 
@@ -46,9 +46,11 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_license_icon()
     {
         $icon = new ToolbarItem(
-            $this->get_license(), 
-            Theme :: getInstance()->getImagesPath() . 'licenses/' . $this->get_license() . '.png', 
-            null, 
+            $this->get_license(),
+            Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\Implementation\Soundcloud',
+                'Licenses/' . $this->get_license()),
+            null,
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();
     }
@@ -122,7 +124,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public static function get_valid_track_types()
     {
         $track_types = array();
-        
+
         $track_types['original'] = Translation :: get('Original');
         $track_types['remix'] = Translation :: get('Remix');
         $track_types['live'] = Translation :: get('Live');
@@ -136,7 +138,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         $track_types['sound effect'] = Translation :: get('SoundEffect');
         $track_types['sample'] = Translation :: get('OneShotSample');
         $track_types['other'] = Translation :: get('Other');
-        
+
         return $track_types;
     }
 }

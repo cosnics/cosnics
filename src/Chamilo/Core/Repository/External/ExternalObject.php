@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class ExternalObject
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     /**
      *
@@ -53,7 +53,7 @@ abstract class ExternalObject
 
     /**
      * Get the default properties of all data classes.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -73,7 +73,7 @@ abstract class ExternalObject
 
     /**
      * Gets a default property of this data class object by name.
-     * 
+     *
      * @param $name string The name of the property.
      * @param mixed
      */
@@ -93,7 +93,7 @@ abstract class ExternalObject
 
     /**
      * Sets a default property of this data class by name.
-     * 
+     *
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
@@ -328,10 +328,10 @@ abstract class ExternalObject
      */
     public function get_icon_image()
     {
-        $source = Theme :: getInstance()->getImagesPath(static :: context()) . 'types/' . $this->get_icon_name() . '.png';
+        $source = Theme :: getInstance()->getImagePath(static :: context(), 'Types/' . $this->get_icon_name());
         $name = Translation :: get(
-            'Type' . StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(), 
-            null, 
+            'Type' . StringUtilities :: getInstance()->createString($this->get_type())->upperCamelize(),
+            null,
             static :: context());
         return '<img src="' . $source . '" alt="' . $name . '" title="' . $name . '" />';
     }
@@ -383,24 +383,24 @@ abstract class ExternalObject
             $sync_conditions = array();
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(), 
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_OBJECT_ID), 
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(),
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_OBJECT_ID),
                 new StaticConditionVariable($this->get_id()));
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(), 
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_ID), 
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: class_name(),
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: PROPERTY_EXTERNAL_ID),
                 new StaticConditionVariable($this->get_external_repository_id()));
             $sync_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
-                new StaticConditionVariable(Session :: get_user_id()), 
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+                new StaticConditionVariable(Session :: get_user_id()),
                 ContentObject :: get_table_name());
             $sync_condition = new AndCondition($sync_conditions);
-            
+
             $this->synchronization_data = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_synchronization_data(
                 $sync_condition);
         }
-        
+
         return $this->synchronization_data;
     }
 
@@ -425,14 +425,14 @@ abstract class ExternalObject
     public function get_connector()
     {
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $this->get_external_repository_id());
         return DataConnector :: get_instance($external_instance);
     }
 
     /**
      * Get the type of the ExternalObject
-     * 
+     *
      * @return string
      * @deprecated Use context() to get the namespace (= type)
      */

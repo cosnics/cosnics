@@ -128,7 +128,7 @@ class ImporterComponent extends Manager
 
                 $html[] = '<a href="' . $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
                 $html[] = '<div class="create_block" style="background-image: url(' .
-                     Theme :: getInstance()->getImagesPath(Manager :: package()) . 'Import/' . $type . '.png);">';
+                     Theme :: getInstance()->getImagePath(Manager :: package(), 'Import/' . $type) . ');">';
                 $html[] = $name;
                 $html[] = '</div>';
                 $html[] = '</a>';

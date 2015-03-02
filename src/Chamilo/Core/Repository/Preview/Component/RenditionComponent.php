@@ -37,7 +37,7 @@ class RenditionComponent extends Manager
                 new DynamicVisualTab(
                     $view,
                     Translation :: get('View' . StringUtilities :: getInstance()->createString($view)->upperCamelize()),
-                    Theme :: getInstance()->getImagesPath() . 'view/' . $view . '.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Preview', 'View/' . $view),
                     $this->get_url(array(self :: PARAM_FORMAT => $this->get_format(), self :: PARAM_VIEW => $view)),
                     $this->get_view() == $view));
         }
