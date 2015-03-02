@@ -177,7 +177,7 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Synchronize'),
-                Theme :: getInstance()->getImagesPath() . 'action/synchronize.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Remote', 'Action/synchronize'),
                 $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_SYNCHRONIZE)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -33,7 +33,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_INVITEE,
                 Translation :: get('Invitee'),
-                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_INVITEE . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Tab/' . self :: ACTION_INVITEE),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_INVITEE)),
                 ($current_tab == self :: ACTION_INVITEE ? true : false)));
 
@@ -41,7 +41,9 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_ADMINISTRATOR,
                 Translation :: get('Administrator'),
-                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_ADMINISTRATOR . '.png',
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\Survey',
+                    'Tab/' . self :: ACTION_ADMINISTRATOR),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADMINISTRATOR)),
                 ($current_tab == self :: ACTION_ADMINISTRATOR ? true : false)));
 
@@ -49,7 +51,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self :: ACTION_MAILER,
                 Translation :: get('Mailer'),
-                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_MAILER . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Tab/' . self :: ACTION_MAILER),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_MAILER)),
                 ($current_tab == self :: ACTION_MAILER ? true : false)));
 

@@ -10,7 +10,7 @@ set_time_limit(0);
 
 /**
  * Package installation
- * 
+ *
  * @author Hans De Bisschop - Erasmus Hogeschool Brussel
  * @author Magali Gillard - Erasmus Hogeschool Brussel
  */
@@ -43,7 +43,7 @@ class PackageUpgrader extends Action
 
     /**
      * Runs the package remover
-     * 
+     *
      * @return boolean
      */
     public function run()
@@ -51,39 +51,42 @@ class PackageUpgrader extends Action
         if ($this->process())
         {
             $title = Translation :: get(
-                'Finished', 
-                null, 
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/finished.png';
+                'Finished',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+            $image = Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+                'PackageAction/finished');
             return $this->action_successful($title, $image, Translation :: get('PackageCompletelyUpgraded'));
         }
         else
         {
             $title = Translation :: get(
-                'Failed', 
-                null, 
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/failed.png';
+                'Failed',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+            $image = Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+                'PackageAction/failed');
             return $this->action_failed($title, $image, Translation :: get('PackageUpgradeFailed'));
         }
     }
 
     /**
      * Installs the package
-     * 
+     *
      * @return boolean
      */
     public function process()
     {
         $title = Translation :: get(
-            'Initialization', 
-            null, 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/initialization.png';
-        
+            'Initialization',
+            null,
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+            'PackageAction/initialization');
+
         if (! $this->get_package() instanceof \Chamilo\Configuration\Package\Storage\DataClass\Package)
         {
             return $this->action_failed($title, $image, Translation :: get('PackageAttributesNotFound'));
@@ -92,14 +95,15 @@ class PackageUpgrader extends Action
         {
             $this->add_message(Translation :: get('PackageAttributesFound'));
         }
-        
+
         $title = Translation :: get(
-            'Upgrade', 
-            array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())), 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) . 'package_action/upgrade.png';
-        
+            'Upgrade',
+            array('PACKAGE' => Translation :: get('TypeName', null, $this->get_package()->get_context())),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+            'PackageAction/upgrade');
+
         try
         {
             $this->upgrader = \Chamilo\Configuration\Package\Action\Upgrader :: factory(
@@ -109,12 +113,12 @@ class PackageUpgrader extends Action
         {
             $this->add_message(
                 Translation :: get(
-                    'UpgraderNotFoundIgnoringPackage', 
+                    'UpgraderNotFoundIgnoringPackage',
                     array('CONTEXT' => $this->get_package()->get_context())));
-            
+
             return $this->action_successful($title, $image);
         }
-        
+
         if (! $this->upgrader->run())
         {
             $this->add_message($this->upgrader->retrieve_message());
@@ -125,19 +129,19 @@ class PackageUpgrader extends Action
             $this->add_message($this->upgrader->retrieve_message());
             $this->action_successful($title, $image);
         }
-        
+
         if ($this->upgrade_additional_packages)
         {
             $this->add_additional_packages($this->upgrader->get_additional_packages());
-            
+
             $title = Translation :: get(
-                'AdditionalPackages', 
-                null, 
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-            $image = Theme :: getInstance()->getImagesPath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__)) .
-                 'package_action/additional_packages.png';
-            
+                'AdditionalPackages',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+            $image = Theme :: getInstance()->getImagePath(
+                ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
+                'PackageAction/additional_packages');
+
             while (($additional_package = $this->get_next_additional_package()) != null)
             {
                 if (! $this->upgrade_additional_package($additional_package))
@@ -146,25 +150,25 @@ class PackageUpgrader extends Action
                 }
             }
         }
-        
+
         return true;
     }
 
     /**
      * Upgrades an additional package
-     * 
+     *
      * @param string $context
      */
     private function upgrade_additional_package($context)
     {
         $title = Translation :: get(
-            'Upgrade', 
-            array('PACKAGE' => Translation :: get('TypeName', null, $context)), 
-            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
-        $image = Theme :: getInstance()->getImagesPath($context) . 'Logo/48.png';
-        
+            'Upgrade',
+            array('PACKAGE' => Translation :: get('TypeName', null, $context)),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
+        $image = Theme :: getInstance()->getImagePath($context, 'Logo/48');
+
         $upgrader = \Chamilo\Configuration\Package\Action\Upgrader :: factory($context);
-        
+
         if (! $upgrader->run())
         {
             $this->add_message($upgrader->retrieve_message());
@@ -181,7 +185,7 @@ class PackageUpgrader extends Action
 
     /**
      * Returns the additional packages
-     * 
+     *
      * @return multitype:string
      */
     public function get_additional_packages()
@@ -191,7 +195,7 @@ class PackageUpgrader extends Action
 
     /**
      * Sets the additional packages
-     * 
+     *
      * @param multitype:string
      */
     public function set_additional_packages($additional_packages)
@@ -201,7 +205,7 @@ class PackageUpgrader extends Action
 
     /**
      * Adds an additional package to the list of additional packages
-     * 
+     *
      * @param string
      */
     public function add_additional_package($context)
@@ -211,7 +215,7 @@ class PackageUpgrader extends Action
 
     /**
      * Adds multiple additional packages to the list of additional packages
-     * 
+     *
      * @param multitype:string
      */
     public function add_additional_packages($additional_packages)
@@ -224,7 +228,7 @@ class PackageUpgrader extends Action
 
     /**
      * Removes and returns the first package from the list of additional packages
-     * 
+     *
      * @return string
      */
     public function get_next_additional_package()

@@ -20,7 +20,7 @@ class UserGroups
 
     /**
      * Constructor
-     * 
+     *
      * @param $user_id int
      * @param $border boolean Indicates if a border should be included
      */
@@ -32,7 +32,7 @@ class UserGroups
 
     /**
      * Returns a HTML representation of the user details
-     * 
+     *
      * @return string
      * @todo Implement further details
      */
@@ -47,8 +47,9 @@ class UserGroups
         {
             $html[] = 'class="vertical_space"';
         }
-        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagesPath(
-            \Chamilo\Core\Group\Manager :: context()) . 'Logo/22.png);">';
+        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
+            \Chamilo\Core\Group\Manager :: context(),
+            'Logo/22') . ');">';
         $html[] = '<div class="title">';
         $html[] = Translation :: get('PlatformGroups', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '</div>';

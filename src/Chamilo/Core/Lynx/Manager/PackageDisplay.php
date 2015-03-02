@@ -57,32 +57,32 @@ class PackageDisplay
     public function render()
     {
         $html = array();
-        
+
         $html[] = $this->get_stability_information();
         $html[] = $this->get_properties_table();
         $html[] = $this->get_cycle_table();
         $html[] = $this->get_dependencies_table();
-        
+
         if (! $this->get_registration() instanceof Registration)
         {
             $html[] = $this->get_install_problems();
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_dependencies_table()
     {
         $package_info = $this->get_package_info();
-        
+
         $html = array();
-        
+
         if ($package_info->has_dependencies())
         {
             $html[] = '<h3>' . Translation :: get('Dependencies') . '</h3>';
-            
+
             $html[] = '<table class="data_table data_table_no_header">';
-            
+
             if (! is_null($package_info->get_pre_depends()))
             {
                 $html[] = '<tr>';
@@ -90,7 +90,7 @@ class PackageDisplay
                 $html[] = '<td>' . $package_info->get_pre_depends()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
-            
+
             if (! is_null($package_info->get_depends()))
             {
                 $html[] = '<tr>';
@@ -98,7 +98,7 @@ class PackageDisplay
                 $html[] = '<td>' . $package_info->get_depends()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
-            
+
             if (! is_null($package_info->get_recommends()))
             {
                 $html[] = '<tr>';
@@ -106,7 +106,7 @@ class PackageDisplay
                 $html[] = '<td>' . $package_info->get_recommends()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
-            
+
             if (! is_null($package_info->get_suggests()))
             {
                 $html[] = '<tr>';
@@ -114,7 +114,7 @@ class PackageDisplay
                 $html[] = '<td>' . $package_info->get_suggests()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
-            
+
             if (! is_null($package_info->get_enhances()))
             {
                 $html[] = '<tr>';
@@ -122,27 +122,27 @@ class PackageDisplay
                 $html[] = '<td>' . $package_info->get_enhances()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
-            
+
             $html[] = '</table><br/>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_update_problems()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_CONTEXT), 
+            new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_CONTEXT),
             new StaticConditionVariable($this->get_registration()->get_context()));
-        
+
         $admin = \Chamilo\Core\Admin\Storage\DataManager :: get_instance();
         $order_by = new OrderBy(new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_VERSION));
-        
+
         $package_remote = $admin->retrieve_remote_packages($condition, $order_by, null, 1);
         if ($package_remote->size() == 1)
         {
             $package_remote = $package_remote->next_result();
-            
+
             $package_update_dependency = new DependencyVerifier($package_remote);
             $success = $package_update_dependency->is_updatable();
             if ($success)
@@ -155,10 +155,10 @@ class PackageDisplay
             }
             $html = array();
             $html[] = '<h3>' . Translation :: get(
-                'UpdateDependencies', 
+                'UpdateDependencies',
                 array('VERSION' => $package_remote->get_version())) . '</h3>';
             $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
-                 Theme :: getInstance()->getImagesPath() . 'place/' . $type . '.png);">';
+                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Place/' . $type) . ');">';
             $html[] = '<div class="title">' . Translation :: get(DependenciesResultVerification) . '</div>';
             $html[] = '<div class="description">';
             $html[] = $package_update_dependency->get_logger()->render();
@@ -182,10 +182,10 @@ class PackageDisplay
         }
         $html = array();
         $html[] = '<h3>' . Translation :: get(
-            'InstallationDependencies', 
+            'InstallationDependencies',
             array('VERSION' => $this->get_package_info()->get_version())) . '</h3>';
         $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
-             Theme :: getInstance()->getImagesPath() . 'place/' . $type . '.png);">';
+             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Place/' . $type) . ');">';
         $html[] = '<div class="title">' . Translation :: get(DependenciesResultVerification) . '</div>';
         $html[] = '<div class="description">';
         $html[] = $package_dependency->get_logger()->render();
@@ -197,7 +197,7 @@ class PackageDisplay
     public function get_cycle_table()
     {
         $package_info = $this->get_package_info();
-        
+
         $html = array();
         $html[] = '<h3>' . Translation :: get('ReleaseInformation') . '</h3>';
         $html[] = '<table class="data_table data_table_no_header">';
@@ -212,28 +212,28 @@ class PackageDisplay
                 'CycleRealm' . StringUtilities :: getInstance()->createString($package_info->get_cycle()->get_realm()))->upperCamelize() .
              '</td></tr>';
         $html[] = '</table><br/>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_properties_table()
     {
         $package_info = $this->get_package_info();
-        
+
         $html = array();
         $html[] = '<table class="data_table data_table_no_header">';
         $properties = $package_info->get_default_property_names();
-        
+
         $hidden_properties = array(
-            Package :: PROPERTY_AUTHORS, 
-            Package :: PROPERTY_VERSION, 
-            Package :: PROPERTY_CYCLE, 
-            Package :: PROPERTY_PRE_DEPENDS, 
-            Package :: PROPERTY_DEPENDS, 
-            Package :: PROPERTY_RECOMMENDS, 
-            Package :: PROPERTY_SUGGESTS, 
+            Package :: PROPERTY_AUTHORS,
+            Package :: PROPERTY_VERSION,
+            Package :: PROPERTY_CYCLE,
+            Package :: PROPERTY_PRE_DEPENDS,
+            Package :: PROPERTY_DEPENDS,
+            Package :: PROPERTY_RECOMMENDS,
+            Package :: PROPERTY_SUGGESTS,
             Package :: PROPERTY_ENHANCES);
-        
+
         foreach ($properties as $property)
         {
             $value = $package_info->get_default_property($property);
@@ -245,11 +245,11 @@ class PackageDisplay
                      $value . '</td></tr>';
             }
         }
-        
+
         $authors = $package_info->get_authors();
         foreach ($authors as $key => $author)
         {
-            
+
             $html[] = '<tr><td class="header">';
             if ($key == 0)
             {
@@ -258,16 +258,16 @@ class PackageDisplay
             $html[] = '</td><td>' . Display :: encrypted_mailto_link($author['email'], $author['name']) . ' - ' .
                  $author['company'] . '</td></tr>';
         }
-        
+
         $html[] = '</table><br/>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_stability_information()
     {
         $package_info = $this->get_package_info();
-        
+
         if (! $package_info->get_cycle()->is_official() || ! $package_info->get_cycle()->is_stable())
         {
             if (! $package_info->get_cycle()->is_official() && $package_info->get_cycle()->is_stable())
@@ -282,7 +282,7 @@ class PackageDisplay
             {
                 $translation_variable = 'WarningPackageInstallUnofficialUnstable';
             }
-            
+
             return Display :: warning_message(Translation :: get($translation_variable), true);
         }
         else

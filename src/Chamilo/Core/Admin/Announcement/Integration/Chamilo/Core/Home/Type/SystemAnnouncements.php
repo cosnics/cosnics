@@ -31,8 +31,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
              * SystemAnnouncement may not be available if not installed.
              * Therefore do not use SystemAnnouncement::...
              */
-            return Theme :: getInstance()->getImagesPath(
-                ContentObject :: get_content_object_type_namespace('system_announcement')) . 'Logo/' . $size . '.png';
+            return Theme :: getInstance()->getImagePath(
+                ContentObject :: get_content_object_type_namespace('system_announcement'),
+                'Logo/' . $size);
         }
     }
 
@@ -42,7 +43,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         {
             return false;
         }
-        
+
         return true; // i.e.display on homepage when anonymous
     }
 
@@ -62,7 +63,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
     /**
      * Returns the url to the icon.
-     * 
+     *
      * @return string
      */
     public function get_icon()
@@ -75,47 +76,47 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         if (! isset($this->publications))
         {
             $from_date_variables = new PropertyConditionVariable(
-                Publication :: class_name(), 
+                Publication :: class_name(),
                 Publication :: PROPERTY_FROM_DATE);
-            
+
             $to_date_variable = new PropertyConditionVariable(
-                Publication :: class_name(), 
+                Publication :: class_name(),
                 Publication :: PROPERTY_TO_DATE);
-            
+
             $time_conditions = array();
-            
+
             $time_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_HIDDEN), 
+                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_HIDDEN),
                 new StaticConditionVariable(0));
-            
+
             $forever_conditions = array();
             $forever_conditions[] = new EqualityCondition($from_date_variables, new StaticConditionVariable(0));
             $forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
             $forever_condition = new AndCondition($forever_conditions);
-            
+
             $between_conditions = array();
             $between_conditions[] = new InequalityCondition(
-                $from_date_variables, 
-                InequalityCondition :: LESS_THAN_OR_EQUAL, 
+                $from_date_variables,
+                InequalityCondition :: LESS_THAN_OR_EQUAL,
                 new StaticConditionVariable(time()));
             $between_conditions[] = new InequalityCondition(
-                $to_date_variable, 
-                InequalityCondition :: GREATER_THAN_OR_EQUAL, 
+                $to_date_variable,
+                InequalityCondition :: GREATER_THAN_OR_EQUAL,
                 new StaticConditionVariable(time()));
             $between_condition = new AndCondition($between_conditions);
-            
+
             $time_conditions[] = new OrCondition(array($forever_condition, $between_condition));
-            
+
             $condition = new AndCondition($time_conditions);
-            
+
             $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_me(
-                $condition, 
-                array(), 
-                0, 
-                - 1, 
+                $condition,
+                array(),
+                0,
+                - 1,
                 $this->get_user()->get_id());
         }
-        
+
         return $this->publications;
     }
 
@@ -125,7 +126,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];
-        
+
         $result = Redirect :: get_link($parameters, null, null, Redirect :: TYPE_CORE);
         return $result;
     }
@@ -133,40 +134,40 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
     public function display_content()
     {
         $publcations = $this->get_publications();
-        
+
         if ($publcations->size() == 0)
         {
             return htmlspecialchars(Translation :: get('NoSystemAnnouncementsCurrently'));
         }
-        
+
         $data = array();
-        
+
         while ($publication = $publcations->next_result())
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 (int) $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
-            
+
             $icon = $content_object->get_icon_image(
-                Theme :: ICON_MINI, 
+                Theme :: ICON_MINI,
                 ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
-            
+
             $href = htmlspecialchars($this->get_publication_link($publication));
             $title = htmlspecialchars($content_object->get_title());
             $target = $this->get_view() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
             $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
-            
+
             $data[] = array($icon, $link);
         }
-        
+
         $table = new SortableTable($data);
         $table->setAttribute('class', 'data_table invisible_table');
         $table->set_header(0, null, false);
         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
         $table->set_header(1, null, false);
         $table->getHeader()->setColAttributes(1, 'class="invisible"');
-        
+
         $html[] = $table->as_html();
-        
+
         return implode(PHP_EOL, $html);
     }
 }

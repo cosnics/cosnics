@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table cell renderer for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AttributeTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -21,7 +21,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
 
     /**
      * Renders a single cell
-     * 
+     *
      * @param TableColumn $column
      * @param DataClass $result
      *
@@ -36,17 +36,17 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
                 break;
             case AttributeTableColumnModel :: COLUMN_CONTROLLED_VOCABULARY :
                 $has_controlled_vocabulary = DataManager :: attribute_has_controlled_vocabulary($result->get_id()) ? 'true' : 'false';
-                
+
                 return Theme :: getInstance()->getCommonImage('action_setting_' . $has_controlled_vocabulary);
                 break;
         }
-        
+
         return parent :: render_cell($column, $result);
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $result
      *
      * @return String
@@ -54,83 +54,87 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
     public function get_actions($result)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         if ($result->is_fixed())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png', 
-                    null, 
+                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit_na.png',
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png', 
-                    null, 
+                    Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete_na.png',
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ManageControlledVocabularyNA', null, 'core\metadata'), 
-                    Theme :: getInstance()->getImagesPath() . 'action/controlled_vocabulary_na.png', 
-                    null, 
+                    Translation :: get('ManageControlledVocabularyNA', null, 'core\metadata'),
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Metadata\Attribute',
+                        'Action/controlled_vocabulary_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MetadataDefaultValuesNA', null, 'core\metadata'), 
-                    Theme :: getInstance()->getImagesPath() . 'action/default_na.png', 
-                    null, 
+                    Translation :: get('MetadataDefaultValuesNA', null, 'core\metadata'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/default_na'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png', 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_edit.png',
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png', 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagesPath() . 'action_delete.png',
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ManageControlledVocabulary', null, 'core\metadata'), 
-                    Theme :: getInstance()->getImagesPath() . 'action/controlled_vocabulary.png', 
+                    Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Metadata\Attribute',
+                        'Action/controlled_vocabulary'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULATE, 
-                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULATE,
+                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MetadataDefaultValues', null, 'core\metadata'), 
-                    Theme :: getInstance()->getImagesPath() . 'action/default.png', 
+                    Translation :: get('MetadataDefaultValues', null, 'core\metadata'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/default'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => null, 
-                            \Chamilo\Core\Metadata\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_VALUE, 
-                            \Chamilo\Core\Metadata\Value\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Value\Manager :: ACTION_ATTRIBUTE, 
-                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())), 
+                            Manager :: PARAM_ACTION => null,
+                            \Chamilo\Core\Metadata\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_VALUE,
+                            \Chamilo\Core\Metadata\Value\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Value\Manager :: ACTION_ATTRIBUTE,
+                            Manager :: PARAM_ATTRIBUTE_ID => $result->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

@@ -84,7 +84,7 @@ class UserSettingsComponent extends Manager
                 $tab = new DynamicVisualTab(
                     $setting_context,
                     Translation :: get('TypeName', null, $setting_context),
-                    Theme :: getInstance()->getImagesPath($setting_context) . 'Logo/22.png',
+                    Theme :: getInstance()->getImagePath($setting_context, 'Logo/22'),
                     $package_url,
                     $is_current_tab);
                 $tabs->add_tab($tab);
@@ -149,7 +149,7 @@ class UserSettingsComponent extends Manager
                 new DynamicVisualTab(
                     $action,
                     $label,
-                    Theme :: getInstance()->getImagesPath('Chamilo\Core\User\\') . 'place_' . $action . '.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'place_' . $action),
                     $link,
                     $selected));
         }

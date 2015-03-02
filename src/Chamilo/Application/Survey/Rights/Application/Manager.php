@@ -19,14 +19,15 @@ abstract class Manager extends Application
 
     public function get_tabs($current_tab, $content)
     {
-       
-        $tabs = new DynamicVisualTabsRenderer(ClassnameUtilities::getInstance()->getPackageNameFromNamespace(__NAMESPACE__, true), $content);
-         
+        $tabs = new DynamicVisualTabsRenderer(
+            ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(__NAMESPACE__, true),
+            $content);
+
         $tabs->add_tab(
             new DynamicVisualTab(
                 self :: ACTION_PUBLISHER,
                 Translation :: get('Publisher'),
-                Theme :: getInstance()->getImagesPath() . 'tab/' . self :: ACTION_PUBLISHER . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Tab/' . self :: ACTION_PUBLISHER),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISHER)),
                 ($current_tab == self :: ACTION_PUBLISHER ? true : false)));
 

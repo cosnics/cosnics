@@ -4,11 +4,9 @@ namespace Chamilo\Application\Survey;
 use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
-use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Core\Repository\Viewer\Component\ViewerComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -410,70 +408,4 @@ abstract class Manager extends Application
 
         return Translation :: get('PublicationCreated');
     }
-
-    public static function get_installable_application_packages($include_installed = false)
-    {
-        $package_list = new PackageList(
-            self :: context(),
-            Translation :: get('TypeName', null, __NAMESPACE__),
-            Theme :: getInstance()->getImagesPath() . 'Logo/16.png');
-
-        $integration_list = new \Chamilo\Configuration\Package\PackageList(
-            self :: context() . '\integration',
-            Translation :: get('Integrations', null, __NAMESPACE__));
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\integration\tracking') ||
-             $include_installed)
-        {
-            $integration_list->add_package(self :: context() . '\integration\tracking');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\cron') || $include_installed)
-        {
-            $package_list->add_package(self :: context() . '\cron');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\mail') || $include_installed)
-        {
-            $package_list->add_package(self :: context() . '\mail');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\export') || $include_installed)
-        {
-            $package_list->add_package(self :: context() . '\export');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\reporting') ||
-             $include_installed)
-        {
-            $package_list->add_package(self :: context() . '\reporting');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\rights') || $include_installed)
-        {
-            $package_list->add_package(self :: context() . '\rights');
-        }
-
-        $rights_list = new \Chamilo\Configuration\Package\PackageList(
-            self :: context() . '\rights',
-            Translation :: get('Rights', null, __NAMESPACE__));
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\core\rights\application') ||
-             $include_installed)
-        {
-            $rights_list->add_package(self :: context() . '\core\rights\application');
-        }
-
-        if (! \Chamilo\Configuration\Configuration :: registration(self :: context() . '\core\rights\publication') ||
-             $include_installed)
-        {
-            $rights_list->add_package(self :: context() . '\core\rights\publication');
-        }
-
-        $package_list->add_child($integration_list);
-        $package_list->add_child($rights_list);
-
-        return $package_list;
-    }
 }
-?>

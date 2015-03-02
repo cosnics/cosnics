@@ -60,7 +60,7 @@ class AdditionalAccountInformationComponent extends Manager
                 new DynamicVisualTab(
                     $action,
                     $label,
-                    Theme :: getInstance()->getImagesPath('Chamilo\Core\User\\') . 'place_' . $action . '.png',
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'place_' . $action),
                     $link,
                     $selected));
         }

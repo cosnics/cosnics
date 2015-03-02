@@ -102,7 +102,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_SUBGROUPS,
                 Translation :: get('Subgroups'),
-                Theme :: getInstance()->getImagesPath(self :: context()) . 'Logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagePath(self :: context(), 'Logo/' . Theme :: ICON_MINI),
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
@@ -110,16 +110,17 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_USERS,
                 Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context()),
-                Theme :: getInstance()->getImagesPath(\Chamilo\Core\User\Manager :: context()) . 'Logo/' .
-                     Theme :: ICON_MINI . '.png',
-                    $table->as_html()));
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\User\Manager :: context(),
+                    'Logo/' . Theme :: ICON_MINI),
+                $table->as_html()));
 
         // Group info tab
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_DETAILS,
                 Translation :: get('Details'),
-                Theme :: getInstance()->getImagesPath('core\help') . 'Logo/' . Theme :: ICON_MINI . '.png',
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Help', 'Logo/' . Theme :: ICON_MINI),
                 $this->get_group_info()));
 
         $html[] = $tabs->render();

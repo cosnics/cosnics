@@ -54,7 +54,7 @@ class ManagerSendMailComponent extends Manager
     {
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         $this->type = Request :: get(Manager :: PARAM_TYPE);
-        
+
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
         {
             $this->display_header();
@@ -62,14 +62,14 @@ class ManagerSendMailComponent extends Manager
             $this->display_footer();
             exit();
         }
-        
+
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
                 $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: PARTICIPATE_RIGHT, 
+                    Rights :: PARTICIPATE_RIGHT,
                     $this->publication_id);
-                
+
                 if (is_array(($target_entities[UserEntity :: ENTITY_TYPE])))
                 {
                     $user_ids = $target_entities[UserEntity :: ENTITY_TYPE];
@@ -78,7 +78,7 @@ class ManagerSendMailComponent extends Manager
                 {
                     $user_ids = array();
                 }
-                
+
                 if (is_array(($target_entities[PlatformGroupEntity :: ENTITY_TYPE])))
                 {
                     $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
@@ -86,7 +86,7 @@ class ManagerSendMailComponent extends Manager
                     foreach ($group_ids as $group_id)
                     {
                         $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                            Group :: class_name(), 
+                            Group :: class_name(),
                             $group_id);
                         $group_user_ids = array_merge($group_user_ids, $group->get_users(true, true));
                     }
@@ -100,32 +100,32 @@ class ManagerSendMailComponent extends Manager
                 $this->not_started = array();
                 $this->started = array();
                 $this->finished = array();
-                
+
                 $condition = new EqualityCondition(Participant :: PROPERTY_SURVEY_PUBLICATION_ID, $this->publication_id);
                 $parameters = new DataClassRetrievesParameters($condition);
                 $participants = DataManager :: get_instance()->retrieves(Participant :: class_name(), $parameters);
-                
+
                 while ($participant = $participants->next_result())
                 {
                     if ($participant->get_status() == Participant :: STATUS_FINISHED)
                     {
                         $this->finished[] = $participant->get_user_id();
                     }
-                    else 
+                    else
                         if ($participant->get_status() == Participant :: STATUS_STARTED)
                         {
                             $this->started[] = $participant->get_user_id();
                         }
                 }
-                
+
                 $invitee_count = count(array_unique($this->invitees));
                 $started_count = count(array_unique($this->started));
                 $finished_count = count(array_unique($this->finished));
                 $started_and_finished_users = array_merge($this->started, $this->finished);
                 $this->not_started = array_diff($this->invitees, $started_and_finished_users);
-                
+
                 $not_started_count = $invitee_count - $started_count - $finished_count;
-                
+
                 $users = array();
                 $users[Rights :: PARTICIPATE_RIGHT_NAME] = $invitee_count;
                 $users[Participant :: STATUS_STARTED] = $started_count;
@@ -134,7 +134,7 @@ class ManagerSendMailComponent extends Manager
                 break;
             case Mail :: EXPORT_TYPE :
                 $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: RIGHT_EXPORT_RESULT, 
+                    Rights :: RIGHT_EXPORT_RESULT,
                     $this->publication_id);
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
@@ -152,7 +152,7 @@ class ManagerSendMailComponent extends Manager
                 break;
             case Mail :: REPORTING_TYPE :
                 $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: RIGHT_REPORTING, 
+                    Rights :: RIGHT_REPORTING,
                     $this->publication_id);
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
@@ -168,16 +168,16 @@ class ManagerSendMailComponent extends Manager
                 $users[Rights :: REPORTING_RIGHT_NAME] = $invitee_count;
                 break;
         }
-        
+
         $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
         $form = new MailForm(
-            $this, 
-            $this->get_user(), 
-            $users, 
-            $this->type, 
+            $this,
+            $this->get_user(),
+            $users,
+            $this->type,
             $this->get_url(
                 array(self :: PARAM_PUBLICATION_ID => $this->publication_id, Manager :: PARAM_TYPE => $this->type)));
-        
+
         if ($form->validate())
         {
             $values = $form->exportValues();
@@ -197,8 +197,8 @@ class ManagerSendMailComponent extends Manager
     {
         $html = array();
         $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagesPath('application\survey') . 'survey_22.png);">';
-        
+             Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/22') . ');">';
+
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
@@ -220,40 +220,40 @@ class ManagerSendMailComponent extends Manager
     {
         $users = array();
         $mail_user_ids = array();
-        
+
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
                 $user_ids = array();
-                
+
                 $not_started = $values[Participant :: STATUS_NOTSTARTED];
                 if ($not_started == 1)
                 {
                     $user_ids = array_merge($user_ids, $this->not_started);
                 }
-                
+
                 $started = $values[Participant :: STATUS_STARTED];
-                
+
                 if ($started == 1)
                 {
                     $user_ids = array_merge($user_ids, $this->started);
                 }
-                
+
                 $finished = $values[Participant :: STATUS_FINISHED];
-                
+
                 if ($finished == 1)
                 {
                     $user_ids = array_merge($user_ids, $this->finished);
                 }
-                
+
                 $invitees = $values[Rights :: PARTICIPATE_RIGHT_NAME];
-                
+
                 if ($invitees == 1)
                 {
-                    
+
                     $user_ids = array_merge($user_ids, $this->invitees);
                 }
-                
+
                 $user_ids = array_unique($user_ids);
                 if (isset($filter_user_ids))
                 {
@@ -269,22 +269,22 @@ class ManagerSendMailComponent extends Manager
                 {
                     $this->invitees = array_intersect($this->invitees, $user_ids);
                 }
-                
+
                 $invitees = $values[Rights :: EXPORT_RESULT_RIGHT_NAME];
-                
+
                 if ($invitees == 1)
                 {
-                    
+
                     $mail_user_ids = array_merge($mail_user_ids, $this->invitees);
                 }
                 break;
             case Mail :: REPORTING_TYPE :
-                
+
                 if (isset($user_ids))
                 {
                     $this->invitees = array_intersect($this->invitees, $user_ids);
                 }
-                
+
                 $invitees = $values[Rights :: REPORTING_RIGHT_NAME];
                 if ($invitees == 1)
                 {
@@ -292,27 +292,27 @@ class ManagerSendMailComponent extends Manager
                 }
                 break;
         }
-        
+
         $mail_user_ids = array_unique($mail_user_ids);
-        
+
         if (count($mail_user_ids) == 0)
         {
             $this->redirect(
-                Translation :: get('NoSurveyMailsSend'), 
-                false, 
+                Translation :: get('NoSurveyMailsSend'),
+                false,
                 array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
         else
         {
             $email_content = $values[MailForm :: EMAIL_CONTENT];
-            
+
             $fullbody = array();
             $fullbody[] = $email_content;
             $fullbody[] = '<br/><br/>';
             $fullbody[] = '<p id="link">';
-            
+
             $parameters = array();
-            
+
             switch ($this->type)
             {
                 case Mail :: PARTICIPANT_TYPE :
@@ -330,19 +330,19 @@ class ManagerSendMailComponent extends Manager
                     $selected_tab = BrowserComponent :: TAB_MAILS_TO_EXPORTERS;
                     break;
             }
-            
+
             $fullbody[] = '<br/><br/>' . Translation :: get('OrCopyAndPasteThisText') . ':';
             $fullbody[] = '<br/><a href=' . $url . '>' . $url . '</a>';
             $fullbody[] = '</p>';
-            
+
             $body = implode(PHP_EOL, $fullbody);
-            
+
             $email_header = $values[MailForm :: EMAIL_HEADER];
             $email_from_address = $values[MailForm :: FROM_ADDRESS];
             $email_reply_address = $values[MailForm :: REPLY_ADDRESS];
             $email_from_address_name = $values[MailForm :: FROM_ADDRESS_NAME];
             $email_reply_address_name = $values[MailForm :: REPLY_ADDRESS_NAME];
-            
+
             $email = new Mail();
             $email->set_mail_header($email_header);
             $email->set_mail_content($body);
@@ -355,18 +355,18 @@ class ManagerSendMailComponent extends Manager
             $email->set_send_date(time());
             $email->set_type($this->type);
             $succes = $email->create();
-            
+
             if ($succes)
             {
                 foreach ($mail_user_ids as $key => $user_id)
                 {
                     $user = $dm = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                        User :: class_name(), 
+                        User :: class_name(),
                         $user_id);
                     $to_email = $user->get_email();
                     $this->send_mail($user_id, $to_email, $email);
                 }
-                
+
                 $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'application\survey');
                 if ($this->mail_send == false)
                 {
@@ -391,19 +391,19 @@ class ManagerSendMailComponent extends Manager
                     }
                 }
                 $this->redirect(
-                    $message, 
-                    ! $this->mail_send, 
+                    $message,
+                    ! $this->mail_send,
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
+                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
                         DynamicTabsRenderer :: PARAM_SELECTED_TAB => $selected_tab));
             }
             else
             {
                 $this->redirect(
-                    Translation :: get('NoMailsSend'), 
-                    true, 
+                    Translation :: get('NoMailsSend'),
+                    true,
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
+                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
                         DynamicTabsRenderer :: PARAM_SELECTED_TAB => $selected_tab));
             }
         }
@@ -416,27 +416,27 @@ class ManagerSendMailComponent extends Manager
         $user_mail->set_user_id($user_id);
         $user_mail->set_mail_id($email->get_id());
         $user_mail->set_publication_id($this->publication_id);
-        
+
         $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'application\survey');
-        
+
         if (! $cron_enabled)
         {
             $from = array();
             $from[\Chamilo\Libraries\Mail\Mail :: NAME] = $email->get_from_address_name();
             $from[\Chamilo\Libraries\Mail\Mail :: EMAIL] = $email->get_from_address();
-            
+
             $mail = \Chamilo\Libraries\Mail\Mail :: factory(
-                $email->get_mail_header(), 
-                $email->get_mail_content(), 
-                $to_email, 
+                $email->get_mail_header(),
+                $email->get_mail_content(),
+                $to_email,
                 $from);
             $reply = array();
             $reply[\Chamilo\Libraries\Mail\Mail :: NAME] = $email->get_reply_address_name();
             $reply[\Chamilo\Libraries\Mail\Mail :: EMAIL] = $email->get_reply_address();
             $mail->set_reply($reply);
-            
+
             // Check whether it was sent successfully
-            
+
             if ($mail->send() === FALSE)
             {
                 $this->mail_send = false;
@@ -450,10 +450,10 @@ class ManagerSendMailComponent extends Manager
         }
         else
         {
-            
+
             $user_mail->set_status(UserMail :: STATUS_MAIL_IN_QUEUE);
             $user_mail->create();
-            
+
             $mail_job = new MailJob();
             $mail_job->set_status(MailJob :: STATUS_NEW);
             $mail_job->set_UUID(0);
@@ -471,22 +471,22 @@ class ManagerSendMailComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
+                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
                 Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
+                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))), 
+                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
                 Translation :: get('ParticipantBrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
+                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
+                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
                 Translation :: get('BrowserComponent')));
     }
 

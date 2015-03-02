@@ -21,7 +21,7 @@ class ContentObjectUpgraderComponent extends UpgraderComponent implements NoAuth
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagesPath(__NAMESPACE__) . 'package_action/finished.png';
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/finished');
         $title = Translation :: get('PlatformUpgraded');
         $result = Translation :: get(
             'ContentObjectsUpgraded',

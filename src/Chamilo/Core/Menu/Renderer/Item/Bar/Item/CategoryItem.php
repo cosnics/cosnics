@@ -66,8 +66,9 @@ class CategoryItem extends Renderer
 
         if ($this->get_item()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagesPath(Manager :: context()) . 'Menu/folder' .
-                 ($selected ? '_selected' : '') . '.png';
+            $imagePath = Theme :: getInstance()->getImagePath(
+                Manager :: context(),
+                'Menu/folder' . ($selected ? '_selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
