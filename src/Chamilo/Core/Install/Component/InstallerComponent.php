@@ -9,14 +9,11 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 
 /**
- * $Id: installer.class.php 225 2009-11-13 14:43:20Z vanpouckesven $
  *
- * @package install.lib.installmanager.component
- * @author Hans De Bisschop
- */
-
-/**
- * Installer install manager component which allows the user to install the platform
+ * @package Chamilo\Core\Install\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class InstallerComponent extends Manager implements NoAuthenticationSupport
 {

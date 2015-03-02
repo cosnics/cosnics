@@ -22,12 +22,12 @@ use Exception;
 
 /**
  * Cell renderer for the object publication table
- * 
+ *
  * @package application.weblcms
  * @author Original Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record table
  */
-class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer implements 
+class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -36,10 +36,10 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Renders a cell for a given object
-     * 
+     *
      * @param $column \libraries\ObjectTableColumn
      *
      * @param mixed $publication
@@ -49,12 +49,12 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
     public function render_cell($column, $publication)
     {
         $content_object = $this->get_component()->get_content_object_from_publication($publication);
-        
+
         switch ($column->get_name())
         {
             case ObjectPublicationTableColumnModel :: COLUMN_STATUS :
                 $title = Translation :: get('TypeName', array(), $content_object->context());
-                
+
                 $icon_suffix = '';
                 if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
                 {
@@ -75,7 +75,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     // $publication[ContentObjectPublication :: PROPERTY_ID],
                     // null,
                     // Manager :: APPLICATION_NAME);
-                    
+
                     // while ($feedback = $feedbacks->next_result())
                     // {
                     // if ($feedback->get_modification_date() >= $last_visit_date)
@@ -87,36 +87,34 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     // }
                     // }
                 }
-                
-                return '<img title="' . $title . '" src="' . str_replace(
-                    '.png', 
-                    $icon_suffix . '.png', 
-                    $content_object->get_icon_path(Theme :: ICON_MINI)) . '" />';
-                
+
+                return '<img title="' . $title . '" src="' . $content_object->get_icon_path(Theme :: ICON_MINI) .
+                     $icon_suffix . '" />';
+
                 break;
             case ContentObject :: PROPERTY_TITLE :
                 if ($content_object instanceof ComplexContentObjectSupport)
                 {
                     $details_url = $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
-                    
+
                     return '<a href="' . $details_url . '">' . parent :: render_cell($column, $publication) . '</a>';
                 }
-                
+
                 $details_url = $this->get_component()->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW));
-                
+
                 return '<a href="' . $details_url . '">' . parent :: render_cell($column, $publication) . '</a>';
-                
+
                 break;
             case ContentObjectPublication :: PROPERTY_PUBLICATION_DATE :
                 $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
                 $data = DatetimeUtilities :: format_locale_date(
-                    $date_format, 
+                    $date_format,
                     $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE]);
                 break;
             case ContentObjectPublication :: PROPERTY_PUBLISHER_ID :
@@ -134,7 +132,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('action_email') . '" alt=""
-                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' .
+                         Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
@@ -143,7 +142,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 $data = $publication[ContentObject :: PROPERTY_DESCRIPTION];
                 $data = Utilities :: truncate_string($data, 100);
         }
-        
+
         if ($data)
         {
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
@@ -155,14 +154,14 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 return $data;
             }
         }
-        
+
         return parent :: render_cell($column, $publication);
     }
 
     /**
      * Returns the actions toolbar quick-win table ordering: passes the table direction to the get_publication_actions
      * method (default ascending).
-     * 
+     *
      * @param mixed $publication
      *
      * @return string
@@ -172,8 +171,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
         $table = &$this->get_table();
         $column_model = &$table->get_column_model();
         return $this->get_component()->get_publication_actions(
-            $publication, 
-            $column_model->is_display_order_column(), 
+            $publication,
+            $column_model->is_display_order_column(),
             $column_model->get_default_order_direction() == SORT_ASC)->as_html();
     }
 
@@ -182,10 +181,10 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
      * Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Renders the publication targets
-     * 
+     *
      * @param mixed$publication
      * @return string
      */
@@ -194,11 +193,11 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
         try
         {
             $target_entities = WeblcmsRights :: get_instance()->get_target_entities(
-                WeblcmsRights :: VIEW_RIGHT, 
-                Manager :: context(), 
-                $publication[ContentObjectPublication :: PROPERTY_ID], 
-                WeblcmsRights :: TYPE_PUBLICATION, 
-                $this->get_component()->get_tool_browser()->get_course_id(), 
+                WeblcmsRights :: VIEW_RIGHT,
+                Manager :: context(),
+                $publication[ContentObjectPublication :: PROPERTY_ID],
+                WeblcmsRights :: TYPE_PUBLICATION,
+                $this->get_component()->get_tool_browser()->get_course_id(),
                 WeblcmsRights :: TREE_TYPE_COURSE);
         }
         catch (Exception $exception)
@@ -206,11 +205,11 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
             error_log($exception->getMessage());
             $target_entities = array();
         }
-        
+
         $rdm = \Chamilo\Core\Rights\Storage\DataManager :: get_instance();
-        
+
         $target_list = array();
-        
+
         if (array_key_exists(0, $target_entities[0]))
         {
             $target_list[] = Translation :: get('Everybody', null, Utilities :: COMMON_LIBRARIES);
@@ -218,7 +217,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
         else
         {
             $target_list[] = '<select>';
-            
+
             foreach ($target_entities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
@@ -227,7 +226,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                                Group :: class_name(), 
+                                Group :: class_name(),
                                 $group_id);
                             if ($group)
                             {
@@ -249,17 +248,17 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                         foreach ($entity_ids as $course_group_id)
                         {
                             $course_group = CourseGroupDataManager :: retrieve_by_id(
-                                CourseGroup :: class_name(), 
+                                CourseGroup :: class_name(),
                                 $course_group_id);
-                            
+
                             if ($course_group)
                             {
                                 $target_list[] = '<option>' . $course_group->get_name() . '</option>';
                             }
                         }
-                        
+
                         break;
-                    
+
                     case 0 :
                         $target_list[] = '<option>Everyone</option>';
                         break;
@@ -267,13 +266,13 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
             }
             $target_list[] = '</select>';
         }
-        
+
         return implode(PHP_EOL, $target_list);
     }
 
     /**
      * Retrieves a user by id
-     * 
+     *
      * @param int $user_id
      *
      * @return \core\user\User
@@ -281,7 +280,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
     public function retrieve_user($user_id)
     {
         return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             $user_id);
     }
 }

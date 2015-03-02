@@ -97,12 +97,12 @@ class AttemptBrowserComponent extends Manager
         if ($attempt->get_hidden())
         {
             $label = Translation :: get('Invisible');
-            $image = 'action_visible_na.png';
+            $image = 'action_visible_na';
         }
         else
         {
             $label = Translation :: get('Visible');
-            $image = 'action_visible.png';
+            $image = 'action_visible';
         }
 
         $toolbar->add_item(

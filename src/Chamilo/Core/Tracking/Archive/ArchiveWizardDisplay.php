@@ -90,7 +90,6 @@ class ArchiveWizardDisplay extends HTML_QuickForm_Action_Display
         $html[] = $this->parent->render_header();
 
         $html[] = '<div style="float: left; background-color:#EFEFEF; width: 17%; margin-right: 20px;padding: 15px; min-height: 400px;">';
-        $html[] = '<img src="layout/aqua/images/common/chamilo.png" alt="logo"/>';
 
         $all_pages = $current_page->controller->_pages;
         $total_number_of_pages = count($all_pages);

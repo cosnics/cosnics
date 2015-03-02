@@ -52,12 +52,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
         $toolbar = new Toolbar();
         $parameters = array();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] = $course_group->get_id();
-        // $details_url = $this->course_group_tool->get_url($parameters);
-        // Default functionity achieved by clicking the course_group name, why
-        // add it as an icon ?
-        // $toolbar_data[] = array ('href' => $details_url, 'label' =>
-        // Translation :: get('Details'), 'img' => Theme ::
-        // get_common_image_path().'description.png');
+
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $parameters = array();

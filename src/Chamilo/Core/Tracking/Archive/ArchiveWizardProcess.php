@@ -247,7 +247,7 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
     {
         $html = array();
 
-        $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(layout/aqua/images/admin/browse_archive.png);">';
+        $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px;">';
         $html[] = '<div class="title">' . Translation :: get('Event') . ' ' . $eventname . '</div>';
         $html[] = '<div class="description">';
 
