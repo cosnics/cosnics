@@ -42,7 +42,7 @@ use Exception;
  */
 abstract class ContentObjectPublicationListRenderer
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Types
     const TYPE_LIST = 'list';
@@ -272,8 +272,8 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
                 array(),
                 true);
-            $down_link = '<a href="' . $down_url . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath($down_img) . '"  alt=""/></a>';
+            $down_link = '<a href="' . $down_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath(
+                $down_img) . '"  alt=""/></a>';
         }
         else
         {
@@ -795,14 +795,6 @@ abstract class ContentObjectPublicationListRenderer
 
         if ($has_edit_right)
         {
-            // $toolbar->add_item(new ToolbarItem(Translation :: get('Edit',
-            // null, Utilities :: COMMON_LIBRARIES), Theme ::
-            // get_common_image_path() . 'action_edit.png',
-            // $this->get_url(array(
-            // Tool :: PARAM_ACTION => Tool :: ACTION_UPDATE,
-            // Tool :: PARAM_PUBLICATION_ID => $publication_id)),
-            // ToolbarItem :: DISPLAY_ICON));
-
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),

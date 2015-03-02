@@ -239,10 +239,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 true);
         }
 
-        $html[] = '<div class="announcements ' . $level . '" style="background-image: url(' . str_replace(
-            '.png',
-            $icon_suffix . '.png',
-            $this->get_content_object_from_publication($publication)->get_icon_path()) . ');">';
+        $html[] = '<div class="announcements ' . $level . '" style="background-image: url(' .
+             $this->get_content_object_from_publication($publication)->get_icon_path() . $icon_suffix . ');">';
 
         $html[] = '<div class="title' . ($this->is_visible_for_target_users($publication) ? '' : ' invisible') . '">';
         $html[] = '<a href="' . $title_url . '">' . $this->render_title($publication) . '</a>';

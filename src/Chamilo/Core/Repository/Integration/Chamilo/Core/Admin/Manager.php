@@ -56,7 +56,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 'ContentObjectPropertyRelMetadataElementDescription',
                 null,
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import.png'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),

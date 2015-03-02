@@ -314,14 +314,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($publication->is_hidden() == 0)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_HIDE_PUBLICATION;
-                $visible_image = 'action_visible.png';
+                $visible_image = 'action_visible';
                 $tool_image = Theme :: ICON_MEDIUM;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
-                $visible_image = 'action_invisible.png';
+                $visible_image = 'action_invisible';
                 $tool_image = Theme :: ICON_MEDIUM . '_na';
                 $link_class = ' class="invisible"';
             }
@@ -352,7 +352,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath('action_delete.png') .
+                         '"><img src="' . Theme :: getInstance()->getCommonImagePath('action_delete') .
                          '" style="vertical-align: middle;" alt=""/></a>';
                 }
                 $cell_contents[] = '&nbsp;&nbsp;&nbsp;';
@@ -366,9 +366,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
                 else
                 {
-                    $class = 'application\\weblcms\\tool\\' . $publication->get_tool() . '\\' .
-                         (string) StringUtilities :: getInstance()->createString($publication->get_tool())->upperCamelize() .
-                         'Tool';
+                    $class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
+                         StringUtilities :: getInstance()->createString($publication->get_tool())->upperCamelize() .
+                         '\Manager';
                     $url = $parent->get_url(
                         array(
                             'tool_action' => null,

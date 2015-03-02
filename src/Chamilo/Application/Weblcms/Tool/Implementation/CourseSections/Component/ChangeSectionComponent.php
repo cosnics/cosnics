@@ -111,12 +111,7 @@ class ChangeSectionComponent extends Manager
                 if ($section->get_type() == CourseSection :: TYPE_TOOL)
                 {
                     $html[] = '<div id="tool_' . $tool->id . '" class="tool" style="display:inline">';
-                    // $html[] = '<div id="drag_' . $tool->id . '"
-                    // class="tooldrag" style="width: 20px; cursor: pointer;
-                    // display:none;"><img src="'. Theme ::
-                    // get_common_image_path() .'action_drag.png" alt="'.
-                    // Translation :: get('DragAndDrop') .'" title="'.
-                    // Translation :: get('DragAndDrop') .'" /></div>';
+
                     $id = 'id="drag_' . $tool->id . '"';
                 }
 
