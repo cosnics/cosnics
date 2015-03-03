@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\metadata\linker\property
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Content object property metadata element linker"
+ContentObjectPropertyRelMetadataElementName = "Manage content object property metadata links"
+ContentObjectPropertyRelMetadataElementDescription = "Links content object properties to metadata elements"
+ContentObjectType = "Content object type"
+PropertyName = "Property name"
+MetadataElement = "Metadata element"
+BrowserComponent = "Manage content object property metadata links"
+CreatorComponent = "Create a new link"
+UpdaterComponent = "Update an existing link"
+DeleterComponent = "Delete an existing link"
+ContentObjectPropertyRelMetadataElement = "Content object property metdata element relation"
+AllContentObjects = "All content objects"
+ContentObjectTypeName = "All content objects"
+Title = "Title"
+Description = "Description"
+Tags = "Tags"
+OwnerFullname = "Owner fullname"
+CreationDate = "Creation date"
+ModificationDate = "Modification date"
+Type = "Type"
+Identifier = "Identifier"

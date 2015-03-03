@@ -1,0 +1,91 @@
+<?php
+namespace Chamilo\Core\Metadata\Value\Component;
+
+use Chamilo\Core\Metadata\Value\Form\Handler\ValueEditorFormHandler;
+use Chamilo\Core\Metadata\Value\Form\ValueEditorFormBuilder;
+use Chamilo\Core\Metadata\Value\Manager;
+use Chamilo\Core\Metadata\Value\MetadataValueEditorComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Platform\Translation;
+
+/**
+ * Displays and handles the metadata form
+ *
+ * @package core\metadata\value
+ */
+class EditorComponent extends Manager
+{
+
+    /**
+     * Constructor
+     *
+     * @param MetadataValueEditorComponent $parent
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function __construct($user = null, MetadataValueEditorComponent $parent)
+    {
+        if (! $parent instanceof MetadataValueEditorComponent)
+        {
+            throw new \InvalidArgumentException(
+                'The parent component must be an instance of MetadataValueEditorComponent');
+        }
+
+        parent :: __construct($user, $parent);
+    }
+
+    /**
+     * Runs this component
+     */
+    public function run()
+    {
+        $form = new FormValidator('metadata_value_form', 'post', $this->get_url());
+
+        $form_builder = new ValueEditorFormBuilder($form);
+        $form_builder->build_form($this->get_parent()->get_element_values());
+        $form_builder->add_submit_buttons();
+
+        if ($form->validate())
+        {
+            try
+            {
+                $this->get_parent()->truncate_values();
+
+                $handler = new ValueEditorFormHandler($this->get_parent()->get_value_creator());
+                $handler->handle_form($form->exportValues());
+
+                $success = true;
+                $message = Translation :: get('MetadataValuesUpdated');
+            }
+            catch (\Exception $ex)
+            {
+                $message = $ex->getMessage();
+                $success = false;
+            }
+
+            $this->get_parent()->redirect_after_update($success, $message);
+        }
+        else
+        {
+            $html = array();
+
+            $html[] = $this->render_header();
+            $html[] = $this->display_additional_information();
+            $html[] = $form->toHtml();
+            $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
+        }
+    }
+
+    /**
+     * Displays the additional information (if any)
+     */
+    protected function display_additional_information()
+    {
+        if (method_exists($this->get_parent(), 'get_additional_information'))
+        {
+            return $this->get_parent()->get_additional_information();
+        }
+    }
+}
