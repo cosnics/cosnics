@@ -1,0 +1,121 @@
+<?php
+namespace application\weblcms;
+
+use libraries\file\Redirect;
+use libraries\DynamicTabsRenderer;
+use libraries\Breadcrumb;
+use libraries\BreadcrumbTrail;
+use libraries\architecture\DelegateComponent;
+use libraries\platform\Translation;
+use configuration\category\CategorySupport;
+use libraries\DataClassRetrievesParameters;
+use libraries\architecture\Application;
+use libraries\DataClassCountParameters;
+use libraries\architecture\NotAllowedException;
+
+/**
+ * Weblcms component allows the user to manage course categories
+ */
+class CourseCategoryManagerComponent extends Manager implements DelegateComponent, CategorySupport
+{
+
+    /**
+     * Runs this component and displays its output.
+     */
+    public function run()
+    {
+        if (! $this->get_user()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
+        $category_manager = \libraries\architecture\Application :: launch(
+            \configuration\category\Manager :: context(),
+            $this->get_user(),
+            $this);
+    }
+
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        if ($this->get_user()->is_platform_admin())
+        {
+            $breadcrumbtrail->add(
+                new Breadcrumb(
+                    Redirect :: get_link(
+                        array(
+                            Application :: PARAM_APPLICATION => \core\admin\Manager :: context(),
+                            \core\admin\Manager :: PARAM_ACTION => \core\admin\Manager :: ACTION_ADMIN_BROWSER),
+                        array(),
+                        false,
+                        Redirect :: TYPE_CORE),
+                    Translation :: get('TypeName', null, 'core\admin')));
+            $breadcrumbtrail->add(
+                new Breadcrumb(
+                    Redirect :: get_link(
+                        array(
+                            Application :: PARAM_APPLICATION => \core\admin\Manager :: context(),
+                            \core\admin\Manager :: PARAM_ACTION => \core\admin\Manager :: ACTION_ADMIN_BROWSER,
+                            DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME),
+                        array(),
+                        false,
+                        Redirect :: TYPE_CORE),
+                    Translation :: get('Courses')));
+        }
+    }
+
+    public function get_category_parameters()
+    {
+        return array();
+    }
+
+    public function get_category()
+    {
+        return new CourseCategory();
+    }
+
+    public function get_category_form()
+    {
+        return new WeblcmsCategoryForm();
+    }
+
+    public function count_categories($condition)
+    {
+        return DataManager :: count(CourseCategory :: class_name(), new DataClassCountParameters($condition));
+    }
+
+    public function retrieve_categories($condition, $offset, $count, $order_property)
+    {
+        return DataManager :: retrieves(
+            CourseCategory :: class_name(),
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+    }
+
+    // Runs through dataclass
+    public function get_next_category_display_order($parent_id)
+    {
+        return null;
+    }
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_delete_category()
+     */
+    public function allowed_to_delete_category($category_id)
+    {
+        return true;
+    }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
+     */
+    public function allowed_to_edit_category($category_id)
+    {
+        return true;
+    }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
+     */
+    public function allowed_to_change_category_visibility($category_id)
+    {
+        return true;
+    }
+}
