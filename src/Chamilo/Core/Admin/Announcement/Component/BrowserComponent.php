@@ -129,21 +129,21 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/day'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Day'),
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_TODAY)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/week'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Week'),
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/month'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Admin\Announcement', 'Filter/Month'),
                 $this->get_url(array(self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

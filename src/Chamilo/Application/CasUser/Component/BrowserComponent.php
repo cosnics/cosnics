@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestAccount'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/request'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Request'),
                     $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_CREATE))));
 
             if ($this->get_user()->is_platform_admin())
@@ -104,17 +104,17 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageAccounts'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/manage_accounts'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/ManageAccounts'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_ACCOUNT))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageServices'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/manage_services'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/ManageServices'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_SERVICE))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ConfigureManagementRights'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/rights'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Rights'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_RIGHTS))));
             }
         }

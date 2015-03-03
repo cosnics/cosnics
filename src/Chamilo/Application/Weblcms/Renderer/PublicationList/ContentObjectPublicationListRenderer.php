@@ -798,7 +798,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'action_edit_publication'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
@@ -815,7 +815,7 @@ abstract class ContentObjectPublicationListRenderer
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('action_build'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Build'),
                         $this->get_complex_builder_url($publication_id),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -948,7 +948,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('ShareContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'action_manage_share_rights'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/ManageShareRights'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_SHARE_CONTENT_OBJECTS,

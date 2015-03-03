@@ -74,9 +74,9 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     * This method will look for selected user_ids in the HTTP header or the form.
-     * When first visiting the page the user_ids will be located in the HTTP header.
-     * They are inserted into the form as an invisible field to store this information.
+     * This method will look for selected user_ids in the HTTP header or the form. When first visiting the page the
+     * user_ids will be located in the HTTP header. They are inserted into the form as an invisible field to store this
+     * information.
      *
      * @return mixed null string
      * @throws \common\libraries\NoObjectSelectedException
@@ -138,8 +138,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     * Will retrieve the selected users from the database.
-     * Ignores and removes users from the array that are not allowed to be subscribed.
+     * Will retrieve the selected users from the database. Ignores and removes users from the array that are not allowed
+     * to be subscribed.
      *
      * @return array
      */

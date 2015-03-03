@@ -24,13 +24,13 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Settings'),
             Translation :: get('SettingsDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/settings'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Settings'),
             $settings_url);
 
         $links[] = new DynamicAction(
             Translation :: get('Importer'),
             Translation :: get('ImporterDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
@@ -42,7 +42,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('SystemAnnouncements'),
             Translation :: get('SystemAnnouncementsDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
@@ -63,7 +63,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Diagnose'),
             Translation :: get('DiagnoseDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/information'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
@@ -75,7 +75,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('LogsViewer'),
             Translation :: get('LogsViewerDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/information'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),

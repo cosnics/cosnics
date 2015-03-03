@@ -137,7 +137,7 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'place_group');
+        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'PlaceGroup');
     }
 
     /**
@@ -191,8 +191,7 @@ class CourseGroupEntity implements NestedRightsEntity
     }
 
     /**
-     * Returns the xml feed which will be used for the element finder and for
-     * the ajax tree menu
+     * Returns the xml feed which will be used for the element finder and for the ajax tree menu
      */
     public function get_xml_feed()
     {
@@ -223,8 +222,7 @@ class CourseGroupEntity implements NestedRightsEntity
     }
 
     /**
-     * Retrieves the type for the advanced element finder for the simple rights
-     * editor
+     * Retrieves the type for the advanced element finder for the simple rights editor
      */
     public function get_element_finder_type()
     {
@@ -237,8 +235,7 @@ class CourseGroupEntity implements NestedRightsEntity
     }
 
     /**
-     * Retrieves an element for the advanced element finder for the simple
-     * rights editor with the given id
+     * Retrieves an element for the advanced element finder for the simple rights editor with the given id
      */
     public function get_element_finder_element($id)
     {

@@ -19,7 +19,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('CourseTypeList'),
             Translation :: get('CourseTypeListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -28,7 +28,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('CourseList'),
             Translation :: get('ListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -37,7 +37,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('CreateCourse'),
             Translation :: get('CreateDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/add'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Add'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -47,7 +47,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('Import'),
             Translation :: get('ImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -56,7 +56,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('RequestList'),
             Translation :: get('RequestDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/list'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -65,7 +65,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('CourseCategoryManagement'),
             Translation :: get('CourseCategoryManagementDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/category'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Category'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -74,7 +74,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('UserImport'),
             Translation :: get('UserImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -98,7 +98,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportCourses'),
             Translation :: get('ImportCoursesDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
@@ -107,7 +107,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('UserImport'),
             Translation :: get('UserImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),

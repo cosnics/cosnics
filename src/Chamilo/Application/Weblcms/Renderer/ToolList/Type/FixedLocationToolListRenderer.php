@@ -34,8 +34,7 @@ use HTML_Table;
  */
 
 /**
- * Tool list renderer which displays all course tools on a fixed location.
- * Disabled tools will be shown in a disabled
+ * Tool list renderer which displays all course tools on a fixed location. Disabled tools will be shown in a disabled
  * looking way.
  */
 class FixedLocationToolListRenderer extends ToolListRenderer

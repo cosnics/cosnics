@@ -492,8 +492,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
     }
 
     /**
-     * Returns the url for the add submission button.
-     * When it's not a group assignment the url will have the extra
+     * Returns the url for the add submission button. When it's not a group assignment the url will have the extra
      * parameters target id and submitter type.
      *
      * @return array The url

@@ -42,7 +42,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Grant'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/grant'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Grant'),
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_GRANT,
@@ -55,7 +55,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Deny'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/deny'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Deny'),
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_DENY,

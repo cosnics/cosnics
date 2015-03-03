@@ -57,7 +57,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/accept'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Accept'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACCEPT,
@@ -69,7 +69,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('AcceptNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/accept_na'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/AcceptNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -79,7 +79,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/reject'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Reject'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_REJECT,
@@ -91,7 +91,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('RejectNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/reject_na'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/RejectNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

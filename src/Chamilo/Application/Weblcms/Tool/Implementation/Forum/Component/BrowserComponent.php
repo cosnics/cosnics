@@ -339,7 +339,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                        'Forum/forum_read');
+                        'Forum/ForumRead');
                     if ($forum->get_locked())
                     {
                         $src = Theme :: getInstance()->getCommonImagePath('action_lock');
@@ -392,10 +392,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                             $content = DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) .
                                  '<br />' . $name . ' <a href="' . $link . '"><img title="' .
                                  Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
-                                 '" src="' .
-                                 Theme :: getInstance()->getImagePath(
+                                 '" src="' . Theme :: getInstance()->getImagePath(
                                     'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                    'Forum/icon_topic_latest') . '" /></a>';
+                                    'Forum/IconTopicLatest') . '" /></a>';
 
                             $table->setCellContents($row, 4, $content);
                         }
@@ -419,10 +418,9 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                                 $content .= '<br />' . $name . ' <a href="' . $link . '"><img title="' .
                                      Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
-                                     '" src="' .
-                                     Theme :: getInstance()->getImagePath(
+                                     '" src="' . Theme :: getInstance()->getImagePath(
                                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                        'Forum/icon_topic_latest.gif') . '" /></a>';
+                                        'Forum/IconTopicLatest.gif') . '" /></a>';
 
                                 $table->setCellContents($row, 4, $content);
                             }
@@ -547,7 +545,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getImagePath(
                         \Chamilo\Application\Weblcms\Manager :: context(),
-                        'action_edit_publication'),
+                        'Action/EditPublication'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -628,7 +626,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Subscribe', null, $forum_namespace),
-                        Theme :: getInstance()->getImagePath($forum_namespace, 'action_mail'),
+                        Theme :: getInstance()->getImagePath($forum_namespace, 'Action/Mail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -643,7 +641,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UnSubscribe', null, $forum_namespace),
-                        Theme :: getInstance()->getImagePath($forum_namespace, 'action_unmail'),
+                        Theme :: getInstance()->getImagePath($forum_namespace, 'Action/Unmail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));

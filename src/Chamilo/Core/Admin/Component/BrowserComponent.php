@@ -116,7 +116,7 @@ class BrowserComponent extends Manager
                         new DynamicAction(
                             null,
                             $search_form->render(),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Admin', 'Admin/search')));
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Admin', 'Admin/Search')));
                 }
 
                 foreach ($links->get_links() as $action)
