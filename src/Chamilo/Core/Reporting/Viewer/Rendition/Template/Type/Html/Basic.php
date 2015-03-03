@@ -170,7 +170,7 @@ class Basic extends Html
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ShowOne'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/show_block'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/ShowBlock'),
                         $this->get_context()->get_url($parameters)));
             }
             elseif ($this->get_template()->count_blocks() > 1)
@@ -180,7 +180,7 @@ class Basic extends Html
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ShowAll'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/show_all'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting\Viewer', 'Action/ShowAll'),
                         $this->get_context()->get_url($parameters)));
             }
         }

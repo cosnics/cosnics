@@ -47,13 +47,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($correct_answer)
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_correct') . '" alt="' .
+                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
                      Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" style="" />';
             }
             else
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') . '" alt="' .
+                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
                      Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
             }
         }

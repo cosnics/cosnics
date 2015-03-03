@@ -31,10 +31,10 @@ class PackagePage extends InstallWizardPage
         $html = array();
         $html[] = '<h3>';
         $html[] = Translation :: get('AllPackages');
-        $html[] = '<img src = "' . Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/check-checked') .
+        $html[] = '<img src = "' . Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
              '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
                 'Chamilo\Configuration',
-                'Form/check-unchecked') . '" class="package-list-select-none" />';
+                'Form/CheckUnchecked') . '" class="package-list-select-none" />';
         $html[] = '</h3>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
@@ -84,11 +84,11 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="package-list">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/check-checked') . '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/check-unchecked') . '" class="package-list-select-none" />';
+            $html[] = '<img src = "' .
+                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
+                 '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Configuration',
+                    'Form/CheckUnchecked') . '" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
             $this->addElement('html', implode(PHP_EOL, $html));

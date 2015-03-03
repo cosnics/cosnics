@@ -98,7 +98,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/controlled_vocabulary'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/ControlledVocabulary'),
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULATE,
@@ -108,7 +108,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('MetadataDefaultValues', null, 'core\metadata'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/default'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/Default'),
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => null,

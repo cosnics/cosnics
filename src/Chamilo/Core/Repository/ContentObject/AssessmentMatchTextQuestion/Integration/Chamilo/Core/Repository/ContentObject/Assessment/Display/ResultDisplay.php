@@ -59,20 +59,20 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $this->get_question()->get_use_wildcards()))
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_correct') . '" alt="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
                          Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" style="" />';
                 }
                 elseif ($valid_answer)
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_warning') . '" alt="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWarning') . '" alt="' .
                          Translation :: get('CorrectButNotBest') . '" title="' . Translation :: get('CorrectButNotBest') .
                          '" style="" />';
                 }
                 else
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') . '" alt="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
                          Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
                 }
             }
@@ -89,7 +89,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') . '" alt="' .
+                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
                      Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
             }
             else

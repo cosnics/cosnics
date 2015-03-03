@@ -22,7 +22,7 @@ class ApplicationUpgraderComponent extends UpgraderComponent implements NoAuthen
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/finished');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
         $title = Translation :: get('PlatformUpgraded');
 
         $result = Translation :: get(

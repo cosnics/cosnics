@@ -67,7 +67,7 @@ abstract class Manager extends Application
         $tabs[] = new DynamicVisualTab(
             'builder',
             Translation :: get('BuilderComponent'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/builder'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Builder'),
             $url,
             false,
             false,

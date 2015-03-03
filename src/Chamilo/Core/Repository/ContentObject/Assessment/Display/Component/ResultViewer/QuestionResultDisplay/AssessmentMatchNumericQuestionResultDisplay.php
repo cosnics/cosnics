@@ -44,27 +44,24 @@ class AssessmentMatchNumericQuestionResultDisplay extends QuestionResultDisplay
         {
             if ($valid_answer && $best_option->matches($user_answer[0], $this->get_question()->get_tolerance_type()))
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                      Translation :: get('Correct') . '" style="" />';
             }
             elseif ($valid_answer)
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_warning') . '" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerWarning') . '" alt="' . Translation :: get('CorrectButNotBest') . '" title="' .
                      Translation :: get('CorrectButNotBest') . '" style="" />';
             }
             else
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                     Translation :: get('Wrong') . '" />';
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                     '" />';
             }
 
             $html[] = '<td>' . $user_answer[0] . $result . '</td>';
@@ -74,7 +71,7 @@ class AssessmentMatchNumericQuestionResultDisplay extends QuestionResultDisplay
             $result = ' <img style="vertical-align: middle;" src="' .
                  Theme :: getInstance()->getImagePath(
                     'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                    'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                    'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                  '" />';
             $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
         }

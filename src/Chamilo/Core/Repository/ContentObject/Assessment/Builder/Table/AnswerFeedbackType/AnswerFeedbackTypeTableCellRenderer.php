@@ -88,7 +88,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
                 $toolbar->add_item(
                     new ToolbarItem(
                         Configuration :: answer_feedback_string($type),
-                        Theme :: getInstance()->getImagePath($context, 'AnswerFeedbackType/' . $type . '_na'),
+                        Theme :: getInstance()->getImagePath($context, 'AnswerFeedbackType/' . $type . 'Na'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
