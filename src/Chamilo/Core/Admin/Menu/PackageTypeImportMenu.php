@@ -21,12 +21,12 @@ class PackageTypeImportMenu extends HTML_Menu
     public function __construct($current_type, $format)
     {
         $this->format = $format;
-        
+
         parent :: __construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageList::getInstance()->get_package_list())));
-        
+                    \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
+
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
@@ -35,18 +35,18 @@ class PackageTypeImportMenu extends HTML_Menu
     {
         $item = array();
         $item['class'] = 'category';
-        
+
         if (! is_null($package_list->get_type_icon()))
         {
             $item['style'] = 'background-image: url(' . $package_list->get_type_icon() . ')';
         }
-        
+
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer :: KEY_ID] = $package_list->get_type();
-        
+
         $sub_items = array();
-        
+
         foreach ($package_list->get_children() as $child)
         {
             $children = $this->get_items($child);
@@ -55,22 +55,22 @@ class PackageTypeImportMenu extends HTML_Menu
                 $sub_items[] = $children;
             }
         }
-        
+
         if (count($sub_items) > 0)
         {
             $item['sub'] = $sub_items;
         }
-        
+
         $has_links = false;
         $packages = $package_list->get_packages();
         foreach ($packages as $package)
         {
             $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package);
-            
+
             if ($registration instanceof Registration && $registration->is_active())
             {
                 $manager_class = $package . '\integration\core\admin\Manager';
-                
+
                 if (class_exists($manager_class) && $manager_class instanceof ActionsSupportInterface)
                 {
                     $has_links = true;
@@ -78,7 +78,7 @@ class PackageTypeImportMenu extends HTML_Menu
                 }
             }
         }
-        
+
         if ($has_links || (count($sub_items) > 0))
         {
             if (! $has_links)
@@ -87,7 +87,7 @@ class PackageTypeImportMenu extends HTML_Menu
             }
             return $item;
         }
-        
+
         return false;
     }
 

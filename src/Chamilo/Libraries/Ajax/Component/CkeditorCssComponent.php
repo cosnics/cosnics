@@ -8,9 +8,9 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Protocol\HttpHeader;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -48,9 +48,11 @@ class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements No
             }
         }
 
-        HttpHeader :: content_type(HttpHeader :: CONTENT_TYPE_CSS, 'utf-8');
-
         $asset_collection = new AssetCollection($assets, array(new CssImportFilter()));
-        echo $asset_collection->dump();
+
+        $response = new Response();
+        $response->setContent($asset_collection->dump());
+        $response->headers->set('Content-Type', 'text/css');
+        $response->send();
     }
 }

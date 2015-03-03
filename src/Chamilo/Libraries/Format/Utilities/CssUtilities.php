@@ -19,7 +19,7 @@ class CssUtilities extends ResourceUtilities
 
     public function run()
     {
-        $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
         $assets = array();
 
@@ -39,17 +39,17 @@ class CssUtilities extends ResourceUtilities
         if ($this->getCachingEnabled())
         {
             $asset_collection = new AssetCollection($assets, array(new CssImportFilter(), new CssMinFilter()));
-            $asset_collection = new AssetCache(
+            $assets = new AssetCache(
                 $asset_collection,
-                new FilesystemCache($this->getPathUtilities()->getCachePath() . 'resource/'));
+                new FilesystemCache($this->getPathUtilities()->getCachePath() . 'Resource/'));
         }
         else
         {
-            $asset_collection = new AssetCollection($assets, array(new CssImportFilter()));
+            $assets = new AssetCollection($assets, array(new CssImportFilter()));
         }
 
         $response = new Response();
-        $response->setContent($asset_collection->dump());
+        $response->setContent($assets->dump());
         $response->headers->set('Content-Type', 'text/css');
         $response->send();
     }

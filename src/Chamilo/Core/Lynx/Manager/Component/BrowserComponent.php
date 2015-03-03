@@ -92,8 +92,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->get_registered_packages_table()));
         }
 
-        $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance(
-            \Chamilo\Configuration\Package\PlatformPackageList :: MODE_AVAILABLE)->get_type_packages();
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance(
+            \Chamilo\Configuration\Package\PlatformPackageBundles :: MODE_AVAILABLE)->get_type_packages();
 
         if (count($packages[$this->get_type()]) > 0)
         {
@@ -234,8 +234,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_available_packages_table()
     {
-        $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance(
-            \Chamilo\Configuration\Package\PlatformPackageList :: MODE_AVAILABLE)->get_type_packages();
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance(
+            \Chamilo\Configuration\Package\PlatformPackageBundles :: MODE_AVAILABLE)->get_type_packages();
 
         $table_data = array();
 

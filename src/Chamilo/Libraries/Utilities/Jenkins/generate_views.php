@@ -21,7 +21,7 @@ if (! is_dir($jenkins_jobs_path))
 
 $jenkins_config_path = $jenkins_jobs_path . 'config.xml';
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageList::getInstance()->get_type_packages();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
 if (! file_exists($jenkins_config_path))
 {
@@ -48,33 +48,33 @@ $missing_view_names = array_diff(array_keys($default_views), $existing_view_name
 foreach ($missing_view_names as $missing_view_name)
 {
     $view_node = $views_node->appendChild($dom_document->createElement('listView'));
-    
+
     $owner_node = $view_node->appendChild($dom_document->createElement('owner'));
     $owner_node->appendChild($dom_document->createAttribute('class'))->appendChild(
         $dom_document->createTextNode('hudson'));
     $owner_node->appendChild($dom_document->createAttribute('reference'))->appendChild(
         $dom_document->createTextNode('../../..'));
-    
+
     $view_node->appendChild($dom_document->createElement('name'))->appendChild(
         $dom_document->createTextNode($missing_view_name));
     $view_node->appendChild($dom_document->createElement('filterExecutors'))->appendChild(
         $dom_document->createTextNode('false'));
     $view_node->appendChild($dom_document->createElement('filterQueue'))->appendChild(
         $dom_document->createTextNode('false'));
-    
+
     $properties_node = $view_node->appendChild($dom_document->createElement('properties'));
     $properties_node->appendChild($dom_document->createAttribute('class'))->appendChild(
         $dom_document->createTextNode('hudson.model.View$PropertyList'));
-    
+
     $jobnames_node = $view_node->appendChild($dom_document->createElement('jobNames'));
     $comparator_node = $jobnames_node->appendChild($dom_document->createElement('comparator'));
     $comparator_node->appendChild($dom_document->createAttribute('class'))->appendChild(
         $dom_document->createTextNode('hudson.util.CaseInsensitiveComparator'));
-    
+
     $view_node->appendChild($dom_document->createElement('jobFilters'));
-    
+
     $columns_node = $view_node->appendChild($dom_document->createElement('columns'));
-    
+
     $columns_node->appendChild($dom_document->createElement('hudson.views.StatusColumn'));
     $columns_node->appendChild($dom_document->createElement('hudson.views.WeatherColumn'));
     $columns_node->appendChild($dom_document->createElement('hudson.views.JobColumn'));
@@ -82,7 +82,7 @@ foreach ($missing_view_names as $missing_view_name)
     $columns_node->appendChild($dom_document->createElement('hudson.views.LastFailureColumn'));
     $columns_node->appendChild($dom_document->createElement('hudson.views.LastDurationColumn'));
     $columns_node->appendChild($dom_document->createElement('hudson.views.BuildButtonColumn'));
-    
+
     $view_node->appendChild($dom_document->createElement('includeRegex'))->appendChild(
         $dom_document->createTextNode($default_views[$missing_view_name] . '_.*'));
     $view_node->appendChild($dom_document->createElement('recurse'))->appendChild(

@@ -73,7 +73,7 @@ class ConfigurerComponent extends Manager
             $html[] = '</div>';
             $html[] = '<div style="float: right; width: 84%;">';
 
-            $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
+            $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
             foreach ($packages[$this->get_tab()] as $package)
             {
@@ -141,7 +141,7 @@ class ConfigurerComponent extends Manager
         $context = Request :: get(self :: PARAM_CONTEXT);
         if (! isset($context))
         {
-            $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
+            $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
             foreach ($packages[$this->get_tab()] as $package)
             {

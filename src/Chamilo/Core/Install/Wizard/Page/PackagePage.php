@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 
@@ -38,7 +38,7 @@ class PackagePage extends InstallWizardPage
         $html[] = '</h3>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $packageList = PlatformPackageList :: getInstance()->get_package_list();
+        $packageList = PlatformPackageBundles :: getInstance()->get_package_list();
         $this->renderPackages($packageList);
 
         $html = array();
@@ -84,11 +84,11 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="package-list">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/check-checked') . '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/check-unchecked') . '" class="package-list-select-none" />';
+            $html[] = '<img src = "' .
+                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/check-checked') .
+                 '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Configuration',
+                    'Form/check-unchecked') . '" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
             $this->addElement('html', implode(PHP_EOL, $html));

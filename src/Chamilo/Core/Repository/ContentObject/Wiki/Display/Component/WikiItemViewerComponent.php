@@ -11,6 +11,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 
 /**
  * $Id: wiki_item_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -85,8 +87,15 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
                     $display_wiki_page->get_description(),
                     $this->get_parameters()));
 
+            $display_wiki_page->set_description($parser->parse());
+            $display = ContentObjectRenditionImplementation :: factory(
+                $display_wiki_page,
+                ContentObjectRendition :: FORMAT_HTML,
+                ContentObjectRendition :: VIEW_DESCRIPTION,
+                $this);
+
             $html[] = '<div class="wiki-pane-content-body">';
-            $html[] = $parser->parse();
+            $html[] = $display->render();
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
             $html[] = $this->render_footer();
