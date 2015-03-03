@@ -79,15 +79,15 @@ class JobGenerator
     public function process(PackageList $package_list)
     {
         $job_folder = $this->get_job_path() . $this->get_job_name($package_list->get_type()) . DIRECTORY_SEPARATOR;
-        
+
         if (! is_dir($job_folder))
         {
             $package_config_path = $this->get_folder($package_list->get_type()) . 'config.xml';
             $job_config_path = $job_folder . 'config.xml';
-            
+
             Filesystem :: copy_file($package_config_path, $job_config_path);
         }
-        
+
         if ($package_list->has_children())
         {
             foreach ($package_list->get_children() as $child_list)
@@ -128,7 +128,7 @@ class JobGenerator
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageList::getInstance()->get_package_list();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list();
 $job_path = 'E:/jenkins/';
 
 $generator = new JobGenerator($package_list, $job_path);

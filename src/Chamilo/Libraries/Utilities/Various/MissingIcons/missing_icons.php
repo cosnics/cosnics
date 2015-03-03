@@ -20,7 +20,7 @@ $total_missing_icons = 0;
 
 $html = array();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
 $source = Request :: get('source');
 $target = Theme :: getInstance()->getTheme();

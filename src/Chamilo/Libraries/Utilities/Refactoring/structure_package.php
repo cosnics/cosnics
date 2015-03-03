@@ -1,7 +1,5 @@
 <?php
-
-
-use Chamilo\Configuration\Package\PlatformPackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -24,7 +22,7 @@ function convert_namespace($namespace)
 
 header('Content-Type: text/plain');
 
-$package_list = PlatformPackageList :: getInstance(PlatformPackageList :: MODE_ALL);
+$package_list = PlatformPackageBundles :: getInstance(PlatformPackageBundles :: MODE_ALL);
 $categorized_namespaces = $package_list->get_type_packages();
 
 $i = 0;
