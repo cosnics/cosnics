@@ -87,18 +87,7 @@ class Path
                 $dir .= '/';
             }
 
-            // // Temporary fix for things that are launched from the common folder
-            // $possible_launchers = array('Chamilo/Core/Install');
-            // foreach ($possible_launchers as $possible_launcher)
-            // {
-            // if (strpos($dir, $possible_launcher . '/') !== false)
-            // {
-            // $dir = substr($dir, 0, strpos($dir, $possible_launcher . '/'));
-            // break;
-            // }
-            // }
             $protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
-
             $path = $protocol . $_SERVER['HTTP_HOST'] . $dir;
         }
         else

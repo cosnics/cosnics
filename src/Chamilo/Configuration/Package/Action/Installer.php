@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Package\PlatformPackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -68,7 +68,7 @@ abstract class Installer extends Action
             if (! $this->extra())
             {
                 var_dump($this);
-                exit;
+                exit();
 
                 return $this->failed(Translation :: get('VariousFailed', null, 'core\install'));
             }
@@ -86,8 +86,8 @@ abstract class Installer extends Action
             return false;
         }
 
-        PlatformPackageList :: getInstance(PlatformPackageList :: MODE_AVAILABLE)->reset();
-        PlatformPackageList :: getInstance(PlatformPackageList :: MODE_INSTALLED)->reset();
+        PlatformPackageBundles :: getInstance(PlatformPackageBundles :: MODE_AVAILABLE)->reset();
+        PlatformPackageBundles :: getInstance(PlatformPackageBundles :: MODE_INSTALLED)->reset();
 
         return $this->successful();
     }

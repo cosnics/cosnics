@@ -1,21 +1,21 @@
 <?php
-namespace Chamilo\Configuration\Package;
+namespace Chamilo\Configuration\Package\Finder;
 
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Configuration\Package\PackageList;
 
 /**
  *
- * @package Chamilo\Configuration\Package
+ * @package Chamilo\Configuration\Package\Builder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PackageListBuilder
+class PackageBundles extends AbstractBundles
 {
 
     /**
@@ -23,12 +23,6 @@ class PackageListBuilder
      * @var integer
      */
     private $mode;
-
-    /**
-     *
-     * @var string
-     */
-    private $rootNamespace;
 
     /**
      *
@@ -49,52 +43,40 @@ class PackageListBuilder
      */
     public function __construct($rootNamespace = PackageList :: ROOT, $mode = PackageList :: MODE_ALL)
     {
-        $this->rootNamespace = $rootNamespace;
         $this->mode = $mode;
-
-        $this->setup();
+        parent :: __construct($rootNamespace);
     }
 
-    private function setup()
+    protected function setup()
     {
-        $this->discoverPackages($this->rootNamespace);
+        parent :: setup();
         $this->readPackageDefinitions();
         $this->processPackageTypes();
     }
 
     /**
      *
-     * @param string $namespace
+     * @return string[]
      */
-    private function discoverPackages($rootNamespace)
+    protected function getBlacklistedFolders()
     {
-        $blacklist = array('.hg', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
-        $rootNamespace = $rootNamespace == PackageList :: ROOT ? '' : $rootNamespace;
+        return array('.hg', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
+    }
 
-        $path = Path :: getInstance()->namespaceToFullPath($rootNamespace);
-
-        $folders = Filesystem :: get_directory_content($path, Filesystem :: LIST_DIRECTORIES, false);
-
-        foreach ($folders as $folder)
-        {
-            if (! in_array($folder, $blacklist) && substr($folder, 0, 1) != '.')
-            {
-                $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder;
-                $packageInfoPath = Path :: getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
-
-                if (file_exists($packageInfoPath))
-                {
-                    $this->packageNamespaces[] = $folderNamespace;
-                }
-
-                $this->discoverPackages($folderNamespace);
-            }
-        }
+    /**
+     *
+     * @param string $folderNamespace
+     * @return boolean
+     */
+    protected function verifyPackage($folderNamespace)
+    {
+        $packageInfoPath = Path :: getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
+        return file_exists($packageInfoPath);
     }
 
     private function readPackageDefinitions()
     {
-        foreach ($this->packageNamespaces as $packageNamespace)
+        foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
             $packageDefinition = Package :: get($packageNamespace);
             $this->packageDefinitions[$packageNamespace] = $packageDefinition;
@@ -103,8 +85,9 @@ class PackageListBuilder
 
     private function processPackageTypes()
     {
-        foreach ($this->packageNamespaces as $packageNamespace)
+        foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
+
             $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
             $packageNamespaceParent = array_shift($packageNamespaceAncestors);
 
@@ -207,6 +190,6 @@ class PackageListBuilder
 
     public function getPackageList()
     {
-        return $this->packageLists[$this->rootNamespace];
+        return $this->packageLists[$this->getRootNamespace()];
     }
 }

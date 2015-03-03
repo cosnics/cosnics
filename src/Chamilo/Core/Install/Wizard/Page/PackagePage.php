@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 
@@ -38,7 +38,7 @@ class PackagePage extends InstallWizardPage
         $html[] = '</h3>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $packageList = PlatformPackageList :: getInstance()->get_package_list();
+        $packageList = PlatformPackageBundles :: getInstance()->get_package_list();
         $this->renderPackages($packageList);
 
         $html = array();

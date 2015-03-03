@@ -72,7 +72,7 @@ class ImporterComponent extends Manager
     {
         $tabs = new DynamicTabsRenderer('admin');
 
-        $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_type_packages();
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
         $package_names = array();
 
