@@ -76,7 +76,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
                 Translation :: get('PlatformInstallFailed') . ' - ' . $exception->get_package(),
                 false,
                 $exception->getMessage(),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'place_failed'));
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Failed'));
         }
     }
 
@@ -184,7 +184,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function after_filesystem_prepared(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'place_folder');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'PlaceFolder');
         return $this->process_result(
             Translation :: get('Folders'),
             $result->get_success(),
@@ -205,7 +205,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
     {
         $message = '<a href="' . Path :: getInstance()->getBasePath(true) . '">' .
              Translation :: get('GoToYourNewlyCreatedPortal') . '</a>';
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'place_finished');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Finished');
         return $this->process_result(Translation :: get('InstallationFinished'), true, $message, $image);
     }
 
@@ -242,7 +242,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function preprod_config_file_written(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'place_config');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Config');
         return $this->process_result(
             Translation :: get('Configuration'),
             $result->get_success(),
@@ -252,7 +252,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     public function preprod_db_created(StepResult $result)
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'place_database');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Database');
         return $this->process_result(
             Translation :: get('Database'),
             $result->get_success(),

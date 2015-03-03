@@ -59,8 +59,7 @@ class BlockRendition
     }
 
     /**
-     * Returns the default image to be displayed for block's creation.
-     * Can be redefined in subclasses to change the
+     * Returns the default image to be displayed for block's creation. Can be redefined in subclasses to change the
      * default icon.
      *
      * @todo : not so good. would be better to make the whole "create block" a view.
@@ -102,8 +101,7 @@ class BlockRendition
     }
 
     /**
-     * The type of view: block or widget.
-     * Block - default - is for integration into Chamilo's homepage. Widget is for
+     * The type of view: block or widget. Block - default - is for integration into Chamilo's homepage. Widget is for
      * integration into a third party application - i.e. external portal.
      *
      * @return string
@@ -178,8 +176,7 @@ class BlockRendition
     }
 
     /**
-     * Returns true if the block is to be displayed, false otherwise.
-     * By default do not show on home page when user is
+     * Returns true if the block is to be displayed, false otherwise. By default do not show on home page when user is
      * not connected.
      *
      * @return bool
@@ -200,8 +197,7 @@ class BlockRendition
     }
 
     /**
-     * Link target for external links.
-     * I.e. links that do not modify the widget itself. In widget mode they should point
+     * Link target for external links. I.e. links that do not modify the widget itself. In widget mode they should point
      * to a new windows.
      */
     public function get_link_target()
@@ -363,8 +359,7 @@ class BlockRendition
     }
 
     /**
-     * Returns the URL used to view a block in "WIDGET" mode.
-     * I.e. for integration into an external application - web
+     * Returns the URL used to view a block in "WIDGET" mode. I.e. for integration into an external application - web
      * portal, IE webslice, etc.
      *
      * @param Block $home_block
@@ -453,8 +448,7 @@ class BlockRendition
     }
 
     /**
-     * Default response for blocks who use an attachment viewer.
-     * Override for different functionality.
+     * Default response for blocks who use an attachment viewer. Override for different functionality.
      *
      * @param ContentObject $object The content object to be tested.
      * @return boolean default response: false.

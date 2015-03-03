@@ -60,18 +60,16 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
 
                         if ($option->get_matches() == $j)
                         {
-                            $result = '<img src="' .
-                                 Theme :: getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                    'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" />';
                         }
                         else
                         {
-                            $result = '<img src="' .
-                                 Theme :: getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                    'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                                'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
                                  Translation :: get('Wrong') . '" />';
                         }
                     }
@@ -80,10 +78,9 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                         $selected = '';
                         if ($option->get_matches() == $j)
                         {
-                            $result = '<img src="' .
-                                 Theme :: getInstance()->getImagePath(
-                                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                    'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" />';
                         }
                         else

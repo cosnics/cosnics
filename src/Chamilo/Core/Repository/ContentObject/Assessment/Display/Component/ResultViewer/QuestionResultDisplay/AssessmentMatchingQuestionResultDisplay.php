@@ -113,19 +113,17 @@ class AssessmentMatchingQuestionResultDisplay extends QuestionResultDisplay
 
             if ($valid_answer)
             {
-                $result = ' <img src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                $result = ' <img src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                      Translation :: get('Correct') . '" style="" />';
             }
             else
             {
-                $result = ' <img src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                     Translation :: get('Wrong') . '" />';
+                $result = ' <img src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                     '" />';
             }
 
             if ($answers[$i] == - 1)

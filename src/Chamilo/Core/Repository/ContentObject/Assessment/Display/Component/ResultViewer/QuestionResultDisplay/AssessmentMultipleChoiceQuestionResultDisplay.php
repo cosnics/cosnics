@@ -56,18 +56,16 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
 
                     if ($option->is_correct())
                     {
-                        $result = '<img src="' .
-                             Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                            'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                              Translation :: get('Correct') . '" style="" />';
                     }
                     else
                     {
-                        $result = '<img src="' .
-                             Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                            'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
                              Translation :: get('Wrong') . '" />';
                     }
                 }
@@ -77,10 +75,9 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
 
                     if ($option->is_correct())
                     {
-                        $result = '<img src="' .
-                             Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                            'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                              Translation :: get('Correct') . '" />';
                     }
                     else
@@ -109,18 +106,16 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
 
                 if ($is_correct)
                 {
-                    $result = '<img src="' .
-                         Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                            'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                    $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                        'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                          Translation :: get('Correct') . '" style="" />';
                 }
                 else
                 {
-                    $result = '<img src="' .
-                         Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                            'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
+                    $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                        'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
                          Translation :: get('Wrong') . '" />';
                 }
 

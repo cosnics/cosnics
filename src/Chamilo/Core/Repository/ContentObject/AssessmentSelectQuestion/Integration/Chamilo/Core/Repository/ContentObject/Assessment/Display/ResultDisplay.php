@@ -74,12 +74,12 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             $result = '<img src="' . Theme :: getInstance()->getImagePath(
                                 __NAMESPACE__,
-                                'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" style="" />';
                         }
                         else
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') .
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
                                  '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
                                  '" />';
                         }
@@ -99,7 +99,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             $result = '<img src="' . Theme :: getInstance()->getImagePath(
                                 __NAMESPACE__,
-                                'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" />';
                         }
                         else
@@ -135,13 +135,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     if ($is_correct)
                     {
-                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_correct') .
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
                              '" alt="' . Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
                              '" style="" />';
                     }
                     else
                     {
-                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') .
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
                              '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
                     }
                 }

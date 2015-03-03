@@ -62,7 +62,7 @@ class ApplicationItem extends Bar
             $integrationNamespace = $this->get_item()->get_application() . '\Integration\Chamilo\Core\Menu';
             $imagePath = Theme :: getInstance()->getImagePath(
                 $integrationNamespace,
-                'menu' . ($selected ? '_selected' : ''));
+                'Menu' . ($selected ? 'Selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
