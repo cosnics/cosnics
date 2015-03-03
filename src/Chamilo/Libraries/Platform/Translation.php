@@ -150,10 +150,7 @@ class Translation
         }
         else
         {
-            return preg_replace(
-                '#\{([A-Z0-9\-_]+)\}#e',
-                'isset($parameters[\'\\1\']) ? $parameters[\'\\1\'] : \'\'',
-                $translation);
+            return strtr($translation, $parameters);
         }
     }
 
