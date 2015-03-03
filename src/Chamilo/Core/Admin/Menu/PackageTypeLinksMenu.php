@@ -23,7 +23,7 @@ class PackageTypeLinksMenu extends HTML_Menu
         parent :: __construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageList :: getInstance()->get_package_list())));
+                    \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
 
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));

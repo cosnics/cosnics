@@ -3,6 +3,7 @@ namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Package\Finder\PackageBundles;
 
 /**
  *
@@ -11,7 +12,7 @@ use Chamilo\Libraries\File\Path;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PlatformPackageList
+class PlatformPackageBundles
 {
     const MODE_ALL = 1;
     const MODE_INSTALLED = 2;
@@ -50,14 +51,14 @@ class PlatformPackageList
 
     /**
      *
-     * @var \configuration\package\PlatformPackageList
+     * @var \configuration\package\PlatformPackageBundles
      */
     private static $instance;
 
     /**
      *
      * @param int $mode
-     * @return \Chamilo\Configuration\Package\PlatformPackageList
+     * @return \Chamilo\Configuration\Package\PlatformPackageBundles
      */
     public static function getInstance($mode = self :: MODE_ALL)
     {
@@ -143,7 +144,7 @@ class PlatformPackageList
 
         if (! file_exists($path))
         {
-            $packageListBuilder = new PackageListBuilder(PackageList :: ROOT, $this->mode);
+            $packageListBuilder = new PackageBundles(PackageList :: ROOT, $this->mode);
             $this->package_list = $packageListBuilder->getPackageList();
 
             Filesystem :: write_to_file($path, serialize($this->package_list));

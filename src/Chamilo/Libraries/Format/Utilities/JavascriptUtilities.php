@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Utilities;
 
 use Assetic\Asset\AssetCollection;
-use Chamilo\Libraries\Protocol\HttpHeader;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -60,20 +60,21 @@ class JavascriptUtilities extends ResourceUtilities
             }
         }
 
-        HttpHeader :: content_type(HttpHeader :: CONTENT_TYPE_JAVASCRIPT, self :: DEFAULT_CHARSET);
+        if ($this->getCachingEnabled())
+        {
+            $asset_collection = new AssetCollection($assets, array(new \Assetic\Filter\JSMinFilter()));
+            $assets = new \Assetic\Asset\AssetCache(
+                $asset_collection,
+                new \Assetic\Cache\FilesystemCache($this->getPathUtilities()->getCachePath() . 'Resource/'));
+        }
+        else
+        {
+            $assets = new AssetCollection($assets);
+        }
 
-        // if ($this->getCachingEnabled())
-        // {
-        // $asset_collection = new AssetCollection($assets, array(new \Assetic\Filter\JSMinFilter()));
-        // $asset_cache = new \Assetic\Asset\AssetCache(
-        // $asset_collection,
-        // new \Assetic\Cache\FilesystemCache($this->getPathUtilities()->getCachePath() . 'resource/'));
-        // echo $asset_cache->dump();
-        // }
-        // else
-        // {
-        $asset_collection = new AssetCollection($assets);
-        echo $asset_collection->dump();
-        // }
+        $response = new Response();
+        $response->setContent($assets->dump());
+        $response->headers->set('Content-Type', 'text/javascript');
+        $response->send();
     }
 }
