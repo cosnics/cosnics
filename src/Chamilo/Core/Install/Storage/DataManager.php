@@ -49,7 +49,7 @@ class DataManager
         $classLoader->register();
         
         $data_source_name = DataSourceName :: factory(
-            'doctrine', 
+            'Doctrine',
             $this->installer_config->get_db_driver(), 
             $this->installer_config->get_db_username(), 
             $this->installer_config->get_db_host(), 
@@ -83,7 +83,7 @@ class DataManager
         $overwrite = $this->installer_config->get_db_overwrite();
         
         $data_source_name = DataSourceName :: factory(
-            'doctrine', 
+            'Doctrine',
             $this->installer_config->get_db_driver(), 
             $this->installer_config->get_db_username(), 
             $this->installer_config->get_db_host(), 
