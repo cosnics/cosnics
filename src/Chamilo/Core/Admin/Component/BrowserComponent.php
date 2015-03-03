@@ -82,7 +82,7 @@ class BrowserComponent extends Manager
     {
         $tabs = new DynamicTabsRenderer('admin');
 
-        $packages = \Chamilo\Configuration\Package\PlatformPackageList :: getInstance(PackageList :: MODE_INSTALLED)->get_type_packages();
+        $packages = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance(PackageList :: MODE_INSTALLED)->get_type_packages();
 
         $packageNames = array();
 

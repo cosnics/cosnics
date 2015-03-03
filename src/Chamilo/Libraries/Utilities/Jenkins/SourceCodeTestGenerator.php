@@ -128,7 +128,7 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageList::getInstance()->get_package_list();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list();
 
 $generator = new SourceCodeTestGenerator($package_list);
 $generator->run();
