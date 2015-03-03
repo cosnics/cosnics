@@ -48,7 +48,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                         Translation :: get('YourRequests'),
                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Application\Weblcms\Request',
-                            'Tab/personal_request'),
+                            'Tab/PersonalRequest'),
                         $table->as_html()));
             }
 
@@ -230,7 +230,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestCourse'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/request'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Request'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
@@ -239,7 +239,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/rights'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Rights'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
         }
 

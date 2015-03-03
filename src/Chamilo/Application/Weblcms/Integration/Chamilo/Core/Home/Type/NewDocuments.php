@@ -70,6 +70,6 @@ class NewDocuments extends NewBlock
     {
         return Theme :: getInstance()->getImagePath(
             \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_DOCUMENT),
-            'Logo/' . Theme :: ICON_MINI . '_new');
+            'Logo/' . Theme :: ICON_MINI . 'New');
     }
 }

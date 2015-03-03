@@ -6,7 +6,6 @@ use Assetic\Asset\AssetCollection;
 use Assetic\Cache\FilesystemCache;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssMinFilter;
-use Chamilo\Libraries\Protocol\HttpHeader;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

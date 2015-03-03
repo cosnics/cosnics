@@ -398,7 +398,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                     Translation :: get('SubscribeUsers'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Application\Weblcms\Tool\Implementation\User',
-                        'action_subscribe_user'),
+                        'Action/SubscribeUser'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -407,7 +407,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                     Translation :: get('SubscribeGroups'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Application\Weblcms\Tool\Implementation\User',
-                        'action_subscribe_group'),
+                        'Action/SubscribeGroup'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_BROWSER)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

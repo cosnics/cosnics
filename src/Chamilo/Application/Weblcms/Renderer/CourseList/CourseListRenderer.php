@@ -16,8 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * Course list renderer to render the course list (used in courses home, courses
- * sorter, courses block...)
+ * Course list renderer to render the course list (used in courses home, courses sorter, courses block...)
  *
  * @author Sven Vanpoucke
  */
@@ -238,7 +237,7 @@ class CourseListRenderer
                  '><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath(
                         \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())),
-                    'Logo/' . Theme :: ICON_MINI . '_new') . '" alt="' .
+                    'Logo/' . Theme :: ICON_MINI . 'New') . '" alt="' .
                  htmlspecialchars(Translation :: get('New', null, Utilities :: COMMON_LIBRARIES)) . '"/></a>';
         }
     }

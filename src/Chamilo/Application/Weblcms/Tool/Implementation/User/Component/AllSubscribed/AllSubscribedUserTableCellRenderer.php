@@ -197,7 +197,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                                 Translation :: get('MakeStudent'),
                                 Theme :: getInstance()->getImagePath(
                                     $weblcms_manager_namespace,
-                                    'action_subscribe_student'),
+                                    'Action/SubscribeStudent'),
                                 $status_change_url,
                                 ToolbarItem :: DISPLAY_ICON));
                         break;
@@ -211,7 +211,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                                 Translation :: get('MakeTeacher'),
                                 Theme :: getInstance()->getImagePath(
                                     $weblcms_manager_namespace,
-                                    'action_subscribe_teacher'),
+                                    'Action/SubscribeTeacher'),
                                 $status_change_url,
                                 ToolbarItem :: DISPLAY_ICON));
                         break;

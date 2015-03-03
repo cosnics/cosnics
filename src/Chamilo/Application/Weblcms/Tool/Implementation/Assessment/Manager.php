@@ -79,7 +79,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ManageAttempts'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'manage_attempts'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'ManageAttempts'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_RESULTS,

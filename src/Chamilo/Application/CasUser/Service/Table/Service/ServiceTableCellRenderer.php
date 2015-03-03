@@ -52,7 +52,7 @@ class ServiceTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/deactivate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/Deactivate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
@@ -64,7 +64,7 @@ class ServiceTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/activate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/Activate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,

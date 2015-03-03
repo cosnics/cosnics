@@ -167,10 +167,10 @@ class Service extends DataClass
         switch ($this->get_enabled())
         {
             case self :: STATUS_ENABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/enabled');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/Enabled');
                 break;
             case self :: STATUS_DISABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/disabled');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/Disabled');
                 break;
         }
 

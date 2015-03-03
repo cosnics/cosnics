@@ -109,7 +109,7 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MakeStudent'),
-                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_student'),
+                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeStudent'),
                             $status_change_url,
                             ToolbarItem :: DISPLAY_ICON));
 
@@ -122,7 +122,7 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('MakeTeacher'),
-                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_teacher'),
+                            Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeTeacher'),
                             $status_change_url,
                             ToolbarItem :: DISPLAY_ICON));
 

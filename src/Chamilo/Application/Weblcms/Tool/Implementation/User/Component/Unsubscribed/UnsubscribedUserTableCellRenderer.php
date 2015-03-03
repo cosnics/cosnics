@@ -33,7 +33,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
      *
      * @param type $column
      * @param type $user_with_subscription_status User from the advanced join query in weblcms database class that
-     *        includes his subscription status.
+     *            includes his subscription status.
      * @return type
      */
     public function render_cell($column, $user_with_subscription_status)
@@ -99,7 +99,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SubscribeAsStudent'),
-                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_student'),
+                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeStudent'),
                     $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -113,7 +113,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('SubscribeAsTeacher'),
-                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'action_subscribe_teacher'),
+                    Theme :: getInstance()->getImagePath($weblcms_manager_namespace, 'Action/SubscribeTeacher'),
                     $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -140,7 +140,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
                         Translation :: get('RequestUser'),
                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Application\Weblcms\Tool\Implementation\User',
-                            'action_request_subscribe_user'),
+                            'Action/RequestSubscribeUser'),
                         $subscribe_request_url,
                         ToolbarItem :: DISPLAY_ICON));
             }

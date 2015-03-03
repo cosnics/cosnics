@@ -28,8 +28,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         else
         {
             /**
-             * SystemAnnouncement may not be available if not installed.
-             * Therefore do not use SystemAnnouncement::...
+             * SystemAnnouncement may not be available if not installed. Therefore do not use SystemAnnouncement::...
              */
             return Theme :: getInstance()->getImagePath(
                 ContentObject :: get_content_object_type_namespace('system_announcement'),
