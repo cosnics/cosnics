@@ -78,5 +78,9 @@
     "bin-dir" : "bin/"
   },
   "license" : [ "GPL-3.0" ],
-  "type" : "chamilo-package"
+  "type" : "chamilo-package",
+  "scripts":{
+  	"post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+  	"post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
+  }
 }

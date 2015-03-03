@@ -18,12 +18,12 @@ trait ClassContext
         {
 			return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), ! $camel_case);
         }
-        
+
         if ($camel_case)
         {
             return get_called_class();
         }
-        
+
 		return (string) StringUtilities :: getInstance()->createString(get_called_class())->underscored();
     }
 
@@ -36,6 +36,4 @@ trait ClassContext
     {
         return ClassnameUtilities :: getInstance()->getNamespaceFromClassname(static :: class_name());
     }
-
-    abstract static function package();
 }
