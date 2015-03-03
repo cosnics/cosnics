@@ -43,14 +43,31 @@ abstract class AbstractBundles
         $this->discoverPackages($this->rootNamespace);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function getPackageNamespaces()
     {
         return $this->packageNamespaces;
     }
 
+    /**
+     *
+     * @param string $packageNamespace
+     */
     protected function addPackageNamespace($packageNamespace)
     {
-        return $this->packageNamespaces[] = $packageNamespace;
+        $this->packageNamespaces[] = $packageNamespace;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getRootNamespace()
+    {
+        return $this->rootNamespace;
     }
 
     /**

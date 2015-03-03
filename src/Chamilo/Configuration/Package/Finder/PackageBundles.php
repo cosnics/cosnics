@@ -26,12 +26,6 @@ class PackageBundles extends AbstractBundles
 
     /**
      *
-     * @var string
-     */
-    private $rootNamespace;
-
-    /**
-     *
      * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
     private $packageDefinitions;
@@ -93,6 +87,7 @@ class PackageBundles extends AbstractBundles
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
+
             $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
             $packageNamespaceParent = array_shift($packageNamespaceAncestors);
 
@@ -195,6 +190,6 @@ class PackageBundles extends AbstractBundles
 
     public function getPackageList()
     {
-        return $this->packageLists[$this->rootNamespace];
+        return $this->packageLists[$this->getRootNamespace()];
     }
 }
