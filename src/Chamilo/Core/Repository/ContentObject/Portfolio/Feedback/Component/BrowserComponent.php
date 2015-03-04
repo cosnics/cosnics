@@ -101,7 +101,7 @@ class BrowserComponent extends Manager
                             Translation :: get('StopReceivingNotifications'),
                             Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/unsubscribe'),
+                                'Action/Unsubscribe'),
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBER))));
                 }
                 else
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager
                             Translation :: get('ReceiveNotifications'),
                             Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/subscribe'),
+                                'Action/Subscribe'),
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBER))));
                 }
 

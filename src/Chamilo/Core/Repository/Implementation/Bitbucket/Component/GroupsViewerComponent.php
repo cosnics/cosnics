@@ -64,7 +64,7 @@ class GroupsViewerComponent extends Manager
                     Translation :: get('AddUser'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'action_add_user'),
+                        'Action/AddUser'),
                     $this->get_external_repository_adding_user_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
@@ -72,7 +72,7 @@ class GroupsViewerComponent extends Manager
                     Translation :: get('DeleteUser'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'action_delete_user'),
+                        'Action/DeleteUser'),
                     $this->get_external_repository_deleting_user_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();
@@ -107,7 +107,7 @@ class GroupsViewerComponent extends Manager
                 Translation :: get('CreateGroup'),
                 Theme :: getInstance()->getImagePath(
                     'Chamilo\Core\Repository\Implementation\Bitbucket',
-                    'action_create'),
+                    'Action/Create'),
                 $this->get_external_repository_group_creating_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -101,7 +101,7 @@ class CreatorComponent extends Manager
                         Theme :: getInstance()->getImagePath(
                             ClassnameUtilities :: getInstance()->getNamespaceParent(
                                 ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context())),
-                            'External/' . 'category_' . $category),
+                            'Category/' . $category),
                         implode(PHP_EOL, $types_html)));
             }
 

@@ -304,21 +304,21 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $count = $topic->get_ref()->get_total_posts();
             $src = Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                'topic_read');
+                'Topic/Read');
             $hover = 'NoNewPosts';
             switch ($topic->get_forum_type())
             {
                 case 1 :
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'sticky_read');
+                        'Sticky/Read');
                     $hover = 'Sticky';
 
                     break;
                 case 2 :
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'important_read');
+                        'ImportantRead');
                     $hover = 'Important';
                     break;
             }
@@ -410,7 +410,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) . '<br />' . $name .
                              ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' . Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                                'icon_topic_latest') . '" /></a>');
+                                'Icon/TopicLatest') . '" /></a>');
                 }
             }
             else
@@ -564,7 +564,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             ContentObject :: get_content_object_type_namespace('forum_topic')),
                         Theme :: getInstance()->getImagePath(
                             ContentObject :: get_content_object_type_namespace('forum'),
-                            'action_mail'),
+                            'Action/Mail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -583,7 +583,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             ContentObject :: get_content_object_type_namespace('forum_topic')),
                         Theme :: getInstance()->getImagePath(
                             ContentObject :: get_content_object_type_namespace('forum'),
-                            'action_unmail'),
+                            'Action/Unmail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -669,7 +669,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             $src = Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                'forum_read');
+                'Forum/Read');
 
             if ($this->is_locked || $forum->get_ref()->get_locked())
             {
@@ -730,7 +730,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) . '<br />' . $name .
                          ' <a href="' . $link . '"><img title="' . Translation :: get('ViewLastPost') . '" src="' . Theme :: getInstance()->getImagePath(
                             'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                            'icon_topic_latest') . '" /></a>');
+                            'Icon/TopicLatest') . '" /></a>');
             }
         }
         else
@@ -855,7 +855,7 @@ public function get_forum_actions($forum)
                     Translation :: get('Subscribe'),
                     Theme :: getInstance()->getImagePath(
                         ContentObject :: get_content_object_type_namespace('forum'),
-                        'action_mail'),
+                        'Action/Mail'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
@@ -870,7 +870,7 @@ public function get_forum_actions($forum)
                     Translation :: get('UnSubscribe'),
                     Theme :: getInstance()->getImagePath(
                         ContentObject :: get_content_object_type_namespace('forum'),
-                        'action_unmail'),
+                        'ActionUnmail'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON,
                     true));

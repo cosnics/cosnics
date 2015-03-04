@@ -27,7 +27,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
         foreach ($feed['items'] as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\RssFeed', 'Logo/22_item') .
+                 Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\RssFeed', 'Logo/22') .
                  ');">';
             $html[] = '<div class="title">' . $item['title'] . '</div>';
             $html[] = html_entity_decode($item['description']);

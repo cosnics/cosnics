@@ -54,7 +54,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Grant'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/grant'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Grant'),
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_GRANT,
@@ -69,7 +69,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Deny'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/deny'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Deny'),
                         $this->get_component()->get_url(
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_DENY,

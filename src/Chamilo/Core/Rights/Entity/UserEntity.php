@@ -117,7 +117,7 @@ class UserEntity implements RightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'place_user');
+        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'Place/User');
     }
 
     /**

@@ -49,23 +49,24 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
                     {
                         $number = $content_object->get_version_count();
                         return '<img src="' .
-                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_multiple') .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'VersionsMultiple') .
                              '" alt="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) .
                              '" title="' . Translation :: get('VersionsAvailable', array('NUMBER' => $number)) . '" />';
                     }
                     else
                     {
                         return '<img src="' .
-                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' .
+                             Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'VersionsNone') . '" alt="' .
                              Translation :: get('NoVersionsAvailable') . '" title="' .
                              Translation :: get('NoVersionsAvailable') . '" />';
                     }
                 }
                 else
                 {
-                    return '<img src="' .
-                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'versions_none') . '" alt="' . Translation :: get(
-                            'NotVersionable') . '" title="' . Translation :: get('NotVersionable') . '" />';
+                    return '<img src="' . Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository',
+                        'VersionsNone') . '" alt="' . Translation :: get('NotVersionable') . '" title="' .
+                         Translation :: get('NotVersionable') . '" />';
                 }
             case ContentObject :: PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
