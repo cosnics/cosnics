@@ -18,10 +18,6 @@ class BuildUtilities
         $basePath = Path :: getInstance()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
-        // Create the web-folder
-        Filesystem :: create_dir($baseWebPath);
-        $event->getIO()->write('Created the web-folder: ' . $baseWebPath);
-
         // Copy the resources
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -39,14 +35,5 @@ class BuildUtilities
 
             $event->getIO()->write('Processed resources for: ' . $packageNamespace);
         }
-
-        // Write pseudo-index file
-        $indexWebPath = $baseWebPath . 'index.php';
-        $php = <<<EOT
-<?php
-require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'boot.php';
-EOT;
-        Filesystem :: write_to_file($indexWebPath, $php);
-        $event->getIO()->write('Created the index-file: ' . $indexWebPath);
     }
 }
