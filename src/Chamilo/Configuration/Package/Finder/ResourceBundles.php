@@ -5,12 +5,12 @@ use Chamilo\Libraries\File\Path;
 
 /**
  *
- * @package Chamilo\Configuration\Package\Builder
+ * @package Chamilo\Configuration\Package\Finder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ResourceBundles extends AbstractBundles
+class ResourceBundles extends BasicBundles
 {
 
     /**

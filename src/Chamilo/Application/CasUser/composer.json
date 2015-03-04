@@ -12,10 +12,7 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.4.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev",
-        "chamilo/core-rights": "*@dev"
+        "php": ">=5.4.0"
     },
     "extra": {
         "install-path": "application/cas_user"

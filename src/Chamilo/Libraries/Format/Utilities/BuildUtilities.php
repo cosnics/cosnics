@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Configuration\Package\Finder\PackageBundles;
+use Chamilo\Configuration\Package\Finder\BasicBundles;
 use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Path;
@@ -49,7 +49,7 @@ class BuildUtilities
 
     public static function processComposer(Event $event)
     {
-        $packageBundles = new PackageBundles(PackageList :: ROOT);
+        $packageBundles = new BasicBundles(PackageList :: ROOT);
         $packageNamespaces = $packageBundles->getPackageNamespaces();
 
         $composer = $event->getComposer();

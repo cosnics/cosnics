@@ -16,11 +16,7 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.4.0",
-        "chamilo/composer-installer": "1.0.0",
-        "chamilo/core": "*@dev",
-        "chamilo/core-home": "*@dev",
-        "chamilo/core-repository": "*@dev"
+        "php": ">=5.4.0"
     },
     "extra": {
         "install-path": "application/portfolio"
