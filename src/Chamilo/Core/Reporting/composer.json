@@ -17,7 +17,6 @@
     "type": "chamilo-package",
     "require": {
         "php": ">=5.4.0",
-        "lapinator.net/ods-php-generator" : "dev-master",
         "phpoffice/phpexcel" : "=1.8.0"
     },
     "extra": {

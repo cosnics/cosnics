@@ -16,10 +16,7 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.4.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev",
-        "chamilo/app-weblcms": "*@dev"
+        "php": ">=5.4.0"
     },
     "extra": {
         "install-path": "application/weblcms/tool/forum"
