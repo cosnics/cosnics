@@ -56,15 +56,4 @@ abstract class ConditionVariableTranslator
 
         return new $class($condition_variable);
     }
-
-    /**
-     *
-     * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
-     * @return string
-     */
-    public static function render($type, ConditionVariable $condition_variable)
-    {
-        return self :: factory($type, $condition_variable)->translate();
-    }
 }

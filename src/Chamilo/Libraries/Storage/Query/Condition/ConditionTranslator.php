@@ -53,17 +53,6 @@ abstract class ConditionTranslator
 
     /**
      *
-     * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return string
-     */
-    public static function render($type, Condition $condition)
-    {
-        return self :: factory($type, $condition)->translate();
-    }
-
-    /**
-     *
      * @return string
      */
     abstract public function translate();
