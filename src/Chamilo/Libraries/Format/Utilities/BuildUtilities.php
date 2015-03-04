@@ -16,9 +16,7 @@ class BuildUtilities
         $packageNamespaces = $resourceBundles->getPackageNamespaces();
 
         $basePath = Path :: getInstance()->getBasePath();
-        $baseWebPath = realpath(
-            Path :: getInstance()->getBasePath() . '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR) .
-             DIRECTORY_SEPARATOR;
+        $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
         // Create the web-folder
         Filesystem :: create_dir($baseWebPath);
@@ -45,7 +43,8 @@ class BuildUtilities
         // Write pseudo-index file
         $indexWebPath = $baseWebPath . 'index.php';
         $php = <<<EOT
-                require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'index.php';
+<?php
+require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'boot.php';
 EOT;
         Filesystem :: write_to_file($indexWebPath, $php);
         $event->getIO()->write('Created the index-file: ' . $indexWebPath);
