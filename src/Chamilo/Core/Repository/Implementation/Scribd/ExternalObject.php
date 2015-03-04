@@ -73,7 +73,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
             $this->get_license_name(),
             Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\Implementation\Scribd',
-                'licenses/' . $this->get_license()),
+                'Licenses/' . $this->get_license()),
             null,
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();

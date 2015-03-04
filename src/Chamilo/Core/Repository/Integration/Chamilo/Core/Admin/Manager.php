@@ -20,7 +20,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('ManageExternalInstances'),
             Translation :: get('ManageExternalInstancesDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/external_instance'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/ExternalInstance'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Instance\Manager :: context(),
@@ -38,7 +38,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 'ContentObjectRelMetadataElementDescription',
                 null,
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
@@ -56,7 +56,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 'ContentObjectPropertyRelMetadataElementDescription',
                 null,
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
@@ -84,7 +84,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportTemplate'),
             Translation :: get('ImportTemplateDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),

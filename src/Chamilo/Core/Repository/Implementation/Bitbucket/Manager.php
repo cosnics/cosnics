@@ -201,7 +201,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             $toolbar_items[self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES] = new ToolbarItem(
                 Translation :: get('ViewPrivileges'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'action_view_privileges'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/ViewPrivileges'),
                 $this->get_external_repository_object_privileges_viewing_url($object),
                 ToolbarItem :: DISPLAY_ICON);
             $toolbar_items[self :: ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(

@@ -138,7 +138,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $html[] = '<div class="content_object" style="background-image: url(' . Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\ContentObject\Portfolio\Display',
-                'Tab/activity') . ')">';
+                'Tab/Activity') . ')">';
             $html[] = '<div class="description">';
 
             $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);

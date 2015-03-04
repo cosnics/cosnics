@@ -92,7 +92,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         if ($this->get_current_node()->is_root())
         {
             $view_title = $this->get_current_content_object()->get_title();
-            $view_image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/home');
+            $view_image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Home');
         }
         else
         {
@@ -122,7 +122,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             if ($this->get_current_node()->is_root())
             {
                 $edit_title = Translation :: get('ChangeIntroduction');
-                $edit_image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/introducer');
+                $edit_image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Introducer');
             }
             else
             {
@@ -168,7 +168,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new DynamicVisualTab(
                     self :: ACTION_FEEDBACK,
                     $title,
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/feedback'),
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Feedback'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_FEEDBACK,
@@ -315,7 +315,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new DynamicVisualTab(
                         self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                         Translation :: get('AddFolder'),
-                        Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/folder'),
+                        Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Folder'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -396,7 +396,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         Translation :: get('MoveDownNotAvailable'),
                         Theme :: getInstance()->getImagePath(
                             __NAMESPACE__,
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN . '_na'),
+                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN . 'Na'),
                         null,
                         false,
                         false,
@@ -431,7 +431,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         Translation :: get('MoveUpNotAvailable'),
                         Theme :: getInstance()->getImagePath(
                             __NAMESPACE__,
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP . '_na'),
+                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP . 'Na'),
                         null,
                         false,
                         false,

@@ -135,7 +135,7 @@ class PrivilegesViewerComponent extends Manager
                 Translation :: get('RevokeAll'),
                 Theme :: getInstance()->getImagePath(
                     'Chamilo\Core\Repository\Implementation\Bitbucket',
-                    'action_revoke'),
+                    'Action/Revoke'),
                 $this->get_external_repository_privilege_revoking_url($id),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
