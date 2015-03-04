@@ -13,17 +13,6 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 abstract class ConditionVariableTranslator extends \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
 {
-
-    /**
-     *
-     * @param ConditionVariable $condition_variable
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
-     */
-    public static function factory(ConditionVariable $condition_variable)
-    {
-        return parent :: factory(DataManager :: TYPE_DOCTRINE, $condition_variable);
-    }
-
     /**
      *
      * @param ConditionVariable $condition_variable
@@ -31,6 +20,6 @@ abstract class ConditionVariableTranslator extends \Chamilo\Libraries\Storage\Qu
      */
     public static function render(ConditionVariable $condition_variable)
     {
-        return parent :: render(DataManager :: TYPE_DOCTRINE, $condition_variable);
+        return parent :: factory(DataManager :: TYPE_DOCTRINE, $condition_variable)->translate();
     }
 }
