@@ -1,0 +1,27 @@
+{
+    "name": "chamilo/core-reporting",
+        "version": "6.0.0", "description": "Chamilo Reporting Core Application",
+    "keywords": [],
+    "homepage": "http://www.chamilo.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.4.0",
+        "lapinator.net/ods-php-generator" : "dev-master",
+        "phpoffice/phpexcel" : "=1.8.0"
+    },
+    "extra": {
+        "install-path": "reporting"
+    }
+
+}

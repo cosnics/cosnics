@@ -1,0 +1,24 @@
+{
+    "name": "chamilo/app-cas-user",
+        "version": "6.0.0", "description": "Chamilo CAS User Application",
+    "keywords": [],
+    "homepage": "http://www.chamilo.org",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.4.0",
+        "chamilo/composer-installer": "v1.0.0",
+        "chamilo/core": "*@dev",
+        "chamilo/core-rights": "*@dev"
+    },
+    "extra": {
+        "install-path": "application/cas_user"
+    }
+
+}
