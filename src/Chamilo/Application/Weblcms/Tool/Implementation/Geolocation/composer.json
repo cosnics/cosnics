@@ -1,8 +1,8 @@
 {
     "name": "chamilo/app-weblcms-tool-geolocation",
-    "description": "Chamilo Geolocation Weblcms Tool",
+        "version": "6.0.0", "description": "Chamilo Geolocation Weblcms Tool",
     "keywords": [],
-    "homepage": "http://chamilo.com",
+    "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
@@ -16,7 +16,7 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.4.0",
         "chamilo/composer-installer": "v1.0.0",
         "chamilo/core": "*@dev",
         "chamilo/app-weblcms": "*@dev"

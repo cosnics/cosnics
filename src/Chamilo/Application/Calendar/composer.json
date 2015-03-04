@@ -1,8 +1,8 @@
 {
-    "name": "chamilo/app-personal-calendar",
-    "description": "Chamilo Personal Calendar Application",
+    "name": "chamilo/calendar",
+        "version": "6.0.0", "description": "Chamilo Personal Calendar Application",
     "keywords": [],
-    "homepage": "http://chamilo.com",
+    "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
@@ -14,16 +14,14 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
+  "autoload": {
+    "psr-4": {
+      "Ehb\\": "src/Ehb/"
+    }
+  },
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.3.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev",
-        "chamilo/core-home": "*@dev",
-        "chamilo/core-repository": "*@dev",
+        "php": ">=5.4.0",
         "sabre/vobject": "~3.2.0."
-    },
-    "extra": {
-        "install-path": "application/personal_calendar"
     }
 }
