@@ -13,7 +13,7 @@ use Sabre\VObject;
 
 /**
  * $Id: calendar_event.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.calendar_event
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -29,7 +29,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
     }
-    
+
     /**
      * The start date of the calendar event
      */
@@ -51,7 +51,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     const PROPERTY_BYDAY = 'byday';
     const PROPERTY_BYMONTHDAY = 'bymonthday';
     const PROPERTY_BYMONTH = 'bymonth';
-    
+
     /**
      * The different frequency types
      */
@@ -67,7 +67,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the start date of this calendar event
-     * 
+     *
      * @return int The start date
      */
     public function get_start_date()
@@ -77,7 +77,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the start date of this calendar event
-     * 
+     *
      * @param int The start date
      */
     public function set_start_date($start_date)
@@ -87,7 +87,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the end date of this calendar event
-     * 
+     *
      * @return int The end date
      */
     public function get_end_date()
@@ -97,7 +97,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the end date of this calendar event
-     * 
+     *
      * @param int The end date
      */
     public function set_end_date($end_date)
@@ -107,7 +107,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the frequency of this calendar event
-     * 
+     *
      * @return int The frequency
      */
     public function get_frequency()
@@ -117,7 +117,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the frequency of this calendar event
-     * 
+     *
      * @param int The frequency
      */
     public function set_frequency($frequency)
@@ -127,7 +127,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Gets the end date of this calendar event repetition
-     * 
+     *
      * @return int The repetition end date
      */
     public function get_until()
@@ -137,7 +137,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Sets the end date of this calendar event repetition
-     * 
+     *
      * @param int The repetition end date
      */
     public function set_until($until)
@@ -147,7 +147,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Returns whether or not the calendar event repeats itself
-     * 
+     *
      * @return boolean
      */
     public function has_frequency()
@@ -158,7 +158,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
     /**
      * Returns whether or not the calendar event repeats itself indefinately
-     * 
+     *
      * @return boolean
      */
     public function frequency_is_indefinately()
@@ -202,7 +202,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
                 $string = Translation :: get('Biweekly');
                 break;
         }
-        
+
         return $string;
     }
 
@@ -259,70 +259,70 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public function get_repeats($from_date = 0, $to_date = 0)
     {
         $vcalendar = new VObject\Component\VCalendar();
-        
+
         $start_date_time = new \DateTime();
         $start_date_time->setTimestamp($this->get_start_date());
-        
+
         $end_date_time = new \DateTime();
         $end_date_time->setTimestamp($this->get_end_date());
-        
+
         $vevent = $vcalendar->add('VEVENT');
-        
+
         $vevent->add('SUMMARY', $this->get_title());
         $vevent->add('DESCRIPTION', $this->get_description());
         $vevent->add('DTSTART', $start_date_time);
         $vevent->add('DTEND', $end_date_time);
-        
+
         $rrules = IcalExportImplementation :: rrule($this);
-        
+
         $bydays = array();
-        
+
         foreach ($rrules['BYDAY'] as $byday)
         {
             $bydays[] = implode('', $byday);
         }
-        
+
         $rrules['BYDAY'] = implode(',', $bydays);
-        
+
         $vevent->add('RRULE', $rrules);
         $vevent->add('UID', uniqid());
-        
+
         $from_date_time = new \DateTime();
         $from_date_time->setTimestamp($from_date);
-        
+
         $to_date_time = new \DateTime();
         $to_date_time->setTimestamp($to_date);
-        
+
         $vcalendar->expand($from_date_time, $to_date_time);
-        
+
         return $vcalendar->VEVENT;
     }
 
     public static function get_frequency_options()
     {
         $options = array();
-        
+
         $options[self :: FREQUENCY_DAILY] = Translation :: get('Daily');
         $options[self :: FREQUENCY_WEEKLY] = Translation :: get('Weekly');
         $options[self :: FREQUENCY_MONTHLY] = Translation :: get('Monthly');
         $options[self :: FREQUENCY_YEARLY] = Translation :: get('Yearly');
         $options[self :: FREQUENCY_WEEKDAYS] = Translation :: get('Weekdays');
         $options[self :: FREQUENCY_BIWEEKLY] = Translation :: get('BiWeekly');
-        
+
         return $options;
     }
 
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_START_DATE, 
-            self :: PROPERTY_END_DATE, 
-            self :: PROPERTY_UNTIL, 
-            self :: PROPERTY_FREQUENCY, 
-            self :: PROPERTY_FREQUENCY_COUNT, 
-            self :: PROPERTY_FREQUENCY_INTERVAL, 
-            self :: PROPERTY_BYDAY, 
-            self :: PROPERTY_BYMONTH, 
+            self :: PROPERTY_START_DATE,
+            self :: PROPERTY_END_DATE,
+            self :: PROPERTY_UNTIL,
+            self :: PROPERTY_FREQUENCY,
+            self :: PROPERTY_FREQUENCY_COUNT,
+            self :: PROPERTY_FREQUENCY_INTERVAL,
+            self :: PROPERTY_BYDAY,
+            self :: PROPERTY_BYMONTH,
             self :: PROPERTY_BYMONTHDAY);
     }
 
@@ -341,9 +341,9 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
         return static :: icon_image(
-            $this->context(), 
-            $size, 
-            $this->is_current() && $is_available, 
+            ClassnameUtilities :: getInstance()->getNamespaceParent($this->context(), 2),
+            $size,
+            $this->is_current() && $is_available,
             $this->has_frequency());
     }
 
@@ -353,7 +353,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         {
             $size = $size . '_repeat';
         }
-        
+
         return parent :: icon_image($context, $size, $is_current);
     }
 
@@ -372,69 +372,69 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     public static function get_byday_options()
     {
         $translator = Translation :: get_instance();
-        
+
         return $result = array(
-            1 => $translator->get("Monday"), 
-            2 => $translator->get("Tuesday"), 
-            3 => $translator->get("Wednesday"), 
-            4 => $translator->get("Thursday"), 
-            5 => $translator->get("Friday"), 
-            6 => $translator->get("Saturday"), 
+            1 => $translator->get("Monday"),
+            2 => $translator->get("Tuesday"),
+            3 => $translator->get("Wednesday"),
+            4 => $translator->get("Thursday"),
+            5 => $translator->get("Friday"),
+            6 => $translator->get("Saturday"),
             7 => $translator->get("Sunday"));
     }
 
     public static function get_bymonthday_options()
     {
         return array(
-            1 => 1, 
-            2 => 2, 
-            3 => 3, 
-            4 => 4, 
-            5 => 5, 
-            6 => 6, 
-            7 => 7, 
-            8 => 8, 
-            9 => 9, 
-            10 => 10, 
-            11 => 11, 
-            12 => 12, 
-            13 => 13, 
-            14 => 14, 
-            15 => 15, 
-            16 => 16, 
-            17 => 17, 
-            18 => 18, 
-            19 => 19, 
-            20 => 20, 
-            21 => 21, 
-            22 => 22, 
-            23 => 23, 
-            24 => 24, 
-            25 => 25, 
-            26 => 26, 
-            27 => 27, 
-            28 => 28, 
-            29 => 29, 
-            30 => 30, 
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+            5 => 5,
+            6 => 6,
+            7 => 7,
+            8 => 8,
+            9 => 9,
+            10 => 10,
+            11 => 11,
+            12 => 12,
+            13 => 13,
+            14 => 14,
+            15 => 15,
+            16 => 16,
+            17 => 17,
+            18 => 18,
+            19 => 19,
+            20 => 20,
+            21 => 21,
+            22 => 22,
+            23 => 23,
+            24 => 24,
+            25 => 25,
+            26 => 26,
+            27 => 27,
+            28 => 28,
+            29 => 29,
+            30 => 30,
             31 => 31);
     }
 
     public static function get_bymonth_options()
     {
         $translator = Translation :: get_instance();
-        
+
         return array(
-            1 => $translator->get("January"), 
-            2 => $translator->get("February"), 
-            3 => $translator->get("March"), 
-            4 => $translator->get("April"), 
-            5 => $translator->get("May"), 
-            6 => $translator->get("June"), 
-            7 => $translator->get("Juli"), 
-            8 => $translator->get("August"), 
-            9 => $translator->get("September"), 
-            10 => $translator->get("October"), 
-            11 => $translator->get("November"), 
+            1 => $translator->get("January"),
+            2 => $translator->get("February"),
+            3 => $translator->get("March"),
+            4 => $translator->get("April"),
+            5 => $translator->get("May"),
+            6 => $translator->get("June"),
+            7 => $translator->get("Juli"),
+            8 => $translator->get("August"),
+            9 => $translator->get("September"),
+            10 => $translator->get("October"),
+            11 => $translator->get("November"),
             12 => $translator->get("December"));
     }
 
@@ -451,7 +451,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         {
             $format[] = $rank;
         }
-        
+
         $format[] = self :: get_day_ical_format($day);
         return implode('', $format);
     }
@@ -471,7 +471,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         $ranks[4] = Translation :: get('Fourth');
         $ranks[5] = Translation :: get('Fifth');
         $ranks[- 1] = Translation :: get('Last');
-        
+
         return $ranks;
     }
 
@@ -506,7 +506,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byday, $byday_parts);
             $parts[] = array($byday_parts[1] == 0 ? 0 : $byday_parts[1][0], $byday_parts[2][0]);
         }
-        
+
         return $parts;
     }
 }

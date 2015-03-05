@@ -1412,7 +1412,7 @@ class ContentObject extends CompositeDataClass
 
         if ($template_registration instanceof TemplateRegistration)
         {
-            $size = 'template/' . $template_registration->get_name() . '/' . $size;
+            $size = 'Template/' . $template_registration->get_name() . '/' . $size;
             $type_string = 'TypeName' .
                  (string) StringUtilities :: getInstance()->createString($template_registration->get_name())->upperCamelize();
         }

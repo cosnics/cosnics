@@ -122,16 +122,14 @@ CKEDITOR.editorConfig = function(config) {
 	config.filebrowserChamiloHandbookLinkBrowseUrl = web_path
 			+ 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
 	config.latexDialogUrl = web_path
-			+ 'Chamilo/Configuration/Plugin/html_editor/ckeditor/release/ckeditor/plugins/latex/dialogs/latex.html?a=b';
+			+ 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/release/ckeditor/plugins/latex/dialogs/latex.html?a=b';
 
 	config.contentsCss = [
 			web_path
-					+ 'Chamilo/Configuration/Plugin/html_editor/ckeditor/release/ckeditor/contents.css'
-					,
+					+ 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/release/ckeditor/contents.css',
 			web_path
 					+ 'index.php?application=Chamilo\Libraries\Ajax&go=ckeditor_css&theme='
-					+ getTheme() 
-					];
+					+ getTheme() ];
 
 	config.disableNativeSpellChecker = false;
 	config.allowedContent = true;

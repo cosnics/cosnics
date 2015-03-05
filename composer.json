@@ -53,7 +53,6 @@
     "bin-dir" : "bin/"
   },
   "license" : [ "GPL-3.0" ],
-  "type" : "chamilo-package",
   "scripts":{
     "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
     "pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",

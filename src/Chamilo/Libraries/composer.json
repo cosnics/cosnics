@@ -29,7 +29,5 @@
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
         }
-    ],
-    "type": "chamilo-package",
-    "minimum-stability" : "stable"
+    ]
 }

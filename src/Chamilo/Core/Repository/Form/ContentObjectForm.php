@@ -309,7 +309,7 @@ abstract class ContentObjectForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) . 'Repository/Resources/Javascript/ContentObjectUpdate.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'));
 
         if (! $in_tab)
         {

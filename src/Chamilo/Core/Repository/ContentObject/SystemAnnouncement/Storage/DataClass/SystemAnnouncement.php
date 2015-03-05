@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: system_announcement.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.system_announcement
  */
 /**
@@ -54,7 +54,7 @@ class SystemAnnouncement extends ContentObject implements Versionable
         {
             return $size;
         }
-        
+
         switch ($icon)
         {
             case self :: ICON_CONFIRMATION :
@@ -76,13 +76,17 @@ class SystemAnnouncement extends ContentObject implements Versionable
                 $icon = 'config';
                 break;
         }
-        
+
         return $size . '_' . $icon;
     }
 
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
-        return static :: icon_image($this->context(), $size, $this->is_current() && $is_available, $this->get_icon());
+        return static :: icon_image(
+            ClassnameUtilities :: getInstance()->getNamespaceParent($this->context(), 2),
+            $size,
+            $this->is_current() && $is_available,
+            $this->get_icon());
     }
 
     public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $icon = self :: ICON_CONFIRMATION)
@@ -93,14 +97,14 @@ class SystemAnnouncement extends ContentObject implements Versionable
     public static function get_possible_icons()
     {
         $icons = array();
-        
+
         $icons[self :: ICON_CONFIRMATION] = Translation :: get('Confirmation');
         $icons[self :: ICON_ERROR] = Translation :: get('Error');
         $icons[self :: ICON_WARNING] = Translation :: get('Warning');
         $icons[self :: ICON_STOP] = Translation :: get('Stop');
         $icons[self :: ICON_QUESTION] = Translation :: get('Question');
         $icons[self :: ICON_CONFIG] = Translation :: get('Config');
-        
+
         return $icons;
     }
 
