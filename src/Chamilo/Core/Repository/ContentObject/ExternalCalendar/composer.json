@@ -14,7 +14,7 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    "type": "chamilo-package",
+    
     "require": {
         "php": ">=5.4.0",
         "sabre/vobject": "~3.2.0"

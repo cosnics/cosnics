@@ -23,7 +23,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     function get_question_preview($nr = null, $complex_question_id = null)
     {
         $content_object = $this->get_content_object();
-        
+
         if ($complex_question_id)
         {
             $question_id = $complex_question_id;
@@ -32,7 +32,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         {
             $question_id = $content_object->get_id();
         }
-        
+
         $html = array();
         $html[] = $this->get_includes();
         $html[] = '<div class="question" >';
@@ -50,7 +50,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="instruction">';
         if ($content_object->has_instruction())
         {
@@ -58,27 +58,27 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="answer">';
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table take_survey">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $html[] = implode(PHP_EOL, $table_header);
-        
+
         if ($content_object->get_date() == 1)
         {
             $html[] = '<th class="info" >' . Translation :: get('EnterDate') . '</th>';
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tbody>';
-            
+
             $html[] = '<tr>';
             $html[] = '<td>';
-            
+
             $html[] = '<div id="datepicker"></div>';
             $html[] = '<script type="text/javascript" src="' .
                  Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/date.js' .
@@ -87,14 +87,14 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</tr>';
             $html[] = '</tbody>';
         }
-        
+
         if ($content_object->get_time() == 1)
         {
             $html[] = '<th class="info" >' . Translation :: get('EnterTime') . '</th>';
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tbody>';
-            
+
             $html[] = '<tr>';
             $html[] = '<td>';
             $html[] = '<div id="timepicker"></div>';
@@ -105,9 +105,9 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</tr>';
             $html[] = '</tbody>';
         }
-        
+
         $html[] = '</table>';
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
@@ -119,20 +119,22 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     {
         $scripts = array();
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/ckeditor.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/adapters/jquery.js');
-        
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
+
         return implode(PHP_EOL, $scripts);
     }
-    
+
     // function get_javascript($question_id)
     // {
     // $html_editor_options = array();
     // $html_editor_options['width'] = '100%';
     // $html_editor_options['toolbar'] = 'Assessment';
     // $options = FormValidatorHtmlEditorOptions :: factory(LocalSetting :: get('html_editor'), $html_editor_options);
-    
+
     // $javascript = array();
     // $javascript[] = '<script type="text/javascript">';
     // $javascript[] = 'var web_path = \'' . Path :: getInstance()->getBasePath(true) . '\'';
@@ -141,14 +143,14 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     // $javascript[] = ' $(document).ready(function ()';
     // $javascript[] = ' {';
     // $javascript[] = ' $("textarea.html_editor[name=\'' . $question_id . '\
-    
+
     // ']").ckeditor({';
     // $javascript[] = $options->render_options();
     // $javascript[] = ' });';
     // $javascript[] = ' });';
     // $javascript[] = '});';
     // $javascript[] = '</script>';
-    
+
     // return implode(PHP_EOL, $javascript);
     // }
 }

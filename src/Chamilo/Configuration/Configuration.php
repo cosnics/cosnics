@@ -389,7 +389,7 @@ class Configuration
         $this->set(array('Chamilo\Core\Admin', 'institution_url'), 'http://www.chamilo.org');
         $this->set(array('Chamilo\Core\Admin', 'platform_timezone'), 'Europe/Brussels');
         $this->set(array('Chamilo\Core\Admin', 'theme'), 'Aqua');
-        $this->set(array('Chamilo\Core\Admin', 'html_editor'), 'ckeditor');
+        $this->set(array('Chamilo\Core\Admin', 'html_editor'), 'Ckeditor');
         $this->set(array('Chamilo\Core\Admin', 'allow_portal_functionality'), false);
         $this->set(array('Chamilo\Core\Admin', 'enable_external_authentication'), false);
         $this->set(array('Chamilo\Core\Admin', 'server_type'), 'production');
