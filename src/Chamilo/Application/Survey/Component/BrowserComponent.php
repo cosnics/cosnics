@@ -40,75 +40,75 @@ class BrowserComponent extends Manager implements TableSupport
     function run()
     {
         $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_PARTICIPATE);
-
+        
         $this->action_bar = $this->get_action_bar();
-
-        $this->display_header();
-
-        echo $this->action_bar->as_html();
-        echo '<div id="action_bar_browser">';
-
-        echo $this->get_tables();
-
-        echo '</div>';
-        echo '</div>';
-        $this->display_footer();
+        
+        $html = array();
+        $html[] = $this->render_header();
+        $html[] = $this->action_bar->as_html();
+        $html[] = '<div id="action_bar_browser">';
+        $html[] = $this->get_tables();
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = $this->render_footer();
+        
+        return implode("\n", $html);
     }
 
     function get_tables()
     {
         $tabs = new DynamicVisualTabsRenderer(self :: class_name());
-
+        
         $params = $this->get_parameters();
         $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
-
+        
         if (Rights :: get_instance()->publication_is_allowed())
         {
             $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MY_PUBLICATIONS;
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self :: TAB_MY_PUBLICATIONS,
-                    Translation :: get('MyPublications'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
-                    $this->get_url($params),
+                    self :: TAB_MY_PUBLICATIONS, 
+                    Translation :: get('MyPublications'), 
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Survey\\') . 'logo/16.png', 
+                    $this->get_url($params), 
                     $this->get_table_type() == self :: TAB_MY_PUBLICATIONS));
         }
-
+        
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_PARTICIPATE;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_PARTICIPATE,
-                Translation :: get('Participate'),
-                Theme :: getInstance()->getCommonImagePath('Action/Next'),
-                $this->get_url($params),
+                self :: TAB_PARTICIPATE, 
+                Translation :: get('Participate'), 
+                Theme :: getInstance()->getCommonImagePath() . 'action_next.png', 
+                $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_PARTICIPATE));
-
+        
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_EXPORT;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_EXPORT,
-                Translation :: get('ExportResults'),
-                Theme :: getInstance()->getCommonImagePath('Action/Export'),
-                $this->get_url($params),
+                self :: TAB_EXPORT, 
+                Translation :: get('ExportResults'), 
+                Theme :: getInstance()->getCommonImagePath() . 'action_export.png', 
+                $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_EXPORT));
-
+        
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_REPORT;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_REPORT,
-                Translation :: get('Reporting'),
-                Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
-                $this->get_url($params),
+                self :: TAB_REPORT, 
+                Translation :: get('Reporting'), 
+                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
+                $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_REPORT));
-
+        
         $table = new PublicationTable($this);
         $tabs->set_content($table->as_html());
-
+        
         $html[] = $tabs->render();
-
+        
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
-
+        
         return implode($html, "\n");
     }
 
@@ -116,27 +116,27 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
         $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
-
+        
         if (Rights :: get_instance()->publication_is_allowed())
         {
             $action_bar->add_common_action(
                 new ToolbarItem(
-                    Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                    $this->get_create_survey_publication_url(),
+                    Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath() . 'action_publish.png', 
+                    $this->get_create_survey_publication_url(), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
-
+        
         if ($this->get_user()->is_platform_admin())
         {
             $action_bar->add_tool_action(
                 new ToolbarItem(
-                    Translation :: get('RightsManager', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                    $this->get_application_rights_url(),
+                    Translation :: get('RightsManager', array(), Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath() . 'action_rights.png', 
+                    $this->get_application_rights_url(), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
-
+        
         return $action_bar;
     }
 
@@ -144,53 +144,53 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $right = null;
-
+        
         switch ($this->get_table_type())
         {
             case self :: TAB_EXPORT :
                 $right = Rights :: RIGHT_EXPORT_RESULT;
                 break;
-
+            
             case self :: TAB_PARTICIPATE :
                 $right = Rights :: PARTICIPATE_RIGHT;
                 break;
-
+            
             case self :: TAB_REPORT :
                 $right = Rights :: RIGHT_REPORTING;
         }
-
+        
         if (isset($right))
         {
             $entities = array();
             $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
             $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
-
+            
             $publication_ids = Rights :: get_instance()->get_publication_ids_for_granted_right($right, $entities);
-
+            
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
+                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID), 
                 $publication_ids);
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER),
+                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER), 
                 new StaticConditionVariable($this->get_user_id()));
         }
-
+        
         $query = $this->action_bar->get_query();
-
+        
         if (isset($query) && $query != '')
         {
             $search_conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_TITLE),
+                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_TITLE), 
                 '*' . $query . '*');
             // $search_conditions[] = new PatternMatchCondition(Publication :: PROPERTY_DESCRIPTION, '*' . $query .
             // '*');
             // $conditions[] = new OrCondition($search_conditions);
         }
-
+        
         return new AndCondition($conditions);
     }
 

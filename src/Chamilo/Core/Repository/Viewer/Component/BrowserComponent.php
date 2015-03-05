@@ -48,9 +48,9 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $renderer;
 
-    public function __construct($user = null, $parent = null)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
     {
-        parent :: __construct($user, $parent);
+        parent :: __construct($request, $user, $parent);
 
         $form_parameters = $this->get_parameter();
         $form_parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSER;
@@ -76,6 +76,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+       
         $this->renderer = clone $this->form->defaultRenderer();
         $this->renderer->setElementTemplate('<span>{element}</span> ');
         $this->form->accept($this->renderer);
@@ -89,28 +90,30 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->renderer->toHTML();
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         if ($this->get_maximum_select() > self :: SELECT_SINGLE)
         {
             $html[] = '<b>' . sprintf(
                 Translation :: get('SelectMaximumNumberOfContentObjects'),
                 $this->get_maximum_select()) . '</b><br />';
         }
-
+    
         $menu = $this->get_menu();
-
+      
+        
         if ($this->is_allowed_shared_object_browsing())
         {
             $shared_menu = $this->get_shared_menu();
         }
 
         $table = $this->get_object_table();
-
+       
         $html[] = '<br />';
 
         $html[] = '<div style="width: 15%; overflow: auto; float:left">';
         $html[] = $menu->render_as_tree();
         $html[] = '<br />';
+       
         $html[] = $shared_menu ? $shared_menu->render_as_tree() : '';
         $html[] = '</div>';
 
@@ -179,7 +182,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_menu($allow_shared = true)
     {
         $url = $this->get_url($this->get_parameters()) . '&' . self :: PROPERTY_CATEGORY . '=%s';
-
+        
         $extra = array();
 
         if ($this->get_query())
@@ -217,7 +220,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $menu->forceCurrentUrl($search_url);
         }
-
+             
         return $menu;
     }
 

@@ -30,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ParticipantBrowserComponent extends Manager implements TableSupport
 {
@@ -51,10 +52,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
 
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->pid))
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
 
         $this->survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->pid);
