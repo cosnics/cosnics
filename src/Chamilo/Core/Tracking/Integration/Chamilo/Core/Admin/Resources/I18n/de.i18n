@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+List = "Liste"
+ListDescription = "Die registrierten Ereignisse und Tracker im System ansehen."
+Archive = "Archiv"
+ArchiveDescription = "Einige Ereignisse archivieren / Tracker, um sicherzustellen, dass die Statistiken viel schneller zugänglich sind"
