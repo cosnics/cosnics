@@ -1,4 +1,5 @@
-@import url('../../../feedback/resources/css/aqua/aqua.css');
+@import url('../../../Feedback/Resources/Css/Aqua/Stylesheet.css');
+@import url('tags.css');
 
 tr.recycled td { /*text-decoration:line-through;*/
 	color: #cccccc;

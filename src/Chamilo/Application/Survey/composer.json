@@ -10,7 +10,7 @@
             "email": "eduard.vossen@ehb.be"
         }
     ],
-    "type": "chamilo-package",
+    
     "require": {
         "php": ">=5.4.0",
         "phpoffice/phpexcel" : "=1.8.0"

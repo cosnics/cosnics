@@ -12,8 +12,7 @@
         "mrclay/minify" : "=2.2.0",
         "danielstjules/stringy" : "1.*",
         "ensepar/html2pdf" : "=1.0.1",
-        "phpoffice/phpexcel" : "=1.8.0",
-        "ckeditor/ckeditor": "full/4.4.*"
+        "phpoffice/phpexcel" : "=1.8.0"
     },
     "require-dev" : {
         "fabpot/php-cs-fixer" : "1.*"
@@ -30,7 +29,5 @@
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
         }
-    ],
-    "type": "chamilo-package",
-    "minimum-stability" : "stable"
+    ]
 }
