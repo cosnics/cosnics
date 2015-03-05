@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\File\Path;
 
 class UpgraderComponent extends Manager implements NoAuthenticationSupport
 {
@@ -58,7 +59,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
         }
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            'Chamilo/Core/Lynx/Resources/Javascript/LynxProcess.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Lynx', true) . 'LynxProcess.js');
 
         $html[] = Display :: footer();
 

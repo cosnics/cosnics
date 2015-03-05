@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -239,9 +237,8 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js');
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.elementfinder.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.elementfinder.js');
         $html[] = '<script type="text/javascript">';
 
         $exclude_ids = array();

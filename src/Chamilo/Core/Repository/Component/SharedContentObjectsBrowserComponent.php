@@ -82,8 +82,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $html[] = $this->action_bar->as_html();
         $html[] = $output;
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\\', true) .
-                 'Resources/Javascript/Repository.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
 
         $html[] = $this->render_footer();
 
@@ -176,7 +175,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $retrieve_types = array(RepositoryRights :: TYPE_USER_CONTENT_OBJECT);
 
         $shared_locations_by_type = RepositoryRights :: get_instance()->get_location_overview_with_rights_granted(
-            ClassnameUtilities::getInstance()->getNamespaceParent(self :: context(), 1),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(self :: context(), 1),
             Session :: get_user_id(),
             $entities,
             null,

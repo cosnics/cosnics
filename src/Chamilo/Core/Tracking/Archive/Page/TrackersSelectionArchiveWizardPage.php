@@ -63,10 +63,6 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
                 'UnselectAll',
                 null,
                 Utilities :: COMMON_LIBRARIES) . '</div>');
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) . 'common/javascript/checkboxes.js'));
 
         while ($event = $events->next_result())
         {

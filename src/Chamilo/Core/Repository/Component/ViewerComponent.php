@@ -172,8 +172,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $version_tab_content = array();
                 $version_tab_content[] = $version_browser->as_html();
                 $version_tab_content[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\\', true) .
-                         'Resources/Javascript/Repository.js');
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
                 $this->tabs->add_tab(
                     new DynamicContentTab(
                         'versions',

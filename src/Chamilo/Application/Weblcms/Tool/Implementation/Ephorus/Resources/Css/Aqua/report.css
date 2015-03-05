@@ -248,3 +248,11 @@ a {
 	border-right-width: 1px;
 	border-right-style: Solid;
 }
+
+.button_print {
+	text-decoration: none;
+	font-weight: bold;
+	color: #4171B5;
+	outline: none;
+	padding-bottom: 20px;
+}

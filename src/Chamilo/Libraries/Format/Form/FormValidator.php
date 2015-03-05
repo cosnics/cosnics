@@ -187,8 +187,8 @@ class FormValidator extends HTML_QuickForm
 
         $this->addElement(
             'html',
-            '<script type="text/javascript" src="' . Path :: getInstance()->getConfigurationPath(true) .
-                 'Resources/Javascript/Reset.js"></script>');
+            '<script type="text/javascript" src="' .
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'Reset.js"></script>');
 
         // Modify the default templates
         $this->renderer = $this->defaultRenderer();
@@ -657,7 +657,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');

@@ -20,7 +20,7 @@ class ExternalObjectForm extends FormValidator
     public function __construct($action, $bitbucket)
     {
         parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-        
+
         $this->bitbucket = $bitbucket;
         $this->build();
     }
@@ -32,16 +32,16 @@ class ExternalObjectForm extends FormValidator
         $this->addElement('textarea', 'description', Translation :: get('Description'));
         $this->addElement('text', 'website', Translation :: get('Website'));
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: get_common_extensions_path(true) .
-                     'external_repository_manager/implementation/bitbucket/resources/javascript/privilege_granting_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+                     'PrivilegeGrantingForm.js'));
     }
 
     public function create_repository()
@@ -59,13 +59,13 @@ class ExternalObjectForm extends FormValidator
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-        
+
         $defaults[ExternalObject :: PROPERTY_ID] = $external_repository_object->get_id();
         $defaults[ExternalObject :: PROPERTY_TITLE] = $external_repository_object->get_title();
         $defaults[ExternalObject :: PROPERTY_DESCRIPTION] = html_entity_decode(
             $external_repository_object->get_description());
         $defaults[ExternalObject :: PROPERTY_WEBSITE] = $external_repository_object->get_website();
-        
+
         parent :: setDefaults($defaults);
     }
 }

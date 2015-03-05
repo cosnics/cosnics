@@ -236,8 +236,9 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         $this->addElement(
             'html',
-            '<script type="text/javascript" src="' . Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
-                 'resources/javascript/visibility.js' . '"></script>');
+            '<script type="text/javascript" src="' .
+                 Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\Publication', true) .
+                 'Visibility.js' . '"></script>');
 
         $this->setDefaultAction('next');
     }

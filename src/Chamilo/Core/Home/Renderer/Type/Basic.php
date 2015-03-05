@@ -301,8 +301,7 @@ class Basic extends Renderer
         if ($user instanceof User && ($user_home_allowed || ($user->is_platform_admin() && $general_mode)))
         {
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Home', true) .
-                 'Resources/Javascript/HomeAjax.js' . '"></script>';
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
 
         return implode(PHP_EOL, $html);

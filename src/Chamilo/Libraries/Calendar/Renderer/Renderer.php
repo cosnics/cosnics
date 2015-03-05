@@ -27,7 +27,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 abstract class Renderer
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Parameters
     const PARAM_TIME = 'time';
@@ -225,7 +225,7 @@ abstract class Renderer
                 $result[] = '</script>';
 
                 $result[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/highlight.js');
+                    Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
             }
 
             if (count($this->legend) > 0 && $visible_sources == 0)
