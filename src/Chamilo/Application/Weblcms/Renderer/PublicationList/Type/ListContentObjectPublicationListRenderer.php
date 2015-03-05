@@ -303,13 +303,13 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_prev') .
+            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Prev') .
                  '"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_next') .
+            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Next') .
                  '"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_first') .
+            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/First') .
                  '"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_last') .
+            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Last') .
                  '"  style="vertical-align: middle;"/>';
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';

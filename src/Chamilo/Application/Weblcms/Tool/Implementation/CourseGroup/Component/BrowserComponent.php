@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url($param_show_all),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -153,7 +153,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Create'),
-                    Theme :: getInstance()->getCommonImagePath('action_create'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'),
                     $this->get_url($param_add_course_group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -163,7 +163,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_introduce'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Introduce'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
@@ -175,7 +175,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ViewSubscriptions'),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
                         $param_subscriptions_overview,
                         array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP)),

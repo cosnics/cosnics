@@ -379,7 +379,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 {
                     $html[] = '<div style="float:left;">';
 
-                    $icon = Theme :: getInstance()->getCommonImagePath('action_home');
+                    $icon = Theme :: getInstance()->getCommonImagePath('Action/Home');
                     $url = $this->get_course_url($course);
 
                     $course_access = $course_settings_controller->get_course_setting(
@@ -390,7 +390,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if ($course_closed && ! $course_admin)
                     {
-                        $icon = Theme :: getInstance()->getCommonImagePath('action_lock');
+                        $icon = Theme :: getInstance()->getCommonImagePath('Action/Lock');
                         $url = null;
                     }
 

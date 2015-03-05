@@ -14,9 +14,8 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: admin_request_browser_table_cell_renderer.class.php 218 2009-11-13
- * 14:21:26Z kariboe $
- * 
+ * $Id: admin_request_browser_table_cell_renderer.class.php 218 2009-11-13 14:21:26Z kariboe $
+ *
  * @package application.lib.weblcms.weblcms_manager.component.admin_request_browser
  */
 /**
@@ -27,13 +26,13 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
 
     /**
      * Constructor
-     * 
+     *
      * @param $browser WeblcmsBrowserComponent
      */
     /*
      * function __construct($browser) { parent :: __construct($browser); }
      */
-    
+
     // Inherited
     public function render_cell($column, $request)
     {
@@ -41,11 +40,11 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
         {
             return $this->get_modification_links($request);
         }
-        
+
         // Add special features here
         switch ($column->get_name())
         {
-            
+
             case CommonRequest :: PROPERTY_MOTIVATION :
                 $motivation = strip_tags(parent :: render_cell($column, $request));
                 if (strlen($motivation) > 175)
@@ -55,20 +54,20 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 return $motivation;
             case AdminRequestTableColumnModel :: USER_NAME :
                 return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                     $request->get_user_id())->get_fullname();
-            
+
             case AdminRequestTableColumnModel :: COURSE_NAME :
                 return DataManager :: retrieve_by_id(Course :: class_name(), $request->get_course_id())->get_title();
             case CommonRequest :: PROPERTY_SUBJECT :
                 return $request->get_subject();
-            
+
             case CommonRequest :: PROPERTY_MOTIVATION :
                 return $request->get_motivation();
-            
+
             case CommonRequest :: PROPERTY_CREATION_DATE :
                 return DatetimeUtilities :: format_locale_date(null, $request->get_creation_date());
-            
+
             case CommonRequest :: PROPERTY_DECISION_DATE :
                 if ($request->get_decision_date() != null)
                 {
@@ -85,55 +84,55 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
     public function get_actions($request)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         $check_item = $request->get_decision();
-        
+
         if ($check_item != CommonRequest :: ALLOWED_DECISION)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_confirm'), 
+                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Confirm'),
                     $this->browser->get_course_request_allowing_url(
-                        $request, 
-                        $this->browser->get_request_type(), 
-                        $this->browser->get_request_view()), 
+                        $request,
+                        $this->browser->get_request_type(),
+                        $this->browser->get_request_view()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         if ($check_item == CommonRequest :: NO_DECISION)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_refuse'), 
+                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Refuse'),
                     $this->browser->get_course_request_refuse_url(
-                        $request, 
-                        $this->browser->get_request_type(), 
-                        $this->browser->get_request_view()), 
+                        $request,
+                        $this->browser->get_request_type(),
+                        $this->browser->get_request_view()),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Ddelete'),
                 $this->browser->get_course_request_deleting_url(
-                    $request, 
-                    $this->browser->get_request_type(), 
-                    $this->browser->get_request_view()), 
-                ToolbarItem :: DISPLAY_ICON, 
+                    $request,
+                    $this->browser->get_request_type(),
+                    $this->browser->get_request_view()),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_view'), 
+                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/View'),
                 $this->browser->get_course_request_viewing_url(
-                    $request, 
-                    $this->browser->get_request_type(), 
-                    $this->browser->get_request_view()), 
+                    $request,
+                    $this->browser->get_request_type(),
+                    $this->browser->get_request_view()),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

@@ -70,7 +70,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
