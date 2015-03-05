@@ -73,9 +73,9 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = '<div id="tool_bar_hide_container" class="hide">';
         $html[] = '<a id="tool_bar_hide" href="#"><img src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_action_bar_right_hide')) . '" /></a>';
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/ActionBar/RightHide')) . '" /></a>';
         $html[] = '<a id="tool_bar_show" href="#"><img src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_action_bar_right_show')) . '" /></a>';
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/ActionBar/RightShow')) . '" /></a>';
         $html[] = '</div>';
 
         $html[] = '<div class="tool_menu">';
@@ -154,7 +154,7 @@ class HomeComponent extends Manager implements DelegateComponent
         if ($count_direct)
         {
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_create')) .
+                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
                  ')"><a style="top: -3px; position: relative;" href="' .
                  htmlspecialchars(
                     $this->get_url(
@@ -167,7 +167,7 @@ class HomeComponent extends Manager implements DelegateComponent
         if ($count_request)
         {
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_create')) .
+                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
                  ')"><a style="top: -3px; position: relative;" href="' .
                  htmlspecialchars(
                     $this->get_url(
@@ -180,7 +180,7 @@ class HomeComponent extends Manager implements DelegateComponent
         if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
         {
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_browser')) .
+                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
                  ')"><a style="top: -3px; position: relative;" href="' .
                  htmlspecialchars($this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))) . '">' . htmlspecialchars(
                     Translation :: get('RequestList')) . '</a></li>';
@@ -193,7 +193,7 @@ class HomeComponent extends Manager implements DelegateComponent
     {
         $html = array();
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_reset')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Reset')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))) . '">' .
              htmlspecialchars(Translation :: get('SortMyCourses')) . '</a></li>';
@@ -201,7 +201,7 @@ class HomeComponent extends Manager implements DelegateComponent
         if (PlatformSetting :: get('show_subscribe_button_on_course_home', __NAMESPACE__))
         {
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_subscribe')) . ')">' .
+                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Subscribe')) . ')">' .
                  '<a style="top: -3px; position: relative;" href="' .
                  htmlspecialchars(
                     $this->get_url(
@@ -210,7 +210,7 @@ class HomeComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES))) .
                  '">' . htmlspecialchars(Translation :: get('CourseSubscribe')) . '</a></li>';
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_unsubscribe')) .
+                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe')) .
                  ')"><a style="top: -3px; position: relative;" href="' .
                  htmlspecialchars(
                     $this->get_url(
@@ -227,7 +227,7 @@ class HomeComponent extends Manager implements DelegateComponent
     {
         $html = array();
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_create')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
              ')"><a style="top: -3px; position: relative;" href="' .
              htmlspecialchars(
                 $this->get_url(
@@ -236,41 +236,41 @@ class HomeComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE))) .
              '">' . htmlspecialchars(Translation :: get('CourseCreate')) . '</a></li>';
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_browser')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER))) . '">' .
              htmlspecialchars(Translation :: get('CourseList')) . '</a></li>';
 
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_browser')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))) . '">' .
              htmlspecialchars(Translation :: get('RequestList')) . '</a></li>';
 
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_browser')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER))) . '">' .
              htmlspecialchars(Translation :: get('UserRequestList')) . '</a></li>';
 
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_move')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Move')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER))) . '">' .
              htmlspecialchars(Translation :: get('CourseCategoryManagement')) . '</a></li>';
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_add')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES))) . '">' .
              htmlspecialchars(Translation :: get('ImportCourseCSV')) . '</a></li>';
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_add')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS))) . '">' .
              htmlspecialchars(Translation :: get('ImportUsersForCourseCSV')) . '</a></li>';
 
         $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_add')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
              ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REPORTING))) . '">' .
              htmlspecialchars(Translation :: get('Reporting')) . '</a></li>';
@@ -282,9 +282,9 @@ class HomeComponent extends Manager implements DelegateComponent
         $offset, $count)
     {
         return '<a href="#" class="closeEl"><img class="visible" src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_visible')) .
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Visible')) .
              '"/><img class="invisible" style="display: none;" src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_invisible')) . '" /></a>';
+             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Invisible')) . '" /></a>';
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

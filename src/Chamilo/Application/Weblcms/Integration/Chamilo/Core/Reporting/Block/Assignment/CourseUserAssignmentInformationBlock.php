@@ -63,7 +63,7 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
 
         $feedback_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
         $pub_submissions = array();

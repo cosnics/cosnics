@@ -26,7 +26,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
 
         $actions[] = new ToolbarItem(
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_publish'),
+            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
             $link);
 
         $parameters = array();
@@ -36,7 +36,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
 
         $actions[] = new ToolbarItem(
             Translation :: get('ImportIcal'),
-            Theme :: getInstance()->getCommonImagePath('action_import'),
+            Theme :: getInstance()->getCommonImagePath('Action/Import'),
             $link);
 
         return $actions;

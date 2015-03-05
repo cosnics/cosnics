@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_PARTICIPATE,
                 Translation :: get('Participate'),
-                Theme :: getInstance()->getCommonImagePath('action_next'),
+                Theme :: getInstance()->getCommonImagePath('Action/Next'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_PARTICIPATE));
 
@@ -88,7 +88,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_EXPORT,
                 Translation :: get('ExportResults'),
-                Theme :: getInstance()->getCommonImagePath('action_export'),
+                Theme :: getInstance()->getCommonImagePath('Action/Export'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_EXPORT));
 
@@ -97,7 +97,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_REPORT,
                 Translation :: get('Reporting'),
-                Theme :: getInstance()->getCommonImagePath('action_view_results'),
+                Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_REPORT));
 
@@ -122,7 +122,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_publish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_create_survey_publication_url(),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -132,7 +132,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('RightsManager', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_rights'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_application_rights_url(),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

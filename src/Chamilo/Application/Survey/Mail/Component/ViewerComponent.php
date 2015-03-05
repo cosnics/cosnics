@@ -86,7 +86,7 @@ class ViewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_MAIL_OVERVIEW,
                 Translation :: get('Overview'),
-                Theme :: getInstance()->getCommonImagePath('action_mail'),
+                Theme :: getInstance()->getCommonImagePath('Action/Mail'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_MAIL_OVERVIEW));
 
@@ -95,7 +95,7 @@ class ViewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_RECIPIENTS,
                 Translation :: get('Recipients'),
-                Theme :: getInstance()->getCommonImagePath('action_users'),
+                Theme :: getInstance()->getCommonImagePath('Action/Users'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_RECIPIENTS));
 
@@ -104,7 +104,7 @@ class ViewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_QUEUED,
                 Translation :: get('QueuedRecipients'),
-                Theme :: getInstance()->getCommonImagePath('action_users'),
+                Theme :: getInstance()->getCommonImagePath('Action/Users'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_QUEUED));
 
@@ -113,7 +113,7 @@ class ViewerComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_UNREACHED_RECIPIENTS,
                 Translation :: get('UnreachedRecipients'),
-                Theme :: getInstance()->getCommonImagePath('action_users'),
+                Theme :: getInstance()->getCommonImagePath('Action/Users'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_UNREACHED_RECIPIENTS));
 

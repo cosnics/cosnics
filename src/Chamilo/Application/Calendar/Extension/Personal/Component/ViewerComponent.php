@@ -245,7 +245,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $this->action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ExportIcal'),
-                    Theme :: getInstance()->getCommonImagePath('export_csv'),
+                    Theme :: getInstance()->getCommonImagePath('Export/Csv'),
                     $ical_url));
 
             $user = $this->get_user();
@@ -255,12 +255,12 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $this->action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('action_edit'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                         $edit_url));
                 $this->action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         $delete_url));
             }
         }

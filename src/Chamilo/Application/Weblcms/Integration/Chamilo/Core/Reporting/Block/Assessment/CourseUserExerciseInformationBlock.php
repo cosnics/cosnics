@@ -44,7 +44,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $course_id = $this->get_course_id();
         $user_id = $this->get_user_id();
 
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
         $conditions[] = new EqualityCondition(

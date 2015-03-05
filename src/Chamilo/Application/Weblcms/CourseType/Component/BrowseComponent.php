@@ -50,8 +50,7 @@ class BrowseComponent extends Manager implements TableSupport
     }
 
     /**
-     * Breadcrumbs are built semi automatically with the given application, subapplication, component...
-     * Use this
+     * Breadcrumbs are built semi automatically with the given application, subapplication, component... Use this
      * function to add other breadcrumbs between the application / subapplication and the current component
      *
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
@@ -115,14 +114,14 @@ class BrowseComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_create_course_type_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

@@ -12,9 +12,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * This class describes the default cell renderer for the subscribed course
- * table
- * 
+ * This class describes the default cell renderer for the subscribed course table
+ *
  * @package \application\weblcms\course
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -27,10 +26,10 @@ class SubscribedCourseTableCellRenderer extends CourseTableCellRenderer
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param $course Course
      *
      * @return String
@@ -38,28 +37,28 @@ class SubscribedCourseTableCellRenderer extends CourseTableCellRenderer
     public function get_actions($course)
     {
         if (DataManager :: is_user_direct_subscribed_to_course(
-            $this->get_component()->get_user_id(), 
+            $this->get_component()->get_user_id(),
             $course[Course :: PROPERTY_ID]) && CourseManagementRights :: get_instance()->is_allowed(
-            CourseManagementRights :: DIRECT_UNSUBSCRIBE_RIGHT, 
+            CourseManagementRights :: DIRECT_UNSUBSCRIBE_RIGHT,
             $course[Course :: PROPERTY_ID]) &&
              ! $this->is_subscribed_as_course_admin($course[Course :: PROPERTY_ID], $this->get_component()->get_user()))
         {
             $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Unsubscribe', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
-                    $this->get_component()->get_unsubscribe_from_course_url($course[Course :: PROPERTY_ID]), 
+                    Translation :: get('Unsubscribe', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    $this->get_component()->get_unsubscribe_from_course_url($course[Course :: PROPERTY_ID]),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             return $toolbar->as_html();
         }
     }
 
     /**
      * Checks whether the current user is subscribed as course admin of the given course
-     * 
+     *
      * @param int $course_id
      * @param User $user
      *

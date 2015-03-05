@@ -43,7 +43,7 @@ class AssignmentBlock extends CourseBlock
         $tool = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(Assignment :: class_name(), true);
         $submissions_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission();
         $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_statistics') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Statistics') . '" title="' .
              Translation :: get('Details') . '" />';
         $count = 1;
 

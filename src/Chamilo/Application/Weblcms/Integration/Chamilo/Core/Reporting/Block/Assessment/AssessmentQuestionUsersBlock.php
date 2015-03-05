@@ -33,7 +33,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_QUESTION);
         $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item($question_id);
 
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
         $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_users(

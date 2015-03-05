@@ -125,7 +125,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -135,14 +135,14 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ManageRights', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_rights'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_publication_rights_url($this->survey_publication),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('SubscribeEmails'),
-                    Theme :: getInstance()->getCommonImagePath('export_excel'),
+                    Theme :: getInstance()->getCommonImagePath('Export/Excel'),
                     $this->get_subscribe_email_url($this->pid),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -152,7 +152,7 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('MailManager'),
-                    Theme :: getInstance()->getCommonImagePath('action_invite_users'),
+                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'),
                     $this->get_mail_survey_participant_url($this->survey_publication),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }

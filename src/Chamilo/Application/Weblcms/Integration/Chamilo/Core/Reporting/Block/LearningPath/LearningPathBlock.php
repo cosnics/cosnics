@@ -40,7 +40,7 @@ class LearningPathBlock extends CourseBlock
 
         $course_id = $this->get_course_id();
         $tool = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name(), true);
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
         $count = 1;
 

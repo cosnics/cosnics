@@ -66,7 +66,7 @@ class ToolPublicationsBlock extends ToolBlock
             ContentObjectPublication :: class_name(),
             $condition);
 
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
         $index = 1;

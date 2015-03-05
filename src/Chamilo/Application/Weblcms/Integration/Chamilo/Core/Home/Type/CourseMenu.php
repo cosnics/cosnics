@@ -11,8 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\SimpleTemplate;
 
 /**
- * Block that displays main course's actions available in the main course menu.
- * That is create course,
+ * Block that displays main course's actions available in the main course menu. That is create course,
  * register/unregister to course, etc. Do not display less common actions such as manage categories.
  *
  * @copyright (c) 2011 University of Geneva
@@ -40,7 +39,8 @@ class CourseMenu extends Block
         $target = $this->get_link_target();
 
         $template = '<li class="tool_list_menu" style="background-image: url({$IMG})">
-        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target . '">{$TEXT}</a></li>';
+        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target .
+             '">{$TEXT}</a></li>';
 
         $ADMIN_MENU = $this->display_admin_menu($template);
         $USER_MENU = SimpleTemplate :: all($template, $this->get_edit_course_menu());
@@ -114,7 +114,7 @@ class CourseMenu extends Block
                 array(
                     \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE));
             $TEXT = htmlspecialchars(Translation :: get('CourseCreate'));
-            $IMG = Theme :: getInstance()->getCommonImagePath('action_create');
+            $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
             $result[] = compact('HREF', 'TEXT', 'IMG');
         }
 
@@ -127,7 +127,7 @@ class CourseMenu extends Block
                     \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE));
 
             $TEXT = htmlspecialchars(Translation :: get('CourseRequest'));
-            $IMG = Theme :: getInstance()->getCommonImagePath('action_create');
+            $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
             $result[] = compact('HREF', 'TEXT', 'IMG');
         }
 
@@ -144,7 +144,7 @@ class CourseMenu extends Block
                 \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES));
 
         $TEXT = htmlspecialchars(Translation :: get('CourseSubscribe'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_subscribe');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Subscribe');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         $HREF = $this->get_course_action_url(
@@ -153,7 +153,7 @@ class CourseMenu extends Block
                 \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_SUBSCRIBED_COURSES));
 
         $TEXT = htmlspecialchars(Translation :: get('CourseUnsubscribe'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_unsubscribe');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         return $result;
@@ -168,24 +168,24 @@ class CourseMenu extends Block
             array(
                 \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE));
         $TEXT = htmlspecialchars(Translation :: get('CourseCreate'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_create');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         $HREF = $this->get_course_action_url(\Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER);
         $TEXT = htmlspecialchars(Translation :: get('CourseList'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_browser');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         $HREF = $this->get_course_action_url(\Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_REQUEST_BROWSER);
         $TEXT = htmlspecialchars(
             Translation :: get('UserRequestList', null, \Chamilo\Application\Weblcms\Manager :: context()));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_browser');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         $HREF = $this->get_course_action_url(\Chamilo\Application\Weblcms\Manager :: ACTION_REQUEST);
         $TEXT = htmlspecialchars(
             Translation :: get('RequestList', null, \Chamilo\Application\Weblcms\Manager :: context()));
-        $IMG = Theme :: getInstance()->getCommonImagePath('action_browser');
+        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         return $result;

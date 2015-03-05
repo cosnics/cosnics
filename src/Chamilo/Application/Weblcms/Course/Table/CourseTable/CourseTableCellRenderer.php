@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class describes the default cell renderer for the course table
- * 
+ *
  * @package \application\weblcms\course
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -27,10 +27,10 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Renders a cell for a given object
-     * 
+     *
      * @param $column \libraries\ObjectTableColumn
      *
      * @param mixed $course
@@ -49,11 +49,11 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
                         {
                             case Course :: PROPERTY_TITLE :
                                 $course_title = parent :: render_cell($column, $course);
-                                
+
                                 return $course_title;
                             case Course :: PROPERTY_TITULAR_ID :
                                 return \Chamilo\Core\User\Storage\DataManager :: get_fullname_from_user(
-                                    $course[Course :: PROPERTY_TITULAR_ID], 
+                                    $course[Course :: PROPERTY_TITULAR_ID],
                                     Translation :: get('TitularUnknown'));
                         }
                         break;
@@ -68,13 +68,13 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
                     }
             }
         }
-        
+
         return parent :: render_cell($column, $course);
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $course
      *
      * @return String
@@ -82,29 +82,29 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
     public function get_actions($course)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('ViewCourseHome'), 
-                Theme :: getInstance()->getCommonImagePath('action_home'), 
-                $this->get_component()->get_view_course_home_url($course[Course :: PROPERTY_ID]), 
+                Translation :: get('ViewCourseHome'),
+                Theme :: getInstance()->getCommonImagePath('Action/Home'),
+                $this->get_component()->get_view_course_home_url($course[Course :: PROPERTY_ID]),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_edit'), 
-                $this->get_component()->get_update_course_url($course[Course :: PROPERTY_ID]), 
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                $this->get_component()->get_update_course_url($course[Course :: PROPERTY_ID]),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
-                $this->get_component()->get_delete_course_url($course[Course :: PROPERTY_ID]), 
-                ToolbarItem :: DISPLAY_ICON, 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                $this->get_component()->get_delete_course_url($course[Course :: PROPERTY_ID]),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         return $toolbar->as_html();
     }
 }

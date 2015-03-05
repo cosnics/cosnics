@@ -15,8 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Umbrella class for WeblcmsAssignmentCourseGroupsReportingBlock and WeblcmsAssignmentPlatformGroupsReportingBlock
- * containing all common code.
- * Implementation specific methods are declared abstract.
+ * containing all common code. Implementation specific methods are declared abstract.
  *
  * @author Anthony Hurst (Hogeschool Gent)
  */
@@ -84,7 +83,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
         $submitters = $this->get_submitters();
 
         $this->get_submitters_data();
-        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_statistics') . '" title="' .
+        $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Statistics') . '" title="' .
              Translation :: get('Details') . '" />';
         $count = 0;
 

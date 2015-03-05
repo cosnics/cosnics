@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_MAILS_TO_EXPORTERS,
                 Translation :: get('MailsToExporters'),
-                Theme :: getInstance()->getCommonImagePath('action_export'),
+                Theme :: getInstance()->getCommonImagePath('Action/Export'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_MAILS_TO_EXPORTERS));
 
@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicVisualTab(
                 self :: TAB_MAILS_TO_REPORTERS,
                 Translation :: get('MailsToReporters'),
-                Theme :: getInstance()->getCommonImagePath('action_view_results'),
+                Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
                 $this->get_url($params),
                 $this->get_table_type() == self :: TAB_MAILS_TO_REPORTERS));
 
@@ -147,19 +147,19 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SendMailToParticipants'),
-                    Theme :: getInstance()->getCommonImagePath('action_invite_users'),
+                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'),
                     $this->get_send_mail_url($this->publication_id, Mail :: PARTICIPANT_TYPE),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SendMailToExporters'),
-                    Theme :: getInstance()->getCommonImagePath('action_invite_users'),
+                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'),
                     $this->get_send_mail_url($this->publication_id, Mail :: EXPORT_TYPE),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SendMailToReporters'),
-                    Theme :: getInstance()->getCommonImagePath('action_invite_users'),
+                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'),
                     $this->get_send_mail_url($this->publication_id, Mail :: REPORTING_TYPE),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -169,7 +169,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('SendTestMail'),
-                    Theme :: getInstance()->getCommonImagePath('action_invite_users'),
+                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => Manager :: ACTION_TEST_MAIL,

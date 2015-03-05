@@ -24,7 +24,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 // $title = Survey :: parse($this->get_component()->get_user_id(), null, $title);
                 $url = '<a href="' . htmlentities($this->get_component()->get_browse_survey_participants_url($object)) .
                      '" title="' . $title . '">' . $title . '</a>';
-                
+
                 switch ($this->get_component()->get_table_type())
                 {
                     case BrowserComponent :: TAB_PARTICIPATE :
@@ -39,19 +39,19 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                             $url = $title;
                         }
                         break;
-                    
+
                     case BrowserComponent :: TAB_EXPORT :
                         $url = '<a href="' .
                              htmlentities($this->get_component()->get_survey_publication_export_excel_url($object)) .
                              '" title="' . $title . '">' . $title . '</a>';
                         break;
-                    
+
                     case BrowserComponent :: TAB_REPORT :
                         $url = '<a href="' .
                              htmlentities($this->get_component()->get_reporting_survey_publication_url($object)) .
                              '" title="' . $title . '">' . $title . '</a>';
                         break;
-                    
+
                     case BrowserComponent :: TAB_MY_PUBLICATIONS :
                         $url = '<a href="' .
                              htmlentities($this->get_component()->get_browse_survey_participants_url($object)) .
@@ -66,17 +66,17 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 return $this->get_date($object->get_to_date());
                 break;
         }
-        
+
         return parent :: render_cell($column, $object);
     }
 
     public function get_actions($object)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         switch ($this->get_component()->get_table_type())
         {
-            
+
             case BrowserComponent :: TAB_PARTICIPATE :
                 if (Rights :: get_instance()->is_right_granted(Rights :: PARTICIPATE_RIGHT, $object->get_id()))
                 {
@@ -84,80 +84,80 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                     {
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation :: get('TakeSurvey'), 
-                                Theme :: getInstance()->getCommonImagePath('action_next'), 
-                                $this->get_component()->get_survey_publication_taker_url($object), 
+                                Translation :: get('TakeSurvey'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Next'),
+                                $this->get_component()->get_survey_publication_taker_url($object),
                                 ToolbarItem :: DISPLAY_ICON));
                     }
                     else
                     {
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation :: get('TakeSurvey'), 
-                                Theme :: getInstance()->getCommonImagePath('action_next_na'), 
-                                null, 
+                                Translation :: get('TakeSurvey'),
+                                Theme :: getInstance()->getCommonImagePath('Action/NextNa'),
+                                null,
                                 ToolbarItem :: DISPLAY_ICON));
                     }
                 }
-                
+
                 break;
-            
+
             case BrowserComponent :: TAB_EXPORT :
                 if (Rights :: get_instance()->is_right_granted(Rights :: RIGHT_EXPORT_RESULT, $object->get_id()))
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('ExportToExcel', array(), reporting), 
-                            Theme :: getInstance()->getCommonImagePath('export_excel'), 
-                            $this->get_component()->get_survey_publication_export_excel_url($object), 
+                            Translation :: get('ExportToExcel', array(), reporting),
+                            Theme :: getInstance()->getCommonImagePath('Export/Excel'),
+                            $this->get_component()->get_survey_publication_export_excel_url($object),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 break;
-            
+
             case BrowserComponent :: TAB_REPORT :
                 if (Rights :: get_instance()->is_right_granted(Rights :: RIGHT_REPORTING, $object->get_id()))
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('ViewReport', array(), reporting), 
-                            Theme :: getInstance()->getCommonImagePath('action_view_results'), 
-                            $this->get_component()->get_reporting_survey_publication_url($object), 
+                            Translation :: get('ViewReport', array(), reporting),
+                            Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
+                            $this->get_component()->get_reporting_survey_publication_url($object),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 break;
-            
+
             case BrowserComponent :: TAB_MY_PUBLICATIONS :
                 if (Rights :: get_instance()->is_right_granted(Rights :: RIGHT_EDIT, $object->get_id()))
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('action_edit'), 
-                            $this->get_component()->get_update_survey_publication_url($object), 
+                            Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                            $this->get_component()->get_update_survey_publication_url($object),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 if (Rights :: get_instance()->is_right_granted(Rights :: RIGHT_DELETE, $object->get_id()))
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('action_delete'), 
-                            $this->get_component()->get_delete_survey_publication_url($object), 
-                            ToolbarItem :: DISPLAY_ICON, 
+                            Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                            $this->get_component()->get_delete_survey_publication_url($object),
+                            ToolbarItem :: DISPLAY_ICON,
                             true));
                 }
                 if (Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $object->get_id()))
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('ViewParticipants'), 
-                            Theme :: getInstance()->getCommonImagePath('action_subscribe'), 
-                            $this->get_component()->get_browse_survey_participants_url($object), 
+                            Translation :: get('ViewParticipants'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
+                            $this->get_component()->get_browse_survey_participants_url($object),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 break;
         }
-        
+
         return $toolbar->as_html();
     }
 

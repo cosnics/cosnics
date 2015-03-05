@@ -50,7 +50,7 @@ class AssessmentUsersBlock extends AssessmentBlock
 
             if ($user_attempts[$user->get_id()]['count'] > 0)
             {
-                $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('action_reporting') . '" title="' .
+                $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
                      Translation :: get('Details') . '" />';
 
                 $params = $this->get_parent()->get_parameters();

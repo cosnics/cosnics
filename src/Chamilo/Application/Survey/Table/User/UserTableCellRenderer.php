@@ -19,7 +19,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             case User :: PROPERTY_EMAIL :
                 return '<a href="mailto:' . $user->get_email() . '">' . $user->get_email() . '</a><br/>';
         }
-        
+
         return parent :: render_cell($column, $user);
     }
 
@@ -28,21 +28,21 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('ViewSurvey'), 
-                Theme :: getInstance()->getCommonImagePath('action_next'), 
+                Translation :: get('ViewSurvey'),
+                Theme :: getInstance()->getCommonImagePath('Action/Next'),
                 $this->get_component()->get_survey_invitee_publication_viewer_url(
-                    $this->get_component()->get_publication_id(), 
-                    $user->get_id()), 
+                    $this->get_component()->get_publication_id(),
+                    $user->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('CancelInvitation'), 
-                Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
+                Translation :: get('CancelInvitation'),
+                Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                 $this->get_component()->get_survey_cancel_invitation_url(
-                    $this->get_component()->get_publication_id(), 
-                    $user->get_id()), 
+                    $this->get_component()->get_publication_id(),
+                    $user->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

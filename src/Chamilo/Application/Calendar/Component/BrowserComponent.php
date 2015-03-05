@@ -231,13 +231,13 @@ class BrowserComponent extends Manager implements DelegateComponent,
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_edit'),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                 $this->get_publication_editing_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_delete'),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_publication_deleting_url($event->get_id()),
                 ToolbarItem :: DISPLAY_ICON,
                 true);
