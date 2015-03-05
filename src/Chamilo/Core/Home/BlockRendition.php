@@ -295,7 +295,7 @@ class BlockRendition
                 $delete_text = Translation :: get('Delete');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_deleting_link($this->get_block_info())) .
                      '" class="deleteEl" title="' . $delete_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_delete')) .
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Delete')) .
                      '" alt="' . $delete_text . '" title="' . $delete_text . '"/></a>';
             }
 
@@ -304,7 +304,7 @@ class BlockRendition
                 $configure_text = Translation :: get('Configure');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_configuring_link($this->get_block_info())) .
                      '" class="configEl" title="' . $configure_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_config')) .
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Config')) .
                      '" alt="' . $configure_text . '" title="' . $configure_text . '"/></a>';
             }
 
@@ -313,7 +313,7 @@ class BlockRendition
                 $edit_text = Translation :: get('Edit');
                 $html[] = '<a href="' . htmlspecialchars($this->get_block_editing_link($this->get_block_info())) .
                      '" class="editEl" title="' . $edit_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_edit')) .
+                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Edit')) .
                      '" alt="' . $edit_text . '" title="' . $edit_text . '"/></a>';
             }
 
@@ -324,18 +324,18 @@ class BlockRendition
                      '" class="closeEl" title="' . $toggle_visibility_text . '">';
                 $html[] = '<img class="visible"' .
                      ($this->get_block_info()->is_visible() ? '' : ' style="display: none;"') . ' src="' .
-                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_visible')) . '" alt="' .
+                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Visible')) . '" alt="' .
                      $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/>';
                 $html[] = '<img class="invisible"' .
                      ($this->get_block_info()->is_visible() ? ' style="display: none;"' : '') . ' src="' .
-                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_invisible')) . '" alt="' .
+                     htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Invisible')) . '" alt="' .
                      $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/></a>';
             }
 
             $drag_text = Translation :: get('Drag');
             $html[] = '<a href="#" id="drag_block_' . $this->get_block_info()->get_id() . '" class="dragEl" title="' .
                  $drag_text . '">';
-            $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_drag')) .
+            $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Drag')) .
                  '" alt="' . $drag_text . '" title="' . $drag_text . '"/></a>';
         }
 

@@ -193,7 +193,7 @@ class Basic extends Html
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ExportToExcel'),
-                Theme :: getInstance()->getCommonImagePath('export_excel'),
+                Theme :: getInstance()->getCommonImagePath('Export/Excel'),
                 $this->get_context()->get_url($parameters)));
 
         return $action_bar;

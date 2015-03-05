@@ -23,8 +23,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  */
 
 /**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
+ * A user manager provides some functionalities to the admin to manage his users. For each functionality a component is
  * available.
  */
 abstract class Manager extends Application
@@ -64,7 +63,7 @@ abstract class Manager extends Application
         {
             return new ToolbarItem(
                 Translation :: get('Help'),
-                Theme :: getInstance()->getCommonImagePath('action_help'),
+                Theme :: getInstance()->getCommonImagePath('Action/Help'),
                 $help_item ? $help_item->get_url() : '',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,

@@ -95,13 +95,13 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(array('category' => Request :: get('category'))),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageCategories'),
-                    Theme :: getInstance()->getCommonImagePath('action_category'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Category'),
                     $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -116,7 +116,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         Translation :: get(
                             'CreateObjectType',
                             array('TYPE' => $template_registration->get_template()->translate('TypeName'))),
-                        Theme :: getInstance()->getCommonImagePath('action_create'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
                         $this->get_url(
                             array(
                                 Application :: PARAM_ACTION => self :: ACTION_CREATE_CONTENT_OBJECTS,
@@ -146,7 +146,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ExportCategory'),
-                    Theme :: getInstance()->getCommonImagePath('action_backup'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Backup'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS,

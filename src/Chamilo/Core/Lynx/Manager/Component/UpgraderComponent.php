@@ -40,7 +40,7 @@ class UpgraderComponent extends Manager implements DelegateComponent
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('BackToPackageOVerview'),
-                Theme :: getInstance()->getCommonImagePath('action_back'),
+                Theme :: getInstance()->getCommonImagePath('Action/Back'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
 
         $html[] = $toolbar->as_html();

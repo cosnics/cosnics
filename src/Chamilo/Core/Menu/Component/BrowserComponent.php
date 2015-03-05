@@ -95,7 +95,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_rights'),
+                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

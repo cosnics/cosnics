@@ -93,7 +93,7 @@ class BrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(Manager :: PARAM_HELP_ITEM => $this->get_help_item())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
