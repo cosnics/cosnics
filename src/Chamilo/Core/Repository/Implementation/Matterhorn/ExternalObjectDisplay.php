@@ -50,7 +50,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
         $html = array();
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath(__NAMESPACE__, true) . 'projekktor/projekktor.js');
+            Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Projekktor/projekktor.js');
 
         if ($is_thumbnail)
         {
