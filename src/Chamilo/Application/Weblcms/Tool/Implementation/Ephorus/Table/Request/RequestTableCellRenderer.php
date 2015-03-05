@@ -72,7 +72,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('ViewResult'),
-                Theme :: getInstance()->getCommonImagePath('action_reporting'),
+                Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
                 $this->get_component()->get_ephorus_request_url($object->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
 

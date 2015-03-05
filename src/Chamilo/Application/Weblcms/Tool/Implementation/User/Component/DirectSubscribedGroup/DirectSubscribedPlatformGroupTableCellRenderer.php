@@ -91,7 +91,7 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UnsubscribeGroup'),
-                        Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                         $this->get_component()->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }

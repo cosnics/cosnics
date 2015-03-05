@@ -116,7 +116,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_ALL,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath('place_users'),
+                Theme :: getInstance()->getCommonImagePath('Place/Users'),
                 $link,
                 $this->current_tab == self :: TAB_ALL));
 
@@ -130,7 +130,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_USERS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath('place_user'),
+                Theme :: getInstance()->getCommonImagePath('Place/User'),
                 $link,
                 $this->current_tab == self :: TAB_USERS));
 
@@ -144,7 +144,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             new DynamicVisualTab(
                 self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
                 $tab_name,
-                Theme :: getInstance()->getCommonImagePath('place_group'),
+                Theme :: getInstance()->getCommonImagePath('Place/Group'),
                 $link,
                 $selected));
 
@@ -417,7 +417,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ExportUserList'),
-                    Theme :: getInstance()->getCommonImagePath('action_backup'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Backup'),
                     $this->get_url($param_export_subscriptions_overview),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -427,7 +427,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $show_all_item = new ToolbarItem(
             Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_browser'),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $show_all_url,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false);

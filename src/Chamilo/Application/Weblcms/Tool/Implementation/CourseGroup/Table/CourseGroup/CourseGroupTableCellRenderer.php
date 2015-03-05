@@ -62,7 +62,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $edit_url,
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -92,7 +92,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $delete_url,
                     ToolbarItem :: DISPLAY_ICON,
                     true,
@@ -119,7 +119,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('Subscribe'),
-                            Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
                             $subscribe_url,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -134,7 +134,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Subscribe'),
-                    Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
                     $subscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -149,7 +149,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Unsubscribe'),
-                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                     $unsubscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }

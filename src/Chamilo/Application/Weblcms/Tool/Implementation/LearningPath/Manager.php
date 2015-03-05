@@ -61,7 +61,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('Statistics'),
-                        Theme :: getInstance()->getCommonImagePath('action_statistics'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_STATISTICS,
@@ -71,7 +71,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ExportRawResults'),
-                        Theme :: getInstance()->getCommonImagePath('action_export'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Export'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RAW_RESULTS,
@@ -86,7 +86,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('StatisticsNA'),
-                        Theme :: getInstance()->getCommonImagePath('action_statistics_na'),
+                        Theme :: getInstance()->getCommonImagePath('Action/StatisticsNa'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }

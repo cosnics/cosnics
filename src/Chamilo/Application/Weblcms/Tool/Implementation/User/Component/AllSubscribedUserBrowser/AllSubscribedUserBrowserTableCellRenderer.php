@@ -137,7 +137,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Details'),
-                Theme :: getInstance()->getCommonImagePath('action_details'),
+                Theme :: getInstance()->getCommonImagePath('Action/Details'),
                 $details_url,
                 ToolbarItem :: DISPLAY_ICON));
 
@@ -169,7 +169,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('DirectUnsubscribe'),
-                            Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                             $unsubscribe_url,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -178,7 +178,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('UnsubscribeNotAvailable'),
-                            Theme :: getInstance()->getCommonImagePath('action_unsubscribe_na'),
+                            Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -222,7 +222,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UnsubscribeNotAvailable'),
-                        Theme :: getInstance()->getCommonImagePath('action_unsubscribe_na'),
+                        Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -237,7 +237,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Report'),
-                    Theme :: getInstance()->getCommonImagePath('action_reporting'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
                     $reporting_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -255,7 +255,7 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('ViewAsUser'),
-                        Theme :: getInstance()->getCommonImagePath('action_login'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Login'),
                         $view_as_url,
                         ToolbarItem :: DISPLAY_ICON));
             }

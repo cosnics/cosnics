@@ -18,7 +18,7 @@ class ViewerComponent extends Manager
         {
             $tool_actions[] = new ToolbarItem(
                 Translation :: get('Test'),
-                Theme :: getInstance()->getCommonImagePath('action_import'),
+                Theme :: getInstance()->getCommonImagePath('Action/Import'),
                 '#',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL);
         }

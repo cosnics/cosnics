@@ -158,9 +158,9 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
         /*
          * $action_bar->add_common_action( new ToolbarItem( Translation :: get('AddLatestSubmissions', array(),
          * ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())), Theme ::
-         * getInstance()->getCommonImagePath('action_add'), $this->get_url( array( Tool :: PARAM_ACTION => self
-         * :: ACTION_PUBLISH_LATEST_DOCUMENTS, Tool :: PARAM_PUBLICATION_ID => $this->get_publication_id() ) ),
-         * ToolbarItem :: DISPLAY_ICON_AND_LABEL ) );
+         * getInstance()->getCommonImagePath('action_add'), $this->get_url( array( Tool :: PARAM_ACTION => self ::
+         * ACTION_PUBLISH_LATEST_DOCUMENTS, Tool :: PARAM_PUBLICATION_ID => $this->get_publication_id() ) ), ToolbarItem
+         * :: DISPLAY_ICON_AND_LABEL ) );
          */
 
         return $action_bar;

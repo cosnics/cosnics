@@ -73,7 +73,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 new DynamicVisualTab(
                     self :: TYPE_ALL,
                     Translation :: get('AllPublications'),
-                    Theme :: getInstance()->getCommonImagePath('Treemenu/shared_objects'),
+                    Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
                     $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_ALL)),
                     $type == self :: TYPE_ALL));
         }
@@ -82,7 +82,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             new DynamicVisualTab(
                 self :: TYPE_FROM_ME,
                 Translation :: get('PublishedForMe'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/shared_objects'),
+                Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
                 $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_FOR_ME)),
                 $type == self :: TYPE_FOR_ME));
 
@@ -90,7 +90,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             new DynamicVisualTab(
                 self :: TYPE_FROM_ME,
                 Translation :: get('MyPublications'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/publication'),
+                Theme :: getInstance()->getCommonImagePath('Treemenu/Publication'),
                 $this->get_url(array(self :: PARAM_PUBLICATION_TYPE => self :: TYPE_FROM_ME)),
                 $type == self :: TYPE_FROM_ME));
 
@@ -114,7 +114,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Publish', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_publish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -122,7 +122,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', array(), Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

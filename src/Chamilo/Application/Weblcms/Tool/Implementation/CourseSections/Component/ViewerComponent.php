@@ -56,13 +56,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_publish'),
+                Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_COURSE_SECTION)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         return $action_bar;

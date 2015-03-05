@@ -67,8 +67,9 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             case PublicationTableColumnModel :: COLUMN_PUBLISHED_FOR :
                 if ($publication[Publication :: PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('action_email') . '" alt=""
-                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
+                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
+                        style="vertical-align: middle;" title="' .
+                         Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
@@ -103,7 +104,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_EDIT,
@@ -113,7 +114,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,

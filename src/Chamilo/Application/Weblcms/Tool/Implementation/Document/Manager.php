@@ -78,7 +78,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Download'),
-                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD,

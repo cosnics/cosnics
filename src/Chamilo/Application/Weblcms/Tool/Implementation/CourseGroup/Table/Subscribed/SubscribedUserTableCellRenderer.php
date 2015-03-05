@@ -13,13 +13,13 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: course_group_subscribed_user_browser_table_cell_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
-class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer implements 
+class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
-    
+
     // Inherited
     public function render_cell($column, $user)
     {
@@ -46,15 +46,15 @@ class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer impleme
             $unsubscribe_url = $browser->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Unsubscribe'), 
-                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
-                    $unsubscribe_url, 
-                    ToolbarItem :: DISPLAY_ICON, 
+                    Translation :: get('Unsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    $unsubscribe_url,
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
-        
+
         $course_group = $browser->get_course_group();
-        
+
         if (! $browser->is_allowed(WeblcmsRights :: EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
              $course_group->is_member($user) && $browser->get_user()->get_id() == $user->get_id())
         {
@@ -64,12 +64,12 @@ class SubscribedUserTableCellRenderer extends DataClassTableCellRenderer impleme
             $unsubscribe_url = $browser->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Unsubscribe'), 
-                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'), 
-                    $unsubscribe_url, 
+                    Translation :: get('Unsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    $unsubscribe_url,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }
