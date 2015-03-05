@@ -12,12 +12,11 @@
         "mrclay/minify" : "=2.2.0",
         "danielstjules/stringy" : "1.*",
         "ensepar/html2pdf" : "=1.0.1",
-        "lapinator.net/ods-php-generator" : "dev-master",
         "phpoffice/phpexcel" : "=1.8.0"
     },
     "require-dev" : {
         "fabpot/php-cs-fixer" : "1.*"
-    }
+    },
     "keywords": [],
     "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
