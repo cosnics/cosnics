@@ -67,7 +67,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ViewUsers'),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

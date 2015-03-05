@@ -32,7 +32,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tool_actions = array();
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_browser'),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
@@ -41,7 +41,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_browser'),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_browser'),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
@@ -59,7 +59,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tool_actions[] = new ToolbarItem(
             Translation :: get('Download'),
-            Theme :: getInstance()->getCommonImagePath('action_save'),
+            Theme :: getInstance()->getCommonImagePath('Action/Save'),
             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ZIP_AND_DOWNLOAD)),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 

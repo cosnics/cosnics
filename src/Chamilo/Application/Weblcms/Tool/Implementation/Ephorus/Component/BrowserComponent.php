@@ -143,7 +143,7 @@ class BrowserComponent extends Manager implements TableSupport, RequestTableInte
                     'AddDocument',
                     array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())),
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url(
                     array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_PUBLISH_DOCUMENT)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));

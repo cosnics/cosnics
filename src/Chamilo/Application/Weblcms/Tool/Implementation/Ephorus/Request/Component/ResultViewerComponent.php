@@ -11,9 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * User: Pieterjan Broekaert
- * Date: 30/07/12
- * Time: 12:41
+ * User: Pieterjan Broekaert Date: 30/07/12 Time: 12:41
  *
  * @author Anthony Hurst (Hogeschool Gent)
  */
@@ -67,7 +65,7 @@ class ResultViewerComponent extends Manager
                     'PrintReport',
                     array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())),
-                Theme :: getInstance()->getCommonImagePath('action_item'),
+                Theme :: getInstance()->getCommonImagePath('Action/Item'),
                 '#',
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false,
@@ -79,7 +77,7 @@ class ResultViewerComponent extends Manager
                     'ExportReport',
                     array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name())),
-                Theme :: getInstance()->getCommonImagePath('action_export'),
+                Theme :: getInstance()->getCommonImagePath('Action/Export'),
                 $this->get_url(array(Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false));
