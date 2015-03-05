@@ -24,7 +24,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     function get_question_preview($nr = null, $complex_question_id = null)
     {
         $content_object = $this->get_content_object();
-        
+
         if ($complex_question_id)
         {
             $question_id = $complex_question_id;
@@ -33,7 +33,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         {
             $question_id = $content_object->get_id();
         }
-        
+
         $html = array();
         $html[] = $this->get_includes();
         $html[] = '<div class="question" >';
@@ -51,7 +51,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="instruction">';
         if ($content_object->has_instruction())
         {
@@ -59,15 +59,15 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="answer">';
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         $html[] = '<table class="data_table">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        
+
         if ($content_object->get_question_type() == ChoiceForm :: TYPE_YES_NO)
         {
             $html[] = '<th class="checkbox" ></th>';
@@ -75,21 +75,21 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tbody>';
-            
+
             $html[] = '<tr class="row_even">';
-            
+
             $html[] = '<td><input type="radio" value="0" name="' . $complex_question_id . '"/></td>';
             $html[] = '<td>' . Translation :: get('AnswerYes') . '</td>';
             $html[] = '</tr>';
-            
+
             $html[] = '<tr class="row_odd">';
             $html[] = '<td><input type="radio" value="1" name="' . $complex_question_id . '"/></td>';
             $html[] = '<td>' . Translation :: get('AnswerNo') . '</td>';
             $html[] = '</tr>';
-            
+
             $html[] = '</tbody>';
         }
-        
+
         if ($content_object->get_question_type() == ChoiceForm :: TYPE_OTHER)
         {
             $html[] = '<th class="checkbox" ></th>';
@@ -97,23 +97,23 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tbody>';
-            
+
             $html[] = '<tr class="row_even">';
-            
+
             $html[] = '<td><input type="radio" value="0"  name="' . $complex_question_id . '"/></td>';
             $html[] = '<td>' . $content_object->get_first_choice() . '</td>';
             $html[] = '</tr>';
-            
+
             $html[] = '<tr class="row_odd">';
             $html[] = '<td><input type="radio" value="1"  name="' . $complex_question_id . '"/></td>';
             $html[] = '<td>' . $content_object->get_second_choice() . '</td>';
             $html[] = '</tr>';
-            
+
             $html[] = '</tbody>';
         }
-        
+
         $html[] = '</table>';
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
@@ -124,10 +124,10 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     {
         $scripts = array();
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/ckeditor.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/adapters/jquery.js');
-        
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
+
         return implode(PHP_EOL, $scripts);
     }
 }
