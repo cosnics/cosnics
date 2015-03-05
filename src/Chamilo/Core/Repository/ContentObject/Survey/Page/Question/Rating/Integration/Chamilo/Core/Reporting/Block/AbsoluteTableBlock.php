@@ -17,12 +17,12 @@ class AbsoluteTableBlock extends ReportingBlock
         $answers = $this->get_parent()->get_answers($question->get_id());
         sort($answers);
         $reporting_data = new ReportingData();
-        
+
         $options = array();
-        
+
         // matrix to store the answer count
         $answer_count = array();
-        
+
         $total_count = 0;
         foreach ($answers as $value)
         {
@@ -30,15 +30,15 @@ class AbsoluteTableBlock extends ReportingBlock
             $total_count ++;
         }
         $options = array_keys($answer_count);
-        
+
         $answer_row = Translation :: get(self :: COUNT);
         $rows = array($answer_row);
-        
+
         $reporting_data->set_rows($rows);
-        
+
         foreach ($options as $option)
         {
-            
+
             $reporting_data->add_category($option);
             $value = $answer_count[$option];
             $reporting_data->add_data_category_row($option, Translation :: get(self :: COUNT), $value);
@@ -47,11 +47,11 @@ class AbsoluteTableBlock extends ReportingBlock
         {
             $reporting_data->add_category(Translation :: get(self :: TOTAL));
             $reporting_data->add_data_category_row(
-                Translation :: get(self :: TOTAL), 
-                Translation :: get(self :: COUNT), 
+                Translation :: get(self :: TOTAL),
+                Translation :: get(self :: COUNT),
                 $total_count);
         }
-        
+
         return $reporting_data;
     }
 
@@ -63,10 +63,9 @@ class AbsoluteTableBlock extends ReportingBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_CSV, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XLSX, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_ODS, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_CSV,
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XLSX,
             \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XML);
     }
 }

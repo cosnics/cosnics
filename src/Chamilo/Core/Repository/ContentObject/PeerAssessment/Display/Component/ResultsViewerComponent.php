@@ -259,16 +259,7 @@ class ResultsViewerComponent extends Manager
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT,
-                            self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_ODS))));
-            // $action_bar->add_common_action(new ToolbarItem(
-            // Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath('export_csv'),
-            // $this->get_url(
-            // array(
-            // self :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT,
-            // self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_CSV
-            // )
-            // )));
+                            self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_EXCEL))));
 
             return $action_bar->as_html();
         }

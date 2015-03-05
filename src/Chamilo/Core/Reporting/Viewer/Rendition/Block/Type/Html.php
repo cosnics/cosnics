@@ -33,7 +33,6 @@ class Html extends BlockRendition
     const VIEW_XML = 'xml';
     const VIEW_PDF = 'pdf';
     const VIEW_XLSX = 'xlsx';
-    const VIEW_ODS = 'ods';
 
     public function render()
     {

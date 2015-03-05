@@ -44,7 +44,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_EXPORT_RESULT = 'result_exporter';
     const EXPORT_TYPE_EXCEL = 'excel';
     const EXPORT_TYPE_CSV = 'csv';
-    const EXPORT_TYPE_ODS = 'ods';
 
     /**
      *

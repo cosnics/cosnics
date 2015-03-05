@@ -14,50 +14,50 @@ class AbsoluteTableBlock extends ReportingBlock
     {
         $question = $this->get_parent()->get_question();
         $results = Result :: calculate_result($question, $this->get_parent()->get_answers($question->get_id()));
-        
+
         $reporting_data = new ReportingData();
         $total = Translation :: get(self :: TOTAL);
-        
+
         foreach ($results[Result :: ROW] as $match)
         {
             $reporting_data->add_row($match);
         }
         $reporting_data->add_row($total);
-        
+
         foreach ($results[Result :: CATEGORY] as $option_id => $option)
         {
             $reporting_data->add_category($option);
-            
+
             foreach ($results[Result :: ROW] as $match_id => $match)
             {
                 $reporting_data->add_data_category_row(
-                    $option, 
-                    $match, 
+                    $option,
+                    $match,
                     $results[Result :: ABSOLUTE][$option_id][$match_id]);
             }
             $reporting_data->add_data_category_row(
-                $option, 
-                $total, 
+                $option,
+                $total,
                 $results[Result :: TOTAL][Result :: CATEGORY][Result :: ABSOLUTE][$option_id]);
         }
-        
+
         if (count($results[Result :: CATEGORY]) > 1)
         {
             $reporting_data->add_category($total);
-            
+
             foreach ($results[Result :: ROW] as $match_id => $match)
             {
                 $reporting_data->add_data_category_row(
-                    $total, 
-                    $match, 
+                    $total,
+                    $match,
                     $results[Result :: TOTAL][Result :: ROW][Result :: ABSOLUTE][$match_id]);
             }
             $reporting_data->add_data_category_row(
-                $total, 
-                $total, 
+                $total,
+                $total,
                 $results[Result :: TOTAL][Result :: TOTAL][Result :: ABSOLUTE]);
         }
-        
+
         return $reporting_data;
     }
 
@@ -69,10 +69,9 @@ class AbsoluteTableBlock extends ReportingBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_CSV, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XLSX, 
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_ODS, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_CSV,
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XLSX,
             \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_XML);
     }
 }
