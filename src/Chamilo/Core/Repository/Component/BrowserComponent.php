@@ -137,7 +137,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                      'View',
                                     null,
                                     Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'view_' . $renderer),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'View' . $renderer),
                             $this->get_url(array(self :: PARAM_RENDERER => $renderer)),
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                 }

@@ -36,7 +36,7 @@ class PackageInstaller extends Action
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
             $image = Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
-                'PackageAction/finished');
+                'PackageAction/Finished');
             return $this->action_successful($title, $image, Translation :: get('PackageCompletelyInstalled'));
         }
         else
@@ -47,7 +47,7 @@ class PackageInstaller extends Action
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
             $image = Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
-                'PackageAction/failed');
+                'PackageAction/Failed');
             return $this->action_failed($title, $image, Translation :: get('PackageInstallFailed'));
         }
     }
@@ -65,7 +65,7 @@ class PackageInstaller extends Action
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
         $image = Theme :: getInstance()->getImagePath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
-            'PackageAction/initialization');
+            'PackageAction/Initialization');
 
         if (! $this->get_package() instanceof \Chamilo\Configuration\Package\Storage\DataClass\Package)
         {
@@ -112,7 +112,7 @@ class PackageInstaller extends Action
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
         $image = Theme :: getInstance()->getImagePath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
-            'PackageAction/installation');
+            'PackageAction/Installation');
 
         $installer = \Chamilo\Configuration\Package\Action\Installer :: factory(
             $this->get_package()->get_context(),
@@ -136,7 +136,7 @@ class PackageInstaller extends Action
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2));
         $image = Theme :: getInstance()->getImagePath(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 2),
-            'PackageAction/additional_packages');
+            'PackageAction/AdditionalPackages');
 
         while (($additional_package = $this->get_next_additional_package()) != null)
         {

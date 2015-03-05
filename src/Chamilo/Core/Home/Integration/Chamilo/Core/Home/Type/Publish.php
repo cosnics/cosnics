@@ -5,8 +5,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- * A "Static" block.
- * I.e. a block that display the title and description of an object. Usefull to display free html
+ * A "Static" block. I.e. a block that display the title and description of an object. Usefull to display free html
  * text.
  *
  * @copyright (c) 2011 University of Geneva

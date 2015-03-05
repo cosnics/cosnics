@@ -88,12 +88,13 @@ class PersonalBlogLayout extends BlogLayout
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
                 $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()),
-                    'Logo/' . Theme :: ICON_MINI) . '" alt="' . htmlentities(
-                    Translation :: get(
-                        'TypeName',
-                        null,
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()))) . '"/> ' .
-                     $attachment->get_title() . '</a></li>';
+                    'Logo/' . Theme :: ICON_MINI) . '" alt="' .
+                     htmlentities(
+                        Translation :: get(
+                            'TypeName',
+                            null,
+                            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()))) .
+                     '"/> ' . $attachment->get_title() . '</a></li>';
             }
 
             $html[] = '</ul>';

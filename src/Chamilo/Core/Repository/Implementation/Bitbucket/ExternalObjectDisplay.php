@@ -21,7 +21,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 Translation :: get('Download'),
                 Theme :: getInstance()->getImagePath(
                     'Chamilo\Core\Repository\Implementation\Bitbucket',
-                    'action_download'),
+                    'Action/Download'),
                 $object->get_download_link(),
                 ToolbarItem :: DISPLAY_ICON);
 
@@ -69,7 +69,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                     Translation :: get('Download'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'action_download'),
+                        'Action/Download'),
                     $tag->get_download_link(),
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();
@@ -104,7 +104,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                     Translation :: get('Download'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\Implementation\Bitbucket',
-                        'action_download'),
+                        'Action/Download'),
                     $changeset->get_download_link(),
                     ToolbarItem :: DISPLAY_ICON);
                 $row[] = $toolbar_item->as_html();

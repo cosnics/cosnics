@@ -63,7 +63,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/deactivate'),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Deactivate'),
                             $this->get_url(
                                 array(
                                     self :: PARAM_ACTION => self :: ACTION_DEACTIVATE,
@@ -79,7 +79,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/activate'),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Activate'),
                             $this->get_url(
                                 array(
                                     self :: PARAM_ACTION => self :: ACTION_ACTIVATE,
@@ -92,7 +92,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Install', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/install'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Install'),
                     $this->get_url(
                         array(self :: PARAM_ACTION => self :: ACTION_INSTALL, self :: PARAM_CONTEXT => $this->context)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL,

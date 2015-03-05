@@ -135,7 +135,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/finished');
+        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
         $title = Translation :: get('PlatformUpgraded');
         $result = Translation :: get(
             'CoreUpgraded',

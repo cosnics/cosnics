@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Enter description here .
- * ..
+ * Enter description here . ..
  *
  * @author Renaat De Muynck
  * @method PeerAssessmentDisplaySupport get_parent()

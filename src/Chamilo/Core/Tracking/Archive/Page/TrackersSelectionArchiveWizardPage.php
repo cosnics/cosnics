@@ -73,7 +73,7 @@ class TrackersSelectionArchiveWizardPage extends ArchiveWizardPage
             if ($event->get_context() != $previousblock)
             {
                 $message = '<div style="float:left;"><img src="' .
-                     Theme :: getInstance()->getImagePath('Chamilo\Core\Admin', 'place_' . $event->get_context()) .
+                     Theme :: getInstance()->getImagePath('Chamilo\Core\Admin', 'Place/' . $event->get_context()) .
                      '" alt="' . $event->get_context() . '"></div>';
                 $previousblock = $event->get_context();
             }

@@ -76,14 +76,14 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
                     Translation :: get('ManageControlledVocabularyNA', null, 'core\metadata'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Metadata\Attribute',
-                        'Action/controlled_vocabulary_na'),
+                        'Action/ControlledVocabularyNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MetadataDefaultValuesNA', null, 'core\metadata'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/default_na'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/DefaultNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -115,7 +115,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
                     Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Metadata\Attribute',
-                        'Action/controlled_vocabulary'),
+                        'Action/ControlledVocabulary'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULATE,
@@ -125,7 +125,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MetadataDefaultValues', null, 'core\metadata'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/default'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/Default'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => null,

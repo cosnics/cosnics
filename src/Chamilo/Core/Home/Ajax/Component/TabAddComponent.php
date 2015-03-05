@@ -73,7 +73,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
 
         $html[] = '<div class="empty_portal_column" style="display:block;">';
         $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-        $img = Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'action_remove_column');
+        $img = Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn');
         $html[] = '<div class="deleteColumn"><a href="#"><img src="' . $img . '" alt="' .
              Translation :: get('RemoveColumn') . '"/></a></div>';
         $html[] = '</div>';
@@ -88,7 +88,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title[] = '<a class="tabTitle" href="#">' . $tab->get_title() . '</a>';
         $title[] = '<a class="deleteTab"><img src="' . Theme :: getInstance()->getImagePath(
             'Chamilo\Core\Home',
-            'action_delete_tab') . '" /></a>';
+            'Action/Delete_tab') . '" /></a>';
         $title[] = '</li>';
 
         $result = new JsonAjaxResult(200);

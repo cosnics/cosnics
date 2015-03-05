@@ -359,7 +359,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     Translation :: get('Quote'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'Buttons/icon_post_quote'),
+                        'Buttons/IconPostQuote'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -370,7 +370,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     Translation :: get('Reply'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'Buttons/button_pm_reply'),
+                        'Buttons/PmReply'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -383,7 +383,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                            'Buttons/icon_post_edit'),
+                            'Buttons/IconPostEdit'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -400,7 +400,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                             Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                                'Buttons/icon_post_delete'),
+                                'Buttons/IconPostDelete'),
                             $this->get_url($parameters),
                             ToolbarItem :: DISPLAY_ICON,
                             true));

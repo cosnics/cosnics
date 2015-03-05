@@ -130,13 +130,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 if ($valid_answer)
                 {
-                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_correct') .
+                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
                          '" alt="' . Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
                          '" style="" />';
                 }
                 else
                 {
-                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'answer_wrong') .
+                    $result = ' <img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
                          '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
                 }
             }
