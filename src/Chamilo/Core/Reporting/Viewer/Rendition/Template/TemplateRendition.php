@@ -16,7 +16,6 @@ abstract class TemplateRendition
     const FORMAT_JSON = 'json';
     const FORMAT_CSV = 'csv';
     const FORMAT_XLSX = 'xlsx';
-    const FORMAT_ODS = 'ods';
     const VIEW_BASIC = 'basic';
 
     /**

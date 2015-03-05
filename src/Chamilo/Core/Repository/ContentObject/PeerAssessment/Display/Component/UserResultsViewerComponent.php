@@ -127,7 +127,7 @@ class UserResultsViewerComponent extends Manager
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_USER_RESULT,
-                            self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_ODS,
+                            self :: PARAM_EXPORT_TYPE => self :: EXPORT_TYPE_EXCEL,
                             self :: PARAM_USER => Request :: get(self :: PARAM_USER),
                             self :: PARAM_ATTEMPT => Request :: get(self :: PARAM_ATTEMPT)))));
         }

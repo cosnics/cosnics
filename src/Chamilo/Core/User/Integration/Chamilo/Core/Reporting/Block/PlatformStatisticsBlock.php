@@ -12,6 +12,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
+/**
+ *
+ * @package Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block
+ */
 class PlatformStatisticsBlock extends Block
 {
 
@@ -20,10 +24,10 @@ class PlatformStatisticsBlock extends Block
         $reporting_data = new ReportingData();
         $uid = $this->get_user_id();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LoginLogout :: class_name(), LoginLogout :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(LoginLogout :: class_name(), LoginLogout :: PROPERTY_USER_ID),
             new StaticConditionVariable($uid));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LoginLogout :: class_name(), LoginLogout :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(LoginLogout :: class_name(), LoginLogout :: PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $condition = new AndCondition($conditions);
         $tracker = new LoginLogout();
@@ -31,7 +35,7 @@ class PlatformStatisticsBlock extends Block
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)
         {
-            
+
             if (! isset($firstconnection))
             {
                 $firstconnection = $value->get_date();
@@ -43,27 +47,27 @@ class PlatformStatisticsBlock extends Block
                 {
                     $firstconnection = $value->get_date();
                 }
-                else 
+                else
                     if (($value->get_date() - $lastconnection) > 0)
                     {
                         $lastconnection = $value->get_date();
                     }
             }
         }
-        
+
         $arr[Translation :: get('FirstConnection')][] = DatetimeUtilities :: format_locale_date(
             Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                 Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES), 
+                 Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
                 $firstconnection);
         $arr[Translation :: get('LastConnection')][] = DatetimeUtilities :: format_locale_date(
             Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                 Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES), 
+                 Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
                 $lastconnection);
-        
+
         $keys = array_keys($arr);
         $reporting_data->set_categories($keys);
         $reporting_data->set_rows(array(Translation :: get('Date')));
-        
+
         foreach ($keys as $key => $name)
         {
             $reporting_data->add_data_category_row($name, Translation :: get('Date'), $arr[$name]);
@@ -78,7 +82,7 @@ class PlatformStatisticsBlock extends Block
 
     /**
      * Checks if a given start date is greater than a given end date
-     * 
+     *
      * @param $start_date <type>
      * @param $end_date <type>
      * @return <type>
@@ -95,6 +99,6 @@ class PlatformStatisticsBlock extends Block
 
     public function get_views()
     {
-        return array(Html :: VIEW_TABLE, Html :: VIEW_CSV, Html :: VIEW_XLSX, Html :: VIEW_ODS, Html :: VIEW_XML);
+        return array(Html :: VIEW_TABLE, Html :: VIEW_CSV, Html :: VIEW_XLSX, Html :: VIEW_XML);
     }
 }
