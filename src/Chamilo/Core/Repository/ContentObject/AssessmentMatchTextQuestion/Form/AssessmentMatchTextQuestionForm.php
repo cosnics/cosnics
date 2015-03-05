@@ -25,8 +25,9 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_match_text_question/resources/javascript/assessment_match_text_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
+                    true) . 'AssessmentMatchTextQuestion.js'));
         $this->add_options();
         $this->addElement('category');
 
@@ -60,8 +61,9 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_match_text_question/resources/javascript/assessment_match_text_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
+                    true) . 'AssessmentMatchTextQuestion.js'));
         $this->add_options();
         $this->addElement('category');
 

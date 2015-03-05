@@ -49,8 +49,9 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_multiple_choice_question/resources/javascript/assessment_multiple_choice_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion',
+                    true) . 'AssessmentMultipleChoiceQuestion.js'));
 
         $this->add_example_box();
     }
@@ -85,8 +86,9 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_multiple_choice_question/resources/javascript/assessment_multiple_choice_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion',
+                    true) . 'AssessmentMultipleChoiceQuestion.js'));
 
         $this->add_example_box();
     }

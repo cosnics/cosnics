@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: content_object_import_form.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 
@@ -34,7 +34,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
     /**
      * Constructor.
-     * 
+     *
      * @param $form_name string The name to use in the form tag.
      * @param $method string The method to use ('post' or 'get').
      * @param $action string The URL to which the form should be submitted.
@@ -42,10 +42,10 @@ abstract class ContentObjectImportForm extends FormValidator
     public function __construct($application, $method = 'post', $action = null, $show_categories = true)
     {
         parent :: __construct('import', $method, $action);
-        
+
         $this->application = $application;
         $this->show_categories = $show_categories;
-        
+
         $this->build_basic_form();
         $this->add_footer();
         $this->setDefaults();
@@ -53,7 +53,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
     /**
      * Gets the categories defined in the user's repository.
-     * 
+     *
      * @return array The categories.
      */
     public function get_categories()
@@ -70,22 +70,22 @@ abstract class ContentObjectImportForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement('hidden', self :: PROPERTY_TYPE);
-        
+
         if ($this->show_categories)
         {
             $category_group = array();
             $category_group[] = $this->createElement(
-                'select', 
-                ContentObject :: PROPERTY_PARENT_ID, 
-                Translation :: get('CategoryTypeName'), 
+                'select',
+                ContentObject :: PROPERTY_PARENT_ID,
+                Translation :: get('CategoryTypeName'),
                 $this->get_categories());
             $category_group[] = $this->createElement(
-                'image', 
-                'add_category', 
-                Theme :: getInstance()->getCommonImagePath('action_add'), 
+                'image',
+                'add_category',
+                Theme :: getInstance()->getCommonImagePath('action_add'),
                 array('id' => 'add_category', 'style' => 'display:none'));
             $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
-            
+
             $group = array();
             $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_CATEGORY . '">');
             $group[] = $this->createElement('static', null, null, Translation :: get('AddNewCategory'));
@@ -111,17 +111,17 @@ abstract class ContentObjectImportForm extends FormValidator
     public function add_footer()
     {
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'import_button', 
-            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'import_button',
+            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive import', 'id' => 'import_button'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) . 'Repository/Resources/Javascript/Import.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Import.js'));
     }
 
     public function get_application()
@@ -134,12 +134,12 @@ abstract class ContentObjectImportForm extends FormValidator
         $class = Manager :: package() . '\Common\Import\\' .
              StringUtilities :: getInstance()->createString($type)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ContentObjectImportForm';
-        
+
         if (! class_exists($class))
         {
             throw new \Exception(Translation :: get('UnknownImportType', array('TYPE' => $type)));
         }
-        
+
         return new $class($application, $method, $action, $show_categories);
     }
 }

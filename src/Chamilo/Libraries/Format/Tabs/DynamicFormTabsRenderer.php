@@ -53,7 +53,7 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
         $html[] = ' var element = "' . $this->get_name() . '"';
         $html[] = '</script>';
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . 'Resources/Javascript/DynamicFormTabs.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'DynamicFormTabs.js');
         $html[] = parent :: footer();
         return implode(PHP_EOL, $html);
     }

@@ -26,10 +26,10 @@ class GroupForm extends FormValidator
     {
         parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
         $this->renderer = clone $this->defaultRenderer();
-        
+
         $this->bitbucket = $bitbucket;
         $this->build();
-        
+
         $this->accept($this->renderer);
     }
 
@@ -40,16 +40,16 @@ class GroupForm extends FormValidator
         $this->addElement('text', 'group_name', Translation :: get('GroupName'));
         $this->addElement('select', self :: PERMISSION, Translation :: get('Permission'), $this->get_privileges_types());
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: get_common_extensions_path(true) .
-                     'external_repository_manager/implementation/bitbucket/resources/javascript/privilege_granting_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+                     'PrivilegeGrantingForm.js'));
     }
 
     /**
@@ -68,7 +68,7 @@ class GroupForm extends FormValidator
     {
         $values = $this->exportValues();
         return $this->bitbucket->get_external_repository_manager_connector()->create_group(
-            $values['group_name'], 
+            $values['group_name'],
             $values['permission']);
     }
 
@@ -78,7 +78,7 @@ class GroupForm extends FormValidator
         $privileges_types[self :: TYPE_READ] = Translation :: get('Read');
         $privileges_types[self :: TYPE_WRITE] = Translation :: get('Write');
         $privileges_types[self :: TYPE_ADMIN] = Translation :: get('Admin');
-        
+
         return $privileges_types;
     }
 }

@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -314,7 +312,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.advelementfinder.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'Plugin/Jquery/jquery.advelementfinder.js');
         $html[] = '<script type="text/javascript">';
 
         if ($this->default_values)

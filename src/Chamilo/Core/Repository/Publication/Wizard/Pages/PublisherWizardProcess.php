@@ -114,7 +114,7 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
         $html[] = '<a href="' . $url . '">' . Translation :: get('GoBack') . '</a>';
 
         $html[] = '<script type="text/javascript" src="' .
-             Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/visibility.js' .
+             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
              '"></script>';
 
         $page->controller->container(true);

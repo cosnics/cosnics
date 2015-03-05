@@ -146,11 +146,8 @@ class ForumPostForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/uploadify2/swfobject.js'));
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/uploadify2/jquery.uploadify.v2.1.0.min.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                     'Plugin/Uploadify/jquery.uploadify.min.js'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
