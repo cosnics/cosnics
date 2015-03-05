@@ -47,8 +47,9 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_select_question/resources/javascript/assessment_select_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion',
+                    true) . 'AssessmentSelectQuestion.js'));
 
         $this->add_example_box();
     }
@@ -81,8 +82,9 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_select_question/resources/javascript/assessment_select_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion',
+                    true) . 'AssessmentSelectQuestion.js'));
 
         $this->add_example_box();
     }

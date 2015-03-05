@@ -139,7 +139,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html[] = '<div class="clear"></div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getConfigurationPath(true) . 'Resources/Javascript/InstallProcess.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'InstallProcess.js');
 
         return implode(PHP_EOL, $html);
     }

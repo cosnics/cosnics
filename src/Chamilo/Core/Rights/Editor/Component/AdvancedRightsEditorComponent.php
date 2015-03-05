@@ -176,7 +176,7 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $html[] = '</script>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . '/Resources/Javascript/ConfigureEntity.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'ConfigureEntity.js');
 
         return implode(PHP_EOL, $html);
     }

@@ -60,18 +60,16 @@ class TagsFormBuilder
     protected function add_dependencies()
     {
         $resource_manager = ResourceManager :: get_instance();
-        $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\\', true);
+        $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) .
+             'Plugin/Bootstrap/Tagsinput/';
 
         $dependencies = array();
 
-        $dependencies[] = $resource_manager->get_resource_html(
-            $plugin_path . 'bootstrap-tagsinput/bootstrap-typeahead.js');
+        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
 
-        $dependencies[] = $resource_manager->get_resource_html(
-            $plugin_path . 'bootstrap-tagsinput/bootstrap-tagsinput.min.js');
+        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.min.js');
 
-        $dependencies[] = $resource_manager->get_resource_html(
-            $plugin_path . 'bootstrap-tagsinput/bootstrap-tagsinput.css');
+        $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.css');
 
         $this->form->addElement('html', implode(PHP_EOL, $dependencies));
     }

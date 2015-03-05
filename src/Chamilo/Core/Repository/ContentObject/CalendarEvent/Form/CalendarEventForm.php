@@ -253,8 +253,8 @@ class CalendarEventForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\CalendarEvent\\', true) .
-                     'Resources/Javascript/HtmlEditor/Dates.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\CalendarEvent', true) .
+                     'Dates.js'));
     }
 
     // Inherited

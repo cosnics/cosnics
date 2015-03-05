@@ -235,12 +235,9 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) .
-                 'jquery/uploadify/jquery.uploadify.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Uploadify/jquery.uploadify.js');
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.imageselecter.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js');
         $html[] = '<script type="text/javascript">';
 
         $exclude_ids = array();
@@ -269,7 +266,8 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = '	{';
         $html[] = '		$("#' . $id . '").elementselecter({
         	name: "' . $this->getName() . '",
-        	search: "' . $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
+        	search: "' .
+             $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
         $html[] = '	});';
         $html[] = '});';
 
