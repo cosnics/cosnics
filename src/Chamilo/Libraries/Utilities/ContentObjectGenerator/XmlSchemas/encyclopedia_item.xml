@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="encyclopedia_item">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" />
+		<property name="image" type="integer" unsigned="1" notnull="1" />
+		<property name="tags" type="text" notnull="1" />
+	</properties>
+	<index name="id" type="primary">
+		<indexproperty name="id" />
+	</index>
+</object>

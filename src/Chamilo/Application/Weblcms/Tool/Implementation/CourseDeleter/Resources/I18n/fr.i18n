@@ -1,0 +1,9 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_deleter
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Supprimer le cours"
+DeleteWarningMessage = "Etes-vous sûr que vous voulez supprimer ce cours?"
+DeleteReDoMessage = "!!!!! Attention: cette confirmation est irréversible. Le cours ne peut plus être récupéré !!!!!"
+CourseDeleteFailed = "Le cours n'a pas été supprimé"
