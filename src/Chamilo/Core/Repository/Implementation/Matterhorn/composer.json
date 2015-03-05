@@ -1,6 +1,6 @@
 {
-    "name": "chamilo/app-cas-user",
-        "version": "6.0.0", "description": "Chamilo CAS User Application",
+    "name": "chamilo/ext-repo-matterhorn",
+        "version": "6.0.0", "description": "Chamilo Matterhorn External Repository",
     "keywords": [],
     "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
@@ -12,10 +12,10 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle" : "5.*"
     },
-    "extra": {
-        "install-path": "application/cas_user"
+    "require": {
+        "php": ">=5.4.0"
     }
-
 }

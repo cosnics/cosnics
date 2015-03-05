@@ -150,7 +150,14 @@ class Translation
         }
         else
         {
-            return strtr($translation, $parameters);
+            $translationMap = array();
+
+            foreach($parameters as $key => $value)
+            {
+                $translationMap['{' . $key . '}'] = $value;
+            }
+
+            return strtr($translation, $translationMap);
         }
     }
 

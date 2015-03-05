@@ -73,7 +73,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
                 return array('pdf', 'pptx'); // 'swf');
                 break;
             case 'spreadsheet' :
-                return array('pdf', 'ods', 'xlsx');
+                return array('pdf', 'xlsx');
                 break;
             case 'pdf' :
                 // return array('pdf');
@@ -108,9 +108,9 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
                 // return array('pdf');
                 break;
         }
-        
+
         $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $this->get_external_repository_id());
         return DataConnector :: get_instance($external_repository)->download_external_repository_object($url);
     }

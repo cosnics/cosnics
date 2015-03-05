@@ -1,8 +1,8 @@
 {
     "name": "chamilo/app-weblcms-tool-ephorus",
-    "description": "Chamilo Ephorus Weblcms Tool",
+        "version": "6.0.0", "description": "Chamilo Ephorus Weblcms Tool",
     "keywords": [],
-    "homepage": "http://chamilo.com",
+    "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
@@ -16,10 +16,8 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.3.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev",
-        "chamilo/app-weblcms": "*@dev"
+        "php": ">=5.4.0",
+        "fergusean/nusoap" : "*"
     },
     "extra": {
         "install-path": "application/weblcms/tool/ephorus"

@@ -1,8 +1,8 @@
 {
     "name": "chamilo/ext-repo-picasa",
-    "description": "Chamilo Picasa External Repository",
+        "version": "6.0.0", "description": "Chamilo Picasa External Repository",
     "keywords": [],
-    "homepage": "http://chamilo.com",
+    "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
@@ -16,9 +16,9 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.3.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev"
+        "php": ">=5.4.0",
+        "zend/gdata" : "1.*",
+        "google/apiclient" : "1.1.2"
     },
     "extra": {
         "install-path": "common/extensions/external_repository_manager/implementation/picasa"

@@ -1,8 +1,8 @@
 {
     "name": "chamilo/ext-repo-slideshare",
-    "description": "Chamilo Slideshare External Repository",
+        "version": "6.0.0", "description": "Chamilo Slideshare External Repository",
     "keywords": [],
-    "homepage": "http://chamilo.com",
+    "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
@@ -16,9 +16,7 @@
     ],
     "type": "chamilo-package",
     "require": {
-        "php": ">=5.3.0",
-        "chamilo/composer-installer": "v1.0.0",
-        "chamilo/core": "*@dev"
+        "php": ">=5.4.0"
     },
     "extra": {
         "install-path": "common/extensions/external_repository_manager/implementation/slideshare"

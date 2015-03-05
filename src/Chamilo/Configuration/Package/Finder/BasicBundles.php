@@ -7,12 +7,12 @@ use Chamilo\Configuration\Package\PackageList;
 
 /**
  *
- * @package Chamilo\Configuration\Package\Builder
+ * @package Chamilo\Configuration\Package\Finder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractBundles
+class BasicBundles
 {
 
     /**
@@ -103,12 +103,19 @@ abstract class AbstractBundles
      *
      * @return string[]
      */
-    abstract protected function getBlacklistedFolders();
+    protected function getBlacklistedFolders()
+    {
+        return array('.hg', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
+    }
 
     /**
      *
      * @param string $folderNamespace
      * @return boolean
      */
-    abstract protected function verifyPackage($folderNamespace);
+    protected function verifyPackage($folderNamespace)
+    {
+        $packageInfoPath = Path :: getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
+        return file_exists($packageInfoPath);
+    }
 }
