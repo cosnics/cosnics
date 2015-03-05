@@ -127,7 +127,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         $html = array();
         $html[] = '<div class="announcements level_1" style="background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath('ContentObject/introduction') . ')">';
+             Theme :: getInstance()->getCommonImagePath('ContentObject/Introduction') . ')">';
         $html[] = $this->generate_assignment_details_html();
         $html[] = $this->get_reporting_as_html();
         $html[] = '</div>';
@@ -253,8 +253,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the reporting block as HTML code.
-     * This block contains the automatic feedback of the assignment and the
+     * Returns the reporting block as HTML code. This block contains the automatic feedback of the assignment and the
      * average score of the user or group.
      *
      * @return array The HTML code
@@ -368,7 +367,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('SubmissionSubmit'),
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url($this->generate_add_submission_url(), ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
         $search_url = $this->get_url(
             array(
@@ -378,7 +377,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $search_url,
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 false));
@@ -386,8 +385,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the url for the add submission button.
-     * When it's not a group assignment the url will have the extra
+     * Returns the url for the add submission button. When it's not a group assignment the url will have the extra
      * parameters target id and submitter type.
      *
      * @return array The url

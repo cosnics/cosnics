@@ -72,7 +72,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
         $legend_items[] = new ToolbarItem(
             Translation :: get('CourseUser'),
-            Theme :: getInstance()->getCommonImagePath('Treemenu/user'),
+            Theme :: getInstance()->getCommonImagePath('Treemenu/User'),
             null,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false,
@@ -80,7 +80,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
         $legend_items[] = new ToolbarItem(
             Translation :: get('LinkedUser'),
-            Theme :: getInstance()->getCommonImagePath('Treemenu/user_platform'),
+            Theme :: getInstance()->getCommonImagePath('Treemenu/UserPlatform'),
             null,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false,

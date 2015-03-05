@@ -131,7 +131,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
             case 'published_for' :
                 if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
                 {
-                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('action_email') . '" alt=""
+                    $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
                         style="vertical-align: middle;" title="' .
                          Translation :: get('SentByEmail') . '"/>';
                 }

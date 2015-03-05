@@ -23,10 +23,10 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Description of student_submissions_browser_own_groups_table_cell_renderer
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRenderer implements 
+class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -55,7 +55,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Returns the submitter name of the user who submitted the given submission.
-     * 
+     *
      * @param $submission type
      * @return string The submitter name
      */
@@ -66,7 +66,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Returns the group members that are part of the submission.
-     * 
+     *
      * @param $submission type
      * @return array
      */
@@ -77,42 +77,42 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
         $order_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
         $order_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
         $users = array();
-        
+
         switch ($submission->get_submitter_type())
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
                 $user_ids = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                    Group :: class_name(), 
+                    Group :: class_name(),
                     $submission->get_submitter_id())->get_users(true, true);
                 $condition = new InCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                     $user_ids);
                 $users = DataManager :: retrieves(
-                    User :: CLASS_NAME, 
+                    User :: CLASS_NAME,
                     new DataClassRetrievesParameters($condition, $retrieve_limit, null, $order_properties))->as_array();
                 break;
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
                 $users = CourseGroupDataManager :: retrieve_course_group_users(
-                    $submission->get_submitter_id(), 
-                    null, 
-                    null, 
-                    $retrieve_limit, 
+                    $submission->get_submitter_id(),
+                    null,
+                    null,
+                    $retrieve_limit,
                     $order_properties)->as_array();
                 break;
         }
-        
+
         if (count($users) == 0)
         {
             return null;
         }
-        
+
         $display_limit_breached = false;
         if (count($users) == $retrieve_limit)
         {
             $display_limit_breached = true;
             array_pop($users);
         }
-        
+
         $html = array();
         $html[] = '<select style="width:180px">';
         foreach ($users as $user)
@@ -129,7 +129,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Retrieves the group name of the group that submitted the given submission.
-     * 
+     *
      * @param $submission type
      * @return string The group name
      */
@@ -139,12 +139,12 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
                 $group = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
-                    CourseGroup :: class_name(), 
+                    CourseGroup :: class_name(),
                     $submission->get_submitter_id());
                 break;
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
                 $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                    Group :: class_name(), 
+                    Group :: class_name(),
                     $submission->get_submitter_id());
                 break;
         }
@@ -153,7 +153,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Retrieves the score from the submission with the given submission id.
-     * 
+     *
      * @param $submission_id int
      * @return mixed The score or null
      */
@@ -161,10 +161,10 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
     {
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID,
             $submission_id);
         $trackers = $tracker->retrieve_tracker_items($condition);
-        
+
         if (count($trackers) > 0)
         {
             $score_tracker = $trackers[0];
@@ -175,7 +175,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Returns the number of feedback the submission with the given submission id has.
-     * 
+     *
      * @param $submission_id int
      * @return int The number of feedback
      */
@@ -183,14 +183,14 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
     {
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID,
             $submission_id);
         return $tracker->count_tracker_items($condition);
     }
 
     /**
      * Makes a hyperlink of the given submission.
-     * 
+     *
      * @param $submission type
      * @return string The hyperlink
      */
@@ -202,7 +202,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Returns the url that links to the submission viewer for the given submission.
-     * 
+     *
      * @param $submission type
      * @return string The url
      */
@@ -210,15 +210,15 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
     {
         return $this->get_component()->get_url(
             array(
-                Manager :: PARAM_SUBMISSION => $submission->get_id(), 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION, 
-                Manager :: PARAM_TARGET_ID => $submission->get_submitter_id(), 
+                Manager :: PARAM_SUBMISSION => $submission->get_id(),
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION,
+                Manager :: PARAM_TARGET_ID => $submission->get_submitter_id(),
                 Manager :: PARAM_SUBMITTER_TYPE => $submission->get_submitter_type()));
     }
 
     /**
      * Creates a toolbar with the appropriate actions
-     * 
+     *
      * @param $submission type
      * @return string The HTML code that represents the actions.
      */
@@ -231,27 +231,27 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ViewSubmission'), 
-                    Theme :: getInstance()->getCommonImagePath('action_browser'), 
+                    Translation :: get('ViewSubmission'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_SUBMISSION => $submission->get_id(), 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION)), 
+                            Manager :: PARAM_SUBMISSION => $submission->get_id(),
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION)),
                     ToolbarItem :: DISPLAY_ICON));
         }
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DownloadSubmission'), 
-                    Theme :: getInstance()->getCommonImagePath('action_download'), 
-                    $this->get_component()->get_url(), 
+                    Translation :: get('DownloadSubmission'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_component()->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DeleteSubmission'), 
-                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
-                    $this->get_component()->get_url(), 
+                    Translation :: get('DeleteSubmission'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                    $this->get_component()->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
         }
         return $toolbar->as_html();
@@ -259,16 +259,16 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
 
     /**
      * Formats the given date so it display red when it's greater than the end time of the assignment.
-     * 
+     *
      * @param $date type
      * @return string The formatted date
      */
     private function format_date($date)
     {
         $formatted_date = DatetimeUtilities :: format_locale_date(
-            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
             $date);
-        
+
         if ($date > $this->get_component()->get_assignment()->get_end_time())
         {
             return '<span style="color:red">' . $formatted_date . '</span>';

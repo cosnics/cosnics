@@ -10,8 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
- * @package application.weblcms.tool.assignment.php.component
- *          Viewer for assignments
+ * @package application.weblcms.tool.assignment.php.component Viewer for assignments
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
@@ -34,7 +33,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
         $actions[] = new ToolbarItem(
             Translation :: get('SubmissionSubmit'),
-            Theme :: getInstance()->getCommonImagePath('action_add'),
+            Theme :: getInstance()->getCommonImagePath('Action/Add'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION,

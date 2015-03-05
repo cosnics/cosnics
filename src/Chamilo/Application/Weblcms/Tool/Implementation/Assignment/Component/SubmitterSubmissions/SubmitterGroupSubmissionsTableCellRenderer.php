@@ -16,11 +16,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Description of submitter_group_submissions_browser_table_cell_renderer
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Bert De Clercq (Hogeschool Gent)
  */
-class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRenderer implements 
+class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -31,10 +31,10 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
             case SubmitterUserSubmissionsTableColumnModel :: PROPERTY_PUBLICATION_TITLE :
                 $content_object = $submission->get_content_object();
                 $title = $content_object ? $content_object->get_title() : Translation :: get('ContentObjectUnknown');
-                
+
                 $url = $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_SUBMISSION => $submission->get_id(), 
+                        Manager :: PARAM_SUBMISSION => $submission->get_id(),
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION));
                 return '<a href=\'' . $url . '\'>' . $title . '</a>';
             case SubmitterUserSubmissionsTableColumnModel :: PROPERTY_CONTENT_OBJECT_DESCRIPTION :
@@ -53,20 +53,20 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
 
     /**
      * Returns the full name of the user with the given submitter id
-     * 
+     *
      * @param $submitter_id int
      * @return string The full name
      */
     private function get_user_name($submitter_id)
     {
         return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             $submitter_id)->get_fullname();
     }
 
     /**
      * Returns the score of the submission with the given submission id.
-     * 
+     *
      * @param $submission_id int
      * @return mixed The score or null
      */
@@ -74,22 +74,22 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
     {
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID,
             $submission_id);
         $trackers = $tracker->retrieve_tracker_items($condition);
-        
+
         if (count($trackers) > 0)
         {
             $score_tracker = $trackers[0];
             return $score_tracker->get_score() . '%';
         }
-        
+
         return null;
     }
 
     /**
      * Returns the number of feedback for the submission with the given submission id.
-     * 
+     *
      * @param $submission_id int
      * @return int The number of feedback
      */
@@ -97,53 +97,53 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
     {
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID,
             $submission_id);
         return $tracker->count_tracker_items($condition);
     }
 
     /**
      * Formats a date.
-     * 
+     *
      * @param $date type the date to be formatted.
      * @return the formatted representation of the date.
      */
     private function format_date($date)
     {
         $formatted_date = DatetimeUtilities :: format_locale_date(
-            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
             $date);
-        
+
         if ($date > $this->get_component()->get_assignment()->get_end_time())
         {
             return '<span style="color:red">' . $formatted_date . '</span>';
         }
-        
+
         return $formatted_date;
     }
 
     /**
      * Creates a toolbar with the appropriate actions
-     * 
+     *
      * @param $submission type
      * @return string The HTML code that represents the actions.
      */
     private function get_actions($submission)
     {
         $toolbar = new Toolbar();
-        
+
         if ($submission->get_user_id() == $this->get_component()->get_user_id() ||
              $this->get_component()->get_assignment()->get_visibility_submissions() ||
              $this->get_component()->is_allowed(WeblcmsRights :: VIEW_RIGHT))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ViewSubmission'), 
-                    Theme :: getInstance()->getCommonImagePath('action_browser'), 
+                    Translation :: get('ViewSubmission'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_SUBMISSION => $submission->get_id(), 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION)), 
+                            Manager :: PARAM_SUBMISSION => $submission->get_id(),
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION)),
                     ToolbarItem :: DISPLAY_ICON));
         }
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
@@ -153,33 +153,33 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('DownloadSubmission'), 
-                        Theme :: getInstance()->getCommonImagePath('action_download'), 
+                        Translation :: get('DownloadSubmission'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Download'),
                         $this->get_component()->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS, 
-                                Manager :: PARAM_SUBMISSION => $submission->get_id())), 
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS,
+                                Manager :: PARAM_SUBMISSION => $submission->get_id())),
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('DownloadNotPossible'), 
-                        Theme :: getInstance()->getCommonImagePath('action_download_na'), 
-                        null, 
+                        Translation :: get('DownloadNotPossible'),
+                        Theme :: getInstance()->getCommonImagePath('Action/DownloadNa'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DeleteSubmission'), 
-                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                    Translation :: get('DeleteSubmission'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION, 
-                            Manager :: PARAM_SUBMISSION => $submission->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION,
+                            Manager :: PARAM_SUBMISSION => $submission->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
         return $toolbar->as_html();

@@ -27,112 +27,112 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         {
             $slideshow_index = Request :: get(self :: SLIDESHOW_INDEX);
         }
-        
+
         $publications = $this->get_publications($slideshow_index, 1);
         $publication = $publications[0];
         $publication_count = $this->get_publication_count();
         if ($publication_count == 0)
         {
             $html[] = Display :: normal_message(
-                Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES), 
+                Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES),
                 true);
             return implode(PHP_EOL, $html);
         }
-        
+
         $first = ($slideshow_index == 0);
         $last = ($slideshow_index == $publication_count - 1);
-        
+
         $content_object = $this->get_content_object_from_publication($publication);
-        
+
         $play_toolbar = $this->get_publication_actions($publication, false);
         if (Request :: get(self :: SLIDESHOW_AUTOPLAY))
         {
             $play_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Stop', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_stop'), 
+                    Translation :: get('Stop', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Stop'),
                     $this->get_url(
                         array(
-                            self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
-                            self :: SLIDESHOW_AUTOPLAY => null)), 
+                            self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX),
+                            self :: SLIDESHOW_AUTOPLAY => null)),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $play_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Play', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_play'), 
+                    Translation :: get('Play', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Play'),
                     $this->get_url(
                         array(
-                            self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX), 
-                            self :: SLIDESHOW_AUTOPLAY => 1)), 
+                            self :: SLIDESHOW_INDEX => Request :: get(self :: SLIDESHOW_INDEX),
+                            self :: SLIDESHOW_AUTOPLAY => 1)),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $navigation_toolbar = new Toolbar();
         if (! $first)
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_first'), 
-                    $this->get_url(array(self :: SLIDESHOW_INDEX => 0)), 
+                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/First'),
+                    $this->get_url(array(self :: SLIDESHOW_INDEX => 0)),
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_prev'), 
-                    $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index - 1)), 
+                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Prev'),
+                    $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index - 1)),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_first_na'), 
-                    null, 
+                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/FirstNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_prev_na'), 
-                    null, 
+                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/PrevNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if (! $last)
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_next'), 
-                    $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index + 1)), 
+                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Next'),
+                    $this->get_url(array(self :: SLIDESHOW_INDEX => $slideshow_index + 1)),
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_last'), 
-                    $this->get_url(array(self :: SLIDESHOW_INDEX => $publication_count - 1)), 
+                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Last'),
+                    $this->get_url(array(self :: SLIDESHOW_INDEX => $publication_count - 1)),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_next_na'), 
-                    null, 
+                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/NextNa');
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_last_na'), 
-                    null, 
+                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/LastNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $table = array();
         $table[] = '<table id="slideshow" class="data_table">';
         $table[] = '<thead>';
@@ -150,9 +150,9 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         $table[] = '<tbody>';
         $table[] = '<tr><td colspan="3" style="background-color: #f9f9f9; text-align: center;">';
         $table[] = ContentObjectRenditionImplementation :: launch(
-            $content_object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_PREVIEW, 
+            $content_object,
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_PREVIEW,
             $this);
         // $table[] = '<a href="' . $download_url . '" target="about:blank"><img
         // src="' . $view_url . '" alt="" style="max-width: 800px; border: 1px
@@ -163,7 +163,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         $table[] = '<tr><td colspan="3">' . $content_object->get_description() . '</td></tr>';
         $table[] = '</tbody>';
         $table[] = '</table>';
-        
+
         if (Request :: get(self :: SLIDESHOW_AUTOPLAY))
         {
             if (! $last)
@@ -175,10 +175,10 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             {
                 $autoplay_url = $this->get_url(array(self :: SLIDESHOW_AUTOPLAY => 1, self :: SLIDESHOW_INDEX => 0));
             }
-            
+
             $html[] = '<meta http-equiv="Refresh" content="10; url=' . $autoplay_url . '" />';
         }
-        
+
         $html[] = implode(PHP_EOL, $table);
         return implode(PHP_EOL, $html);
     }
