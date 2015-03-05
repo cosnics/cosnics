@@ -27,7 +27,7 @@ class DynamicSearchAction extends DynamicAction
         parent :: __construct(
             null,
             $search_form->toHtml(),
-            Theme :: getInstance()->getImagePath($namespace, 'Admin/search'),
+            Theme :: getInstance()->getImagePath($namespace, 'Admin/Search'),
             null);
     }
 }

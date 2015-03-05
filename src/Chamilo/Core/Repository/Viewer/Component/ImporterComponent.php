@@ -141,8 +141,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 }
 
             /**
-             * TODO: Do something with the result here 1.
-             * If the import produces no errors AND only 1 object was
+             * TODO: Do something with the result here 1. If the import produces no errors AND only 1 object was
              * returned: select it 2. If the import produces no errors AND results in multiple objects: show selection
              * table ALWAYS filter on allowed types (since CPO can result in multiple objects of multiple types)
              */

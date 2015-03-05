@@ -234,7 +234,7 @@ class DenierComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('UpgradeQuota'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/upgrade'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
@@ -243,14 +243,14 @@ class DenierComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestUpgrade'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/request'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('BackToOverview'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/browser'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Browser'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
 
         return $action_bar;

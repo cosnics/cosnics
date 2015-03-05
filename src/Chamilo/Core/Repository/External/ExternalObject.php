@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class ExternalObject
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     /**
      *

@@ -106,7 +106,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                     new DynamicContentTab(
                         self :: TAB_MOST_USED,
                         Translation :: get('MostUsed'),
-                        Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/most_used'),
+                        Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/MostUsed'),
                         $most_used_content));
             }
         }
@@ -129,7 +129,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 new DynamicContentTab(
                     self :: TAB_EXTRA,
                     Translation :: get('Extra'),
-                    Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/extra'),
+                    Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/Extra'),
                     $this->render_additional_links()));
         }
 
@@ -199,8 +199,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 
         uasort(
             $content_object_type_counts,
-            function ($count_a, $count_b)
-            {
+            function ($count_a, $count_b) {
                 return $count_a < $count_b;
             });
 

@@ -68,7 +68,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new DynamicContentTab(
                     'personal',
                     Translation :: get('Personal'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/personal'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Personal'),
                     implode(PHP_EOL, $user_quota)));
 
             if ($user_requests > 0)
@@ -79,7 +79,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'personal_request',
                         Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/personal_request'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/PersonalRequest'),
                         $table->as_html()));
             }
 
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new DynamicContentTab(
                         'platform',
                         Translation :: get('Platform'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/platform'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'),
                         implode(PHP_EOL, $platform_quota)));
 
                 $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
@@ -224,8 +224,7 @@ class BrowserComponent extends Manager implements TableSupport
         /**
          * Disabled right now since database quota are not enforced anywhere, this is just a visual reference $html[] =
          * Calculator :: get_bar($this->calculator->get_user_database_percentage(),
-         * $this->calculator->get_used_database_quota() .
-         * ' / ' . $this->calculator->get_maximum_database_quota());
+         * $this->calculator->get_used_database_quota() . ' / ' . $this->calculator->get_maximum_database_quota());
          */
 
         $properties = array();
@@ -367,7 +366,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('UpgradeQuota'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/upgrade'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
@@ -376,7 +375,7 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestUpgrade'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/request'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
         }
 
@@ -385,13 +384,13 @@ class BrowserComponent extends Manager implements TableSupport
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/rights'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ResetTotal'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/reset'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Reset'),
                     $this->get_url(array(self :: PARAM_RESET_CACHE => 1))));
         }
 

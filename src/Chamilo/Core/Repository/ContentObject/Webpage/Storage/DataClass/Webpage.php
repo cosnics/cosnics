@@ -46,16 +46,14 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @var mixed
      */
     private $in_memory_file;
 
     /**
-     * Temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved. Useful for
+     * Temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved. Useful for
      * instance when a file is uploaded to the server.
      *
      * @var string
@@ -375,8 +373,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * Get In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @return mixed
      */
@@ -386,8 +383,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * Set In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @var $in_memory_file mixed
      * @return void
@@ -432,8 +428,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved
+     * Get temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved
      *
      * @return string
      */
@@ -443,8 +438,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved
+     * Set temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved
      *
      * @var $temporary_file_path string
      * @return void
@@ -835,8 +829,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Copy the current file to a new unique filename.
-     * Set the new values of path and hash of the current object. Useful
+     * Copy the current file to a new unique filename. Set the new values of path and hash of the current object. Useful
      * when a Webpage is updated as a new version, without replacing the content Note: needed as when saving a new
      * version of a Webpage, a new record is saved in the repository_document table, and the 'hash' field must be
      * unique.

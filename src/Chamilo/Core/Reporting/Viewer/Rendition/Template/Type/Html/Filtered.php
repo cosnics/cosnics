@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: tomgoethals Date: 10/03/14 Time: 14:19
+ * Created by PhpStorm. User: tomgoethals Date: 10/03/14 Time: 14:19
  */
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Html;
 

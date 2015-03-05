@@ -82,7 +82,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     Translation :: get('ViewNotAllowed'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Portfolio\Display',
-                        'Action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '_na'),
+                        'Action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . 'Na'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

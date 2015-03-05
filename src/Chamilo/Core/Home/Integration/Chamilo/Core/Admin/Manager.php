@@ -18,7 +18,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ManageDefault'),
             Translation :: get('ManageDefaultDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/build'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Build'),
             Redirect :: get_link(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Home\Manager :: context(),

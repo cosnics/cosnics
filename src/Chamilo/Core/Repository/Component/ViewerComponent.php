@@ -178,7 +178,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     new DynamicContentTab(
                         'versions',
                         Translation :: get('Versions'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_versions'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Versions'),
                         implode(PHP_EOL, $version_tab_content)));
             }
             elseif (count($publication_attr) > 0)
@@ -438,7 +438,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     'external_instances',
                     Translation :: get('ExternalInstances'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_external_instance'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/ExternalInstance'),
                     $browser->as_html()));
         }
 
@@ -451,7 +451,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_PUBLICATIONS,
                     Translation :: get('Publications'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_publications'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Publications'),
                     $browser->as_html()));
         }
         // EXPORT
@@ -460,7 +460,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             new DynamicContentTab(
                 'export',
                 Translation :: get('Export'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_export'),
+                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Export'),
                 $this->get_export_types()));
 
         // LINKS | PARENTS
@@ -472,7 +472,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_PARENTS,
                     Translation :: get('UsedIn'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_parents'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Parents'),
                     $browser->as_html()));
         }
 
@@ -485,7 +485,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_CHILDREN,
                     Translation :: get('Uses'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_children'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Children'),
                     $browser->as_html()));
         }
 
@@ -498,7 +498,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_ATTACHED_TO,
                     Translation :: get('AttachedTo'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_attached_to'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/AttachedTo'),
                     $browser->as_html()));
         }
 
@@ -511,7 +511,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_ATTACHES,
                     Translation :: get('Attaches'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_attaches'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Attaches'),
                     $browser->as_html()));
         }
 
@@ -524,7 +524,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_INCLUDED_IN,
                     Translation :: get('IncludedIn'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_included_in'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/IncludedIn'),
                     $browser->as_html()));
         }
 
@@ -537,7 +537,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 new DynamicContentTab(
                     LinkTable :: TYPE_INCLUDES,
                     Translation :: get('Includes'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'place_mini_includes'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Includes'),
                     $browser->as_html()));
         }
     }
@@ -589,13 +589,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             if (file_exists($url))
             {
-                $html[] = '<div class="create_block" style="background-image : url(' .
-                     Theme :: getInstance()->getImagePath(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
-                        'Export/' . $type) . '); ">' . Translation :: get(
-                        'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(),
-                        null,
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . '</div>';
+                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
+                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
+                    'Export/' . $type) . '); ">' . Translation :: get(
+                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(),
+                    null,
+                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . '</div>';
             }
             else
             {

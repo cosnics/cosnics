@@ -320,7 +320,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                         new DynamicVisualTab(
                             self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                             Translation :: get('AddFolder'),
-                            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/folder'),
+                            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Folder'),
                             $this->get_url(
                                 array(
                                     self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -364,7 +364,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                             Translation :: get('MoveDownNotAvailable'),
                             Theme :: getInstance()->getImagePath(
                                 __NAMESPACE__,
-                                'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN . '_na'),
+                                'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN . 'Na'),
                             null,
                             false,
                             false,
@@ -399,7 +399,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                             Translation :: get('MoveUpNotAvailable'),
                             Theme :: getInstance()->getImagePath(
                                 __NAMESPACE__,
-                                'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP . '_na'),
+                                'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP . 'Na'),
                             null,
                             false,
                             false,

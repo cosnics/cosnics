@@ -121,7 +121,7 @@ class AccountComponent extends Manager implements NoContextComponent
                         new DynamicVisualTab(
                             $action,
                             $label,
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'place_' . $action),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'Place/' . $action),
                             $link,
                             $selected));
                 }

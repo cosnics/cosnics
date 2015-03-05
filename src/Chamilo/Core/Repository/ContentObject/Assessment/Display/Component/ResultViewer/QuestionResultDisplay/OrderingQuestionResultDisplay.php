@@ -43,19 +43,17 @@ class OrderingQuestionResultDisplay extends QuestionResultDisplay
 
             if ($correct_answer)
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_correct') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                      Translation :: get('Correct') . '" style="" />';
             }
             else
             {
-                $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'answer_wrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                     Translation :: get('Wrong') . '" />';
+                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+                    'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                     '" />';
             }
 
             if ($user_answers[$i + 1] == - 1)

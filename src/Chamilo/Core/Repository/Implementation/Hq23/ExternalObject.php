@@ -187,7 +187,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
             $this->get_license_name(),
             Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\Implementation\Hq23',
-                'Licenses/license_' . $this->get_license_id()),
+                'Licenses/License' . $this->get_license_id()),
             null,
             ToolbarItem :: DISPLAY_ICON);
         return $icon->as_html();
