@@ -72,7 +72,7 @@ class FormValidatorTinymceHtmlEditorOptions extends FormValidatorHtmlEditorOptio
 
         $this->set_option(
             self :: OPTION_SCRIPT_URL,
-            Path :: getInstance()->getBasePath(true) . 'configuration/plugin/html_editor/tinymce/tiny_mce.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/tinymce.min.js');
         $this->set_option(self :: OPTION_THEME, 'advanced');
         $this->set_option(self :: OPTION_TOOLBAR_LOCATION, 'top');
         $this->set_option(self :: OPTION_TOOLBAR_ALIGN, 'left');

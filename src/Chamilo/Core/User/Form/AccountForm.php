@@ -17,7 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: account_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.forms
  */
 class AccountForm extends FormValidator
@@ -42,16 +42,16 @@ class AccountForm extends FormValidator
     public function __construct($form_type, $user, $action)
     {
         parent :: __construct('user_account', 'post', $action);
-        
+
         $this->user = $user;
         $this->adm = \Chamilo\Core\Admin\Storage\DataManager :: get_instance();
-        
+
         $this->form_type = $form_type;
         if ($this->form_type == self :: TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        
+
         $this->setDefaults();
     }
 
@@ -62,15 +62,15 @@ class AccountForm extends FormValidator
     {
         // Show user picture
         $this->addElement(
-            'html', 
+            'html',
             '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
                  '" style="position:absolute; right: 40px; z-index:1; border:1px solid black; max-width: 150px; margin-top: 10px"/>');
-        
+
         $this->addElement('category', Translation :: get('PersonalDetails'));
         // Name
         $this->addElement('text', User :: PROPERTY_LASTNAME, Translation :: get('LastName'), array("size" => "50"));
         $this->addElement('text', User :: PROPERTY_FIRSTNAME, Translation :: get('FirstName'), array("size" => "50"));
-        
+
         if (PlatformSetting :: get('allow_change_firstname', Manager :: context()) == 0)
         {
             if (! ((PlatformSetting :: get('allow_change_placeholder_data', Manager :: context()) == 1) && ($this->user->get_firstname() ==
@@ -87,57 +87,57 @@ class AccountForm extends FormValidator
                 $this->freeze(array(User :: PROPERTY_LASTNAME));
             }
         }
-        
+
         $this->applyFilter(array(User :: PROPERTY_LASTNAME, User :: PROPERTY_FIRSTNAME), 'stripslashes');
         $this->applyFilter(array(User :: PROPERTY_LASTNAME, User :: PROPERTY_FIRSTNAME), 'trim');
-        
+
         if ((PlatformSetting :: get('allow_change_lastname', Manager :: context()) == 1) || ((PlatformSetting :: get(
-            'allow_change_placeholder_data', 
+            'allow_change_placeholder_data',
             Manager :: context()) == 1) && ($this->user->get_lastname() ==
              PlatformSetting :: get('personal_data_placeholder', Manager :: context()))))
         {
             $this->addRule(
-                User :: PROPERTY_LASTNAME, 
-                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                User :: PROPERTY_LASTNAME,
+                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                 'required');
         }
         if ((PlatformSetting :: get('allow_change_firstname', Manager :: context()) == 1) || ((PlatformSetting :: get(
-            'allow_change_placeholder_data', 
+            'allow_change_placeholder_data',
             Manager :: context()) == 1) && ($this->user->get_firstname() ==
              PlatformSetting :: get('personal_data_placeholder', Manager :: context()))))
         {
             $this->addRule(
-                User :: PROPERTY_FIRSTNAME, 
-                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                User :: PROPERTY_FIRSTNAME,
+                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                 'required');
         }
         // Official Code
         $this->addElement(
-            'text', 
-            User :: PROPERTY_OFFICIAL_CODE, 
-            Translation :: get('OfficialCode'), 
+            'text',
+            User :: PROPERTY_OFFICIAL_CODE,
+            Translation :: get('OfficialCode'),
             array("size" => "50"));
-        
+
         if (PlatformSetting :: get('allow_change_official_code', Manager :: context()) == 0)
         {
             $this->freeze(User :: PROPERTY_OFFICIAL_CODE);
         }
-        
+
         $this->applyFilter(User :: PROPERTY_OFFICIAL_CODE, 'stripslashes');
         $this->applyFilter(User :: PROPERTY_OFFICIAL_CODE, 'trim');
-        
+
         if (PlatformSetting :: get('require_official_code', Manager :: context()) &&
              PlatformSetting :: get('allow_change_official_code', Manager :: context()) == 1)
         {
             $this->addRule(
-                User :: PROPERTY_OFFICIAL_CODE, 
-                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                User :: PROPERTY_OFFICIAL_CODE,
+                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                 'required');
         }
-        
+
         // Email
         $this->addElement('text', User :: PROPERTY_EMAIL, Translation :: get('Email'), array("size" => "50"));
-        
+
         if (PlatformSetting :: get('allow_change_email', Manager :: context()) == 0)
         {
             if (! ((PlatformSetting :: get('allow_change_placeholder_data', Manager :: context()) == 1) && ($this->user->get_email() ==
@@ -149,98 +149,99 @@ class AccountForm extends FormValidator
         else
         {
             if (PlatformSetting :: get('require_email', Manager :: context()) || ((PlatformSetting :: get(
-                'allow_change_placeholder_data', 
+                'allow_change_placeholder_data',
                 Manager :: context()) == 1) && ($this->user->get_email() ==
                  PlatformSetting :: get('personal_data_placeholder', Manager :: context()))))
             {
                 $this->addRule(
-                    User :: PROPERTY_EMAIL, 
-                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                    User :: PROPERTY_EMAIL,
+                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                     'required');
                 $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('EmailWrong'), 'email');
             }
         }
-        
+
         $this->applyFilter(User :: PROPERTY_EMAIL, 'stripslashes');
         $this->applyFilter(User :: PROPERTY_EMAIL, 'trim');
-        
+
         // Username
         $this->addElement('text', User :: PROPERTY_USERNAME, Translation :: get('Username'), array("size" => "50"));
-        
+
         if (PlatformSetting :: get('allow_change_username', Manager :: context()) == 0 ||
              ! Authentication :: factory($this->user->get_auth_source()) instanceof ChangeableUsername)
         {
             $this->freeze(User :: PROPERTY_USERNAME);
         }
-        
+
         if (PlatformSetting :: get('allow_change_username', Manager :: context()) == 1)
         {
             $this->applyFilter(User :: PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User :: PROPERTY_USERNAME, 'trim');
             $this->addRule(
-                User :: PROPERTY_USERNAME, 
-                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                User :: PROPERTY_USERNAME,
+                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                 'required');
             $this->addRule(User :: PROPERTY_USERNAME, Translation :: get('UsernameWrong'), 'username');
         }
-        
+
         // Todo: The rule to check unique username should be updated to the LCMS code api
         // $this->addRule(User :: PROPERTY_USERNAME, Translation :: get('UserTaken'), 'username_available',
         // $user_data['username']);
         $this->addElement('category');
-        
+
         // Password
         if (PlatformSetting :: get('allow_change_password', Manager :: context()) == 1 &&
              Authentication :: factory($this->user->get_auth_source()) instanceof ChangeablePassword)
         {
             $this->addElement('category', Translation :: get('ChangePassword'));
-            
+
             $password_requirements = Authentication :: factory($this->user->get_auth_source())->get_password_requirements();
             if (! is_null($password_requirements))
             {
                 $this->add_warning_message('password_requirements', null, $password_requirements);
             }
-            
+
             $this->addElement('static', null, null, '<em>' . Translation :: get('EnterCurrentPassword') . '</em>');
             $this->addElement(
-                'password', 
-                User :: PROPERTY_PASSWORD, 
-                Translation :: get('CurrentPassword'), 
+                'password',
+                User :: PROPERTY_PASSWORD,
+                Translation :: get('CurrentPassword'),
                 array('size' => 40, 'autocomplete' => 'off'));
             $this->addElement('static', null, null, '<em>' . Translation :: get('EnterNewPasswordTwice') . '</em>');
             $this->addElement(
-                'password', 
-                self :: NEW_PASSWORD, 
-                Translation :: get('NewPassword'), 
+                'password',
+                self :: NEW_PASSWORD,
+                Translation :: get('NewPassword'),
                 array('size' => 40, 'autocomplete' => 'off', 'id' => 'new_password'));
             $this->addElement(
-                'password', 
-                self :: NEW_PASSWORD_CONFIRMATION, 
-                Translation :: get('PasswordConfirmation'), 
+                'password',
+                self :: NEW_PASSWORD_CONFIRMATION,
+                Translation :: get('PasswordConfirmation'),
                 array('size' => 40, 'autocomplete' => 'off'));
             $this->addRule(
-                array(self :: NEW_PASSWORD, self :: NEW_PASSWORD_CONFIRMATION), 
-                Translation :: get('PassTwo'), 
+                array(self :: NEW_PASSWORD, self :: NEW_PASSWORD_CONFIRMATION),
+                Translation :: get('PassTwo'),
                 'compare');
-            
+
             $this->addElement(
-                'html', 
+                'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getBasePath(true) . 'Configuration/Plugin/jquery/jquery.jpassword.js'));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                         'Plugin/Jquery/jquery.jpassword.js'));
             $this->addElement(
-                'html', 
+                'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getBasePath(true) . 'Configuration/Resources/Javascript/Password.js'));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'Password.js'));
             $this->addElement('category');
         }
-        
+
         // Picture
         if (PlatformSetting :: get('allow_change_user_picture', Manager :: context()) == 1)
         {
             $this->addElement('category', Translation :: get('PlatformOptions'));
             $this->addElement(
-                'file', 
-                User :: PROPERTY_PICTURE_URI, 
+                'file',
+                User :: PROPERTY_PICTURE_URI,
                 ($this->user->has_picture() ? Translation :: get('UpdateImage') : Translation :: get('AddImage')));
             $this->addElement('static', null, null, Translation :: get('AllowedProfileImageFormats'));
             if ($this->form_type == self :: TYPE_EDIT && $this->user->has_picture())
@@ -249,13 +250,13 @@ class AccountForm extends FormValidator
             }
             $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF');
             $this->addRule(
-                User :: PROPERTY_PICTURE_URI, 
-                Translation :: get('OnlyImagesAllowed'), 
-                'filetype', 
+                User :: PROPERTY_PICTURE_URI,
+                Translation :: get('OnlyImagesAllowed'),
+                'filetype',
                 $allowed_picture_types);
             $this->addElement('category');
         }
-        
+
         if (PlatformSetting :: get('show_personal_token', __NAMESPACE__))
         {
             $this->addElement('category', Translation :: get('Other'));
@@ -270,20 +271,20 @@ class AccountForm extends FormValidator
     public function build_editing_form()
     {
         $this->build_basic_form();
-        
+
         $this->addElement('hidden', User :: PROPERTY_ID);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -298,35 +299,35 @@ class AccountForm extends FormValidator
         {
             $user->set_firstname($values[User :: PROPERTY_FIRSTNAME]);
         }
-        
+
         if (PlatformSetting :: get('allow_change_lastname', Manager :: context()))
         {
             $user->set_lastname($values[User :: PROPERTY_LASTNAME]);
         }
-        
+
         if (PlatformSetting :: get('allow_change_official_code', Manager :: context()))
         {
             $user->set_official_code($values[User :: PROPERTY_OFFICIAL_CODE]);
         }
-        
+
         if (PlatformSetting :: get('allow_change_email', Manager :: context()))
         {
             $user->set_email($values[User :: PROPERTY_EMAIL]);
         }
-        
+
         if (PlatformSetting :: get('allow_change_username', Manager :: context()) &&
              Authentication :: factory($this->user->get_auth_source()) instanceof ChangeableUsername)
         {
             $user->set_username($values[User :: PROPERTY_USERNAME]);
         }
-        
+
         if (PlatformSetting :: get('allow_change_password', Manager :: context()) &&
              strlen($values[User :: PROPERTY_PASSWORD]) &&
              Authentication :: factory($this->user->get_auth_source()) instanceof ChangeablePassword)
         {
             $result = Authentication :: factory($this->user->get_auth_source())->change_password(
-                $user, 
-                $values[User :: PROPERTY_PASSWORD], 
+                $user,
+                $values[User :: PROPERTY_PASSWORD],
                 $values[self :: NEW_PASSWORD]);
             if (! $result)
             {
@@ -334,10 +335,10 @@ class AccountForm extends FormValidator
             }
         }
         $value1 = true;
-        
+
         if (PlatformSetting :: get('allow_change_user_picture', Manager :: context()))
         {
-            
+
             if (isset($_FILES['picture_uri']) && strlen($_FILES['picture_uri']['name']) > 0)
             {
                 if (! $_FILES['picture_uri']['error'])
@@ -354,25 +355,25 @@ class AccountForm extends FormValidator
                 $user->delete_picture();
             }
         }
-        
+
         $value = $user->update();
-        
+
         if ($value)
         {
             Event :: trigger(
-                'update', 
-                Manager :: context(), 
+                'update',
+                Manager :: context(),
                 array(
-                    ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(), 
+                    ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(),
                     ChangesTracker :: PROPERTY_USER_ID => $user->get_id()));
         }
-        
+
         return $value && $value1;
     }
 
     /**
      * Sets default values.
-     * 
+     *
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())

@@ -20,10 +20,11 @@ class Processor extends HtmlEditorProcessor
         $html[] = '<script type="text/javascript">';
         $html[] = 'window.opener.CKEDITOR.tools.callFunction(
                         ' . $this->get_parameter('CKEditorFuncNum') . ',
-                        \'' .
-             Path :: getInstance()->namespaceToFullPath(
+                        \'' . Path :: getInstance()->getJavascriptPath(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(
                 ClassnameUtilities :: getInstance()->getNamespaceFromObject($object),
-                true) . 'Resources/Javascript/HtmlEditor/Ckeditor/dialog.js' . '\', \'' . $object->get_id() . '\', \'' .
+                2),
+            true) . 'HtmlEditor/Ckeditor/dialog.js' . '\', \'' . $object->get_id() . '\', \'' .
              ClassnameUtilities :: getInstance()->getClassNameFromNamespace($object->get_type(), true) . '\');';
         $html[] = 'window.close();';
 

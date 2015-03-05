@@ -116,8 +116,8 @@ echo Theme :: getInstance()->getCommonStylesheetPath(true);
 <script type="text/javascript" src="TblChange.js"></script>
 <script type="text/javascript"
 	src="<?php
-echo Path :: getInstance()->getBasePath(true);
-?>configuration/plugin/jquery/jquery.min.js"></script>
+echo Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true);
+?>Plugin/Jquery/jquery.min.js"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
 var month_names = new Array(

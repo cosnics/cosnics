@@ -42,16 +42,13 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.draw.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                     'Plugin/jquery.draw.js'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js'));
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'core/repository/content_object/hotspot_question/resources/javascript/hotspot_question_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                     'HotspotQuestionForm.js'));
 
         $this->add_warning_message(
             'hotspot_javascript',
@@ -112,16 +109,13 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.draw.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                     'Plugin/jquery.draw.js'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js'));
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'core/repository/content_object/hotspot_question/resources/javascript/hotspot_question_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                     'HotspotQuestionForm.js'));
         $this->add_options();
 
         $html = array();

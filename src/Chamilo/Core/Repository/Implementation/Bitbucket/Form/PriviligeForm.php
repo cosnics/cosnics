@@ -27,10 +27,10 @@ class PriviligeForm extends FormValidator
     {
         parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
         $this->renderer = clone $this->defaultRenderer();
-        
+
         $this->bitbucket = $bitbucket;
         $this->build();
-        
+
         $this->accept($this->renderer);
     }
 
@@ -45,21 +45,21 @@ class PriviligeForm extends FormValidator
             $this->addElement('select', 'groups', Translation :: get('Groups'), $groups);
         }
         $this->addElement(
-            'select', 
-            self :: TYPE_PRIVILEGE, 
-            Translation :: get('PrivilegeType'), 
+            'select',
+            self :: TYPE_PRIVILEGE,
+            Translation :: get('PrivilegeType'),
             self :: get_privileges_types());
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Grant', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Grant', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: get_common_extensions_path(true) .
-                     'external_repository_manager/implementation/bitbucket/resources/javascript/privilege_granting_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+                     'PrivilegeGrantingForm.js'));
     }
 
     public function get_groups_name()
@@ -90,19 +90,19 @@ class PriviligeForm extends FormValidator
         $values = $this->exportValues();
         $group = $values['groups'];
         $user = $values['username'];
-        
+
         if ($user)
         {
             return $this->bitbucket->get_external_repository_manager_connector()->grant_user_privilege(
-                $this->bitbucket->get_repository()->get_id(), 
-                $values['username'], 
+                $this->bitbucket->get_repository()->get_id(),
+                $values['username'],
                 $values['type']);
         }
         elseif ($group)
         {
             return $this->bitbucket->get_external_repository_manager_connector()->grant_group_privileges(
-                $this->bitbucket->get_repository()->get_id(), 
-                $values['groups'], 
+                $this->bitbucket->get_repository()->get_id(),
+                $values['groups'],
                 $values['type']);
         }
     }
@@ -113,7 +113,7 @@ class PriviligeForm extends FormValidator
         $privileges_types[self :: TYPE_READ] = Translation :: get('Read');
         $privileges_types[self :: TYPE_WRITE] = Translation :: get('Write');
         $privileges_types[self :: TYPE_ADMIN] = Translation :: get('Admin');
-        
+
         return $privileges_types;
     }
 }
