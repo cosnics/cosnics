@@ -14,7 +14,7 @@
             "email": "hans.de.bisschop@hogent.be"
         }
     ],
-    "type": "chamilo-package",
+    
     "require": {
         "php": ">=5.4.0"
     },

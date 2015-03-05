@@ -13,32 +13,30 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_object();
-        
+
         $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'url', 
+            'url',
             $object->get_external_repository_id());
-        
+
         $html = array();
-        
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath(
-                \Chamilo\Core\Repository\Implementation\Matterhorn\Manager :: context(), 
-                true) . 'projekktor/projekktor.js');
-        
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) . 'Projekktor/projekktor.js');
+
         $width = 620;
         $height = 596;
         $video_tracks = $object->get_video_tracks();
-        
+
         $tabs = new DynamicTabsRenderer('matterhorn_preview');
-        
+
         if (count($video_tracks) > 0)
         {
             $video = array();
-            
+
             $video[] = '<video class="projekktor" title="' . $object->get_title() .
                  '" width="640" height="390" controls>';
             $video[] = '</video>';
-            
+
             $video[] = '<script type="text/javascript">';
             $video[] = '$(document)
         .ready(
@@ -87,10 +85,10 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
                                     } ]
                                 } ],
                                 playlist : [ {';
-            
+
             $track_codes = array();
             $i = 0;
-            
+
             foreach ($object->get_tracks() as $track)
             {
                 if ($track->is_video())
@@ -108,21 +106,21 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
                     $i ++;
                 }
             }
-            
+
             $video[] = implode(', ' . "\n", $track_codes);
             $video[] = '    } ]
                             });
                 })';
             $video[] = '</script>';
-            
+
             $html[] = implode(PHP_EOL, $video);
         }
-        
+
         $audio_tracks = $object->get_audio_tracks();
         if (count($audio_tracks) > 0)
         {
             $audio = array();
-            
+
             $audio[] = ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getPluginPath('configuration', true) . 'jquery/jquery.jplayer.js');
             $audio[] = '<script type="text/javascript">
@@ -132,13 +130,13 @@ $(document).ready(function(){
 		ready: function (event) {
 			$(this).jPlayer("setMedia", {
 				title: "' . htmlentities($object->get_title()) . '",';
-            
+
             foreach ($object->get_tracks() as $track)
             {
-                
+
                 $audio[] = $track->get_extension() . ': "' . $track->get_url() . '",';
             }
-            
+
             $audio[] = '});
 		},
 		wmode: "window",
@@ -150,7 +148,7 @@ $(document).ready(function(){
 	});
 });
 </script>';
-            
+
             $audio[] = ' <div id="jquery_jplayer_' . $this->get_content_object()->get_id() . '" class="jp-jplayer"></div>
 
 		<div id="jp_container_' . $this->get_content_object()->get_id() . '" class="jp-audio">
@@ -193,10 +191,10 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>';
-            
+
             $html[] = implode(PHP_EOL, $audio);
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

@@ -25,7 +25,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     function get_question_preview($nr = null, $complex_question_id = null)
     {
         $content_object = $this->get_content_object();
-        
+
         if ($complex_question_id)
         {
             $question_id = $complex_question_id;
@@ -34,7 +34,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         {
             $question_id = $content_object->get_id();
         }
-        
+
         $html = array();
         $html[] = $this->get_includes();
         $html[] = '<div class="question" >';
@@ -52,7 +52,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="instruction">';
         if ($content_object->has_instruction())
         {
@@ -60,11 +60,11 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="answer">';
-        
+
         $html[] = '<div class="clear"></div>';
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table take_survey">';
         $table_header[] = '<thead>';
@@ -76,16 +76,16 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<tr>';
         $table_header[] = '<td>';
         $html[] = implode(PHP_EOL, $table_header);
-        
+
         $html[] = '<textarea class="html_editor" name="' . $question_id . '" >';
         $html[] = '</textarea>';
-        
+
         $table_footer[] = '</td>';
         $table_footer[] = '</tr>';
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $html[] = implode(PHP_EOL, $table_footer);
-        
+
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
@@ -97,10 +97,12 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     {
         $scripts = array();
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/ckeditor.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
         $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'html_editor/ckeditor/adapters/jquery.js');
-        
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
+
         return implode(PHP_EOL, $scripts);
     }
 
@@ -110,7 +112,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html_editor_options['width'] = '100%';
         $html_editor_options['toolbar'] = 'Assessment';
         $options = FormValidatorHtmlEditorOptions :: factory(LocalSetting :: get('html_editor'), $html_editor_options);
-        
+
         $javascript = array();
         $javascript[] = '<script type="text/javascript">';
         $javascript[] = 'var web_path = \'' . Path :: getInstance()->getBasePath(true) . '\'';
@@ -124,7 +126,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $javascript[] = '	});';
         $javascript[] = '});';
         $javascript[] = '</script>';
-        
+
         return implode(PHP_EOL, $javascript);
     }
 }

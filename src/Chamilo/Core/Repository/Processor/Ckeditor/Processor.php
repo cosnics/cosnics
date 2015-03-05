@@ -23,7 +23,7 @@ class Processor extends HtmlEditorProcessor
                         \'' .
              Path :: getInstance()->namespaceToFullPath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromObject($object),
-                true) . 'resources/javascript/html_editor/ckeditor/dialog.js' . '\', \'' . $object->get_id() . '\', \'' .
+                true) . 'Resources/Javascript/HtmlEditor/Ckeditor/dialog.js' . '\', \'' . $object->get_id() . '\', \'' .
              ClassnameUtilities :: getInstance()->getClassNameFromNamespace($object->get_type(), true) . '\');';
         $html[] = 'window.close();';
 
