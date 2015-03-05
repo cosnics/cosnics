@@ -88,7 +88,7 @@ class Path
             }
 
             $protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
-            $path = $protocol . $_SERVER['HTTP_HOST'] . $dir;
+            $path = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . $dir;
         }
         else
         {

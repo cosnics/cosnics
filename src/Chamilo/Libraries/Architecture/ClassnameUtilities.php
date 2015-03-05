@@ -179,7 +179,8 @@ class ClassnameUtilities
         if (! isset($this->packageNamespaceMap[$namespace]) ||
              ! isset($this->packageNamespaceMap[$namespace][$convertToCamelCase]))
         {
-            $packageName = array_pop(explode('\\', $namespace));
+            $packageName = explode('\\', $namespace);
+            $packageName = array_pop($packageName);
 
             if ($convertToCamelCase)
             {

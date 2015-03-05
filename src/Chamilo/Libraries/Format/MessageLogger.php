@@ -16,7 +16,7 @@ class MessageLogger
 
     public static function get_instance_by_name($instance_name)
     {
-        if (! self :: $instances[$instance_name])
+        if (! isset(self :: $instances[$instance_name]))
         {
             self :: $instances[$instance_name] = new MessageLogger();
         }
