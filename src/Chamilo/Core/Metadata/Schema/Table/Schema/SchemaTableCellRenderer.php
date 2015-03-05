@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table cell renderer for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SchemaTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -20,7 +20,7 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $result
      *
      * @return String
@@ -28,47 +28,47 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
     public function get_actions($result)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         if ($result->is_fixed())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_edit_na'), 
-                    null, 
+                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/EditNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_delete_na'), 
-                    null, 
+                    Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/DeleteNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_edit'), 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                            Manager :: PARAM_SCHEMA_ID => $result->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                            Manager :: PARAM_SCHEMA_ID => $result->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                            Manager :: PARAM_SCHEMA_ID => $result->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                            Manager :: PARAM_SCHEMA_ID => $result->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
-        
+
         return $toolbar->as_html();
     }
 }

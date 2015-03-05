@@ -124,7 +124,7 @@ abstract class ContentObjectRenderer implements TableSupport
         $actions = array();
         $actions[] = new ToolbarItem(
             Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_edit'),
+            Theme :: getInstance()->getCommonImagePath('Action/Edit'),
             $this->get_repository_browser()->get_content_object_editing_url($content_object),
             ToolbarItem :: DISPLAY_ICON);
 
@@ -132,7 +132,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Duplicate'),
-                Theme :: getInstance()->getCommonImagePath('action_reuse'),
+                Theme :: getInstance()->getCommonImagePath('Action/Reuse'),
                 $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
         }
@@ -141,7 +141,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
+                Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
                 $url,
                 ToolbarItem :: DISPLAY_ICON,
                 true);
@@ -150,7 +150,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'),
+                Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
                 null,
                 ToolbarItem :: DISPLAY_ICON);
         }
@@ -159,7 +159,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_move'),
+                Theme :: getInstance()->getCommonImagePath('Action/Move'),
                 $this->get_repository_browser()->get_content_object_moving_url($content_object),
                 ToolbarItem :: DISPLAY_ICON);
         }
@@ -168,25 +168,25 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_rights'),
+                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                 $this->get_repository_browser()->get_create_share_content_objects_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
         }
 
         $actions[] = new ToolbarItem(
             Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_export'),
+            Theme :: getInstance()->getCommonImagePath('Action/Export'),
             $this->get_repository_browser()->get_content_object_exporting_url($content_object),
             ToolbarItem :: DISPLAY_ICON);
         $actions[] = new ToolbarItem(
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_publish'),
+            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
             $this->get_repository_browser()->get_publish_content_object_url($content_object),
             ToolbarItem :: DISPLAY_ICON);
 
         $actions[] = new ToolbarItem(
             Translation :: get('ContentObjectAlternativeLinker'),
-            Theme :: getInstance()->getCommonImagePath('action_content_object_alternative_linker'),
+            Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
             $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
             ToolbarItem :: DISPLAY_ICON);
 
@@ -194,7 +194,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('CopyToTemplates'),
-                Theme :: getInstance()->getCommonImagePath('export_template'),
+                Theme :: getInstance()->getCommonImagePath('ExportTemplate'),
                 $this->get_repository_browser()->get_url(
                     array(
                         Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
@@ -206,7 +206,7 @@ abstract class ContentObjectRenderer implements TableSupport
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
         $actions[] = new ToolbarItem(
             Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('action_preview'),
+            Theme :: getInstance()->getCommonImagePath('Action/Preview'),
             $preview_url,
             ToolbarItem :: DISPLAY_ICON,
             false,
@@ -216,7 +216,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             $label = Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES);
-            $image = Theme :: getInstance()->getCommonImagePath('action_build');
+            $image = Theme :: getInstance()->getCommonImagePath('Action/Build');
 
             if (\Chamilo\Core\Repository\Builder\Action\Manager :: exists(
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())))
@@ -244,7 +244,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_download'),
+                Theme :: getInstance()->getCommonImagePath('Action/Download'),
                 $this->get_repository_browser()->get_document_downloader_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
         }

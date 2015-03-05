@@ -60,14 +60,14 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_edit_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/EditNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
 
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/DeleteNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -76,7 +76,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
@@ -86,7 +86,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
@@ -125,7 +125,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_up'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Up'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
@@ -138,7 +138,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_up_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/UpNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -149,7 +149,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_down'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Down'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
@@ -162,7 +162,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_down_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/DownNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

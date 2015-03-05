@@ -19,7 +19,7 @@ class GroupRelUserTableCellRenderer extends DataClassTableCellRenderer implement
             case GroupRelUser :: PROPERTY_USER_ID :
                 $user_id = parent :: render_cell($column, $groupreluser);
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                     $user_id);
                 return $user->get_fullname();
         }
@@ -29,15 +29,15 @@ class GroupRelUserTableCellRenderer extends DataClassTableCellRenderer implement
     public function get_actions($groupreluser)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Unsubscribe'), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
-                $this->get_component()->get_group_rel_user_unsubscribing_url($groupreluser), 
-                ToolbarItem :: DISPLAY_ICON, 
+                Translation :: get('Unsubscribe'),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                $this->get_component()->get_group_rel_user_unsubscribing_url($groupreluser),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         return $toolbar->as_html();
     }
 }

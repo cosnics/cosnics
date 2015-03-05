@@ -67,7 +67,7 @@ class ViewerComponent extends Manager implements TableSupport
             $html[] = $this->ab->as_html() . '<br />';
 
             $html[] = '<div class="clear"></div><div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getCommonImagePath('place_group') . ');">';
+                 Theme :: getInstance()->getCommonImagePath('Place/Group') . ');">';
             $html[] = '<div class="title">' . Translation :: get('Details') . '</div>';
             $html[] = '<b>' . Translation :: get('Code') . '</b>: ' . $group->get_code();
             $html[] = '<br /><b>' . Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES) . '</b>: ' .
@@ -76,7 +76,7 @@ class ViewerComponent extends Manager implements TableSupport
             $html[] = '</div>';
 
             $html[] = '<div class="content_object" style="background-image: url(' .
-                 Theme :: getInstance()->getCommonImagePath('place_users') . ');">';
+                 Theme :: getInstance()->getCommonImagePath('Place/Users') . ');">';
             $html[] = '<div class="title">' . Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context()) .
                  '</div>';
 
@@ -152,13 +152,13 @@ class ViewerComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_edit'),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                 $this->get_group_editing_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -167,7 +167,7 @@ class ViewerComponent extends Manager implements TableSupport
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_group_delete_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -175,7 +175,7 @@ class ViewerComponent extends Manager implements TableSupport
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('AddUsers', null, \Chamilo\Core\User\Manager :: context()),
-                Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
                 $this->get_group_suscribe_user_browser_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -190,13 +190,13 @@ class ViewerComponent extends Manager implements TableSupport
             $toolbar_data[] = array(
                 'href' => $this->get_group_emptying_url($group),
                 'label' => Translation :: get('Truncate'),
-                'img' => Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
+                'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
                 'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('Truncate'),
-                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
                     $this->get_group_emptying_url($group),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -204,12 +204,12 @@ class ViewerComponent extends Manager implements TableSupport
         {
             $toolbar_data[] = array(
                 'label' => Translation :: get('TruncateNA'),
-                'img' => Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'),
+                'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
                 'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
             $action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TruncateNA'),
-                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -217,7 +217,7 @@ class ViewerComponent extends Manager implements TableSupport
         $action_bar->add_tool_action(
             new ToolbarItem(
                 Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_metadata'),
+                Theme :: getInstance()->getCommonImagePath('Action/Metadata'),
                 $this->get_group_metadata_url($group),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
