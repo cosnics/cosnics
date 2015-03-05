@@ -1,0 +1,87 @@
+@CHARSET "ISO-8859-1";
+
+ul.tree-menu li div a.survey_open_question {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+ul.tree-menu li div a.type_survey_open_question {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+ul.tree-menu li div a.survey_open_question_checked {
+	background-image: url(../../Images/Aqua/Logo/16_checked.png);
+}
+
+ul.tree-menu li div a.type_survey_open_question_checked {
+	background-image: url(../../Images/Aqua/Logo/16_checked.png);
+}
+
+th.info {
+	font-size: 9px;
+	color: gray;
+}
+
+.ui-datepicker {
+	background-color: #eeeeee !important;
+	display: inline-table !important;
+	padding: 2px;
+}
+
+.ui-datepicker table {
+	font-size: 80%;
+	border: 1px solid #b5cae7;
+}
+
+.ui-datepicker table th {
+	border: 1px solid #b5cae7;
+}
+
+.ui-datepicker table a {
+	background: #eeeeee !important;
+}
+
+.ui-timepicker-div .ui-widget-header {
+	background-color: #4171b5 !important;
+	display: none;
+}
+
+.ui-widget-content .ui-state-hover {
+	border: 0px solid #4171b5 !important;
+}
+
+.ui-widget-content .ui-state-default {
+	border: 0px solid #4171b5 !important;
+}
+
+.ui-widget-content {
+	color: #4171b5;
+}
+
+/* .ui-datepicker { */
+/*     background-color: #264269 !important; */
+/* } */
+
+/* /* css for timepicker */
+*
+/
+/* .ui-timepicker-div .ui-widget-header { */
+/*     margin-bottom: 8px; */
+/*     background-color: #264269 !important; */
+/* } */
+
+/* .ui-timepicker-div dl { */
+/*     text-align: left; */
+/* } */
+
+/* .ui-timepicker-div dl dt { */
+/*     height: 25px; */
+/*     margin-bottom: -25px; */
+/* } */
+
+/* .ui-timepicker-div dl dd { */
+/*     margin: 0 10px 10px 65px; */
+/* } */
+
+/* .ui-timepicker-div td { */
+/*     font-size: 90%; */
+/* } */

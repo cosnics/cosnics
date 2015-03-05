@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\forum_topic
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Forumthema"
+Topic = "Thema"
+Nothing = "Nichts"
+LastChangedAt = "Zuletzt geändert um {TIME}"
+Top = "Top"
+ReplyOnTopic = "Antwort zum Thema"
+ReplyOnPost = ""
+Subscribe = ""
+UnSubscribe = ""
+SuccesSubscribe = ""
+UnSuccesSubscribe = ""
+SuccesUnSubscribe = ""
+UnSuccesUnSubscribe = ""
+Title = "Titel"
+Description = "Beschreibung"
+Properties = "Eigenschaften"
+ForumTopicBuilderBrowserComponent = ""
+ForumTopicBuilderCreatorComponent = ""

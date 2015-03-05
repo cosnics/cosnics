@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_peer_assessment_attempt_tracker">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="publication_id" type="integer" unsigned="1" notnull="1" />
+		<property name="direct_subscribe_available" type="tinyint" unsigned="1" />
+		<property name="unsubscribe_available" type="tinyint" unsigned="1" />
+		<property name="subscription_deadline" type="integer" unsigned="1" />
+		<property name="min_group_members" type="integer" unsigned="1" />
+		<property name="max_group_members" type="integer" unsigned="1" />
+		<property name="filter_min_max" type="tinyint" unsigned="1" />
+		<property name="filter_self" type="tinyint" unsigned="1" />
+	</properties>
+	<index name="publication_id">
+		<indexproperty name="publication_id" />
+	</index>
+</object>

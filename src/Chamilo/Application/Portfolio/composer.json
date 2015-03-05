@@ -1,0 +1,29 @@
+{
+    "name": "chamilo/app-portfolio",
+    "description": "Chamilo Portfolio",
+    "keywords": [],
+    "homepage": "http://chamilo.com",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "type": "chamilo-package",
+    "require": {
+        "php": ">=5.3.0",
+        "chamilo/composer-installer": "1.0.0",
+        "chamilo/core": "*@dev",
+        "chamilo/core-home": "*@dev",
+        "chamilo/core-repository": "*@dev"
+    },
+    "extra": {
+        "install-path": "application/portfolio"
+    }
+
+}

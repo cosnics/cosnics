@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata_structure>
+	<schemas>
+		<schema name="Dublin Core" namespace="dc" url="http://purl.org/dc/elements/1.1/">
+			<elements>
+				<element id="1" name="contributor" display_order="1">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="2" name="coverage" display_order="2">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="3" name="creator" display_order="3">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="4" name="date" display_order="4">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="5" name="description" display_order="5">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="6" name="format" display_order="6">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="7" name="identifier" display_order="7">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="8" name="language" display_order="8">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="9" name="publisher" display_order="9">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="10" name="relation" display_order="10">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="11" name="rights" display_order="11">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="12" name="source" display_order="12">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="13" name="subject" display_order="13">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="14" name="title" display_order="15">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="15" name="type" display_order="14">
+					<nested_elements></nested_elements>
+					<attributes>
+						<attribute idref="1"></attribute>
+					</attributes>
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</element>
+				<element id="16" name="Hello" display_order="16">
+					<nested_elements>
+						<nested_element idref="14"></nested_element>
+					</nested_elements>
+					<attributes></attributes>
+					<default_values>
+						<default_value idref="1"></default_value>
+					</default_values>
+					<controlled_vocabularies>
+						<controlled_vocabulary idref="1"></controlled_vocabulary>
+					</controlled_vocabularies>
+				</element>
+			</elements>
+			<attributes>
+				<attribute id="2" name="testje">
+					<default_values>
+						<default_value idref="1"></default_value>
+					</default_values>
+					<controlled_vocabularies>
+						<controlled_vocabulary idref="1"></controlled_vocabulary>
+					</controlled_vocabularies>
+				</attribute>
+			</attributes>
+		</schema>
+		<schema name="XML" namespace="xml" url="http://www.w3.org/2001/XMLSchema">
+			<elements></elements>
+			<attributes>
+				<attribute id="1" name="lang">
+					<default_values></default_values>
+					<controlled_vocabularies></controlled_vocabularies>
+				</attribute>
+			</attributes>
+		</schema>
+	</schemas>
+	<controlled_vocabularies>
+		<controlled_vocabulary id="1">België</controlled_vocabulary>
+	</controlled_vocabularies>
+</metadata_structure>
