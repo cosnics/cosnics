@@ -19,8 +19,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @package user.lib.user_manager.component
  */
 /**
- * User manager component which displays the quota to the user.
- * This component displays two progress-bars. The first one
+ * User manager component which displays the quota to the user. This component displays two progress-bars. The first one
  * displays the used disk space and the second one the number of learning objects in the users user.
  *
  * @author Bart Mollet
@@ -80,7 +79,7 @@ class QuotaViewerComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('EditUser'),
-                Theme :: getInstance()->getCommonImagePath('action_edit'),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                 $this->get_url(
                     array(
                         Application :: PARAM_ACTION => self :: ACTION_UPDATE_USER,

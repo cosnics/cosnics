@@ -211,21 +211,20 @@ class DayCalendar extends Calendar
             0,
             0,
             '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_prev')) .
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Prev')) .
                  '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(0, 1, date('l d F Y', $this->get_display_time()));
         $navigation->setCellContents(
             0,
             2,
             ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('action_next')) .
+                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Next')) .
                  '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }
 
     /**
-     * Sets the daynames.
-     * If you don't use this function, the long daynames will be displayed
+     * Sets the daynames. If you don't use this function, the long daynames will be displayed
      *
      * @param array $daynames An array of 7 elements with keys 0 -> 6 containing the titles to display.
      */

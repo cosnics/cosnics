@@ -78,9 +78,9 @@ abstract class LocationEntityTableCellRenderer extends DataClassTableCellRendere
                 $locked_parent->get_id());
 
             $html[] = ($value == 1 ? '<img src="' .
-                 Theme :: getInstance()->getCommonImagePath('action_setting_true_locked') . '" title="' .
+                 Theme :: getInstance()->getCommonImagePath('Action/SettingTrueLocked') . '" title="' .
                  Translation :: get('LockedTrue') . '" />' : '<img src="' .
-                 Theme :: getInstance()->getCommonImagePath('action_setting_false_locked') . '" title="' .
+                 Theme :: getInstance()->getCommonImagePath('Action/SettingFalseLocked') . '" title="' .
                  Translation :: get('LockedFalse') . '" />');
         }
         else

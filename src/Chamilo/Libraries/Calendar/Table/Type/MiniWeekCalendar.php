@@ -1,11 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
-
-
-
-
-
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -183,7 +178,8 @@ class MiniWeekCalendar extends Calendar
             0,
             0,
             '<a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath('action_prev') . '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
+                 Theme :: getInstance()->getCommonImagePath('Action/Prev') .
+                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(
             0,
             1,
@@ -194,7 +190,8 @@ class MiniWeekCalendar extends Calendar
             0,
             2,
             ' <a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath('action_next') . '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
+                 Theme :: getInstance()->getCommonImagePath('Action/Next') .
+                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
         $this->navigation_html = $navigation->toHtml();
     }
 

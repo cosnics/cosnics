@@ -52,14 +52,14 @@ class AdminEventViewerCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     ($tracker->get_active() == 1) ? Translation :: get('Deactivate') : Translation :: get('Activate'),
-                    ($tracker->get_active() == 1) ? Theme :: getInstance()->getCommonImagePath('action_visible') : Theme :: getInstance()->getCommonImagePath(
+                    ($tracker->get_active() == 1) ? Theme :: getInstance()->getCommonImagePath('Action/Visible') : Theme :: getInstance()->getCommonImagePath(
                         'action_invisible'),
                     $this->eventviewer->get_change_active_url('tracker', $this->event->get_id(), $tracker->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Empty_Tracker'),
-                    Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
                     $this->eventviewer->get_empty_tracker_url('tracker', $this->event->get_id()),
                     ToolbarItem :: DISPLAY_ICON,
                     true));

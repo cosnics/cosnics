@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -35,7 +33,8 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->_appendName = true;
         $this->_type = 'datepicker';
         $popup_link = '<a href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName . '\')"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('action_calendar_select') . '" style="vertical-align:middle;"/></a>';
+             Theme :: getInstance()->getCommonImagePath('Action/CalendarSelect') .
+             '" style="vertical-align:middle;"/></a>';
         $special_chars = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
         $hour_minute_devider = Translation :: get('HourMinuteDivider', null, Utilities :: COMMON_LIBRARIES);
         foreach ($special_chars as $index => $char)
@@ -115,8 +114,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     /**
      * Inheritance of setValue due to limitations of the date element When the default value is bigger then the maximum
-     * possible selected value the default year is the lowest possible year.
-     * This can give serious problems when using
+     * possible selected value the default year is the lowest possible year. This can give serious problems when using
      * multiple timestamps and compare
      *
      * @param String $value

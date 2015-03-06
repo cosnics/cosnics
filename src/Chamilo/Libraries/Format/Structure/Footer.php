@@ -66,7 +66,7 @@ class Footer
         $output[] = '<div id="copyright">';
         $output[] = '<div class="logo">';
         $output[] = '<a href="http://www.chamilo.org"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('logo_footer') . '" alt="footer"/></a>';
+             Theme :: getInstance()->getCommonImagePath('LogoFooter') . '" alt="footer"/></a>';
         $output[] = '</div>';
         $output[] = '<div class="links">';
 

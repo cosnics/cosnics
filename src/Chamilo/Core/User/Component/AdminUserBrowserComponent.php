@@ -112,14 +112,14 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
                 $this->action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('action_add'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Add'),
                         $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_CREATE_USER)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
                 $this->action_bar->add_tool_action(
                     new ToolBarItem(
                         Translation :: get('Report'),
-                        Theme :: getInstance()->getCommonImagePath('action_reporting'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
                         $this->get_reporting_url(),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
@@ -127,7 +127,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
