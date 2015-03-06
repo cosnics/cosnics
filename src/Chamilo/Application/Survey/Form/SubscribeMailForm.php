@@ -12,8 +12,6 @@ use PHPExcel_Reader_OOCalc;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
-
-require_once Path :: getInstance()->getPluginPath() . 'phpexcel/PHPExcel.php';
 class SubscribeMailForm extends FormValidator
 {
     const APPLICATION_NAME = 'survey';
@@ -31,7 +29,7 @@ class SubscribeMailForm extends FormValidator
     function __construct($publication_id, $action)
     {
         parent :: __construct('subscribe_users', 'post', $action);
-        
+
         $this->publication_id = $publication_id;
         $this->build_form();
         $this->setDefaults();
@@ -42,29 +40,29 @@ class SubscribeMailForm extends FormValidator
         $this->addElement('category', Translation :: get('UserEmails'));
         $this->add_information_message(null, null, Translation :: get('ExcelfileWithFirstColumnOfEmails'));
         $this->addElement(
-            'file', 
-            self :: IMPORT_FILE_NAME, 
+            'file',
+            self :: IMPORT_FILE_NAME,
             Translation :: get('FileName', null, Utilities :: COMMON_LIBRARIES));
-        
+
         $rights = Rights :: get_available_rights_for_publications();
         foreach ($rights as $right_name => $right)
         {
             $check_boxes[] = $this->createElement('checkbox', $right, $right_name, $right_name . '  ');
         }
         $this->addGroup($check_boxes, self :: PARAM_RIGHTS, Translation :: get('Rights'), '&nbsp;', true);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('SubscribeEmails'), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('SubscribeEmails'),
             array('class' => 'positive update'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         $this->addElement('category');
         $this->addElement('html', '<br />');
     }
@@ -74,7 +72,7 @@ class SubscribeMailForm extends FormValidator
         $values = $this->exportValues();
         $array = explode('.', $_FILES[self :: IMPORT_FILE_NAME]['name']);
         $type = $array[count($array) - 1];
-        
+
         switch ($type)
         {
             case 'xlsx' :
@@ -93,17 +91,17 @@ class SubscribeMailForm extends FormValidator
                 return false;
                 break;
         }
-        
+
         $worksheet = $excel->getSheet(0);
         $excel_array = $worksheet->toArray();
-        
+
         $no_user_emails = array();
         $location_id = Rights :: get_instance()->get_publication_location_id($this->publication_id);
-        
+
         // each row in excel file starting row1 =header
         for ($i = 1; $i < count($excel_array); $i ++)
         {
-            
+
             $email = $excel_array[$i][0];
             $users = \Chamilo\Core\User\Storage\DataManager :: retrieve_users_by_email($email);
             if (count($users) > 0)
@@ -116,8 +114,8 @@ class SubscribeMailForm extends FormValidator
                         if ($value == 1)
                         {
                             $succes = Rights :: get_instance()->set_publication_user_right(
-                                $right, 
-                                $user_id, 
+                                $right,
+                                $user_id,
                                 $this->publication_id);
                         }
                     }
