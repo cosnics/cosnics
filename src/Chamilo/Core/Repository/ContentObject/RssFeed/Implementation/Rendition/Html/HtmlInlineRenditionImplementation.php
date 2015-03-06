@@ -24,7 +24,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 
         $feed = self :: parse_file($object->get_url());
 
-        foreach ($feed['items'] as $item)
+        foreach ($feed as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
                  Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\RssFeed', 'Logo/22') .
