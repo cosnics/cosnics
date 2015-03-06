@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: rss_feed.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.rss_feed
  */
 class RssFeed extends ContentObject implements Versionable, Includeable
@@ -19,7 +19,6 @@ class RssFeed extends ContentObject implements Versionable, Includeable
     public static function get_type_name()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
-        ;
     }
 
     public function get_url()

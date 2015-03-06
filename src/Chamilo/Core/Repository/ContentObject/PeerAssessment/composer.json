@@ -16,7 +16,8 @@
     ],
     
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "szymach/c-pchart": "1.1.*"
     },
     "extra": {
         "install-path": "repository/content_object/peer_assessment"

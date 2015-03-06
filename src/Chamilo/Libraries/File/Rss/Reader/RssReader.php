@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\File\Rss\Reader;
 
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class that reads and parses rss feed
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class RssReader
 {
-    const TYPE_RSS_PHP = 'rss_php';
+    const TYPE_FASTFEED = 'Fastfeed';
 
     /**
      * Keeps instances of the rss readers per type
@@ -30,11 +29,11 @@ abstract class RssReader
      *
      * @return RssReader
      */
-    public static function factory($type = self :: TYPE_RSS_PHP)
+    public static function factory($type = self :: TYPE_FASTFEED)
     {
         if (! self :: $instances[$type])
         {
-            $class = __NAMESPACE__ . '\Implementation\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'RssReader';
+            $class = __NAMESPACE__ . '\Implementation\\' . $type;
             if (! class_exists($class, true))
             {
                 throw new ClassNotExistException($type);

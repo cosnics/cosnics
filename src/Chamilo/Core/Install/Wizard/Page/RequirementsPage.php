@@ -154,29 +154,6 @@ class RequirementsPage extends InstallWizardPage
             'yes_no',
             Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES));
 
-        // FreeType
-        // Fatal error: Call to undefined function imageftbbox() in
-        // /var/www/html/chamilo3/configuration/plugin/pChart/pChart/pChart.class on line 2428
-        // --with-freetype-dir=/usr/lib64
-        $loaded = function_exists('imageftbbox');
-
-        if (! $loaded)
-        {
-            $this->fatal = true;
-        }
-
-        $status = $loaded ? Diagnoser :: STATUS_OK : Diagnoser :: STATUS_ERROR;
-
-        $array[] = $diagnoser->build_setting(
-            $status,
-            '[PHP-EXTENSION]',
-            Translation :: get('ExtensionLoaded', null, Utilities :: COMMON_LIBRARIES) . ': ' . 'FreeType',
-            null,
-            $loaded,
-            1,
-            'yes_no',
-            Translation :: get('ExtensionMustBeLoaded', null, Utilities :: COMMON_LIBRARIES));
-
         return $array;
     }
 
