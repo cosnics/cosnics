@@ -61,7 +61,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         // TODO date locale doesn't work
         $html = array();
 
-        $image = Theme :: getInstance()->getCommonImagePath('Treemenu/group');
+        $image = Theme :: getInstance()->getCommonImagePath('Treemenu/Group');
 
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -107,7 +107,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Subscribe', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_subscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER,
@@ -119,7 +119,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Unsubscribe', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_unsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_USER,
@@ -143,7 +143,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('CreateGroup'),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER))));
 
         return $action_bar->as_html();

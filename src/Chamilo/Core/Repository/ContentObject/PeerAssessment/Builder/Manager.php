@@ -155,19 +155,19 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentBuilderSettingsEditorComponent'),
-                        Theme :: getInstance()->getCommonImagePath('action_config'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Config'),
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_SETTINGS))));
             if ($display_action != self :: ACTION_BROWSE_ATTEMPTS)
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentBuilderAttemptBrowserComponent'),
-                        Theme :: getInstance()->getCommonImagePath('action_period'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Period'),
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS))));
             if ($display_action != self :: ACTION_BROWSE_GROUPS)
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('PeerAssessmentBuilderGroupCreatorComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Treemenu/group'),
+                        Theme :: getInstance()->getCommonImagePath('Treemenu/Group'),
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS))));
 
             if ($display_action != self :: ACTION_BROWSE && ! $this->publication_has_scores())
@@ -179,7 +179,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                     $this->action_bar->add_tool_action(
                         new ToolbarItem(
                             Translation :: get('PeerAssessmentBuilderBrowserComponent'),
-                            Theme :: getInstance()->getCommonImagePath('action_build'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Build'),
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
                 }
             }
@@ -187,7 +187,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
             $this->action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ToolComplexDisplay'),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url($this->get_complex_display_params())));
         }
         return $this->action_bar;

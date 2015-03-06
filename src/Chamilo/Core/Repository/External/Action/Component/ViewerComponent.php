@@ -63,7 +63,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $toolbar = new Toolbar();
             $toolbar_item = new ToolbarItem(
                 Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_prev'),
+                Theme :: getInstance()->getCommonImagePath('Action/Prev'),
                 'javascript:history.back();');
             $toolbar->add_item($toolbar_item);
 

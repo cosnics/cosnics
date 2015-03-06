@@ -143,7 +143,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
             $toolbar_items[self :: ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                 Translation :: get('DeleteRepository'),
-                Theme :: getInstance()->getCommonImagePath('action_delete'),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $deleting_url,
                 ToolbarItem :: DISPLAY_ICON,
                 true);

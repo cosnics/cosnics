@@ -88,7 +88,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_up'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Uup'),
                     $this->browser->get_complex_content_object_item_move_url(
                         $cloi->get_id(),
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_UP),
@@ -99,7 +99,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_up_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/UpNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -109,7 +109,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_down'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Down'),
                     $this->browser->get_complex_content_object_item_move_url(
                         $cloi->get_id(),
                         \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_DOWN),
@@ -120,7 +120,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_down_na'),
+                    Theme :: getInstance()->getCommonImagePath('Action/DownNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

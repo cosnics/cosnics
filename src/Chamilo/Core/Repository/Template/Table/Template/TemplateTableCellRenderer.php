@@ -34,7 +34,7 @@ class TemplateTableCellRenderer extends RepositoryTableCellRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('CopyToRepository'),
-                Theme :: getInstance()->getCommonImagePath('action_copy'),
+                Theme :: getInstance()->getCommonImagePath('Action/Copy'),
                 $this->get_component()->get_copy_content_object_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
 
@@ -43,7 +43,7 @@ class TemplateTableCellRenderer extends RepositoryTableCellRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('DeleteFromTemplates'),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_delete_template_url($content_object->get_id()),
                     ToolbarItem :: DISPLAY_ICON,
                     true));

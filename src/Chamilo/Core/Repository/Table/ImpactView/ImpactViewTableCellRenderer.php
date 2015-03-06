@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Description of impact_view_cell_renderer
- * 
+ *
  * @author Pieterjan Broekaert
  */
 class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -29,13 +29,13 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
             case ImpactViewTableColumnModel :: COLUMN_CATEGORY :
                 $category = DataManager :: retrieve_by_id(
-                    RepositoryCategory :: class_name(), 
+                    RepositoryCategory :: class_name(),
                     $content_object->get_parent_id());
                 return $category->get_name();
             case ImpactViewTableColumnModel :: COLUMN_SAFE_DELETE :
                 return $this->render_is_linked_column($content_object);
         }
-        
+
         return parent :: render_cell($column, $content_object);
     }
 
@@ -44,9 +44,9 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_preview'), 
-                'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) . '\');void(0);', 
+                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) . '\');void(0);',
                 ToolbarItem :: DISPLAY_ICON));
         return $toolbar->as_html();
     }
@@ -55,17 +55,17 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     {
         if (! DataManager :: content_object_deletion_allowed($content_object))
         {
-            return '<img src="' . Theme :: getInstance()->getCommonImagePath('status_warning_mini') . '" />';
+            return '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/WarningMini') . '" />';
         }
         else
         {
-            return '<img src="' . Theme :: getInstance()->getCommonImagePath('status_ok_mini') . '" />';
+            return '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/OkMini') . '" />';
         }
     }
 
     /**
      * Returns the url to the content object preview
-     * 
+     *
      * @param ContentObject $content_object
      *
      * @return string
@@ -74,8 +74,8 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     {
         return $this->get_component()->get_url(
             array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS, 
-                Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
+                Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 Manager :: PARAM_CATEGORY_ID => $content_object->get_parent_id()));
     }
 }

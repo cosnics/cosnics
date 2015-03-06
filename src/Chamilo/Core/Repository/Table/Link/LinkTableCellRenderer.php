@@ -19,7 +19,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
     public function render_cell($column, $data_class)
     {
         $type = $this->get_table()->get_type();
-        
+
         if ($type == LinkTable :: TYPE_PARENTS)
         {
             $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($data_class->get_parent());
@@ -37,7 +37,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
         {
             $object = $data_class;
         }
-        
+
         switch ($column->get_name())
         {
             case Attributes :: PROPERTY_APPLICATION :
@@ -51,48 +51,49 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             case ContentObject :: PROPERTY_TITLE :
                 $url = $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS, 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
                         Manager :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
                 return '<a href="' . $url . '">' . Utilities :: truncate_string($object->get_title(), 50) . '</a>';
             case ContentObject :: PROPERTY_TYPE :
                 return $object->get_icon_image();
         }
-        
+
         return parent :: render_cell($column, $data_class);
     }
 
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-        
+
         $link_id = $this->render_id_cell($object);
-        
+
         $type = $this->get_table()->get_type();
-        
+
         if ($type == LinkTable :: TYPE_INCLUDES)
         {
             return '&nbsp';
         }
-        
+
         if ($type == LinkTable :: TYPE_INCLUDED_IN)
         {
             return '&nbsp';
         }
-        
+
         if ($this->get_component()->is_allowed_to_modify())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_delete'), 
+
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_component()->get_delete_link_url(
-                        $this->type, 
-                        $this->get_component()->get_object()->get_id(), 
-                        $link_id), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                        $this->type,
+                        $this->get_component()->get_object()->get_id(),
+                        $link_id),
+                    ToolbarItem :: DISPLAY_ICON,
                     true));
         }
-        
+
         return $toolbar->as_html();
     }
 }

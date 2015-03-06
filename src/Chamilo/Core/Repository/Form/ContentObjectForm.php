@@ -423,7 +423,7 @@ EOT;
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 array('id' => 'add_category', 'style' => 'display:none'));
             $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
 
@@ -646,8 +646,7 @@ EOT;
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.

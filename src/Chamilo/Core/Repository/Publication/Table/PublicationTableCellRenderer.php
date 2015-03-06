@@ -17,14 +17,14 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
 
     public function render_cell($column, $publication_attributes)
     {
-        
+
         // Add special features here
         switch ($column->get_name())
         {
             case Attributes :: PROPERTY_DATE :
                 return DatetimeUtilities :: format_locale_date(
                     Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                         Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES), 
+                         Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
                         $publication_attributes->get_date());
             case Attributes :: PROPERTY_APPLICATION :
                 return Translation :: get('TypeName', null, $publication_attributes->get_application());
@@ -35,40 +35,40 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
             case Attributes :: PROPERTY_DATE :
                 return date('Y-m-d, H:i', $publication_attributes->get_date());
         }
-        
+
         return parent :: render_cell($column, $publication_attributes);
     }
 
     public function get_actions($publication_attributes)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_PUBLICATION_ID => $publication_attributes->get_id(), 
-                        Manager :: PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application())), 
-                ToolbarItem :: DISPLAY_ICON, 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                        Manager :: PARAM_PUBLICATION_ID => $publication_attributes->get_id(),
+                        Manager :: PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application())),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         if (! $publication_attributes->get_content_object()->is_latest_version())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_revert'), 
+                    Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Revert'),
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                            Manager :: PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(), 
-                            Manager :: PARAM_PUBLICATION_ID => $publication_attributes->get_id())), 
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                            Manager :: PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(),
+                            Manager :: PARAM_PUBLICATION_ID => $publication_attributes->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

@@ -24,20 +24,20 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             case 'Duplicates' :
                 $conditions = array();
-                
+
                 $conditions[] = new EqualityCondition(
-                    ContentObject :: PROPERTY_CONTENT_HASH, 
+                    ContentObject :: PROPERTY_CONTENT_HASH,
                     $content_object->get_content_hash());
-                
+
                 if ($this->condition)
                 {
                     $conditions[] = $this->condition;
                 }
-                
+
                 $condition = new AndCondition($conditions);
-                
+
                 return DataManager :: count_active_content_objects(
-                    ContentObject :: class_name(), 
+                    ContentObject :: class_name(),
                     new DataClassCountParameters($condition));
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
@@ -45,17 +45,17 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return '<a href="' . htmlentities($this->browser->get_content_object_viewing_url($content_object)) .
                      '" title="' . $title . '">' . $title_short . '</a>';
             case Theme :: getInstance()->getCommonImage(
-                'action_category', 
-                'png', 
-                Translation :: get('Type'), 
-                null, 
+                'action_category',
+                'png',
+                Translation :: get('Type'),
+                null,
                 ToolbarItem :: DISPLAY_ICON) :
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
-            
+
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
         }
-        
+
         return parent :: render_cell($column, $content_object);
     }
 
@@ -65,13 +65,13 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             return null;
         }
-        
+
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('ViewItem'), 
-                Theme :: getInstance()->getCommonImagePath('action_browser'), 
-                $this->get_component()->get_url(array(Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id())), 
+                Translation :: get('ViewItem'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_component()->get_url(array(Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
         return $toolbar->as_html();
     }

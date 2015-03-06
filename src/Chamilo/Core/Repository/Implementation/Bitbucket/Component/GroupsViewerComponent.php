@@ -56,7 +56,7 @@ class GroupsViewerComponent extends Manager
 
                 $toolbar_item = new ToolbarItem(
                     Translation :: get('Delete'),
-                    Theme :: getInstance()->getCommonImagePath('action_delete'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_external_repository_group_deleting_url($group->get_id()),
                     ToolbarItem :: DISPLAY_ICON);
                 $actions[] = $toolbar_item->as_html();

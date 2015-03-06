@@ -30,29 +30,29 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $content_object->get_owner_fullname();
             case ContentObject :: PROPERTY_TYPE :
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
-            
+
             case Theme :: getInstance()->getCommonImage(
-                'action_category', 
-                'png', 
-                Translation :: get('Type'), 
-                null, 
+                'action_category',
+                'png',
+                Translation :: get('Type'),
+                null,
                 ToolbarItem :: DISPLAY_ICON) :
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
             case ContentObject :: PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
-                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
                     $content_object->get_modification_date());
         }
-        
+
         return parent :: render_cell($column, $content_object);
     }
 
     public function get_actions($content_object)
     {
         $toolbar = new Toolbar();
-        
+
         // delete only for owner
         if ($content_object->get_owner_id() == $this->get_component()->get_user_id())
         {
@@ -61,51 +61,50 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('action_remove'), 
-                        $remove_url, 
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Remove'),
+                        $remove_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('DeleteNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('action_remove_na'), 
-                        null, 
+                        Translation :: get('DeleteNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/RemoveNa'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         // revert if collaborate right or owner
-        if (($content_object->get_owner_id() == $this->get_component()->get_user_id() ||
-             RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-                RepositoryRights :: COLLABORATE_RIGHT, 
-                $content_object->get_id(), 
-                RepositoryRights :: TYPE_USER_CONTENT_OBJECT, 
-                $content_object->get_owner_id())))
+        if (($content_object->get_owner_id() == $this->get_component()->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
+            RepositoryRights :: COLLABORATE_RIGHT,
+            $content_object->get_id(),
+            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
+            $content_object->get_owner_id())))
         {
             $revert_url = $this->get_component()->get_content_object_revert_url($content_object, 'version');
             if ($revert_url)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('action_revert'), 
-                        $revert_url, 
+                        Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Revert'),
+                        $revert_url,
                         ToolbarItem :: DISPLAY_ICON));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('RevertNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('action_revert_na'), 
-                        null, 
+                        Translation :: get('RevertNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/RevertNa'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
-        
+
         return $toolbar->as_html();
     }
 }

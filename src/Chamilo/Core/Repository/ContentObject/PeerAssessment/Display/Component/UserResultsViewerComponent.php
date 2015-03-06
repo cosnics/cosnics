@@ -16,8 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * Enter description here .
- * ..
+ * Enter description here . ..
  *
  * @author admin
  */
@@ -123,7 +122,7 @@ class UserResultsViewerComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('export_ods'),
+                    Theme :: getInstance()->getCommonImagePath('Export/Ods'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_USER_RESULT,
