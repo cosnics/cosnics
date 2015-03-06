@@ -44,8 +44,9 @@ class MatrixForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/survey_matrix_question/resources/javascript/survey_matrix_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
+                    true) . 'SurveyMatrixQuestion.js'));
     }
 
     protected function build_creation_form()

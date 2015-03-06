@@ -31,9 +31,8 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
              $question_id . '" class="hotspot_image" style="width: ' . $dimensions[0] . 'px; height: ' . $dimensions[1] .
              'px; background-image: url(' . $image_object->get_url() . ')"></div></div>';
-        $html[] = '<script type="text/javascript" src="' .
-             htmlspecialchars(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+        $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js') . '"></script>';
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .

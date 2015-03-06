@@ -92,7 +92,7 @@ class CategoryForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getConfigurationPath() . 'Resources/Javascript/CategoryForm.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CategoryForm.js'));
     }
 
     public function add_name_field($number = null)

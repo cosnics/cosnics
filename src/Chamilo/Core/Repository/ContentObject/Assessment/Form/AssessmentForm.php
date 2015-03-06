@@ -165,29 +165,25 @@ class AssessmentForm extends ContentObjectForm
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var " .
-                 self :: UNLIMITED_ATTEMPTS . " = document.getElementById('" . self :: UNLIMITED_ATTEMPTS . "');
+					var " . self :: UNLIMITED_ATTEMPTS . " = document.getElementById('" . self :: UNLIMITED_ATTEMPTS . "');
 					if (" . self :: UNLIMITED_ATTEMPTS . ".checked)
 					{
 						window_hide('" . self :: UNLIMITED_ATTEMPTS . "_window');
 					}
 
-					var " .
-                 self :: ALL_QUESTIONS . " = document.getElementById('" . self :: ALL_QUESTIONS . "');
+					var " . self :: ALL_QUESTIONS . " = document.getElementById('" . self :: ALL_QUESTIONS . "');
 					if (" . self :: ALL_QUESTIONS . ".checked)
 					{
 						window_hide('" . self :: ALL_QUESTIONS . "_window');
 					}
 
-					var " .
-                 self :: UNLIMITED_TIME . " = document.getElementById('" . self :: UNLIMITED_TIME . "');
+					var " . self :: UNLIMITED_TIME . " = document.getElementById('" . self :: UNLIMITED_TIME . "');
 					if (" . self :: UNLIMITED_TIME . ".checked)
 					{
 						window_hide('" . self :: UNLIMITED_TIME . "_window');
 					}
 
-					var " .
-                 self :: RANDOM_QUESTIONS . " = document.getElementById('" . self :: RANDOM_QUESTIONS . "');
+					var " . self :: RANDOM_QUESTIONS . " = document.getElementById('" . self :: RANDOM_QUESTIONS . "');
 					if (" . self :: RANDOM_QUESTIONS . ".checked)
 					{
 						window_hide('" . self :: RANDOM_QUESTIONS . "_window');
@@ -346,29 +342,25 @@ class AssessmentForm extends ContentObjectForm
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var " .
-                 self :: UNLIMITED_ATTEMPTS . " = document.getElementById('" . self :: UNLIMITED_ATTEMPTS . "');
+					var " . self :: UNLIMITED_ATTEMPTS . " = document.getElementById('" . self :: UNLIMITED_ATTEMPTS . "');
 					if (" . self :: UNLIMITED_ATTEMPTS . ".checked)
 					{
 						window_hide('" . self :: UNLIMITED_ATTEMPTS . "_window');
 					}
 
-					var " .
-                 self :: ALL_QUESTIONS . " = document.getElementById('" . self :: ALL_QUESTIONS . "');
+					var " . self :: ALL_QUESTIONS . " = document.getElementById('" . self :: ALL_QUESTIONS . "');
 					if (" . self :: ALL_QUESTIONS . ".checked)
 					{
 						window_hide('" . self :: ALL_QUESTIONS . "_window');
 					}
 
-					var " .
-                 self :: UNLIMITED_TIME . " = document.getElementById('" . self :: UNLIMITED_TIME . "');
+					var " . self :: UNLIMITED_TIME . " = document.getElementById('" . self :: UNLIMITED_TIME . "');
 					if (" . self :: UNLIMITED_TIME . ".checked)
 					{
 						window_hide('" . self :: UNLIMITED_TIME . "_window');
 					}
 
-					var " .
-                 self :: RANDOM_QUESTIONS . " = document.getElementById('" . self :: RANDOM_QUESTIONS . "');
+					var " . self :: RANDOM_QUESTIONS . " = document.getElementById('" . self :: RANDOM_QUESTIONS . "');
 					if (" . self :: RANDOM_QUESTIONS . ".checked)
 					{
 						window_hide('" . self :: RANDOM_QUESTIONS . "_window');

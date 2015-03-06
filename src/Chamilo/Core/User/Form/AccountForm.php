@@ -231,7 +231,7 @@ class AccountForm extends FormValidator
             $this->addElement(
                 'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'Password.js'));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Password.js'));
             $this->addElement('category');
         }
 

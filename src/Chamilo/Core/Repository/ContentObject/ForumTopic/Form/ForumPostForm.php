@@ -151,7 +151,7 @@ class ForumPostForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'CollapseHorizontal.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
         $this->addElement(
             'category',
             '<a href="#">' . Translation :: get('Attachments') . '</a>',

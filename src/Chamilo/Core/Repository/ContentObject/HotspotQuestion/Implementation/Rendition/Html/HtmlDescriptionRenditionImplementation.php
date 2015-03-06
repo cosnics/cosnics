@@ -80,7 +80,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                  'Plugin/jquery.draw.js');
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                 'rendition.js');
+                 'Rendition.js');
 
         return implode(PHP_EOL, $html);
     }

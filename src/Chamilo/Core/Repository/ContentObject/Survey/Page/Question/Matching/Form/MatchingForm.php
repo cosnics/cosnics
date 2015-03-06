@@ -44,8 +44,9 @@ class MatchingForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/survey_matching_question/resources/javascript/survey_matching_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching',
+                    true) . 'SurveyMatchingQuestion.js'));
     }
 
     protected function build_creation_form()
