@@ -17,7 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Class that converts the database result to html
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent) Pieterjan Broekaert Hogent
  */
 class ResultToHtmlConverter
@@ -35,34 +35,36 @@ class ResultToHtmlConverter
     {
         $this->xslt_path = realpath(__DIR__ . '/../../../../resources/xslt');
         $html = $this->get_html($request_id);
-        
+
         return $html;
     }
 
     private function get_html($request_id)
     {
         $request = DataManager :: retrieve_by_id(Request :: class_name(), $request_id);
-        
+
         $html = array();
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getBasePath(true) .
-                 'application/weblcms/tool/ephorus/ephorus_request/resources/css/report.css');
-        
+            Path :: getInstance()->getResourcesPath(
+                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
+                true) . 'Css/Report.css');
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getBasePath(true) .
-                 'application/weblcms/tool/ephorus/ephorus_request/resources/javascript/report.js');
+            Path :: getInstance()->getJavascriptPath(
+                'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
+                true) . 'Report.js');
         $html[] = '<div id="printable">';
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID),
             new StaticConditionVariable($request_id));
         $order_bys = array();
         $order_bys[] = new OrderBy(new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_PERCENTAGE));
         $parameters = new DataClassRetrievesParameters($condition, null, null, $order_bys);
         $results_rs = DataManager :: retrieves(Result :: class_name(), $parameters);
-        
+
         $results = $results_rs ? $results_rs->as_array() : array();
-        
+
         $diffs = array();
         $html[] = $this->show_summary($request, $results);
         foreach ($results as $result)
@@ -71,14 +73,14 @@ class ResultToHtmlConverter
         }
         $html[] = implode(PHP_EOL, $diffs);
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     private function format_date($date)
     {
         return DatetimeUtilities :: format_locale_date(
-            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
+            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
             $date);
     }
 
@@ -93,7 +95,7 @@ class ResultToHtmlConverter
         {
             $colour = 'green';
         }
-        
+
         return '<span style="color: ' . $colour . '">' . $percentage . '%</span>';
     }
 
@@ -114,7 +116,7 @@ class ResultToHtmlConverter
         $chamilo = array();
         $local = array();
         $internet = array();
-        
+
         foreach ($results as $result)
         {
             if ($result->get_original_guid() === null)
@@ -129,7 +131,7 @@ class ResultToHtmlConverter
             }
             $chamilo[$result->get_original_guid()] = $result;
         }
-        
+
         $details_parameters = array();
         $details_parameters['REQUESTDATE'] = $this->format_date($request->get_request_time());
         $details_parameters['REQUESTERNAME'] = \Chamilo\Core\User\Storage\DataManager :: get_fullname_from_user(
@@ -139,7 +141,7 @@ class ResultToHtmlConverter
         $details_parameters['GUID'] = $request->get_guid();
         $details_parameters['PERCENTAGE'] = $this->define_percentage_colour($request->get_percentage());
         $details_parameters['NUMBERSOURCES'] = count($chamilo) + count($local) + count($internet);
-        
+
         $html = array();
         $html[] = "<table width='100%' cellpadding='0' cellspacing='0'>";
         $html[] = "<td height='19' colspan='2' class='tableTop minFont' style='PADDING-LEFT: 4px; PADDING-TOP: 0px'>";
@@ -175,14 +177,14 @@ class ResultToHtmlConverter
         $html[] = "</td>";
         $html[] = "</tr>";
         $html[] = "</table>";
-        
+
         return implode(PHP_EOL, $html);
     }
 
     private function get_chamilo_list($chamilo)
     {
         $hits = $this->get_chamilo_hits(array_keys($chamilo));
-        
+
         /**
          *
          * @var Result $result
@@ -194,15 +196,15 @@ class ResultToHtmlConverter
         {
             $hit = $hits[$result->get_original_guid()];
             $detals_parameters = array();
-            
+
             // If no hit is found, the original document is not in the chamilo database
             if ($hit)
             {
-                
+
                 $detals_parameters['PERCENTAGE'] = $this->define_percentage_colour($result->get_percentage());
-                
+
                 $detals_parameters['TITLE'] = $hit->get_title();
-                
+
                 $detals_parameters['AUTHOR'] = $result->get_student_name();
                 $detals_parameters['STUDENTCODE'] = $result->get_student_number();
                 $detals_parameters['CREATEDATE'] = $this->format_date($hit->get_creation_date());
@@ -211,18 +213,18 @@ class ResultToHtmlConverter
             else
             {
                 $detals_parameters['PERCENTAGE'] = $this->define_percentage_colour($result->get_percentage());
-                
+
                 $detals_parameters['TITLE'] = Translation :: get(
-                    "LocalHitNotFoundOnServer", 
+                    "LocalHitNotFoundOnServer",
                     array('LOCAL_GUID' => $result->get_original_guid(), 'SOURCE' => $result->get_student_name()));
             }
-            
+
             $html[] = '<li>';
             $html[] = Translation :: get('ResultDetails', $detals_parameters);
             $html[] = '</li>';
         }
         $html[] = '</ol>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -235,7 +237,7 @@ class ResultToHtmlConverter
     private function get_chamilo_hits($guids)
     {
         $hits_rs = DataManager :: get_instance()->retrieve_results_content_objects($guids);
-        
+
         /**
          *
          * @var \core\repository\ContentObject $hit
@@ -245,7 +247,7 @@ class ResultToHtmlConverter
         {
             $hits[$hit->get_optional_property(Request :: PROPERTY_GUID)] = $hit;
         }
-        
+
         return $hits;
     }
 
@@ -264,7 +266,7 @@ class ResultToHtmlConverter
             $html[] = '</li>';
         }
         $html[] = '</ol>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -284,7 +286,7 @@ class ResultToHtmlConverter
             $html[] = '</li>';
         }
         $html[] = '</ol>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -295,17 +297,17 @@ class ResultToHtmlConverter
     private function show_results($request)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID),
             new StaticConditionVariable($request->get_id()));
         $parameters = new DataClassRetrievesParameters($condition);
         $results = DataManager :: retrieves(Result :: class_name(), $parameters);
-        
+
         $html = array();
         while ($results && $result = $results->next_result())
         {
             $html[] = $this->show_result($result);
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -318,36 +320,34 @@ class ResultToHtmlConverter
         $string = str_replace(array('<diff>', '</diff>'), '', $result->get_diff());
         $diff = new \DOMDocument();
         $diff->loadXML($string);
-        
+
         $stylesheet = new \DOMDocument();
         $stylesheet->load($this->xslt_path . '/diff.xslt');
-        
+
         $xslt = new \XSLTProcessor();
         $xslt->setParameter('sablotron', 'xslt_base_dir', $this->xslt_path);
         $xslt->setParameter('', 'original', addslashes(Translation :: get('OriginalText')));
         $xslt->setParameter('', 'found', addslashes(Translation :: get('FoundByEphorus')));
         $xslt->registerPHPFunctions();
         $xslt->importStylesheet($stylesheet);
-        
+
         $html = array();
         $html[] = "<table width='100%' cellpadding='0' cellspacing='0'>";
         $html[] = "<td height='19' class='tableTop minFont' style='PADDING-LEFT: 4px; PADDING-TOP: 0px'>";
-        
+
         if ($result->get_original_guid() == null)
         {
             $html[] = "<span class='report_table_header'>" . Translation :: get(
-                'UrlReport', 
+                'UrlReport',
                 array("URL" => $result->get_url())) . "</span>";
         }
         else
         {
-            $html[] = "<span class='report_table_header'>" .
-                 Translation :: get(
-                    'LocalReport', 
-                    array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) .
-                 "</span>";
+            $html[] = "<span class='report_table_header'>" . Translation :: get(
+                'LocalReport',
+                array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) . "</span>";
         }
-        
+
         $html[] = "</td>";
         $html[] = "<td height='19' class='minFont'>";
         $html[] = "&nbsp;";
@@ -364,7 +364,7 @@ class ResultToHtmlConverter
         $html[] = "</td>";
         $html[] = "</tr>";
         $html[] = "</table>";
-        
+
         return implode(PHP_EOL, $html);
     }
 }

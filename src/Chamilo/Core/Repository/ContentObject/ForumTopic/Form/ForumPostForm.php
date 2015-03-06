@@ -146,15 +146,12 @@ class ForumPostForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/uploadify2/swfobject.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                     'Plugin/Uploadify/jquery.uploadify.min.js'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/uploadify2/jquery.uploadify.v2.1.0.min.js'));
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'CollapseHorizontal.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
         $this->addElement(
             'category',
             '<a href="#">' . Translation :: get('Attachments') . '</a>',

@@ -48,8 +48,7 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
         }
         else
         {
-            $path = Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor.js';
+            $path = Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor.js';
         }
         $this->set_option(self :: OPTION_CONFIGURATION, $path);
     }

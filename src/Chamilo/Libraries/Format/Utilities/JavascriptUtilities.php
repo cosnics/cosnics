@@ -17,48 +17,46 @@ class JavascriptUtilities extends ResourceUtilities
     {
         $assets = array();
 
-        if ($this->getContext() == __NAMESPACE__)
-        {
-            $plugin_path = $this->getPathUtilities()->getPluginPath();
-            $configuration = $this->getPathUtilities()->getConfigurationPath();
+        // if ($this->getContext() == __NAMESPACE__)
+        // {
+        $javascriptPath = $this->getPathUtilities()->getJavascriptPath('Chamilo\Libraries');
+        $pluginPath = $javascriptPath . 'Plugin/';
 
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.min.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.tabula.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.dynamic.visual_tabs.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.tablednd.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.ui.min.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.ui.tabs.paging.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.treeview.async.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.timeout.interval.idle.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.mousewheel.min.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.scrollable.pack.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.xml2json.pack.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.json.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.iphone.checkboxes.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.jsuggest.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.jeditable.mini.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.query.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.simplemodal.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.tree_menu.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/jquery.timepicker.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'jquery/phpjs.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Resources/Javascript/Utilities.js');
-            $assets[] = new FileAsset(
-                $this->getPathUtilities(),
-                $configuration . 'Resources/Javascript/Notifications.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Resources/Javascript/Help.js');
-            $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Resources/Javascript/Visit.js');
-        }
-        else
-        {
-            $path = $this->getClassnameUtilties()->namespaceToFullPath($this->getContext()) . 'Resources/Javascript/' .
-                 $this->getClassnameUtilties()->getPackageNameFromNamespace($this->getContext()) . '.js';
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tabula.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.dynamic.visual_tabs.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tablednd.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.ui.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.ui.tabs.paging.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.treeview.async.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.timeout.interval.idle.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.mousewheel.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.scrollable.pack.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.xml2json.pack.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.json.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.iphone.checkboxes.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.jsuggest.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.jeditable.mini.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.query.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.simplemodal.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tree_menu.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.timepicker.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'phpjs.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Utilities.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Help.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Visit.js');
+        // }
+        // else
+        // {
+        // $path = $this->getPathUtilities()->getJavascriptPath($this->getContext()) .
+        // $this->getClassnameUtilties()->getPackageNameFromNamespace($this->getContext(), true) . '.js';
 
-            if (is_readable($path))
-            {
-                $assets[] = new FileAsset($this->getPathUtilities(), $path);
-            }
-        }
+        // if (is_readable($path))
+        // {
+        // $assets[] = new FileAsset($this->getPathUtilities(), $path);
+        // }
+        // }
 
         if ($this->getCachingEnabled())
         {

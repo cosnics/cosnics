@@ -65,8 +65,7 @@ class BrowserComponent extends Manager
         $html[] = '</div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Admin\\', true) .
-                 'Resources/Javascript/AdminBrowser.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'AdminBrowser.js');
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

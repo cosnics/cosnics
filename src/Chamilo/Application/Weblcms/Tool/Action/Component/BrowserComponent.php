@@ -145,8 +145,7 @@ class BrowserComponent extends Manager
             $content[] = $this->publication_category_tree->render_as_tree();
             $content[] = '</div>';
             $content[] = ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms', true) .
-                     'Resources/Javascript/TreeMenu.js');
+                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'TreeMenu.js');
             $content[] = '</div>';
 
             $cat_id = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
@@ -663,7 +662,8 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * Returns the default object table order for the browser. Can be "overridden" by the individual component to force
+     * Returns the default object table order for the browser.
+     * Can be "overridden" by the individual component to force
      * a different order if needed. Because the individual component is not an actual implementation but merely this
      * parent, there is a check if the method exists.
      *

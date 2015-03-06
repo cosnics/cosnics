@@ -125,7 +125,7 @@ class LogViewerComponent extends Manager
         $form->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) . 'Configuration/Resources/javascript/LogViewer.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'));
 
         return $form;
     }

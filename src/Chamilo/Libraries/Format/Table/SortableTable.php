@@ -282,7 +282,7 @@ class SortableTable extends HTML_Table
                 $html[] = '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?' . $params . '" name="form_' .
                      $this->table_name . '" class="table_form">';
                 $html[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getConfigurationPath(true) . 'Resources/Javascript/SortableTable.js');
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'SortableTable.js');
             }
         }
 

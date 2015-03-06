@@ -1,7 +1,7 @@
 <?php
 /**
  * $Id: option_orderer.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.formvalidator.Element
  */
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -22,8 +22,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
     public function toHtml()
     {
         $html = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) .
-                 'Resources/Javascript/OptionOrderer.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js');
         $html .= $this->getFrozenHtml();
         return $html;
     }

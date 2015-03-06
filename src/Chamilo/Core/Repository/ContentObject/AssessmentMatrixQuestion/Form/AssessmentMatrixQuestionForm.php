@@ -25,8 +25,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_matrix_question/resources/javascript/assessment_matrix_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion',
+                    true) . 'AssessmentMatrixQuestion.js'));
         $this->add_example_box();
     }
 
@@ -37,8 +38,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/assessment_matrix_question/resources/javascript/assessment_matrix_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion',
+                    true) . 'AssessmentMatrixQuestion.js'));
         $this->add_example_box();
     }
 

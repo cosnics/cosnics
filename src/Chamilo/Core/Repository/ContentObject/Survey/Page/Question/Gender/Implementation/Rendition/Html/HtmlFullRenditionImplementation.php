@@ -36,7 +36,6 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
 
         $html = array();
-        $html[] = $this->get_includes();
         $html[] = '<div class="question" >';
         $html[] = '<div class="title">';
         $html[] = '<div class="number">';
@@ -93,19 +92,6 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<div class="clear"></div>';
         $html[] = $this->get_javascript($question_id);
         return implode(PHP_EOL, $html);
-    }
-
-    function get_includes()
-    {
-        $scripts = array();
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
-
-        return implode(PHP_EOL, $scripts);
     }
 
     function get_javascript($question_id)

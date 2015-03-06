@@ -19,7 +19,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $question = $this->get_content_object();
         $min = $question->get_low();
         $max = $question->get_high();
-        
+
         $html = array();
         $html[] = '<div class="question">';
         $html[] = '<div class="answer">';
@@ -35,9 +35,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', 
-                true) . 'Resources/Javascript/assessment_rating_question.js');
+            Path :: getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion',
+                true) . 'AssessmentRatingQuestion.js');
+
         return implode(PHP_EOL, $html);
     }
 }

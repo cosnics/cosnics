@@ -34,7 +34,6 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
 
         $html = array();
-        $html[] = $this->get_includes();
         $html[] = '<div class="question" >';
         $html[] = '<div class="title">';
         $html[] = '<div class="number">';
@@ -81,7 +80,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 
             $html[] = '<div id="datepicker"></div>';
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/date.js' .
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Date.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';
@@ -99,7 +98,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<td>';
             $html[] = '<div id="timepicker"></div>';
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/time.js' .
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Time.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';
@@ -114,44 +113,5 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         // $html[] = $this->get_javascript($question_id);
         return implode(PHP_EOL, $html);
     }
-
-    function get_includes()
-    {
-        $scripts = array();
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
-
-        return implode(PHP_EOL, $scripts);
-    }
-
-    // function get_javascript($question_id)
-    // {
-    // $html_editor_options = array();
-    // $html_editor_options['width'] = '100%';
-    // $html_editor_options['toolbar'] = 'Assessment';
-    // $options = FormValidatorHtmlEditorOptions :: factory(LocalSetting :: get('html_editor'), $html_editor_options);
-
-    // $javascript = array();
-    // $javascript[] = '<script type="text/javascript">';
-    // $javascript[] = 'var web_path = \'' . Path :: getInstance()->getBasePath(true) . '\'';
-    // $javascript[] = '$(function ()';
-    // $javascript[] = '{';
-    // $javascript[] = ' $(document).ready(function ()';
-    // $javascript[] = ' {';
-    // $javascript[] = ' $("textarea.html_editor[name=\'' . $question_id . '\
-
-    // ']").ckeditor({';
-    // $javascript[] = $options->render_options();
-    // $javascript[] = ' });';
-    // $javascript[] = ' });';
-    // $javascript[] = '});';
-    // $javascript[] = '</script>';
-
-    // return implode(PHP_EOL, $javascript);
-    // }
 }
 ?>

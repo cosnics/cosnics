@@ -21,7 +21,7 @@ class GroupUserAdditionForm extends FormValidator
     public function __construct($action, $bitbucket)
     {
         parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-        
+
         $this->bitbucket = $bitbucket;
         $this->build();
     }
@@ -30,23 +30,23 @@ class GroupUserAdditionForm extends FormValidator
     {
         $this->addElement('text', 'user', Translation :: get('UserToAdd'));
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: get_common_extensions_path(true) .
-                     'external_repository_manager/implementation/bitbucket/resources/javascript/privilege_granting_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+                     'PrivilegeGrantingForm.js'));
     }
 
     public function add_user_to_group()
     {
         $values = $this->exportValues();
         return $this->bitbucket->get_external_repository_manager_connector()->add_user_to_group(
-            Request :: get(Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP), 
+            Request :: get(Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP),
             $values['user']);
     }
 }
