@@ -26,7 +26,7 @@ class AssignmentForm extends ContentObjectForm
     public function setDefaults($defaults = array())
     {
         $object = $this->get_content_object();
-        
+
         if ($object->get_id() != null)
         {
             $defaults[Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS] = $object->get_visibility_submissions();
@@ -34,30 +34,30 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS] = $object->get_allow_late_submissions();
             $defaults[Assignment :: PROPERTY_START_TIME] = $object->get_start_time();
             $defaults[Assignment :: PROPERTY_END_TIME] = $object->get_end_time();
-            
+
             if (! is_null($object->get_visibility_feedback()))
                 $defaults[Assignment :: PROPERTY_VISIBILTY_FEEDBACK] = $object->get_visibility_feedback();
             else
                 $defaults[Assignment :: PROPERTY_VISIBILTY_FEEDBACK] = Assignment :: VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-            
+
             $defaults[Assignment :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT] = $object->get_automatic_feedback_text();
             $defaults[Assignment :: PROPERTY_SELECT_ATTACHMENT] = array();
-            
+
             $co_ids = explode(',', $object->get_automatic_feedback_co_ids());
-            
+
             if ($co_ids)
             {
                 $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
-                    $co_ids, 
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                    $co_ids,
                     ContentObject :: get_table_name());
                 $attached_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-                    ContentObject :: class_name(), 
+                    ContentObject :: class_name(),
                     new DataClassRetrievesParameters($condition))->as_array();
                 $defaults[Assignment :: PROPERTY_SELECT_ATTACHMENT] = Utilities :: content_objects_for_element_finder(
                     $attached_objects);
             }
-            
+
             $active = $this->getElement(Assignment :: PROPERTY_SELECT_ATTACHMENT);
             if ($active)
             {
@@ -66,7 +66,7 @@ class AssignmentForm extends ContentObjectForm
                     $active->_elements[0]->setValue(serialize($defaults[Assignment :: PROPERTY_SELECT_ATTACHMENT]));
                 }
             }
-            
+
             $defaults[Assignment :: PROPERTY_ALLOWED_TYPES] = explode(',', $object->get_allowed_types());
         }
         else
@@ -79,7 +79,7 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment :: PROPERTY_START_TIME] = time();
             $defaults[Assignment :: PROPERTY_END_TIME] = strtotime('+1 day', time());
         }
-        
+
         parent :: setDefaults($defaults);
     }
 
@@ -98,84 +98,84 @@ class AssignmentForm extends ContentObjectForm
     private function build_form()
     {
         $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
-        
+
         // Start and end time
         $this->add_timewindow(
-            Assignment :: PROPERTY_START_TIME, 
-            Assignment :: PROPERTY_END_TIME, 
-            Translation :: get('StartTime'), 
+            Assignment :: PROPERTY_START_TIME,
+            Assignment :: PROPERTY_END_TIME,
+            Translation :: get('StartTime'),
             Translation :: get('EndTime'));
-        
+
         // Visibilty submissions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS, 
-            null, 
-            Translation :: get('VisibleOthers'), 
+            'radio',
+            Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS,
+            null,
+            Translation :: get('VisibleOthers'),
             1);
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS, 
-            null, 
-            Translation :: get('InvisibleOthers'), 
+            'radio',
+            Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS,
+            null,
+            Translation :: get('InvisibleOthers'),
             0);
         $this->addGroup($choices, null, Translation :: get('VisibilitySubmissions'), '<br/>', false);
-        
+
         // Assignment type
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-            null, 
-            Translation :: get('Individual'), 
+            'radio',
+            Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS,
+            null,
+            Translation :: get('Individual'),
             0);
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-            null, 
-            Translation :: get('Group'), 
+            'radio',
+            Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS,
+            null,
+            Translation :: get('Group'),
             1);
         $this->addGroup($choices, null, Translation :: get('AssignmentType'), '<br/>', false);
-        
+
         // Allow late submissions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS, 
-            null, 
-            Translation :: get('AllowLateYes'), 
+            'radio',
+            Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS,
+            null,
+            Translation :: get('AllowLateYes'),
             1);
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS, 
-            null, 
-            Translation :: get('AllowLateNo'), 
+            'radio',
+            Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS,
+            null,
+            Translation :: get('AllowLateNo'),
             0);
         $this->addGroup($choices, null, Translation :: get('AllowLateSubmissions'), '<br/>', false);
-        
+
         // Allowed content types for submissions
         $types = $this->get_allowed_content_object_types();
         $advanced_select = $this->createElement(
-            'multiselect', 
-            Assignment :: PROPERTY_ALLOWED_TYPES, 
-            Translation :: get('AllowedContentTypes'), 
-            $types, 
+            'multiselect',
+            Assignment :: PROPERTY_ALLOWED_TYPES,
+            Translation :: get('AllowedContentTypes'),
+            $types,
             array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
         $advanced_select->setButtonAttributes('add', 'class="add"');
         $advanced_select->setButtonAttributes('remove', 'class="remove"');
         $this->addElement($advanced_select);
-        
+
         $this->addRule(
-            Assignment :: PROPERTY_ALLOWED_TYPES, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            Assignment :: PROPERTY_ALLOWED_TYPES,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement('category');
-        
+
         // Automatic feedback
         $this->addElement('category', Translation :: get('AutomaticFeedback'));
-        
+
         // attachment uploader and selector
         $url = Path :: getInstance()->getBasePath(true) . 'repository/php/xml_feed.php';
         $locale = array();
@@ -184,46 +184,42 @@ class AssignmentForm extends ContentObjectForm
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/uploadify2/swfobject.js'));
-        $this->addElement(
-            'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\Assignment', true) .
-                     'Resources/Javascript/uploadify2.js'));
-        $this->addElement('static', 'uploadify2', Translation :: get('UploadDocument'), '<div id="uploadify2"></div>');
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                     'Plugin/Uploadify/jquery.uploadify.min.js'));
+        $this->addElement('static', 'uploadify', Translation :: get('UploadDocument'), '<div id="uploadify"></div>');
         $elem = $this->addElement(
-            'element_finder', 
-            Assignment :: PROPERTY_SELECT_ATTACHMENT, 
-            Translation :: get('SelectAttachment'), 
-            $url, 
-            $locale, 
+            'element_finder',
+            Assignment :: PROPERTY_SELECT_ATTACHMENT,
+            Translation :: get('SelectAttachment'),
+            $url,
+            $locale,
             array());
         $elem->setDefaultCollapsed(true);
-        
+
         $this->addElement(
-            'textarea', 
-            Assignment :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT, 
-            Translation :: get('Text'), 
+            'textarea',
+            Assignment :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
+            Translation :: get('Text'),
             array('cols' => '60', 'rows' => '3'));
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_VISIBILTY_FEEDBACK, 
-            null, 
-            Translation :: get('AfterEndDate'), 
+            'radio',
+            Assignment :: PROPERTY_VISIBILTY_FEEDBACK,
+            null,
+            Translation :: get('AfterEndDate'),
             0);
         $choices[] = $this->createElement(
-            'radio', 
-            Assignment :: PROPERTY_VISIBILTY_FEEDBACK, 
-            null, 
-            Translation :: get('AfterSubmission'), 
+            'radio',
+            Assignment :: PROPERTY_VISIBILTY_FEEDBACK,
+            null,
+            Translation :: get('AfterSubmission'),
             1);
         $this->addGroup($choices, null, Translation :: get('VisibiltyFeedback'), '<br/>', false);
         $this->addElement('category');
     }
-    
+
     // Inherited
     public function create_content_object()
     {
@@ -234,9 +230,9 @@ class AssignmentForm extends ContentObjectForm
         $object->set_visibility_submissions($values[Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_group_submissions($values[Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS]);
-        
+
         $cos = null;
-        
+
         foreach ($values[Assignment :: PROPERTY_SELECT_ATTACHMENT]['lo'] as $co)
         {
             if ($cos == null)
@@ -252,7 +248,7 @@ class AssignmentForm extends ContentObjectForm
             $object->set_visibility_feedback($values[Assignment :: PROPERTY_VISIBILTY_FEEDBACK]);
         else
             $object->set_visibility_feedback(null);
-        
+
         $this->set_content_object($object);
         return parent :: create_content_object();
     }
@@ -266,9 +262,9 @@ class AssignmentForm extends ContentObjectForm
         $object->set_visibility_submissions($values[Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_group_submissions($values[Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS]);
-        
+
         $cos = null;
-        
+
         foreach ($values[Assignment :: PROPERTY_SELECT_ATTACHMENT]['lo'] as $co)
         {
             if ($cos == null)
@@ -284,7 +280,7 @@ class AssignmentForm extends ContentObjectForm
             $object->set_visibility_feedback($values[Assignment :: PROPERTY_VISIBILTY_FEEDBACK]);
         else
             $object->set_visibility_feedback(null);
-        
+
         $this->set_content_object($object);
         return parent :: update_content_object();
     }
@@ -292,7 +288,7 @@ class AssignmentForm extends ContentObjectForm
     public function get_allowed_content_object_types()
     {
         $types = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types(true);
-        
+
         $return_types = array();
         foreach ($types as $index => $type)
         {
@@ -306,12 +302,12 @@ class AssignmentForm extends ContentObjectForm
             if (! strstr($type, 'survey_'))
             {
                 $return_types[$type] = Translation :: get(
-                    'TypeName', 
-                    array(), 
+                    'TypeName',
+                    array(),
                     ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type));
             }
         }
-        
+
         asort($return_types);
         return $return_types;
     }

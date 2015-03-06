@@ -30,22 +30,22 @@ class PeerAssessmentSettingsForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     public function __construct(ViewerComponent $viewer)
     {
         $this->viewer = $viewer;
-        
+
         parent :: __construct(self :: FORM_NAME, 'post', $this->viewer->get_url());
-        
+
         $this->add_elements();
     }
 
     function setDefaults($defaultValues = null, $filter = null)
     {
         $defaultValues[self :: PARAM_SUBSCRIPTION_DEADLINE] = date(
-            'Y-m-d', 
+            'Y-m-d',
             $defaultValues[self :: PARAM_SUBSCRIPTION_DEADLINE]);
         parent :: setDefaults($defaultValues, $filter);
     }
@@ -80,17 +80,17 @@ class PeerAssessmentSettingsForm extends FormValidator
         // );
         // }
         $this->addElement(
-            'checkbox', 
-            self :: PARAM_ANONYMOUS_FEEDBACK, 
+            'checkbox',
+            self :: PARAM_ANONYMOUS_FEEDBACK,
             Translation :: get(
                 (string) StringUtilities :: getInstance()->createString(self :: PARAM_ANONYMOUS_FEEDBACK)->upperCamelize()));
-        
+
         $this->addElement(
-            'checkbox', 
-            self :: PARAM_ENABLE_USER_RESULT_EXPORT, 
+            'checkbox',
+            self :: PARAM_ENABLE_USER_RESULT_EXPORT,
             Translation :: get(
                 (string) StringUtilities :: getInstance()->createString(self :: PARAM_ENABLE_USER_RESULT_EXPORT)->upperCamelize()));
-        
+
         // //TODO add filter group
         // $this->addElement(
         // 'checkbox',
@@ -98,16 +98,16 @@ class PeerAssessmentSettingsForm extends FormValidator
         // Translation :: get('FilterMinMaxScores')
         // );
         $this->addElement('checkbox', self :: PARAM_FILTER_SELF, Translation :: get('FilterSelfAssessment'));
-        
+
         $this->addElement(
-            'style_submit_button', 
-            FormValidator :: PARAM_SUBMIT, 
+            'style_submit_button',
+            FormValidator :: PARAM_SUBMIT,
             Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/peer_assessment/resources/javascript/settings.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PeerAssessment', true) .
+                     'Settings.js'));
     }
 }

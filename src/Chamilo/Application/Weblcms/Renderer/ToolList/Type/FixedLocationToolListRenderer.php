@@ -34,7 +34,8 @@ use HTML_Table;
  */
 
 /**
- * Tool list renderer which displays all course tools on a fixed location. Disabled tools will be shown in a disabled
+ * Tool list renderer which displays all course tools on a fixed location.
+ * Disabled tools will be shown in a disabled
  * looking way.
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
@@ -198,11 +199,10 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         }
 
         $html[] = '<script type="text/javascript" src="' .
-             Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) .
-             'Resources/Javascript/HomeAjax.js' . '"></script>';
+             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HomeAjax.js' . '"></script>';
         $html[] = '<script type="text/javascript" src="' .
-             Path :: getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
-             'Resources/Javascript/course_home.js' . '"></script>';
+             Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseHome.js' .
+             '"></script>';
 
         return implode(PHP_EOL, $html);
     }

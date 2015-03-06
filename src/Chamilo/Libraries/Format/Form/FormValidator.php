@@ -187,8 +187,8 @@ class FormValidator extends HTML_QuickForm
 
         $this->addElement(
             'html',
-            '<script type="text/javascript" src="' . Path :: getInstance()->getConfigurationPath(true) .
-                 'Resources/Javascript/Reset.js"></script>');
+            '<script type="text/javascript" src="' . Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'Reset.js"></script>');
 
         // Modify the default templates
         $this->renderer = $this->defaultRenderer();
@@ -451,7 +451,7 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) . 'Configuration/Resources/Javascript/FormTabs.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTabs.js'));
     }
 
     public function create_html_editor($name, $label, $options = array(), $attributes = array())
@@ -876,8 +876,8 @@ EOT;
                  Translation :: get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
         $this->addElement(
             'html',
-            '<script src="' . Path :: getInstance()->getConfigurationPath(true) .
-                 'Resources/Javascript/Upload.js" type="text/javascript"></script>');
+            '<script src="' . Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'Upload.js" type="text/javascript"></script>');
         $this->addElement(
             'html',
             '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');

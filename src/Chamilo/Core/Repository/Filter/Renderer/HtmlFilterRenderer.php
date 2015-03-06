@@ -37,37 +37,37 @@ class HtmlFilterRenderer extends FilterRenderer
     public function render()
     {
         $html = array();
-        
+
         if ($this->get_filter_data()->is_set())
         {
             $html[] = $this->add_header();
             $html[] = $this->add_properties();
             $html[] = $this->add_footer();
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function add_properties()
     {
         $filter_data = $this->get_filter_data();
-        
+
         $html = array();
-        
+
         // Text
         if ($filter_data->has_filter_property(FilterData :: FILTER_TEXT))
         {
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_TEXT) . '">' .
                  $filter_data->get_filter_property(FilterData :: FILTER_TEXT) . '</div>';
         }
-        
+
         // Category id
         $category_id = $filter_data->get_filter_property(FilterData :: FILTER_CATEGORY);
-        
+
         if (isset($category_id) && $category_id >= 0)
         {
             $recursive = (boolean) $filter_data->get_filter_property(FilterData :: FILTER_CATEGORY_RECURSIVE);
-            
+
             if ($recursive)
             {
                 if ($category_id == 0)
@@ -98,15 +98,15 @@ class HtmlFilterRenderer extends FilterRenderer
                 }
             }
         }
-        
+
         // Creation date
         if ($filter_data->has_date(FilterData :: FILTER_CREATION_DATE))
         {
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE) .
                  '">' . Translation :: get(
-                    'CreatedBetween', 
+                    'CreatedBetween',
                     array(
-                        'FROM' => $filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE), 
+                        'FROM' => $filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE),
                         'TO' => $filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))) . '</div>';
         }
         else
@@ -115,26 +115,26 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE) .
                      '">' . Translation :: get(
-                        'CreatedAfter', 
+                        'CreatedAfter',
                         array('FROM' => $filter_data->get_creation_date(FilterData :: FILTER_FROM_DATE))) . '</div>';
             }
             elseif ($filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CREATION_DATE) .
                      '">' . Translation :: get(
-                        'CreatedBefore', 
+                        'CreatedBefore',
                         array('TO' => $filter_data->get_creation_date(FilterData :: FILTER_TO_DATE))) . '</div>';
             }
         }
-        
+
         // Modification date
         if ($filter_data->has_date(FilterData :: FILTER_MODIFICATION_DATE))
         {
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE) .
                  '">' . Translation :: get(
-                    'ModifiedBetween', 
+                    'ModifiedBetween',
                     array(
-                        'FROM' => $filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE), 
+                        'FROM' => $filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE),
                         'TO' => $filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))) . '</div>';
         }
         else
@@ -144,28 +144,28 @@ class HtmlFilterRenderer extends FilterRenderer
                 $html[] = '<div class="parameter" id="' .
                      $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE) . '">' .
                      Translation :: get(
-                        'ModifiedAfter', 
+                        'ModifiedAfter',
                         array('FROM' => $filter_data->get_modification_date(FilterData :: FILTER_FROM_DATE))) . '</div>';
             }
             elseif ($filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))
             {
                 $html[] = '<div class="parameter" id="' .
                      $this->get_parameter_name(FilterData :: FILTER_MODIFICATION_DATE) . '">' . Translation :: get(
-                        'ModifiedBefore', 
+                        'ModifiedBefore',
                         array('TO' => $filter_data->get_modification_date(FilterData :: FILTER_TO_DATE))) . '</div>';
             }
         }
-        
+
         // Type
         if ($filter_data->has_filter_property(FilterData :: FILTER_TYPE))
         {
             $type = $filter_data->get_filter_property(FilterData :: FILTER_TYPE);
-            
+
             // Category
             if (! is_numeric($type) && ! empty($type))
             {
                 $type_selector = TypeSelector :: populate(DataManager :: get_registered_types());
-                
+
                 try
                 {
                     $category_name = $type_selector->get_category_by_type($type)->get_name();
@@ -174,7 +174,7 @@ class HtmlFilterRenderer extends FilterRenderer
                 {
                     $category_name = $type;
                 }
-                
+
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_TYPE) . '">' .
                      $category_name . '</div>';
             }
@@ -187,17 +187,17 @@ class HtmlFilterRenderer extends FilterRenderer
                      $template->translate('TypeName') . '</div>';
             }
         }
-        
+
         // User view id
         if ($filter_data->has_filter_property(FilterData :: FILTER_USER_VIEW))
         {
             $user_view = DataManager :: retrieve_by_id(
-                UserView :: class_name(), 
+                UserView :: class_name(),
                 $filter_data->get_filter_property(FilterData :: FILTER_USER_VIEW));
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_USER_VIEW) . '">' .
                  Translation :: get('UserViewFilter', array('VIEW' => $user_view->get_name())) . '</div>';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -209,7 +209,7 @@ class HtmlFilterRenderer extends FilterRenderer
     {
         $html = array();
         $html[] = '<div id="search_parameters"><h4>' . Translation :: get('SearchParameters') . '</h4>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -220,15 +220,15 @@ class HtmlFilterRenderer extends FilterRenderer
     public function add_footer()
     {
         $html = array();
-        
+
         $html[] = '<div class="parameter" id="' . $this->get_parameter_name(self :: CLEAR_ALL) . '">' .
              Translation :: get('ClearAllParameters') . '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath(Manager :: context(), true) . 'Resources/Javascript/Search.js');
-        
+            Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'Search.js');
+
         return implode(PHP_EOL, $html);
     }
 

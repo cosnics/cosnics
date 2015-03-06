@@ -27,7 +27,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/display_order.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Builder', true) .
+                 'DisplayOrder.js');
         $html[] = parent :: render_footer();
 
         return implode(PHP_EOL, $html);

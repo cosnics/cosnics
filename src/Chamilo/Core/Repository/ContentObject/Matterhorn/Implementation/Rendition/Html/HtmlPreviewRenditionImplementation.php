@@ -21,7 +21,8 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
         $html = array();
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) . 'Projekktor/projekktor.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
+                 'Plugin/Projekktor/projekktor.js');
 
         $width = 620;
         $height = 596;
@@ -122,7 +123,8 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
             $audio = array();
 
             $audio[] = ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getPluginPath('configuration', true) . 'jquery/jquery.jplayer.js');
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
+                     'Plugin/jquery.jplayer.js');
             $audio[] = '<script type="text/javascript">
 $(document).ready(function(){
 

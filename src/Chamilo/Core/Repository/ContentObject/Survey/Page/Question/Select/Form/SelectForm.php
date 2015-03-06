@@ -42,8 +42,9 @@ class SelectForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/survey_select_question/resources/javascript/survey_select_question.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
+                    true) . 'SurveySelectQuestion.js'));
     }
 
     protected function build_creation_form()

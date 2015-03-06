@@ -76,8 +76,6 @@ class RequestProcessor
      */
     private function change_single_document_visibility_on_index($document_guid, $index_type)
     {
-        require_once Path :: getInstance()->getBasePath() . 'configuration/plugin/nusoap/nusoap.php';
-
         $index_document_service_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'index_document_service_wsdl',
             'application\weblcms\tool\ephorus');
@@ -169,8 +167,6 @@ class RequestProcessor
      */
     private function send_hand_in_request($parameters)
     {
-        require_once Path :: getInstance()->getBasePath() . 'configuration/plugin/nusoap/nusoap.php';
-
         $hand_in_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'handin_service_wsdl',
             'application\weblcms\tool\ephorus');

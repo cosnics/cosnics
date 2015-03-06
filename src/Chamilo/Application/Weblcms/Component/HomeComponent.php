@@ -45,8 +45,8 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = $renderer->as_html();
         $html[] = '<script type="text/javascript" src="' .
-             htmlspecialchars(Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true)) .
-             'Resources/Javascript/HomeAjax.js' . '"></script>';
+             htmlspecialchars(Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true)) . 'HomeAjax.js' .
+             '"></script>';
 
         $toolbar_state = Session :: retrieve('toolbar_state');
 
@@ -113,8 +113,8 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = '</div>';
         $html[] = '<script type="text/javascript" src="' .
-             htmlspecialchars(Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true)) .
-             'Resources/Javascript/ToolBar.js' . '"></script>';
+             htmlspecialchars(Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true)) . 'ToolBar.js' .
+             '"></script>';
         $html[] = '<div class="clear"></div>';
         return implode($html, "\n");
     }

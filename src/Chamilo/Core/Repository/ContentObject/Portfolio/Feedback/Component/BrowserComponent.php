@@ -209,8 +209,9 @@ class BrowserComponent extends Manager
                     $html[] = '<div class="clear"></div>';
 
                     $html[] = ResourceManager :: get_instance()->get_resource_html(
-                        Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
-                             'resources/javascript/feedback.js');
+                        Path :: getInstance()->getJavascriptPath(
+                            'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
+                            true) . 'Feedback.js');
                 }
             }
 

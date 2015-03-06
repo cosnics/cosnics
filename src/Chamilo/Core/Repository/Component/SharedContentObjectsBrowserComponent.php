@@ -82,8 +82,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $html[] = $this->action_bar->as_html();
         $html[] = $output;
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\\', true) .
-                 'Resources/Javascript/Repository.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
 
         $html[] = $this->render_footer();
 

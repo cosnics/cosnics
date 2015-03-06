@@ -487,19 +487,18 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\\', true) .
-                     'Resources/Javascript/ContentObjectFormUpload.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
         // added platform option 'omit_content_object_title_check'
         // when NULL (platform option not set) or FALSE (platform option set to false)
         // check title duplicates of content objects; when it is both set and true,
         // omit this check. (this way, the platform setting is unobtrusive).
         if (PlatformSetting :: get('omit_content_object_title_check', __NAMESPACE__) != 1)
         {
-            $co_check_script = 'Resources/Javascript/ContentObjectFormCheck.js';
             $this->addElement(
                 'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\\', true) . $co_check_script));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) .
+                         'ContentObjectFormCheck.js'));
         }
 
         $buttons = array();
@@ -589,12 +588,12 @@ EOT;
             $this->addElement(
                 'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) .
-                         'jquery/uploadify/jquery.uploadify.min.js'));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                         'Plugin/Uploadify/jquery.uploadify.min.js'));
             $this->addElement(
                 'html',
                 ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'CollapseHorizontal.js'));
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
             $this->addElement(
                 'category',
@@ -970,7 +969,7 @@ EOT;
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'CollapseHorizontal.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
         $this->addElement(
             'category',

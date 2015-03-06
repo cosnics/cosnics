@@ -136,7 +136,7 @@ class DynamicContentMenu
         $html[] = '<div class="clear"></div></div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getConfigurationPath(true) . 'Resources/Javascript/DynamicContentMenu.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'DynamicContentMenu.js');
 
         $selected_item = $this->get_selected_item();
         if ($selected_item)

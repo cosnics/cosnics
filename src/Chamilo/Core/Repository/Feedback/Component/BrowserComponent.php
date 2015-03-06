@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '<div class="clear"></div>';
 
                 $html[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/feedback.js');
+                    Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Feedback', true) . 'Feedback.js');
             }
 
             if ($this->get_parent()->is_allowed_to_create_feedback())

@@ -21,11 +21,11 @@ class MultiPrivilegeForm extends FormValidator
     public function __construct($component)
     {
         parent :: __construct(
-            ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 
-            'post', 
+            ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true),
+            'post',
             $component->get_url());
         $this->component = $component;
-        
+
         $this->build();
     }
 
@@ -34,40 +34,40 @@ class MultiPrivilegeForm extends FormValidator
         $this->addElement('text', 'username', Translation :: get('User'));
         $this->addElement('select', self :: GROUPS, Translation :: get('Groups'), self :: get_groups_name());
         $this->addElement(
-            'select', 
-            self :: TYPES_PRIVILEGES, 
-            Translation :: get('Privilege'), 
+            'select',
+            self :: TYPES_PRIVILEGES,
+            Translation :: get('Privilege'),
             self :: get_privileges_types());
-        
+
         $url = $this->component->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_RENDER_REPOSITORY_FEED));
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
-        
+
         $options = array('load_elements' => true);
-        
+
         $element_finder = $this->addElement(
-            'element_finder', 
-            'repositories', 
-            Translation :: get('SelectAttachment'), 
-            $url, 
-            $locale, 
-            array(), 
+            'element_finder',
+            'repositories',
+            Translation :: get('SelectAttachment'),
+            $url,
+            $locale,
+            array(),
             $options);
-        
+
         $this->addElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Grant', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Grant', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
-        
+
         $this->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: get_common_extensions_path(true) .
-                     'external_repository_manager/implementation/bitbucket/resources/javascript/privilege_granting_form.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Bitbucket', true) .
+                     'PrivilegeGrantingForm.js'));
     }
 
     public function grant_privilege()
@@ -76,14 +76,14 @@ class MultiPrivilegeForm extends FormValidator
         $username = Setting :: get('username', $this->component->get_external_repository()->get_id());
         $user = $values['username'];
         $group = $values['groups'];
-        
+
         foreach ($values[repositories][repository] as $repository)
         {
             if ($user)
             {
                 $success = $this->component->get_external_repository_manager_connector()->grant_user_privilege(
-                    $username . '/' . $repository, 
-                    $user, 
+                    $username . '/' . $repository,
+                    $user,
                     $values['types']);
             }
             else
@@ -91,8 +91,8 @@ class MultiPrivilegeForm extends FormValidator
                 if ($group)
                 {
                     $success = $this->component->get_external_repository_manager_connector()->grant_group_privileges(
-                        $username . '/' . $repository, 
-                        $group, 
+                        $username . '/' . $repository,
+                        $group,
                         $values['types']);
                 }
             }
@@ -121,7 +121,7 @@ class MultiPrivilegeForm extends FormValidator
         $privileges_types[self :: TYPE_READ] = Translation :: get('Read');
         $privileges_types[self :: TYPE_WRITE] = Translation :: get('Write');
         $privileges_types[self :: TYPE_ADMIN] = Translation :: get('Admin');
-        
+
         return $privileges_types;
     }
 }

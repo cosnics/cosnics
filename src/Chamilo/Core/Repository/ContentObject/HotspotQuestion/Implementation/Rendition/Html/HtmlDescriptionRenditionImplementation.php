@@ -12,16 +12,16 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
 
     private $colours = array(
-        '#ff0000', 
-        '#f2ef00', 
-        '#00ff00', 
-        '#00ffff', 
-        '#0000ff', 
-        '#ff00ff', 
-        '#0080ff', 
-        '#ff0080', 
-        '#00ff80', 
-        '#ff8000', 
+        '#ff0000',
+        '#f2ef00',
+        '#00ff00',
+        '#00ffff',
+        '#0000ff',
+        '#ff00ff',
+        '#0080ff',
+        '#ff0080',
+        '#00ff80',
+        '#ff8000',
         '#8000ff');
 
     public function render()
@@ -32,17 +32,17 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function get_description()
     {
         $html = array();
-        
+
         $content_object = $this->get_content_object();
         $options = $content_object->get_answers();
         $image = $content_object->get_image_object();
-        
+
         if (! is_null($image))
         {
             $dimensions = getimagesize($image->get_full_path());
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' . $dimensions[0] .
                  'px; height: ' . $dimensions[1] . 'px; background-image: url(' . $image->get_url() . ')"></div></div>';
-            
+
             // $html[] = '<img class="hotspot_image_display" src="' . $image->get_url() . '" alt="' .
             // $image->get_title() . '" title="' . $image->get_title() . '" />';
         }
@@ -51,7 +51,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<div id="hotspot_container"><div id="hotspot_image"></div></div>';
         }
         $html[] = '';
-        
+
         $html[] = '<table class="data_table">';
         $html[] = '<thead>';
         $html[] = '<tr>';
@@ -66,23 +66,22 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<td><div class="colour_box" style="background-color: ' . $this->colours[$index] .
                  ';"></div><div id="coordinates_' . $index . '" class="coordinates" style="display: none;">' .
                  $option->get_hotspot_coordinates() . '</div></td>';
-            
+
             $renderer = new ContentObjectResourceRenderer($this->get_context(), $option->get_answer());
             $html[] = '<td>' . $renderer->run() . '</td>';
-            
+
             $html[] = '</tr>';
         }
         $html[] = '</tbody>';
         $html[] = '</table>';
-        
+
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/jquery.draw.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                 'Plugin/jquery.draw.js');
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getPluginPath('Chamilo\Configuration', true) . 'jquery/phpjs.js');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getBasePath(true) .
-                 'repository/content_object/hotspot_question/resources/javascript/rendition.js');
-        
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+                 'Rendition.js');
+
         return implode(PHP_EOL, $html);
     }
 }
