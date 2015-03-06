@@ -65,7 +65,7 @@ class JumpForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Configuration', true) . 'Postback.js'));
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'));
 
         $this->setDefaults(
             array(

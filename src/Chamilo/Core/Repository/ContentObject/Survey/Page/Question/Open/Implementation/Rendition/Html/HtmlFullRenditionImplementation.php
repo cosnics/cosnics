@@ -36,7 +36,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         }
 
         $html = array();
-        $html[] = $this->get_includes();
+
         $html[] = '<div class="question" >';
         $html[] = '<div class="title">';
         $html[] = '<div class="number">';
@@ -54,10 +54,12 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
 
         $html[] = '<div class="instruction">';
+
         if ($content_object->has_instruction())
         {
             $html[] = $content_object->get_instruction();
         }
+
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
 
@@ -93,19 +95,6 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         return implode(PHP_EOL, $html);
     }
 
-    function get_includes()
-    {
-        $scripts = array();
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
-
-        return implode(PHP_EOL, $scripts);
-    }
-
     function get_javascript($question_id)
     {
         $html_editor_options = array();
@@ -130,4 +119,3 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         return implode(PHP_EOL, $javascript);
     }
 }
-?>

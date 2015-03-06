@@ -59,7 +59,7 @@ class Display extends QuestionDisplay
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                     'hotspot_question_display.js'));
+                     'HotspotQuestionDisplay.js'));
 
         $image_html = array();
         $image_object = $question->get_image_object();

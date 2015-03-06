@@ -82,8 +82,9 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\Rating', true) .
-                 'Resources/Javascript/survey_rating_question.js');
+            Path :: getInstance()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating',
+                true) . 'SurveyRatingQuestion.js');
 
         $table_footer[] = '</td>';
         $table_footer[] = '</tr>';

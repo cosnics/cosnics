@@ -79,8 +79,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         }
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) .
-                 'Resources/Javascript/PublicationsList.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'PublicationsList.js');
 
         if ($this->get_actions() && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {

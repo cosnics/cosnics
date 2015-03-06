@@ -19,33 +19,33 @@ class JavascriptUtilities extends ResourceUtilities
 
         // if ($this->getContext() == __NAMESPACE__)
         // {
-        $plugin_path = $this->getPathUtilities()->getJavascriptPath('Chamilo\Libraries') . 'Plugin/';
-        $configuration = $this->getPathUtilities()->getJavascriptPath('Chamilo\Configuration');
+        $javascriptPath = $this->getPathUtilities()->getJavascriptPath('Chamilo\Libraries');
+        $pluginPath = $javascriptPath . 'Plugin/';
 
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.tabula.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.dynamic.visual_tabs.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.tablednd.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.ui.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.ui.tabs.paging.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.treeview.async.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.timeout.interval.idle.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.mousewheel.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.scrollable.pack.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.xml2json.pack.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.json.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.iphone.checkboxes.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.jsuggest.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.jeditable.mini.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.query.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.simplemodal.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.tree_menu.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'JQuery/jquery.timepicker.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $plugin_path . 'phpjs.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Utilities.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Notifications.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Help.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $configuration . 'Visit.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tabula.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.dynamic.visual_tabs.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tablednd.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.ui.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.ui.tabs.paging.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.treeview.async.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.timeout.interval.idle.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.mousewheel.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.scrollable.pack.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.xml2json.pack.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.json.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.iphone.checkboxes.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.jsuggest.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.jeditable.mini.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.query.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.simplemodal.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.tree_menu.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'JQuery/jquery.timepicker.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'phpjs.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Utilities.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Help.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Visit.js');
         // }
         // else
         // {

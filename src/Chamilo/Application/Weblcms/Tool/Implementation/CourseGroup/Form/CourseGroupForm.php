@@ -101,7 +101,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement('html', '<div class="configuration_form">');
         $this->addElement(
             'html',
-            '<span class="category">' . $header_title . // Translation :: get($header_title, null, Utilities ::
+            '<span class="category">' . $header_title .             // Translation :: get($header_title, null, Utilities ::
                                                         // COMMON_LIBRARIES) .
             '</span>');
     }
@@ -898,9 +898,9 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath(
+                Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
-                    true) . 'Resources/Javascript/course_group_edit_form.js'));
+                    true) . 'CourseGroupEditForm.js'));
 
         $this->build_header($this->course_group->get_name());
         $this->addElement(
@@ -961,8 +961,9 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
-                     'resources/javascript/course_group_form.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
+                    true) . 'CourseGroupForm.js'));
 
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
@@ -1010,8 +1011,9 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) .
-                     'resources/javascript/course_group_form.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
+                    true) . 'CourseGroupForm.js'));
 
         $this->build_header(Translation :: get('CourseGroupParent'));
         $this->build_parent_form_create();
@@ -1077,6 +1079,7 @@ class CourseGroupForm extends FormValidator
      * are created with the same name as the course_group titel.
      *
      * @param
+     *
      *
      *
      *
@@ -1650,7 +1653,8 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
@@ -1691,7 +1695,8 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $counternteger.

@@ -47,12 +47,12 @@ class ResultToHtmlConverter
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getResourcesPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
-                true) . 'Css/report.css');
+                true) . 'Css/Report.css');
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
-                true) . 'report.js');
+                true) . 'Report.js');
         $html[] = '<div id="printable">';
 
         $condition = new EqualityCondition(
@@ -343,11 +343,9 @@ class ResultToHtmlConverter
         }
         else
         {
-            $html[] = "<span class='report_table_header'>" .
-                 Translation :: get(
-                    'LocalReport',
-                    array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) .
-                 "</span>";
+            $html[] = "<span class='report_table_header'>" . Translation :: get(
+                'LocalReport',
+                array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) . "</span>";
         }
 
         $html[] = "</td>";

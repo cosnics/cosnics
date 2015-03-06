@@ -16,50 +16,50 @@ class Display extends QuestionDisplay
         $renderer = $this->get_renderer();
         $complex_question = $complex_content_object_path_node->get_complex_content_object_item();
         $question = $complex_content_object_path_node->get_content_object();
-        
+
         $options = $question->get_options();
         $matches = $question->get_matches();
         $match_objects = array();
         $type = $question->get_matrix_type();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table take_survey">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="caption" style="width: 30%;"></th>';
-        
+
         while ($match = $matches->next_result())
         {
             $match_objects[] = $match;
             $table_header[] = '<th class="center">' . trim(strip_tags($match->get_value())) . '</th>';
         }
-        
+
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $question_id = $complex_question->get_id();
-        
+
         while ($option = $options->next_result())
         {
             $group = array();
             $i = $option->get_id();
             $group[] = $formvalidator->createElement(
-                'static', 
-                null, 
-                null, 
+                'static',
+                null,
+                null,
                 '<div style="text-align: left;">' . $option->get_value() . '</div>');
-            
+
             foreach ($match_objects as $match)
             {
                 $j = $match->get_id();
                 if ($type == Matrix :: MATRIX_TYPE_RADIO)
                 {
                     $option_name = $question_id . '_' . $i;
-                    
+
                     $radio = $formvalidator->createElement('radio', $option_name, null, null, $j);
-                    
+
                     if ($answer)
                     {
                         if ($answer[$option_name] == $j)
@@ -67,13 +67,13 @@ class Display extends QuestionDisplay
                             $formvalidator->setDefaults(array($option_name => $j));
                         }
                     }
-                    
+
                     $group[] = $radio;
                 }
                 elseif ($type == Matrix :: MATRIX_TYPE_CHECKBOX)
                 {
                     $option_name = $question_id . '_' . $i . '_' . $j;
-                    
+
                     $checkbox = $formvalidator->createElement('checkbox', $option_name, null, null, null, $j);
                     if ($answer)
                     {
@@ -85,23 +85,22 @@ class Display extends QuestionDisplay
                     $group[] = $checkbox;
                 }
             }
-            
+
             $formvalidator->addGroup($group, 'matrix_option_' . $i, null, '', false);
-            
+
             $renderer->setElementTemplate(
-                '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
+                '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
                 'matrix_option_' . $i);
             $renderer->setGroupElementTemplate('<td style="text-align: center;">{element}</td>', 'matrix_option_' . $i);
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
         $formvalidator->addElement(
-            'html', 
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getBasePath(true) .
-                     'repository/content_object/survey_matrix_question/integration/repository/content_object/survey_page/resources/javascript/matrix_question_display.js'));
+                Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'MatrixQuestionDisplay.js'));
     }
 
     function add_border()

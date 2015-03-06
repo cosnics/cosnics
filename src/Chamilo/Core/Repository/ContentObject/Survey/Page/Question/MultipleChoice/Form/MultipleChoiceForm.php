@@ -70,7 +70,9 @@ class MultipleChoiceForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->namespaceToFullPath(__NAMESPACE__, true) . 'resources/javascript/form.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
+                    true) . 'Form.js'));
 
         $tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
 
