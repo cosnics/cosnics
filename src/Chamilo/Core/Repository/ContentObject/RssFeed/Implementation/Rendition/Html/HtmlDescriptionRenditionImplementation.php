@@ -21,15 +21,13 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
         $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
         $html[] = '<div class="title">' . Translation :: get('Description') . '</div>';
-        // $html[] = ContentObjectRendition ::
-        // factory($this)->get_description();
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($object->get_url()) . '">' .
              htmlentities($object->get_url()) . '</a></div>';
         $html[] = '</div>';
 
         $feed = $this->parse_file($object->get_url());
 
-        foreach ($feed['items'] as $item)
+        foreach ($feed as $item)
         {
             $html[] = '<div class="content_object" style="background-image: url(' .
                  Theme :: getInstance()->getCommonImagePath('ContentObject/RssFeedItem') . ');">';

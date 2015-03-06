@@ -4,8 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Impl
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Form\ChoiceForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
 class HtmlFullRenditionImplementation extends HtmlRenditionImplementation

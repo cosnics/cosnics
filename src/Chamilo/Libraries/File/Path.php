@@ -28,6 +28,7 @@ class Path
     const RESOURCE = 13;
     const JAVASCRIPT = 14;
     const I18N = 15;
+    const VENDOR = 16;
 
     /**
      *
@@ -115,6 +116,17 @@ class Path
         return $this->cache[self :: STORAGE][(string) $namespace][(string) $web] = realpath(
             $this->getBasePath($web) . '../files/') . ($web ? '/' : DIRECTORY_SEPARATOR) .
              ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+    }
+
+    /**
+     *
+     * @param boolean $web
+     * @return string
+     */
+    public function getVendorPath($web = false)
+    {
+        return $this->cache[self :: VENDOR][(string) $web] = realpath($this->getBasePath($web) . '../vendor/') .
+             ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
     /**
