@@ -59,7 +59,7 @@ class SimpleRightsEditorComponent extends RightsEditorComponent
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AdvancedRightsEditor'),
-                Theme :: getInstance()->getCommonImagePath('action_config'),
+                Theme :: getInstance()->getCommonImagePath('Action/Config'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 

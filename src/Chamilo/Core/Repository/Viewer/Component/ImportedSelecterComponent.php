@@ -60,7 +60,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_publish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_url(
                         array_merge(
                             $this->get_parameters(),
@@ -76,7 +76,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Preview'),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
                         array_merge(
                             $this->get_parameters(),
@@ -92,7 +92,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('EditAndPublish'),
-                    Theme :: getInstance()->getCommonImagePath('action_editpublish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
                     $this->get_url(
                         array_merge(
                             $this->get_parameters(),
@@ -111,7 +111,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_preview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
                     $preview_url,
                     ToolbarItem :: DISPLAY_ICON,
                     false,

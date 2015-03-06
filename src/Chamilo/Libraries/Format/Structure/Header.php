@@ -101,7 +101,7 @@ class Header
         $this->add_link_header(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
         $this->add_link_header('http://help.chamilo.org/', 'help');
         $this->add_link_header(
-            Theme :: getInstance()->getCommonImagePath('favicon', 'ico'),
+            Theme :: getInstance()->getCommonImagePath('Favicon', 'ico'),
             'shortcut icon',
             null,
             'image/x-icon');
@@ -169,8 +169,7 @@ class Header
     }
 
     /**
-     * Creates the HTML output for the header.
-     * This function will send all http headers to the browser and return the
+     * Creates the HTML output for the header. This function will send all http headers to the browser and return the
      * head-tag of the html document
      */
     public function toHtml()

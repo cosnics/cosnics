@@ -31,31 +31,32 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
 
     /**
      * Gets the action links to display
-     * 
+     *
      * @param $user The user for which the action links should be returned
      * @return string A HTML representation of the action links
      */
     public function get_actions($user)
     {
         $toolbar = new Toolbar();
-        
+
         if ($this->get_user()->is_platform_admin())
         {
             $um = new Manager();
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Approve'), 
-                    Theme :: getInstance()->getCommonImagePath('action_activate'), 
-                    $um->get_approve_user_url($user), 
+                    Translation :: get('Approve'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Activate'),
+                    $um->get_approve_user_url($user),
                     ToolbarItem :: DISPLAY_ICON));
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Deny'), 
-                    Theme :: getInstance()->getCommonImagePath('action_deinstall'), 
-                    $um->get_deny_user_url($user), 
+                    Translation :: get('Deny'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Deinstall'),
+                    $um->get_deny_user_url($user),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 

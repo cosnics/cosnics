@@ -56,7 +56,7 @@ class FormValidator extends HTML_QuickForm
      * @param string $target Form's target defaults to '_self'
      * @param mixed $attributes (optional)Extra attributes for <form> tag
      * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
-     *        (default = true)
+     *            (default = true)
      */
     public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $trackSubmit = true)
     {
@@ -209,7 +209,7 @@ EOT;
         $element_template[] = '<div class="row">';
         $element_template[] = '<div class="label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('action_required') .
+             Theme :: getInstance()->getCommonImagePath('Action/Required') .
              '" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
         $element_template[] = '<div class="formw">';
@@ -230,7 +230,7 @@ EOT;
         $this->renderer->setHeaderTemplate($header_template);
 
         HTML_QuickForm :: setRequiredNote(
-            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagePath('action_required') .
+            '<span class="form_required"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Required') .
                  '" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
@@ -286,8 +286,7 @@ EOT;
     }
 
     /**
-     * Add a textfield to the form.
-     * A trim-filter is attached to the field.
+     * Add a textfield to the form. A trim-filter is attached to the field.
      *
      * @param string $label The label for the form-element
      * @param string $name The element name
@@ -386,8 +385,7 @@ EOT;
     }
 
     /**
-     * Add a HTML-editor to the form to fill in a title.
-     * A trim-filter is attached to the field. A HTML-filter is
+     * Add a HTML-editor to the form to fill in a title. A trim-filter is attached to the field. A HTML-filter is
      * attached to the field (cleans HTML) A rule is attached to check for unwanted HTML
      *
      * @param string $label The label for the form-element
@@ -507,8 +505,7 @@ EOT;
     }
 
     /**
-     * Add a timewindow element to the form.
-     * 2 datepicker elements are added and a rule to check if the first date is
+     * Add a timewindow element to the form. 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
      *
      * @param string $label The label for the form-element
@@ -657,7 +654,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -849,7 +847,7 @@ EOT;
             'static',
             'add_resource_img',
             null,
-            '<img src="' . Theme :: getInstance()->getCommonImagePath('action_attachment') . '" alt="' .
+            '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Attachment') . '" alt="' .
                  Translation :: get('Attachment') . '"/>');
         $group[] = $this->createElement(
             'submit',
@@ -860,19 +858,18 @@ EOT;
     }
 
     /**
-     * Adds a progress bar to the form.
-     * Once the user submits the form, a progress bar (animated gif) is displayed. The
+     * Adds a progress bar to the form. Once the user submits the form, a progress bar (animated gif) is displayed. The
      * progress bar will disappear once the page has been reloaded.
      *
      * @param int $delay The number of seconds between the moment the user submits the form and the start of the
-     *        progress bar.
+     *            progress bar.
      */
     public function add_progress_bar($delay = 2)
     {
         $this->with_progress_bar = true;
         $this->updateAttributes(
             "onsubmit=\"javascript: myUpload.start('dynamic_div','" .
-                 Theme :: getInstance()->getCommonImagePath('action_progress_bar', 'gif') . "','" .
+                 Theme :: getInstance()->getCommonImagePath('Action/ProgressBar', 'gif') . "','" .
                  Translation :: get('PleaseStandBy') . "','" . $this->getAttribute('id') . "');\"");
         $this->addElement(
             'html',
