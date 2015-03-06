@@ -62,8 +62,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Empty the recycle bin.
-     * This function will permanently delete all objects from the recycle bin. Only objects from
+     * Empty the recycle bin. This function will permanently delete all objects from the recycle bin. Only objects from
      * current user will be deleted.
      */
     private function empty_recycle_bin()
@@ -89,7 +88,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('EmptyRecycleBin'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/trash'),
+                Theme :: getInstance()->getCommonImagePath('Treemenu/Trash'),
                 $this->get_url(array(self :: PARAM_EMPTY_RECYCLE_BIN => 1)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                 true));

@@ -126,8 +126,7 @@ class MatchingForm extends ContentObjectForm
     }
 
     /**
-     * Adds the answer to the current learning object.
-     * This function adds the list of possible options and matches and
+     * Adds the answer to the current learning object. This function adds the list of possible options and matches and
      * the relation between the options and the matches to the question.
      */
     function add_answers()
@@ -402,7 +401,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image',
                         'remove_option[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number));
                 }
                 else
@@ -412,7 +411,7 @@ class MatchingForm extends ContentObjectForm
                         null,
                         null,
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
+                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
 
                 $this->addGroup($group, MatchingOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);
@@ -504,7 +503,7 @@ class MatchingForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image',
                         'remove_match[' . $match_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number));
                 }
                 else
@@ -513,8 +512,8 @@ class MatchingForm extends ContentObjectForm
                         'static',
                         null,
                         null,
-                        '<img class="remove_match" src="' .
-                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
+                        '<img class="remove_match" src="' . Theme :: getInstance()->getCommonImagePath(
+                            'Action/DeleteNa') . '" />');
                 }
 
                 $this->addGroup($group, MatchingMatch :: PROPERTY_VALUE . '_' . $match_number, null, '', false);

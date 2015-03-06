@@ -245,7 +245,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('action_recycle_bin'),
+                            Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
                             $recycle_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             Translation :: get('ConfirmRemove', null, Utilities :: COMMON_LIBRARIES)));
@@ -259,7 +259,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         {
                             $recycle_bin_button = new ToolbarItem(
                                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_delete'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                                 $delete_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 Translation :: get('ConfirmDelete', null, Utilities :: COMMON_LIBRARIES));
@@ -269,7 +269,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         {
                             $recycle_bin_button = new ToolbarItem(
                                 Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_recycle_bin_na'));
+                                Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'));
                         }
                     }
                 }
@@ -283,7 +283,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         $force_delete_button = new ToolbarItem(
                             Translation :: get('Unlink', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('action_unlink'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Unlink'),
                             $delete_link_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             true);
@@ -296,7 +296,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_edit'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                                 $edit_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                     }
@@ -305,7 +305,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_edit_na')));
+                                Theme :: getInstance()->getCommonImagePath('Action/EditNa')));
                     }
 
                     if (isset($recycle_bin_button) && $is_owner)
@@ -324,7 +324,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_move'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Move'),
                                 $move_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                     }
@@ -337,7 +337,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             $action_bar->add_common_action(
                                 new ToolbarItem(
                                     Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                                    Theme :: getInstance()->getCommonImagePath('action_share'),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Share'),
                                     $this->get_share_content_objects_url($object->get_id()),
                                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                         }
@@ -362,7 +362,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_build'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Build'),
                                 $clo_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 false,
@@ -374,7 +374,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_preview'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
                                 $preview_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 false,
@@ -390,7 +390,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action(
                             new ToolbarItem(
                                 Translation :: get('Restore', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('action_restore'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Restore'),
                                 $restore_url,
                                 ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                                 true));
@@ -409,7 +409,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('CopyToTemplates'),
-                        Theme :: getInstance()->getCommonImagePath('export_template'),
+                        Theme :: getInstance()->getCommonImagePath('Export/Template'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,

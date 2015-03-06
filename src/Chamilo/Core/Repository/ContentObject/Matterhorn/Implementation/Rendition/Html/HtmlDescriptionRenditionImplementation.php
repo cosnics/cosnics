@@ -103,7 +103,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadTrack'),
-                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
                     $track->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
 

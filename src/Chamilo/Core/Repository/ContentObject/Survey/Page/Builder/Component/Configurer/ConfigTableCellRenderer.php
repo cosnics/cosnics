@@ -48,22 +48,22 @@ class ConfigTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get(
-                    'Edit', 
-                    array('OBJECT' => Translation :: get('PageConfig')), 
-                    Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_edit'), 
-                $this->get_component()->get_config_update_url($config->get_id()), 
+                    'Edit',
+                    array('OBJECT' => Translation :: get('PageConfig')),
+                    Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                $this->get_component()->get_config_update_url($config->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get(
-                    'Delete', 
-                    array('OBJECT' => Translation :: get('PageConfig')), 
-                    Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
-                $this->get_component()->get_config_delete_url($config->get_id()), 
-                ToolbarItem :: DISPLAY_ICON, 
+                    'Delete',
+                    array('OBJECT' => Translation :: get('PageConfig')),
+                    Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                $this->get_component()->get_config_delete_url($config->get_id()),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
         return $toolbar->as_html();
     }

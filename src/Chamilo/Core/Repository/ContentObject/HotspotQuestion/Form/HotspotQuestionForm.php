@@ -418,12 +418,12 @@ class HotspotQuestionForm extends ContentObjectForm
                 $hotspot_actions[] = $this->createElement(
                     'image',
                     'edit[' . $option_number . ']',
-                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     array('class' => 'edit_option', 'id' => 'edit_' . $option_number));
                 $hotspot_actions[] = $this->createElement(
                     'image',
                     'reset[' . $option_number . ']',
-                    Theme :: getInstance()->getCommonImagePath('action_reset'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Reset'),
                     array('class' => 'reset_option', 'id' => 'reset_' . $option_number));
 
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
@@ -431,7 +431,7 @@ class HotspotQuestionForm extends ContentObjectForm
                     $hotspot_actions[] = $this->createElement(
                         'image',
                         'remove[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
@@ -441,7 +441,7 @@ class HotspotQuestionForm extends ContentObjectForm
                         null,
                         null,
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
+                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
                 $group[] = $this->createElement(
                     'static',

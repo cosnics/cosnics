@@ -324,7 +324,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                     $group[] = & $this->createElement(
                         'image',
                         'remove[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => 'remove_option', 'id' => $option_number));
                 }
                 else
@@ -333,7 +333,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                         'static',
                         null,
                         null,
-                        '<img src="' . Theme :: getInstance()->getCommonImagePath('action_delete_na') .
+                        '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') .
                              '" class="remove_option" />');
                 }
 

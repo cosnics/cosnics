@@ -18,33 +18,33 @@ class TableCellRenderer extends DataClassTableCellRenderer implements TableCellR
         switch ($column->get_name())
         {
             case Theme :: getInstance()->getCommonImage(
-                'action_category', 
-                'png', 
-                Translation :: get('Type'), 
-                null, 
+                'action_category',
+                'png',
+                Translation :: get('Type'),
+                null,
                 ToolbarItem :: DISPLAY_ICON) :
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
-            
+
             case ContentObject :: PROPERTY_TITLE :
                 return Utilities :: truncate_string($content_object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
         }
-        
+
         return parent :: render_cell($column, $content_object);
     }
 
     private function get_actions($content_object)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('SelectQuestion'), 
-                Theme :: getInstance()->getCommonImagePath('action_right'), 
-                $this->get_component()->get_question_selector_url($content_object->get_id()), 
+                Translation :: get('SelectQuestion'),
+                Theme :: getInstance()->getCommonImagePath('Action/Right'),
+                $this->get_component()->get_question_selector_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

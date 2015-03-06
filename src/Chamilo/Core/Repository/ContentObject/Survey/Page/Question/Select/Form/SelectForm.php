@@ -290,7 +290,7 @@ class SelectForm extends ContentObjectForm
                     $group[] = & $this->createElement(
                         'image',
                         'remove[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
                 }
                 else
@@ -300,7 +300,7 @@ class SelectForm extends ContentObjectForm
                         null,
                         null,
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
+                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
 
                 $this->addGroup($group, SelectOption :: PROPERTY_VALUE . '_' . $option_number, null, '', false);

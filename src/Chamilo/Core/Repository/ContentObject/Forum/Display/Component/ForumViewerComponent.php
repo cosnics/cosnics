@@ -325,7 +325,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             if ($this->is_locked || $topic->get_ref()->get_locked())
             {
-                $src = Theme :: getInstance()->getCommonImagePath('action_lock');
+                $src = Theme :: getInstance()->getCommonImagePath('Action/Lock');
                 $hover = 'Locked';
             }
 
@@ -452,7 +452,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $tool_bar->add_item(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -465,14 +465,14 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $tool_bar->add_item(
                         new ToolbarItem(
                             Translation :: get('UnSticky'),
-                            Theme :: getInstance()->getCommonImagePath('action_remove_sticky'),
+                            Theme :: getInstance()->getCommonImagePath('Action/RemoveSticky'),
                             $this->get_url($parameters),
                             ToolbarItem :: DISPLAY_ICON));
 
                     $tool_bar->add_item(
                         new ToolbarItem(
                             Translation :: get('ImportantNa'),
-                            Theme :: getInstance()->getCommonImagePath('action_make_important_na'),
+                            Theme :: getInstance()->getCommonImagePath('Action/MakeImportantNa'),
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -486,14 +486,14 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         $tool_bar->add_item(
                             new ToolbarItem(
                                 Translation :: get('StickyNa'),
-                                Theme :: getInstance()->getCommonImagePath('action_make_sticky_na'),
+                                Theme :: getInstance()->getCommonImagePath('Action/MakeStickyNa'),
                                 null,
                                 ToolbarItem :: DISPLAY_ICON));
 
                         $tool_bar->add_item(
                             new ToolbarItem(
                                 Translation :: get('UnImportant'),
-                                Theme :: getInstance()->getCommonImagePath('action_remove_important'),
+                                Theme :: getInstance()->getCommonImagePath('Action/RemoveImportant'),
                                 $this->get_url($parameters),
                                 ToolbarItem :: DISPLAY_ICON));
                     }
@@ -505,7 +505,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $tool_bar->add_item(
                                 new ToolbarItem(
                                     Translation :: get('MakeSticky'),
-                                    Theme :: getInstance()->getCommonImagePath('action_make_sticky'),
+                                    Theme :: getInstance()->getCommonImagePath('Action/MakeSticky'),
                                     $this->get_url($parameters),
                                     ToolbarItem :: DISPLAY_ICON));
 
@@ -513,7 +513,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $tool_bar->add_item(
                                 new ToolbarItem(
                                     Translation :: get('MakeImportant'),
-                                    Theme :: getInstance()->getCommonImagePath('action_make_important'),
+                                    Theme :: getInstance()->getCommonImagePath('Action/MakeImportant'),
                                     $this->get_url($parameters),
                                     ToolbarItem :: DISPLAY_ICON));
                         }
@@ -529,7 +529,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $tool_bar->add_item(
                                 new ToolbarItem(
                                     Translation :: get('Unlock'),
-                                    Theme :: getInstance()->getCommonImagePath('action_unlock'),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Unlock'),
                                     $this->get_url($parameters),
                                     ToolbarItem :: DISPLAY_ICON));
                         }
@@ -539,7 +539,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $tool_bar->add_item(
                                 new ToolbarItem(
                                     Translation :: get('Lock'),
-                                    Theme :: getInstance()->getCommonImagePath('action_lock'),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Lock'),
                                     $this->get_url($parameters),
                                     ToolbarItem :: DISPLAY_ICON));
                         }
@@ -673,7 +673,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             if ($this->is_locked || $forum->get_ref()->get_locked())
             {
-                $src = Theme :: getInstance()->getCommonImagePath('action_lock');
+                $src = Theme :: getInstance()->getCommonImagePath('Action/Lock');
             }
 
             $table->setCellContents(
@@ -752,7 +752,7 @@ public function get_action_bar()
     $action_bar->add_common_action(
         new ToolbarItem(
             Translation :: get('NewTopic'),
-            Theme :: getInstance()->getCommonImagePath('action_add'),
+            Theme :: getInstance()->getCommonImagePath('Action/Add'),
             $this->get_url(
                 array(
                     self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
@@ -765,7 +765,7 @@ public function get_action_bar()
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('NewSubForum'),
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_url(
                     array(
                         self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
@@ -801,7 +801,7 @@ public function get_forum_actions($forum)
             $parameters[self :: PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;
             $delete = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_delete'),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON,
                 true);
@@ -812,7 +812,7 @@ public function get_forum_actions($forum)
             $tool_bar->add_item(
                 new ToolbarItem(
                     Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
             if ($this->get_user()->is_platform_admin() || $this->is_forum_manager($this->get_user()))
@@ -825,7 +825,7 @@ public function get_forum_actions($forum)
                         $tool_bar->add_item(
                             new ToolbarItem(
                                 Translation :: get('Unlock'),
-                                Theme :: getInstance()->getCommonImagePath('action_unlock'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Unlock'),
                                 $this->get_url($parameters),
                                 ToolbarItem :: DISPLAY_ICON));
                     }
@@ -835,7 +835,7 @@ public function get_forum_actions($forum)
                         $tool_bar->add_item(
                             new ToolbarItem(
                                 Translation :: get('Lock'),
-                                Theme :: getInstance()->getCommonImagePath('action_lock'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Lock'),
                                 $this->get_url($parameters),
                                 ToolbarItem :: DISPLAY_ICON));
                     }

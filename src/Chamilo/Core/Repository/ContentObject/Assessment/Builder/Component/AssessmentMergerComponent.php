@@ -125,7 +125,7 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('AddAllQuestions'),
-                Theme :: getInstance()->getCommonImagePath('action_add'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
                 $this->get_question_selector_url(null, $selected_assessment->get_id())));
 
         return $action_bar;

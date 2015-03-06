@@ -176,7 +176,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $retrieve_types = array(RepositoryRights :: TYPE_USER_CONTENT_OBJECT);
 
         $shared_locations_by_type = RepositoryRights :: get_instance()->get_location_overview_with_rights_granted(
-            ClassnameUtilities::getInstance()->getNamespaceParent(self :: context(), 1),
+            ClassnameUtilities :: getInstance()->getNamespaceParent(self :: context(), 1),
             Session :: get_user_id(),
             $entities,
             null,
@@ -256,7 +256,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
         $action_bar->add_common_action(
             new ToolbarItem(
                 Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -265,7 +265,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('ManageCategories'),
-                    Theme :: getInstance()->getCommonImagePath('action_category'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Category'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,

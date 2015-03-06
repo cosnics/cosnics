@@ -130,8 +130,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
     }
 
     /**
-     * Adds the answer to the current learning object.
-     * This function adds the list of possible options and matches and
+     * Adds the answer to the current learning object. This function adds the list of possible options and matches and
      * the relation between the options and the matches to the question.
      */
     public function add_answer()
@@ -320,7 +319,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image',
                         'remove_option[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => self :: PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number));
                 }
                 else
@@ -330,8 +329,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                         null,
                         null,
                         '<img class="remove_option" src="' .
-                             Theme :: getInstance()->getCommonImagePath('action_delete_na') .
-                             '" class="remove_option" />');
+                             Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" class="remove_option" />');
                 }
 
                 $this->addGroup(
@@ -442,7 +440,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'image',
                         'remove_match[' . $match_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('action_delete'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                         array('class' => self :: PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number));
                 }
                 else
@@ -451,7 +449,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                         'static',
                         null,
                         null,
-                        '<img src="' . Theme :: getInstance()->getCommonImagePath('action_delete_na') . '" />');
+                        '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
 
                 $this->addGroup($group, 'match_' . $match_number, null, '', false);

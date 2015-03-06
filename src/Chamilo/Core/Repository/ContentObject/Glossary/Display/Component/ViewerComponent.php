@@ -108,7 +108,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $this->action_bar->add_common_action(
                     new ToolbarItem(
                         Translation :: get('CreateItem'),
-                        Theme :: getInstance()->getCommonImagePath('action_create'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
                         $this->get_url(
                             array(
                                 self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
@@ -119,13 +119,13 @@ class ViewerComponent extends Manager implements DelegateComponent
             $this->action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('TableView', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(array(self :: PARAM_VIEW => GlossaryRendererFactory :: TYPE_TABLE)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             $this->action_bar->add_tool_action(
                 new ToolbarItem(
                     Translation :: get('ListView', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('action_browser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(array(self :: PARAM_VIEW => GlossaryRendererFactory :: TYPE_LIST)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
