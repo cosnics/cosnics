@@ -19,10 +19,10 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         switch ($column->get_name())
         {
             case Theme :: getInstance()->getCommonImage(
-                'action_category', 
-                'png', 
-                Translation :: get('Type'), 
-                null, 
+                'action_category',
+                'png',
+                Translation :: get('Type'),
+                null,
                 ToolbarItem :: DISPLAY_ICON) :
                 return $object->get_icon_image(Theme :: ICON_MINI);
             case ContentObject :: PROPERTY_TITLE :
@@ -36,17 +36,17 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_export'), 
+                Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Export'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_EXTERNAL_REPOSITORY_MANAGER_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY, 
-                        Manager :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())), 
+                        Manager :: PARAM_EXTERNAL_REPOSITORY_MANAGER_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY,
+                        Manager :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

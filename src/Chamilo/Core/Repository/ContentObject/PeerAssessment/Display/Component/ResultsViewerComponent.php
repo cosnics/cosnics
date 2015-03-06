@@ -13,8 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * Enter description here .
- * ..get_
+ * Enter description here . ..get_
  *
  * @author admin
  */
@@ -235,7 +234,7 @@ class ResultsViewerComponent extends Manager
     {
         $item = new ToolbarItem(
             Translation :: get('Details'),
-            Theme :: getInstance()->getCommonImagePath(($complete ? 'action_details' : 'action_details_na')),
+            Theme :: getInstance()->getCommonImagePath(($complete ? 'Action/Details' : 'Action/DetailsNa')),
             $this->get_url(
                 array(
                     self :: PARAM_ACTION => self :: ACTION_VIEW_USER_RESULTS,
@@ -255,7 +254,7 @@ class ResultsViewerComponent extends Manager
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('export_ods'),
+                    Theme :: getInstance()->getCommonImagePath('Export/Ods'),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_EXPORT_RESULT,

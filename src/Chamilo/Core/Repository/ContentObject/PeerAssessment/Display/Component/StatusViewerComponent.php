@@ -11,8 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Enter description here .
- * ..
+ * Enter description here . ..
  *
  * @author admin
  */
@@ -168,7 +167,7 @@ class StatusViewerComponent extends Manager
         $item = new ToolbarItem(
             Translation :: get('Details'),
             Theme :: getInstance()->getCommonImagePath(
-                (($status->get_progress() > 0) ? 'action_details' : 'action_details_na')),
+                (($status->get_progress() > 0) ? 'Action/Details' : 'Action/DetailsNa')),
             $this->get_url(
                 array(
                     self :: PARAM_ACTION => self :: ACTION_VIEW_USER_STATUS,
@@ -193,7 +192,7 @@ class StatusViewerComponent extends Manager
         if ($status->get_closed() === null)
         {
             $item->set_label(Translation :: get('StatusOpen') . ' ' . Translation :: get('CloseStatus'));
-            $item->set_image(Theme :: getInstance()->getCommonImagePath('action_lock_na'));
+            $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/LockNa'));
         }
         else
         {
@@ -202,13 +201,13 @@ class StatusViewerComponent extends Manager
                 $item->set_label(
                     Translation :: get('AttemptClosed') . ': ' . date('d/m/Y', $status->get_closed()) . '. ' .
                          Translation :: get('OpenStatus'));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath('action_setting_true_locked'));
+                $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/SettingTrueLocked'));
             }
             else
             {
                 $item->set_label(
                     Translation :: get('AttemptClosedAfterDeadline') . ': ' . date('d/m/Y', $status->get_closed()));
-                $item->set_image(Theme :: getInstance()->getCommonImagePath('action_setting_false_locked'));
+                $item->set_image(Theme :: getInstance()->getCommonImagePath('Action/SettingFalseLocked'));
                 $item->set_href(null);
             }
         }

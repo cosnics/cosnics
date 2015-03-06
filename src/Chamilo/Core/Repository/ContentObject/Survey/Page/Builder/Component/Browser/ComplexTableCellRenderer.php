@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: survey_page_browser_table_cell_renderer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder.survey_page.component.browser
  */
 /**
@@ -30,7 +30,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
                 $title = htmlspecialchars($complex_content_object_item->get_title());
                 $title_short = $title;
                 $title_short = Utilities :: truncate_string($title_short, 53, false);
-                
+
                 if ($complex_content_object_item instanceof ComplexContentObjectSupport)
                 {
                     $title_short = '<a href="' .
@@ -44,20 +44,20 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
                     $title_short = '<a href="' . $this->get_component()->get_complex_content_object_item_view_url(
                         $complex_content_object_item->get_id()) . '">' . $title_short . '</a>';
                 }
-                
+
                 return $title_short;
                 break;
-            
+
             case Theme :: getInstance()->getImage(
-                'display_order', 
-                'png', 
-                Translation :: get('DisplayOrder'), 
-                null, 
+                'display_order',
+                'png',
+                Translation :: get('DisplayOrder'),
+                null,
                 ToolbarItem :: DISPLAY_ICON) :
-                
+
                 $html = array();
                 $html[] = '<select class="order" id="order_' . $complex_content_object_item->get_id() . '">';
-                
+
                 $parent_object = $complex_content_object_item->get_parent_object();
                 $count_questions = $parent_object->count_children();
                 for ($i = 1; $i <= $count_questions; $i ++)
@@ -65,12 +65,12 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
                     $html[] = '<option' . ($i == $complex_content_object_item->get_display_order() ? ' selected' : '') .
                          ' value="' . $i . '">' . $i . '</option>';
                 }
-                
+
                 $html[] = '</select>';
                 return implode(PHP_EOL, $html);
                 break;
         }
-        
+
         return parent :: render_cell($column, $complex_content_object_item);
     }
 
@@ -79,80 +79,80 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
         $toolbar = parent :: get_actions($complex_content_object_item);
         $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
             $complex_content_object_item->get_parent());
-        
+
         if ($complex_content_object_item->is_extended() || $this->get_component() instanceof Manager)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit'), 
-                    Theme :: getInstance()->getCommonImagePath('action_edit'), 
+                    Translation :: get('Edit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_component()->get_complex_content_object_item_edit_url(
-                        $complex_content_object_item->get_id()), 
+                        $complex_content_object_item->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditNA'), 
-                    Theme :: getInstance()->getCommonImagePath('action_edit_na'), 
-                    null, 
+                    Translation :: get('EditNA'),
+                    Theme :: getInstance()->getCommonImagePath('Action/EditNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete'), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                Translation :: get('Delete'),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_component()->get_complex_content_object_item_delete_url(
-                    $complex_content_object_item->get_id()), 
-                ToolbarItem :: DISPLAY_ICON, 
+                    $complex_content_object_item->get_id()),
+                ToolbarItem :: DISPLAY_ICON,
                 true));
-        
+
         $allowed = $this->check_move_allowed($complex_content_object_item);
-        
+
         if ($allowed["moveup"])
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveUp'), 
-                    Theme :: getInstance()->getCommonImagePath('action_up'), 
+                    Translation :: get('MoveUp'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Up'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $complex_content_object_item->get_id(), 
-                        \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_UP), 
+                        $complex_content_object_item->get_id(),
+                        \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_UP),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveUpNA'), 
-                    Theme :: getInstance()->getCommonImagePath('action_up_na'), 
-                    null, 
+                    Translation :: get('MoveUpNA'),
+                    Theme :: getInstance()->getCommonImagePath('Action/UpNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($allowed["movedown"])
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveDown'), 
-                    Theme :: getInstance()->getCommonImagePath('action_down'), 
+                    Translation :: get('MoveDown'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Down'),
                     $this->get_component()->get_complex_content_object_item_move_url(
-                        $complex_content_object_item->get_id(), 
-                        \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_DOWN), 
+                        $complex_content_object_item->get_id(),
+                        \Chamilo\Core\Repository\Manager :: PARAM_DIRECTION_DOWN),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MoveDownNA'), 
-                    Theme :: getInstance()->getCommonImagePath('action_down_na'), 
-                    null, 
+                    Translation :: get('MoveDownNA'),
+                    Theme :: getInstance()->getCommonImagePath('Action/DownNa'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

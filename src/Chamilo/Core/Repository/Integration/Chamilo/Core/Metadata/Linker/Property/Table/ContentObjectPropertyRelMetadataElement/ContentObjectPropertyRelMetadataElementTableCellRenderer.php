@@ -17,17 +17,17 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table cell renderer for the ContentObjectPropertyRelMetadataElement data class
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentObjectPropertyRelMetadataElementTableCellRenderer extends DataClassTableCellRenderer implements 
+class ContentObjectPropertyRelMetadataElementTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
     /**
      * Renders a single cell
-     * 
+     *
      * @param TableColumn $column
      * @param mixed $result
      *
@@ -46,29 +46,29 @@ class ContentObjectPropertyRelMetadataElementTableCellRenderer extends DataClass
                             return Translation :: get('ContentObjectTypeName', null, $result->get_content_object_type());
                         case ContentObjectPropertyRelMetadataElement :: PROPERTY_PROPERTY_NAME :
                             return Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($result->get_property_name())->upperCamelize(), 
-                                null, 
+                                (string) StringUtilities :: getInstance()->createString($result->get_property_name())->upperCamelize(),
+                                null,
                                 $result->get_content_object_type());
                     }
                 case Element :: class_name() :
                     $element = \Chamilo\Core\Metadata\Element\Storage\DataManager :: retrieve_by_id(
-                        Element :: class_name(), 
+                        Element :: class_name(),
                         $result->get_metadata_element_id());
-                    
+
                     $schema = \Chamilo\Core\Metadata\Schema\Storage\DataManager :: retrieve_by_id(
-                        Schema :: class_name(), 
+                        Schema :: class_name(),
                         $element->get_schema_id());
-                    
+
                     return $schema->get_namespace() . ':' . $element->get_name();
             }
         }
-        
+
         return parent :: render_cell($column, $result);
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $result
      *
      * @return String
@@ -76,27 +76,27 @@ class ContentObjectPropertyRelMetadataElementTableCellRenderer extends DataClass
     public function get_actions($result)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_edit'), 
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                        Manager :: PARAM_CONTENT_OBJECT_PROPERTY_REL_METADATA_ELEMENT_ID => $result->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                        Manager :: PARAM_CONTENT_OBJECT_PROPERTY_REL_METADATA_ELEMENT_ID => $result->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('action_delete'), 
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_CONTENT_OBJECT_PROPERTY_REL_METADATA_ELEMENT_ID => $result->get_id())), 
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                        Manager :: PARAM_CONTENT_OBJECT_PROPERTY_REL_METADATA_ELEMENT_ID => $result->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         return $toolbar->as_html();
     }
 }

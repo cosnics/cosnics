@@ -164,7 +164,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('action_delete') . '"  alt="' . $title . '" title="' . $title .
+             Theme :: getInstance()->getCommonImagePath('Action/Delete') . '"  alt="' . $title . '" title="' . $title .
              '"/></a>';
 
         return $delete_link;
@@ -179,7 +179,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $title = Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES);
         $update_link = '<a href="' . $update_url . '"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('action_edit') . '"  alt="' . $title . '" title="' . $title .
+             Theme :: getInstance()->getCommonImagePath('Action/Edit') . '"  alt="' . $title . '" title="' . $title .
              '"/></a>';
 
         return $update_link;

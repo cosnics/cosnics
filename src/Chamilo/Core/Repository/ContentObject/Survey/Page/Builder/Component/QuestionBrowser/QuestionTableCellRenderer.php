@@ -20,7 +20,7 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
     {
         $question_id = $complex_item->get_ref();
         $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($question_id);
-        
+
         switch ($column->get_name())
         {
             case ContentObject :: PROPERTY_TITLE :
@@ -41,32 +41,31 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
             case ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER :
                 return $complex_item->get_display_order();
         }
-        
+
         return parent :: render_cell($column, $complex_item);
     }
 
     public function get_actions($complex_item)
     {
         $toolbar = new Toolbar();
-        
+
         if ($complex_item->get_visible() == 1)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_visible'), 
-                    $this->get_component()->get_change_question_visibility_url($complex_item), 
+                    Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Visible'),
+                    $this->get_component()->get_change_question_visibility_url($complex_item),
                     ToolbarItem :: DISPLAY_ICON));
-            
-            $excluded_type = $complex_item instanceof ComplexDescription ||
-                 $complex_item instanceof ComplexOpen;
+
+            $excluded_type = $complex_item instanceof ComplexDescription || $complex_item instanceof ComplexOpen;
             if (! $excluded_type)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Configure', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('action_build_prerequisites'), 
-                        $this->get_component()->get_configure_question_url($complex_item), 
+                        Translation :: get('Configure', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/BuildPrerequisites'),
+                        $this->get_component()->get_configure_question_url($complex_item),
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
@@ -74,12 +73,12 @@ class QuestionTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('action_visible_na'), 
-                    $this->get_component()->get_change_question_visibility_url($complex_item), 
+                    Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/VisibleNa'),
+                    $this->get_component()->get_change_question_visibility_url($complex_item),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         return $toolbar->as_html();
     }
 }

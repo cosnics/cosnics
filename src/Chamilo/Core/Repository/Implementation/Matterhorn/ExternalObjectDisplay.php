@@ -304,7 +304,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadTrack'),
-                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
                     $track->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -338,7 +338,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadAttachment'),
-                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
                     $attachment->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -370,7 +370,7 @@ $(document).ready(function(){
             $actions->add_item(
                 new ToolbarItem(
                     Translation :: get('DownloadMetadata'),
-                    Theme :: getInstance()->getCommonImagePath('action_download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
                     $metadata->get_url(),
                     ToolbarItem :: DISPLAY_ICON));
 

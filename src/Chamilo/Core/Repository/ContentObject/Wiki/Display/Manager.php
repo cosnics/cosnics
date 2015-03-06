@@ -237,7 +237,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('MainPage'),
-                Theme :: getInstance()->getCommonImagePath('action_home'),
+                Theme :: getInstance()->getCommonImagePath('Action/Home'),
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI,
@@ -246,13 +246,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Contents'),
-                Theme :: getInstance()->getCommonImagePath('action_browser'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_WIKI)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Statistics'),
-                Theme :: getInstance()->getCommonImagePath('action_statistics'),
+                Theme :: getInstance()->getCommonImagePath('Action/Statistics'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_STATISTICS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $html[] = $toolbar->as_html();
@@ -279,7 +279,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('AddWikiPage'),
-                Theme :: getInstance()->getCommonImagePath('action_create'),
+                Theme :: getInstance()->getCommonImagePath('Action/Create'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_PAGE)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $html[] = $toolbar->as_html();
