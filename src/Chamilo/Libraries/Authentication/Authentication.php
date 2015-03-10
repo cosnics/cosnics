@@ -205,15 +205,15 @@ abstract class Authentication
     public static function get_internal_authentication_types()
     {
         $types = array();
-        $types[] = 'ldap';
-        $types[] = 'platform';
+        $types[] = 'Ldap';
+        $types[] = 'Platform';
         return $types;
     }
 
     public static function is_valid_authentication_type($type)
     {
-        $types = array_merge(self :: get_external_authentication_types(), self :: get_internal_authentication_types());
-        return in_array($type, $types);
+        return in_array($type, self :: get_external_authentication_types()) ||
+             in_array($type, self :: get_internal_authentication_types());
     }
 
     public function get_configuration()

@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: user_import_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- * 
+ *
  * @package user.lib.forms
  */
 set_time_limit(0);
@@ -45,7 +45,7 @@ class UserImportForm extends FormValidator
     public function __construct($form_type, $action, $form_user)
     {
         parent :: __construct('user_import', 'post', $action);
-        
+
         $this->form_user = $form_user;
         $this->form_type = $form_type;
         $this->failedcsv = array();
@@ -60,33 +60,33 @@ class UserImportForm extends FormValidator
         $this->addElement('file', 'file', Translation :: get('FileName'));
         $allowed_upload_types = array('xml', 'csv');
         $this->addRule('file', Translation :: get('OnlyXMLCSVAllowed'), 'filetype', $allowed_upload_types);
-        
+
         $group = array();
         $group[] = & $this->createElement(
-            'radio', 
-            'send_mail', 
-            null, 
-            Translation :: get('ConfirmYes', null, Utilities :: COMMON_LIBRARIES), 
+            'radio',
+            'send_mail',
+            null,
+            Translation :: get('ConfirmYes', null, Utilities :: COMMON_LIBRARIES),
             1);
         $group[] = & $this->createElement(
-            'radio', 
-            'send_mail', 
-            null, 
-            Translation :: get('ConfirmNo', null, Utilities :: COMMON_LIBRARIES), 
+            'radio',
+            'send_mail',
+            null,
+            Translation :: get('ConfirmNo', null, Utilities :: COMMON_LIBRARIES),
             0);
         $this->addGroup($group, 'mail', Translation :: get('SendMailToNewUser'), '&nbsp;');
-        
+
         // $this->addElement('submit', 'user_import', Translation :: get('Ok'));
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive import'));
         // $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'), array('class'
         // => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         $defaults['mail']['send_mail'] = 1;
         $this->setDefaults($defaults);
     }
@@ -94,15 +94,15 @@ class UserImportForm extends FormValidator
     public function import_users()
     {
         $values = $this->exportValues();
-        
+
         $csvusers = $this->parse_file($_FILES['file']['tmp_name'], $_FILES['file']['type']);
         $validusers = array();
-        
+
         $failures = 0;
         foreach ($csvusers as $csvuser)
         {
             $validuser = $this->validate_data($csvuser);
-            
+
             if (! $validuser)
             {
                 $failures ++;
@@ -113,53 +113,53 @@ class UserImportForm extends FormValidator
                 $validusers[] = $validuser;
             }
         }
-        
+
         if ($failures > 0)
         {
             return false;
         }
-        
+
         foreach ($validusers as $csvuser)
         {
             $action = strtoupper($csvuser['action']);
-            
+
             if ($action == 'A')
             {
                 $user = new User();
-                
+
                 $user->set_firstname($csvuser[User :: PROPERTY_FIRSTNAME]);
                 $user->set_lastname($csvuser[User :: PROPERTY_LASTNAME]);
                 $user->set_username($csvuser[User :: PROPERTY_USERNAME]);
-                
+
                 $password = $csvuser[User :: PROPERTY_PASSWORD];
                 if (! $password || $password == "")
                 {
                     $password = uniqid();
                 }
-                
+
                 $user->set_password(Hashing :: hash($password));
-                
+
                 $user->set_email($csvuser[User :: PROPERTY_EMAIL]);
                 $user->set_status($csvuser[User :: PROPERTY_STATUS]);
                 $user->set_active($csvuser[User :: PROPERTY_ACTIVE]);
                 $user->set_official_code($csvuser[User :: PROPERTY_OFFICIAL_CODE]);
                 $user->set_phone($csvuser[User :: PROPERTY_PHONE]);
                 $user->set_auth_source($csvuser[User :: PROPERTY_AUTH_SOURCE]);
-                
+
                 $act_date = $csvuser[User :: PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
                     $act_date = Utilities :: time_from_datepicker($act_date);
-                
+
                 $user->set_activation_date($act_date);
-                
+
                 $exp_date = $csvuser[User :: PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
                     $exp_date = Utilities :: time_from_datepicker($exp_date);
-                
+
                 $user->set_expiration_date($exp_date);
-                
+
                 $user->set_platformadmin(0);
-                
+
                 if (! $user->create())
                 {
                     $failures ++;
@@ -168,20 +168,20 @@ class UserImportForm extends FormValidator
                 else
                 {
                     LocalSetting :: create_local_setting(
-                        'platform_language', 
-                        $csvuser['language'], 
-                        'Chamilo\Core\Admin', 
+                        'platform_language',
+                        $csvuser['language'],
+                        'Chamilo\Core\Admin',
                         $user->get_id());
-                    
+
                     $send_mail = intval($values['mail']['send_mail']);
                     if ($send_mail)
                     {
                         $this->send_email($user, $password);
                     }
-                    
+
                     Event :: trigger(
-                        'import', 
-                        Manager :: context(), 
+                        'import',
+                        Manager :: context(),
                         array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()));
                 }
             }
@@ -191,33 +191,33 @@ class UserImportForm extends FormValidator
                     $csvuser[User :: PROPERTY_USERNAME]);
                 $user->set_firstname($csvuser[User :: PROPERTY_FIRSTNAME]);
                 $user->set_lastname($csvuser[User :: PROPERTY_LASTNAME]);
-                
+
                 $user->set_email($csvuser[User :: PROPERTY_EMAIL]);
                 $user->set_status($csvuser[User :: PROPERTY_STATUS]);
                 $user->set_active($csvuser[User :: PROPERTY_ACTIVE]);
                 $user->set_official_code($csvuser[User :: PROPERTY_OFFICIAL_CODE]);
                 $user->set_phone($csvuser[User :: PROPERTY_PHONE]);
                 $user->set_auth_source($csvuser[User :: PROPERTY_AUTH_SOURCE]);
-                
+
                 $act_date = $csvuser[User :: PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
                     $act_date = Utilities :: time_from_datepicker($act_date);
-                
+
                 $user->set_activation_date($act_date);
-                
+
                 $exp_date = $csvuser[User :: PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
                     $exp_date = Utilities :: time_from_datepicker($exp_date);
-                
+
                 $user->set_expiration_date($exp_date);
-                
+
                 $pass = $csvuser[User :: PROPERTY_PASSWORD];
                 if ($pass)
                 {
                     $pass = Hashing :: hash($pass);
                     $user->set_password($pass);
                 }
-                
+
                 if (! $user->update())
                 {
                     $failures ++;
@@ -226,9 +226,9 @@ class UserImportForm extends FormValidator
                 else
                 {
                     LocalSetting :: create_local_setting(
-                        'platform_language', 
-                        $csvuser['language'], 
-                        'Chamilo\Core\Admin', 
+                        'platform_language',
+                        $csvuser['language'],
+                        'Chamilo\Core\Admin',
                         $user->get_id());
                 }
             }
@@ -243,7 +243,7 @@ class UserImportForm extends FormValidator
                 }
             }
         }
-        
+
         if ($failures > 0)
         {
             return false;
@@ -274,10 +274,10 @@ class UserImportForm extends FormValidator
     public function validate_data($csvuser)
     {
         $failures = 0;
-        
+
         if ($csvuser['user_name'])
             $csvuser[User :: PROPERTY_USERNAME] = $csvuser['user_name'];
-            
+
             // 1. Action valid ?
         if ($csvuser['action'])
         {
@@ -311,29 +311,29 @@ class UserImportForm extends FormValidator
         {
             $csvuser[User :: PROPERTY_STATUS] = 5;
         }
-        
+
         $email = $csvuser[User :: PROPERTY_EMAIL];
-        
+
         if ($csvuser['phone_number'])
             $csvuser[User :: PROPERTY_PHONE] = $csvuser['phone_number'];
-        
+
         if (! $csvuser[User :: PROPERTY_ACTIVE])
             $csvuser[User :: PROPERTY_ACTIVE] = 1;
-        
+
         if (! $csvuser[User :: PROPERTY_ACTIVATION_DATE])
             $csvuser[User :: PROPERTY_ACTIVATION_DATE] = 0;
-        
+
         if (! $csvuser[User :: PROPERTY_EXPIRATION_DATE])
             $csvuser[User :: PROPERTY_EXPIRATION_DATE] = 0;
-        
+
         if (! $csvuser[User :: PROPERTY_AUTH_SOURCE])
-            $csvuser[User :: PROPERTY_AUTH_SOURCE] = 'platform';
-        
+            $csvuser[User :: PROPERTY_AUTH_SOURCE] = 'Platform';
+
         if (! $csvuser['language'])
         {
             $csvuser['language'] = PlatformSetting :: get('platform_language');
         }
-        
+
         if (PlatformSetting :: get('require_email', Manager :: context()) && (! $email || $email == ''))
         {
             $failures ++;
@@ -406,7 +406,7 @@ class UserImportForm extends FormValidator
                 break;
         }
         $this->current_value = '';
-        
+
         // the xml_parse function splits the data in an element on special characters (for each split a different call
         // to character_data function).
         // So in the character_data function the data needs to be concatinated.
@@ -437,21 +437,21 @@ class UserImportForm extends FormValidator
         $options['admin_surname'] = PlatformSetting :: get('administrator_surname');
         $options['admin_telephone'] = PlatformSetting :: get('administrator_telephone');
         $options['admin_email'] = PlatformSetting :: get('administrator_email');
-        
+
         $subject = Translation :: get('YourRegistrationOn') . $options['site_name'];
-        
+
         $body = PlatformSetting :: get('email_template', Manager :: context());
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
         }
-        
+
         $mail = Mail :: factory(
-            $subject, 
-            $body, 
-            $user->get_email(), 
+            $subject,
+            $body,
+            $user->get_email(),
             array(
-                Mail :: NAME => $options['admin_firstname'] . ' ' . $options['admin_surname'], 
+                Mail :: NAME => $options['admin_firstname'] . ' ' . $options['admin_surname'],
                 Mail :: EMAIL => $options['admin_email']));
         $mail->send();
     }

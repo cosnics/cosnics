@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Im
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Implementation\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
 class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
