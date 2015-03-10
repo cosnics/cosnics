@@ -6,9 +6,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- * $Id: manager.class.php 227 2009-11-13 14:45:05Z kariboe $
- * 
- * @package home.lib.home_manager.component
+ *
+ * @package Chamilo\Core\Home\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ManagerComponent extends Manager
 {
@@ -27,7 +27,7 @@ class ManagerComponent extends Manager
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

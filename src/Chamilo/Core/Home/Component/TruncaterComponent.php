@@ -6,6 +6,11 @@ use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
+/**
+ *
+ * @package Chamilo\Core\Home\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class TruncaterComponent extends Manager
 {
 
@@ -17,7 +22,7 @@ class TruncaterComponent extends Manager
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

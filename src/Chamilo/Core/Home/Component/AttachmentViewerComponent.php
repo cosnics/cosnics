@@ -13,9 +13,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: attachment_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
- * @package application.lib.weblcms.tool.component
+ * @package Chamilo\Core\Home\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AttachmentViewerComponent extends Manager
 {
