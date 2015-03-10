@@ -122,7 +122,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $navigation_toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/NextNa');
+                    Theme :: getInstance()->getCommonImagePath('Action/NextNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
             $navigation_toolbar->add_item(
