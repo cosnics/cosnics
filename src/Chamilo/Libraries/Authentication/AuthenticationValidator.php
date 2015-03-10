@@ -23,6 +23,15 @@ class AuthenticationValidator
 
     /**
      *
+     * @param \Chamilo\Libraries\Architecture\Kernel $kernel
+     */
+    public function __construct(Kernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
     public function getKernel()
@@ -44,15 +53,6 @@ class AuthenticationValidator
      * @param \Chamilo\Libraries\Architecture\Kernel $kernel
      */
     public function setKernel(Kernel $kernel)
-    {
-        $this->kernel = $kernel;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Kernel $kernel
-     */
-    public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
     }

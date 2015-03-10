@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\integration\core\home
-; Language = nl
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Home"
-ManageDefault = "Beheer standaard homepagina"
-ManageDefaultDescription = "Beheer standaard homepagina die gebruikt wordt voor gebruikers die geen toestemming hebben om hun eigen portaal aan te maken, alsook voor alle gebruikers die zich voor het eerst aanmelden en nadien hun portaal wensen aan te passsen."

@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\integration\core\home
-; Language = de
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Home"
-ManageDefault = "Standard-Homepage verwalten"
-ManageDefaultDescription = "Verwaltung der Standardhomepage, die für alle Nutzer verwendet wird, wenn diese nicht berechtigt sind, ihr eigenes Portal zu verwalten oder die für alle Nutzer standardmäßig als Grundbeispiel erstellt wurde, das angepasst werden kann."

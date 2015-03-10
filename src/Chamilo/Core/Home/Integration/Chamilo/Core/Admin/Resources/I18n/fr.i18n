@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\integration\core\home
-; Language = fr
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Home"
-ManageDefault = "Gérer la page d'accueil par défaut"
-ManageDefaultDescription = "Gérer la page d'accueil par défaut qui est utilisée pour tous les utilisateurs qui ne sont pas autorisés à gérer leur propre portail, et pour tous les utilisateurs qui se connectent pour la première fois  et qui veulent personnaliser leur portail."
