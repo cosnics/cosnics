@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Structure\Page;
 
 class HtmlEditorFileComponent extends Manager
 {
@@ -22,6 +23,8 @@ class HtmlEditorFileComponent extends Manager
     {
         $plugin = $this->get_plugin();
         $this->set_parameter(self :: PARAM_PLUGIN, $plugin);
+
+        Page::getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
@@ -41,9 +44,13 @@ class HtmlEditorFileComponent extends Manager
                 $this,
                 \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
 
-            $this->small_header();
-            $processor->run();
-            $this->small_footer();
+            $html = array();
+
+            $html[] = $this->render_header();
+            $html[] = $processor->run();
+            $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -68,15 +75,5 @@ class HtmlEditorFileComponent extends Manager
             }
         }
         return $types;
-    }
-
-    public function render_header()
-    {
-        return $this->render_small_header();
-    }
-
-    public function render_footer()
-    {
-        return $this->render_small_footer();
     }
 }

@@ -7,12 +7,12 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * Attachment Viewer used for the Forum Posts.
@@ -66,20 +66,19 @@ class AttachmentViewerComponent extends Manager
                 $this->get_url(array(self :: PARAM_ATTACHMENT_ID => $attachment_id)),
                 Translation :: get('ViewAttachment')));
 
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
         $html = array();
 
-        $html[] = Display :: small_header();
-
+        $html[] = $this->render_header();
         $html[] = '<a href="javascript:history.go(-1)">' .
              Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a><br /><br />';
-
         $html[] = ContentObjectRenditionImplementation :: launch(
             $attachment,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_FULL,
             $this);
-
-        $html[] = Display :: small_footer();
+        $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
 

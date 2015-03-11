@@ -18,6 +18,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -212,16 +213,6 @@ abstract class Application
     }
 
     /**
-     * Display the header
-     *
-     * @deprecated Don't output the header directly anymore
-     */
-    public function display_header()
-    {
-        echo $this->render_header();
-    }
-
-    /**
      * Displays the header
      */
     public function render_header()
@@ -238,11 +229,12 @@ abstract class Application
                 new Breadcrumb($this->get_url(), Translation :: get('TypeName', null, static :: context())));
         }
 
-        $title = $breadcrumbtrail->get_last()->get_name();
+        $page = Page :: getInstance();
+        $page->setApplication($this);
 
         $html = array();
 
-        $html[] = Display :: header();
+        $html[] = $page->getHeader()->toHtml();
 
         // If there is an application-wide menu, show it
         if ($this->has_menu())
@@ -253,8 +245,13 @@ abstract class Application
             $html[] = '<div style="float: right; width: 82%;">';
         }
 
-        $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        if ($breadcrumbtrail->size() > 0)
+        {
+            $title = $breadcrumbtrail->get_last()->get_name();
+
+            $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
+            $html[] = '<div class="clear">&nbsp;</div>';
+        }
 
         if (PlatformSetting :: get('maintenance_mode'))
         {
@@ -295,16 +292,6 @@ abstract class Application
     }
 
     /**
-     * Display the footer
-     *
-     * @deprecated Don't output the footer directly anymore
-     */
-    public function display_footer()
-    {
-        echo $this->render_footer();
-    }
-
-    /**
      * Displays the footer
      */
     public function render_footer()
@@ -324,61 +311,9 @@ abstract class Application
         }
 
         $html[] = '<div class="clear">&nbsp;</div>';
-        $html[] = Display :: footer();
+        $html[] = Page :: getInstance()->getFooter()->toHtml();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function render_small_header()
-    {
-        if ($this->get_application())
-        {
-            return $this->get_application()->render_small_header();
-        }
-
-        $html = array();
-
-        $html[] = Display :: small_header();
-
-        // Display messages
-        $messages = Session :: retrieve(self :: PARAM_MESSAGES);
-        Session :: unregister(self :: PARAM_MESSAGES);
-        if (is_array($messages))
-        {
-            $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Display the small header
-     *
-     * @deprecated Don't output the small header directly anymore
-     */
-    public function small_header()
-    {
-        echo $this->small_header();
-    }
-
-    public function render_small_footer()
-    {
-        if ($this->get_application())
-        {
-            return $this->get_application()->render_small_footer();
-        }
-
-        return Display :: small_footer();
-    }
-
-    /**
-     * Displays the small footer
-     *
-     * @deprecated Don't output the small footer directly anymore
-     */
-    public function small_footer()
-    {
-        echo $this->render_small_footer();
     }
 
     /**
@@ -491,13 +426,12 @@ abstract class Application
     }
 
     /**
-     * Wrapper for Display :: not_allowed();
      *
-     * @param boolean $show_login_form
+     * @param boolean $showLoginForm
      */
-    public function not_allowed($show_login_form = true)
+    public function not_allowed($showLoginForm = true)
     {
-        throw new NotAllowedException();
+        throw new NotAllowedException($showLoginForm);
     }
 
     /**

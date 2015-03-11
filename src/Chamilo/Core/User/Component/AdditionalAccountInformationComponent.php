@@ -5,7 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -27,7 +27,7 @@ class AdditionalAccountInformationComponent extends Manager
      */
     public function run()
     {
-        Header :: get_instance()->set_section('my_account');
+        Page :: getInstance()->setSection('my_account');
 
         $form_executer = new \Chamilo\Configuration\Form\Executer(
             $this,

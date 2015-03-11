@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -23,9 +23,13 @@ class AccountItem extends Item
         return 'my_account';
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Menu\Storage\DataClass\Item::is_selected()
+     */
     public function is_selected()
     {
-        $current_section = Header :: get_instance()->get_section();
+        $current_section = Page :: getInstance()->getSection();
         if ($current_section == $this->get_section())
         {
             return true;

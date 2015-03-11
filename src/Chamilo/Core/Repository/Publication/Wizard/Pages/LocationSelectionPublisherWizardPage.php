@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 /**
  * $Id: location_selection_publisher_wizard_page.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -54,11 +54,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         if (empty($ids))
         {
-            return Display :: error_page(
-                Translation :: get(
-                    'NoObjectSelected',
-                    array('OBJECT' => Translation :: get('ContentObject')),
-                    Utilities :: COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
         if (! is_array($ids))
@@ -77,11 +73,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             // fail if no object exists
             if (! $content_object instanceof ContentObject)
             {
-                return Display :: error_page(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES));
+                throw new NoObjectSelectedException(Translation :: get('ContentObject'));
             }
 
             // check for USE right
@@ -112,7 +104,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             }
             elseif ($this->type != $content_object->get_type())
             {
-                return Display :: error_page(Translation :: get('ObjectsNotSameType'));
+                throw new \Exception(Translation :: get('ObjectsNotSameType'));
             }
         }
     }

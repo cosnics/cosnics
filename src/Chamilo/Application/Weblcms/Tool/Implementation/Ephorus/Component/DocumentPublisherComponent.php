@@ -5,8 +5,8 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * This class sends a request for a document to ephorus
@@ -24,9 +24,7 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
     {
         if (! $this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
-            Display :: error_page(Translation :: get("NotAllowed"));
-
-            return;
+            throw new NotAllowedException();
         }
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())

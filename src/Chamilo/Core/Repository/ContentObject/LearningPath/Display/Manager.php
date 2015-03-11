@@ -661,7 +661,6 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     private function get_progress_bar()
     {
-        // $progress = $this->learning_path_menu->get_progress();
         $progress = $this->get_complex_content_object_path()->get_progress();
 
         return Display :: get_progress_bar($progress);

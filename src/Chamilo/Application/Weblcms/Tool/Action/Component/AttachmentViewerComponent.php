@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: attachment_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -81,6 +82,8 @@ class AttachmentViewerComponent extends Manager
             $error_message = Translation :: get('NotAllowed');
         }
 
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
         if (! $failed)
         {
             $trail->add(
@@ -92,13 +95,13 @@ class AttachmentViewerComponent extends Manager
 
             $html = array();
 
-            $html[] = $this->small_header();
+            $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation :: launch(
                 $object,
                 ContentObjectRendition :: FORMAT_HTML,
                 ContentObjectRendition :: VIEW_FULL,
                 $this);
-            $html[] = $this->small_footer();
+            $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
@@ -106,9 +109,9 @@ class AttachmentViewerComponent extends Manager
         {
             $html = array();
 
-            $html[] = $this->small_header();
+            $html[] = $this->render_header();
             $html[] = $this->display_error_message($error_message);
-            $html[] = $this->small_footer();
+            $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }

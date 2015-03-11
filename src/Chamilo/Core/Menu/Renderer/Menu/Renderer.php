@@ -13,7 +13,6 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -22,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -118,7 +118,7 @@ abstract class Renderer
 
         $items = $this->get_menu_items();
 
-        $current_section = Header :: get_instance()->get_section();
+        $current_section = Page :: getInstance()->getSection();
 
         $html = array();
 

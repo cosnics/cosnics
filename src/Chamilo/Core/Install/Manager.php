@@ -3,7 +3,7 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: install_manager.class.php 225 2009-11-13 14:43:20Z vanpouckesven $
@@ -48,6 +48,9 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function render_header()
     {
-        return Display :: header();
+        $page = Page :: getInstance();
+        $page->setApplication($this);
+
+        return $page->getHeader()->toHtml();
     }
 }

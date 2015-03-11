@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -24,6 +23,8 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Response\ExceptionResponse;
+use Chamilo\Libraries\Format\Response\Response;
 
 /**
  *
@@ -455,8 +456,8 @@ class Kernel
      */
     private function runApplication()
     {
-        // TODO: This should become a \Symfony\Component\HttpFoundation\Response object
-        echo $this->getApplication()->run();
+        $response = new Response($this->getApplication()->run());
+        $response->send();
     }
 
     /**
@@ -478,7 +479,8 @@ class Kernel
         }
         catch (\Exception $exception)
         {
-            echo Display :: error_page($exception->getMessage());
+            $response = new ExceptionResponse($exception);
+            $response->send();
         }
     }
 }

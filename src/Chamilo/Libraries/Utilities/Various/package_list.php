@@ -2,9 +2,9 @@
 namespace Chamilo\Libraries\Utilities\Various;
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Page;
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -356,6 +356,9 @@ $table->set_header(0, '#');
 $table->set_header(1, 'Package');
 $table->set_header(2, ' ');
 
-Display :: small_header();
+$page = Page :: getInstance();
+$page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+echo $page->getHeader()->toHtml();
 echo $table->as_html();
-Display :: small_footer();
+echo $page->getFooter()->toHtml();

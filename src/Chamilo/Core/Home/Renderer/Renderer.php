@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
 use Exception;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -17,8 +16,6 @@ use Exception;
 abstract class Renderer
 {
     const TYPE_BASIC = 'Basic';
-    const TYPE_WIDGET = 'Widget';
-    const TYPE_MY_CHAMILO_OS = 'MyChamiloOs';
     const PARAM_TAB_ID = 'tab';
     const PARAM_VIEW_TYPE = 'view_type';
     const PARAM_WIDGET_ID = 'widget_id';
@@ -26,9 +23,9 @@ abstract class Renderer
 
     /**
      *
-     * @var User null
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private $user;
+    private $application;
 
     /**
      *
@@ -38,11 +35,29 @@ abstract class Renderer
 
     /**
      *
-     * @param User|null $user
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function __construct($user = null)
+    public function __construct(Application $application)
     {
-        $this->user = $user;
+        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
     }
 
     /**
@@ -51,7 +66,7 @@ abstract class Renderer
      */
     public function get_user()
     {
-        return $this->user;
+        return $this->getApplication()->get_user();
     }
 
     public function get_user_id()
@@ -61,53 +76,9 @@ abstract class Renderer
 
     /**
      *
-     * @param string $type
-     * @param User|null $user
-     * @return MenuRenderer
-     */
-    public static function factory($type, $user)
-    {
-        $class = __NAMESPACE__ . '\Type\\' . $type;
-
-        if (! class_exists($class))
-        {
-            throw new Exception(Translation :: get('HomeRendererTypeDoesNotExist', array('type' => $type)));
-        }
-
-        return new $class($user);
-    }
-
-    /**
-     *
-     * @param string $type
-     * @param User|null $user
-     * @return string
-     */
-    public static function as_html($type, $user)
-    {
-        return self :: factory($type, $user)->render();
-    }
-
-    /**
-     *
      * @return string
      */
     abstract public function render();
-
-    public function render_header()
-    {
-        return Display :: header();
-    }
-
-    public function render_footer()
-    {
-        $html = array();
-
-        $html[] = '<div class="clear">&nbsp;</div>';
-        $html[] = Display :: footer();
-
-        return implode(PHP_EOL, $html);
-    }
 
     public function get_current_tab()
     {

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User;
 
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UserDetails
 {
@@ -58,7 +58,8 @@ class UserDetails
         $html[] = $this->user->get_fullname();
         $html[] = '</div>';
         $html[] = '<div class="description">';
-        $html[] = Translation :: get('Email') . ': ' . Display :: encrypted_mailto_link($this->user->get_email());
+        $html[] = Translation :: get('Email') . ': ' .
+             StringUtilities :: getInstance()->encryptMailLink($this->user->get_email());
         $html[] = '<br />' . Translation :: get('Username') . ': ' . $this->user->get_username();
         $html[] = '<br />' . Translation :: get('Status') . ': ' .
              ($this->user->get_status() == 1 ? Translation :: get('Teacher') : Translation :: get('Student'));

@@ -8,12 +8,12 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\Session;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 class PublicationForm extends FormValidator
 {
@@ -60,7 +60,7 @@ class PublicationForm extends FormValidator
 
         if (count($publications) <= 0)
         {
-            return Display :: error_page(Translation :: get('NoObjectsSelected', null, Utilities :: COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation :: get('Publication'));
         }
 
         $this->publications = $publications;

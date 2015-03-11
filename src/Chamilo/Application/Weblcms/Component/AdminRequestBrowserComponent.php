@@ -12,7 +12,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -26,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: admin_course_type_browser.class.php 218 2010-03-11 14:21:26Z Yannick & Tristan $
@@ -52,7 +52,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        Header :: get_instance()->set_section('admin');
+        Page :: getInstance()->setSection('admin');
 
         $this->request_type = Request :: get(self :: PARAM_REQUEST_TYPE);
         $this->request_view = Request :: get(self :: PARAM_REQUEST_VIEW);

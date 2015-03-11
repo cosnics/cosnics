@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ViewerComponent extends Manager implements DelegateComponent, SurveyDisplaySupport
 {
@@ -54,7 +55,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
             $this->publication_id,
             $this->invitee_id))
         {
-            \Chamilo\Libraries\Format\Display :: not_allowed();
+            throw new NotAllowedException(false);
         }
 
         $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);

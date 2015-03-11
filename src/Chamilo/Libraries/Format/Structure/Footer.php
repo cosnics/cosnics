@@ -2,31 +2,80 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * Class to display the footer of a HTML-page
+ *
+ * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Footer
 {
 
     /**
-     * Create a new Footer
+     *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    public function __construct()
+    private $application;
+
+    /**
+     *
+     * @var integer
+     */
+    private $viewMode;
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function __construct($viewMode = Page :: VIEW_MODE_FULL)
     {
+        $this->viewMode = $viewMode;
     }
 
-    public function get_setting($variable, $application)
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
     {
-        return \Chamilo\Configuration\Configuration :: get($application, $variable);
+        return $this->application;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
     }
 
     /**
@@ -36,118 +85,140 @@ class Footer
     {
         $output = array();
 
-        $output[] = '<div class="clear">&nbsp;</div> <!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
-        $output[] = '</div> <!-- end of #main" started at the end of banner.inc.php -->';
-
-        $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('core\menu');
-        if ($registration instanceof Registration && $registration->is_active())
+        if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
         {
-            $show_sitemap = $this->get_setting('show_sitemap', 'core\menu');
 
-            if (Authentication :: is_valid() && $show_sitemap == '1')
+            $output[] = '<div class="clear">&nbsp;</div>';
+            $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
+            $output[] = '</div> <!-- end of #main" -->';
+
+            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('Chamilo\Core\Menu');
+
+            if ($registration instanceof Registration && $registration->is_active())
             {
-                $output[] = '<div id="sitemap">';
-                $output[] = '<div class="categories">';
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                    (int) Session :: get_user_id());
+                $show_sitemap = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Menu', 'show_sitemap');
 
-                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
-                    \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
-                    $user);
-                $output[] = '<div class="clear"></div>';
-                $output[] = '</div>';
-                $output[] = '<div class="clear"></div>';
-                $output[] = '</div>';
-            }
-        }
-
-        $output[] = '<div id="footer"> <!-- start of #footer section -->';
-        $output[] = '<div id="copyright">';
-        $output[] = '<div class="logo">';
-        $output[] = '<a href="http://www.chamilo.org"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('LogoFooter') . '" alt="footer"/></a>';
-        $output[] = '</div>';
-        $output[] = '<div class="links">';
-
-        $links = array();
-        $links[] = DatetimeUtilities :: format_locale_date(
-            Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                 Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
-                time());
-        $links[] = '<a href="' . $this->get_setting('institution_url', 'Chamilo\Core\Admin') . '" target="about:blank">' .
-             $this->get_setting('institution', 'Chamilo\Core\Admin') . '</a>';
-
-        if ($this->get_setting('show_administrator_data', 'Chamilo\Core\Admin') == '1')
-        {
-            $admin_data = Translation :: get('Manager');
-            $admin_data .= ':&nbsp;';
-
-            $administrator_email = $this->get_setting('administrator_email', 'Chamilo\Core\Admin');
-            $administrator_website = $this->get_setting('administrator_website', 'Chamilo\Core\Admin');
-
-            if (! empty($administrator_email) && ! empty($administrator_website))
-            {
-                $email = Display :: encrypted_mailto_link(
-                    $this->get_setting('administrator_email', 'Chamilo\Core\Admin'),
-                    $this->get_setting('administrator_surname', 'Chamilo\Core\Admin') . ' ' .
-                         $this->get_setting('administrator_firstname', 'Chamilo\Core\Admin'));
-
-                $admin_data = Translation :: get(
-                    'ManagerContactWebsite',
-                    array('EMAIL' => $email, 'WEBSITE' => $administrator_website));
-            }
-            else
-            {
-                if (! empty($administrator_email))
+                if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User &&
+                     $show_sitemap == '1')
                 {
-                    $admin_data = Translation :: get('Manager');
-                    $admin_data .= ':&nbsp;';
+                    $output[] = '<div id="sitemap">';
+                    $output[] = '<div class="categories">';
 
-                    $admin_data .= Display :: encrypted_mailto_link(
-                        $this->get_setting('administrator_email', 'Chamilo\Core\Admin'),
-                        $this->get_setting('administrator_surname', 'Chamilo\Core\Admin') . ' ' .
-                             $this->get_setting('administrator_firstname', 'Chamilo\Core\Admin'));
-                }
+                    $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
+                        \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
+                        $this->getApplication()->get_user());
 
-                if (! empty($administrator_website))
-                {
-                    $admin_data = Translation :: get('Support');
-                    $admin_data .= ':&nbsp;';
-
-                    $admin_data .= '<a href="' . $administrator_website . '">' .
-                         $this->get_setting('administrator_surname', 'Chamilo\Core\Admin') . ' ' .
-                         $this->get_setting('administrator_firstname', 'Chamilo\Core\Admin') . '</a>';
+                    $output[] = '<div class="clear"></div>';
+                    $output[] = '</div>';
+                    $output[] = '<div class="clear"></div>';
+                    $output[] = '</div>';
                 }
             }
 
-            $links[] = $admin_data;
+            $output[] = '<div id="footer"> <!-- start of #footer section -->';
+            $output[] = '<div id="copyright">';
+            $output[] = '<div class="logo">';
+            $output[] = '<a href="http://www.chamilo.org"><img src="' .
+                 Theme :: getInstance()->getCommonImagePath('LogoFooter') . '" alt="footer"/></a>';
+            $output[] = '</div>';
+            $output[] = '<div class="links">';
+
+            $links = array();
+            $links[] = DatetimeUtilities :: format_locale_date(
+                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
+                     Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
+                    time());
+            $links[] = '<a href="' . \Chamilo\Configuration\Configuration :: get(
+                'Chamilo\Core\Admin',
+                'institution_url') . '" target="about:blank">' . \Chamilo\Configuration\Configuration :: get(
+                'Chamilo\Core\Admin',
+                'institution') . '</a>';
+
+            if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'show_administrator_data') == '1')
+            {
+                $admin_data = Translation :: get('Manager');
+                $admin_data .= ':&nbsp;';
+
+                $administrator_email = \Chamilo\Configuration\Configuration :: get(
+                    'Chamilo\Core\Admin',
+                    'administrator_email');
+                $administrator_website = \Chamilo\Configuration\Configuration :: get(
+                    'Chamilo\Core\Admin',
+                    'administrator_website');
+
+                if (! empty($administrator_email) && ! empty($administrator_website))
+                {
+                    $email = StringUtilities :: getInstance()->encryptMailLink(
+                        \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'administrator_email'),
+                        \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'administrator_surname') . ' ' . \Chamilo\Configuration\Configuration :: get(
+                            'Chamilo\Core\Admin',
+                            'administrator_firstname'));
+
+                    $admin_data = Translation :: get(
+                        'ManagerContactWebsite',
+                        array('EMAIL' => $email, 'WEBSITE' => $administrator_website));
+                }
+                else
+                {
+                    if (! empty($administrator_email))
+                    {
+                        $admin_data = Translation :: get('Manager');
+                        $admin_data .= ':&nbsp;';
+
+                        $admin_data .= StringUtilities :: getInstance()->encryptMailLink(
+                            \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'administrator_email'),
+                            \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'administrator_surname') .
+                                 ' ' . \Chamilo\Configuration\Configuration :: get(
+                                    'Chamilo\Core\Admin',
+                                    'administrator_firstname'));
+                    }
+
+                    if (! empty($administrator_website))
+                    {
+                        $admin_data = Translation :: get('Support');
+                        $admin_data .= ':&nbsp;';
+
+                        $admin_data .= '<a href="' . $administrator_website . '">' .
+                             \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'administrator_surname') .
+                             ' ' . \Chamilo\Configuration\Configuration :: get(
+                                'Chamilo\Core\Admin',
+                                'administrator_firstname') . '</a>';
+                    }
+                }
+
+                $links[] = $admin_data;
+            }
+
+            if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'show_version_data') == '1')
+            {
+                $links[] = htmlspecialchars(Translation :: get('Version')) . ' ' .
+                     \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'version');
+            }
+
+            $world = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'whoisonlineaccess');
+
+            if ($world == "1" || (key_exists('_uid', $_SESSION) && $world == "2"))
+            {
+                $links[] = '<a href="' .
+                     htmlspecialchars(
+                        Redirect :: get_link(
+                            array(
+                                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                                Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE))) . '">' .
+                     Translation :: get('WhoisOnline') . '</a>';
+            }
+
+            $links[] = '&copy;&nbsp;' . date('Y');
+
+            $output[] = implode('&nbsp;|&nbsp;', $links);
+
+            $output[] = '</div>';
+            $output[] = '<div class="clear"></div>';
+            $output[] = '</div>';
+
+            $output[] = '   </div> <!-- end of #footer -->';
         }
 
-        if ($this->get_setting('show_version_data', 'Chamilo\Core\Admin') == '1')
-        {
-            $links[] = htmlspecialchars(Translation :: get('Version')) . ' ' .
-                 $this->get_setting('version', 'Chamilo\Core\Admin');
-        }
-
-        $world = $this->get_setting('whoisonlineaccess', 'Chamilo\Core\Admin');
-
-        if ($world == "1" || (key_exists('_uid', $_SESSION) && $world == "2"))
-        {
-            $links[] = '<a href="' . htmlspecialchars(
-                Path :: getInstance()->getBasePath(true) . 'index.php?go=whois_online&application=admin') . '">' .
-                 Translation :: get('WhoisOnline') . '</a>';
-        }
-
-        $links[] = '&copy;&nbsp;' . date('Y');
-
-        $output[] = implode('&nbsp;|&nbsp;', $links);
-
-        $output[] = '</div>';
-        $output[] = '<div class="clear"></div>';
-        $output[] = '</div>';
-
-        $output[] = '   </div> <!-- end of #footer -->';
         $output[] = '  </div> <!-- end of #outerframe opened in header -->';
         $output[] = ' </body>';
         $output[] = '</html>';

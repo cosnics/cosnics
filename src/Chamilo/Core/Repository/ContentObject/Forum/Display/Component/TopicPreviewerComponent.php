@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Theme;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 use HTML_Table;
 use Pager;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: topic_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -140,18 +140,20 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
 
         $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
 
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
         $html = array();
 
-        $html[] = Display :: small_header();
+        $html[] = $this->render_header();
         $html[] = '<a name="top"></a>';
 
         $row = 0;
         $this->get_posts_table($this->get_table_data($from), $table, $row);
+
         $html[] = '<div>' . $table->toHtml() . '</div>';
         $html[] = $this->get_navigation_html();
         $html[] = '<br />';
-
-        $html[] = Display :: small_footer();
+        $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }

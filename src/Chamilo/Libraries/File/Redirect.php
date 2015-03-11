@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * $Id: redirect.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
@@ -154,8 +155,9 @@ class Redirect
         {
             throw new Exception('headers already sent in ' . $filename . ' on line ' . $line);
         }
-        header('Location: ' . $url);
-        exit();
+
+        $response = new RedirectResponse($url);
+        $response->send();
     }
 
     /**

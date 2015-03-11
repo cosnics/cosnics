@@ -8,9 +8,9 @@ use Chamilo\Core\Repository\ContentObject\Bookmark\Form\BookmarkForm;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * Component to create a bookmark for a course
@@ -69,6 +69,8 @@ class CourseBookmarkCreatorComponent extends Manager
             $extra,
             $additional_elements,
             $allow_new_version);
+
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
 
         if ($form->validate())
         {
@@ -133,16 +135,4 @@ class CourseBookmarkCreatorComponent extends Manager
             return implode(PHP_EOL, $html);
         }
     }
-
-    function render_header()
-    {
-        return Display :: small_header();
-    }
-
-    function render_footer()
-    {
-        return Display :: small_footer();
-    }
 }
-
-?>

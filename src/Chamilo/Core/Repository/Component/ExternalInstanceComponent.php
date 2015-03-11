@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -18,7 +18,7 @@ class ExternalInstanceComponent extends Manager implements ApplicationSupport
 
     public function run()
     {
-        Header :: get_instance()->set_section('external_repository');
+        Page :: getInstance()->setSection('external_repository');
 
         $trail = BreadcrumbTrail :: get_instance();
         $trail->remove($trail->size() - 1);

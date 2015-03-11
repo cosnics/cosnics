@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -50,7 +50,7 @@ class LinkApplicationItem extends Item
 
     public function is_selected()
     {
-        $current_section = Header :: get_instance()->get_section();
+        $current_section = Page :: getInstance()->getSection();
         if ($current_section == $this->get_section())
         {
             return true;
@@ -113,12 +113,12 @@ class LinkApplicationItem extends Item
     public function get_target_types($types_only = false)
     {
         $types = array();
-        
+
         $types[self :: TARGET_BLANK] = self :: target_string(self :: TARGET_BLANK);
         $types[self :: TARGET_SELF] = self :: target_string(self :: TARGET_SELF);
         $types[self :: TARGET_PARENT] = self :: target_string(self :: TARGET_PARENT);
         $types[self :: TARGET_TOP] = self :: target_string(self :: TARGET_TOP);
-        
+
         return ($types_only ? array_keys($types) : $types);
     }
 }

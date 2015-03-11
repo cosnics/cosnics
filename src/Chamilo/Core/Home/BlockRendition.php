@@ -5,9 +5,7 @@ use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -59,7 +57,8 @@ class BlockRendition
     }
 
     /**
-     * Returns the default image to be displayed for block's creation. Can be redefined in subclasses to change the
+     * Returns the default image to be displayed for block's creation.
+     * Can be redefined in subclasses to change the
      * default icon.
      *
      * @todo : not so good. would be better to make the whole "create block" a view.
@@ -101,7 +100,8 @@ class BlockRendition
     }
 
     /**
-     * The type of view: block or widget. Block - default - is for integration into Chamilo's homepage. Widget is for
+     * The type of view: block or widget.
+     * Block - default - is for integration into Chamilo's homepage. Widget is for
      * integration into a third party application - i.e. external portal.
      *
      * @return string
@@ -176,7 +176,8 @@ class BlockRendition
     }
 
     /**
-     * Returns true if the block is to be displayed, false otherwise. By default do not show on home page when user is
+     * Returns true if the block is to be displayed, false otherwise.
+     * By default do not show on home page when user is
      * not connected.
      *
      * @return bool
@@ -197,12 +198,13 @@ class BlockRendition
     }
 
     /**
-     * Link target for external links. I.e. links that do not modify the widget itself. In widget mode they should point
+     * Link target for external links.
+     * I.e. links that do not modify the widget itself. In widget mode they should point
      * to a new windows.
      */
     public function get_link_target()
     {
-        return Request :: get(Renderer :: PARAM_WIDGET_ID, false) ? '_blank' : '';
+        return '';
     }
 
     /**
@@ -241,7 +243,6 @@ class BlockRendition
     {
         $block_id = $this->get_block_info()->get_id();
         $icon_url = $this->get_icon();
-        $widget_view_url = htmlspecialchars($this->get_block_widget_view_link($this->block_info));
 
         $title = $this->display_title();
         if ($this->get_view() == self :: BLOCK_VIEW)
@@ -358,27 +359,6 @@ class BlockRendition
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Returns the URL used to view a block in "WIDGET" mode. I.e. for integration into an external application - web
-     * portal, IE webslice, etc.
-     *
-     * @param Block $home_block
-     * @return string
-     */
-    public function get_block_widget_view_link($home_block)
-    {
-        $result = Redirect :: get_link(
-            array(
-                Application :: PARAM_CONTEXT => '',
-                Renderer :: PARAM_VIEW_TYPE => Renderer :: TYPE_WIDGET,
-                Renderer :: PARAM_WIDGET_ID => $home_block->get_id()),
-            array(),
-            false,
-            Redirect :: TYPE_INDEX);
-        $result = Path :: getInstance()->getBasePath(true) . $result;
-        return $result;
-    }
-
     public function get_block_visibility_link($home_block)
     {
         return $this->get_manipulation_link(
@@ -448,7 +428,8 @@ class BlockRendition
     }
 
     /**
-     * Default response for blocks who use an attachment viewer. Override for different functionality.
+     * Default response for blocks who use an attachment viewer.
+     * Override for different functionality.
      *
      * @param ContentObject $object The content object to be tested.
      * @return boolean default response: false.

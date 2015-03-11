@@ -35,22 +35,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Basic extends Renderer
 {
 
-    /**
-     *
-     * @return string
-     */
     public function render()
-    {
-        $html = array();
-
-        $html[] = $this->render_header();
-        $html[] = $this->render_homepage();
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function render_homepage()
     {
         $current_tab = $this->get_current_tab();
         $user = $this->get_user();

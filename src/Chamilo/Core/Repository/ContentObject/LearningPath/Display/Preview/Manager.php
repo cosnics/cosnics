@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewSt
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -55,12 +56,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     {
         if ($this->is_embedded())
         {
-            return $this->render_small_header();
+            Page :: getInstance()->setViewMode(PAge :: VIEW_MODE_HEADERLESS);
         }
-        else
-        {
-            return parent :: render_header();
-        }
+
+        return parent :: render_header();
     }
 
     /**
