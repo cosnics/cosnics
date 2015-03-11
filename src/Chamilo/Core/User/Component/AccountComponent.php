@@ -30,7 +30,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  */
 class AccountComponent extends Manager implements NoContextComponent
 {
-
     /**
      * Runs this component and displays its output.
      */

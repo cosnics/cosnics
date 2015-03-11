@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Exception;
 use PEAR;
 use XML_Unserializer;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -441,15 +442,6 @@ class Utilities
         {
             return null;
         }
-    }
-
-    /**
-     *
-     * @param $application string
-     */
-    public static function set_application($application)
-    {
-        Translation :: set_application($application);
     }
 
     /**

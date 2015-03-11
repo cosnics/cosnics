@@ -106,6 +106,7 @@ class LocalSetting
     public function load_local_settings()
     {
         $user_id = Session :: get_user_id();
+
         if (! $user_id)
         {
             return null;
@@ -117,6 +118,7 @@ class LocalSetting
             new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
         $user_settings = \Chamilo\Core\User\Storage\DataManager :: retrieves(UserSetting :: class_name(), $condition);
+
         while ($user_setting = $user_settings->next_result())
         {
             $condition = new EqualityCondition(

@@ -53,7 +53,9 @@ class ConfigurationForm extends FormValidator
         $this->is_user_setting_form = $is_user_setting_form;
         $this->context = $context;
         // TODO: It might be better to move this functionality to the Path-class
+
         $this->configuration = $this->parse_application_settings();
+
         $this->build_form();
         $this->setDefaults();
     }

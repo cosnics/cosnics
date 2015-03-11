@@ -45,7 +45,7 @@ class UserSettingsComponent extends Manager
 
         if (! $context)
         {
-            $context = \Chamilo\Core\Admin\Manager :: context();
+            $context = \Chamilo\Core\Admin\Manager :: package();
         }
 
         $form = new ConfigurationForm(
@@ -66,8 +66,9 @@ class UserSettingsComponent extends Manager
         else
         {
             $tabs = new DynamicVisualTabsRenderer(
-                ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__NAMESPACE__, true),
+                ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true),
                 $form->toHtml());
+
             $setting_contexts = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_contexts(
                 new EqualityCondition(
                     new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_SETTING),
