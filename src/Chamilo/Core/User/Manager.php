@@ -5,15 +5,9 @@ use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: user_manager.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -68,61 +62,11 @@ abstract class Manager extends Application
     const ACTION_QUICK_LANG = 'quick_language';
     const PARAM_REFER = 'refer';
 
-    private $quota_url;
-
-    private $publication_url;
-
-    private $create_url;
-
-    private $recycle_bin_url;
-
-    /**
-     * The selected user
-     *
-     * @var User
-     */
-    private $selected_user;
-
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
     {
         parent :: __construct($request, $user, $application);
 
-        $this->load_user_theme();
-
-        // Can users set their own theme and if they
-        // can, do they have one set ? If so apply it
-        $user = $this->get_user();
-
-        if (is_object($user))
-        {
-            $user_can_set_theme = PlatformSetting :: get('allow_user_theme_selection', self :: context());
-
-            if ($user_can_set_theme)
-            {
-                $user_theme = LocalSetting :: get('theme');
-                Theme :: getInstance()->setTheme($user_theme);
-            }
-        }
-        $this->create_url = $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_USER));
-    }
-
-    /**
-     * Sets the platform theme to the user's selection if allowed.
-     */
-    public function load_user_theme()
-    {
-        $user = $this->get_user();
-
-        if (is_object($user))
-        {
-            $user_can_set_theme = PlatformSetting :: get('allow_user_theme_selection', self :: context());
-
-            if ($user_can_set_theme)
-            {
-                $user_theme = LocalSetting :: get('theme');
-                Theme :: getInstance()->setTheme($user_theme);
-            }
-        }
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }
 
     public function retrieve_user_by_username($username)
@@ -263,35 +207,6 @@ abstract class Manager extends Application
             self :: context());
 
         return $platform_setting->get_value();
-    }
-
-    /**
-     * Returns the currently selected user
-     *
-     * @throws ObjectNotExistException
-     * @throws NoObjectSelectedException
-     *
-     * @return User
-     */
-    public function get_selected_user()
-    {
-        if (! isset($this->selected_user))
-        {
-            $user_id = Request :: get(self :: PARAM_USER_USER_ID);
-            if (! $user_id)
-            {
-                throw new NoObjectSelectedException(Translation :: get('Group'));
-            }
-            $user = DataManager :: retrieve_by_id(User :: class_name(), $user_id);
-            if (! $user)
-            {
-                throw new ObjectNotExistException(Translation :: get('Group', $user_id));
-            }
-
-            $this->selected_user = $user;
-        }
-
-        return $this->selected_user;
     }
 
     /**

@@ -18,13 +18,14 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\Response;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -292,6 +293,19 @@ class Kernel
             $this->user = Authentication :: as_anonymous_user();
         }
 
+        if ($this->getUser() instanceof User)
+        {
+            $themeSettable = \Chamilo\Configuration\Configuration :: get(
+                'Chamilo\Core\User',
+                'allow_user_theme_selection');
+
+            if ($themeSettable)
+            {
+                $userTheme = LocalSetting :: get('theme');
+                Theme :: getInstance()->setTheme($userTheme);
+            }
+        }
+
         return $this;
     }
 
@@ -326,7 +340,9 @@ class Kernel
     {
         $this->context = $this->determineContext();
         $this->context = Application :: context_fallback($this->context);
-        Utilities :: set_application($this->context);
+
+        Translation :: set_application($this->context);
+
         return $this;
     }
 

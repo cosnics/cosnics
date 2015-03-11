@@ -32,8 +32,6 @@ class BlockSortComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 
     public function run()
     {
-        Utilities :: set_application('application\weblcms');
-
         $section_id = explode($_POST['id']);
         $blocks = $this->unserialize_jquery($_POST['order']);
 

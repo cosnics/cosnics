@@ -84,6 +84,8 @@ abstract class Application
         $this->request = $request;
         $this->user = $user;
         $this->application = $application;
+
+        Page :: getInstance()->setSection($this->package());
     }
 
     public function getRequest()
@@ -855,7 +857,16 @@ abstract class Application
      */
     public static function package()
     {
-        return static :: context();
+        $className = self :: class_name(false);
+
+        if ($className == 'Manager')
+        {
+            return static :: context();
+        }
+        else
+        {
+            return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+        }
     }
 
     abstract function run();

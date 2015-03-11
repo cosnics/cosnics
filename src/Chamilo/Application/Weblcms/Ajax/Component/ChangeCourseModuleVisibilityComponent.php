@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -17,8 +16,6 @@ class ChangeCourseModuleVisibilityComponent extends \Chamilo\Application\Weblcms
 
     public function run()
     {
-        Utilities :: set_application('application\weblcms');
-
         $module_id = Request :: post('tool');
         $visible = Request :: post('visible');
         $course = Request :: post('course');

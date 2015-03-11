@@ -10,6 +10,11 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Manages the metadata for a given user
@@ -19,6 +24,13 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 class MetadataManagerComponent extends Manager implements DelegateComponent, MetadataValueEditorComponent
 {
+
+    /**
+     * The selected user
+     *
+     * @var User
+     */
+    private $selected_user;
 
     /**
      * Runs this component and displays its output.
@@ -109,5 +121,34 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
     {
         \Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_user(
             $this->get_selected_user()->get_id());
+    }
+
+    /**
+     * Returns the currently selected user
+     *
+     * @throws ObjectNotExistException
+     * @throws NoObjectSelectedException
+     *
+     * @return User
+     */
+    public function get_selected_user()
+    {
+        if (! isset($this->selected_user))
+        {
+            $user_id = $this->getRequest()->query->get(self :: PARAM_USER_USER_ID);
+            if (! $user_id)
+            {
+                throw new NoObjectSelectedException(Translation :: get('Group'));
+            }
+            $user = DataManager :: retrieve_by_id(User :: class_name(), $user_id);
+            if (! $user)
+            {
+                throw new ObjectNotExistException(Translation :: get('Group', $user_id));
+            }
+
+            $this->selected_user = $user;
+        }
+
+        return $this->selected_user;
     }
 }
