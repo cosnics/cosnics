@@ -65,21 +65,4 @@ class Display
 
         return implode(PHP_EOL, $html);
     }
-
-    /**
-     *
-     * @param integer $percent
-     * @param integer $step
-     * @return string
-     */
-    public static function get_progress_bar($percent, $step = 2)
-    {
-        $done = (int) ($percent / $step);
-        $rest = (int) (100.0 / $step) - $done;
-        return '<div class="progress_information"><div class="progress_bar">' . str_repeat(
-            '<div class="done"></div>',
-            $done) . str_repeat('<div class=""></div>', $rest) . '</div><div class="progress_status">' . round(
-            $percent,
-            2) . ' %</div></div>';
-    }
 }
