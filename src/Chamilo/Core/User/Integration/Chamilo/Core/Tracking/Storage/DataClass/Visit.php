@@ -2,14 +2,14 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * This class tracks the visits to pages
- * 
+ *
  * @package users.lib.trackers
  */
 class Visit extends SimpleTracker
@@ -57,7 +57,7 @@ class Visit extends SimpleTracker
         {
             $tracker_id = $this->get_id();
             $html_header = "<script type=\"text/javascript\">var tracker={$tracker_id};</script>";
-            Header :: get_instance()->add_html_header($html_header);
+            Page :: getInstance()->getHeader()->addHtmlHeader($html_header);
         }
     }
 
@@ -80,13 +80,13 @@ class Visit extends SimpleTracker
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: empty_tracker
      */
     public function empty_tracker()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
             new StaticConditionVariable($this->get_event()->get_name()));
         return $this->remove($condition);
     }
@@ -98,14 +98,14 @@ class Visit extends SimpleTracker
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
             new StaticConditionVariable($event->get_name()));
         return parent :: export($start_date, $end_date, $conditions);
     }
 
     /**
      * Get's the userid of the visit tracker
-     * 
+     *
      * @return int $userid the userid
      */
     public function get_user_id()
@@ -115,7 +115,7 @@ class Visit extends SimpleTracker
 
     /**
      * Sets the userid of the visit tracker
-     * 
+     *
      * @param int $userid the userid
      */
     public function set_user_id($userid)
@@ -125,7 +125,7 @@ class Visit extends SimpleTracker
 
     /**
      * Get's the enter date of the visit tracker
-     * 
+     *
      * @return int $date the date
      */
     public function get_enter_date()
@@ -135,7 +135,7 @@ class Visit extends SimpleTracker
 
     /**
      * Sets the enter date of the visit tracker
-     * 
+     *
      * @param int $date the date
      */
     public function set_enter_date($value)
@@ -145,7 +145,7 @@ class Visit extends SimpleTracker
 
     /**
      * Get's the leave date of the visit tracker
-     * 
+     *
      * @return int $date the date
      */
     public function get_leave_date()
@@ -155,7 +155,7 @@ class Visit extends SimpleTracker
 
     /**
      * Sets the leave date of the visit tracker
-     * 
+     *
      * @param int $date the date
      */
     public function set_leave_date($value)
@@ -165,7 +165,7 @@ class Visit extends SimpleTracker
 
     /**
      * Get's the location of the visit tracker
-     * 
+     *
      * @return int $ip the ip
      */
     public function get_location()
@@ -175,7 +175,7 @@ class Visit extends SimpleTracker
 
     /**
      * Sets the location of the visit tracker
-     * 
+     *
      * @param int $ip the ip
      */
     public function set_location($value)
@@ -190,9 +190,9 @@ class Visit extends SimpleTracker
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_ENTER_DATE, 
-                self :: PROPERTY_LEAVE_DATE, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_ENTER_DATE,
+                self :: PROPERTY_LEAVE_DATE,
                 self :: PROPERTY_LOCATION));
     }
 }

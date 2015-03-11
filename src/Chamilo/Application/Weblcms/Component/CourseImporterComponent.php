@@ -7,10 +7,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: course_importer.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -28,7 +28,7 @@ class CourseImporterComponent extends Manager
      */
     public function run()
     {
-        Header :: get_instance()->set_section('admin');
+        Page :: getInstance()->setSection('admin');
 
         if (! $this->get_user()->is_platform_admin())
         {

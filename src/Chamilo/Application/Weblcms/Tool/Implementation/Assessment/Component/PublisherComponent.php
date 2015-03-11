@@ -5,11 +5,11 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Publisher;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class PublisherComponent extends Manager
 {
@@ -21,8 +21,7 @@ class PublisherComponent extends Manager
     {
         if (! ($this->get_course()->is_course_admin($this->get_user()) || $this->is_allowed(WeblcmsRights :: ADD_RIGHT)))
         {
-            Display :: error_page(Translation :: get("NotAllowed"));
-            return;
+            throw new NotAllowedException();
         }
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())

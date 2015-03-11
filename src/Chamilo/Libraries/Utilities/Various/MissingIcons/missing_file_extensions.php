@@ -2,18 +2,17 @@
 namespace Chamilo\Libraries\Utilities\Various\MissingIcons;
 
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Page;
 
 require_once __DIR__ . '/../../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
 
 $sizes = array(Theme :: ICON_MINI, Theme :: ICON_SMALL, Theme :: ICON_MEDIUM, Theme :: ICON_BIG);
 
-$html = array();
 $failures = 0;
 $data = array();
 
@@ -101,6 +100,11 @@ foreach ($sizes as $key => $header_size)
     $table->set_header(($key * 3) + 3, $header_size . ' NEW');
 }
 
+$page = Page :: getInstance();
+$page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+$html = array();
+
 if ($failures || Request :: get('show_all'))
 {
     $html[] = '<h3>' . count($extensions) . ' extensions</h3>';
@@ -111,15 +115,13 @@ if ($failures || Request :: get('show_all'))
     $total_missing_icons += $failures;
 }
 
-Display :: small_header();
-
+$html[] = $page->getHeader()->toHtml();
 $html[] = '<style>';
 $html[] = 'table td {text-align: center;}';
 $html[] = 'table td:first-child {text-align: left;}';
 $html[] = 'table th {width: 70px; text-align: center !important;}';
 $html[] = 'table th:first-child {width: auto; text-align: left !important;}';
 $html[] = '</style>';
+$html[] = $page->getFooter()->toHtml();
 
 echo implode(PHP_EOL, $html);
-
-Display :: small_footer();

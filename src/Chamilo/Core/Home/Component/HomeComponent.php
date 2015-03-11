@@ -4,8 +4,8 @@ namespace Chamilo\Core\Home\Component;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Core\Home\Renderer\Factory;
 
 /**
  *
@@ -23,7 +23,16 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         BreadcrumbTrail :: get_instance()->truncate();
-        $view = Request :: get(Renderer :: PARAM_VIEW_TYPE, Renderer :: TYPE_BASIC);
-        return Renderer :: as_html($view, $this->get_user());
+
+        $type = $this->getRequest()->query->get(Renderer :: PARAM_VIEW_TYPE, Renderer :: TYPE_BASIC);
+        $rendererFactory = new Factory($type, $this);
+
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = $rendererFactory->getRenderer()->render();
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 }

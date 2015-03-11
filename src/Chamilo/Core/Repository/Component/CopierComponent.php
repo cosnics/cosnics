@@ -6,11 +6,10 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 /**
  * $Id: content_object_copier.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -29,7 +28,7 @@ class CopierComponent extends Manager
 
         if (! $selected_content_object_ids)
         {
-            return Display :: error_page(Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
         $target_user_id = $this->get_user_id();

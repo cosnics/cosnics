@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Theme;
@@ -23,7 +22,6 @@ class CategoryItem extends Renderer
     public function render()
     {
         $html = array();
-        $current_section = Header :: get_instance()->get_section();
 
         $sub_html = array();
         $selected = $this->get_item()->is_selected();

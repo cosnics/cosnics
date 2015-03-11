@@ -6,11 +6,11 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -72,6 +72,8 @@ class AttachmentViewerComponent extends Manager
 
         $html = array();
 
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
         if (! $failed)
         {
             $trail->add(
@@ -79,7 +81,7 @@ class AttachmentViewerComponent extends Manager
                     $this->get_url(array('object' => $parent_id)),
                     Translation :: get('ViewAttachment', null, \Chamilo\Core\Repository\Manager :: context())));
 
-            $html[] = Display :: small_header();
+            $html[] = $this->render_header();
 
             $html[] = ContentObjectRenditionImplementation :: launch(
                 $object,
@@ -87,13 +89,13 @@ class AttachmentViewerComponent extends Manager
                 ContentObjectRendition :: VIEW_FULL,
                 $this);
 
-            $html[] = Display :: small_footer();
+            $html[] = $this->render_footer();
         }
         else
         {
-            $html[] = Display :: small_header();
+            $html[] = $this->render_header();
             $html[] = $this->display_error_message($error_message);
-            $html[] = Display :: small_footer();
+            $html[] = $this->render_footer();
         }
 
         return implode(PHP_EOL, $html);

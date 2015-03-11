@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -53,9 +53,13 @@ class ApplicationItem extends Item
         return array(self :: PROPERTY_USE_TRANSLATION, self :: PROPERTY_APPLICATION);
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Menu\Storage\DataClass\Item::is_selected()
+     */
     public function is_selected()
     {
-        $current_section = Header :: get_instance()->get_section();
+        $current_section = Page :: getInstance()->getSection();
         if ($current_section == $this->get_application())
         {
             return true;

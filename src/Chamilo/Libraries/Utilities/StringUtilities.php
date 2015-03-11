@@ -52,7 +52,7 @@ class StringUtilities
 
     /**
      * Create a \Stringy\Stringy instance with the given string and return it
-     * 
+     *
      * @param string $string
      * @return \Stringy\Stringy
      */
@@ -63,7 +63,7 @@ class StringUtilities
 
     /**
      * Get an instance of StringUtilities
-     * 
+     *
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public static function getInstance()
@@ -72,7 +72,7 @@ class StringUtilities
         {
             self :: $instance = new static();
         }
-        
+
         return static :: $instance;
     }
 
@@ -98,15 +98,15 @@ class StringUtilities
         if ($forHumans)
         {
             $tags = array('br', 'p', 'div', 'span');
-            
+
             foreach ($tags as $tag)
             {
                 $string = preg_replace('#</?' . $tag . '(>|\s[^>]*>)#is', '', $string);
             }
-            
+
             $string = trim(str_replace('&nbsp;', '', $string));
         }
-        
+
         if (isset($string))
         {
             if (is_string($string))
@@ -129,5 +129,48 @@ class StringUtilities
         {
             return true;
         }
+    }
+
+    /**
+     *
+     * @param string $email
+     * @param string $clickable_text
+     * @param string $style_class
+     * @return string
+     */
+    public function encryptMailLink($email, $clickable_text = null, $style_class = '')
+    {
+        if (is_null($clickable_text))
+        {
+            $clickable_text = $email;
+        }
+        // mailto already present?
+        if (substr($email, 0, 7) != 'mailto:')
+            $email = 'mailto:' . $email;
+            // class (stylesheet) defined?
+        if ($style_class != '')
+        {
+            $style_class = ' class="full_url_print ' . $style_class . '"';
+        }
+        else
+        {
+            $style_class = ' class="full_url_print"';
+        }
+        // encrypt email
+        $hmail = '';
+        for ($i = 0; $i < strlen($email); $i ++)
+            $hmail .= '&#' . ord($email{$i}) . ';';
+            // encrypt clickable text if @ is present
+        if (strpos($clickable_text, '@'))
+        {
+            for ($i = 0; $i < strlen($clickable_text); $i ++)
+                $hclickable_text .= '&#' . ord($clickable_text{$i}) . ';';
+        }
+        else
+        {
+            $hclickable_text = htmlspecialchars($clickable_text);
+        }
+        // return encrypted mailto hyperlink
+        return '<a href="' . $hmail . '"' . $style_class . '>' . $hclickable_text . '</a>';
     }
 }

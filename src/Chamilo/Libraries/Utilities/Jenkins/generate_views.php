@@ -1,5 +1,6 @@
 <?php
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\Page;
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -89,15 +90,18 @@ foreach ($missing_view_names as $missing_view_name)
         $dom_document->createTextNode('false'));
 }
 
+$page = Page :: getInstance();
+$page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
 if ($dom_document->save($jenkins_config_path))
 {
-    Display :: small_header();
-    Display :: message(Display :: MESSAGE_TYPE_CONFIRM, 'Default views saved to config file');
-    Display :: small_footer();
+    echo $page->getHeader()->toHtml();
+    echo Display :: message(Display :: MESSAGE_TYPE_CONFIRM, 'Default views saved to config file');
+    echo $page->getFooter()->toHtml();
 }
 else
 {
-    Display :: small_header();
-    Display :: message(Display :: MESSAGE_TYPE_ERROR, 'Problem saving default views to config file');
-    Display :: small_footer();
+    echo $page->getHeader()->toHtml();
+    echo Display :: message(Display :: MESSAGE_TYPE_ERROR, 'Problem saving default views to config file');
+    echo $page->getFooter()->toHtml();
 }

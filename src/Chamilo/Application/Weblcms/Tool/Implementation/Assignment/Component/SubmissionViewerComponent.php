@@ -274,7 +274,8 @@ class SubmissionViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Returns the name of the submitter as a string. When submitted as a group, it will return the name of the user who
+     * Returns the name of the submitter as a string.
+     * When submitted as a group, it will return the name of the user who
      * submitted followed by the group name.
      *
      * @return string The name of the submitter

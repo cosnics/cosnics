@@ -28,7 +28,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * This component renders the assessment attempts from the learning path. Depending on the parameters in the URL, it
+ * This component renders the assessment attempts from the learning path.
+ * Depending on the parameters in the URL, it
  * will show an overview of all the assessment attempts or a detail from one attempt.
  *
  * @author Bert De Clercq (Hogeschool Gent)
@@ -132,7 +133,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders an overview of the assessment attempt in the learning path. On top there's a description of the
+     * Renders an overview of the assessment attempt in the learning path.
+     * On top there's a description of the
      * assessment with some info about the attempts such as the average score of all the attempts.
      */
     public function view_assessment_results()
@@ -185,7 +187,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders a detailed overview of a single assessment attempt. A course admin can change scores and add feedback.
+     * Renders a detailed overview of a single assessment attempt.
+     * A course admin can change scores and add feedback.
      */
     public function view_single_result()
     {
@@ -282,7 +285,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns an action bar if the user has edit rights. The action bar includes a button to download the assessment
+     * Returns an action bar if the user has edit rights.
+     * The action bar includes a button to download the assessment
      * attempts documents and a button to delete the assessment attempts.
      *
      * @return ActionBarRenderer

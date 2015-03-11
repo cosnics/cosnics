@@ -33,6 +33,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
@@ -121,28 +122,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         if ($this->is_embedded())
         {
-            return $this->render_small_header();
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
         }
-        else
-        {
-            return parent :: render_header();
-        }
-    }
 
-    /**
-     *
-     * @see \application\weblcms\tool\Manager::render_footer()
-     */
-    public function render_footer()
-    {
-        if ($this->is_embedded())
-        {
-            return $this->render_small_footer();
-        }
-        else
-        {
-            return parent :: render_footer();
-        }
+        return parent :: render_header();
     }
 
     public function get_publication()

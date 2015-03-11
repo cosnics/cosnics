@@ -7,76 +7,156 @@ use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- * $Id: header.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
  *
- * @package common.html
- */
-/**
- * Class to display the header of a HTML-page
+ * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Header
 {
 
     /**
-     * Singleton
      *
-     * @var Header
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private static $instance;
+    private $application;
 
     /**
-     * The http headers which will be send to the browser using php's header (...) function.
+     *
+     * @var integer
      */
-    private $http_headers;
+    private $viewMode;
 
     /**
      * The html headers which will be added in the <head> tag of the html document.
+     *
+     * @var string[]
      */
-    private $html_headers;
+    private $htmlHeaders;
 
     /**
-     * The language code
+     *
+     * @var string
      */
-    private $language_code;
+    private $languageCode;
 
     /**
-     * Constructor
+     *
+     * @var string
      */
-    public function __construct($language_code = 'en')
+    private $textDirection;
+
+    /**
+     *
+     * @param integer $viewMode
+     * @param string $languageCode
+     * @param string $textDirection
+     */
+    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $languageCode = 'en', $textDirection = 'ltr')
     {
-        $this->http_headers = array();
-        $this->html_headers = array();
-        $this->set_language_code($language_code);
+        $this->viewMode = $viewMode;
+        $this->languageCode = $languageCode;
+        $this->textDirection = $textDirection;
+
+        $this->htmlHeaders = array();
+        $this->addDefaultHeaders();
     }
 
     /**
      *
-     * @return Header
+     * @return string
      */
-    public static function get_instance()
+    public function getLanguageCode()
     {
-        if (self :: $instance == null)
-        {
-            self :: set_instance(new Header());
-        }
-
-        return self :: $instance;
+        return $this->languageCode;
     }
 
-    public static function set_instance($instance)
+    /**
+     *
+     * @param string $languageCode
+     */
+    public function setLanguageCode($languageCode)
     {
-        self :: $instance = $instance;
+        $this->languageCode = $languageCode;
     }
 
-    public function set_language_code($language_code)
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
     {
-        $this->language_code = $language_code;
+        return $this->application;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getHtmlHeaders()
+    {
+        return $this->htmlHeaders;
+    }
+
+    /**
+     *
+     * @param string[] $htmlHeaders
+     */
+    public function setHtmlHeaders($htmlHeaders)
+    {
+        $this->htmlHeaders = $htmlHeaders;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTextDirection()
+    {
+        return $this->textDirection;
+    }
+
+    /**
+     *
+     * @param string $textDirection
+     */
+    public function setTextDirection($textDirection)
+    {
+        $this->textDirection = $textDirection;
     }
 
     /**
      * Adds some default headers to the output
      */
-    public function add_default_headers()
+    private function addDefaultHeaders()
     {
         $server_type = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type');
         $theme = Theme :: getInstance()->getTheme();
@@ -87,116 +167,106 @@ class Header
         $parameters[ResourceUtilities :: PARAM_THEME] = $theme;
         $parameters[ResourceUtilities :: PARAM_SERVER_TYPE] = $server_type;
 
-        $this->add_http_header('Content-Type: text/html; charset=UTF-8');
-        $this->add_http_header(
-            'X-Powered-By: Chamilo ' . \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'version'));
-
-        $this->add_html_header('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
+        $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
         $parameters[ResourceUtilities :: PARAM_TYPE] = 'css';
-        $context = http_build_query($parameters);
 
-        $this->add_css_file_header(Path :: getInstance()->getBasePath(true) . 'index.php?' . $context);
+        $this->addCssFile(Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
 
-        $this->add_link_header(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
-        $this->add_link_header('http://help.chamilo.org/', 'help');
-        $this->add_link_header(
+        $this->addLink(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
+        $this->addLink('http://help.chamilo.org/', 'help');
+        $this->addLink(
             Theme :: getInstance()->getCommonImagePath('Favicon', 'ico'),
             'shortcut icon',
             null,
             'image/x-icon');
-        $this->add_html_header(
+        $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path :: getInstance()->getBasePath(true) . '";</script>');
 
         $parameters[ResourceUtilities :: PARAM_TYPE] = 'javascript';
-        $context = http_build_query($parameters);
-        $this->add_javascript_file_header(Path :: getInstance()->getBasePath(true) . 'index.php?' . $context);
-    }
+        $this->addJavascriptFile(
+            Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
 
-    /**
-     * Adds a http header
-     */
-    public function add_http_header($http_header)
-    {
-        $this->http_headers[] = $http_header;
+        $pageTitle = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'institution') . ' - ' .
+             \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'site_name');
+
+        $this->addHtmlHeader('<title>' . $pageTitle . '</title>');
     }
 
     /**
      * Adds a html header
      */
-    public function add_html_header($html_header)
+    public function addHtmlHeader($html_header)
     {
-        $this->html_headers[] = $html_header;
-    }
-
-    /**
-     * Sets the page title
-     */
-    public function set_page_title($title)
-    {
-        $this->add_html_header('<title>' . $title . '</title>');
+        $this->htmlHeaders[] = $html_header;
     }
 
     /**
      * Adds a css file
      */
-    public function add_css_file_header($file, $media = 'screen,projection')
+    public function addCssFile($file, $media = 'screen,projection')
     {
         $header = '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $file . '" />';
-        $this->add_html_header($header);
+        $this->addHtmlHeader($header);
     }
 
     /**
      * Adds a javascript file
      */
-    public function add_javascript_file_header($file)
+    public function addJavascriptFile($file)
     {
         $header[] = '<script type="text/javascript" src="' . $file . '"></script>';
-        $this->add_html_header(implode(' ', $header));
+        $this->addHtmlHeader(implode(' ', $header));
     }
 
     /**
      * Adds a link
      */
-    public function add_link_header($url, $rel = null, $title = null, $type = null)
+    public function addLink($url, $rel = null, $title = null, $type = null)
     {
         $type = $type ? ' type="' . $type . '"' : '';
         $title = $title ? ' title="' . $title . '"' : '';
         $rel = $rel ? ' rel="' . $rel . '"' : '';
         $href = ' href="' . $url . '"';
         $header = '<link' . $href . $rel . $title . $type . '/>';
-        $this->add_html_header($header);
+        $this->addHtmlHeader($header);
     }
 
     /**
-     * Creates the HTML output for the header. This function will send all http headers to the browser and return the
+     * Creates the HTML output for the header.
+     * This function will send all http headers to the browser and return the
      * head-tag of the html document
      */
     public function toHtml()
     {
-        foreach ($this->http_headers as $index => & $http_header)
-        {
-            header($http_header);
-        }
-        $output[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-        $output[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->language_code . '" lang="' .
-             $this->language_code . '">';
-        $output[] = ' <head>';
-        foreach ($this->html_headers as $index => & $html_header)
-        {
-            $output[] = '  ' . $html_header;
-        }
-        $output[] = ' </head>';
-        return implode(PHP_EOL, $output);
-    }
+        $html = array();
 
-    public function get_section()
-    {
-        return $this->section;
-    }
+        $html[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->getLanguageCode() . '" lang="' .
+             $this->getLanguageCode() . '">';
+        $html[] = '<head>';
 
-    public function set_section($section)
-    {
-        $this->section = $section;
+        foreach ($this->getHtmlHeaders() as $index => & $html_header)
+        {
+            $html[] = $html_header;
+        }
+
+        $html[] = '</head>';
+
+        $html[] = '<body dir="' . $this->getTextDirection() . '">' . "\n";
+        $html[] = '<!-- #outerframe container to control some general layout of all pages -->' . "\n";
+        $html[] = '<div id="outerframe">' . "\n";
+
+        if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
+        {
+            $banner = new Banner($this->getApplication(), $this->getViewMode());
+
+            $html[] = $banner->toHtml();
+            $html[] = '<div id="main"> <!-- start of #main wrapper for #content and #menu divs -->';
+            $html[] = '<!--   Begin Of script Output   -->';
+            $html[] = '<div id="helpbox" class="helpdialog"></div>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

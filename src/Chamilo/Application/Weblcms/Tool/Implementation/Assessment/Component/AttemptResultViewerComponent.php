@@ -11,7 +11,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManag
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -23,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * This class displays the result of a single attempt
@@ -132,14 +132,12 @@ class AttemptResultViewerComponent extends Manager
     {
         $html = array();
 
-        if (Request :: get(self :: PARAM_SHOW_FULL))
+        if (! Request :: get(self :: PARAM_SHOW_FULL))
         {
-            $html[] = parent :: render_header();
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
         }
-        else
-        {
-            $html[] = Display :: small_header();
-        }
+
+        $html[] = parent :: render_header();
 
         if ($this->assessment_attempt->get_status() == AssessmentAttempt :: STATUS_NOT_COMPLETED)
         {
@@ -147,19 +145,6 @@ class AttemptResultViewerComponent extends Manager
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Displays the footer, depending on the parameters
-     */
-    public function render_footer()
-    {
-        if (Request :: get(self :: PARAM_SHOW_FULL))
-        {
-            return parent :: render_footer();
-        }
-
-        return Display :: small_footer();
     }
 
     /**

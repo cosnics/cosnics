@@ -255,8 +255,8 @@ class PackageDisplay
             {
                 $html[] = Translation :: get('Authors');
             }
-            $html[] = '</td><td>' . Display :: encrypted_mailto_link($author['email'], $author['name']) . ' - ' .
-                 $author['company'] . '</td></tr>';
+            $html[] = '</td><td>' . StringUtilities :: getInstance()->encryptMailLink($author['email'], $author['name']) .
+                 ' - ' . $author['company'] . '</td></tr>';
         }
 
         $html[] = '</table><br/>';

@@ -1,11 +1,9 @@
 <?php
-
-
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Structure\Page;
 require __DIR__ . '/../../Architecture/Bootstrap.php';
 
 \Chamilo\Libraries\Architecture\Bootstrap :: launch();
@@ -101,7 +99,9 @@ $component_table = new SortableTableFromArray($data, 0, 600);
 $component_table->set_header(0, 'context');
 $component_table->set_header(1, 'component');
 
-Display :: small_header();
-// echo $action_table->toHtml();
+$page = Page :: getInstance();
+$page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+echo $page->getHeader()->toHtml();
 echo $component_table->toHtml();
-Display :: small_footer();
+echo $page->getFooter()->toHtml();

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Proces
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * handles request processing (calls to ephorus webservices)
@@ -100,11 +101,18 @@ class RequestProcessor
 
         if ($show_debug)
         {
-            echo \Chamilo\Libraries\Format\Display :: small_header();
-            echo '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
-            echo '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-            echo \Chamilo\Libraries\Format\Display :: small_footer();
+            $page = Page :: getInstance();
+            $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+            $html = array();
+
+            $html[] = $page->getHeader()->toHtml();
+            $html[] = '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
+            $html[] = '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';
+            $html[] = '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            $html[] = $page->getFooter()->toHtml();
+
+            return implode(PHP_EOL, $html);
         }
 
         if ($result['IndexDocumentResult'])
@@ -187,11 +195,16 @@ class RequestProcessor
 
         if ($show_debug)
         {
-            \Chamilo\Libraries\Format\Display :: small_header();
-            echo '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
-            echo '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-            \Chamilo\Libraries\Format\Display :: small_footer();
+            $page = Page :: getInstance();
+            $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+            $html[] = $page->getHeader()->toHtml();
+            $html[] = '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
+            $html[] = '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';
+            $html[] = '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            $html[] = $page->getFooter()->toHtml();
+
+            return implode(PHP_EOL, $html);
         }
 
         return $result['UploadDocumentResult'];

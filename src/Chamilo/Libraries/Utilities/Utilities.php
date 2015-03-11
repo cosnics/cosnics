@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Utilities;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\Header;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -16,7 +15,6 @@ use XML_Unserializer;
 
 /**
  *
- * @package common This class provides some common methods that are used throughout the platform.
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -452,7 +450,6 @@ class Utilities
     public static function set_application($application)
     {
         Translation :: set_application($application);
-        Header :: get_instance()->set_section($application);
     }
 
     /**

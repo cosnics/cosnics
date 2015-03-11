@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: complex_builder.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -31,27 +32,13 @@ class BuilderComponent extends Manager implements ApplicationSupport
     public function render_header()
     {
         $is_popup = Request :: get(self :: PARAM_POPUP);
-        if ($is_popup)
-        {
-            return $this->render_small_header();
-        }
-        else
-        {
-            return parent :: render_header();
-        }
-    }
 
-    public function render_footer()
-    {
-        $is_popup = Request :: get(self :: PARAM_POPUP);
         if ($is_popup)
         {
-            return $this->render_small_footer();
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
         }
-        else
-        {
-            return parent :: render_footer();
-        }
+
+        return parent :: render_header();
     }
 
     /**

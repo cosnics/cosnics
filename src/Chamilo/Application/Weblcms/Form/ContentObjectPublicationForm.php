@@ -19,7 +19,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -37,6 +36,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 /**
  * This class represents a form to allow a user to publish a learning object.
@@ -109,7 +109,7 @@ class ContentObjectPublicationForm extends FormValidator
 
         if (count($publications) <= 0)
         {
-            Display :: error_page(Translation :: get('NoObjectsSelected', null, Utilities :: COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation :: get('Publication'));
         }
         else
         {
@@ -645,8 +645,7 @@ class ContentObjectPublicationForm extends FormValidator
 
         if ($category > 0 && ! array_key_exists($category, $this->categories))
         {
-            Display :: error_page(Translation :: get("PublicationInSelectedCategoryNotAllowed"));
-            return false;
+            throw new \Exception(Translation :: get("PublicationInSelectedCategoryNotAllowed"));
         }
 
         if ($values[self :: PROPERTY_FOREVER] != 0)

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Structure\Page;
 
 require_once __DIR__ . '/../../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -18,7 +19,12 @@ $total_failures = 0;
 $total_packages = 0;
 $total_missing_icons = 0;
 
+$page = Page :: getInstance();
+$page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
 $html = array();
+
+$html[] = $page->getHeader()->toHtml();
 
 $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
 
@@ -165,15 +171,12 @@ else
     $html[] = '<h3>Total number of missing icons: ' . $total_missing_icons . '</h3>';
 }
 
-Display :: small_header();
-
 $html[] = '<style>';
 $html[] = 'table td {text-align: center;}';
 $html[] = 'table td:first-child {text-align: left;}';
 $html[] = 'table th {width: 70px; text-align: center !important;}';
 $html[] = 'table th:first-child {width: auto; text-align: left !important;}';
 $html[] = '</style>';
+$html[] = $page->getFooter()->toHtml();
 
 echo implode(PHP_EOL, $html);
-
-Display :: small_footer();

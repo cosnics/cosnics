@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Page;
 
 abstract class Manager extends Application
 {
@@ -60,7 +61,10 @@ abstract class Manager extends Application
     {
         $html = array();
 
-        $html[] = $this->render_small_header();
+        $page = Page :: getInstance();
+        $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
+        $html[] = $page->getHeader()->toHtml();
         $html[] = '<div class="warning-banner">';
 
         $translation = Translation :: get(
@@ -88,9 +92,8 @@ abstract class Manager extends Application
 
         $is_complex_object = $this->get_content_object()->is_complex_content_object();
         $is_display_action = $this->get_action() == self :: ACTION_DISPLAY;
-        $supports_preview_reset = $this->getPreview()->getComponent()->supports_reset();
 
-        if ($is_display_action && $is_complex_object && $supports_preview_reset)
+        if ($is_display_action && $is_complex_object && $this->getPreview()->getComponent()->supports_reset())
         {
             $html[] = Theme :: getInstance()->getImage(
                 'action/reset',
@@ -124,14 +127,6 @@ abstract class Manager extends Application
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\architecture\application\Application::render_footer()
-     */
-    public function render_footer()
-    {
-        return $this->render_small_footer();
     }
 
     /**

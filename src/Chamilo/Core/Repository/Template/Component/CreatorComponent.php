@@ -4,11 +4,10 @@ namespace Chamilo\Core\Repository\Template\Component;
 use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Template\Manager;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 /**
  * Repository manager component which provides functionality to create a template based on another content object
@@ -28,7 +27,7 @@ class CreatorComponent extends Manager
 
         if (! $selected_content_object_ids)
         {
-            return Display :: error_page(Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
         $messages = array();

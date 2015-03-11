@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Header;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -44,7 +44,7 @@ class AccountComponent extends Manager implements NoContextComponent
             throw new NotAllowedException();
         }
 
-        Header :: get_instance()->set_section('my_account');
+        Page :: getInstance()->setSection('my_account');
 
         $user = $this->get_user();
 

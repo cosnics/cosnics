@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: banner.class.php 179 2009-11-12 13:51:39Z vanpouckesven $
@@ -25,9 +25,63 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Banner
 {
 
-    public function render()
+    /**
+     *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
+    private $application;
+
+    /**
+     *
+     * @var integer
+     */
+    private $viewMode;
+
+    /**
+     *
+     * @param Application $application
+     * @param integer $viewMode
+     */
+    public function __construct(Application $application = null, $viewMode)
     {
-        return $this->toHtml();
+        $this->application = $application;
+        $this->viewMode = $viewMode;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\Application
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     *
+     * @param integer $viewMode
+     */
+    public function setViewMode($viewMode)
+    {
+        $this->viewMode = $viewMode;
     }
 
     private static function get_languages()
@@ -50,7 +104,7 @@ class Banner
     {
         $output = array();
 
-        if (Authentication :: is_valid() && ! is_null(Session :: get_user_id()))
+        if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 User :: class_name(),
@@ -73,7 +127,7 @@ class Banner
                 Redirect :: TYPE_CORE);
             $output[] = '<div id="emulator">' .
                  Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
-                 $user->get_fullname() . ' <a href="' . $link . '">' .
+                 $this->getApplication()->get_user()->get_fullname() . ' <a href="' . $link . '">' .
                  Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
         }
 
@@ -123,7 +177,7 @@ class Banner
              'index.php" target="_top"><span class="logo">' . PlatformSetting :: get('site_name', 'Chamilo\Core\Admin') .
              '</span></a></div>';
 
-        if (Authentication :: is_valid())
+        if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
             $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('Chamilo\Core\Menu');
             if ($registration instanceof Registration && $registration->is_active())
@@ -131,7 +185,7 @@ class Banner
                 $output[] = '<div class="applications">';
                 $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
                     \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
-                    $user);
+                    $this->getApplication()->get_user());
                 $output[] = '<div class="clear">&nbsp;</div>';
                 $output[] = '</div>';
             }
@@ -140,15 +194,17 @@ class Banner
 
         $output[] = '</div> <!-- end of #header1 -->';
 
-        $breadcrumbtrail = BreadcrumbTrail :: get_instance();
-        if ($breadcrumbtrail->size() > 0)
+        if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
         {
-            $output[] = '<div id="trailbox">';
+            $breadcrumbtrail = BreadcrumbTrail :: get_instance();
 
-            $output[] = $breadcrumbtrail->render();
-
-            $output[] = '<div class="clear">&nbsp;</div>';
-            $output[] = '</div>';
+            if ($breadcrumbtrail->size() > 0)
+            {
+                $output[] = '<div id="trailbox">';
+                $output[] = $breadcrumbtrail->render();
+                $output[] = '<div class="clear">&nbsp;</div>';
+                $output[] = '</div>';
+            }
         }
 
         $output[] = '<div class="clear">&nbsp;</div>';

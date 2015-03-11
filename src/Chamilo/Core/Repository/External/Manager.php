@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Page;
 
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -154,14 +155,12 @@ abstract class Manager extends Application implements NoContextComponent
 
         $html = array();
 
-        if ($this->is_stand_alone())
+        if (! $this->is_stand_alone())
         {
-            $html[] = parent :: render_header();
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
         }
-        else
-        {
-            $html[] = parent :: render_small_header();
-        }
+
+        $html[] = parent :: render_header();
 
         $external_repository_actions = $this->get_external_repository_actions();
 
@@ -263,15 +262,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
-
-        if ($this->is_stand_alone())
-        {
-            $html[] = parent :: render_footer();
-        }
-        else
-        {
-            $html[] = parent :: render_small_footer();
-        }
+        $html[] = parent :: render_footer();
 
         return implode(PHP_EOL, $html);
     }

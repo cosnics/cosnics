@@ -7,19 +7,10 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Page;
 
 class PreviewerComponent extends Manager
 {
-
-    public function render_header()
-    {
-        return parent :: render_small_header();
-    }
-
-    public function render_footer()
-    {
-        return $this->render_small_footer();
-    }
 
     public function run()
     {
@@ -28,6 +19,8 @@ class PreviewerComponent extends Manager
 
         if ($content_object)
         {
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+
             $preview_factory = $this->getPreview();
             return $preview_factory->run();
         }
