@@ -1,10 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -93,87 +90,6 @@ abstract class Authentication
     public function logout($user)
     {
         Session :: destroy();
-    }
-
-    public static function is_valid()
-    {
-        // $context = Kernel :: getInstance()->getContext();
-
-        // $is_registration = $context == 'Chamilo\Core\User' && Request :: get(Application :: PARAM_ACTION) ==
-        // 'register';
-        // $is_login = $context == 'Chamilo\Core\User' && Request :: get(Application :: PARAM_ACTION) == 'login';
-        // $is_invitation = $context == 'Chamilo\Core\User' && Request :: get(Application :: PARAM_ACTION) == 'inviter';
-        // $is_password_reset = $context == 'Chamilo\Core\User' &&
-        // Request :: get(Application :: PARAM_ACTION) == 'reset_password';
-        // $is_online_page = $context == 'Chamilo\Core\Admin' &&
-        // Request :: get(Application :: PARAM_ACTION) == 'whois_online';
-        // $is_download_page = $context == 'Chamilo\Core\Repository' &&
-        // Request :: get(Application :: PARAM_ACTION) == 'document_downloader';
-        // $is_home_page = $context == 'Chamilo\Core\Home' && Request :: get(Application :: PARAM_ACTION) == null;
-        // $is_upgrade = $context == 'Chamilo\Core\Lynx' && (Request :: get(Application :: PARAM_ACTION) == 'upgrader'
-        // ||
-        // Request :: get(Application :: PARAM_ACTION) == 'content_object_upgrader' ||
-        // Request :: get(Application :: PARAM_ACTION) == 'application_upgrader');
-
-        // $is_authentication_exception = $is_home_page || $is_registration || $is_login || $is_invitation ||
-        // $is_password_reset || $is_online_page || $is_download_page || $is_upgrade;
-        $allow_external_authentication = PlatformSetting :: get('enable_external_authentication');
-        // if (($is_login || $is_invitation) && $allow_external_authentication)
-        // {
-        // return true;
-        // }
-
-        // if ($is_download_page || $is_upgrade)
-        // {
-        // return true;
-        // }
-
-        // TODO: Add system here to allow authentication via encrypted user key ?
-        if (! Session :: get_user_id())
-        {
-            // Check whether external authentication is enabled
-            $allow_external_authentication = PlatformSetting :: get('enable_external_authentication');
-
-            $no_external_authentication = Request :: get('noExtAuth');
-            if ($allow_external_authentication && ! isset($no_external_authentication))
-            {
-                $external_authentication_types = self :: get_external_authentication_types();
-
-                foreach ($external_authentication_types as $type)
-                {
-                    $allow_authentication = PlatformSetting :: get('enable_' . $type . '_authentication');
-                    $no_authentication = Request :: get(
-                        'no' . StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'Auth');
-
-                    if ($allow_authentication)
-                    {
-                        $authentication = self :: factory($type);
-                        if ($authentication->check_login())
-                        {
-                            if (PlatformSetting :: get('prevent_double_login', \Chamilo\Core\User\Manager :: context()))
-                            {
-                                \Chamilo\Core\User\Storage\DataClass\UserLoginSession :: check_single_login();
-                            }
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (PlatformSetting :: get('prevent_double_login', \Chamilo\Core\User\Manager :: context()))
-            {
-                \Chamilo\Core\User\Storage\DataClass\UserLoginSession :: check_single_login(false);
-            }
-            return true;
-        }
     }
 
     /**

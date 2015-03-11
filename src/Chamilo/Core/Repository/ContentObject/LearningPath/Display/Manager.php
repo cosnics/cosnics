@@ -663,7 +663,24 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $progress = $this->get_complex_content_object_path()->get_progress();
 
-        return Display :: get_progress_bar($progress);
+        return $this->render_progress_bar($progress);
+    }
+
+    /**
+     *
+     * @param integer $percent
+     * @param integer $step
+     * @return string
+     */
+    private function render_progress_bar($percent, $step = 2)
+    {
+        $done = (int) ($percent / $step);
+        $rest = (int) (100.0 / $step) - $done;
+        return '<div class="progress_information"><div class="progress_bar">' . str_repeat(
+            '<div class="done"></div>',
+            $done) . str_repeat('<div class=""></div>', $rest) . '</div><div class="progress_status">' . round(
+            $percent,
+            2) . ' %</div></div>';
     }
 
     /**
