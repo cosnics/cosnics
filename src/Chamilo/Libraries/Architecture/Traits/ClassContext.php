@@ -34,6 +34,6 @@ trait ClassContext
      */
     public static function context()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceFromClassname(static :: class_name());
+        return ClassnameUtilities :: getInstance()->getNamespaceFromClassname(get_called_class());
     }
 }

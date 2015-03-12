@@ -139,16 +139,9 @@ class DataManager
             $parameters = DataClassRetrieveParameters :: generate($parameters);
         }
 
-        if (is_subclass_of($class, CompositeDataClass :: class_name()) &&
-             get_parent_class($class) == CompositeDataClass :: class_name())
-        {
-            $base_class = $class;
-        }
-        elseif (is_subclass_of($class, CompositeDataClass :: class_name()) && $class :: is_extended())
-        {
-            $base_class = $class :: parent_class_name();
-        }
-        elseif (is_subclass_of($class, CompositeDataClass :: class_name()) && ! $class :: is_extended())
+        $composite_class = CompositeDataClass :: class_name();
+
+        if (is_subclass_of($class, $composite_class) && get_parent_class($class) !== $composite_class)
         {
             $base_class = $class :: parent_class_name();
         }
@@ -156,11 +149,12 @@ class DataManager
         {
             $base_class = $class;
         }
+        
         if (! DataClassCache :: exists($base_class, $parameters))
         {
             try
             {
-                $base = (is_subclass_of($class, CompositeDataClass :: class_name()) ? CompositeDataClass :: class_name() : DataClass :: class_name());
+                $base = (is_subclass_of($class, $composite_class) ? $composite_class : DataClass :: class_name());
                 $record = self :: process_record(self :: get_instance()->retrieve($class, $parameters));
 
                 DataClassResultCache :: add($base :: factory($class, $record), $parameters);
