@@ -3,7 +3,7 @@ default:
     error_reporting: 22519 # E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE
   extensions:
     Behat\MinkExtension:
-      base_url: 'http://localhost/chamilo/' # Change to your local Chamilo base url
+      base_url: 'http://localhost/chamilo/web/' # Change to your local Chamilo base url
       #show_auto: true # Run a command when a test fails (uncomment one of the following commands)
       #show_cmd: cat %s >> files/temp/behat_dump.html # Dump all HTML to file (Linux)
       #show_cmd: type %s >> files/temp/behat_dump.html # Dump all HTML to file (Windows)
