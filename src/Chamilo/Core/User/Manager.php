@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Component\UserApproverComponent;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
@@ -23,10 +22,15 @@ use Chamilo\Libraries\Format\Structure\Page;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'user';
+
+    // Parameters
     const PARAM_USER_USER_ID = 'user_id';
     const PARAM_ACTIVE = 'active';
     const PARAM_CHOICE = 'choice';
     const PARAM_FIRSTLETTER = 'firstletter';
+    const PARAM_REFER = 'refer';
+
+    // Actions
     const ACTION_CREATE_USER = 'creator';
     const ACTION_BROWSE_USERS = 'admin_user_browser';
     const ACTION_EXPORT_USERS = 'exporter';
@@ -58,10 +62,20 @@ abstract class Manager extends Application
     const ACTION_MANAGE_METADATA = 'metadata_manager';
     const ACTION_VIEW_TERMSCONDITIONS = 'terms_conditions_viewer';
     const ACTION_EDIT_TERMSCONDITIONS = 'terms_conditions_editor';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE_USERS;
     const ACTION_QUICK_LANG = 'quick_language';
-    const PARAM_REFER = 'refer';
 
+    // Default action
+    const DEFAULT_ACTION = self :: ACTION_BROWSE_USERS;
+
+    // Section
+    const SECTION_MY_ACCOUNT = 'my_account';
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
     {
         parent :: __construct($request, $user, $application);

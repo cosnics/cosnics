@@ -39,7 +39,7 @@ class UserSettingsComponent extends Manager
      */
     public function run()
     {
-        Page :: getInstance()->setSection('my_account');
+        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
         $context = Request :: get(self :: PARAM_CONTEXT);
 

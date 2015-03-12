@@ -7,6 +7,7 @@ use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: tracking_manager.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
@@ -22,11 +23,15 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'tracking';
+
+    // Parameters
     const PARAM_EVENT_ID = 'event_id';
     const PARAM_TRACKER_ID = 'track_id';
     const PARAM_REF_ID = 'ref_id';
     const PARAM_TYPE = 'type';
     const PARAM_EXTRA = 'extra';
+
+    // Actions
     const ACTION_BROWSE_EVENTS = 'admin_event_browser';
     const ACTION_VIEW_EVENT = 'admin_event_viewer';
     const ACTION_CHANGE_ACTIVE = 'activity_changer';
@@ -35,22 +40,19 @@ abstract class Manager extends Application
     const ACTION_EMPTY_TRACKER = 'empty_tracker';
     const ACTION_EMPTY_EVENT_TRACKERS = 'empty_event_tracker';
     const ACTION_ARCHIVE = 'archiver';
+
+    // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_EVENTS;
 
-    private $tdm;
-
-    private function get_tracking_data_manager()
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
+     */
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
     {
-        if ($this->tdm == null)
-        {
-            $this->tdm = $this->tdm = DataManager :: get_instance();
-        }
-        return $this->tdm;
-    }
+        parent :: __construct($request, $user, $application);
 
-    public function set_tracking_data_manager(DataManager $tdm)
-    {
-        $this->tdm = $tdm;
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }
 
     /**

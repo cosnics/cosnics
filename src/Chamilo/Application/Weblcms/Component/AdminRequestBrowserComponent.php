@@ -52,7 +52,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        Page :: getInstance()->setSection('admin');
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
 
         $this->request_type = Request :: get(self :: PARAM_REQUEST_TYPE);
         $this->request_view = Request :: get(self :: PARAM_REQUEST_VIEW);

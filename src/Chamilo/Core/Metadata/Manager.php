@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * A metadata manager
@@ -49,6 +50,17 @@ abstract class Manager extends Application
     const ACTION_CONTROLLED_VOCABULARY = 'controlled_vocabulary';
 
     private $display_order_total = array();
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
+     */
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    {
+        parent :: __construct($request, $user, $application);
+
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
+    }
 
     /**
      * Returns an array with all the metadata for a content-object array key =

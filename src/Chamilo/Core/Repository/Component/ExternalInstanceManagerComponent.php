@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -16,7 +15,6 @@ class ExternalInstanceManagerComponent extends Manager
 
     public function run()
     {
-        Page :: getInstance()->setSection('external_repository');
         \Chamilo\Core\Repository\External\Manager :: launch($this);
     }
 }

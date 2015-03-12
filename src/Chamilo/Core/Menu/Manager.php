@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -30,6 +31,17 @@ abstract class Manager extends Application
     const PARAM_DIRECTION_UP = 'up';
     const PARAM_DIRECTION_DOWN = 'down';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
+     */
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    {
+        parent :: __construct($request, $user, $application);
+
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
+    }
 
     public function get_item_creation_url()
     {

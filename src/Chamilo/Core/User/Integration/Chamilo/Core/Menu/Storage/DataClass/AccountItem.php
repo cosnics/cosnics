@@ -20,7 +20,7 @@ class AccountItem extends Item
      */
     public function get_section()
     {
-        return 'my_account';
+        return \Chamilo\Core\User\Manager :: SECTION_MY_ACCOUNT;
     }
 
     /**
