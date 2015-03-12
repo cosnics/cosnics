@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Exception;
 use PEAR;
 use XML_Unserializer;
-use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *

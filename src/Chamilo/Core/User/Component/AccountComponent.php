@@ -30,6 +30,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  */
 class AccountComponent extends Manager implements NoContextComponent
 {
+
     /**
      * Runs this component and displays its output.
      */
@@ -43,7 +44,7 @@ class AccountComponent extends Manager implements NoContextComponent
             throw new NotAllowedException();
         }
 
-        Page :: getInstance()->setSection('my_account');
+        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
         $user = $this->get_user();
 

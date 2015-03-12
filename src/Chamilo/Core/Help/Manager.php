@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: help_manager.class.php 226 2009-11-13 14:44:03Z chellee $
@@ -23,7 +24,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  */
 
 /**
- * A user manager provides some functionalities to the admin to manage his users. For each functionality a component is
+ * A user manager provides some functionalities to the admin to manage his users.
+ * For each functionality a component is
  * available.
  */
 abstract class Manager extends Application
@@ -33,6 +35,17 @@ abstract class Manager extends Application
     const ACTION_UPDATE_HELP_ITEM = 'updater';
     const ACTION_BROWSE_HELP_ITEMS = 'browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE_HELP_ITEMS;
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
+     */
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    {
+        parent :: __construct($request, $user, $application);
+
+        Page :: getInstance()->setSection('Chamilo\Core\Admin');
+    }
 
     public function count_help_items($condition)
     {

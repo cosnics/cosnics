@@ -27,7 +27,7 @@ class AdditionalAccountInformationComponent extends Manager
      */
     public function run()
     {
-        Page :: getInstance()->setSection('my_account');
+        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
         $form_executer = new \Chamilo\Configuration\Form\Executer(
             $this,
