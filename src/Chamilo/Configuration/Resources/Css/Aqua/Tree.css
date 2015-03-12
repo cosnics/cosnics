@@ -1,0 +1,441 @@
+/*****************************************************
+ *  TREEMENU STYLES                                  *
+ *****************************************************/
+ul.tree-menu,ul.tree-menu ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}
+
+ul.tree-menu ul {
+	background-repeat: repeat-y;
+	background-image: url(../../Images/Aqua/Treemenu/tree-branch.png);
+	padding-left: 18px;
+	clear: both;
+}
+
+ul.tree-menu li {
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}
+
+ul.tree-menu li div,ul.tree-menu li div.last,ul.tree-menu li div.collapse,ul.tree-menu li div.lastCollapse,ul.tree-menu li div.expand,ul.tree-menu li div.lastExpand
+	{
+	padding-left: 18px;
+	background-repeat: no-repeat;
+	height: 18px;
+	clear: both;
+}
+
+ul.tree-menu li div {
+	background-image: url(../../Images/Aqua/Treemenu/tree-leaf.png);
+}
+
+ul.tree-menu li div.last {
+	background-image: url(../../Images/Aqua/Treemenu/tree-leaf-end.png);
+}
+
+ul.tree-menu li div.collapse {
+	background-image: url(../../Images/Aqua/Treemenu/tree-node-open.png);
+}
+
+ul.tree-menu li div.lastCollapse {
+	background-image: url(../../Images/Aqua/Treemenu/tree-node-open-end.png);
+}
+
+ul.tree-menu li div.expand {
+	background-image: url(../../Images/Aqua/Treemenu/tree-node.png);
+}
+
+ul.tree-menu li div.lastExpand {
+	background-image: url(../../Images/Aqua/Treemenu/tree-node-end.png);
+}
+
+ul.tree-menu li div a {
+	clear: both;
+	display: block;
+	height: 18px;
+	padding-left: 21px;
+	background-repeat: no-repeat;
+	background-position: left top;
+	background-image: url(../../Images/Aqua/Treemenu/tree-document.png);
+	white-space: nowrap;
+	font-weight: bold;
+}
+
+ul.tree-menu li div a.selected {
+	background-color: #ddecf7;
+}
+
+ul.tree-menu li div a.lastSelected {
+	border: 1px dotted #d4d4d4;
+	margin-left: -1px;
+	height: 16px;
+}
+
+ul.tree-menu li div a.disabled {
+	color: #9f9f9f;
+	cursor: default;
+}
+
+ul.tree-menu li div img {
+	height: 16px;
+	margin-left: 2px;
+	position: relative;
+	margin-top: -1px;
+	vertical-align: middle;
+}
+
+/*
+ * Special treemenu icons
+ */
+ul.tree-menu li div a.home {
+	background-image: url(../../Images/Aqua/Treemenu/home.png);
+}
+
+ul.tree-menu li div a.user {
+	background-image: url(../../Images/Aqua/Treemenu/user.png);
+}
+
+ul.tree-menu li div a.feed {
+	background-image: url(../../Images/Aqua/Treemenu/feed.png);
+}
+
+ul.tree-menu li div a.streaming {
+	background-image: url(../../Images/Aqua/Treemenu/streaming.png);
+}
+
+ul.tree-menu li div a.trash {
+	background-image: url(../../Images/Aqua/Treemenu/trash.png);
+}
+
+ul.tree-menu li div a.trash_full {
+	background-image: url(../../Images/Aqua/Treemenu/trash_full.png);
+}
+
+ul.tree-menu li div a.quota {
+	background-image: url(../../Images/Aqua/Treemenu/quota.png);
+}
+
+ul.tree-menu li div a.userview {
+	background-image: url(../../Images/Aqua/Treemenu/userview.png);
+}
+
+ul.tree-menu li div a.publication {
+	background-image: url(../../Images/Aqua/Treemenu/publication.png);
+}
+
+ul.tree-menu li div a.create {
+	background-image: url(../../Images/Aqua/Treemenu/create.png);
+}
+
+ul.tree-menu li div a.manage {
+	background-image: url(../../Images/Aqua/Treemenu/manage.png);
+}
+
+ul.tree-menu li div a.rights {
+	background-image: url(../../Images/Aqua/Treemenu/rights.png);
+}
+
+ul.tree-menu li div a.import {
+	background-image: url(../../Images/Aqua/Treemenu/import.png);
+}
+
+ul.tree-menu li div a.external_instance {
+	background-image: url(../../Images/Aqua/Treemenu/external_instance.png);
+}
+
+ul.tree-menu li div a.search_results {
+	background-image: url(../../Images/Aqua/Treemenu/search.png);
+}
+
+ul.tree-menu li div a.shared_objects {
+	background-image: url(../../Images/Aqua/Treemenu/shared_objects.png);
+}
+
+ul.tree-menu li div a.template {
+	background-image: url(../../Images/Aqua/Treemenu/template.png);
+}
+
+ul.tree-menu li div a.category {
+	background-image: url(../../Images/Aqua/Treemenu/tree-folder-closed.png);
+}
+
+ul.tree-menu li div a.hidden {
+	background-image: url(../../Images/Aqua/Treemenu/hidden.png);
+}
+
+ul.tree-menu li div a.google_docs_pdf {
+	background-image: url(../../Images/Aqua/file/extension/pdf/16.png);
+}
+
+ul.tree-menu li div a.google_docs_document {
+	background-image:
+		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/document.png);
+}
+
+ul.tree-menu li div a.google_docs_presentation {
+	background-image:
+		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/presentation.png);
+}
+
+ul.tree-menu li div a.google_docs_spreadsheet {
+	background-image:
+		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/spreadsheet.png);
+}
+
+ul.tree-menu li div a.survey {
+	background-image: url(../../Images/Aqua/Treemenu/survey.png);
+}
+
+ul.tree-menu li div a.survey_finished {
+	background-image: url(../../Images/Aqua/Treemenu/survey_finished.png);
+}
+
+ul.tree-menu li div a.divider {
+	background-repeat: repeat-x;
+	background-image: url(../../Images/Aqua/Treemenu/tree-divider.png);
+	margin-left: 0px;
+	margin-right: 0px;
+	cursor: default;
+}
+
+ul.tree-menu li.current_path>div a.category,ul.tree-menu li.current>div a.category
+	{
+	background-image: url(../../Images/Aqua/Treemenu/tree-folder-open.png);
+}
+
+ul.tree-menu li div a.new_category {
+	background-image:
+		url(../../Images/Aqua/Treemenu/tree-folder-closed-new.png);
+}
+
+ul.tree-menu li.current_path>div a.new_category,ul.tree-menu li.current>div a.new_category
+	{
+	background-image:
+		url(../../Images/Aqua/Treemenu/tree-folder-open-new.png);
+}
+
+ul.tree-menu li div a.invisible_category {
+	color: #666;
+	background-image:
+		url(../../Images/Aqua/Treemenu/tree-folder-closed-invisible.png);
+}
+
+ul.tree-menu li.current_path>div a.invisible_category,ul.tree-menu li.current>div a.invisible_category
+	{
+	color: #666;
+	background-image:
+		url(../../Images/Aqua/Treemenu/tree-folder-open-invisible.png);
+}
+
+ul.tree-menu li.current>div a {
+	text-decoration: underline;
+}
+
+/*
+ul.tree-menu li.current_path ul li div a.category
+{
+	background-image: url(../../Images/Aqua/Treemenu/tree-folder-closed.png);
+}
+
+ul.tree-menu li.current_path ul li.current_path div a.category
+{
+	background-image: url(../../Images/Aqua/Treemenu/tree-folder-open.png);
+}
+*/
+ul.tree-menu li div a.end_node {
+	background-image: url(../../Images/Aqua/Treemenu/end-node.png);
+}
+
+ul.tree-menu li div a.no_link {
+	color: #797268;
+	cursor: default;
+}
+
+ul.tree-menu li div a.type_user {
+	background-image: url(../../Images/Aqua/Treemenu/user.png);
+}
+
+ul.tree-menu li div a.type_user_platform {
+	background-image: url(../../Images/Aqua/Treemenu/user_platform.png);
+}
+
+ul.tree-menu li div a.type_group {
+	background-image: url(../../Images/Aqua/Treemenu/group.png);
+}
+
+/*************
+ * TOOL MENU *
+ *************/
+div.tool_bar {
+	background-color: #eef5fa;
+	border: 1px solid #b5cae7;
+	padding: 10px;
+	position: fixed;
+	text-align: left;
+}
+
+div.tool_bar div.divider {
+	background-color: #4271B5;
+	margin: 10px 0px 10px 0px;
+	line-height: 1px;
+	height: 1px;
+	font-size: 1px;
+}
+
+div.tool_bar #tool_bar_hide_container {
+	display: none;
+	text-align: center;
+	width: 18px;
+	height: 36px;
+	position: absolute;
+	top: 50%;
+	margin-top: -18px;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#tool_bar_show {
+	display: none;
+}
+
+#tool_bar_hide img {
+	margin: 10px 5px 11px 5px;
+}
+
+#tool_bar_show img {
+	margin: 10px 5px 11px 5px;
+}
+
+/***************************
+ * TOOL MENU IN LEFT MODUS *
+ ***************************/
+div.tool_bar_left {
+	border-left: 0px;
+	left: 0px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+}
+
+#tool_browser_left {
+	margin-left: 180px;
+}
+
+/****************************
+ * TOOL MENU IN RIGHT MODUS *
+ ****************************/
+div.tool_bar_right {
+	width: 142px;
+	padding-left: 28px;
+	border-right: 0px;
+	right: 0px;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-topleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-top-left-radius: 10px;
+}
+
+#tool_browser_right {
+	margin-right: 180px;
+}
+
+/********************************
+ * TOOL MENU IN LEFT ICON MODUS *
+ ********************************/
+div.tool_bar_icon_left {
+	width: 34px;
+	border-left: 0px;
+	left: 0px;
+}
+
+#tool_browser_icon_left {
+	margin-left: 54px;
+}
+
+/*********************************
+ * TOOL MENU IN RIGHT ICON MODUS *
+ *********************************/
+div.tool_bar_icon_right {
+	width: 16px;
+	padding-left: 28px;
+	border-right: 0px;
+	right: 0px;
+}
+
+#tool_browser_icon_right {
+	margin-right: 54px;
+}
+
+/****************************************
+ * TOOL MENU IN LEFT OR LEFT ICON MODUS *
+ ****************************************/
+div.tool_bar_left #tool_bar_hide_container.hide,div.tool_bar_icon_left #tool_bar_hide_container.hide
+	{
+	right: 0px;
+	margin-right: -1px;
+	background-image:
+		url(../../Images/Aqua/action_action_bar_left_hide_background.png);
+}
+
+div.tool_bar_left #tool_bar_hide_container.show,div.tool_bar_icon_left #tool_bar_hide_container.show
+	{
+	right: -18px;
+	margin-left: 0px;
+	background-image:
+		url(../../Images/Aqua/action_action_bar_left_show_background.png);
+}
+
+/******************************************
+ * TOOL MENU IN RIGHT OR RIGHT ICON MODUS *
+ ******************************************/
+div.tool_bar_right #tool_bar_hide_container.hide,div.tool_bar_icon_right #tool_bar_hide_container.hide
+	{
+	left: 0px;
+	margin-left: -1px;
+	background-image:
+		url(../../Images/Aqua/action_action_bar_right_hide_background.png);
+}
+
+div.tool_bar_right #tool_bar_hide_container.show,div.tool_bar_icon_right #tool_bar_hide_container.show
+	{
+	left: -18px;
+	margin-right: 0px;
+	background-image:
+		url(../../Images/Aqua/action_action_bar_right_show_background.png);
+}
+
+/**************************
+ * TOOL MENU LIST OPTIONS *
+ **************************/
+div.tool_menu ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+div.tool_menu ul li.tool_list_menu {
+	padding: 2px 0px 4px 22px;
+	margin: 0px;
+	list-style: none;
+	background-repeat: no-repeat;
+}
+
+div.tool_menu ul li.title {
+	padding: 0px 0px 10px 0px;
+	font-weight: bold;
+}
+
+div.tool_menu ul li.tool_list_menu a {
+	top: -3px;
+	position: relative;
+}
+
+div.tool_menu div.splitter {
+	margin: 10px 0 10px 0;
+	border-bottom: 1px dotted #4271B5;
+	height: 0px;
+}
