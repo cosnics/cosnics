@@ -79,6 +79,8 @@ class DublinCoreDefaultsInstaller
         
         $schemas[] = array('name' => 'XML', 'namespace' => 'xml', 'url' => 'http://www.w3.org/2001/XMLSchema');
         
+        DataClassCache :: reset();
+        
         foreach ($schemas as $schema_array)
         {
             try
@@ -105,7 +107,6 @@ class DublinCoreDefaultsInstaller
             $schema->set_fixed(true);
             
             $succes = $schema->is_identified() ? $schema->update() : $schema->create();
-            DataClassCache :: reset();
             
             if ($succes)
             {
