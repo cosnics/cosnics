@@ -22,10 +22,9 @@ class FeatureContext extends MinkContext
         $installer = new CommandLineInstaller($config_file);
         $installer->run();
     }
-    
+
     /**
      * logs the user in as an admin user
-     *
      * @Given /^I am logged in$/
      */
     public function iAmLoggedIn()
@@ -38,7 +37,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if a notification div is available
-     *
      * @Then /^I should see a success box$/
      */
     public function iShouldSeeASuccessBox()
@@ -48,7 +46,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if a notification div is available
-     *
      * @Then /^I should see an error box$/
      */
     public function iShouldSeeAnErrorBox()
@@ -58,7 +55,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if a notification div is not available
-     *
      * @Then /^I should not see an error box$/
      */
     public function iShouldNotSeeAnErrorBox()
@@ -68,7 +64,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if an exception is shown on the page
-     *
      * @Then /^I should see an exception$/
      */
     public function iShouldSeeAnException()
@@ -78,7 +73,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if no exception is shown on the page
-     *
      * @Then /^I should not see an exception$/
      */
     public function iShouldNotSeeAnExceptionBox()
@@ -88,7 +82,6 @@ class FeatureContext extends MinkContext
 
     /**
      * Checks if the page is successfully loaded
-     *
      * @Then /^the page should be successfully loaded$/
      */
     public function thePageShouldBeSuccessfullyLoaded()
@@ -101,31 +94,30 @@ class FeatureContext extends MinkContext
 
     /**
      * Go to an application
-     *
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)"$/
+     *
      * @param unknown $application
      */
     public function iGoToApplication($application)
     {
-        $this->visit(Redirect :: get_web_link('index.php', array(
-            Application :: PARAM_CONTEXT => $application
-        )));
+        $redirect = new Redirect(array(Application :: PARAM_CONTEXT => $application));
+
+        $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
     }
 
     /**
      * Go to an application and do an action
-     *
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)" and do action "(?P<action>[^"]+)"$/
+     *
      * @param unknown $application
      */
     public function iAmInApplicationAndDoAction($application, $action)
     {
-        $this->visit(Redirect :: get_web_link('index.php', array(
-            Application :: PARAM_CONTEXT => $application,
-            Application :: PARAM_ACTION => $action
-        )));
+        $redirect = new Redirect(
+            array(Application :: PARAM_CONTEXT => $application, Application :: PARAM_ACTION => $action));
+
+        $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
     }
-
 }

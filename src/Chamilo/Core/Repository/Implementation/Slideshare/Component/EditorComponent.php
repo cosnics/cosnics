@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Implementation\Slideshare\Component;
 use Chamilo\Core\Repository\Implementation\Slideshare\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Slideshare\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -36,16 +35,8 @@ class EditorComponent extends Manager implements DelegateComponent
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
-            if ($this->is_stand_alone())
-            {
-                Redirect :: web_link(
-                    Path :: getInstance()->getBasePath(true) . 'common/launcher/index.php',
-                    $parameters);
-            }
-            else
-            {
-                Redirect :: web_link(Path :: getInstance()->getBasePath(true) . 'index.php', $parameters);
-            }
+            $redirect = new Redirect($parameters);
+            $redirect->toUrl();
         }
         else
         {

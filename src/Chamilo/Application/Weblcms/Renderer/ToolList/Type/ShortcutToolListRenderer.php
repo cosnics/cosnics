@@ -65,8 +65,10 @@ class ShortcutToolListRenderer extends ToolListRenderer
                 Application :: PARAM_ACTION => Manager :: ACTION_VIEW_COURSE,
                 Manager :: PARAM_TOOL => $tool->get_name());
 
-            $html[] = '<a href="' . Redirect :: get_url($params, array(Manager :: PARAM_CATEGORY), true) . '" title="' .
-                 $title . '">';
+            $redirect = new Redirect($params, array(Manager :: PARAM_CATEGORY), true);
+            $url = $redirect->getUrl();
+
+            $html[] = '<a href="' . $url . '" title="' . $title . '">';
             $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
                 \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
                 'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/> ';

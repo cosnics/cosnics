@@ -87,12 +87,13 @@ class ExternalCalendarForm extends ContentObjectForm
         {
             $maximum_size = $calculator->get_available_user_disk_quota();
 
-            $url = Redirect :: get_url(
+            $redirect = new Redirect(
                 array(
                     \Chamilo\Libraries\Architecture\Application\Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
                     \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
                     \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
                     \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
+            $url = $redirect->getUrl();
 
             $allow_upgrade = PlatformSetting :: get(
                 'allow_upgrade',

@@ -33,29 +33,29 @@ class Manager
     static public function process_instance(Instance $instance)
     {
         $category_name = Translation :: get('ExternalRepositories');
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_TITLE), 
+            new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_TITLE),
             new StaticConditionVariable($category_name));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_ISOCODE), 
+            new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_ISOCODE),
             new StaticConditionVariable(Translation :: get_instance()->get_language()));
-        
+
         $parameters = new DataClassDistinctParameters(new AndCondition($conditions), ItemTitle :: PROPERTY_ITEM_ID);
         DataClassResultCache :: truncate(ItemTitle :: class_name());
         $titles = DataManager :: distinct(ItemTitle :: class_name(), $parameters);
-        
+
         if (count($titles) > 0)
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE), 
+                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE),
                 new StaticConditionVariable(CategoryItem :: class_name()));
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_ID), 
+                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_ID),
                 $titles);
-            
+
             $category = DataManager :: retrieve(CategoryItem :: class_name(), new AndCondition($conditions));
         }
         else
@@ -63,7 +63,7 @@ class Manager
             $languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
             $category = new CategoryItem();
             $category->set_parent(0);
-            
+
             $item_titles = new ItemTitles();
             foreach ($languages as $isocode => $language)
             {
@@ -72,24 +72,26 @@ class Manager
                 $item_title->set_isocode($isocode);
                 $item_titles->add($item_title);
             }
-            
+
             $category->set_titles($item_titles);
             if (! $category->create())
             {
                 return false;
             }
         }
-        
+
         $item = new LinkApplicationItem();
-        
+
         $item->set_section($instance->get_type());
         $item->set_target(LinkItem :: TARGET_SELF);
         $item->set_parent($category->get_id());
-        $item->set_url(
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => $instance->get_implementation(), 
-                    \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $instance->get_id())));
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => $instance->get_implementation(),
+                \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $instance->get_id()));
+
+        $item->set_url($redirect->getUrl());
         if (! $item->create())
         {
             return false;

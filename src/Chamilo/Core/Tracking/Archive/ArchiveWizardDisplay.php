@@ -47,39 +47,24 @@ class ArchiveWizardDisplay extends HTML_QuickForm_Action_Display
      */
     public function _renderForm($current_page)
     {
-        /*
-         * $renderer = $current_page->defaultRenderer(); $current_page->setRequiredNote('<font color="#FF0000">*</font>
-         * ' . Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES)); $element_template =
-         * "\n\t<tr>\n\t\t<td valign=\"top\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span> <!-- END
-         * required -->{label}</td>\n\t\t<td valign=\"top\" align=\"left\"><!-- BEGIN error --><span style=\"color:
-         * #ff0000;font-size:x-small;margin:2px;\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>";
-         * $renderer->setElementTemplate($element_template); $header_template = "\n\t<tr>\n\t\t<td valign=\"top\"
-         * colspan=\"2\">{header}</td>\n\t</tr>"; $renderer->setHeaderTemplate($header_template); HTML_QuickForm ::
-         * setRequiredNote('<font color="red">*</font> <small>' . Translation :: get('ThisFieldIsRequired', null,
-         * Utilities :: COMMON_LIBRARIES) . '</small>'); $current_page->accept($renderer);
-         */
         $trail = BreadcrumbTrail :: get_instance();
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER));
         $trail->add(
             new Breadcrumb(
-                Redirect :: get_link(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                        \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE),
+                $redirect->getUrl(),
                 Translation :: get('Administration', null, \Chamilo\Core\Admin\Manager :: context())));
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
+                DynamicTabsRenderer :: PARAM_SELECTED_TAB => Manager :: APPLICATION_NAME));
         $trail->add(
-            new Breadcrumb(
-                Redirect :: get_link(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                        \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => Manager :: APPLICATION_NAME),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE),
-                Translation :: get('Tracking')));
+            new Breadcrumb($redirect->getUrl(), Translation :: get('Tracking')));
         $trail->add(
             new Breadcrumb(
                 $this->parent->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_ARCHIVE)),
@@ -101,6 +86,7 @@ class ArchiveWizardDisplay extends HTML_QuickForm_Action_Display
         foreach ($all_pages as $page)
         {
             $page_number ++;
+
             if ($page->get_title() == $current_page->get_title())
             {
                 $current_page_number = $page_number;

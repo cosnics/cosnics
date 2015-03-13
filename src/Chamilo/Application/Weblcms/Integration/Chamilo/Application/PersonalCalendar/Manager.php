@@ -27,26 +27,26 @@ class Manager implements CalendarInterface
     {
         $condition = $this->get_conditions($renderer->get_user());
         $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             $condition);
         $result = array();
         while ($publication = $publications->next_result())
         {
             $course = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                Course :: class_name(), 
+                Course :: class_name(),
                 $publication->get_course_id());
             if (! WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
-                WeblcmsRights :: VIEW_RIGHT, 
-                $publication->get_id(), 
-                WeblcmsRights :: TYPE_PUBLICATION, 
+                WeblcmsRights :: VIEW_RIGHT,
+                $publication->get_id(),
+                WeblcmsRights :: TYPE_PUBLICATION,
                 $publication->get_course_id()))
             {
                 continue;
             }
             $parser = EventParser :: factory(
-                $publication->get_content_object(true), 
-                $from_date, 
-                $to_date, 
+                $publication->get_content_object(true),
+                $from_date,
+                $to_date,
                 Event :: class_name());
             $parsed_events = $parser->get_events();
             foreach ($parsed_events as &$parsed_event)
@@ -59,7 +59,10 @@ class Manager implements CalendarInterface
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $publication->get_course_id();
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $publication->get_tool();
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication->get_id();
-                $link = Redirect :: get_link($parameters);
+
+                $redirect = new Redirect($parameters);
+                $link = $redirect->getUrl();
+
                 $parsed_event->set_url($link);
                 $parsed_event->set_source(
                     Translation :: get('Course', null, \Chamilo\Application\Weblcms\Manager :: context()) . ' - ' .
@@ -84,30 +87,30 @@ class Manager implements CalendarInterface
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_TOOL), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_TOOL),
             new StaticConditionVariable('calendar'));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_HIDDEN), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_HIDDEN),
             new StaticConditionVariable(0));
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_COURSE_ID), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID),
             $course_ids);
         $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
             new StaticConditionVariable(CalendarEvent :: class_name()));
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID), 
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
-            ContentObject :: get_table_name(), 
-            $subselect_condition, 
-            null, 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+            ContentObject :: get_table_name(),
+            $subselect_condition,
+            null,
             \Chamilo\Core\Repository\Storage\DataManager :: get_instance());
         return new AndCondition($conditions);
     }

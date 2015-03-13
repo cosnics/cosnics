@@ -4,11 +4,13 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Configuration\Configuration;
 
 /**
  * $Id: change_user.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -38,18 +40,9 @@ class ChangeUserComponent extends Manager
             \Chamilo\Libraries\Platform\Session\Session :: register('_as_admin', $this->get_user_id());
             \Chamilo\Libraries\Platform\Session\Session :: register('checkChamiloURL', $checkurl);
 
-            $login_page = PlatformSetting :: get('page_after_login');
-            if ($login_page == 'home')
-            {
-                header('Location: index.php');
-            }
-            else
-            {
-                header('Location: index.php?application=' . $login_page);
-            }
-
-            // $this->redirect(Translation :: get('LoggedInAsUser'), false, $parameters, array(), false, Redirect ::
-            // TYPE_LINK, Redirect :: TYPE_INDEX);
+            $loginApplication = Configuration :: get('Chamilo\Core\Admin', 'page_after_login');
+            $response = new RedirectResponse($this->get_link(array(Application :: PARAM_CONTEXT => $loginApplication)));
+            $response->send();
         }
         else
         {

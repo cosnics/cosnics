@@ -124,7 +124,9 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
-            $url_title = Redirect :: get_url($params);
+
+            $redirect = new Redirect($params);
+            $url_title = $redirect->getUrl();
 
             if ($pub_submissions[$publication[ContentObjectPublication :: PROPERTY_ID]])
             {

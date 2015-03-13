@@ -54,7 +54,8 @@ class LocationResult extends LocationResult
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $location->get_tool_id();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
-        
-        return Redirect :: get_url($parameters);
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 }

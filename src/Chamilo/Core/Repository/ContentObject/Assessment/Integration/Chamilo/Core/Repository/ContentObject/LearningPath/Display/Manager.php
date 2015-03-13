@@ -62,7 +62,8 @@ abstract class Manager extends Application
         $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $node->get_content_object()->get_id();
         $parameters[\Chamilo\Core\Repository\Component\BuilderComponent :: PARAM_POPUP] = 1;
 
-        $url = Redirect :: get_link($parameters);
+        $redirect = new Redirect($parameters);
+        $url = $redirect->getUrl();
 
         $tabs[] = new DynamicVisualTab(
             'builder',

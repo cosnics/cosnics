@@ -10,13 +10,13 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\Da
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Mail\Mail;
-use Chamilo\Libraries\Platform\Configuration\Configuration;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Application\Survey\Cron\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -37,54 +37,54 @@ class ExportJobManager
 
     static function launch_job()
     {
-        
+
         // $conditions = array();
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_UUID, '0');
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_STATUS, ExportJob :: STATUS_NEW);
         // $condition = new AndCondition($conditions);
         // $export_jobs = DataManager :: get_instance()->retrieve_export_jobs($condition);
-        
+
         // $UUID = uniqid($_SERVER['SERVER_ADDR'], true);
-        
+
         // echo ' UUID=' . $UUID . "\n";
-        
+
         // while ($export_job = $export_jobs->next_result())
         // {
         // $export_job->set_UUID($UUID);
         // $export_job->update();
         // }
-        
+
         // $conditions = array();
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_UUID, $UUID);
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_STATUS, ExportJob :: STATUS_NEW);
         // $condition = new AndCondition($conditions);
         // $export_jobs = DataManager :: get_instance()->retrieve_export_jobs($condition);
-        
+
         // while ($export_job = $export_jobs->next_result())
         // {
-        
+
         // if ($export_job->get_export_type() == ExportJob :: EXPORT_TYPE_TEMPLATE_EXPORT)
         // {
-        
+
         // $export_template = DataManager ::
         // get_instance()->retrieve_export_template_by_id($export_job->get_export_template_id());
-        
+
         // $condition = new EqualityCondition(Export :: PROPERTY_EXPORT_JOB_ID,
         // $export_job->get_id());
-        
+
         // $export_tracker = Tracker :: get_singular_data(Export :: CLASS_NAME,
         // \Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $condition);
-        
+
         // $export_type = 'xlsx';
         // $export = Exporter :: factory($export_template, $export_template->get_publication_id());
         // $file = $export->save();
-        
+
         // $conditions = array();
         // $conditions[] = new EqualityCondition(Registration :: PROPERTY_TYPE, Registration :: TYPE_CONTENT_OBJECT);
         // $conditions[] = new EqualityCondition(Registration :: PROPERTY_NAME, File :: get_type_name());
         // $conditions[] = new EqualityCondition(Registration :: PROPERTY_STATUS, true);
         // $condition = new AndCondition($conditions);
-        
+
         // $registration = \Chamilo\Core\Admin\Storage\DataManager :: count_registrations($condition);
         // if ($registration > 0)
         // {
@@ -94,9 +94,9 @@ class ExportJobManager
         // $html_object->set_parent_id(0);
         // $html_object->set_owner_id($export_job->get_user_id());
         // $html_object->set_filename($export->get_file_name() . '.' . $export_type);
-        
+
         // $html_object->set_in_memory_file($file);
-        
+
         // if (! $html_object->create())
         // {
         // $status = self :: STATUS_NO_DOCUMENT_CREATED;
@@ -105,37 +105,37 @@ class ExportJobManager
         // {
         // $status = self :: STATUS_DOCUMENT_CREATED;
         // }
-        
+
         // }
         // else
         // {
         // $status = self :: STATUS_NO_DOCUMENT_REGISTRATION;
-        
+
         // }
         // }
         // elseif ($export_job->get_export_type() == ExportJob :: EXPORT_TYPE_SYNCHRONIZE_ANSWERS)
         // {
-        
+
         // $condition = new EqualityCondition(SynchronizeAnswer :: PROPERTY_SURVEY_PUBLICATION_ID,
         // $export_job->get_publication_id());
         // $synchronize_tracker = Tracker :: get_singular_data(SynchronizeAnswer :: CLASS_NAME,
         // \Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $condition);
-        
+
         // if ($synchronize_tracker)
         // {
         // $id = $export_job->get_publication_id();
         // ExportJobManager :: delete_old_tracker_data($id);
         // ExportJobManager :: update_tracker_data($id);
-        
+
         // $status = self :: STATUS_ANSWERS_SYNCHRONIZED;
         // }
         // else
         // {
         // $status = self :: STATUS_ANSWERS_NOT_SYNCHRONIZED;
         // }
-        
+
         // }
-        
+
         // switch ($status)
         // {
         // case self :: STATUS_NO_DOCUMENT_REGISTRATION :
@@ -152,7 +152,7 @@ class ExportJobManager
         // ExportJobManager :: send_mail($export_job->get_user_id(), ExportJobManager :: get_mail_message(self ::
         // TYPE_DOCUMENT_NOT_AVAILABLE, $export_template->get_publication_id()), $export_template);
         // break;
-        
+
         // case self :: STATUS_NO_DOCUMENT_CREATED :
         // $export_job->set_status(ExportJob :: STATUS_NOT_DONE);
         // $export_job->update();
@@ -167,7 +167,7 @@ class ExportJobManager
         // ExportJobManager :: send_mail($export_job->get_user_id(), ExportJobManager :: get_mail_message(self ::
         // TYPE_EXPORT_NOT_FINISHED, $export_template->get_publication_id()), $export_template);
         // break;
-        
+
         // case self :: STATUS_DOCUMENT_CREATED :
         // $export_job->set_status(ExportJob :: STATUS_DONE);
         // $export_job->update();
@@ -214,7 +214,7 @@ class ExportJobManager
         // echo ' Job id: ' . $export_job->get_id() . "\n";
         // break;
         // }
-        
+
         // }
     }
 
@@ -222,7 +222,7 @@ class ExportJobManager
     {
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($user_id);
         $to_email = $user->get_email();
-        
+
         $from = array();
         $name = PlatformSetting :: get('administrator_firstname', 'admin') . ' ' .
              PlatformSetting :: get('administrator_surname', 'admin');
@@ -237,14 +237,14 @@ class ExportJobManager
         {
             $header = Translation :: get('AnswerSynchronizationHeader');
         }
-        
+
         $mail = Mail :: factory($header, $message, $to_email, $from);
-        
+
         $reply = array();
         $reply[Mail :: NAME] = $name;
         $reply[Mail :: EMAIL] = $email;
         $mail->set_reply($reply);
-        
+
         // Check whether it was sent successfully
         if ($mail->send() === FALSE)
         {
@@ -261,85 +261,94 @@ class ExportJobManager
     static function get_mail_message($type, $publication_id, $document_id)
     {
         $message = array();
-        
-        $config = Configuration :: get_instance();
-        $base_url = $config->get_parameter('general', 'root_web');
-        
+
         switch ($type)
         {
             case self :: TYPE_DOCUMENT_NOT_AVAILABLE :
                 $message[] = Translation :: get("ExportDocumentNotAvailable");
                 $click_message = Translation :: get('ClickToGoToSurveyTool');
                 $parameters = array();
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_BROWSE;
-                $url = $base_url .
-                     Redirect :: get_link(\Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $parameters);
+
+                $redirect = new Redirect($parameters);
+                $url = $redirect->getUrl();
                 break;
             case self :: TYPE_EXPORT_FINISHED :
                 $message[] = Translation :: get("ExportAvailable");
                 $click_message = Translation :: get('ClickTGoToExport');
                 $parameters = array();
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager :: package();
                 $parameters[\Chamilo\Core\Repository\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
                 $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $document_id;
-                $url = $base_url .
-                     Redirect :: get_link(\Chamilo\Core\Repository\Manager :: APPLICATION_NAME, $parameters);
+
+                $redirect = new Redirect($parameters);
+                $url = $redirect->getUrl();
                 break;
             case self :: TYPE_EXPORT_NOT_FINISHED :
                 $message[] = Translation :: get("ExportNotAvailable");
                 $click_message = Translation :: get('ClickToGoToExportTool');
                 $parameters = array();
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
-                $url = $base_url .
-                     Redirect :: get_link(\Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $parameters);
+
+                $redirect = new Redirect($parameters);
+                $url = $redirect->getUrl();
                 break;
             case self :: TYPE_SYNCHRONIZATION_FINISHED :
                 $message[] = Translation :: get("AnswerSynchronizationFinished");
                 $click_message = Translation :: get('ClickToGoToExportTool');
                 $parameters = array();
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
-                $url = $base_url .
-                     Redirect :: get_link(\Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $parameters);
+
+                $redirect = new Redirect($parameters);
+                $url = $redirect->getUrl();
                 break;
             case self :: TYPE_SYNCHRONIZATION_NOT_FINISHED :
                 $message[] = Translation :: get("AnswerSynchronizationNotFinished");
                 $click_message = Translation :: get('ClickToGoToExportTool');
                 $parameters = array();
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
                 $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
-                $url = $base_url .
-                     Redirect :: get_link(\Chamilo\Application\Survey\Manager :: APPLICATION_NAME, $parameters);
+
+                $redirect = new Redirect($parameters);
+                $url = $redirect->getUrl();
                 break;
         }
-        
+
         $message[] = '<br/><br/>';
         $message[] = '<a href=' . $url . '>' . $click_message . '</a>';
-        
+
         $message[] = '<br/><br/>' . Translation :: get('OrCopyAndPasteThisText') . ':';
         $message[] = '<br/><a href=' . $url . '>' . $url . '</a>';
         $message[] = '</p>';
-        
+
         return implode(PHP_EOL, $message);
     }
 
     static public function update_tracker_data($publication_id)
     {
-        $condition = new EqualityCondition(new PropertyConditionVariable(Answer :: CLASS_NAME, Answer :: PROPERTY_PUBLICATION_ID), $publication_id);
-        $answers = DataManager::retrieves(Answer :: CLASS_NAME, new DataClassRetrievesParameters($condition));
-        
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Answer :: CLASS_NAME, Answer :: PROPERTY_PUBLICATION_ID),
+            $publication_id);
+        $answers = DataManager :: retrieves(Answer :: CLASS_NAME, new DataClassRetrievesParameters($condition));
+
         while ($raw_answer = $answers->next_result())
         {
             $complex_question_id = $raw_answer->get_question_cid();
             $object = ExportJobManager :: get_question($complex_question_id);
-            
+
             $type = $object->get_type();
-            
+
             switch ($type)
             {
                 case MultipleChoice :: get_type_name() :
                     $answer = $raw_answer->get_answer();
-                    
+
                     foreach ($answer as $option_id)
                     {
                         // $parameters = array();
@@ -363,15 +372,15 @@ class ExportJobManager
                         // $parameters);
                     }
                     break;
-                
+
                 case Matrix :: get_type_name() :
                     $answer = $raw_answer->get_answer();
-                    
+
                     foreach ($answer as $ids => $match_id)
                     {
                         $ids = explode('_', $ids);
                         $option_id = $ids[1];
-                        
+
                         // $parameters = array();
                         // $parameters[SurveyMatrixQuestionAnswerTracker :: PROPERTY_SURVEY_PARTICIPANT_ID] =
                         // $tracker->get_survey_participant_id();
@@ -392,10 +401,10 @@ class ExportJobManager
                         // \application\survey\Manager :: APPLICATION_NAME, $parameters);
                     }
                     break;
-                
+
                 case Select :: get_type_name() :
                     $answer = $raw_answer->get_answer();
-                    
+
                     foreach ($answer as $option_id)
                     {
                         // $parameters = array();
@@ -417,15 +426,15 @@ class ExportJobManager
                         // \application\survey\Manager :: APPLICATION_NAME, $parameters);
                     }
                     break;
-                
+
                 case Matching :: get_type_name() :
                     $answer = $raw_answer->get_answer();
-                    
+
                     foreach ($answer as $ids => $match_id)
                     {
                         $ids = explode('_', $ids);
                         $option_id = $ids[1];
-                        
+
                         // $parameters = array();
                         // $parameters[SurveyMatchingQuestionAnswerTracker :: PROPERTY_SURVEY_PARTICIPANT_ID] =
                         // $tracker->get_survey_participant_id();
@@ -447,10 +456,10 @@ class ExportJobManager
                         // \application\survey\Manager :: APPLICATION_NAME, $parameters);
                     }
                     break;
-                
+
                 case Open :: get_type_name() :
                     $answer = $raw_answer->get_answer();
-                    
+
                     $text = ExportJobManager :: transcode_string(array_pop($answer));
                     if (strlen(strip_tags($text)) > 0)
                     {
@@ -474,11 +483,11 @@ class ExportJobManager
                         // \application\survey\Manager :: APPLICATION_NAME, $parameters);
                     }
                     break;
-                
+
                 case Rating :: get_type_name() :
-                    
+
                     $answer = $raw_answer->get_answer();
-                    
+
                     foreach ($answer as $rating)
                     {
                         // $parameters = array();
@@ -506,7 +515,7 @@ class ExportJobManager
 
     static function delete_old_tracker_data($publication_id)
     {
-        
+
         // $condition = new EqualityCondition(SurveyMatrixQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMatrixQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -515,7 +524,7 @@ class ExportJobManager
         // {
         // $tracker->delete();
         // }
-        
+
         // $condition = new EqualityCondition(SurveyMultipleChoiceQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMultipleChoiceQuestionAnswerTracker :: CLASS_NAME,
@@ -524,7 +533,7 @@ class ExportJobManager
         // {
         // $tracker->delete();
         // }
-        
+
         // $condition = new EqualityCondition(SurveyMatchingQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyMatchingQuestionAnswerTracker :: CLASS_NAME,
@@ -533,7 +542,7 @@ class ExportJobManager
         // {
         // $tracker->delete();
         // }
-        
+
         // $condition = new EqualityCondition(SurveySelectQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveySelectQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -542,7 +551,7 @@ class ExportJobManager
         // {
         // $tracker->delete();
         // }
-        
+
         // $condition = new EqualityCondition(SurveyRatingQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyRatingQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager
@@ -551,7 +560,7 @@ class ExportJobManager
         // {
         // $tracker->delete();
         // }
-        
+
         // $condition = new EqualityCondition(SurveyOpenQuestionAnswerTracker :: PROPERTY_PUBLICATION_ID,
         // $publication_id);
         // $trackers = Tracker :: get_data(SurveyOpenQuestionAnswerTracker :: CLASS_NAME, \application\survey\Manager ::

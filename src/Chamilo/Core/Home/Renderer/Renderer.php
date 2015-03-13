@@ -87,9 +87,8 @@ abstract class Renderer
 
     public function get_url($parameters = array (), $filter = array(), $encode_entities = false)
     {
-        // $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) :
-        // $this->get_parameters());
-        return Redirect :: get_url($parameters, $filter, $encode_entities);
+        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        return $redirect->getUrl();
     }
 
     /**
@@ -100,10 +99,8 @@ abstract class Renderer
      */
     public function get_link($parameters = array (), $filter = array(), $encode_entities = false)
     {
-        // Use this untill PHP 5.3 is available
-        // Then use get_class($this) :: APPLICATION_NAME
-        // and remove the get_application_name function();
-        return Redirect :: get_link($parameters, $filter, $encode_entities);
+        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        return $redirect->getUrl();
     }
 
     public function get_home_tab_viewing_url($home_tab)

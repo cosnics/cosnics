@@ -108,7 +108,10 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $publication[ContentObjectPublication :: PROPERTY_TOOL];
                 $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
-                $link = Redirect :: get_link($parameters);
+
+                $redirect = new Redirect($parameters);
+                $link = $redirect->getUrl();
+
                 $parsed_event->set_url($link);
                 $parsed_event->set_source(
                     Translation :: get('TypeName', null, $this->get_tool_browser()->get_parent()->context()));

@@ -34,31 +34,25 @@ class DeleterComponent extends Manager
         }
 
         $trail = BreadcrumbTrail :: get_instance();
-        $trail->add(
-            new Breadcrumb(
-                Redirect :: get_link(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                        \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE),
-                Translation :: get('Administration')));
-        $trail->add(
-            new Breadcrumb(
-                Redirect :: get_link(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                        \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE),
-                Translation :: get('Group')));
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER));
+        $trail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Administration')));
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
+                DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME));
+        $trail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Group')));
+
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)),
                 Translation :: get('GroupList')));
+
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('DeleteGroup')));
         $trail->add_help('group general');
 

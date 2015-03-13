@@ -5,7 +5,6 @@ use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 require __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance();
@@ -21,21 +20,24 @@ foreach ($packageNamespaces as $packageNamespace)
     $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
          DIRECTORY_SEPARATOR;
 
-    $files = Filesystem :: get_directory_content($sourceResourceImagePath, Filesystem :: LIST_FILES, true);
+    $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'ImagesCC' .
+        DIRECTORY_SEPARATOR;
 
-    foreach ($files as $file)
-    {
-        $parts = explode('\\', $file);
-        $last = array_pop($parts);
+    Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
 
-        $parts[] = StringUtilities :: getInstance()->createString($last)->upperCamelize()->__toString();
+//     $files = Filesystem :: get_directory_content($sourceResourceImagePath, Filesystem :: LIST_FILES, true);
 
-        $newFile = implode('\\', $parts);
+//     foreach ($files as $file)
+//     {
+//         $parts = explode('\\', $file);
+//         $last = array_pop($parts);
 
-        Filesystem :: move_file($file, $newFile);
-    }
+//         $parts[] = StringUtilities :: getInstance()->createString($last)->upperCamelize()->__toString();
+
+//         $newFile = implode('\\', $parts);
+
+//         Filesystem :: move_file($file, $newFile);
+//     }
 
     echo $packageNamespace . PHP_EOL;
-
-    exit();
 }

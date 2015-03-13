@@ -137,7 +137,10 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
-            $title = '<a href="' . Redirect :: get_url($params) . '">' . $content_object->get_title() . '</a>';
+            $redirect = new Redirect($params);
+            $link = $redirect->getUrl();
+
+            $title = '<a href="' . $link . '">' . $content_object->get_title() . '</a>';
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation :: get('Title'), $title);

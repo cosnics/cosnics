@@ -111,7 +111,11 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
             $learning_path = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-            $url = '<a href="' . Redirect :: get_url($params) . '">' . $learning_path->get_title() . '</a>';
+
+            $redirect = new Redirect($params);
+            $link = $redirect->getUrl();
+
+            $url = '<a href="' . $link . '">' . $learning_path->get_title() . '</a>';
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation :: get('Title'), $url);

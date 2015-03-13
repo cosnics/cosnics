@@ -45,9 +45,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             $success = $form->create_user();
             if ($success == 1)
             {
-                // $this->redirect(Translation :: get($success ? 'UserRegistered' : 'UserNotRegistered'), ($success ?
-                // false : true), array(), array(), false, Redirect :: TYPE_LINK);
-
                 $parameters = array();
 
                 if (PlatformSetting :: get('allow_registration', self :: context()) == 2)
@@ -56,7 +53,9 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
                 }
 
                 $parameters[Application :: PARAM_CONTEXT] = '';
-                Redirect :: link($parameters);
+
+                $redirect = new Redirect($parameters);
+                $redirect->toUrl();
             }
             else
             {

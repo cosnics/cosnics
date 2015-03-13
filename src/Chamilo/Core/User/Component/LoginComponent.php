@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -40,7 +41,8 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
             if (PlatformSetting :: get('enable_terms_and_conditions', self :: context()) &&
                  ! $user->terms_conditions_uptodate())
             {
-                Redirect :: link(array(Application :: PARAM_ACTION => self :: ACTION_VIEW_TERMSCONDITIONS));
+                $redirect = new Redirect(array(Application :: PARAM_ACTION => self :: ACTION_VIEW_TERMSCONDITIONS));
+                $redirect->toUrl();
             }
 
             if (PlatformSetting :: get('prevent_double_login', self :: context()))
@@ -55,17 +57,23 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
                 $request_uris = explode("/", $request_uri);
                 $request_uri = array_pop($request_uris);
                 \Chamilo\Libraries\Platform\Session\Session :: unregister(self :: PARAM_REQUEST_URI);
-                Redirect :: write_header($request_uri);
+
+                $response = new RedirectResponse($request_uri);
+                $response->send();
             }
 
             $parameters = array(Application :: PARAM_CONTEXT => PlatformSetting :: get('page_after_login'));
-            Redirect :: link($parameters);
+
+            $redirect = new Redirect($parameters);
+            $redirect->toUrl();
         }
         else
         {
             \Chamilo\Libraries\Platform\Session\Session :: unregister('_uid');
             $parameters = array(self :: PARAM_LOGIN_FAILED => true);
-            $this->redirect($user, false, $parameters, array(), false, Redirect :: TYPE_LINK, Redirect :: TYPE_INDEX);
+
+            $redirect = new Redirect($parameters);
+            $redirect->toUrl();
         }
     }
 }

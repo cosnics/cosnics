@@ -17,18 +17,20 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
     {
         $info = new Actions(\Chamilo\Core\Repository\Manager :: context());
 
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Instance\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Instance\Manager :: ACTION_BROWSE));
         $links[] = new DynamicAction(
             Translation :: get('ManageExternalInstances'),
             Translation :: get('ManageExternalInstancesDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/ExternalInstance'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Instance\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Instance\Manager :: ACTION_BROWSE),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT));
         $links[] = new DynamicAction(
             Translation :: get(
                 'ContentObjectRelMetadataElementName',
@@ -39,14 +41,12 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 null,
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA));
         $links[] = new DynamicAction(
             Translation :: get(
                 'ContentObjectPropertyRelMetadataElementName',
@@ -57,22 +57,13 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 null,
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
-        $info->set_search(
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS));
+        $info->set_search($redirect->getUrl());
         $info->set_links($links);
 
         return $info;
@@ -81,17 +72,16 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
     public static function get_import_actions()
     {
         $links = array();
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_TEMPLATE));
         $links[] = new DynamicAction(
             Translation :: get('ImportTemplate'),
             Translation :: get('ImportTemplateDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_TEMPLATE),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
         return $links;
     }

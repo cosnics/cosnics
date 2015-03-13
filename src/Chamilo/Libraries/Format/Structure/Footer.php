@@ -199,13 +199,13 @@ class Footer
 
             if ($world == "1" || (key_exists('_uid', $_SESSION) && $world == "2"))
             {
-                $links[] = '<a href="' .
-                     htmlspecialchars(
-                        Redirect :: get_link(
-                            array(
-                                Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                                Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE))) . '">' .
-                     Translation :: get('WhoisOnline') . '</a>';
+                $redirect = new Redirect(
+                    array(
+                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                        Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE));
+
+                $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation :: get(
+                    'WhoisOnline') . '</a>';
             }
 
             $links[] = '&copy;&nbsp;' . date('Y');

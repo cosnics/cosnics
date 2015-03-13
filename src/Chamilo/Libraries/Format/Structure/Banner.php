@@ -117,14 +117,12 @@ class Banner
 
         if (! is_null(Session :: get('_as_admin')))
         {
-            $link = Redirect :: get_link(
-
+            $redirect = new Redirect(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_ADMIN_USER),
-                array(),
-                false,
-                Redirect :: TYPE_CORE);
+                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_ADMIN_USER));
+            $link = $redirect->getUrl();
+
             $output[] = '<div id="emulator">' .
                  Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
                  $this->getApplication()->get_user()->get_fullname() . ' <a href="' . $link . '">' .
@@ -147,7 +145,9 @@ class Banner
                 $output[] = '<ul id="header_quick_language"> <!-- quick language buttons -->';
 
                 $current_language = LocalSetting :: get('platform_language');
-                $current_url = Redirect :: current_url();
+
+                $redirect = new Redirect();
+                $currentUrl = $redirect->getCurrentUrl();
 
                 foreach ($languages as $isocode => $language)
                 {
@@ -157,13 +157,14 @@ class Banner
                     }
                     else
                     {
-                        $href = Redirect :: get_link(
+                        $redirect = new Redirect(
                             array(
                                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
                                 Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_QUICK_LANG,
                                 \Chamilo\Core\User\Manager :: PARAM_CHOICE => $isocode,
-                                \Chamilo\Core\User\Manager :: PARAM_REFER => $current_url));
-                        $item = '<a href="' . $href . '">' . $isocode . '</a>';
+                                \Chamilo\Core\User\Manager :: PARAM_REFER => $currentUrl));
+
+                        $item = '<a href="' . $redirect->getUrl() . '">' . $isocode . '</a>';
                     }
 
                     $output[] = '<li>' . $item . '</li>';

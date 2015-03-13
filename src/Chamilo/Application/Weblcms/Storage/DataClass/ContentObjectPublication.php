@@ -26,7 +26,7 @@ use Chamilo\Application\Weblcms\Manager;
 
 /**
  * $Id: content_object_publication.class.php 218 2009-11-13 14:21:26Z kariboe $
- * 
+ *
  * @package application.lib.weblcms
  */
 
@@ -38,7 +38,7 @@ use Chamilo\Application\Weblcms\Manager;
 class ContentObjectPublication extends DataClass implements DisplayOrderDataClassListenerSupport
 {
     const CLASS_NAME = __CLASS__;
-    
+
     /*
      * #@+ Constant defining a property of the publication
      */
@@ -77,25 +77,25 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_CONTENT_OBJECT_ID, 
-                self :: PROPERTY_COURSE_ID, 
-                self :: PROPERTY_TOOL, 
-                self :: PROPERTY_PARENT_ID, 
-                self :: PROPERTY_CATEGORY_ID, 
-                self :: PROPERTY_FROM_DATE, 
-                self :: PROPERTY_TO_DATE, 
-                self :: PROPERTY_HIDDEN, 
-                self :: PROPERTY_PUBLISHER_ID, 
-                self :: PROPERTY_PUBLICATION_DATE, 
-                self :: PROPERTY_MODIFIED_DATE, 
-                self :: PROPERTY_DISPLAY_ORDER_INDEX, 
-                self :: PROPERTY_EMAIL_SENT, 
+                self :: PROPERTY_CONTENT_OBJECT_ID,
+                self :: PROPERTY_COURSE_ID,
+                self :: PROPERTY_TOOL,
+                self :: PROPERTY_PARENT_ID,
+                self :: PROPERTY_CATEGORY_ID,
+                self :: PROPERTY_FROM_DATE,
+                self :: PROPERTY_TO_DATE,
+                self :: PROPERTY_HIDDEN,
+                self :: PROPERTY_PUBLISHER_ID,
+                self :: PROPERTY_PUBLICATION_DATE,
+                self :: PROPERTY_MODIFIED_DATE,
+                self :: PROPERTY_DISPLAY_ORDER_INDEX,
+                self :: PROPERTY_EMAIL_SENT,
                 self :: PROPERTY_SHOW_ON_HOMEPAGE));
     }
 
     /**
      * Gets the learning object.
-     * 
+     *
      * @return ContentObject
      */
     public function get_content_object_id()
@@ -105,7 +105,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the course code of the course in which this publication was made.
-     * 
+     *
      * @return string The course code
      */
     public function get_course_id()
@@ -115,7 +115,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the tool in which this publication was made.
-     * 
+     *
      * @return string
      */
     public function get_tool()
@@ -125,7 +125,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the parent_id of the learning object publication
-     * 
+     *
      * @return int
      */
     public function get_parent_id()
@@ -135,7 +135,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the id of the learning object publication category in which this publication was made
-     * 
+     *
      * @return int
      */
     public function get_category_id()
@@ -145,7 +145,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the list of target users of this publication
-     * 
+     *
      * @return array An array of user ids.
      * @see is_for_everybody()
      */
@@ -155,13 +155,13 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         {
             $this->target_users = DataManager :: retrieve_publication_target_user_ids($this->get_id());
         }
-        
+
         return $this->target_users;
     }
 
     /**
      * Gets the list of target course_groups of this publication
-     * 
+     *
      * @return array An array of course_group ids.
      * @see is_for_everybody()
      */
@@ -171,13 +171,13 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         {
             $this->target_course_groups = DataManager :: retrieve_publication_target_course_group_ids($this->get_id());
         }
-        
+
         return $this->target_course_groups;
     }
 
     /**
      * Gets the list of target groups of this publication
-     * 
+     *
      * @return array An array of group ids.
      * @see is_for_everybody()
      */
@@ -187,13 +187,13 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         {
             $this->target_groups = DataManager :: retrieve_publication_target_platform_group_ids($this->get_id());
         }
-        
+
         return $this->target_groups;
     }
 
     /**
      * Gets the date on which this publication becomes available
-     * 
+     *
      * @return int
      * @see is_forever()
      */
@@ -204,7 +204,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the date on which this publication becomes unavailable
-     * 
+     *
      * @return int
      * @see is_forever()
      */
@@ -215,7 +215,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the user id of the user who made this publication
-     * 
+     *
      * @return int
      */
     public function get_publisher_id()
@@ -225,7 +225,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Retrieves the content object associated with this publication.
-     * 
+     *
      * @param bool $full Whether the content object must have its full complement of properties.
      */
     public function get_content_object($full = false)
@@ -245,7 +245,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                     $this->get_content_object_id());
             }
         }
-        
+
         return $this->content_object;
     }
 
@@ -259,16 +259,16 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         if (! isset($this->publisher))
         {
             $this->publisher = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: clasS_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: clasS_name(),
                 $this->get_publisher_id());
         }
-        
+
         return $this->publisher;
     }
 
     /**
      * Sets the publication publisher for caching
-     * 
+     *
      * @param $user; User
      */
     public function set_publication_publisher(User $user)
@@ -278,7 +278,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the date on which this publication was made
-     * 
+     *
      * @return int
      */
     public function get_publication_date()
@@ -288,7 +288,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Gets the date on which this publication was made
-     * 
+     *
      * @return int
      */
     public function get_modified_date()
@@ -299,7 +299,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     /**
      * Determines whether this publication was sent by email to the users and course_groups for which this publication
      * was made
-     * 
+     *
      * @return boolean True if an email was sent
      */
     public function is_email_sent()
@@ -309,7 +309,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Determines whether this publication is hidden or not
-     * 
+     *
      * @return boolean True if the publication is hidden.
      */
     public function is_hidden()
@@ -319,7 +319,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Determines whether this publication is available forever
-     * 
+     *
      * @return boolean True if the publication is available forever
      * @see get_from_date()
      * @see get_to_date()
@@ -425,11 +425,11 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     {
         $this->set_default_property(self :: PROPERTY_EMAIL_SENT, $email_sent);
     }
-    
+
     /*
      * #@-
      */
-    
+
     /**
      * Toggles the visibility of this publication.
      */
@@ -457,17 +457,17 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         {
             $this->set_category_id(0);
         }
-        
+
         if (! parent :: create())
         {
             return false;
         }
-        
+
         if ($this->get_category_id())
         {
             $parent = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
-                WeblcmsRights :: TYPE_COURSE_CATEGORY, 
-                $this->get_category_id(), 
+                WeblcmsRights :: TYPE_COURSE_CATEGORY,
+                $this->get_category_id(),
                 $this->get_course_id());
         }
         else
@@ -476,35 +476,35 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
             {
                 $parent_id = WeblcmsRights :: get_instance()->get_courses_subtree_root_id($this->get_course_id());
                 return WeblcmsRights :: get_instance()->create_location_in_courses_subtree(
-                    WeblcmsRights :: TYPE_PUBLICATION, 
-                    $this->get_id(), 
-                    $parent_id, 
-                    $this->get_course_id(), 
+                    WeblcmsRights :: TYPE_PUBLICATION,
+                    $this->get_id(),
+                    $parent_id,
+                    $this->get_course_id(),
                     $create_in_batch);
             }
             else
             {
                 $course_tool = DataManager :: retrieve_course_tool_by_name($this->get_tool());
                 $course_tool_id = $course_tool->get_id();
-                
+
                 $parent = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
-                    WeblcmsRights :: TYPE_COURSE_MODULE, 
-                    $course_tool_id, 
+                    WeblcmsRights :: TYPE_COURSE_MODULE,
+                    $course_tool_id,
                     $this->get_course_id());
             }
         }
-        
+
         return WeblcmsRights :: get_instance()->create_location_in_courses_subtree(
-            WeblcmsRights :: TYPE_PUBLICATION, 
-            $this->get_id(), 
-            $parent, 
-            $this->get_course_id(), 
+            WeblcmsRights :: TYPE_PUBLICATION,
+            $this->get_id(),
+            $parent,
+            $this->get_course_id(),
             $create_in_batch);
     }
 
     /**
      * Moves the publication up or down in the list.
-     * 
+     *
      * @param $places The number of places to move the publication down. A negative number moves it up.
      * @return int The number of places that the publication was moved down.
      */
@@ -518,8 +518,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     public function delete()
     {
         $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights :: TYPE_PUBLICATION, 
-            $this->get_id(), 
+            WeblcmsRights :: TYPE_PUBLICATION,
+            $this->get_id(),
             $this->get_course_id());
         if ($location)
         {
@@ -528,16 +528,16 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 return false;
             }
         }
-        
+
         if (! parent :: delete())
         {
             return false;
         }
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Feedback :: class_name(), Feedback :: PROPERTY_PUBLICATION_ID), 
+            new PropertyConditionVariable(Feedback :: class_name(), Feedback :: PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         return DataManager :: deletes(Feedback :: class_name(), $condition);
     }
 
@@ -546,11 +546,11 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         try
         {
             return WeblcmsRights :: get_instance()->get_target_entities(
-                WeblcmsRights :: VIEW_RIGHT, 
-                Manager :: context(), 
-                $this->get_id(), 
-                WeblcmsRights :: TYPE_PUBLICATION, 
-                $this->get_course_id(), 
+                WeblcmsRights :: VIEW_RIGHT,
+                Manager :: context(),
+                $this->get_id(),
+                WeblcmsRights :: TYPE_PUBLICATION,
+                $this->get_course_id(),
                 WeblcmsRights :: TREE_TYPE_COURSE);
         }
         catch (ErrorException $exception)
@@ -567,7 +567,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -577,14 +577,14 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()
     {
         return array(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_COURSE_ID), 
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TOOL), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TOOL),
             new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CATEGORY_ID));
     }
 
@@ -599,20 +599,20 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     /**
      * Mails the given publication to the target users Originally appeared in content_object_publication_form.class.php,
      * refactored to support mailing after publication was published.
-     * 
+     *
      * @param $publication ContentObjectPublication
      */
     public function mail_publication($after_publication = false)
     {
         set_time_limit(3600);
-        
+
         // prepare mail
         $user = $this->get_publication_publisher();
         $content_object = $this->get_content_object();
         $tool = $this->get_tool();
         $link = $this->get_course_viewer_link();
         $course = CourseDataManager :: retrieve_course($this->get_course_id());
-        
+
         $body = Translation :: get(
             $after_publication ? 'OldPublicationMailDescription' : 'NewPublicationMailDescription') . ' ' .
              $course->get_title() . ' : <a href="' . $link . '" target="_blank">' .
@@ -621,37 +621,37 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
              Translation :: get('TypeName', null, 'application\\weblcms\\tool\\' . $tool);
-        
+
         // get targets
         $target_email = array();
-        
+
         // Add the publisher to the email address
         $target_email[] = $user->get_email();
-        
+
         $target_users = $this->get_filtered_email_recipients();
-        
+
         foreach ($target_users as $target_user)
         {
             $target_email[] = $target_user[User :: PROPERTY_EMAIL];
         }
-        
+
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
-        
+
         $site_name = PlatformSetting :: get('site_name');
-        
+
         $mail = Mail :: factory(
             '[' . $site_name . '] ' . Translation :: get(
-                $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject', 
-                array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())), 
-            '', 
-            '', 
+                $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject',
+                array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())),
+            '',
+            '',
             array(Mail :: NAME => $user->get_fullname(), Mail :: EMAIL => $user->get_email()));
-        
+
         $doc = new DOMDocument();
         $doc->loadHTML($body);
         $elements = $doc->getElementsByTagname('resource');
-        
+
         // replace image document resource tags with a html img tag with base64
         // data
         // remove all other resource tags
@@ -665,12 +665,12 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 if ($object->is_image())
                 {
                     $mail_embedded_object = new MailEmbeddedObject(
-                        $object->get_filename(), 
-                        $object->get_mime_type(), 
+                        $object->get_filename(),
+                        $object->get_mime_type(),
                         $object->get_full_path());
-                    
+
                     $index = $mail->add_embedded_image($mail_embedded_object);
-                    
+
                     $elem = $doc->createElement('img');
                     $elem->setAttribute('src', 'cid:' . $index);
                     $elem->setAttribute('alt', $object->get_filename());
@@ -682,27 +682,27 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
             else
                 $element->parentNode->removeChild($element);
         }
-        
+
         $body = $doc->saveHTML();
-        
+
         if ($content_object->has_attachments())
         {
             $body .= '<br ><br >' . Translation :: get('AttachmentWarning', array('LINK' => $link));
         }
-        
+
         $mail->set_message($body);
-        
+
         $log .= "mail for publication " . $this->get_id() . " in course ";
         $log .= $course->get_title();
         $log .= " to: \n";
-        
+
         // send mail
         foreach ($unique_email as $mail_to)
         {
-            
+
             $mail->set_to($mail_to);
             $success = $mail->send();
-            
+
             $log .= $mail_to;
             if ($success)
             {
@@ -713,22 +713,22 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 $log .= " (unsuccessfull)\n";
             }
         }
-        
+
         if (PlatformSetting :: get('log_mails', __NAMESPACE__))
         {
             $dir = Path :: getInstance()->getLogPath() . 'mail';
-            
+
             if (! file_exists($dir) and ! is_dir($dir))
             {
                 mkdir($dir);
             }
-            
+
             $today = date("Ymd", mktime());
             $logfile = $dir . '//' . "mails_sent_$today" . ".log";
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($log, true);
         }
-        
+
         $this->set_email_sent(true);
         $this->update();
     }
@@ -738,16 +738,16 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
      * weblcms_exclude_email_recipients($target_users) in any application to apply filtering from context Originally
      * appeared in content_object_publication_form.class.php, refactored to support mailing after publication was
      * published.
-     * 
+     *
      * @return array containing User objects
      */
     function get_filtered_email_recipients()
     {
         $target_users = DataManager :: get_publication_target_users($this);
-        
+
         // retrieve all applications
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_registrations();
-        
+
         foreach ($registrations[\Chamilo\Configuration\Storage\DataManager :: REGISTRATION_TYPE] as $type)
         {
             foreach ($type as $registration)
@@ -756,7 +756,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 {
                     // see if app has method implemented
                     $classname = $registration->get_context() . '\\' . $registration->get_name() . 'Manager';
-                    
+
                     if (class_exists($classname))
                     {
                         $method_name = 'weblcms_filter_out_excluded__email_recipients';
@@ -779,7 +779,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         $params[Manager :: PARAM_TOOL] = $this->get_tool();
         $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
         $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $this->get_id();
-        
-        return Path :: getInstance()->getBasePath(true) . Redirect :: get_link($params);
+
+        $redirect = new Redirect($params);
+        return $redirect->getUrl();
     }
 }

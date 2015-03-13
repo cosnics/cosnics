@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Generates a breadcrumb based on the administration breadcrumb, the package and component
  * name. Includes the possibility to add additional breadcrumbs between the package breadcrumb and the component
  * breadcrumb
- * 
+ *
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -27,38 +27,22 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
     {
         $breadcrumb_trail = $this->get_breadcrumb_trail();
         $component = $this->get_component();
-        
-        $breadcrumb_trail->add(
-            new Breadcrumb(
-                Redirect :: get_link(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER), 
-                    array(), 
-                    false, 
-                    Redirect :: TYPE_CORE), 
-                Translation :: get('TypeName')));
-        
+
+        $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER));
+        $breadcrumb_trail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName')));
+
         $tab = 'core';
-        
+
+        $redirect = new Redirect(
+            array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, BrowserComponent :: PARAM_TAB => $tab));
         $breadcrumb_trail->add(
             new BreadCrumb(
-                Redirect :: get_link(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, 
-                        BrowserComponent :: PARAM_TAB => $tab), 
-                    array(), 
-                    false, 
-                    Redirect :: TYPE_CORE), 
+                $redirect->getUrl(),
                 Translation :: get((string) StringUtilities :: getInstance()->createString($tab)->upperCamelize())));
-        
+
+        $redirect = new Redirect(
+            array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, BrowserComponent :: PARAM_TAB => $tab));
         $breadcrumb_trail->add(
-            new BreadCrumb(
-                Redirect :: get_link(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, 
-                        BrowserComponent :: PARAM_TAB => $tab), 
-                    array(), 
-                    false, 
-                    Redirect :: TYPE_CORE), 
-                Translation :: get('TypeName', null, $component->context())));
+            new BreadCrumb($redirect->getUrl(), Translation :: get('TypeName', null, $component->context())));
     }
 }

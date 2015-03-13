@@ -202,6 +202,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function get_learning_path_tree_menu_url()
     {
         $parameters = array();
+
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = Request :: get('course');
@@ -212,7 +213,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = '__STEP__';
 
-        return Redirect :: get_link($parameters);
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     /**

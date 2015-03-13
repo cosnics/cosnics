@@ -20,7 +20,10 @@ class LogoutComponent extends Manager
     {
         \Chamilo\Core\User\Storage\DataManager :: logout();
         Event :: trigger('logout', Manager :: context(), array('server' => $_SERVER, 'user' => $this->get_user()));
-        
-        Redirect :: link(array(), array(self :: PARAM_CONTEXT));
+
+        $parameters = array(self :: PARAM_CONTEXT => null);
+
+        $redirect = new Redirect($parameters);
+        $redirect->toUrl();
     }
 }

@@ -11,7 +11,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\SimpleTemplate;
 
 /**
- * Block that displays main course's actions available in the main course menu. That is create course,
+ * Block that displays main course's actions available in the main course menu.
+ * That is create course,
  * register/unregister to course, etc. Do not display less common actions such as manage categories.
  *
  * @copyright (c) 2011 University of Geneva
@@ -39,8 +40,7 @@ class CourseMenu extends Block
         $target = $this->get_link_target();
 
         $template = '<li class="tool_list_menu" style="background-image: url({$IMG})">
-        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target .
-             '">{$TEXT}</a></li>';
+        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target . '">{$TEXT}</a></li>';
 
         $ADMIN_MENU = $this->display_admin_menu($template);
         $USER_MENU = SimpleTemplate :: all($template, $this->get_edit_course_menu());
@@ -195,6 +195,8 @@ class CourseMenu extends Block
     {
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = $action;
-        return htmlspecialchars(Redirect :: get_link($params));
+
+        $redirect = new Redirect($params);
+        return htmlspecialchars($redirect->getUrl());
     }
 }

@@ -312,14 +312,15 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $breadcrumb_trail = BreadcrumbTrail :: get_instance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
+
+        $redirect = new Redirect(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context()));
+
         array_splice(
             $breadcrumbs,
             1,
             0,
             array(
-                new Breadcrumb(
-                    Redirect :: get_url(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context())),
-                    Translation :: get('Administration'))));
-        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
+                new Breadcrumb($redirect->getUrl(), Translation :: get('Administration'))));
+        $breadcrumb_trail->set($breadcrumbs);
     }
 }

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Implementation\Scribd\Component;
 use Chamilo\Core\Repository\Implementation\Scribd\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Scribd\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,16 +24,9 @@ class UploaderComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                if ($this->is_stand_alone())
-                {
-                    Redirect :: web_link(
-                        Path :: getInstance()->getBasePath(true) . 'common/launcher/index.php',
-                        $parameters);
-                }
-                else
-                {
-                    Redirect :: web_link(Path :: getInstance()->getBasePath(true) . 'index.php', $parameters);
-                }
+
+                $redirect = new Redirect($parameters);
+                $redirect->toUrl();
             }
             else
             {

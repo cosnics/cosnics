@@ -868,13 +868,14 @@ abstract class Manager extends Application
             $security_code = $object->calculate_security_code();
         }
 
-        $parameters = array(
-            self :: PARAM_CONTEXT => self :: context(),
-            self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
-            self :: PARAM_CONTENT_OBJECT_ID => $document_id,
-            ContentObject :: PARAM_SECURITY_CODE => $security_code);
+        $redirect = new Redirect(
+            array(
+                self :: PARAM_CONTEXT => self :: context(),
+                self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
+                self :: PARAM_CONTENT_OBJECT_ID => $document_id,
+                ContentObject :: PARAM_SECURITY_CODE => $security_code));
 
-        return Redirect :: get_link($parameters, null, null, Redirect :: TYPE_CORE);
+        return $redirect->getUrl();
     }
 
     public function get_complex_content_object_item_edit_url($complex_content_object_item, $root_id)

@@ -39,33 +39,33 @@ class LearningPathAttemptProgressBlock extends ToolBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        
+
         $reporting_data->set_rows(
             array(
-                Translation :: get('Type'), 
-                Translation :: get('Title'), 
-                Translation :: get('Status'), 
-                Translation :: get('Score'), 
-                Translation :: get('Time'), 
+                Translation :: get('Type'),
+                Translation :: get('Title'),
+                Translation :: get('Status'),
+                Translation :: get('Score'),
+                Translation :: get('Time'),
                 Translation :: get('Action')));
-        
+
         $tracker = $this->retrieve_tracker();
         $attempt_data = $this->retrieve_tracker_items($tracker);
         $pid = $this->get_publication_id();
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             $pid);
-        
+
         $menu = new LearningPathTree($publication->get_content_object_id(), null, null, $attempt_data);
         $objects = $menu->get_objects();
-        
+
         $counter = 1;
         $total = 0;
-        
+
         foreach ($objects as $wrapper_id => $object)
         {
             $tracker_data = $attempt_data[$wrapper_id];
-            
+
             if ($object instanceof Assessment)
             {
                 $params = $this->get_parent()->get_parameters();
@@ -77,26 +77,27 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                     \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID) : $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID] = $tracker->get_id();
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ASSESSMENT_ID] = $object->get_id();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(
-                    LearningPath :: class_name(), 
+                    LearningPath :: class_name(),
                     true);
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: ACTION_VIEW_ASSESSMENT_RESULTS;
-                
-                $assessment_url = Redirect :: get_url(
-                    $params, 
+
+                $redirect = new Redirect(
+                    $params,
                     array(
-                        \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID, 
+                        \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID,
                         \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_ACTION));
-                
+                $assessment_url = $redirect->getUrl();
+
                 $title = '<a href="' . $assessment_url . '">' . $object->get_title() . '</a>';
             }
             else
             {
                 $title = $object->get_title();
             }
-            
+
             $category = $counter;
             $reporting_data->add_category($category);
-            
+
             if ($tracker_data)
             {
                 $status = Translation :: get($tracker_data['completed'] ? 'Completed' : 'Incomplete');
@@ -110,68 +111,70 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 $score = '0%';
                 $time = '0:00:00';
             }
-            
+
             $reporting_data->add_data_category_row($category, Translation :: get('Type'), $object->get_icon_image());
             $reporting_data->add_data_category_row($category, Translation :: get('Title'), $title);
             $reporting_data->add_data_category_row($category, Translation :: get('Status'), $status);
             $reporting_data->add_data_category_row($category, Translation :: get('Score'), $score);
             $reporting_data->add_data_category_row($category, Translation :: get('Time'), $time);
-            
+
             $actions = array();
-            
+
             if ($this->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION) ==
                  \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: ACTION_VIEW_STATISTICS)
             {
                 $params = array_merge(
-                    $this->get_parent()->get_parameters(), 
+                    $this->get_parent()->get_parameters(),
                     $this->get_parent()->get_parent()->get_parameters());
                 $params[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
                 $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
                 $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: ACTION_VIEW_STATISTICS;
                 $params[StatisticsViewerComponent :: PARAM_STAT] = StatisticsViewerComponent :: ACTION_DELETE_LPI_ATTEMPTS;
                 $params[StatisticsViewerComponent :: PARAM_ITEM_ID] = $wrapper_id;
-                $url = Redirect :: get_url($params);
-                
+
+                $redirect = new Redirect($params);
+                $url = $redirect->getUrl();
+
                 $actions[] = Text :: create_link(
-                    $url, 
+                    $url,
                     Theme :: getInstance()->getCommonImage(
-                        'action_delete', 
-                        'png', 
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                        null, 
+                        'action_delete',
+                        'png',
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
-            
+
             if ($object instanceof Assessment)
             {
                 $actions[] = Text :: create_link(
-                    $assessment_url, 
+                    $assessment_url,
                     Theme :: getInstance()->getCommonImage(
-                        'action_reporting', 
-                        'png', 
-                        Translation :: get('Details'), 
-                        null, 
+                        'action_reporting',
+                        'png',
+                        Translation :: get('Details'),
+                        null,
                         ToolbarItem :: DISPLAY_ICON));
             }
-            
+
             $reporting_data->add_data_category_row($category, Translation :: get('Action'), implode(' ', $actions));
-            
+
             $counter ++;
         }
-        
+
         $category_name = '-';
         $reporting_data->add_category($category_name);
         $reporting_data->add_data_category_row($category_name, Translation :: get('Title'), '');
         $reporting_data->add_data_category_row(
-            $category_name, 
-            Translation :: get('Status'), 
+            $category_name,
+            Translation :: get('Status'),
             '<span style="font-weight: bold;">' . Translation :: get('TotalTime') . '</span>');
         $reporting_data->add_data_category_row($category_name, Translation :: get('Score'), '');
         $reporting_data->add_data_category_row(
-            $category_name, 
-            Translation :: get('Time'), 
+            $category_name,
+            Translation :: get('Time'),
             '<span style="font-weight: bold;">' . Utilities :: format_seconds_to_hours($total) . '</span>');
-        
+
         $reporting_data->hide_categories();
         return $reporting_data;
     }
@@ -192,38 +195,38 @@ class LearningPathAttemptProgressBlock extends ToolBlock
         if ($this->get_attempt_id())
         {
             return \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                LearningPathAttempt :: class_name(), 
+                LearningPathAttempt :: class_name(),
                 $attempt_id);
         }
         else
         {
             $pid = $this->get_publication_id();
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(), 
+                ContentObjectPublication :: class_name(),
                 $pid);
-            
+
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    LearningPathAttempt :: class_name(), 
-                    LearningPathAttempt :: PROPERTY_COURSE_ID), 
+                    LearningPathAttempt :: class_name(),
+                    LearningPathAttempt :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->get_course_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    LearningPathAttempt :: class_name(), 
-                    LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID), 
+                    LearningPathAttempt :: class_name(),
+                    LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID),
                 new StaticConditionVariable($publication->get_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    LearningPathAttempt :: class_name(), 
-                    LearningPathAttempt :: PROPERTY_USER_ID), 
+                    LearningPathAttempt :: class_name(),
+                    LearningPathAttempt :: PROPERTY_USER_ID),
                 new StaticConditionVariable(Session :: get_user_id()));
             $condition = new AndCondition($conditions);
-            
+
             $attempt = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
-                LearningPathAttempt :: class_name(), 
+                LearningPathAttempt :: class_name(),
                 new DataClassRetrieveParameters($condition));
-            
+
             if (! $attempt)
             {
                 $attempt = new LearningPathAttempt();
@@ -232,7 +235,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 $attempt->set_learning_path_id($publication->get_content_object_id());
                 $attempt->create();
             }
-            
+
             return $attempt;
         }
     }
@@ -240,36 +243,36 @@ class LearningPathAttemptProgressBlock extends ToolBlock
     private function retrieve_tracker_items($attempt)
     {
         $item_attempt_data = array();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt :: class_name(), 
-                LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
+                LearningPathItemAttempt :: class_name(),
+                LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($attempt->get_id()));
-        
+
         $item_attempts = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            LearningPathItemAttempt :: class_name(), 
+            LearningPathItemAttempt :: class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         while ($item_attempt = $item_attempts->next_result())
         {
             $item_id = $item_attempt->get_learning_path_item_id();
-            
+
             if (! $item_attempt_data[$item_id])
             {
                 $item_attempt_data[$item_id]['score'] = 0;
                 $item_attempt_data[$item_id]['time'] = 0;
             }
-            
+
             $item_attempt_data[$item_id]['trackers'][] = $item_attempt;
             $item_attempt_data[$item_id]['size'] ++;
             $item_attempt_data[$item_id]['score'] += $item_attempt->get_score();
-            
+
             if ($item_attempt->get_total_time())
             {
                 $item_attempt_data[$item_id]['time'] += $item_attempt->get_total_time();
             }
-            
+
             if ($item_attempt->get_status() == LearningPathItemAttempt :: STATUS_COMPLETED)
             {
                 $item_attempt_data[$item_id]['completed'] = 1;

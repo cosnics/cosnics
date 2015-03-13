@@ -999,13 +999,16 @@ class ContentObjectPublicationForm extends FormValidator
 
     private function get_course_viewer_link($publication)
     {
-        $params[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_COURSE;
-        $params[Manager :: PARAM_COURSE] = $this->course->get_id();
-        $params[Manager :: PARAM_TOOL] = $publication->get_tool();
-        $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-        $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication->get_id();
+        $parameters = array();
 
-        return Path :: getInstance()->getBasePath(true) . Redirect :: get_link($params);
+        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_COURSE;
+        $parameters[Manager :: PARAM_COURSE] = $this->course->get_id();
+        $parameters[Manager :: PARAM_TOOL] = $publication->get_tool();
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication->get_id();
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     /**
