@@ -17,10 +17,10 @@ $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECT
 
 foreach ($packageNamespaces as $packageNamespace)
 {
-    $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
+    $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'ImagesCC' .
          DIRECTORY_SEPARATOR;
 
-    $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'ImagesCC' .
+    $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
         DIRECTORY_SEPARATOR;
 
     Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
