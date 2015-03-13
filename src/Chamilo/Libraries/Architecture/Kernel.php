@@ -390,10 +390,12 @@ class Kernel
              ! $already_viewed)
         {
             \Chamilo\Libraries\Platform\Session\Session :: register('terms_and_conditions_viewed', true);
-            Redirect :: link(
+
+            $redirect = new Redirect(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_VIEW_TERMSCONDITIONS));
+            $redirect->toUrl();
         }
 
         return $this;

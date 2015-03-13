@@ -39,7 +39,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     /**
      * The id of the user on Flickr
-     * 
+     *
      * @var string
      */
     private $user_id;
@@ -51,28 +51,30 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function __construct($external_repository_instance)
     {
         parent :: __construct($external_repository_instance);
-        
+
         $this->key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'key', 
+            'key',
             $this->get_external_repository_instance_id());
         $this->secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'secret', 
+            'secret',
             $this->get_external_repository_instance_id());
         $this->hq23 = new php23($this->key, $this->secret);
-        $uri = Redirect :: current_url();
-        
+
+        $redirect = new Redirect();
+        $uri = $redirect->getCurrentUrl();
+
         $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
-        
+
         if (! $session_token)
         {
             $frob = Session :: retrieve('23hq_frob');
-            
+
             if (! $frob)
             {
                 $frob = $this->hq23->auth_getFrob();
                 Session :: register('23hq_frob', $frob);
             }
-            
+
             $auth = Session :: retrieve('23hq_auth');
             if (! $auth)
             {
@@ -82,20 +84,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             else
             {
                 $token = $this->hq23->auth_getToken($frob);
-                
+
                 if ($token['token'])
                 {
                     $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                        'session_token', 
+                        'session_token',
                         $this->get_external_repository_instance_id());
                     $user_setting = new Setting();
                     $user_setting->set_setting_id($setting->get_id());
                     $user_setting->set_user_id(Session :: get_user_id());
                     $user_setting->set_value($token['token']);
-                    
+
                     if ($user_setting->create())
                     {
-                        
+
                         $session_token = $token['token'];
                     }
                 }
@@ -107,7 +109,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $this->hq23->setToken($session_token);
         }
-        
+
         // $this->hq23->people_getUploadStatus($token);
     }
 
@@ -134,16 +136,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (! isset($this->licenses))
         {
             $raw_licenses = $this->hq23->photos_licenses_getInfo();
-            
+
             $this->licenses = array();
             foreach ($raw_licenses as $raw_license)
             {
                 $this->licenses[$raw_license['id']] = array(
-                    'name' => $raw_license['name'], 
+                    'name' => $raw_license['name'],
                     'url' => $raw_license['url']);
             }
         }
-        
+
         return $this->licenses;
     }
 
@@ -158,7 +160,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $hidden = $this->hq23->test_login();
             $this->user_id = $hidden['id'];
         }
-        
+
         return $this->user_id;
     }
 
@@ -173,35 +175,35 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_photos($condition = null, $order_property, $offset, $count)
     {
         $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
-        
+
         $offset = (($offset - ($offset % $count)) / $count) + 1;
         $attributes = 'description,date_upload,owner_name,license,media,original_format,last_update,url_sq,url_t,url_s,url_m,url_l,url_o';
-        
+
         $search_parameters = array();
         $search_parameters['api_key'] = $this->key;
         $search_parameters['per_page'] = $count;
         $search_parameters['page'] = $offset;
         $search_parameters['text'] = $condition;
         $search_parameters['extras'] = $attributes;
-        
+
         if ($order_property)
         {
             $order_direction = $this->convert_order_property($order_property);
-            
+
             if ($order_direction)
             {
                 $search_parameters['sort'] = $order_direction;
             }
         }
-        
+
         switch ($feed_type)
         {
             case Manager :: FEED_TYPE_GENERAL :
                 $photos = ($condition ? $this->hq23->photos_search($search_parameters) : $this->hq23->photos_getRecent(
-                    $attributes, 
-                    $count, 
+                    $attributes,
+                    $count,
                     $offset));
-                
+
                 break;
             case Manager :: FEED_TYPE_MY_PHOTOS :
                 $search_parameters['user_id'] = $this->retrieve_user_id();
@@ -212,7 +214,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $photos = $this->hq23->photos_search($search_parameters);
                 break;
         }
-        
+
         return $photos;
     }
 
@@ -229,9 +231,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $photos = $this->retrieve_photos($condition, $order_property, $offset, $count);
         // $licenses = $this->retrieve_licenses();
         $licenses = ExternalObject :: get_possible_licenses();
-        
+
         $objects = array();
-        
+
         foreach ($photos['photo'] as $photo)
         {
             $object = new ExternalObject();
@@ -242,10 +244,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_created($photo['dateupload']);
             $object->set_modified($photo['last_update']);
             $object->set_owner_id($photo['ownername']);
-            
+
             $photo_sizes = $this->hq23->photos_getSizes($photo['id']);
             $photo_urls = array();
-            
+
             foreach ($photo_sizes as $photo_size)
             {
                 $key = strtolower($photo_size['label']);
@@ -254,11 +256,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 unset($photo_size['url']);
                 $photo_urls[$key] = $photo_size;
             }
-            
+
             $object->set_urls($photo_urls);
-            
+
             $object->set_license($licenses[$photo['license']]);
-            
+
             $types = array();
             $types[] = $photo['media'];
             if (isset($photo['originalformat']))
@@ -267,10 +269,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             }
             $object->set_type(implode('_', $types));
             $object->set_rights($this->determine_rights($photo['license'], $photo['owner']));
-            
+
             $objects[] = $object;
         }
-        
+
         return new ArrayResultSet($objects);
     }
 
@@ -312,7 +314,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             else
             {
                 $sorting_direction = $order_properties[0]->get_direction();
-                
+
                 if ($sorting_direction == SORT_ASC)
                 {
                     return $order_property . '-asc';
@@ -323,7 +325,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -335,13 +337,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
         $query = ActionBarSearchForm :: get_query();
-        
+
         if (($feed_type == Manager :: FEED_TYPE_GENERAL && $query) || $feed_type == Manager :: FEED_TYPE_MY_PHOTOS)
         {
             return array(
-                self :: SORT_DATE_POSTED, 
-                self :: SORT_DATE_TAKEN, 
-                self :: SORT_INTERESTINGNESS, 
+                self :: SORT_DATE_POSTED,
+                self :: SORT_DATE_TAKEN,
+                self :: SORT_INTERESTINGNESS,
                 self :: SORT_RELEVANCE);
         }
         else
@@ -349,7 +351,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             return array();
         }
     }
-    
+
     /*
      * (non-PHPdoc) @see
      * common/extensions/external_repository_manager/ManagerConnector#retrieve_external_repository_object()
@@ -360,7 +362,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $licenses = ExternalObject :: get_possible_licenses();
         $photo = $this->hq23->photos_getInfo($id);
         $photo = $photo[0];
-        
+
         $object = new ExternalObject();
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_id($photo['id']);
@@ -369,17 +371,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_created($photo['dateuploaded']);
         $object->set_modified($photo['dates']['lastupdate']);
         $object->set_owner_id($photo['owner']['username']);
-        
+
         $tags = array();
         foreach ($photo['tags']['tag'] as $tag)
         {
             $tags[] = array('display' => $tag['raw'], 'text' => $tag['_content']);
         }
         $object->set_tags($tags);
-        
+
         $photo_sizes = $this->hq23->photos_getSizes($photo['id']);
         $photo_urls = array();
-        
+
         foreach ($photo_sizes as $photo_size)
         {
             $key = strtolower($photo_size['label']);
@@ -391,10 +393,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $photo_urls[$key] = $photo_size;
             }
         }
-        
+
         $object->set_urls($photo_urls);
         $object->set_license($licenses[$photo['license']]);
-        
+
         $types = array();
         $types[] = $photo['media'];
         if (isset($photo['originalformat']))
@@ -402,7 +404,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $types[] = strtolower($photo['originalformat']);
         }
         $object->set_type(implode('_', $types));
-        
+
         $object->set_rights($this->determine_rights($photo['license'], $photo['owner']['nsid']));
         return $object;
     }
@@ -415,20 +417,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function update_external_repository_object($values)
     {
         $this->hq23->photos_setMeta(
-            $values[ExternalObject :: PROPERTY_ID], 
-            '', 
+            $values[ExternalObject :: PROPERTY_ID],
+            '',
             $values[ExternalObject :: PROPERTY_DESCRIPTION]);
-        
+
         $tags = explode(',', $values[ExternalObject :: PROPERTY_TAGS]);
         $tags = '"' . implode('" "', $tags) . '"';
-        
+
         $success = $this->hq23->photos_setTags($values[ExternalObject :: PROPERTY_ID], $tags);
-        
+
         if (! $success)
         {
             return false;
         }
-        
+
         return true;
     }
 
@@ -442,7 +444,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $tags = explode(',', $values[ExternalObject :: PROPERTY_TAGS]);
         $tags = '"' . implode('" "', $tags) . '"';
-        
+
         return $this->hq23->sync_upload($photo_path, '', $values[ExternalObject :: PROPERTY_DESCRIPTION], $tags);
     }
 
@@ -454,8 +456,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function export_external_repository_object($content_object)
     {
         return $this->hq23->sync_upload(
-            $content_object->get_full_path(), 
-            $content_object->get_title(), 
+            $content_object->get_full_path(),
+            $content_object->get_title(),
             $content_object->get_description());
     }
 
@@ -470,13 +472,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $users_match = ($this->retrieve_user_id() == $photo_user_id ? true : false);
         // $compatible_license = ($license == 0 ? false : true);
         $compatible_license = true;
-        
+
         $rights = array();
         $rights[ExternalObject :: RIGHT_USE] = $compatible_license || $users_match;
         $rights[ExternalObject :: RIGHT_EDIT] = $users_match;
         $rights[ExternalObject :: RIGHT_DELETE] = $users_match;
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = $compatible_license || $users_match;
-        
+
         return $rights;
     }
 

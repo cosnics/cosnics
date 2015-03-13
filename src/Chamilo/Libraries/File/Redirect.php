@@ -12,98 +12,134 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class Redirect
 {
     // Different redirect types
-    const TYPE_LINK = 'link';
-    const TYPE_URL = 'url';
-
-    // Different link types
-    const TYPE_CORE = 'core';
-    const TYPE_APPLICATION = 'application';
-    const TYPE_INDEX = 'index';
     const ARGUMENT_SEPARATOR = '&';
 
     /**
      *
-     * @param string $application
-     * @param array $parameters
-     * @param array $filter
-     * @param boolean $encode_entities
+     * @var string[]
      */
-    public static function link($parameters = array (), $filter = array(), $encode_entities = false)
+    private $parameters;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $filterParameters;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $encodeEntities;
+
+    /**
+     *
+     * @param string[] $parameters
+     * @param string[] $filterParameters
+     * @param boolean $encodeEntities
+     */
+    public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false)
     {
-        $link = self :: get_link($parameters, $filter, $encode_entities);
-        self :: write_header($link);
+        $this->parameters = $parameters;
+        $this->filterParameters = $filterParameters;
+        $this->encodeEntities = $encodeEntities;
     }
 
     /**
      *
-     * @param string $url
-     * @param array $parameters
-     * @param boolean $encode_entities
+     * @return string[]
      */
-    public static function web_link($url, $parameters = array (), $encode_entities = false)
+    private function getParameters()
     {
-        $link = self :: get_web_link($url, $parameters, $encode_entities);
-        self :: write_header($link);
+        return $this->parameters;
     }
 
     /**
      *
-     * @param string $application
-     * @param array $parameters
-     * @param array $filter
-     * @param boolean $encode_entities
+     * @param string[] $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getFilterParameters()
+    {
+        return $this->filterParameters;
+    }
+
+    /**
+     *
+     * @param string[] $filterParameters
+     */
+    public function setFilterParameters($filterParameters)
+    {
+        $this->filterParameters = $filterParameters;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getEncodeEntities()
+    {
+        return $this->encodeEntities;
+    }
+
+    /**
+     *
+     * @param boolean $encodeEntities
+     */
+    public function setEncodeEntities($encodeEntities)
+    {
+        $this->encodeEntities = $encodeEntities;
+    }
+
+    public function toUrl()
+    {
+        $this->writeHeader($this->getUrl());
+    }
+
+    /**
+     *
      * @return string
      */
-    public static function get_link($parameters = array (), $filter = array(), $encode_entities = false)
+    public function getUrl()
     {
-        $filtered_parameters = self :: filter_out_parameters($parameters, $filter);
-        return self :: get_web_link('index.php', $filtered_parameters, $encode_entities);
+        $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
+        return $this->getWebLink($baseUrl);
     }
 
-    private static function filter_out_parameters($parameters, $filter)
+    /**
+     *
+     * @return string[]
+     */
+    private function getFilteredParameters()
     {
-        if (empty($filter))
-            return $parameters;
+        $parameters = $this->getParameters();
+        $filterParameters = $this->getFilterParameters();
 
-        $filter = is_array($filter) ? $filter : array($filter);
-        $filtered_parameters = array();
+        if (empty($filterParameters))
+        {
+            return $parameters;
+        }
+
+        $filterParameters = is_array($filterParameters) ? $filterParameters : array($filterParameters);
+        $filteredParameters = array();
 
         foreach ($parameters as $key => $value)
         {
-            if (! in_array($key, $filter))
+            if (! in_array($key, $filterParameters))
             {
-                $filtered_parameters[$key] = $value;
+                $filteredParameters[$key] = $value;
             }
         }
 
-        return $filtered_parameters;
-    }
-
-    /**
-     *
-     * @param array $parameters
-     * @param array $filter
-     * @param boolean $encode_entities
-     */
-    public static function url($parameters = array (), $filter = array(), $encode_entities = false)
-    {
-        $url = self :: get_url($parameters, $filter, $encode_entities);
-        self :: write_header($url);
-    }
-
-    /**
-     *
-     * @param array $parameters
-     * @param array $filter
-     * @param boolean $encode_entities
-     * @return string
-     */
-    public static function get_url($parameters = array (), $filter = array(), $encode_entities = false)
-    {
-        $url = $_SERVER['PHP_SELF'];
-
-        $filtered_parameters = self :: filter_out_parameters($parameters, $filter);
-        return self :: get_web_link($url, $filtered_parameters, $encode_entities);
+        return $filteredParameters;
     }
 
     /**
@@ -113,8 +149,10 @@ class Redirect
      * @param boolean $encode_entities
      * @return string
      */
-    public static function get_web_link($url, $parameters = array (), $encode_entities = false)
+    private function getWebLink($url, $parameters = array (), $encode_entities = false)
     {
+        $parameters = $this->getFilteredParameters();
+
         if (count($parameters))
         {
             // remove anchor
@@ -138,10 +176,11 @@ class Redirect
             $url .= $anchor;
         }
 
-        if ($encode_entities)
+        if ($this->getEncodeEntities())
         {
             $url = htmlentities($url);
         }
+
         return $url;
     }
 
@@ -149,7 +188,7 @@ class Redirect
      *
      * @param string $url
      */
-    public static function write_header($url)
+    private function writeHeader($url)
     {
         if (headers_sent($filename, $line))
         {
@@ -167,20 +206,8 @@ class Redirect
      *
      * @return string Current URL
      */
-    public static function current_url($encode_entities = false)
+    public function getCurrentUrl($includeRequest = true)
     {
-        global $_SERVER;
-
-        /**
-         * Filter php_self to avoid a security vulnerability.
-         */
-        $php_request_uri = substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], "\n\r"));
-
-        if ($encode_entities)
-        {
-            $php_request_uri = htmlentities($php_request_uri, ENT_QUOTES);
-        }
-
         if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on')
         {
             $protocol = 'https://';
@@ -200,6 +227,55 @@ class Redirect
             $port = '';
         }
 
-        return $protocol . $host . $port . $php_request_uri;
+        $parts = array();
+
+        $parts[] = $protocol;
+        $parts[] = $host;
+        $parts[] = $port;
+
+        if ($includeRequest)
+        {
+            /**
+             * Filter php_self to avoid a security vulnerability.
+             */
+            $requestUri = substr($_SERVER['REQUEST_URI'], 0, strcspn($_SERVER['REQUEST_URI'], "\n\r"));
+
+            if ($this->getEncodeEntities())
+            {
+                $requestUri = htmlentities($requestUri, ENT_QUOTES);
+            }
+
+            $parts[] = $requestUri;
+        }
+
+        return implode('', $parts);
+    }
+
+    /**
+     *
+     * @param string[] $parameters
+     * @param string[] $filterParameters
+     * @param boolean $encodeEntities
+     * @return string
+     * @deprecated No longer use this static method, it's only available for backwards compatibility
+     */
+    public static function get_url($parameters = array (), $filterParameters = array(), $encodeEntities = false)
+    {
+        $redirect = new self($parameters, $filterParameters, $encodeEntities);
+        return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @param string[] $parameters
+     * @param string[] $filterParameters
+     * @param boolean $encodeEntities
+     * @return string
+     * @deprecated No longer use this static method, it's only available for backwards compatibility
+     */
+    public static function url($parameters = array (), $filterParameters = array(), $encodeEntities = false)
+    {
+        $redirect = new self($parameters, $filterParameters, $encodeEntities);
+        $redirect->toUrl();
     }
 }

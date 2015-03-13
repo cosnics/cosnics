@@ -14,40 +14,42 @@ class Manager implements UserInterface
     public static function get_additional_user_information(\Chamilo\Core\User\Storage\DataClass\User $user)
     {
         $html = array();
-        
+
         $table = new HTML_Table(array('class' => 'data_table'));
-        
+
         $table->setHeaderContents(0, 0, Translation :: get('Courses'));
         $table->setCellAttributes(0, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
-        
+
         $table->setHeaderContents(1, 0, Translation :: get('CourseCode'));
         $table->setHeaderContents(1, 1, Translation :: get('CourseName'));
-        
+
         $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
-        
+
         if ($courses->size() == 0)
         {
             $table->setCellContents(2, 0, Translation :: get('NoCourses'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
         }
-        
+
         $index = 2;
-        
+
         while ($course = $courses->next_result())
         {
-            $url = Redirect :: get_link(
+            $redirect = new Redirect(
                 array(self :: PARAM_ACTION => self :: ACTION_VIEW_COURSE, self :: PARAM_COURSE => $course->get_id()));
+            $url = $redirect->getUrl();
+
             $url = '<a href="' . $url . '">';
             $table->setCellContents($index, 0, $url . $course->get_visual_code() . '</a>');
             $table->setCellAttributes($index, 0, array('style' => 'width: 150px;'));
             $table->setCellContents($index, 1, $url . $course->get_title() . '</a>');
             $index ++;
         }
-        
+
         $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
-        
+
         $html[] = $table->toHtml();
-        
+
         return implode(PHP_EOL, $html);
     }
 }

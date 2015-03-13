@@ -46,27 +46,19 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
     {
         if ($this->get_user()->is_platform_admin())
         {
+            $redirect = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                    \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER));
             $breadcrumbtrail->add(
-                new Breadcrumb(
-                    Redirect :: get_link(
-                        array(
-                            Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                            \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER),
-                        array(),
-                        false,
-                        Redirect :: TYPE_CORE),
-                    Translation :: get('TypeName', null, 'core\admin')));
-            $breadcrumbtrail->add(
-                new Breadcrumb(
-                    Redirect :: get_link(
-                        array(
-                            Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                            \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
-                            DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME),
-                        array(),
-                        false,
-                        Redirect :: TYPE_CORE),
-                    Translation :: get('Courses')));
+                new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName', null, 'core\admin')));
+
+            $redirect = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
+                    \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME));
+            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Courses')));
         }
     }
 

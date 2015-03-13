@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Implementation\Flickr\Component;
 
 use Chamilo\Core\Repository\Implementation\Flickr\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Flickr\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -30,16 +29,8 @@ class EditorComponent extends Manager
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
-            if ($this->is_stand_alone())
-            {
-                Redirect :: web_link(
-                    Path :: getInstance()->getBasePath(true) . 'common/launcher/index.php',
-                    $parameters);
-            }
-            else
-            {
-                Redirect :: web_link(Path :: getInstance()->getBasePath(true) . 'index.php', $parameters);
-            }
+            $redirect = new Redirect($parameters);
+            $redirect->toUrl();
         }
         else
         {

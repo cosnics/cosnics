@@ -116,7 +116,9 @@ class AssignmentBlock extends CourseBlock
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $tool;
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $pub[ContentObjectPublication :: PROPERTY_ID];
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS;
-            $url_title = Redirect :: get_url($params);
+
+            $redirect = new Redirect($params);
+            $url_title = $redirect->getUrl();
 
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $pub[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);

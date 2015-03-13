@@ -75,10 +75,14 @@ class LearningPathAttemptsBlock extends ToolBlock
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user->get_id();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $pid;
                 $params[StatisticsViewerComponent :: PARAM_STAT] = null;
-                $url = Redirect :: get_url($params);
+
+                $redirect = new Redirect($params);
+                $url = $redirect->getUrl();
 
                 $params[StatisticsViewerComponent :: PARAM_STAT] = StatisticsViewerComponent :: ACTION_DELETE_LP_ATTEMPT;
-                $delete_url = Redirect :: get_url($params);
+
+                $redirect = new Redirect($params);
+                $delete_url = $redirect->getUrl();
 
                 if ($tool == 'reporting')
                 {

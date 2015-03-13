@@ -22,9 +22,10 @@ class LogoutItem extends MenuItem
      */
     public function get_url()
     {
-        return Redirect :: get_link(
+        $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: context(),
                 Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
+        return $redirect->getUrl();
     }
 }

@@ -26,7 +26,8 @@ class LocationResult extends ContextLocationResult
         $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $result->get_id();
-        
-        return Redirect :: get_url($parameters);
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 }

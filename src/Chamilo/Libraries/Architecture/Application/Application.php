@@ -128,7 +128,9 @@ abstract class Application
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-        return Redirect :: get_url($parameters, $filter, $encode_entities);
+
+        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        return $redirect->getUrl();
     }
 
     /**
@@ -140,19 +142,12 @@ abstract class Application
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
      * @param string $redirect_type
      */
-    public function simple_redirect($parameters = array(), $filter = array(), $encode_entities = false,
-        $redirect_type = Redirect :: TYPE_URL)
+    public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false)
     {
-        switch ($redirect_type)
-        {
-            case Redirect :: TYPE_URL :
-                $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-                Redirect :: url($parameters, $filter, $encode_entities);
-                break;
-            case Redirect :: TYPE_LINK :
-                Redirect :: link($parameters, $filter, $encode_entities);
-                break;
-        }
+        $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
+
+        $redirect = new Redirect($parameters, $filter, $encodeEntities);
+        $redirect->toUrl();
         exit();
     }
 
@@ -168,8 +163,7 @@ abstract class Application
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
      * @param string $redirect_type
      */
-    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false,
-        $redirect_type = Redirect :: TYPE_URL)
+    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false)
     {
         $message_type = (! $error_message) ? NotificationMessage :: TYPE_NORMAL : NotificationMessage :: TYPE_ERROR;
 
@@ -179,7 +173,7 @@ abstract class Application
 
         Session :: register(self :: PARAM_MESSAGES, $messages);
 
-        $this->simple_redirect($parameters, $filter, $encode_entities, $redirect_type);
+        $this->simple_redirect($parameters, $filter, $encode_entities);
     }
 
     /**
@@ -663,7 +657,8 @@ abstract class Application
      */
     public function get_link($parameters = array (), $filter = array(), $encode_entities = false)
     {
-        return Redirect :: get_link($parameters, $filter, $encode_entities);
+        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        return $redirect->getUrl();
     }
 
     /**
@@ -823,10 +818,14 @@ abstract class Application
 
                 Session :: register(self :: PARAM_MESSAGES, $messages);
 
-                $logger = new FileLogger(Path :: getInstance()->getLogPath() . '/application_parameters.log', true);
-                $logger->log_message(Redirect :: current_url());
+                $redirect = new Redirect();
+                $currentUrl = $redirect->getCurrentUrl();
 
-                Redirect :: link($query);
+                $logger = new FileLogger(Path :: getInstance()->getLogPath() . '/application_parameters.log', true);
+                $logger->log_message($currentUrl);
+
+                $redirect = new Redirect($query);
+                $redirect->toUrl();
             }
         }
 

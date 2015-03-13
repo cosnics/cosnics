@@ -25,7 +25,8 @@ class LocationResult extends ContextLocationResult
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Calendar\Manager :: context();
         $parameters[\Chamilo\Application\Calendar\Manager :: PARAM_ACTION] = \Chamilo\Application\Calendar\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Application\Calendar\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
-        
-        return Redirect :: get_url($parameters);
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 }

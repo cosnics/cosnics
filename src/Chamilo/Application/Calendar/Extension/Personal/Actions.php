@@ -22,7 +22,9 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_CREATE;
-        $link = Redirect :: get_link($parameters);
+
+        $redirect = new Redirect($parameters);
+        $link = $redirect->getUrl();
 
         $actions[] = new ToolbarItem(
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
@@ -32,7 +34,9 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_IMPORT;
-        $link = Redirect :: get_link($parameters);
+
+        $redirect = new Redirect($parameters);
+        $link = $redirect->getUrl();
 
         $actions[] = new ToolbarItem(
             Translation :: get('ImportIcal'),

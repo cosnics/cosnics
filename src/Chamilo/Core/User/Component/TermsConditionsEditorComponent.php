@@ -26,7 +26,8 @@ class TermsConditionsEditorComponent extends Manager
             $success = $form->edit_terms_conditions();
             if ($success == 1)
             {
-                Redirect :: link();
+                $redirect = new Redirect();
+                $redirect->toUrl();
             }
             else
             {

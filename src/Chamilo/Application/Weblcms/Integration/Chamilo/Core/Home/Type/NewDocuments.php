@@ -58,7 +58,9 @@ class NewDocuments extends NewBlock
                 \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager :: ACTION_VIEW_DOCUMENTS,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $id);
-            $link = Redirect :: get_link($parameters);
+
+            $redirect = new Redirect($parameters);
+            $link = $redirect->getUrl();
 
             $html[] = '<a href="' . $link . '">' . $icon . ' ' . $title . '</a><br />';
         }

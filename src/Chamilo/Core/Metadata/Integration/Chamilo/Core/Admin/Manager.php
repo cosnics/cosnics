@@ -15,73 +15,66 @@ class Manager implements ActionsSupportInterface
     public static function get_actions()
     {
         $links = array();
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_SCHEMA));
         $links[] = new DynamicAction(
             Translation :: get('MetadataNamespacesBrowser'),
             Translation :: get('MetadataNamespacesDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_SCHEMA),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_ELEMENT));
         $links[] = new DynamicAction(
             Translation :: get('MetadataElementsBrowser'),
             Translation :: get('MetadataElementsDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_ELEMENT),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_ATTRIBUTE));
         $links[] = new DynamicAction(
             Translation :: get('MetadataAttributesBrowser'),
             Translation :: get('MetadataAttributesDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_ATTRIBUTE),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_CONTROLLED_VOCABULARY));
         $links[] = new DynamicAction(
             Translation :: get('ControlledVocabularyBrowser'),
             Translation :: get('ControlledVocabularyBrowserDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_CONTROLLED_VOCABULARY),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_EXPORT_METADATA));
         $links[] = new DynamicAction(
             Translation :: get('ExportMetadaTitle'),
             Translation :: get('ExportMetadataDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Export'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_EXPORT_METADATA),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_IMPORT_METADATA));
         $links[] = new DynamicAction(
             Translation :: get('ImportMetadaTitle'),
             Translation :: get('ImportMetadataDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_IMPORT_METADATA),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
         return new Actions(\Chamilo\Core\Metadata\Manager :: context(), $links);
     }

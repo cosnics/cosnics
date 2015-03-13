@@ -81,7 +81,8 @@ class ToolPublicationsBlock extends ToolBlock
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $content_object_publication->get_id();
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
 
-            $url = Redirect :: get_url($params);
+            $redirect = new Redirect($params);
+            $url = $redirect->getUrl();
 
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $content_object_publication->get_content_object_id());

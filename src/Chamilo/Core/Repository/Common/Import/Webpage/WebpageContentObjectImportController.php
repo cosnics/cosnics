@@ -117,12 +117,14 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 if ($content_objects->size() == 1)
                 {
                     $content_object = $content_objects->next_result();
-                    $link = Redirect :: get_link(
+
+                    $redirect = new Redirect(
                         array(
                             Application :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
                             Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
+
                     $this->add_message(
-                        Translation :: get('ObjectAlreadyExists', array('LINK' => $link)),
+                        Translation :: get('ObjectAlreadyExists', array('LINK' => $redirect->getUrl())),
                         self :: TYPE_ERROR);
                 }
                 else

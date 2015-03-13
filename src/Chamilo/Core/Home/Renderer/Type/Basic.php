@@ -141,17 +141,13 @@ class Basic extends Renderer
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
                      htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
 
-                $reset_url = Redirect :: get_link(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE);
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
                 if ($user_id != '0')
                 {
                     $html[] = '<a onclick="return confirm(\'' .
-                         Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' . $reset_url .
-                         '"><img src="' . htmlspecialchars(
+                         Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
+                         $redirect->getUrl() . '"><img src="' . htmlspecialchars(
                             Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
                          htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
                 }
@@ -159,27 +155,19 @@ class Basic extends Renderer
 
             if (! $general_mode && $user->is_platform_admin())
             {
-                $manage_url = Redirect :: get_link(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE);
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
 
-                $html[] = '<a href="' . $manage_url . '"><img src="' . htmlspecialchars(
+                $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Configure')) . '" />&nbsp;' .
                      htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
             }
             elseif ($general_mode && $user->is_platform_admin())
             {
-                $personal_url = Redirect :: get_link(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL),
-                    array(),
-                    false,
-                    Redirect :: TYPE_CORE);
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
 
                 $title = $user_home_allowed ? 'BackToPersonal' : 'ViewDefault';
 
-                $html[] = '<a href="' . $personal_url . '"><img src="' . htmlspecialchars(
+                $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Home')) . '" />&nbsp;' .
                      htmlspecialchars(Translation :: get($title)) . '</a>';
             }

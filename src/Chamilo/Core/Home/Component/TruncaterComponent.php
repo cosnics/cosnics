@@ -17,7 +17,9 @@ class TruncaterComponent extends Manager
     public function run()
     {
         $success = DataManager :: truncate_home($this->get_user_id());
-        Redirect :: link();
+
+        $redirect = new Redirect();
+        $redirect->toUrl();
     }
 
     /**

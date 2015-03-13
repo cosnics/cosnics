@@ -14,7 +14,8 @@ use HTML_Table;
 use Pager;
 
 /**
- * This class allows you to display a sortable data-table. It is possible to split the data in several pages. Using this
+ * This class allows you to display a sortable data-table.
+ * It is possible to split the data in several pages. Using this
  * class you can: - automatically create checkboxes of the first table column - a "select all" and "deselect all" link
  * is added - only if you provide a list of actions for the selected items - click on the table header to sort the data
  * - choose how many items you see per page - navigate through all data-pages
@@ -232,7 +233,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Returns the complete table HTML. Alias of as_html().
+     * Returns the complete table HTML.
+     * Alias of as_html().
      */
     public function toHTML()
     {
@@ -576,11 +578,12 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Add a filter to a column. If another filter was allready defined for the given column, it will be overwritten.
+     * Add a filter to a column.
+     * If another filter was allready defined for the given column, it will be overwritten.
      *
      * @param $column int The number of the column
      * @param $function string The name of the filter-function. This should be a function wich requires 1 parameter and
-     *            returns the filtered value.
+     *        returns the filtered value.
      */
     public function set_column_filter($column, $function)
     {
@@ -588,13 +591,14 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Define a list of actions which can be performed on the table-date. If you define a list of actions, the first
+     * Define a list of actions which can be performed on the table-date.
+     * If you define a list of actions, the first
      * column of the table will be converted into checkboxes.
      *
      * @param $actions array A list of actions. The key is the name of the action. The value is the label to show in the
-     *            select-box
+     *        select-box
      * @param $checkbox_name string The name of the generated checkboxes. The value of the checkbox will be the value of
-     *            the first column.
+     *        the first column.
      */
     public function set_form_actions($actions, $checkbox_name = 'id', $select_name = 'action')
     {
@@ -614,7 +618,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Set other tables on the same page. If you have other sortable tables on the page displaying this sortable tables,
+     * Set other tables on the same page.
+     * If you have other sortable tables on the page displaying this sortable tables,
      * you can define those other tables with this function. If you don't define the other tables, there sorting and
      * pagination will return to their default state when sorting this table.
      *
@@ -627,7 +632,8 @@ class SortableTable extends HTML_Table
 
     /**
      * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class. If you've defined actions, the first element of the given row will be converted into a
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
      * checkbox
      *
      * @param $row array A row from the table.
@@ -664,7 +670,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Get the total number of items. This function calls the function given as 2nd argument in the constructor of a
+     * Get the total number of items.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      */
     public function get_total_number_of_items()
@@ -677,7 +684,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Get the data to display. This function calls the function given as 2nd argument in the constructor of a
+     * Get the data to display.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
      * @param $from int Index of the first item to return.

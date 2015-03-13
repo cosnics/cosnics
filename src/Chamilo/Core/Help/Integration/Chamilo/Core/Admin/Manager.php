@@ -15,17 +15,16 @@ class Manager implements ActionsSupportInterface
     public static function get_actions()
     {
         $links = array();
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Help\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\Help\Manager :: ACTION_BROWSE_HELP_ITEMS));
         $links[] = new DynamicAction(
             Translation :: get('List'),
             Translation :: get('ListDescription'),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Help\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\Help\Manager :: ACTION_BROWSE_HELP_ITEMS),
-                array(),
-                false,
-                Redirect :: TYPE_CORE));
+            $redirect->getUrl());
 
         return new Actions(\Chamilo\Core\Help\Manager :: context(), $links);
     }

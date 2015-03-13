@@ -8,7 +8,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     const URL = 'http://hostname:12345/path/to/script.php/path/info?arg=value&arg2=value2#anchor';
 
     private $parsed_url;
-    
+
     /*
      * array(7) { ["scheme"]=> string(4) "http" ["host"]=> string(8) "hostname" ["port"]=> int(12345) ["path"]=>
      * string(29) "/path/to/script.php/path/info" ["query"]=> string(21) "arg=value&arg2=value2" ["fragment"]=>
@@ -17,7 +17,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->parsed_url =\Chamilo\ParseUrl(self :: URL);
-        
+
         $_SERVER['PHP_SELF'] = $this->parsed_url['path'];
         $_SERVER['QUERY_STRING'] = $this->parsed_url['query'];
         $_SERVER['PATH_INFO'] = '/path/info';
@@ -31,7 +31,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_url_should_be_consistent_with_php_self()
     {
-        $return_value = Redirect :: get_url();
+        $redirect = new Redirect();
+        $return_value = $redirect->getUrl();
         $this->assertEquals($_SERVER['PHP_SELF'], $return_value);
     }
 
@@ -39,36 +40,35 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = array('greets' => 'Hi', 'bad word' => '******');
         $filters = array('bad word');
-        
-        $return_value = Redirect :: get_url($parameters, $filters);
+
+        $redirect = new Redirect($parameters, $filters);
+        $return_value = $redirect->getUrl();
         $this->assertEquals($_SERVER['PHP_SELF'] . '?greets=Hi', $return_value);
     }
 
     public function test_current_url_should_be_exactly_the_same()
     {
-        $return_value = Redirect :: current_url();
-        $this->assertEquals(self :: URL, $return_value);
-    }
-
-    public function test_get_web_link_should_be_the_same()
-    {
-        $return_value = Redirect :: get_web_link(self :: URL);
+        $redirect = new Redirect();
+        $return_value = $redirect->getCurrentUrl();
         $this->assertEquals(self :: URL, $return_value);
     }
 
     public function test_get_web_link_add_parameters_to_url()
     {
         $params = array('extraparam1' => 'extraValue1', 'extraparam2' => array('array1', 'array2', 'array3'));
-        
+
         $expected = $params + array('arg' => "value", 'arg2' => "value2");
-        $return_value = Redirect :: get_web_link(self :: URL, $params);
-        
+
+        $redirect = new Redirect($params);
+        $return_value = $redirect->getUrl();
+
         $this->assertURLQueryContainsExactly($expected, $return_value);
     }
 
     public function test_get_link_should_build_application_relative_url()
     {
-        $return_value = Redirect :: get_link('customApplication');
+        $redirect = new Redirect(array('application' => 'customApplication'));
+        $return_value = $redirect->getUrl();
         $this->assertEquals('run.php?application=customApplication', $return_value);
     }
 
@@ -76,45 +76,25 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = array('greets' => 'Hi', 'bad word' => '******');
         $filters = array('bad word');
-        $return_value = Redirect :: get_link('customApplication', $parameters, $filters);
-        
+
+        $redirect = new Redirect($parameters, $filters);
+        $return_value = $redirect->getUrl();
+
         $expected = array('application' => "customApplication", 'greets' => "Hi");
-        
+
         $this->assertURLQueryContainsExactly($expected, $return_value);
-    }
-
-    public function test_get_link_should_call_run_script_when_type_is_application()
-    {
-        $return_value = Redirect :: get_link('customApplication', array(), array(), false, Redirect :: TYPE_APPLICATION);
-        
-        $this->assertEquals('run.php?application=customApplication', $return_value);
-    }
-
-    public function test_get_link_should_call_core_script_when_type_is_core()
-    {
-        $return_value = Redirect :: get_link('coreApplication', array(), array(), false, Redirect :: TYPE_CORE);
-        $this->assertEquals('core.php?application=coreApplication', $return_value);
-    }
-
-    public function test_get_link_should_call_index_script_when_type_is_index()
-    {
-        $return_value = Redirect :: get_link('coreApplication', array(), array(), false, Redirect :: TYPE_INDEX);
-        $this->assertEquals('index.php', $return_value);
-    }
-
-    public function test_get_link_should_call_index_script_when_type_is_something_else()
-    {
-        $return_value = Redirect :: get_link('coreApplication', array(), array(), false, "unknown");
-        $this->assertEquals('index.php', $return_value);
     }
 
     public function test_get_web_link_encode_entities_when_specified()
     {
-        $url = "un script nécessitant d'être encodé & including <different> entities";
-        
-        $unencoded_return_value = Redirect :: get_web_link($url, array(), false);
-        $encoded_return_value = Redirect :: get_web_link($url, array(), true);
-        
+        $params = array('test' => "un script nécessitant d'être encodé & including <different> entities");
+
+        $redirect = new Redirect($params, array(), false);
+        $unencoded_return_value = $redirect->getUrl();
+
+        $redirect = new Redirect($params, array(), true);
+        $encoded_return_value = $redirect->getUrl();
+
         $this->assertEquals($url, $unencoded_return_value);
         $this->assertEquals($url,\Chamilo\HtmlEntityDecode($encoded_return_value));
     }
@@ -123,9 +103,9 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parsed_return_value = parse_url(urldecode($return_value));
         parse_str($parsed_return_value['query'], $parsed_return_query);
-        
+
         $not_found = array_diff($expected, $parsed_return_query);
-        
+
         $this->assertEquals(array(), $not_found);
     }
 
@@ -133,7 +113,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parsed_return_value = parse_url(urldecode($url));
         parse_str($parsed_return_value['query'], $parsed_return_query);
-        
+
         $this->assertEquals($expected, $parsed_return_query);
     }
 }

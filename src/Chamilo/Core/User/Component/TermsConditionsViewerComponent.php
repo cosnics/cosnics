@@ -25,7 +25,8 @@ class TermsConditionsViewerComponent extends Manager
             $success = $form->register_terms_user();
             if ($success == 1)
             {
-                Redirect :: link();
+                $redirect = new Redirect();
+                $redirect->toUrl();
             }
             else
             {

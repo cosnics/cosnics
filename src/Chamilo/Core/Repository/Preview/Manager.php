@@ -178,11 +178,13 @@ abstract class Manager extends Application
 
         $action = $content_object->is_complex_content_object() ? self :: ACTION_DISPLAY : self :: ACTION_RENDITION;
 
-        return Redirect :: get_link(
+        $redirect = new Redirect(
             array(
                 self :: PARAM_CONTEXT => self :: context(),
                 self :: PARAM_ACTION => $action,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
+
+        return $redirect->getUrl();
     }
 
     public function getPreview()

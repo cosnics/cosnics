@@ -393,12 +393,14 @@ class BlockRendition
 
     public function get_manipulation_link($parameters)
     {
-        return Redirect :: get_link($parameters, array(), false);
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     public function get_link($parameters = array(), $encode = false)
     {
-        return Redirect :: get_link($parameters, array(), $encode);
+        $redirect = new Redirect($parameters, array(), $encode);
+        return $redirect->getUrl();
     }
 
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)

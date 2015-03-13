@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\UploadForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
@@ -31,11 +30,9 @@ class UploaderComponent extends Manager
                     $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
                     $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
-                    $platform_url = Redirect :: get_web_link(
-                        Path :: getInstance()->getBasePath(true) . 'index.php',
-                        $parameters);
+                    $redirect = new Redirect($parameters);
 
-                    $next_url = $upload_token['url'] . '?nexturl=' . urlencode($platform_url);
+                    $next_url = $upload_token['url'] . '?nexturl=' . urlencode($redirect->getUrl());
                     $form = new UploadForm($next_url, $upload_token['token']);
 
                     $html = array();

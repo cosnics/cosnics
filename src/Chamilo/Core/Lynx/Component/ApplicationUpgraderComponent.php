@@ -25,9 +25,9 @@ class ApplicationUpgraderComponent extends UpgraderComponent implements NoAuthen
         $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
         $title = Translation :: get('PlatformUpgraded');
 
-        $result = Translation :: get(
-            'ApplicationsUpgraded',
-            array('URL' => Redirect :: get_link(array(), array(self :: PARAM_CONTEXT))));
+        $redirect = new Redirect(array(self :: PARAM_CONTEXT => null));
+
+        $result = Translation :: get('ApplicationsUpgraded', array('URL' => $redirect->getUrl()));
 
         return $this->render_upgrade_step($image, $title, $result);
     }

@@ -26,7 +26,9 @@ class PersonalComponent extends Manager
         {
             \Chamilo\Libraries\Platform\Session\Session :: unregister(__NAMESPACE__ . '\general');
         }
-        Redirect :: link();
+
+        $redirect = new Redirect();
+        $redirect->toUrl();
     }
 
     /**

@@ -2,10 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -36,14 +36,14 @@ class QuickLanguageComponent extends Manager
         {
             $choice = Request :: get(self :: PARAM_CHOICE);
             $languages = array_keys(self :: get_languages());
-            
+
             if ($choice && in_array($choice, $languages))
             {
                 LocalSetting :: create_local_setting('platform_language', $choice);
             }
         }
-        
-        $origin = Request :: get(self :: PARAM_REFER);
-        Redirect :: web_link($origin);
+
+        $response = new RedirectResponse(Request :: get(self :: PARAM_REFER));
+        $response->send();
     }
 }

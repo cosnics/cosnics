@@ -21,11 +21,13 @@ class Manager implements ActionsSupportInterface
 
         if ($package_management == '1')
         {
+            $redirect = new Redirect(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Lynx\Manager :: context()));
+
             $links[] = new DynamicAction(
                 Translation :: get('ManagePackages'),
                 Translation :: get('ManagePackagesDescription'),
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Build'),
-                Redirect :: get_link(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Lynx\Manager :: context())));
+                $redirect->getUrl());
         }
 
         return new Actions(\Chamilo\Core\Lynx\Manager :: context(), $links);

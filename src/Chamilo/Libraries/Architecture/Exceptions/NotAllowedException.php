@@ -34,13 +34,12 @@ class NotAllowedException extends \Exception
 
     public function getLoginForm()
     {
-        $form = new FormValidator(
-            'formLogin',
-            'post',
-            Redirect :: get_link(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGIN)));
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGIN));
+
+        $form = new FormValidator('formLogin', 'post', $redirect->getUrl());
 
         $form->get_renderer()->setElementTemplate('<div class="row">{element}</div>');
 

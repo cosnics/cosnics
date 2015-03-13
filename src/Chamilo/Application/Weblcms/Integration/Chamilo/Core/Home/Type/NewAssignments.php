@@ -66,7 +66,8 @@ class NewAssignments extends NewBlock
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $id);
 
-            $link = Redirect :: get_link($parameters);
+            $redirect = new Redirect($parameters);
+            $link = $redirect->getUrl();
 
             $start_date = DatetimeUtilities :: format_locale_date(
                 Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES),

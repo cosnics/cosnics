@@ -255,7 +255,8 @@ class Preview extends \Chamilo\Core\Repository\ContentObject\LearningPath\Displa
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = '__STEP__';
 
-        return Redirect :: get_link($parameters);
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     /**

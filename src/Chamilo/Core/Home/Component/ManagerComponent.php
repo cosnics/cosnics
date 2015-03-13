@@ -22,7 +22,9 @@ class ManagerComponent extends Manager
         {
             \Chamilo\Libraries\Platform\Session\Session :: register(__NAMESPACE__ . '\general', '1');
         }
-        Redirect :: link();
+
+        $redirect = new Redirect();
+        $redirect->toUrl();
     }
 
     /**

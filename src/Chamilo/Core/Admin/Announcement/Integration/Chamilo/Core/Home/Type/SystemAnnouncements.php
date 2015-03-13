@@ -28,7 +28,8 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         else
         {
             /**
-             * SystemAnnouncement may not be available if not installed. Therefore do not use SystemAnnouncement::...
+             * SystemAnnouncement may not be available if not installed.
+             * Therefore do not use SystemAnnouncement::...
              */
             return Theme :: getInstance()->getImagePath(
                 ContentObject :: get_content_object_type_namespace('system_announcement'),
@@ -126,8 +127,8 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];
 
-        $result = Redirect :: get_link($parameters, null, null, Redirect :: TYPE_CORE);
-        return $result;
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     public function display_content()

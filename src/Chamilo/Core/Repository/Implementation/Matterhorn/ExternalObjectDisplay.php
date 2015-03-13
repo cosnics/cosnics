@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Implementation\Matterhorn;
 
 use Chamilo\Core\Repository\External\General\Streaming\StreamingMediaExternalObjectDisplay;
 use Chamilo\Core\Repository\Implementation\Matterhorn\Stream\Stream;
-use Chamilo\Core\Repository\Implementation\Matterhorn\Stream\Type\TrackStream;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -67,7 +66,9 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                 $parameters[Stream :: PARAM_TYPE] = Stream :: TYPE_PREVIEW;
                 $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $object->get_external_repository_id();
                 $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-                $image_url = Redirect :: get_link($parameters);
+
+                $redirect = new Redirect($parameters);
+                $image_url = $redirect->getUrl();
 
                 $html[] = '<img class="thumbnail" src="' . $image_url . '"/>';
             }
@@ -148,14 +149,6 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
                 {
                     if ($track->is_video())
                     {
-                        $parameters = array();
-                        $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-                        $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_STREAM;
-                        $parameters[Stream :: PARAM_TYPE] = Stream :: TYPE_TRACK;
-                        $parameters[TrackStream :: PARAM_TRACK_ID] = $track->get_id();
-                        $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $object->get_external_repository_id();
-                        $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-                        $track_url = Redirect :: get_link($parameters);
                         $track_url = $track->get_url();
 
                         $track_code = array();

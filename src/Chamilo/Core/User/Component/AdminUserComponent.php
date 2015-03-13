@@ -27,7 +27,8 @@ class AdminUserComponent extends Manager
             \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $admin_user);
             \Chamilo\Libraries\Platform\Session\Session :: register('checkChamiloURL', $checkurl);
 
-            $this->redirect(null, false, array(), array(), false, Redirect :: TYPE_LINK, Redirect :: TYPE_INDEX);
+            $redirect = new Redirect();
+            $redirect->toUrl();
         }
         else
         {

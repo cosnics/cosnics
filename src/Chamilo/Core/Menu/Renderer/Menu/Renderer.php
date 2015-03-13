@@ -190,11 +190,13 @@ abstract class Renderer
                 $item_titles = new ItemTitles(new ArrayResultSet(array($item_title)));
 
                 $external_instance_manager_sub_item->set_titles($item_titles);
-                $external_instance_manager_sub_item->set_url(
-                    Redirect :: get_link(
-                        array(
-                            Application :: PARAM_CONTEXT => $external_instance_manager->get_type(),
-                            \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $external_instance_manager->get_id())));
+
+                $redirect = new Redirect(
+                    array(
+                        Application :: PARAM_CONTEXT => $external_instance_manager->get_type(),
+                        \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $external_instance_manager->get_id()));
+
+                $external_instance_manager_sub_item->set_url($redirect->getUrl());
 
                 $external_instance_manager_sub_item->set_target(LinkItem :: TARGET_SELF);
                 $external_instance_manager_sub_item->set_section($external_instance_manager->get_type());

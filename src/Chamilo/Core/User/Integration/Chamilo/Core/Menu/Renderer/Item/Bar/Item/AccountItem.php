@@ -18,9 +18,10 @@ class AccountItem extends MenuItem
 
     public function get_url()
     {
-        return Redirect :: get_link(
+        $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: context(),
                 Application :: PARAM_ACTION => Manager :: ACTION_VIEW_ACCOUNT));
+        return $redirect->getUrl();
     }
 }
