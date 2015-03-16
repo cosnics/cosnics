@@ -42,7 +42,6 @@ div#emulator {
 	width: 100%;
 	padding: 0;
 	margin: 0;
-
 }
 
 /* Header 1: Containing title, portal and organization */
@@ -117,7 +116,7 @@ div#emulator {
 	margin-bottom: 10px;
 }
 
-#trailbox2 ul,#breadcrumbtrail li {
+#trailbox2 ul, #breadcrumbtrail li {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
@@ -137,7 +136,7 @@ div#emulator {
 	height: 26px;
 }
 
-#trailbox ul,#breadcrumbtrail li {
+#trailbox ul, #breadcrumbtrail li {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
@@ -173,7 +172,7 @@ div#emulator {
 	outline: none;
 }
 
-#trailbox #help_item,#trailbox #extra_item {
+#trailbox #help_item, #trailbox #extra_item {
 	float: right;
 	height: 26px;
 	line-height: 26px;
@@ -183,7 +182,7 @@ div#emulator {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer,#sitemap {
+#footer, #sitemap {
 	clear: both;
 	padding-left: 19px;
 	padding-right: 19px;
@@ -312,7 +311,8 @@ div#emulator {
 }
 
 /* Message boxes */
-.normal-message,.error-message,.warning-message,.confirm-message,.fatal-message {
+.normal-message, .error-message, .warning-message, .confirm-message,
+	.fatal-message {
 	z-index: 9999;
 	position: relative;
 	margin: 10px auto;
@@ -335,14 +335,14 @@ div#emulator {
 	color: #272761;
 }
 
-.error-message,.fatal-message {
+.error-message, .fatal-message {
 	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
-.fatal-message
-{
+
+.fatal-message {
 	position: fixed;
 	top: 100px;
 }
@@ -361,8 +361,8 @@ div#emulator {
 	color: #006600;
 }
 
-.normal-message h2,.warning-message h2,.error-message h2,.fatal-message h2,.confirm-message h2
-	{
+.normal-message h2, .warning-message h2, .error-message h2,
+	.fatal-message h2, .confirm-message h2 {
 	padding: 0px 0px 5px 0px;
 	margin: 0px;
 	font-size: 120%;
@@ -499,19 +499,19 @@ div#emulator {
 	font-weight: bold;
 }
 
-.does_not_exist a:link,does_not_exist a:visited {
+.does_not_exist a:link, does_not_exist a:visited {
 	color: #FF0000;
 }
 
-a.does_not_exist:link,a.does_not_exist:visited {
+a.does_not_exist:link, a.does_not_exist:visited {
 	color: #FF0000;
 }
 
-.invisible a:link,.invisible a:visited {
+.invisible a:link, .invisible a:visited {
 	color: #999;
 }
 
-a.invisible:link,a.invisible:visited {
+a.invisible:link, a.invisible:visited {
 	color: #999;
 }
 
@@ -527,7 +527,7 @@ a.invisible:link,a.invisible:visited {
 	padding: 10px 0;
 }
 
-p,blockquote,ol,ul {
+p, blockquote, ol, ul {
 	font-size: 12px;
 }
 
@@ -550,7 +550,7 @@ h4 {
 	font-size: 12px;
 }
 
-h5,h6 {
+h5, h6 {
 	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
@@ -793,7 +793,7 @@ div.difference div.right {
 }
 
 /* List of versions */
-div.versions,div.versions_na {
+div.versions, div.versions_na {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
@@ -827,15 +827,15 @@ div.versions span.current a {
 }
 
 /* Version quota statistics */
-div.version_stats,div.version_stats_na {
+div.version_stats, div.version_stats_na {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
 }
 
 div.version_stats {
-	background: url(../../Images/Aqua/Place/VersionQuota.png) no-repeat
-		10px 10px;
+	background: url(../../Images/Aqua/Place/VersionQuota.png) no-repeat 10px
+		10px;
 }
 
 div.version_stats_na {
@@ -854,20 +854,20 @@ span.version_comment {
 	font-style: italic;
 }
 
-span.compare_delete,span.compare_delete a {
+span.compare_delete, span.compare_delete a {
 	color: red;
 	text-decoration: line-through;
 }
 
-span.compare_add,span.compare_add a {
+span.compare_add, span.compare_add a {
 	color: green;
 }
 
-span.compare_change,span.compare_change a {
+span.compare_change, span.compare_change a {
 	color: blue;
 }
 
-span.compare_copy,span.compare_copy a {
+span.compare_copy, span.compare_copy a {
 	color: black;
 }
 
@@ -877,7 +877,7 @@ span.info_message {
 }
 
 /* List of publications_attributes */
-div.publications,div.publications_na {
+div.publications, div.publications_na {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
@@ -1000,14 +1000,16 @@ ol.learning-style-survey-tree ol.learning-style-survey-section-questions
 	margin-bottom: 0.5em;
 }
 
-ol.learning-style-survey-tree ul.learning-style-survey-question-categories,ol.learning-style-survey-tree ul.learning-style-survey-answer-categories
+ol.learning-style-survey-tree ul.learning-style-survey-question-categories,
+	ol.learning-style-survey-tree ul.learning-style-survey-answer-categories
 	{
 	list-style: none;
 	padding-left: 0;
 	margin-top: 0.5em;
 }
 
-ol.learning-style-survey-tree ul.learning-style-survey-question-categories li,ol.learning-style-survey-tree ul.learning-style-survey-answer-categories li
+ol.learning-style-survey-tree ul.learning-style-survey-question-categories li,
+	ol.learning-style-survey-tree ul.learning-style-survey-answer-categories li
 	{
 	padding: 0.5em;
 	border: 1px solid #DCDCFF;
@@ -1015,7 +1017,8 @@ ol.learning-style-survey-tree ul.learning-style-survey-question-categories li,ol
 	margin-bottom: 0.25em;
 }
 
-ol.learning-style-survey-tree div.learning-style-survey-question-no-categories,ol.learning-style-survey-tree div.learning-style-survey-answer-no-categories
+ol.learning-style-survey-tree div.learning-style-survey-question-no-categories,
+	ol.learning-style-survey-tree div.learning-style-survey-answer-no-categories
 	{
 	border: 1px dotted #DCDCFF;
 	margin-top: 0.5em;
@@ -1057,7 +1060,7 @@ ol.survey-user-answers {
 	border: 1px solid #DCDCDC;
 }
 
-div.survey-categories-header,div.survey-outline-header,div.survey-result-header
+div.survey-categories-header, div.survey-outline-header, div.survey-result-header
 	{
 	font-weight: bold;
 	font-size: 120%;
@@ -1099,7 +1102,7 @@ div.survey-categories-header,div.survey-outline-header,div.survey-result-header
 	-webkit-border-top-right-radius: 5px;
 }
 
-.tabbed-pane-tabs li a:hover,.tabbed-pane-tabs li a.current {
+.tabbed-pane-tabs li a:hover, .tabbed-pane-tabs li a.current {
 	background: white;
 	margin-top: 0;
 	padding-bottom: 0.5em;
@@ -1107,8 +1110,8 @@ div.survey-categories-header,div.survey-outline-header,div.survey-result-header
 	color: #4171b5;
 }
 
-.tabbed-pane-tabs li a:active,.tabbed-pane-tabs li a.current,.tabbed-pane-tabs li a.current:hover
-	{
+.tabbed-pane-tabs li a:active, .tabbed-pane-tabs li a.current,
+	.tabbed-pane-tabs li a.current:hover {
 	color: black;
 }
 
@@ -1164,14 +1167,14 @@ div.survey-categories-header,div.survey-outline-header,div.survey-result-header
 }
 
 /* Progress and rating bars */
-.progress_bar,.rating_bar {
+.progress_bar, .rating_bar {
 	float: left;
 	width: 101px;
 	height: 12px;
 	border: 1px solid #999;
 }
 
-.progress_bar div,.rating_bar div {
+.progress_bar div, .rating_bar div {
 	float: left;
 	margin: 1px 0px 0px 1px;
 	padding: 0;
@@ -1180,12 +1183,12 @@ div.survey-categories-header,div.survey-outline-header,div.survey-result-header
 	width: 1px;
 }
 
-.progress_information,.rating_information {
+.progress_information, .rating_information {
 	height: 14px;
 	margin: 0px;
 }
 
-.progress_status,.rating_status {
+.progress_status, .rating_status {
 	float: left;
 	margin: 0px 0px 0px 10px;
 }
@@ -1227,7 +1230,7 @@ div.survey-categories-header,div.survey-outline-header,div.survey-result-header
 /*****************************************************
  *  ICON BASED TOOLBAR STYLES                        *
  *****************************************************/
-ul.toolbar,ul.toolbar_horizontal,ul.toolbar_vertical {
+ul.toolbar, ul.toolbar_horizontal, ul.toolbar_vertical {
 	display: inline;
 	list-style: none;
 	margin: 0;
@@ -1236,7 +1239,7 @@ ul.toolbar,ul.toolbar_horizontal,ul.toolbar_vertical {
 	white-space: nowrap;
 }
 
-ul.toolbar li,ul.toolbar_horizontal li {
+ul.toolbar li, ul.toolbar_horizontal li {
 	display: inline;
 	float: left;
 	margin: 0px 2px 0px 2px;
@@ -1251,30 +1254,30 @@ ul.toolbar_vertical li {
 	white-space: nowrap;
 }
 
-ul.toolbar li img,ul.toolbar_horizontal li img,ul.toolbar_vertical li img
+ul.toolbar li img, ul.toolbar_horizontal li img, ul.toolbar_vertical li img
 	{
 	margin: 0;
 	padding: 0;
 	vertical-align: middle;
 }
 
-ul.toolbar li img.labeled,ul.toolbar_horizontal li img.labeled,ul.toolbar_vertical li img.labeled
+ul.toolbar li img.labeled, ul.toolbar_horizontal li img.labeled, ul.toolbar_vertical li img.labeled
 	{
 	margin-right: 0.5ex;
 }
 
-ul.toolbar li span,ul.toolbar_horizontal li span,ul.toolbar_vertical li span
+ul.toolbar li span, ul.toolbar_horizontal li span, ul.toolbar_vertical li span
 	{
 	margin: 0;
 	padding: 0 1ex 0 0;
 }
 
-ul.toolbar li.last span,ul.toolbar_horizontal li.last span,ul.toolbar_vertical li.last span
+ul.toolbar li.last span, ul.toolbar_horizontal li.last span, ul.toolbar_vertical li.last span
 	{
 	padding-right: 0;
 }
 
-ul.toolbar li span.legend,ul.toolbar_horizontal li span.legend,ul.toolbar_vertical li span.legend
+ul.toolbar li span.legend, ul.toolbar_horizontal li span.legend, ul.toolbar_vertical li span.legend
 	{
 	color: black;
 }
@@ -1314,7 +1317,7 @@ div.action_bar {
 	display: none;
 }
 
-div.action_bar_text div.bevel,div.action_bar div.bevel {
+div.action_bar_text div.bevel, div.action_bar div.bevel {
 	border-left: 1px solid white;
 	border-top: 1px solid white;
 	padding: 5px;
@@ -1336,7 +1339,7 @@ div.action_bar table {
 	width: 100%;
 }
 
-div.action_bar .common_menu,div.action_bar .tool_menu,div.action_bar .search_menu
+div.action_bar .common_menu, div.action_bar .tool_menu, div.action_bar .search_menu
 	{
 	padding: 5px 5px 5px 5px;
 	width: 33%;
@@ -1426,7 +1429,7 @@ div.action_bar_left .action_bar_left_hide_container {
 	background-position: center center;
 }
 
-div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .hide
+div.action_bar_left .action_bar_left_hide_container, div.action_bar_left .hide
 	{
 	right: 0px;
 	margin-right: -1px;
@@ -1434,7 +1437,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .hide
 		url(../../Images/Aqua/Action/ActionBar/HideBackground.png);
 }
 
-div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
+div.action_bar_left .action_bar_left_hide_container, div.action_bar_left .show
 	{
 	right: -18px;
 	margin-left: 0px;
@@ -1489,7 +1492,7 @@ div.reporting_filter {
 	display: none;
 }
 
-div.reporting_filter_text div.bevel,div.reporting_filter div.bevel {
+div.reporting_filter_text div.bevel, div.reporting_filter div.bevel {
 	border-left: 1px solid white;
 	border-top: 1px solid white;
 	padding: 5px;
@@ -1511,7 +1514,7 @@ div.reporting_filter table {
 	width: 100%;
 }
 
-div.reporting_filter .common_menu,div.reporting_filter .tool_menu,div.reporting_filter .search_menu
+div.reporting_filter .common_menu, div.reporting_filter .tool_menu, div.reporting_filter .search_menu
 	{
 	padding: 5px 5px 5px 5px;
 	width: 33%;
@@ -1601,7 +1604,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container {
 	background-position: center center;
 }
 
-div.reporting_filter_left .reporting_filter_left_hide_container,div.areporting_filter_left .hide
+div.reporting_filter_left .reporting_filter_left_hide_container, div.areporting_filter_left .hide
 	{
 	right: 0px;
 	margin-right: -1px;
@@ -1609,7 +1612,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.areporting_f
 		url(../../Images/Aqua/Reporting/FilterHideBackground.png);
 }
 
-div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_filter_left .show
+div.reporting_filter_left .reporting_filter_left_hide_container, div.reporting_filter_left .show
 	{
 	right: -18px;
 	margin-left: 0px;
@@ -1678,7 +1681,7 @@ div.block div.description_contains {
 	clear: both;
 }
 
-div.block div.description img,div.block div.description_contains img {
+div.block div.description img, div.block div.description_contains img {
 	max-width: 100%;
 }
 
@@ -1752,7 +1755,7 @@ a.help-modal-close {
 /**********************************
  * Drag And Drop TreeMenu
  **********************************/
-.myTree,.myTree ul {
+.myTree, .myTree ul {
 	list-style: none;
 	padding-left: 22px;
 }
@@ -1826,7 +1829,7 @@ a.help-modal-close {
 }
 
 .loadingSmall {
-	background-image: url(../../Images/Aqua/action_loading_small.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingSmall.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 22px;
@@ -1835,7 +1838,7 @@ a.help-modal-close {
 }
 
 .loadingMedium {
-	background-image: url(../../Images/Aqua/action_loading_medium.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingMedium.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 32px;
@@ -1844,7 +1847,7 @@ a.help-modal-close {
 }
 
 .loadingLarge {
-	background-image: url(../../Images/Aqua/action_loading_large.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingLarge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 48px;
@@ -1853,7 +1856,7 @@ a.help-modal-close {
 }
 
 .loadingHuge {
-	background-image: url(../../Images/Aqua/action_loading_huge.gif);
+	background-image: url(../../Images/Aqua/ActionLoadingHuge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1862,7 +1865,7 @@ a.help-modal-close {
 }
 
 .statusConfirmation {
-	background-image: url(../../Images/Aqua/status_confirmation_huge.png);
+	background-image: url(../../Images/Aqua/Status/ConfirmationHuge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1871,7 +1874,7 @@ a.help-modal-close {
 }
 
 .statusError {
-	background-image: url(../../Images/Aqua/status_error_huge.png);
+	background-image: url(../../Images/Aqua/Status/ErrorHuge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1879,8 +1882,8 @@ a.help-modal-close {
 	display: inline-block;
 }
 
-.close_message,.close_normal_message,.close_error_message,.close_warning_message
-	{
+.close_message, .close_normal_message, .close_error_message,
+	.close_warning_message {
 	float: right;
 	width: 16px;
 	height: 16px;
@@ -1893,40 +1896,40 @@ a.help-modal-close {
 }
 
 .close_message {
-	background: url(../../Images/Aqua/action_close_message.png) no-repeat;
+	background: url(../../Images/Aqua/Action/CloseMessage.png) no-repeat;
 }
 
 .close_normal_message {
-	background: url(../../Images/Aqua/action_close_normal_message.png)
+	background: url(../../Images/Aqua/Action/CloseNormalMessage.png)
 		no-repeat;
 }
 
 .close_error_message {
-	background: url(../../Images/Aqua/action_close_error_message.png)
+	background: url(../../Images/Aqua/Action/CloseErrorMessage.png)
 		no-repeat;
 }
 
 .close_warning_message {
-	background: url(../../Images/Aqua/action_close_warning_message.png)
+	background: url(../../Images/Aqua/Action/CloseWarningMessage.png)
 		no-repeat;
 }
 
 .rightTrue {
-	background: url(../../Images/Aqua/action_setting_true.png) no-repeat;
+	background: url(../../Images/Aqua/Action/SettingTrue.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightFalse {
-	background: url(../../Images/Aqua/action_setting_false.png) no-repeat;
+	background: url(../../Images/Aqua/Action/SettingFalse.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightInheritTrue {
-	background: url(../../Images/Aqua/action_setting_true_inherit.png)
+	background: url(../../Images/Aqua/Action/SettingTrueInherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -1934,7 +1937,7 @@ a.help-modal-close {
 }
 
 .rightInheritFalse {
-	background: url(../../Images/Aqua/action_setting_false_inherit.png)
+	background: url(../../Images/Aqua/Action/SettingFalseInherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -2004,7 +2007,7 @@ div.reporting_template_menu {
 	
 }
 
-div.reporting_template_menu #nav,#nav ul {
+div.reporting_template_menu #nav, #nav ul {
 	padding: 3px 0 0 0;
 	margin: 0;
 	list-style: none;
@@ -2021,7 +2024,7 @@ div.reporting_template_menu #nav ul {
 	left: -1000px;
 }
 
-div.reporting_template_menu #nav li:hover ul,#nav li.ie_does_hover ul {
+div.reporting_template_menu #nav li:hover ul, #nav li.ie_does_hover ul {
 	left: auto;
 	background-position: 0 0;
 }
@@ -2038,12 +2041,12 @@ div.reporting_template_menu ul a {
 	cursor: default;
 }
 
-div.reporting_template_menu ul ul a:link,ul ul a:visited {
+div.reporting_template_menu ul ul a:link, ul ul a:visited {
 	font-weight: normal;
 	cursor: pointer;
 }
 
-div.reporting_template_menu ul ul a:hover,ul ul a:active {
+div.reporting_template_menu ul ul a:hover, ul ul a:active {
 	font-weight: normal;
 	color: #FFF;
 	cursor: pointer;
@@ -2126,7 +2129,7 @@ div.buddylist li.category_list_item_static {
 	list-style: none;
 }
 
-div.buddylist img.category_toggle,div.buddylist img.item_toggle {
+div.buddylist img.category_toggle, div.buddylist img.item_toggle {
 	float: left;
 	padding-right: 5px;
 }
@@ -2172,7 +2175,7 @@ li.buddyDrop {
  * ADDITIONAL ELEMENT FINDER STYLES *
  ************************************/
 .element_finder_loading {
-	background-image: url(../../Images/Aqua/action_loading_huge.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingHuge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 100%;
@@ -2233,9 +2236,9 @@ div.question div.title {
 	/*margin-bottom: 10px;*/
 }
 
-div.question div.title div.number,div.question div.title div.text {
+div.question div.title div.number, div.question div.title div.text {
 	border: 1px solid #b5cae7;
-	background: #4171b5 url(../../Images/Aqua/background_table_header.png)
+	background: #4171b5 url(../../Images/Aqua/Background/TableHeader.png)
 		repeat-x;
 }
 
@@ -2252,7 +2255,7 @@ div.question div.title div.text {
 	margin: 0px 0px 0px 50px;
 }
 
-div.question div.title div.text div.bevel,div.question div.title div.number div.bevel
+div.question div.title div.text div.bevel, div.question div.title div.number div.bevel
 	{
 	padding: 6px 10px 6px 10px;
 	border-left: 1px solid white;
@@ -2313,7 +2316,8 @@ div.question div.answer div.splitter {
 	color: #4171b5;
 	font-weight: bold;
 	font-size: 11px;
-	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
+		sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	padding: 3px 10px 3px 10px;
@@ -2339,7 +2343,7 @@ div.question div.answer div.caption {
 	margin-left: 20px;
 }
 
-#selected_image,.selected_image,#hotspot_image,.hotspot_image {
+#selected_image, .selected_image, #hotspot_image, .hotspot_image {
 	position: relative;
 }
 
@@ -2354,24 +2358,24 @@ div.question div.answer div.caption {
 	border: 1px solid black;
 }
 
-#hotspot_container,.hotspot_container {
+#hotspot_container, .hotspot_container {
 	float: left;
 	position: relative;
 	padding: 1px;
 	background-color: #b5cae7;
 }
 
-#hotspot_marking,.hotspot_marking {
+#hotspot_marking, .hotspot_marking {
 	margin-bottom: 10px;
 }
 
-#hotspot_marking .colour_box,#hotspot_marking .colour_box_label,.hotspot_marking .colour_box,.hotspot_marking .colour_box_label
-	{
+#hotspot_marking .colour_box, #hotspot_marking .colour_box_label,
+	.hotspot_marking .colour_box, .hotspot_marking .colour_box_label {
 	float: left;
 	font-weight: bold;
 }
 
-#hotspot_marking .colour_box,.hotspot_marking .colour_box {
+#hotspot_marking .colour_box, .hotspot_marking .colour_box {
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -2382,7 +2386,7 @@ div.description_hotspot {
 	border-top: 0px solid white;
 }
 
-div.description_hotspot #hotspot_marking,div.description_hotspot .hotspot_marking
+div.description_hotspot #hotspot_marking, div.description_hotspot .hotspot_marking
 	{
 	margin-top: 10px;
 	margin-bottom: 0px;
@@ -2553,7 +2557,7 @@ div.create_block {
 	overflow: auto;
 }
 
-div.no_thumbnail,div.no_preview {
+div.no_thumbnail, div.no_preview {
 	border: 1px solid #cccccc;
 	/* 	background-color: white; */
 	padding: 15px;
@@ -2580,12 +2584,12 @@ div.no_thumbnail {
 	padding: 0px;
 }
 
-div.no_thumbnail div.background,div.no_preview div.background {
+div.no_thumbnail div.background, div.no_preview div.background {
 	border: 1px solid #cccccc;
 	background-color: #efefef;
 	padding: 15px;
 	width: 268px;
-	background-image: url(../../Images/Aqua/background_no_thumbnail.png);
+	background-image: url(../../Images/Aqua/Background/NoThumbnail.png);
 	background-position: top center;
 	background-repeat: repeat-x;
 }
