@@ -5,6 +5,7 @@ use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 require __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance();
@@ -17,27 +18,31 @@ $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECT
 
 foreach ($packageNamespaces as $packageNamespace)
 {
-    $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'ImagesCC' .
+    $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
          DIRECTORY_SEPARATOR;
 
-    $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
-        DIRECTORY_SEPARATOR;
+//     $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
+//         DIRECTORY_SEPARATOR;
 
-    Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
+//     Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
 
-//     $files = Filesystem :: get_directory_content($sourceResourceImagePath, Filesystem :: LIST_FILES, true);
+    $files = Filesystem :: get_directory_content($sourceResourceImagePath, Filesystem :: LIST_FILES, true);
 
-//     foreach ($files as $file)
-//     {
-//         $parts = explode('\\', $file);
-//         $last = array_pop($parts);
+    foreach ($files as $file)
+    {
+        $parts = explode('/', $file);
+        $last = array_pop($parts);
 
-//         $parts[] = StringUtilities :: getInstance()->createString($last)->upperCamelize()->__toString();
+        $parts[] = StringUtilities :: getInstance()->createString($last)->upperCamelize()->__toString();
 
-//         $newFile = implode('\\', $parts);
+        $newFile = implode('/', $parts);
+        
+//         var_dump($newFile);
 
-//         Filesystem :: move_file($file, $newFile);
-//     }
+        Filesystem :: move_file($file, $newFile);
+    }
+    
+    exit;
 
     echo $packageNamespace . PHP_EOL;
 }
