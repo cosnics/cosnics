@@ -26,9 +26,9 @@ class Configuration
 
     private $platform_language = 'english';
 
-    private $base_url = 'http://localhost/chamilo';
+    private $base_url = 'http://localhost/chamilo/web';
 
-    private $url_append = '/chamilo';
+    private $url_append = '/chamilo/web';
 
     private $admin_email = '';
 

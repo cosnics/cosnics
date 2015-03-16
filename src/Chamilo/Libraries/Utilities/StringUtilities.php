@@ -95,40 +95,22 @@ class StringUtilities
      */
     public function isNullOrEmpty($string, $forHumans = false)
     {
+        if (! is_string($string))
+        {
+            return false;
+        }
+        
         if ($forHumans)
         {
-            $tags = array('br', 'p', 'div', 'span');
-
-            foreach ($tags as $tag)
-            {
-                $string = preg_replace('#</?' . $tag . '(>|\s[^>]*>)#is', '', $string);
-            }
-
-            $string = trim(str_replace('&nbsp;', '', $string));
+            $string = trim(str_replace('&nbsp;', '', strip_tags($string)));
         }
-
-        if (isset($string))
-        {
-            if (is_string($string))
-            {
-                if (strlen($string) == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
+        
+        if (strlen($string) === 0)
         {
             return true;
         }
+        
+        return false;
     }
 
     /**
@@ -173,4 +155,5 @@ class StringUtilities
         // return encrypted mailto hyperlink
         return '<a href="' . $hmail . '"' . $style_class . '>' . $hclickable_text . '</a>';
     }
+
 }
