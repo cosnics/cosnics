@@ -1482,7 +1482,7 @@ div.reporting_filter {
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
 	background: #d4e0f1
-		url(../../Images/Aqua/background_reporting_filter.png) no-repeat;
+		url(../../Images/Aqua/Background/ReportingFilter.png) no-repeat;
 }
 
 .reporting_filter_text {
@@ -1534,7 +1534,7 @@ div.reporting_filter .reporting_filter_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../Images/Aqua/background_ajax_hide.png);
+	background-image: url(../../Images/Aqua/Background/AjaxHide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1606,7 +1606,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.areporting_f
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../Images/Aqua/reporting_filter_hide_background.png);
+		url(../../Images/Aqua/Reporting/FilterHideBackground.png);
 }
 
 div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_filter_left .show
@@ -1614,7 +1614,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_fi
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../Images/Aqua/reporting_filter_show_background.png);
+		url(../../Images/Aqua/Reporting/FilterShowBackground.png);
 }
 
 .reporting_filter_left_show {
@@ -1724,7 +1724,7 @@ div.padding_10 {
 }
 
 a.help-modal-close {
-	background: url(../../Images/Aqua/action_close_modal.png) no-repeat;
+	background: url(../../Images/Aqua/Action/CloseModal.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;
@@ -1786,7 +1786,7 @@ a.help-modal-close {
 }
 
 .togglePlus {
-	background: url(../../Images/Aqua/treemenu/bullet_toggle_plus.png)
+	background: url(../../Images/Aqua/Treemenu/BulletTogglePlus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1796,7 +1796,7 @@ a.help-modal-close {
 }
 
 .toggleMinus {
-	background: url(../../Images/Aqua/treemenu/bullet_toggle_minus.png)
+	background: url(../../Images/Aqua/Treemenu/BulletToggleMinus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1817,7 +1817,7 @@ a.help-modal-close {
  * AJAX loading... icons
  **********************************/
 .loadingMini {
-	background-image: url(../../Images/Aqua/action_loading_mini.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingMini.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
