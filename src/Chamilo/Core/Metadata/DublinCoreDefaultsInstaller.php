@@ -79,6 +79,8 @@ class DublinCoreDefaultsInstaller
         
         $schemas[] = array('name' => 'XML', 'namespace' => 'xml', 'url' => 'http://www.w3.org/2001/XMLSchema');
         
+        DataClassCache :: reset();
+        
         foreach ($schemas as $schema_array)
         {
             try
@@ -95,30 +97,22 @@ class DublinCoreDefaultsInstaller
             {
                 $schema = new Schema();
                 $schema->set_default_properties($schema_array);
-                $schema->set_fixed(true);
-            }
-            else
-            {
-                $schema->set_fixed(true);
             }
             
             $schema->set_fixed(true);
             
             $succes = $schema->is_identified() ? $schema->update() : $schema->create();
-            DataClassCache :: reset();
             
-            if ($succes)
-            {
-                $this->add_message(
-                    Action :: TYPE_NORMAL, 
-                    Translation :: get('SchemaCreated', array('SCHEMA' => $schema_array['name'])));
-                
-                $this->created_schemas[$schema->get_namespace()] = $schema;
-            }
-            else
+            if (! $succes)
             {
                 return $this->failed(Translation :: get('SchemaNotCreated', array('SCHEMA' => $schema_array['name'])));
             }
+            
+            $this->add_message(
+                Action :: TYPE_NORMAL, 
+                Translation :: get('SchemaCreated', array('SCHEMA' => $schema_array['name'])));
+            
+            $this->created_schemas[$schema->get_namespace()] = $schema;
         }
         
         return true;
