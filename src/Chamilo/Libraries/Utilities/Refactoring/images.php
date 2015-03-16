@@ -41,8 +41,6 @@ foreach ($packageNamespaces as $packageNamespace)
 
         Filesystem :: move_file($file, $newFile);
     }
-    
-    exit;
 
-    echo $packageNamespace . PHP_EOL;
+    echo $packageNamespace . '<br />';
 }
