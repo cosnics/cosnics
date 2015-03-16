@@ -66,7 +66,7 @@ div#emulator {
 }
 
 #header1 div.banner span.logo {
-	background-image: url('../../Images/Aqua/logo_header.png');
+	background-image: url('../../Images/Aqua/LogoHeader.png');
 	background-repeat: no-repeat;
 	height: 32px;
 	width: 84px;
@@ -159,7 +159,7 @@ div#emulator {
 #breadcrumbtrail li a {
 	display: block;
 	padding: 0 15px 0 0;
-	background: url(../../Images/Aqua/background_breadcrumb.png) no-repeat
+	background: url(../../Images/Aqua/Background/Breadcrumb.png) no-repeat
 		right center;
 	color: #444444;
 }
@@ -329,14 +329,14 @@ div#emulator {
 }
 
 .normal-message {
-	background-image: url('../../Images/Aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/Status/NormalMini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .error-message,.fatal-message {
-	background-image: url('../../Images/Aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
@@ -348,14 +348,14 @@ div#emulator {
 }
 
 .warning-message {
-	background-image: url('../../Images/Aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .confirm-message {
-	background-image: url('../../Images/Aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -413,28 +413,28 @@ div#emulator {
 }
 
 .notification-4 {
-	background-image: url('../../Images/Aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/Status/NormalMini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .notification-1 {
-	background-image: url('../../Images/Aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
 
 .notification-2 {
-	background-image: url('../../Images/Aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .notification-3 {
-	background-image: url('../../Images/Aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -715,7 +715,7 @@ div.attachments {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
-	background: url(../../Images/Aqua/place_attachment.png) no-repeat 10px
+	background: url(../../Images/Aqua/Place/Attachment.png) no-repeat 10px
 		10px;
 }
 
@@ -800,12 +800,12 @@ div.versions,div.versions_na {
 }
 
 div.versions {
-	background: url(../../Images/Aqua/place_versions.png) no-repeat 10px
+	background: url(../../Images/Aqua/Place/Versions.png) no-repeat 10px
 		10px;
 }
 
 div.versions_na {
-	background: url(../../Images/Aqua/place_versions_na.png) no-repeat 10px
+	background: url(../../Images/Aqua/Place/VersionsNa.png) no-repeat 10px
 		10px;
 }
 
@@ -834,12 +834,12 @@ div.version_stats,div.version_stats_na {
 }
 
 div.version_stats {
-	background: url(../../Images/Aqua/place_version_quota.png) no-repeat
+	background: url(../../Images/Aqua/Place/VersionQuota.png) no-repeat
 		10px 10px;
 }
 
 div.version_stats_na {
-	background: url(../../Images/Aqua/place_version_quota_na.png) no-repeat
+	background: url(../../Images/Aqua/Place/VersionQuotaNa.png) no-repeat
 		10px 10px;
 }
 
@@ -884,12 +884,12 @@ div.publications,div.publications_na {
 }
 
 div.publications {
-	background: url(../../Images/Aqua/place_publications.png) no-repeat 10px
+	background: url(../../Images/Aqua/Place/Publications.png) no-repeat 10px
 		10px;
 }
 
 div.publications_na {
-	background: url(../../Images/Aqua/place_publications_na.png) no-repeat
+	background: url(../../Images/Aqua/Place/PublicationsNa.png) no-repeat
 		10px 10px;
 }
 
@@ -1289,7 +1289,7 @@ div.action_bar_text {
 	-moz-border-radius-bottomright: 15px;
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
-	background: #d4e0f1 url(../../Images/Aqua/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Aqua/Background/ActionBar.png)
 		no-repeat;
 }
 
@@ -1306,7 +1306,7 @@ div.action_bar {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
-	background: #d4e0f1 url(../../Images/Aqua/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Aqua/Background/ActionBar.png)
 		no-repeat;
 }
 
@@ -1359,7 +1359,7 @@ div.action_bar .action_bar_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../Images/Aqua/background_ajax_hide.png);
+	background-image: url(../../Images/Aqua/Background/AjaxHide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1431,7 +1431,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .hide
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../Images/Aqua/action_action_bar_hide_background.png);
+		url(../../Images/Aqua/Action/ActionBar/HideBackground.png);
 }
 
 div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
@@ -1439,7 +1439,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../Images/Aqua/action_action_bar_show_background.png);
+		url(../../Images/Aqua/Action/ActionBar/ShowBackground.png);
 }
 
 .action_bar_left_show {
@@ -1465,7 +1465,7 @@ div.reporting_filter_text {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	background: #d4e0f1
-		url(../../Images/Aqua/background_reporting_filter.png) no-repeat;
+		url(../../Images/Aqua/Background/ReportingFilter.png) no-repeat;
 }
 
 div.reporting_filter_text img {
