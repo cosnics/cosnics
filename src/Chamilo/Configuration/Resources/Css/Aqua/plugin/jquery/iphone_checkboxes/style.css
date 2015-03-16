@@ -30,7 +30,7 @@
 	overflow: hidden;
 }
 
-.iPhoneCheckContainer,.iPhoneCheckContainer label {
+.iPhoneCheckContainer, .iPhoneCheckContainer label {
 	user-select: none;
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -80,7 +80,7 @@ label.iPhoneCheckLabelOff span {
 	left: 0;
 	width: 0;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/slider_left.png')
+		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SliderLeft.png')
 		no-repeat;
 	padding-left: 3px;
 }
@@ -90,7 +90,7 @@ label.iPhoneCheckLabelOff span {
 	width: 100%;
 	padding-right: 3px;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/slider_right.png')
+		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SlideRight.png')
 		no-repeat right 0;
 }
 
@@ -98,7 +98,7 @@ label.iPhoneCheckLabelOff span {
 	height: 100%;
 	width: 100%;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/slider_center.png');
+		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SliderCenter.png');
 }
 
 .iOSCheckContainer {
@@ -132,7 +132,7 @@ label.iPhoneCheckLabelOff span {
 	overflow: hidden;
 }
 
-.iOSCheckContainer,.iOSCheckContainer label {
+.iOSCheckContainer, .iOSCheckContainer label {
 	user-select: none;
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -180,7 +180,7 @@ label.iOSCheckLabelOff span {
 	left: 0;
 	width: 0;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/slider_left.png')
+		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderLeft.png')
 		no-repeat;
 	padding-left: 3px;
 }
@@ -190,7 +190,7 @@ label.iOSCheckLabelOff span {
 	width: 100%;
 	padding-right: 3px;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/slider_right.png')
+		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderRight.png')
 		no-repeat right 0;
 }
 
@@ -198,5 +198,5 @@ label.iOSCheckLabelOff span {
 	height: 100%;
 	width: 100%;
 	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/slider_center.png');
+		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderCenter.png');
 }
