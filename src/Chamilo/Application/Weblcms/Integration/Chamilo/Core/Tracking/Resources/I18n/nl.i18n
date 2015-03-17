@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = 
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Tracking"
+NotCompleted = "Niet voltooid"
+Completed = "Voltooid"
+Status = "Status"
+StartTime = "Start datum"
+EndTime = "Eind datum"
+TotalTime = "Totale tijd"
+TotalScore = "Totale score"
