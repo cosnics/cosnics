@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 CKEDITOR.plugins.setLang( 'flash', 'ca', {
@@ -10,14 +10,14 @@ CKEDITOR.plugins.setLang( 'flash', 'ca', {
 	alignAbsBottom: 'Abs Bottom',
 	alignAbsMiddle: 'Abs Middle',
 	alignBaseline: 'Baseline',
-	alignTextTop: 'Text Top',
+	alignTextTop: 'Text Superior',
 	bgcolor: 'Color de Fons',
 	chkFull: 'Permetre la pantalla completa',
 	chkLoop: 'Bucle',
 	chkMenu: 'Habilita menú Flash',
 	chkPlay: 'Reprodució automàtica',
 	flashvars: 'Variables de Flash',
-	hSpace: 'Espaiat horit.',
+	hSpace: 'Espaiat horitzontal',
 	properties: 'Propietats del Flash',
 	propertiesTab: 'Propietats',
 	quality: 'Qualitat',
@@ -32,12 +32,12 @@ CKEDITOR.plugins.setLang( 'flash', 'ca', {
 	scaleFit: 'Mida exacta',
 	scaleNoBorder: 'Sense vores',
 	title: 'Propietats del Flash',
-	vSpace: 'Espaiat vert.',
-	validateHSpace: 'L\'espaiat horitzonatal ha de ser un nombre.',
-	validateSrc: 'Si us plau, escrigui l\'enllaç URL',
-	validateVSpace: 'L\'espaiat vertical ha de ser un nombre.',
+	vSpace: 'Espaiat vertical',
+	validateHSpace: 'L\'espaiat horitzontal ha de ser un número.',
+	validateSrc: 'La URL no pot estar buida.',
+	validateVSpace: 'L\'espaiat vertical ha de ser un número.',
 	windowMode: 'Mode de la finestra',
 	windowModeOpaque: 'Opaca',
 	windowModeTransparent: 'Transparent',
 	windowModeWindow: 'Finestra'
-});
+} );

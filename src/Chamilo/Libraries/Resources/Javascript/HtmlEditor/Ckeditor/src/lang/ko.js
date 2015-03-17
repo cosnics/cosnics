@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -60,7 +60,7 @@ CKEDITOR.lang[ 'ko' ] = {
 		close: '닫기',
 		preview: '미리보기',
 		resize: '크기 조절',
-		generalTab: 'General', // MISSING
+		generalTab: '일반',
 		advancedTab: '자세히',
 		validateNumberFailed: '이 값은 숫자가 아닙니다.',
 		confirmNewPage: '저장하지 않은 모든 변경사항은 유실됩니다. 정말로 새로운 페이지를 부르겠습니까?',
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'ko' ] = {
 		alignLeft: '왼쪽',
 		alignRight: '오른쪽',
 		alignCenter: '가운데',
+		alignJustify: '両端揃え',
 		alignTop: '위',
 		alignMiddle: '중간',
 		alignBottom: '아래',
+		alignNone: 'None', // MISSING
 		invalidValue	: '잘못된 값.',
 		invalidHeight: '높이는 숫자여야 합니다.',
 		invalidWidth: '넓이는 숫자여야 합니다.',

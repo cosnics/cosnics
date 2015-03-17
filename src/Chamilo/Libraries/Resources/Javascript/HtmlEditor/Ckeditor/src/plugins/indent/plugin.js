@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -7,15 +7,18 @@
  * @fileOverview Increase and Decrease Indent commands.
  */
 
-(function() {
+( function() {
 	'use strict';
 
 	var TRISTATE_DISABLED = CKEDITOR.TRISTATE_DISABLED,
 		TRISTATE_OFF = CKEDITOR.TRISTATE_OFF;
 
 	CKEDITOR.plugins.add( 'indent', {
-		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:disable maximumLineLength
+		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:enable maximumLineLength
 		icons: 'indent,indent-rtl,outdent,outdent-rtl', // %REMOVE_LINE_CORE%
+		hidpi: true, // %REMOVE_LINE_CORE%
 
 		init: function( editor ) {
 			var genericDefinition = CKEDITOR.plugins.indent.genericDefinition;
@@ -344,7 +347,10 @@
 		refreshJob: function( editor, priority, path ) {
 			var job = this.jobs[ priority ];
 
-			job.state = job.refresh.call( this, editor, path );
+			if ( !editor.activeFilter.checkFeature( this ) )
+				job.state = TRISTATE_DISABLED;
+			else
+				job.state = job.refresh.call( this, editor, path );
 
 			return job.state;
 		},
@@ -450,9 +456,9 @@
 
 		// Housekeeping. Make sure selectionChange will be called.
 		// Also re-select previously saved bookmarks.
-		command.on( 'exec', function( evt ) {
+		command.on( 'exec', function() {
 			editor.forceNextSelectionCheck();
 			selection.selectBookmarks( bookmarks );
 		}, command, null, 100 );
 	}
-})();
+} )();

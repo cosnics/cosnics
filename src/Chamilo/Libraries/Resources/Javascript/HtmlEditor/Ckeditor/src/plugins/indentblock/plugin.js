@@ -1,5 +1,5 @@
-﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+/**
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -7,7 +7,7 @@
  * @fileOverview Handles the indentation of block elements.
  */
 
-(function() {
+( function() {
 	'use strict';
 
 	var $listItem = CKEDITOR.dtd.$listItem,
@@ -27,7 +27,7 @@
 				outdentblock: new commandDefinition( editor, 'outdentblock' )
 			} );
 
-			function commandDefinition( editor, name ) {
+			function commandDefinition() {
 				globalHelpers.specificDefinition.apply( this, arguments );
 
 				this.allowedContent = {
@@ -53,23 +53,18 @@
 						refresh: function( editor, path ) {
 							var firstBlock = path.block || path.blockLimit;
 
+							// Switch context from somewhere inside list item to list item,
+							// if not found just assign self (doing nothing).
+							if ( !firstBlock.is( $listItem ) ) {
+								firstBlock = firstBlock.getAscendant( $listItem ) || firstBlock;
+							}
+
 							// Switch context from list item to list
 							// because indentblock can indent entire list
 							// but not a single list element.
 
 							if ( firstBlock.is( $listItem ) )
 								firstBlock = firstBlock.getParent();
-
-							// If firstBlock isn't list item, but still there's
-							// some ascendant (i.e. <ul>), then this is not
-							// a job for indentblock, e.g.:
-							//
-							//		<ul>
-							//			<li><p>foo</p></li>
-							//		</ul>
-
-							else if ( firstBlock.getAscendant( $listItem ) )
-								return TRISTATE_DISABLED;
 
 							//	[-] Context in the path or ENTER_BR
 							//
@@ -138,7 +133,7 @@
 
 						exec: function( editor ) {
 							var selection = editor.getSelection(),
-								range = selection && selection.getRanges( 1 )[ 0 ],
+								range = selection && selection.getRanges()[ 0 ],
 								nearestListBlock;
 
 							// If there's some list in the path, then it will be
@@ -156,8 +151,10 @@
 								iterator.enforceRealBlocks = true;
 								iterator.enlargeBr = enterMode != CKEDITOR.ENTER_BR;
 
-								while ( ( block = iterator.getNextParagraph( enterMode == CKEDITOR.ENTER_P ? 'p' : 'div' ) ) )
-									indentElement.call( this, block, classes );
+								while ( ( block = iterator.getNextParagraph( enterMode == CKEDITOR.ENTER_P ? 'p' : 'div' ) ) ) {
+									if ( !block.isReadOnly() )
+										indentElement.call( this, block, classes );
+								}
 							}
 
 							return true;
@@ -275,7 +272,7 @@
 	function getIndent( element ) {
 		return parseInt( element.getStyle( getIndentCss( element ) ), 10 );
 	}
-})();
+} )();
 
 /**
  * A list of classes to use for indenting the contents. If set to `null`, no classes will be used

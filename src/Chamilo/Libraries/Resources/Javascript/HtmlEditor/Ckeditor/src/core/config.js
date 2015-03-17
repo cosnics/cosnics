@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -48,6 +48,9 @@ CKEDITOR.ENTER_DIV = 3;
  * Stores default configuration settings. Changes to this object are
  * reflected in all editor instances, if not specified otherwise for a particular
  * instance.
+ *
+ * Read more about setting CKEditor configuration in the
+ * [Developer's Guide](#!/guide/dev_configuration).
  *
  * @class
  * @singleton
@@ -103,15 +106,15 @@ CKEDITOR.config = {
 	defaultLanguage: 'en',
 
 	/**
-	 * The writting direction of the language used to write the editor
-	 * contents. Allowed values are:
+	 * The writing direction of the language which is used to create editor contents.
+	 * Allowed values are:
 	 *
-	 * * `''` (empty string) - indicate content direction will be the same with either the editor
-	 *     UI direction or page element direction depending on the creators:
-	 *     * Themed UI: The same with user interface language direction;
-	 *     * Inline: The same with the editable element text direction;
-	 * * `'ltr'` - for Left-To-Right language (like English);
-	 * * `'rtl'` - for Right-To-Left languages (like Arabic).
+	 * * `''` (an empty string) &ndash; Indicates that content direction will be the same as either
+	 *      the editor UI direction or the page element direction depending on the editor type:
+	 *     * Classic editor &ndash; The same as the user interface language direction.
+	 *     * Inline editor &ndash; The same as the editable element text direction.
+	 * * `'ltr'` &ndash; Indicates a Left-To-Right text direction (like in English).
+	 * * `'rtl'` &ndash; Indicates a Right-To-Left text direction (like in Arabic).
 	 *
 	 * Example:
 	 *
@@ -207,6 +210,12 @@ CKEDITOR.config = {
 	 *
 	 *		config.bodyClass = 'contents';
 	 *
+	 * **Note:** Editor needs to load stylesheets containing contents styles. You can either
+	 * copy them to the `contents.css` file that editor loads by default or set the {@link #contentsCss}
+	 * option.
+	 *
+	 * **Note:** This setting applies only to the classic editor (the one that uses `iframe`).
+	 *
 	 * @since 3.1
 	 * @cfg
 	 */
@@ -226,10 +235,11 @@ CKEDITOR.config = {
 	fullPage: false,
 
 	/**
-	 * The height of the editing area (that includes the editor content). This
-	 * can be an integer, for pixel sizes, or any CSS-defined length unit.
+	 * The height of the editing area that includes the editor content. This configuration
+	 * option accepts an integer (to denote a value in pixels) or any CSS-defined length unit
+	 * except percent (`%`) values  which are not supported.
 	 *
-	 * **Note:** Percent units (%) are not supported.
+	 * **Note:** This configuration option is ignored by [inline editor](#!/guide/dev_inline).
 	 *
 	 *		config.height = 500;		// 500 pixels.
 	 *		config.height = '25em';		// CSS length.
@@ -240,8 +250,8 @@ CKEDITOR.config = {
 	height: 200,
 
 	/**
-	 * Comma separated list of plugins to be used for an editor instance,
-	 * besides, the actual plugins that to be loaded could be still affected by two other settings:
+	 * Comma-separated list of plugins to be used in an editor instance. Note that
+	 * the actual plugins that are to be loaded could still be affected by two other settings:
 	 * {@link CKEDITOR.config#extraPlugins} and {@link CKEDITOR.config#removePlugins}.
 	 *
 	 * @cfg {String} [="<default list of plugins>"]
@@ -250,7 +260,11 @@ CKEDITOR.config = {
 
 	/**
 	 * A list of additional plugins to be loaded. This setting makes it easier
-	 * to add new plugins without having to touch {@link CKEDITOR.config#plugins} setting.
+	 * to add new plugins without having to touch the {@link CKEDITOR.config#plugins} setting.
+	 *
+	 * **Note:** The most recommended way to
+	 * [add CKEditor plugins](http://docs.ckeditor.com/#!/guide/dev_plugins) is through
+	 * [CKEditor Builder](http://ckeditor.com/builder).
 	 *
 	 *		config.extraPlugins = 'myplugin,anotherplugin';
 	 *
@@ -263,9 +277,9 @@ CKEDITOR.config = {
 	 * to avoid loading some plugins defined in the {@link CKEDITOR.config#plugins}
 	 * setting, without having to touch it.
 	 *
-	 * **Note:** Plugin required by other plugin cannot be removed (error will be thrown).
-	 * So e.g. if `contextmenu` is required by `tabletools`, then it can be removed
-	 * only if `tabletools` isn't loaded.
+	 * **Note:** A plugin required by another plugin cannot be removed and will cause
+	 * an error to be thrown. So for example if `contextmenu` is required by `tabletools`,
+	 * it can only be removed if `tabletools` is not loaded.
 	 *
 	 *		config.removePlugins = 'elementspath,save,font';
 	 *
@@ -274,7 +288,7 @@ CKEDITOR.config = {
 	removePlugins: '',
 
 	/**
-	 * List of regular expressions to be executed on input HTML,
+	 * A list of regular expressions to be executed on input HTML,
 	 * indicating HTML source code that when matched, must **not** be available in the WYSIWYG
 	 * mode for editing.
 	 *
@@ -296,12 +310,14 @@ CKEDITOR.config = {
 	tabIndex: 0,
 
 	/**
-	 * The editor UI outer width. This can be an integer, for pixel sizes, or
-	 * any CSS-defined unit.
+	 * The editor UI outer width. This configuration option accepts an integer
+	 * (to denote a value in pixels) or any CSS-defined length unit.
 	 *
 	 * Unlike the {@link CKEDITOR.config#height} setting, this
 	 * one will set the outer width of the entire editor UI, not for the
 	 * editing area only.
+	 *
+	 * **Note:** This configuration option is ignored by [inline editor](#!/guide/dev_inline).
 	 *
 	 *		config.width = 850;		// 850 pixels wide.
 	 *		config.width = '75%';	// CSS unit.
@@ -323,7 +339,14 @@ CKEDITOR.config = {
 	 * The keystrokes that are blocked by default as the browser implementation
 	 * is buggy. These default keystrokes are handled by the editor.
 	 *
-	 * @cfg {Array} [=[ CKEDITOR.CTRL + 66, CKEDITOR.CTRL + 73, CKEDITOR.CTRL + 85 ] // CTRL+B,I,U]
+	 *		// Default setting.
+	 *		config.blockedKeystrokes = [
+	 *			CKEDITOR.CTRL + 66, // CTRL+B
+	 *			CKEDITOR.CTRL + 73, // CTRL+I
+	 *			CKEDITOR.CTRL + 85 // CTRL+U
+	 *		];
+	 *
+	 * @cfg {Array} [blockedKeystrokes=see example]
 	 */
 	blockedKeystrokes: [
 		CKEDITOR.CTRL + 66, // CTRL+B

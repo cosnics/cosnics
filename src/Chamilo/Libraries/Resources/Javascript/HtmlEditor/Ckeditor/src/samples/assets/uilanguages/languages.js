@@ -1,9 +1,11 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-var CKEDITOR_LANGS = (function() {
+/* exported CKEDITOR_LANGS */
+
+var CKEDITOR_LANGS = ( function() {
 	var langs = {
 		af: 'Afrikaans',
 		ar: 'Arabic',
@@ -42,7 +44,7 @@ var CKEDITOR_LANGS = (function() {
 		ka: 'Georgian',
 		km: 'Khmer',
 		ko: 'Korean',
-		ku : 'Kurdish',
+		ku: 'Kurdish',
 		lt: 'Lithuanian',
 		lv: 'Latvian',
 		mk: 'Macedonian',
@@ -58,13 +60,14 @@ var CKEDITOR_LANGS = (function() {
 		ru: 'Russian',
 		si: 'Sinhala',
 		sk: 'Slovak',
-		sq : 'Albanian',
+		sq: 'Albanian',
 		sl: 'Slovenian',
 		sr: 'Serbian (Cyrillic)',
 		'sr-latn': 'Serbian (Latin)',
 		sv: 'Swedish',
 		th: 'Thai',
 		tr: 'Turkish',
+		tt: 'Tatar',
 		ug: 'Uighur',
 		uk: 'Ukrainian',
 		vi: 'Vietnamese',
@@ -75,12 +78,12 @@ var CKEDITOR_LANGS = (function() {
 	var langsArray = [];
 
 	for ( var code in CKEDITOR.lang.languages ) {
-		langsArray.push({ code: code, name: ( langs[ code ] || code ) } );
+		langsArray.push( { code: code, name: ( langs[ code ] || code ) } );
 	}
 
 	langsArray.sort( function( a, b ) {
 		return ( a.name < b.name ) ? -1 : 1;
-	});
+	} );
 
 	return langsArray;
-})();
+} )();

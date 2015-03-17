@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -7,7 +7,7 @@
  * @fileOverview Justify commands.
  */
 
-(function() {
+( function() {
 	function getAlignment( element, useComputedState ) {
 		useComputedState = useComputedState === undefined || useComputedState;
 
@@ -134,7 +134,7 @@
 				return;
 
 			var bookmarks = selection.createBookmarks(),
-				ranges = selection.getRanges( true );
+				ranges = selection.getRanges();
 
 			var cssClassName = this.cssClassName,
 				iterator, block;
@@ -147,6 +147,9 @@
 				iterator.enlargeBr = enterMode != CKEDITOR.ENTER_BR;
 
 				while ( ( block = iterator.getNextParagraph( enterMode == CKEDITOR.ENTER_P ? 'p' : 'div' ) ) ) {
+					if ( block.isReadOnly() )
+						continue;
+
 					block.removeAttribute( 'align' );
 					block.removeStyle( 'text-align' );
 
@@ -161,8 +164,9 @@
 							block.addClass( cssClassName );
 						else if ( !className )
 							block.removeAttribute( 'class' );
-					} else if ( apply )
+					} else if ( apply ) {
 						block.setStyle( 'text-align', this.value );
+					}
 				}
 
 			}
@@ -180,7 +184,9 @@
 	};
 
 	CKEDITOR.plugins.add( 'justify', {
-		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:disable maximumLineLength
+		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:enable maximumLineLength
 		icons: 'justifyblock,justifycenter,justifyleft,justifyright', // %REMOVE_LINE_CORE%
 		hidpi: true, // %REMOVE_LINE_CORE%
 		init: function( editor ) {
@@ -202,28 +208,28 @@
 					label: editor.lang.justify.left,
 					command: 'justifyleft',
 					toolbar: 'align,10'
-				});
+				} );
 				editor.ui.addButton( 'JustifyCenter', {
 					label: editor.lang.justify.center,
 					command: 'justifycenter',
 					toolbar: 'align,20'
-				});
+				} );
 				editor.ui.addButton( 'JustifyRight', {
 					label: editor.lang.justify.right,
 					command: 'justifyright',
 					toolbar: 'align,30'
-				});
+				} );
 				editor.ui.addButton( 'JustifyBlock', {
 					label: editor.lang.justify.block,
 					command: 'justifyblock',
 					toolbar: 'align,40'
-				});
+				} );
 			}
 
 			editor.on( 'dirChanged', onDirChanged );
 		}
-	});
-})();
+	} );
+} )();
 
 /**
  * List of classes to use for aligning the contents. If it's `null`, no classes will be used

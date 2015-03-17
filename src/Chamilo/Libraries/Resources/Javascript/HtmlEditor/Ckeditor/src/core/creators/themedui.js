@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -15,7 +15,7 @@
  */
 CKEDITOR.replaceClass = 'ckeditor';
 
-(function() {
+( function() {
 	/**
 	 * Replaces a `<textarea>` or a DOM element (`<div>`) with a CKEditor
 	 * instance. For textareas, the initial value in the editor will be the
@@ -42,9 +42,21 @@ CKEDITOR.replaceClass = 'ckeditor';
 	/**
 	 * Creates a new editor instance at the end of a specific DOM element.
 	 *
-	 *		<div id="editorSpace"></div>
-	 *		...
-	 *		CKEDITOR.appendTo( 'editorSpace' );
+	 *		<!DOCTYPE html>
+	 * 		<html>
+	 * 			<head>
+	 * 				<meta charset="utf-8">
+	 * 				<title>CKEditor</title>
+	 * 				<!-- Make sure the path to CKEditor is correct. -->
+	 *				<script src="/ckeditor/ckeditor.js"></script>
+	 *			</head>
+	 *			<body>
+	 *				<div id="editorSpace"></div>
+	 *				<script>
+	 *					CKEDITOR.appendTo( 'editorSpace' );
+	 *				</script>
+	 *			</body>
+	 *		</html>
 	 *
 	 * @param {Object/String} element The DOM element, its ID, or name.
 	 * @param {Object} [config] The specific configuration to apply to this
@@ -53,8 +65,7 @@ CKEDITOR.replaceClass = 'ckeditor';
 	 * @param {String} [data] Since 3.3. Initial value for the instance.
 	 * @returns {CKEDITOR.editor} The editor instance created.
 	 */
-	CKEDITOR.appendTo = function( element, config, data )
-	{
+	CKEDITOR.appendTo = function( element, config, data ) {
 		return createInstance( element, config, data, CKEDITOR.ELEMENT_MODE_APPENDTO );
 	};
 
@@ -76,7 +87,27 @@ CKEDITOR.replaceClass = 'ckeditor';
 	 *			// You can also customize the editor instance by having the function
 	 *			// modify the "config" parameter.
 	 *		} );
-	 * 
+	 *
+	 *		// Full page example where three <textarea> elements are replaced.
+	 *		<!DOCTYPE html>
+	 *		<html>
+	 *			<head>
+	 *				<meta charset="utf-8">
+	 *				<title>CKEditor</title>
+	 *				<!-- Make sure the path to CKEditor is correct. -->
+	 *				<script src="/ckeditor/ckeditor.js"></script>
+	 *			</head>
+	 *			<body>
+	 *				<textarea name="editor1"></textarea>
+	 *				<textarea name="editor2"></textarea>
+	 *				<textarea name="editor3"></textarea>
+	 *				<script>
+	 *					// Replace all three <textarea> elements above with CKEditor instances.
+	 *					CKEDITOR.replaceAll();
+	 *				</script>
+	 *			</body>
+	 *		</html>
+	 *
 	 * @param {String} [className] The `<textarea>` class name.
 	 * @param {Function} [function] An assertion function that must return `true` for a `<textarea>`
 	 * to be replaced with the editor. If the function returns `false`, the `<textarea>` element
@@ -151,19 +182,43 @@ CKEDITOR.replaceClass = 'ckeditor';
 		editor.fire( 'beforeSetMode', newMode );
 
 		if ( editor.mode ) {
-			var isDirty = editor.checkDirty();
-
-			editor._.previousMode = editor.mode;
+			var isDirty = editor.checkDirty(),
+				previousModeData = editor._.previousModeData,
+				currentData,
+				unlockSnapshot = 0;
 
 			editor.fire( 'beforeModeUnload' );
 
-			// Detach the current editable.
+			// Detach the current editable. While detaching editable will set
+			// cached editor's data (with internal setData call). We use this
+			// data below to avoid two getData() calls in a row.
 			editor.editable( 0 );
+
+			editor._.previousMode = editor.mode;
+			// Get cached data, which was set while detaching editable.
+			editor._.previousModeData = currentData = editor.getData( 1 );
+
+			// If data has not been modified in the mode which we are currently leaving,
+			// avoid making snapshot right after initializing new mode.
+			// http://dev.ckeditor.com/ticket/5217#comment:20
+			// Tested by:
+			// 'test switch mode with unrecoreded, inner HTML specific content (boguses)'
+			// 'test switch mode with unrecoreded, inner HTML specific content (boguses) plus changes in source mode'
+			if ( editor.mode == 'source' && previousModeData == currentData ) {
+				// We need to make sure that unlockSnapshot will update the last snapshot
+				// (will not create new one) if lockSnapshot is not called on outdated snapshots stack.
+				// Additionally, forceUpdate prevents from making content image now, which is useless
+				// (because it equals editor data not inner HTML).
+				editor.fire( 'lockSnapshot', { forceUpdate: true } );
+				unlockSnapshot = 1;
+			}
 
 			// Clear up the mode space.
 			editor.ui.space( 'contents' ).setHtml( '' );
 
 			editor.mode = '';
+		} else {
+			editor._.previousModeData = editor.getData( 1 );
 		}
 
 		// Fire the mode handler.
@@ -171,16 +226,23 @@ CKEDITOR.replaceClass = 'ckeditor';
 			// Set the current mode.
 			editor.mode = newMode;
 
-			if ( isDirty !== undefined ) {
+			if ( isDirty !== undefined )
 				!isDirty && editor.resetDirty();
-			}
+
+			if ( unlockSnapshot )
+				editor.fire( 'unlockSnapshot' );
+			// Since snapshot made on dataReady (which normally catches changes done by setData)
+			// won't work because editor.mode was not set yet (it's set in this function), we need
+			// to make special snapshot for changes done in source mode here.
+			else if ( newMode == 'wysiwyg' )
+				editor.fire( 'saveSnapshot' );
 
 			// Delay to avoid race conditions (setMode inside setMode).
 			setTimeout( function() {
 				editor.fire( 'mode' );
 				callback && callback.call( editor );
-			}, 0);
-		});
+			}, 0 );
+		} );
 	};
 
 	/**
@@ -208,7 +270,15 @@ CKEDITOR.replaceClass = 'ckeditor';
 		var container = this.container,
 			contents = this.ui.space( 'contents' ),
 			contentsFrame = CKEDITOR.env.webkit && this.document && this.document.getWindow().$.frameElement,
-			outer = resizeInner ? container.getChild( 1 ) : container;
+			outer;
+
+		if ( resizeInner ) {
+			outer = this.container.getFirst( function( node ) {
+				return node.type == CKEDITOR.NODE_ELEMENT && node.hasClass( 'cke_inner' );
+			} );
+		} else {
+			outer = container;
+		}
 
 		// Set as border box width. (#5353)
 		outer.setSize( 'width', width, true );
@@ -280,8 +350,8 @@ CKEDITOR.replaceClass = 'ckeditor';
 				editor.status = 'ready';
 				editor.fireOnce( 'instanceReady' );
 				CKEDITOR.fire( 'instanceReady', null, editor );
-			});
-		});
+			} );
+		} );
 
 		editor.on( 'destroy', destroy );
 		return editor;
@@ -308,8 +378,6 @@ CKEDITOR.replaceClass = 'ckeditor';
 		}
 	}
 
-	var themedTpl;
-
 	function loadTheme( editor ) {
 		var name = editor.name,
 			element = editor.element,
@@ -319,40 +387,41 @@ CKEDITOR.replaceClass = 'ckeditor';
 		var topHtml = editor.fire( 'uiSpace', { space: 'top', html: '' } ).html;
 		var bottomHtml = editor.fire( 'uiSpace', { space: 'bottom', html: '' } ).html;
 
-		if ( !themedTpl ) {
-			themedTpl = CKEDITOR.addTemplate( 'maincontainer', '<{outerEl}' +
+		var themedTpl = new CKEDITOR.template(
+			'<{outerEl}' +
 				' id="cke_{name}"' +
 				' class="{id} cke cke_reset cke_chrome cke_editor_{name} cke_{langDir} ' + CKEDITOR.env.cssClass + '" ' +
 				' dir="{langDir}"' +
 				' lang="{langCode}"' +
 				' role="application"' +
-				' aria-labelledby="cke_{name}_arialbl">' +
-				'<span id="cke_{name}_arialbl" class="cke_voice_label">{voiceLabel}</span>' +
-					'<{outerEl} class="cke_inner cke_reset" role="presentation">' +
-						'{topHtml}' +
-						'<{outerEl} id="{contentId}" class="cke_contents cke_reset" role="presentation"></{outerEl}>' +
-						'{bottomHtml}' +
-					'</{outerEl}>' +
-				'</{outerEl}>' );
-		}
+				( editor.title ? ' aria-labelledby="cke_{name}_arialbl"' : '' ) +
+				'>' +
+				( editor.title ? '<span id="cke_{name}_arialbl" class="cke_voice_label">{voiceLabel}</span>' : '' ) +
+				'<{outerEl} class="cke_inner cke_reset" role="presentation">' +
+					'{topHtml}' +
+					'<{outerEl} id="{contentId}" class="cke_contents cke_reset" role="presentation"></{outerEl}>' +
+					'{bottomHtml}' +
+				'</{outerEl}>' +
+			'</{outerEl}>' );
 
-		var container = CKEDITOR.dom.element.createFromHtml( themedTpl.output({
+		var container = CKEDITOR.dom.element.createFromHtml( themedTpl.output( {
 			id: editor.id,
 			name: name,
 			langDir: editor.lang.dir,
 			langCode: editor.langCode,
-			voiceLabel: [ editor.lang.editor, editor.name ].join( ', ' ),
+			voiceLabel: editor.title,
 			topHtml: topHtml ? '<span id="' + editor.ui.spaceId( 'top' ) + '" class="cke_top cke_reset_all" role="presentation" style="height:auto">' + topHtml + '</span>' : '',
 			contentId: editor.ui.spaceId( 'contents' ),
 			bottomHtml: bottomHtml ? '<span id="' + editor.ui.spaceId( 'bottom' ) + '" class="cke_bottom cke_reset_all" role="presentation">' + bottomHtml + '</span>' : '',
 			outerEl: CKEDITOR.env.ie ? 'span' : 'div'	// #9571
-		}));
+		} ) );
 
 		if ( elementMode == CKEDITOR.ELEMENT_MODE_REPLACE ) {
 			element.hide();
 			container.insertAfter( element );
-		} else
+		} else {
 			element.append( container );
+		}
 
 		editor.container = container;
 
@@ -375,7 +444,7 @@ CKEDITOR.replaceClass = 'ckeditor';
 		// Redirect the focus into editor for webkit. (#5713)
 		CKEDITOR.env.webkit && container.on( 'focus', function() {
 			editor.focus();
-		});
+		} );
 
 		editor.fireOnce( 'uiReady' );
 	}
@@ -383,8 +452,8 @@ CKEDITOR.replaceClass = 'ckeditor';
 	// Replace all textareas with the default class name.
 	CKEDITOR.domReady( function() {
 		CKEDITOR.replaceClass && CKEDITOR.replaceAll( CKEDITOR.replaceClass );
-	});
-})();
+	} );
+} )();
 
 /**
  * The current editing mode. An editing mode basically provides

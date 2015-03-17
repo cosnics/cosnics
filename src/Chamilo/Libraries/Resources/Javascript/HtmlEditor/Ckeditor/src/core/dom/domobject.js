@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -33,7 +33,7 @@ CKEDITOR.dom.domObject = function( nativeDomObject ) {
 	}
 };
 
-CKEDITOR.dom.domObject.prototype = (function() {
+CKEDITOR.dom.domObject.prototype = ( function() {
 	// Do not define other local variables here. We want to keep the native
 	// listener closures as clean as possible.
 
@@ -136,16 +136,20 @@ CKEDITOR.dom.domObject.prototype = (function() {
 
 				delete nativeListeners[ eventName ];
 			}
+
+			// Remove events from events object so fire() method will not call
+			// listeners (#11400).
+			CKEDITOR.event.prototype.removeAllListeners.call( this );
 		}
 	};
-})();
+} )();
 
-(function( domObjectProto ) {
+( function( domObjectProto ) {
 	var customData = {};
 
 	CKEDITOR.on( 'reset', function() {
 		customData = {};
-	});
+	} );
 
 	/**
 	 * Determines whether the specified object is equal to the current object.
@@ -174,6 +178,8 @@ CKEDITOR.dom.domObject.prototype = (function() {
 	 * thus any wish to continue access it from other element clones (either created by
 	 * clone node or from `innerHtml`) will fail, for such usage, please use
 	 * {@link CKEDITOR.dom.element#setAttribute} instead.
+	 *
+	 * **Note**: This method does not work on text nodes prior to Internet Explorer 9.
 	 *
 	 *		var element = new CKEDITOR.dom.element( 'span' );
 	 *		element.setCustomData( 'hasCustomData', true );
@@ -243,8 +249,10 @@ CKEDITOR.dom.domObject.prototype = (function() {
 	};
 
 	/**
-	 * Gets an ID that can be used to identiquely identify this DOM object in
+	 * Gets an ID that can be used to identify this DOM object in
 	 * the running session.
+	 *
+	 * **Note**: This method does not work on text nodes prior to Internet Explorer 9.
 	 *
 	 * @returns {Number} A unique ID.
 	 */
@@ -255,4 +263,4 @@ CKEDITOR.dom.domObject.prototype = (function() {
 	// Implement CKEDITOR.event.
 	CKEDITOR.event.implementOn( domObjectProto );
 
-})( CKEDITOR.dom.domObject.prototype );
+} )( CKEDITOR.dom.domObject.prototype );

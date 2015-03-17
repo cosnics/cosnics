@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -64,7 +64,7 @@ CKEDITOR.lang[ 'en-ca' ] = {
 		advancedTab: 'Advanced',
 		validateNumberFailed: 'This value is not a number.',
 		confirmNewPage: 'Any unsaved changes to this content will be lost. Are you sure you want to load new page?',
-		confirmCancel: 'Some of the options have been changed. Are you sure to close the dialog?',
+		confirmCancel: 'You have changed some options. Are you sure you want to close the dialog window?',
 		options: 'Options', // MISSING
 		target: 'Target',
 		targetNew: 'New Window (_blank)', // MISSING
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'en-ca' ] = {
 		alignLeft: 'Left', // MISSING
 		alignRight: 'Right', // MISSING
 		alignCenter: 'Centre',
+		alignJustify: 'Justify',
 		alignTop: 'Top', // MISSING
 		alignMiddle: 'Middle', // MISSING
 		alignBottom: 'Bottom', // MISSING
+		alignNone: 'None', // MISSING
 		invalidValue	: 'Invalid value.', // MISSING
 		invalidHeight: 'Height must be a number.', // MISSING
 		invalidWidth: 'Width must be a number.', // MISSING

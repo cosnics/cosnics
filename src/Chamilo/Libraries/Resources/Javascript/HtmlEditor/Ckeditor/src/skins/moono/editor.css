@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
@@ -46,7 +46,8 @@ other files.
 /* Important!
    To avoid showing the editor UI while its styles are still not available, the
    editor creates it with visibility:hidden. Here, we restore the UI visibility. */
-.cke_chrome {
+.cke_chrome
+{
 	visibility: inherit;
 }
 
@@ -54,10 +55,12 @@ other files.
    These are usually <span> elements that show not be visible, but that are
    used by screen-readers to announce other elements. Here, we hide these
    <spans>, in fact. */
-.cke_voice_label {
+.cke_voice_label
+{
 	display: none;
 }
 
-legend.cke_voice_label {
+legend.cke_voice_label
+{
 	display: none;
 }

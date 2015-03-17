@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'cs' ] = {
 		alignLeft: 'Vlevo',
 		alignRight: 'Vpravo',
 		alignCenter: 'Na střed',
+		alignJustify: 'Zarovnat do bloku',
 		alignTop: 'Nahoru',
 		alignMiddle: 'Na střed',
 		alignBottom: 'Dolů',
+		alignNone: 'Žádné',
 		invalidValue	: 'Neplatná hodnota.',
 		invalidHeight: 'Zadaná výška musí být číslo.',
 		invalidWidth: 'Šířka musí být číslo.',

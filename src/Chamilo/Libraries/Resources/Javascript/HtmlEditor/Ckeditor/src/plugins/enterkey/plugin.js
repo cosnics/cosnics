@@ -1,31 +1,33 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
+( function() {
 	CKEDITOR.plugins.add( 'enterkey', {
 		init: function( editor ) {
-			editor.addCommand( 'enter', { modes:{wysiwyg:1 },
+			editor.addCommand( 'enter', {
+				modes: { wysiwyg: 1 },
 				editorFocus: false,
 				exec: function( editor ) {
 					enter( editor );
 				}
-			});
+			} );
 
-			editor.addCommand( 'shiftEnter', { modes:{wysiwyg:1 },
+			editor.addCommand( 'shiftEnter', {
+				modes: { wysiwyg: 1 },
 				editorFocus: false,
 				exec: function( editor ) {
 					shiftEnter( editor );
 				}
-			});
+			} );
 
 			editor.setKeystroke( [
 				[ 13, 'enter' ],
 				[ CKEDITOR.SHIFT + 13, 'shiftEnter' ]
-				] );
+			] );
 		}
-	});
+	} );
 
 	var whitespaces = CKEDITOR.dom.walker.whitespaces(),
 		bookmark = CKEDITOR.dom.walker.bookmark();
@@ -39,6 +41,10 @@
 			// contenteditable=false element.
 			if ( !range )
 				return;
+
+			// When range is in nested editable, we have to replace range with this one,
+			// which have root property set to closest editable, to make auto paragraphing work. (#12162)
+			range = replaceRangeWithClosestEditableRoot( range );
 
 			var doc = range.document;
 
@@ -56,6 +62,10 @@
 			if ( atBlockStart && atBlockEnd ) {
 				// Exit the list when we're inside an empty list item block. (#5376)
 				if ( block && ( block.is( 'li' ) || block.getParent().is( 'li' ) ) ) {
+					// Make sure to point to the li when dealing with empty list item.
+					if ( !block.is( 'li' ) )
+						block = block.getParent();
+
 					var blockParent = block.getParent(),
 						blockGrandParent = blockParent.getParent(),
 
@@ -70,7 +80,7 @@
 						style = block.getAttribute( 'style' ),
 						dirLoose = blockGrandParent.getDirection( 1 ) != orgDir,
 
-						enterMode = editor.config.enterMode,
+						enterMode = editor.enterMode,
 						needsBlock = enterMode != CKEDITOR.ENTER_BR || dirLoose || style || className,
 
 						child;
@@ -128,7 +138,7 @@
 					}
 
 					else if ( !needsBlock ) {
-						block.appendBogus();
+						block.appendBogus( true );
 
 						// If block is the first or last child of the parent
 						// list, move all block's children out of the list:
@@ -173,17 +183,24 @@
 
 						block.remove();
 					} else {
-						// Use <div> block for ENTER_BR and ENTER_DIV.
-						newBlock = doc.createElement( mode == CKEDITOR.ENTER_P ? 'p' : 'div' );
+						// Original path block is the list item, create new block for the list item content.
+						if ( path.block.is( 'li' ) ) {
+							// Use <div> block for ENTER_BR and ENTER_DIV.
+							newBlock = doc.createElement( mode == CKEDITOR.ENTER_P ? 'p' : 'div' );
 
-						if ( dirLoose )
-							newBlock.setAttribute( 'dir', orgDir );
+							if ( dirLoose )
+								newBlock.setAttribute( 'dir', orgDir );
 
-						style && newBlock.setAttribute( 'style', style );
-						className && newBlock.setAttribute( 'class', className );
+							style && newBlock.setAttribute( 'style', style );
+							className && newBlock.setAttribute( 'class', className );
 
-						// Move all the child nodes to the new block.
-						block.moveChildren( newBlock );
+							// Move all the child nodes to the new block.
+							block.moveChildren( newBlock );
+						}
+						// The original path block is not a list item, just copy the block to out side of the list.
+						else {
+							newBlock = path.block;
+						}
 
 						// If block is the first or last child of the parent
 						// list, move it out of the list:
@@ -299,9 +316,8 @@
 					};
 
 					node = walker.next();
-					if ( node && node.type == CKEDITOR.NODE_ELEMENT && node.is( 'ul', 'ol' ) ) {
-						( CKEDITOR.env.ie ? doc.createText( '\xa0' ) : doc.createElement( 'br' ) ).insertBefore( node );
-					}
+					if ( node && node.type == CKEDITOR.NODE_ELEMENT && node.is( 'ul', 'ol' ) )
+						( CKEDITOR.env.needsBrFiller ? doc.createElement( 'br' ) : doc.createText( '\xa0' ) ).insertBefore( node );
 				}
 
 				// Move the selection to the end block.
@@ -318,8 +334,9 @@
 						// Otherwise, duplicate the previous block.
 						newBlock = previousBlock.clone();
 					}
-				} else if ( nextBlock )
+				} else if ( nextBlock ) {
 					newBlock = nextBlock.clone();
+				}
 
 				if ( !newBlock ) {
 					// We have already created a new list item. (#6849)
@@ -332,8 +349,9 @@
 					}
 				}
 				// Force the enter block unless we're talking of a list item.
-				else if ( forceMode && !newBlock.is( 'li' ) )
+				else if ( forceMode && !newBlock.is( 'li' ) ) {
 					newBlock.renameNode( blockTag );
+				}
 
 				// Recreate the inline elements tree, which was available
 				// before hitting enter, so the same styles will be available in
@@ -354,8 +372,7 @@
 					}
 				}
 
-				if ( !CKEDITOR.env.ie )
-					newBlock.appendBogus();
+				newBlock.appendBogus();
 
 				if ( !newBlock.getParent() )
 					range.insertNode( newBlock );
@@ -394,17 +411,12 @@
 
 			var doc = range.document;
 
-			// Determine the block element to be used.
-			var blockTag = ( mode == CKEDITOR.ENTER_DIV ? 'div' : 'p' );
-
 			var isEndOfBlock = range.checkEndOfBlock();
 
 			var elementPath = new CKEDITOR.dom.elementPath( editor.getSelection().getStartElement() );
 
 			var startBlock = elementPath.block,
 				startBlockTag = startBlock && elementPath.block.getName();
-
-			var isPre = false;
 
 			if ( !forceMode && startBlockTag == 'li' ) {
 				enterBlock( editor, mode, range, forceMode );
@@ -443,8 +455,8 @@
 				range.deleteContents();
 				range.insertNode( lineBreak );
 
-				// IE has different behavior regarding position.
-				if ( CKEDITOR.env.ie )
+				// Old IEs have different behavior regarding position.
+				if ( !CKEDITOR.env.needsBrFiller )
 					range.setStartAt( lineBreak, CKEDITOR.POSITION_AFTER_END );
 				else {
 					// A text node is required by Gecko only to make the cursor blink.
@@ -453,8 +465,11 @@
 					doc.createText( '\ufeff' ).insertAfter( lineBreak );
 
 					// If we are at the end of a block, we must be sure the bogus node is available in that block.
-					if ( isEndOfBlock )
-						lineBreak.getParent().appendBogus();
+					if ( isEndOfBlock ) {
+						// In most situations we've got an elementPath.block (e.g. <p>), but in a
+						// blockless editor or when autoP is false that needs to be a block limit.
+						( startBlock || elementPath.blockLimit ).appendBogus();
+					}
 
 					// Now we can remove the text node contents, so the caret doesn't
 					// stop on it.
@@ -479,14 +494,10 @@
 		headerTagRegex = /^h[1-6]$/;
 
 	function shiftEnter( editor ) {
-		// Only effective within document.
-		if ( editor.mode != 'wysiwyg' )
-			return false;
-
 		// On SHIFT+ENTER:
 		// 1. We want to enforce the mode to be respected, instead
 		// of cloning the current block. (#77)
-		return enter( editor, editor.config.shiftEnterMode, 1 );
+		return enter( editor, editor.activeShiftEnterMode, 1 );
 	}
 
 	function enter( editor, mode, forceMode ) {
@@ -494,14 +505,14 @@
 
 		// Only effective within document.
 		if ( editor.mode != 'wysiwyg' )
-			return false;
+			return;
 
 		if ( !mode )
-			mode = editor.config.enterMode;
+			mode = editor.activeEnterMode;
 
+		// TODO this should be handled by setting editor.activeEnterMode on selection change.
 		// Check path block specialities:
 		// 1. Cannot be a un-splittable element, e.g. table caption;
-		// 2. Must not be the editable element itself. (blockless)
 		var path = editor.elementPath();
 		if ( !path.isContextFor( 'p' ) ) {
 			mode = CKEDITOR.ENTER_BR;
@@ -516,8 +527,6 @@
 			enterBlock( editor, mode, null, forceMode );
 
 		editor.fire( 'saveSnapshot' );
-
-		return true;
 	}
 
 	function getRange( editor ) {
@@ -532,4 +541,19 @@
 		// Return the first range.
 		return ranges[ 0 ];
 	}
-})();
+
+	function replaceRangeWithClosestEditableRoot( range ) {
+		var closestEditable = range.startContainer.getAscendant( function( node ) {
+			return node.type == CKEDITOR.NODE_ELEMENT && node.getAttribute( 'contenteditable' ) == 'true';
+		}, true );
+
+		if ( range.root.equals( closestEditable ) ) {
+			return range;
+		} else {
+			var newRange = new CKEDITOR.dom.range( closestEditable );
+
+			newRange.moveToRange( range );
+			return newRange;
+		}
+	}
+} )();

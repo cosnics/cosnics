@@ -1,5 +1,5 @@
-﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+/**
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -7,7 +7,7 @@
  * @fileOverview Handles the indentation of lists.
  */
 
-(function() {
+( function() {
 	'use strict';
 
 	var isNotWhitespaces = CKEDITOR.dom.walker.whitespaces( true ),
@@ -18,8 +18,7 @@
 	CKEDITOR.plugins.add( 'indentlist', {
 		requires: 'indent',
 		init: function( editor ) {
-			var globalHelpers = CKEDITOR.plugins.indent,
-				editable = editor;
+			var globalHelpers = CKEDITOR.plugins.indent;
 
 			// Register commands.
 			globalHelpers.registerCommands( editor, {
@@ -27,7 +26,7 @@
 				outdentlist: new commandDefinition( editor, 'outdentlist' )
 			} );
 
-			function commandDefinition( editor, name ) {
+			function commandDefinition( editor ) {
 				globalHelpers.specificDefinition.apply( this, arguments );
 
 				// Require ul OR ol list.
@@ -46,7 +45,7 @@
 							// Don't indent if in first list item of the parent.
 							// Outdent, however, can always be done to collapse
 							// the list into a paragraph (div).
-							if ( this.isIndent && firstItemInPath.call( this, editor.elementPath(), list ) )
+							if ( this.isIndent && CKEDITOR.plugins.indentList.firstItemInPath( this.context, editor.elementPath(), list ) )
 								return;
 
 							// Exec related global indentation command. Global
@@ -80,7 +79,7 @@
 					refresh: this.isIndent ?
 							function( editor, path ) {
 								var list = this.getContext( path ),
-									inFirstListItem = firstItemInPath.call( this, path, list );
+									inFirstListItem = CKEDITOR.plugins.indentList.firstItemInPath( this.context, path, list );
 
 								if ( !list || !this.isIndent || inFirstListItem )
 									return TRISTATE_DISABLED;
@@ -211,9 +210,7 @@
 					while ( ( followingList = followingList.getNext() ) && followingList.is && followingList.getName() in context ) {
 						// IE requires a filler NBSP for nested list inside empty list item,
 						// otherwise the list item will be inaccessiable. (#4476)
-						if ( CKEDITOR.env.ie && !li.getFirst( function( node ) {
-							return isNotWhitespaces( node ) && isNotBookmark( node );
-						} ) )
+						if ( CKEDITOR.env.needsNbspFiller && !li.getFirst( neitherWhitespacesNorBookmark ) )
 							li.append( range.document.createText( '\u00a0' ) );
 
 						li.append( followingList );
@@ -223,11 +220,14 @@
 				}
 			}
 
+			if ( newList )
+				editor.fire( 'contentDomInvalidated' );
+
 			return true;
 		}
 
 		var selection = editor.getSelection(),
-			ranges = selection && selection.getRanges( 1 ),
+			ranges = selection && selection.getRanges(),
 			iterator = ranges.createIterator(),
 			range;
 
@@ -276,18 +276,40 @@
 		return 0;
 	}
 
-	// Check whether a first child of a list is in the path.
-	// The list can be extracted from path or given explicitly
-	// e.g. for better performance if cached.
-	function firstItemInPath( path, list ) {
-		if ( !list )
-			list = path.contains( this.context );
-
-		return list && path.block && path.block.equals( list.getFirst( listItem ) );
-	}
-
 	// Determines whether a node is a list <li> element.
 	function listItem( node ) {
 		return node.type == CKEDITOR.NODE_ELEMENT && node.is( 'li' );
 	}
-})();
+
+	function neitherWhitespacesNorBookmark( node ) {
+		return isNotWhitespaces( node ) && isNotBookmark( node );
+	}
+
+	/**
+	 * Global namespace for methods exposed by the Indent List plugin.
+	 *
+	 * @singleton
+	 * @class
+	 */
+	CKEDITOR.plugins.indentList = {};
+
+	/**
+	 * Checks whether the first child of the list is in the path.
+	 * The list can be extracted from the path or given explicitly
+	 * e.g. for better performance if cached.
+	 *
+	 * @since 4.4.6
+	 * @param {Object} query See the {@link CKEDITOR.dom.elementPath#contains} method arguments.
+	 * @param {CKEDITOR.dom.elementPath} path
+	 * @param {CKEDITOR.dom.element} [list]
+	 * @returns {Boolean}
+	 * @member CKEDITOR.plugins.indentList
+	 */
+	CKEDITOR.plugins.indentList.firstItemInPath = function( query, path, list ) {
+		var firstListItemInPath = path.contains( listItem );
+		if ( !list )
+			list = path.contains( query );
+
+		return list && firstListItemInPath && firstListItemInPath.equals( list.getFirst( listItem ) );
+	};
+} )();

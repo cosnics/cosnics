@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'ja' ] = {
 	// ARIA description.
 	editor: 'リッチテキストエディタ',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'リッチテキストエディタパネル',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'ja' ] = {
 		alignLeft: '左',
 		alignRight: '右',
 		alignCenter: '中央',
+		alignJustify: '両端揃え',
 		alignTop: '上',
 		alignMiddle: '中央',
 		alignBottom: '下',
+		alignNone: 'なし',
 		invalidValue	: '不正な値です。',
 		invalidHeight: '高さは数値で入力してください。',
 		invalidWidth: '幅は数値で入力してください。',

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
@@ -13,10 +13,12 @@ This file contains styles to used by Internet Explorer 8 only.
 /* Base it on dialog_ie.css, overriding it with styles defined in this file. */
 @import url("dialog_ie.css");
 
-.cke_rtl .cke_dialog_footer_buttons td {
+.cke_rtl .cke_dialog_footer_buttons td
+{
 	padding-left: 2px;
 }
 
-.cke_rtl .cke_dialog_close_button {
+.cke_rtl .cke_dialog_close_button
+{
 	left: 8px;
 }

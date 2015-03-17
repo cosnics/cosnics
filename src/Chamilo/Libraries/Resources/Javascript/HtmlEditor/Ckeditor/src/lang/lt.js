@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'lt' ] = {
 	// ARIA description.
 	editor: 'Pilnas redaktorius',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Pilno redagtoriaus skydelis',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'lt' ] = {
 		alignLeft: 'Kairę',
 		alignRight: 'Dešinę',
 		alignCenter: 'Centrą',
+		alignJustify: 'Lygiuoti abi puses',
 		alignTop: 'Viršūnę',
 		alignMiddle: 'Vidurį',
 		alignBottom: 'Apačią',
+		alignNone: 'Niekas',
 		invalidValue	: 'Neteisinga reikšmė.',
 		invalidHeight: 'Aukštis turi būti nurodytas skaičiais.',
 		invalidWidth: 'Plotis turi būti nurodytas skaičiais.',

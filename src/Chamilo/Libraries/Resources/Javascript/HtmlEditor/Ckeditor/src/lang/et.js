@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'et' ] = {
 	// ARIA description.
 	editor: 'Rikkalik tekstiredaktor',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Rikkaliku tekstiredaktori paneel',
 
 	// Common messages and labels.
 	common: {
@@ -55,7 +55,7 @@ CKEDITOR.lang[ 'et' ] = {
 		cssClass: 'Stiilistiku klassid',
 		advisoryTitle: 'Soovituslik pealkiri',
 		cssStyle: 'Laad',
-		ok: 'OK',
+		ok: 'Olgu',
 		cancel: 'Loobu',
 		close: 'Sulge',
 		preview: 'Eelvaade',
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'et' ] = {
 		alignLeft: 'Vasak',
 		alignRight: 'Paremale',
 		alignCenter: 'Kesk',
+		alignJustify: 'Rööpjoondus',
 		alignTop: 'Üles',
 		alignMiddle: 'Keskele',
 		alignBottom: 'Alla',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'Vigane väärtus.',
 		invalidHeight: 'Kõrgus peab olema number.',
 		invalidWidth: 'Laius peab olema number.',

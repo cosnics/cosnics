@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -80,9 +80,11 @@ CKEDITOR.lang[ 'si' ] = {
 		alignLeft: 'වම',
 		alignRight: 'දකුණ',
 		alignCenter: 'මධ්‍ය',
+		alignJustify: 'Justify', // MISSING
 		alignTop: 'ඉ',
 		alignMiddle: 'මැද',
 		alignBottom: 'පහල',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'වැරදී වටිනාකමකි',
 		invalidHeight: 'උස අංකයක් විය යුතුය',
 		invalidWidth: 'පළල අංකයක් විය යුතුය',
