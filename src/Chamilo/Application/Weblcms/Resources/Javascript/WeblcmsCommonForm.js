@@ -109,7 +109,7 @@ $(function() {
 			if (!theElement.hasClass('disabled')) {
 				theElement.addClass('disabled');
 				theElement.css("background-image", theElement.css(
-						"background-image").replace(".png", "_na.png"));
+						"background-image").replace(".png", "Na.png"));
 			}
 		}
 	}
@@ -118,7 +118,7 @@ $(function() {
 		if (typeof theElement.css("background-image") !== 'undefined') {
 			theElement.removeClass('disabled');
 			theElement.css("background-image", theElement.css(
-					"background-image").replace("_na.png", ".png"));
+					"background-image").replace("Na.png", ".png"));
 		}
 	}
 

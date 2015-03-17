@@ -561,16 +561,16 @@ class Diagnoser
         switch ($status)
         {
             case self :: STATUS_OK :
-                $img = 'status_ok_mini';
+                $img = 'Status/OkMini';
                 break;
             case self :: STATUS_WARNING :
-                $img = 'status_warning_mini';
+                $img = 'Status/WarningMini';
                 break;
             case self :: STATUS_ERROR :
-                $img = 'status_error_mini';
+                $img = 'Status/ErrorMini';
                 break;
             case self :: STATUS_INFORMATION :
-                $img = 'action_details';
+                $img = 'Action/Details';
                 break;
         }
 

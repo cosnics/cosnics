@@ -27,21 +27,21 @@ class Menu extends HTML_Menu
 
     /**
      * Constructor
-     * 
+     *
      * @param Manager $context
      */
     public function __construct(Manager $context)
     {
         $this->context = $context;
         $this->path = $this->context->get_complex_content_object_path();
-        
+
         parent :: __construct($this->get_menu());
-        
+
         if ($this->context->get_current_step())
         {
             $this->forceCurrentUrl($this->get_url($this->context->get_current_step()));
         }
-        
+
         if ($this->context->get_action() == Manager :: ACTION_REPORTING && ! $this->context->is_current_step_set())
         {
             $this->forceCurrentUrl($this->get_reporting_url());
@@ -50,15 +50,15 @@ class Menu extends HTML_Menu
 
     /**
      * Get the actual menu contents
-     * 
+     *
      * @return string[]
      */
     public function get_menu()
     {
         $learning_path_id = $this->context->get_root_content_object_id();
-        
+
         $menu = array();
-        
+
         $learning_path_item = array();
         $learning_path_item['title'] = $this->get_title($this->path->get_root());
         $learning_path_item['class'] = 'type_' .
@@ -66,23 +66,23 @@ class Menu extends HTML_Menu
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
                     $this->path->get_root()->get_content_object()->get_type()));
         $learning_path_item['url'] = $this->get_url($this->path->get_root()->get_id());
-        
+
         $sub_items = $this->get_menu_items($this->path->get_root());
-        
+
         if (count($sub_items) > 0)
         {
             $learning_path_item['sub'] = $sub_items;
         }
-        
+
         $menu[] = $learning_path_item;
-        
+
         $progress_item = array();
         $progress_item['title'] = Translation :: get('Progress');
         $progress_item['url'] = $this->get_reporting_url();
         $progress_item['class'] = 'type_statistics';
-        
+
         $menu[] = $progress_item;
-        
+
         return $menu;
     }
 
@@ -94,22 +94,22 @@ class Menu extends HTML_Menu
 
     /**
      * Get the menu items for a given ComplexContentObjectPathNode
-     * 
+     *
      * @param ComplexContentObjectPathNode $parent
      * @return string[]
      */
     public function get_menu_items(ComplexContentObjectPathNode $parent)
     {
         $menu = array();
-        
+
         $children = $parent->get_children();
-        
+
         foreach ($children as $child)
         {
             $menu_item = array();
-            
+
             $menu_item['title'] = $this->get_title($child);
-            
+
             if ($this->context->get_parent()->is_allowed_to_view_content_object($child))
             {
                 $menu_item['url'] = $this->get_url($child->get_id());
@@ -123,15 +123,15 @@ class Menu extends HTML_Menu
                 $menu_item['url'] = '#';
                 $menu_item['class'] = 'disabled type_disabled';
             }
-            
+
             if ($child->has_children())
             {
                 $menu_item['sub'] = $this->get_menu_items($child);
             }
-            
+
             $menu[] = $menu_item;
         }
-        
+
         return $menu;
     }
 
@@ -139,7 +139,7 @@ class Menu extends HTML_Menu
     {
         if ($node->is_completed())
         {
-            return $node->get_content_object()->get_title() . Theme :: getInstance()->getCommonImage('status_ok_mini');
+            return $node->get_content_object()->get_title() . Theme :: getInstance()->getCommonImage('Status/OkMini');
         }
         else
         {
@@ -149,7 +149,7 @@ class Menu extends HTML_Menu
 
     /**
      * Get the URL of the learning_path step
-     * 
+     *
      * @param int $step
      * @return string
      */
@@ -160,7 +160,7 @@ class Menu extends HTML_Menu
 
     /**
      * Get the tree name based on the classname
-     * 
+     *
      * @return string
      */
     public static function get_tree_name()
@@ -170,7 +170,7 @@ class Menu extends HTML_Menu
 
     /**
      * Render the tree as HTML
-     * 
+     *
      * @return string
      */
     public function render_as_tree()

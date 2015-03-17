@@ -62,7 +62,7 @@ class ContentObjectRelMetadataElementTableCellRenderer extends DataClassTableCel
                         $label = Translation :: get('ConfirmTrue', null, Utilities :: COMMON_LIBRARIES);
 
                         return Theme :: getInstance()->getCommonImage(
-                            'status_ok_mini',
+                            'Status/OkMini',
                             'png',
                             $label,
                             null,
