@@ -148,10 +148,10 @@ abstract class Manager extends Application
     const ACTION_TEMPLATE = 'template';
 
     // Tabs
-    const TAB_CATEGORY = 'category';
-    const TAB_OBJECT_TYPE = 'object_type';
-    const TAB_SEARCH = 'search';
-    const TAB_USERVIEW = 'userview';
+    const TAB_CATEGORY = 'Category';
+    const TAB_OBJECT_TYPE = 'ObjectType';
+    const TAB_SEARCH = 'Search';
+    const TAB_USERVIEW = 'Userview';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
