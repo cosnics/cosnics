@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block name="filtered_course_list">
+	<settings>
+		<category name="filters">
+			<setting name="course_type" field="select" default="0">
+				<options type="dynamic" source="get_course_types" />
+			</setting>
+		</category>
+	</settings>
+</block>

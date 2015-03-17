@@ -1,0 +1,25 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = help
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Help"
+HelpItemsInstalled = "Geinstalleerde Help items"
+Url = "Url"
+UpdateItem = "Vernieuw item"
+NoHelpItemSelected = "Geen help item geselecteerd"
+List = "Lijst"
+ListDescription = "Bekijk de lijst beschikbare help items op het platform met de mogelijkheid om te koppelen aan uw eigen help pagina's per onderwerp"
+Help = "Help"
+HelpItemUpdated = "Help item vernieuwd"
+HelpItemNotUpdated = "Help item niet vernieuwd"
+HelpManagerBrowserComponent = "Browser"
+HelpManagerUpdaterComponent = "Vernieuwer"
+Context = "Context"
+Identifier = "ID"
+Language = "Taal"
+HideEmptyPages = "Verberg lege pagina's"
+HelpUrl = "Help URL"
+AutocompleteMissingPages = "Autocomplete ontbrekende pagina's"
+AutocompleteAllLanguages = "Autocomplete alle talen"
+General = "Algemeen"

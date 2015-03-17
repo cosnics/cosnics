@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\glossary_item
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Woordverklaring"
+Title = "Woord"
+Description = "Definitie"
+Properties = "Eigenschappen"
+GeneralProperties = "Algemene eigenschappen"
+Word = "Word"
+CategoryTypeName = "Categorie"
+Definition = "Definitie"
