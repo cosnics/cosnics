@@ -52,7 +52,7 @@ class Login extends Block
             $user = $this->get_user();
 
             $html[] = '<br />';
-            $max_height = PlatformSetting :: get('restrict_picture_height', __NAMESPACE__) ? 'max-height:100px' : null;
+            $max_height = PlatformSetting :: get('restrict_picture_height', \Chamilo\Core\User\Manager :: context()) ? 'max-height:100px' : null;
             $html[] = '<img src="' . htmlspecialchars($user->get_full_picture_url()) . '" style="max-width: 100%; ' .
                  $max_height . '" />';
             $html[] = '<br /><br />';
