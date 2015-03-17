@@ -48,9 +48,9 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $renderer;
 
-    public function __construct($user = null, $parent = null)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
     {
-        parent :: __construct($user, $parent);
+        parent :: __construct($request, $user, $parent);
 
         $form_parameters = $this->get_parameter();
         $form_parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSER;

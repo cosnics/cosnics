@@ -104,6 +104,24 @@ class Page
 
     /**
      *
+     * @return boolean
+     */
+    public function isHeaderless()
+    {
+        return $this->getViewMode() == self :: VIEW_MODE_HEADERLESS;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isFullPage()
+    {
+        return $this->getViewMode() == self :: VIEW_MODE_FULL;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
