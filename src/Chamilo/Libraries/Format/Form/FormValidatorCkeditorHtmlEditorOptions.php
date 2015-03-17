@@ -40,6 +40,7 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
     public function set_defaults()
     {
         parent :: set_defaults();
+
         $application = Request :: get('application');
         $app_sys_path = Path :: getInstance()->getJavascriptPath($application) . 'HtmlEditor/Ckeditor.js';
         if (file_exists($app_sys_path))
@@ -50,6 +51,9 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
         {
             $path = Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor.js';
         }
+
         $this->set_option(self :: OPTION_CONFIGURATION, $path);
+
+        $this->set_option(self :: OPTION_THEME, 'moonocolor');
     }
 }
