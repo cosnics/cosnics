@@ -29,7 +29,7 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 abstract class Application
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     /**
      *
@@ -232,21 +232,24 @@ abstract class Application
 
         $html[] = $page->getHeader()->toHtml();
 
-        // If there is an application-wide menu, show it
-        if ($this->has_menu())
+        if ($page->isFullPage())
         {
-            $html[] = '<div style="float: left; width: 17%;">';
-            $html[] = $this->get_menu();
-            $html[] = '</div>';
-            $html[] = '<div style="float: right; width: 82%;">';
-        }
+            // If there is an application-wide menu, show it
+            if ($this->has_menu())
+            {
+                $html[] = '<div style="float: left; width: 17%;">';
+                $html[] = $this->get_menu();
+                $html[] = '</div>';
+                $html[] = '<div style="float: right; width: 82%;">';
+            }
 
-        if ($breadcrumbtrail->size() > 0)
-        {
-            $title = $breadcrumbtrail->get_last()->get_name();
+            if ($breadcrumbtrail->size() > 0)
+            {
+                $title = $breadcrumbtrail->get_last()->get_name();
 
-            $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
-            $html[] = '<div class="clear">&nbsp;</div>';
+                $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
+                $html[] = '<div class="clear">&nbsp;</div>';
+            }
         }
 
         if (PlatformSetting :: get('maintenance_mode'))
@@ -296,18 +299,23 @@ abstract class Application
         {
             return $this->get_application()->render_footer();
         }
+        $page = Page :: getInstance();
 
         $html = array();
 
-        // In case there is an application-wide menu, properly end it
-        if ($this->has_menu())
+        if ($page->isFullPage())
         {
+            // In case there is an application-wide menu, properly end it
+            if ($this->has_menu())
+            {
+                $html[] = '<div class="clear">&nbsp;</div>';
+                $html[] = '</div>';
+            }
+
             $html[] = '<div class="clear">&nbsp;</div>';
-            $html[] = '</div>';
         }
 
-        $html[] = '<div class="clear">&nbsp;</div>';
-        $html[] = Page :: getInstance()->getFooter()->toHtml();
+        $html[] = $page->getFooter()->toHtml();
 
         return implode(PHP_EOL, $html);
     }
