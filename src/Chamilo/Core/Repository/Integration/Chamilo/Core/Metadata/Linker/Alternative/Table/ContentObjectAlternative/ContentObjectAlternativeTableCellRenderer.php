@@ -68,7 +68,7 @@ class ContentObjectAlternativeTableCellRenderer extends RecordTableCellRenderer 
                 }
 
                 return Theme :: getInstance()->getCommonImage(
-                    'status_warning_mini',
+                    'Status/WarningMini',
                     'png',
                     Translation :: get('NoMetadataValue'),
                     null,

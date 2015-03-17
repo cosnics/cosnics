@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Abstract class to show the options of an assessment question
- * 
+ *
  * @package application.weblcms.integration.reporting
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -21,28 +21,28 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * The complex content object item for the question
-     * 
+     *
      * @var ComplexContentObjectItem
      */
     private $question_complex_content_object_item;
 
     /**
      * The Question
-     * 
+     *
      * @var mixed
      */
     private $question;
 
     /**
      * The attempts on the specific question
-     * 
+     *
      * @var ResultSet
      */
     private $question_attempts;
 
     /**
      * Constructor
-     * 
+     *
      * @param mixed $question
      * @param ComplexContentObjectItem $complex_content_object_item
      * @param $parent
@@ -53,18 +53,18 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     public function __construct($question, $complex_content_object_item, $parent, $vertical = false)
     {
         parent :: __construct($parent, $vertical);
-        
+
         $this->set_question($question);
         $this->set_question_complex_content_object_item($complex_content_object_item);
-        
+
         $this->question_attempts = $this->get_question_attempts_from_publication_and_question(
-            $this->get_publication_id(), 
+            $this->get_publication_id(),
             $complex_content_object_item->get_id());
     }
 
     /**
      * Retrieves the question from the parameters and instantiates the correct subclass
-     * 
+     *
      * @param mixed $parent
      *
      * @return self
@@ -75,19 +75,19 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_QUESTION);
         $question_complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
             $question_complex_content_object_item_id);
-        
+
         $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
             $question_complex_content_object_item->get_ref());
-        
+
         $type = (string) StringUtilities :: getInstance()->createString($question->get_type_name())->upperCamelize();
         $class = __NAMESPACE__ . '\\' . $type . 'OptionsBlock';
-        
+
         return new $class($question, $question_complex_content_object_item, $parent);
     }
 
     /**
      * Retrieves the data
-     * 
+     *
      * @return ReportingData
      */
     public function retrieve_data()
@@ -97,7 +97,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Returns the view of the block
-     * 
+     *
      * @return array
      */
     public function get_views()
@@ -107,7 +107,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Returns the question
-     * 
+     *
      * @return mixed
      */
     protected function get_question()
@@ -117,7 +117,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Sets the question
-     * 
+     *
      * @param mixed $question
      */
     protected function set_question($question)
@@ -127,7 +127,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Returns the complex content object item for the question
-     * 
+     *
      * @return ComplexContentObjectItem
      */
     protected function get_question_complex_content_object_item()
@@ -137,7 +137,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Sets the complex content object item for the question
-     * 
+     *
      * @param ComplexContentObjectItem $question_complex_content_object_item
      */
     protected function set_question_complex_content_object_item($question_complex_content_object_item)
@@ -147,22 +147,22 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Adds the option headers
-     * 
+     *
      * @param ReportingData $reporting_data
      */
     protected function add_option_headers($reporting_data)
     {
         $reporting_data->set_rows(
             array(
-                Translation :: get('Answer'), 
-                Translation :: get('Correct'), 
-                Translation :: get('TimesChosen'), 
+                Translation :: get('Answer'),
+                Translation :: get('Correct'),
+                Translation :: get('TimesChosen'),
                 Translation :: get('DifficultyIndex')));
     }
 
     /**
      * Adds the data for an option
-     * 
+     *
      * @param ReportingData $reporting_data
      * @param int $row_count
      * @param string $option
@@ -173,57 +173,57 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     protected function add_option_data($reporting_data, $row_count, $option, $correct, $times_chosen, $total_attempts)
     {
         $reporting_data->add_category($row_count);
-        
+
         $reporting_data->add_data_category_row($row_count, Translation :: get('Answer'), $option);
-        
+
         $reporting_data->add_data_category_row(
-            $row_count, 
-            Translation :: get('Correct'), 
-            $correct ? Theme :: getInstance()->getCommonImage('status_confirm_mini') : '');
-        
+            $row_count,
+            Translation :: get('Correct'),
+            $correct ? Theme :: getInstance()->getCommonImage('Status/ConfirmMini') : '');
+
         $reporting_data->add_data_category_row(
-            $row_count, 
-            Translation :: get('TimesChosen'), 
+            $row_count,
+            Translation :: get('TimesChosen'),
             $times_chosen ? $times_chosen : 0);
-        
+
         if ($correct)
         {
             $reporting_data->add_data_category_row(
-                $row_count, 
-                Translation :: get('DifficultyIndex'), 
+                $row_count,
+                Translation :: get('DifficultyIndex'),
                 $this->render_difficulty_index($times_chosen, $total_attempts));
         }
     }
 
     /**
      * Returns a list of the answers that are extracted from the question attempts
-     * 
+     *
      * @return mixed[]
      */
     protected function get_answers_count_from_attempts()
     {
         $answers = array();
-        
+
         while ($question_attempt = $this->question_attempts->next_result())
         {
             $assessment_attempt = $question_attempt->get_optional_property(self :: PROPERTY_ASSESSMENT_ATTEMPT);
-            
+
             if ($assessment_attempt->get_status() == AssessmentAttempt :: STATUS_NOT_COMPLETED)
             {
                 continue;
             }
-            
+
             $this->get_answers_count_from_attempt($question_attempt, $answers);
         }
-        
+
         $this->question_attempts->reset();
-        
+
         return $answers;
     }
 
     /**
      * Returns the answer from the attempt
-     * 
+     *
      * @param QuestionAttempt $attempt
      * @param mixed[] $answers
      */
@@ -238,7 +238,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Counts the number of attempts
-     * 
+     *
      * @return int
      */
     protected function get_total_attempts()
@@ -248,7 +248,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Returns the attempts
-     * 
+     *
      * @return ResultSet
      */
     protected function get_attempts()

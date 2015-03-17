@@ -5,7 +5,7 @@ $(function() {
 	var cdaMatchRegExp = /\[CDA context=\{([^"]*?)\}\](.*?)\[\/CDA\]/gi;
 	var attributeReplacement = "$2";
 	var replacement = attributeReplacement
-			+ " <a class=\"cda_link\" href=\"http://translate.chamilo.org/translate.php?context=$1&variable=$2\"><img src=\"configuration/resources/images/aqua/action_translate.png\" style=\"width: 7px; height: 7px;\" /></a>";
+			+ " <a class=\"cda_link\" href=\"http://translate.chamilo.org/translate.php?context=$1&variable=$2\"><img src=\"Configuration/Resources/Images/Aqua/Action/Translate.png\" style=\"width: 7px; height: 7px;\" /></a>";
 
 	function hideMessages() {
 		setTimeout("$('.normal-message').fadeOut(500);", 5000);

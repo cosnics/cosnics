@@ -100,50 +100,50 @@ abstract class LocationResult
     public function add(LocationSupport $location, ContentObject $content_object, $result)
     {
         $data_row = array();
-        
+
         foreach ($this->get_location($location) as $cell)
         {
             $data_row[] = $cell;
         }
-        
+
         $data_row[] = $content_object->get_title();
-        
+
         if ($result)
         {
             $link = $this->get_link($location, $result);
-            
+
             if (! empty($link))
             {
                 $data_row[] = Theme :: getInstance()->getCommonImage(
-                    'action_right', 
-                    'png', 
-                    Translation :: get('ViewPublication'), 
-                    $link, 
+                    'action_right',
+                    'png',
+                    Translation :: get('ViewPublication'),
+                    $link,
                     ToolbarItem :: DISPLAY_ICON);
             }
             else
             {
                 $data_row[] = '';
             }
-            
+
             $data_row[] = Theme :: getInstance()->getCommonImage(
-                'status_confirm_mini', 
-                'png', 
-                Translation :: get('PublicationCreated'), 
-                null, 
+                'Status/ConfirmMini',
+                'png',
+                Translation :: get('PublicationCreated'),
+                null,
                 ToolbarItem :: DISPLAY_ICON);
         }
         else
         {
             $data_row[] = '';
             $data_row[] = Theme :: getInstance()->getCommonImage(
-                'status_error_mini', 
-                'png', 
-                Translation :: get('PublicationFailed'), 
-                null, 
+                'Status/ErrorMini',
+                'png',
+                Translation :: get('PublicationFailed'),
+                null,
                 ToolbarItem :: DISPLAY_ICON);
         }
-        
+
         $this->table_data[] = $data_row;
     }
 
@@ -151,39 +151,39 @@ abstract class LocationResult
     {
         $this->table = new SortableTableFromArray($this->table_data, 0, count($this->table_data));
         $table_header = $this->table->getHeader();
-        
+
         $headers = $this->get_header();
-        
+
         foreach ($headers as $key => $header)
         {
             $this->table->set_header($key, $header, false);
         }
         $key ++;
-        
+
         $this->table->set_header($key ++, Translation :: get('ContentObject'), false);
-        
+
         $table_header->setColAttributes($key, 'class="action"');
         $this->table->set_header(
-            $key ++, 
+            $key ++,
             Theme :: getInstance()->getCommonImage(
-                'action_search', 
-                'png', 
-                Translation :: get('ViewPublication'), 
-                null, 
-                ToolbarItem :: DISPLAY_ICON), 
+                'action_search',
+                'png',
+                Translation :: get('ViewPublication'),
+                null,
+                ToolbarItem :: DISPLAY_ICON),
             false);
-        
+
         $table_header->setColAttributes($key, 'class="action"');
         $this->table->set_header(
-            $key ++, 
+            $key ++,
             Theme :: getInstance()->getCommonImage(
-                'status_normal_mini', 
-                'png', 
-                Translation :: get('Result'), 
-                null, 
-                ToolbarItem :: DISPLAY_ICON), 
+                'Status/NormalMini',
+                'png',
+                Translation :: get('Result'),
+                null,
+                ToolbarItem :: DISPLAY_ICON),
             false);
-        
+
         return $this->table->as_html();
     }
 
