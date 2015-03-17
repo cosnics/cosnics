@@ -88,7 +88,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title[] = '<a class="tabTitle" href="#">' . $tab->get_title() . '</a>';
         $title[] = '<a class="deleteTab"><img src="' . Theme :: getInstance()->getImagePath(
             'Chamilo\Core\Home',
-            'Action/Delete_tab') . '" /></a>';
+            'Action/DeleteTab') . '" /></a>';
         $title[] = '</li>';
 
         $result = new JsonAjaxResult(200);

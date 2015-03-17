@@ -115,7 +115,7 @@ class Basic extends Renderer
             if ($isUser && $homeAllowed && ! $isAnonymous)
             {
                 $html[] = '<a class="deleteTab"><img src="' . htmlspecialchars(
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Delete_tab')) . '" /></a>';
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/DeleteTab')) . '" /></a>';
             }
 
             $html[] = '</li>';

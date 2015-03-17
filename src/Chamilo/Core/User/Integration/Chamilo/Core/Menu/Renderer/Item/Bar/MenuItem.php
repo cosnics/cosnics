@@ -38,9 +38,7 @@ abstract class MenuItem extends Bar
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
                 $this->get_item()->get_type());
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($itemNamespace, 2);
-            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace(
-                $this->get_item()->get_type(),
-                true);
+            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->get_item()->get_type());
             $imagePath = Theme :: getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';

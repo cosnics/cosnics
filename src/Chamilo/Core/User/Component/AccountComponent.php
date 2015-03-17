@@ -111,17 +111,16 @@ class AccountComponent extends Manager implements NoContextComponent
                 foreach ($actions as $action)
                 {
                     $selected = ($action == 'account' ? true : false);
+                    $type = (string) StringUtilities :: getInstance()->createString($action)->upperCamelize();
 
-                    $label = htmlentities(
-                        Translation :: get(
-                            (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Title'));
+                    $label = htmlentities(Translation :: get($type . 'Title'));
                     $link = $this->get_url(array(self :: PARAM_ACTION => $action));
 
                     $tabs->add_tab(
                         new DynamicVisualTab(
                             $action,
                             $label,
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'Place/' . $action),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\User', 'Place/' . $type),
                             $link,
                             $selected));
                 }
