@@ -93,7 +93,7 @@ class LearningPathAttemptsBlock extends ToolBlock
                     $action = Text :: create_link(
                         $url,
                         Theme :: getInstance()->getCommonImage(
-                            'action_reporting',
+                            'Action/Reporting',
                             'png',
                             Translation :: get('Details'),
                             null,
@@ -102,7 +102,7 @@ class LearningPathAttemptsBlock extends ToolBlock
                     $action .= ' ' . Text :: create_link(
                         $delete_url,
                         Theme :: getInstance()->getCommonImage(
-                            'action_delete',
+                            'Action/Delete',
                             'png',
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                             null,

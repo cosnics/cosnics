@@ -37,7 +37,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
             case AttributeTableColumnModel :: COLUMN_CONTROLLED_VOCABULARY :
                 $has_controlled_vocabulary = DataManager :: attribute_has_controlled_vocabulary($result->get_id()) ? 'true' : 'false';
 
-                return Theme :: getInstance()->getCommonImage('action_setting_' . $has_controlled_vocabulary);
+                return Theme :: getInstance()->getCommonImage('Action/Setting' . $has_controlled_vocabulary);
                 break;
         }
 

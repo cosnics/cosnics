@@ -309,7 +309,7 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_assessment_result_viewer_link($assessment_attempt_id, $question_id = null)
     {
-        $details_image = Theme :: getInstance()->getCommonImage('action_browser');
+        $details_image = Theme :: getInstance()->getCommonImage('Action/Browser');
 
         $params = array();
 

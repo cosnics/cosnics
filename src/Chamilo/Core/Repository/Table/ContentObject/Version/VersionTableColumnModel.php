@@ -29,10 +29,10 @@ class VersionTableColumnModel extends DataClassTableColumnModel implements Table
         $this->add_column(
             new StaticTableColumn(
                 Theme :: getInstance()->getCommonImage(
-                    'action_category', 
-                    'png', 
-                    Translation :: get('Type'), 
-                    null, 
+                    'Action/Category',
+                    'png',
+                    Translation :: get('Type'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON)));
     }
 }

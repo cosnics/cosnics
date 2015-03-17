@@ -19,12 +19,12 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: PROPERTY_TYPE, 
+                self :: PROPERTY_TYPE,
                 Theme :: getInstance()->getCommonImage(
-                    'action_category', 
-                    'png', 
-                    Translation :: get('Type'), 
-                    null, 
+                    'Action/Category',
+                    'png',
+                    Translation :: get('Type'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON)));
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));

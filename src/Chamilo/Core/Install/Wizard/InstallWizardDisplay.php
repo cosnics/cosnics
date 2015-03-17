@@ -91,7 +91,7 @@ EOT;
 
         $renderer->setHeaderTemplate($header_template);
         HTML_QuickForm :: setRequiredNote(
-            '<span class="form_required"><img src=src="' . Theme :: getInstance()->getCommonImagePath('action_required') .
+            '<span class="form_required"><img src=src="' . Theme :: getInstance()->getCommonImagePath('Action/Required') .
                  '" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT

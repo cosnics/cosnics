@@ -53,7 +53,7 @@ class AdminEventViewerCellRenderer
                 new ToolbarItem(
                     ($tracker->get_active() == 1) ? Translation :: get('Deactivate') : Translation :: get('Activate'),
                     ($tracker->get_active() == 1) ? Theme :: getInstance()->getCommonImagePath('Action/Visible') : Theme :: getInstance()->getCommonImagePath(
-                        'action_invisible'),
+                        'Action/Invisible'),
                     $this->eventviewer->get_change_active_url('tracker', $this->event->get_id(), $tracker->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
             $toolbar->add_item(

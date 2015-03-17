@@ -70,7 +70,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                 return $this->parent_title_cache[$pid];
 
             case Theme :: getInstance()->getCommonImage(
-                'action_category',
+                'Action/Category',
                 'png',
                 Translation :: get('Type'),
                 null,

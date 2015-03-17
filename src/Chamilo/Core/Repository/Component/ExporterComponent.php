@@ -82,23 +82,27 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CONTENT_OBJECT_ID,
-                                $this->get_export_types_cache($export_type),
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CONTENT_OBJECT_ID,
+                                    $this->get_export_types_cache($export_type),
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CATEGORY_ID,
-                                $category_ids,
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('action_export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CATEGORY_ID,
+                                    $category_ids,
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                     }
                     else
                     {
                         $table_row[] = Theme :: getInstance()->getImage(
-                            'action_export_na',
+                            'Action/ExportNa',
                             'png',
                             Translation :: get('ExportNotAvailable'),
                             null,

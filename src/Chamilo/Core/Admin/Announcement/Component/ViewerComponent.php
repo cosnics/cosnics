@@ -91,15 +91,15 @@ class ViewerComponent extends Manager implements NoContextComponent
 
             if ($publication->is_hidden())
             {
-                $visibility_img = 'action_invisible';
+                $visibility_img = 'Action/Invisible';
             }
             elseif ($publication->is_forever())
             {
-                $visibility_img = 'action_visible';
+                $visibility_img = 'Action/Visible';
             }
             else
             {
-                $visibility_img = 'action_period';
+                $visibility_img = 'Action/Period';
             }
 
             $action_bar->add_common_action(
