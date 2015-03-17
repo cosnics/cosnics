@@ -14,7 +14,7 @@
  */
 
 var CKBUILDER_CONFIG = {
-    skin: 'kama',
+    skin: ['kama', 'aqua', 'eagle', 'moono', 'ruby'],
     preset: 'full',
     ignore: [
         'dev',
