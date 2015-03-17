@@ -23,7 +23,8 @@ class EditorComponent extends Manager
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($user = null, MetadataValueEditorComponent $parent)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null,
+        MetadataValueEditorComponent $parent)
     {
         if (! $parent instanceof MetadataValueEditorComponent)
         {
@@ -31,7 +32,7 @@ class EditorComponent extends Manager
                 'The parent component must be an instance of MetadataValueEditorComponent');
         }
 
-        parent :: __construct($user, $parent);
+        parent :: __construct($request, $user, $parent);
     }
 
     /**

@@ -30,9 +30,9 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
      *
      * @param $parent Application - The component in which this tool runs @codeCoverageIgnore
      */
-    public function __construct($parent)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
     {
-        parent :: __construct($parent);
+        parent :: __construct($request, $user, $parent);
 
         $this->initialize_dependencies($this->get_dependency_container());
     }

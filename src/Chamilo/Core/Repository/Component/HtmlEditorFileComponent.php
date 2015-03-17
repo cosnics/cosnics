@@ -11,9 +11,10 @@ class HtmlEditorFileComponent extends Manager
 {
     const PARAM_PLUGIN = 'plugin';
 
-    public function __construct($user)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
     {
-        parent :: __construct($user);
+        parent :: __construct($request, $user, $parent);
+
         $this->set_parameter('CKEditor', Request :: get('CKEditor'));
         $this->set_parameter('CKEditorFuncNum', Request :: get('CKEditorFuncNum'));
         $this->set_parameter('langCode', Request :: get('langCode'));
@@ -24,10 +25,11 @@ class HtmlEditorFileComponent extends Manager
         $plugin = $this->get_plugin();
         $this->set_parameter(self :: PARAM_PLUGIN, $plugin);
 
-        Page::getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
+
             $factory = new ApplicationFactory(
                 $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
