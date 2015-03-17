@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -28,7 +28,7 @@ CKEDITOR.lang[ 'nb' ] = {
 		// of reading non-English words. So be careful while translating it.
 		editorHelp: 'Trykk ALT 0 for hjelp',
 
-		browseServer: 'Bla igjennom server',
+		browseServer: 'Bla gjennom tjener',
 		url: 'URL',
 		protocol: 'Protokoll',
 		upload: 'Last opp',
@@ -63,8 +63,8 @@ CKEDITOR.lang[ 'nb' ] = {
 		generalTab: 'Generelt',
 		advancedTab: 'Avansert',
 		validateNumberFailed: 'Denne verdien er ikke et tall.',
-		confirmNewPage: 'Alle ulagrede endringer som er gjort i dette innholdet vil bli tapt. Er du sikker på at du vil laste en ny side?',
-		confirmCancel: 'Noen av valgene har blitt endret. Er du sikker på at du vil lukke dialogen?',
+		confirmNewPage: 'Alle ulagrede endringer som er gjort i dette innholdet vil gå tapt. Er du sikker på at du vil laste en ny side?',
+		confirmCancel: 'Du har endret noen alternativer. Er du sikker på at du vil lukke dialogvinduet?',
 		options: 'Valg',
 		target: 'Mål',
 		targetNew: 'Nytt vindu (_blank)',
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'nb' ] = {
 		alignLeft: 'Venstre',
 		alignRight: 'Høyre',
 		alignCenter: 'Midtjuster',
+		alignJustify: 'Blokkjuster',
 		alignTop: 'Topp',
 		alignMiddle: 'Midten',
 		alignBottom: 'Bunn',
+		alignNone: 'Ingen',
 		invalidValue	: 'Ugyldig verdi.',
 		invalidHeight: 'Høyde må være et tall.',
 		invalidWidth: 'Bredde må være et tall.',

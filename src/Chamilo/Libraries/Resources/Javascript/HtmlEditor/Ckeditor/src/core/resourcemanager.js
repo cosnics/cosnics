@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -201,14 +201,15 @@ CKEDITOR.resourceManager.prototype = {
 				if ( !( url in urlsNames ) )
 					urlsNames[ url ] = [];
 				urlsNames[ url ].push( name );
-			} else
+			} else {
 				resources[ name ] = this.get( name );
+			}
 		}
 
 		CKEDITOR.scriptLoader.load( urls, function( completed, failed ) {
 			if ( failed.length ) {
-				throw '[CKEDITOR.resourceManager.load] Resource name "' + urlsNames[ failed[ 0 ] ].join( ',' )
-					+ '" was not found at "' + failed[ 0 ] + '".';
+				throw '[CKEDITOR.resourceManager.load] Resource name "' + urlsNames[ failed[ 0 ] ].join( ',' ) +
+					'" was not found at "' + failed[ 0 ] + '".';
 			}
 
 			for ( var i = 0; i < completed.length; i++ ) {

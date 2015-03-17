@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'lv' ] = {
 		alignLeft: 'Pa kreisi',
 		alignRight: 'Pa labi',
 		alignCenter: 'Centrēti',
+		alignJustify: 'Izlīdzināt malas',
 		alignTop: 'Augšā',
 		alignMiddle: 'Vertikāli centrēts',
 		alignBottom: 'Apakšā',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'Nekorekta vērtība',
 		invalidHeight: 'Augstumam jābūt skaitlim.',
 		invalidWidth: 'Platumam jābūt skaitlim',

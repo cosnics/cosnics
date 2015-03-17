@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -80,9 +80,11 @@ CKEDITOR.lang[ 'ug' ] = {
 		alignLeft: 'سول',
 		alignRight: 'ئوڭ',
 		alignCenter: 'ئوتتۇرا',
+		alignJustify: 'ئىككى تەرەپتىن توغرىلا',
 		alignTop: 'ئۈستى',
 		alignMiddle: 'ئوتتۇرا',
 		alignBottom: 'ئاستى',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'ئىناۋەتسىز قىممەت.',
 		invalidHeight: 'ئېگىزلىك چوقۇم رەقەم پىچىمىدا بولۇشى زۆرۈر',
 		invalidWidth: 'كەڭلىك چوقۇم رەقەم پىچىمىدا بولۇشى زۆرۈر',

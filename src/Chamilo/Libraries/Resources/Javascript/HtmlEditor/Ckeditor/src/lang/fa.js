@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -19,8 +19,8 @@
  */
 CKEDITOR.lang[ 'fa' ] = {
 	// ARIA description.
-	editor: 'ویرایشگر متن کامل',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editor: 'ویرایش‌گر متن غنی',
+	editorPanel: 'پنل ویرایشگر متن غنی',
 
 	// Common messages and labels.
 	common: {
@@ -30,8 +30,8 @@ CKEDITOR.lang[ 'fa' ] = {
 
 		browseServer: 'فهرست​نمایی سرور',
 		url: 'URL',
-		protocol: 'پروتکل',
-		upload: 'آپلود',
+		protocol: 'قرارداد',
+		upload: 'بالاگذاری',
 		uploadSubmit: 'به سرور بفرست',
 		image: 'تصویر',
 		flash: 'فلش',
@@ -44,29 +44,29 @@ CKEDITOR.lang[ 'fa' ] = {
 		button: 'دکمه',
 		select: 'فیلد انتخاب چند گزینه​ای',
 		imageButton: 'دکمه‌ی تصویری',
-		notSet: '<تعین نشده>',
+		notSet: '<تعیین‌نشده>',
 		id: 'شناسه',
 		name: 'نام',
-		langDir: 'جهت​نمای زبان',
+		langDir: 'جهت زبان',
 		langDirLtr: 'چپ به راست',
 		langDirRtl: 'راست به چپ',
 		langCode: 'کد زبان',
 		longDescr: 'URL توصیف طولانی',
 		cssClass: 'کلاس​های شیوه​نامه (Stylesheet)',
 		advisoryTitle: 'عنوان کمکی',
-		cssStyle: 'شیوه (style)',
+		cssStyle: 'سبک',
 		ok: 'پذیرش',
 		cancel: 'انصراف',
 		close: 'بستن',
 		preview: 'پیش‌نمایش',
 		resize: 'تغییر اندازه',
 		generalTab: 'عمومی',
-		advancedTab: 'پیشرفته',
+		advancedTab: 'پیش‌رفته',
 		validateNumberFailed: 'این مقدار یک عدد نیست.',
 		confirmNewPage: 'هر تغییر ایجاد شده​ی ذخیره نشده از بین خواهد رفت. آیا اطمینان دارید که قصد بارگیری صفحه جدیدی را دارید؟',
 		confirmCancel: 'برخی از گزینه‌ها تغییر کرده‌اند. آیا واقعا قصد بستن این پنجره را دارید؟',
 		options: 'گزینه​ها',
-		target: 'نحوه باز کردن',
+		target: 'مقصد',
 		targetNew: 'پنجره جدید',
 		targetTop: 'بالاترین پنجره',
 		targetSelf: 'همان پنجره',
@@ -74,16 +74,18 @@ CKEDITOR.lang[ 'fa' ] = {
 		langDirLTR: 'چپ به راست',
 		langDirRTL: 'راست به چپ',
 		styles: 'سبک',
-		cssClasses: 'کلاس‌های شیوه‌نامه',
+		cssClasses: 'کلاس‌های سبک‌نامه',
 		width: 'عرض',
 		height: 'طول',
 		align: 'چینش',
 		alignLeft: 'چپ',
 		alignRight: 'راست',
-		alignCenter: 'مرکز',
+		alignCenter: 'وسط',
+		alignJustify: 'بلوک چین',
 		alignTop: 'بالا',
-		alignMiddle: 'وسط',
+		alignMiddle: 'میانه',
 		alignBottom: 'پائین',
+		alignNone: 'هیچ',
 		invalidValue	: 'مقدار نامعتبر.',
 		invalidHeight: 'ارتفاع باید یک عدد باشد.',
 		invalidWidth: 'عرض باید یک عدد باشد.',

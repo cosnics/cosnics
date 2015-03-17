@@ -1,9 +1,9 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
+( function() {
 	var cellNodeRegex = /^(?:td|th)$/;
 
 	function getSelectedCells( selection ) {
@@ -123,7 +123,7 @@
 			} else {
 				cell = new CKEDITOR.dom.element( cloneRow[ i ] ).clone();
 				cell.removeAttribute( 'rowSpan' );
-				!CKEDITOR.env.ie && cell.appendBogus();
+				cell.appendBogus();
 				newRow.append( cell );
 				cell = cell.$;
 			}
@@ -255,7 +255,7 @@
 			} else {
 				cell = new CKEDITOR.dom.element( cloneCol[ i ] ).clone();
 				cell.removeAttribute( 'colSpan' );
-				!CKEDITOR.env.ie && cell.appendBogus();
+				cell.appendBogus();
 				cell[ insertBefore ? 'insertBefore' : 'insertAfter' ].call( cell, new CKEDITOR.dom.element( cloneCol[ i ] ) );
 				cell = cell.$;
 			}
@@ -320,38 +320,6 @@
 		return cursorPosition;
 	}
 
-	function getFocusElementAfterDelCols( cells ) {
-		var cellIndexList = [],
-			table = cells[ 0 ] && cells[ 0 ].getAscendant( 'table' ),
-			i, length, targetIndex, targetCell;
-
-		// get the cellIndex list of delete cells
-		for ( i = 0, length = cells.length; i < length; i++ )
-			cellIndexList.push( cells[ i ].$.cellIndex );
-
-		// get the focusable column index
-		cellIndexList.sort();
-		for ( i = 1, length = cellIndexList.length; i < length; i++ ) {
-			if ( cellIndexList[ i ] - cellIndexList[ i - 1 ] > 1 ) {
-				targetIndex = cellIndexList[ i - 1 ] + 1;
-				break;
-			}
-		}
-
-		if ( !targetIndex )
-			targetIndex = cellIndexList[ 0 ] > 0 ? ( cellIndexList[ 0 ] - 1 ) : ( cellIndexList[ cellIndexList.length - 1 ] + 1 );
-
-		// scan row by row to get the target cell
-		var rows = table.$.rows;
-		for ( i = 0, length = rows.length; i < length; i++ ) {
-			targetCell = rows[ i ].cells[ targetIndex ];
-			if ( targetCell )
-				break;
-		}
-
-		return targetCell ? new CKEDITOR.dom.element( targetCell ) : table.getPrevious();
-	}
-
 	function insertCell( selection, insertBefore ) {
 		var startElement = selection.getStartElement();
 		var cell = startElement.getAscendant( 'td', 1 ) || startElement.getAscendant( 'th', 1 );
@@ -361,8 +329,7 @@
 
 		// Create the new cell element to be added.
 		var newCell = cell.clone();
-		if ( !CKEDITOR.env.ie )
-			newCell.appendBogus();
+		newCell.appendBogus();
 
 		if ( insertBefore )
 			newCell.insertBefore( cell );
@@ -405,7 +372,9 @@
 
 		// Fixing "Unspecified error" thrown in IE10 by resetting
 		// selection the dirty and shameful way (#10308).
-		if ( CKEDITOR.env.ie && CKEDITOR.env.version < 11 ) {
+		// We can not apply this hack to IE8 because
+		// it causes error (#11058).
+		if ( CKEDITOR.env.ie && CKEDITOR.env.version == 10 ) {
 			docOuter.focus();
 			docInner.focus();
 		}
@@ -453,9 +422,8 @@
 		// 2. In solo mode while not exactly only one selected.
 		// 3. Cells distributed in different table groups (e.g. from both thead and tbody).
 		var commonAncestor;
-		if ( ( mergeDirection ? cells.length != 1 : cells.length < 2 ) || ( commonAncestor = selection.getCommonAncestor() ) && commonAncestor.type == CKEDITOR.NODE_ELEMENT && commonAncestor.is( 'table' ) ) {
+		if ( ( mergeDirection ? cells.length != 1 : cells.length < 2 ) || ( commonAncestor = selection.getCommonAncestor() ) && commonAncestor.type == CKEDITOR.NODE_ELEMENT && commonAncestor.is( 'table' ) )
 			return false;
-		}
 
 		var cell,
 			firstCell = cells[ 0 ],
@@ -519,7 +487,7 @@
 				// Trim all cell fillers and check to remove empty cells.
 				if ( trimCell( cell ), cell.getChildren().count() ) {
 					// Merge vertically cells as two separated paragraphs.
-					if ( rowIndex != lastRowIndex && cellFirstChild && !( cellFirstChild.isBlockBoundary && cellFirstChild.isBlockBoundary( { br:1 } ) ) ) {
+					if ( rowIndex != lastRowIndex && cellFirstChild && !( cellFirstChild.isBlockBoundary && cellFirstChild.isBlockBoundary( { br: 1 } ) ) ) {
 						var last = frag.getLast( CKEDITOR.dom.walker.whitespaces( true ) );
 						if ( last && !( last.is && last.is( 'br' ) ) )
 							frag.append( 'br' );
@@ -535,8 +503,7 @@
 		if ( !isDetect ) {
 			frag.moveChildren( firstCell );
 
-			if ( !CKEDITOR.env.ie )
-				firstCell.appendBogus();
+			firstCell.appendBogus();
 
 			if ( totalColSpan >= mapWidth )
 				firstCell.removeAttribute( 'rowSpan' );
@@ -565,8 +532,9 @@
 		}
 		// Be able to merge cells only if actual dimension of selected
 		// cells equals to the caculated rectangle.
-		else
+		else {
 			return ( totalRowSpan * totalColSpan ) == dimension;
+		}
 	}
 
 	function verticalSplitCell( selection, isDetect ) {
@@ -602,13 +570,14 @@
 				if ( candidateCell.parentNode == newCellTr.$ && c > colIndex ) {
 					newCell.insertBefore( new CKEDITOR.dom.element( candidateCell ) );
 					break;
-				} else
+				} else {
 					candidateCell = null;
+				}
 			}
 
 			// The destination row is empty, append at will.
 			if ( !candidateCell )
-				newCellTr.append( newCell, true );
+				newCellTr.append( newCell );
 		} else {
 			newCellRowSpan = newRowSpan = 1;
 
@@ -621,8 +590,7 @@
 				cellsInSameRow[ i ].rowSpan++;
 		}
 
-		if ( !CKEDITOR.env.ie )
-			newCell.appendBogus();
+		newCell.appendBogus();
 
 		cell.$.rowSpan = newRowSpan;
 		newCell.$.rowSpan = newCellRowSpan;
@@ -661,8 +629,7 @@
 		}
 		newCell = cell.clone();
 		newCell.insertAfter( cell );
-		if ( !CKEDITOR.env.ie )
-			newCell.appendBogus();
+		newCell.appendBogus();
 
 		cell.$.colSpan = newColSpan;
 		newCell.$.colSpan = newCellColSpan;
@@ -673,8 +640,6 @@
 
 		return newCell;
 	}
-	// Context menu on table caption incorrect (#3834)
-	var contextMenuTags = { thead:1,tbody:1,tfoot:1,td:1,tr:1,th:1 };
 
 	CKEDITOR.plugins.tabletools = {
 		requires: 'table,dialog,contextmenu',
@@ -685,9 +650,9 @@
 				return CKEDITOR.tools.extend( def || {}, {
 					contextSensitive: 1,
 					refresh: function( editor, path ) {
-						this.setState( path.contains( { td:1,th:1 }, 1 ) ? CKEDITOR.TRISTATE_OFF : CKEDITOR.TRISTATE_DISABLED );
+						this.setState( path.contains( { td: 1, th: 1 }, 1 ) ? CKEDITOR.TRISTATE_OFF : CKEDITOR.TRISTATE_DISABLED );
 					}
-				});
+				} );
 			}
 			function addCmd( name, def ) {
 				var cmd = editor.addCommand( name, def );
@@ -815,7 +780,7 @@
 
 			// If the "menu" plugin is loaded, register the menu items.
 			if ( editor.addMenuItems ) {
-				editor.addMenuItems({
+				editor.addMenuItems( {
 					tablecell: {
 						label: lang.cell.menu,
 						group: 'tablecell',
@@ -967,13 +932,13 @@
 						command: 'columnDelete',
 						order: 15
 					}
-				});
+				} );
 			}
 
 			// If the "contextmenu" plugin is laoded, register the listeners.
 			if ( editor.contextMenu ) {
 				editor.contextMenu.addListener( function( element, selection, path ) {
-					var cell = path.contains( { 'td':1,'th':1 }, 1 );
+					var cell = path.contains( { 'td': 1, 'th': 1 }, 1 );
 					if ( cell && !cell.isReadOnly() ) {
 						return {
 							tablecell: CKEDITOR.TRISTATE_OFF,
@@ -983,7 +948,7 @@
 					}
 
 					return null;
-				});
+				} );
 			}
 		},
 
@@ -991,7 +956,7 @@
 
 	};
 	CKEDITOR.plugins.add( 'tabletools', CKEDITOR.plugins.tabletools );
-})();
+} )();
 
 /**
  * Create a two-dimension array that reflects the actual layout of table cells,

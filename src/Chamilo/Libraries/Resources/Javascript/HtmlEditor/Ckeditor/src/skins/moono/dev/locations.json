@@ -105,7 +105,10 @@
 		"plugins/link/icons/anchor-rtl.png"
 	],
 	"7": [
-		"plugins/image/icons/image.png",
+		[
+			"plugins/image/icons/image.png",
+			"plugins/image2/icons/image.png"
+		],
 		"plugins/flash/icons/flash.png",
 		"plugins/table/icons/table.png",
 		"plugins/horizontalrule/icons/horizontalrule.png",
@@ -127,7 +130,9 @@
 	"10": [
 		"plugins/about/icons/about.png",
 		"plugins/uicolor/icons/uicolor.png",
-		"plugins/placeholder/icons/placeholder.png"
+		"plugins/placeholder/icons/placeholder.png",
+		"plugins/language/icons/language.png",
+		"plugins/codesnippet/icons/codesnippet.png"
 	],
 	"11": [
 		"plugins/link/images/anchor.png",

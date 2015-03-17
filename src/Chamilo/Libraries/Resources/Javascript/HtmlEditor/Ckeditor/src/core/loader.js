@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -9,7 +9,7 @@
  */
 
 if ( typeof CKEDITOR == 'undefined' )
-	CKEDITOR = {};
+	CKEDITOR = {}; // jshint ignore:line
 
 if ( !CKEDITOR.loader ) {
 	/**
@@ -18,11 +18,20 @@ if ( !CKEDITOR.loader ) {
 	 * @class
 	 * @singleton
 	 */
-	CKEDITOR.loader = (function() {
+	CKEDITOR.loader = ( function() {
 		// Table of script names and their dependencies.
 		var scripts = {
-			'_bootstrap': [ 'config', 'creators/inline', 'creators/themedui', 'editable', 'ckeditor', 'plugins', 'scriptloader', 'style', 'tools', /* The following are entries that we want to force loading at the end to avoid dependence recursion */ 'dom/comment', 'dom/elementpath', 'dom/text', 'dom/rangelist', 'skin' ],
-			'ckeditor': [ 'ckeditor_basic', 'dom', 'dtd', 'dom/document', 'dom/element', 'dom/iterator', 'editor', 'event', 'htmldataprocessor', 'htmlparser', 'htmlparser/element', 'htmlparser/fragment', 'htmlparser/filter', 'htmlparser/basicwriter', 'template', 'tools' ],
+			'_bootstrap': [
+				'config', 'creators/inline', 'creators/themedui', 'editable', 'ckeditor', 'plugins',
+				'scriptloader', 'style', 'tools',
+				// The following are entries that we want to force loading at the end to avoid dependence recursion.
+				'dom/comment', 'dom/elementpath', 'dom/text', 'dom/rangelist', 'skin'
+			],
+			'ckeditor': [
+				'ckeditor_basic', 'dom', 'dtd', 'dom/document', 'dom/element', 'dom/iterator', 'editor', 'event',
+				'htmldataprocessor', 'htmlparser', 'htmlparser/element', 'htmlparser/fragment', 'htmlparser/filter',
+				'htmlparser/basicwriter', 'template', 'tools'
+			],
 			'ckeditor_base': [],
 			'ckeditor_basic': [ 'editor_basic', 'env', 'event' ],
 			'command': [],
@@ -45,7 +54,10 @@ if ( !CKEDITOR.loader ) {
 			'dom/window': [ 'dom/domobject' ],
 			'dtd': [ 'tools' ],
 			'editable': [ 'editor', 'tools' ],
-			'editor': [ 'command', 'config', 'editor_basic', 'filter', 'focusmanager', 'keystrokehandler', 'lang', 'plugins', 'tools', 'ui' ],
+			'editor': [
+				'command', 'config', 'editor_basic', 'filter', 'focusmanager', 'keystrokehandler', 'lang',
+				'plugins', 'tools', 'ui'
+			],
 			'editor_basic': [ 'event' ],
 			'env': [],
 			'event': [],
@@ -54,7 +66,7 @@ if ( !CKEDITOR.loader ) {
 			'htmldataprocessor': [ 'htmlparser', 'htmlparser/basicwriter', 'htmlparser/fragment', 'htmlparser/filter' ],
 			'htmlparser': [],
 			'htmlparser/comment': [ 'htmlparser', 'htmlparser/node' ],
-			'htmlparser/element': [ 'htmlparser', 'htmlparser/fragment','htmlparser/node' ],
+			'htmlparser/element': [ 'htmlparser', 'htmlparser/fragment', 'htmlparser/node' ],
 			'htmlparser/fragment': [ 'htmlparser', 'htmlparser/comment', 'htmlparser/text', 'htmlparser/cdata' ],
 			'htmlparser/text': [ 'htmlparser', 'htmlparser/node' ],
 			'htmlparser/cdata': [ 'htmlparser', 'htmlparser/node' ],
@@ -76,39 +88,6 @@ if ( !CKEDITOR.loader ) {
 			'creators/inline': []
 		};
 
-		var basePath = (function() {
-			// This is a copy of CKEDITOR.basePath, but requires the script having
-			// "_source/loader.js".
-			if ( CKEDITOR && CKEDITOR.basePath )
-				return CKEDITOR.basePath;
-
-			// Find out the editor directory path, based on its <script> tag.
-			var path = '';
-			var scripts = document.getElementsByTagName( 'script' );
-
-			for ( var i = 0; i < scripts.length; i++ ) {
-				var match = scripts[ i ].src.match( /(^|.*?[\\\/])(?:_source\/)?core\/loader.js(?:\?.*)?$/i );
-
-				if ( match ) {
-					path = match[ 1 ];
-					break;
-				}
-			}
-
-			// In IE (only) the script.src string is the raw valued entered in the
-			// HTML. Other browsers return the full resolved URL instead.
-			if ( path.indexOf( '://' ) == -1 ) {
-				// Absolute path.
-				if ( path.indexOf( '/' ) === 0 )
-					path = location.href.match( /^.*?:\/\/[^\/]*/ )[ 0 ] + path;
-				// Relative path.
-				else
-					path = location.href.match( /^[^\?]*\// )[ 0 ] + path;
-			}
-
-			return path;
-		})();
-
 		var timestamp = ( CKEDITOR && CKEDITOR.timestamp ) || ( new Date() ).valueOf(); // %REMOVE_LINE%
 		/*																				// %REMOVE_LINE%
 		 * The production implementation contains a fixed timestamp						// %REMOVE_LINE%
@@ -120,7 +99,7 @@ if ( !CKEDITOR.loader ) {
 				if ( CKEDITOR && CKEDITOR.getUrl )
 					return CKEDITOR.getUrl( resource );
 
-				return basePath + resource + ( resource.indexOf( '?' ) >= 0 ? '&' : '?' ) + 't=' + timestamp;
+				return CKEDITOR.basePath + resource + ( resource.indexOf( '?' ) >= 0 ? '&' : '?' ) + 't=' + timestamp;
 			};
 
 		var pendingLoad = [];
@@ -166,7 +145,7 @@ if ( !CKEDITOR.loader ) {
 				// We must guarantee the execution order of the scripts, so we
 				// need to load them one by one. (#4145)
 				// The following if/else block has been taken from the scriptloader core code.
-				if ( typeof( script.onreadystatechange ) !== "undefined" ) {
+				if ( typeof script.onreadystatechange !== 'undefined' ) {
 					/** @ignore */
 					script.onreadystatechange = function() {
 						if ( script.readyState == 'loaded' || script.readyState == 'complete' ) {
@@ -237,7 +216,7 @@ if ( !CKEDITOR.loader ) {
 				}
 			}
 		};
-	})();
+	} )();
 }
 
 // Check if any script has been defined for autoload.

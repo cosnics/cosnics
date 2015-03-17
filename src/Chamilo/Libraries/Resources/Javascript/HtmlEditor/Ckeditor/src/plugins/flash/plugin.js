@@ -1,9 +1,9 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
+( function() {
 	var flashFilenameRegex = /\.swf(?:$|\?)/i;
 
 	function isFlashEmbed( element ) {
@@ -18,7 +18,9 @@
 
 	CKEDITOR.plugins.add( 'flash', {
 		requires: 'dialog,fakeobjects',
-		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:disable maximumLineLength
+		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
+		// jscs:enable maximumLineLength
 		icons: 'flash', // %REMOVE_LINE_CORE%
 		hidpi: true, // %REMOVE_LINE_CORE%
 		onLoad: function() {
@@ -52,18 +54,18 @@
 				label: editor.lang.common.flash,
 				command: 'flash',
 				toolbar: 'insert,20'
-			});
+			} );
 			CKEDITOR.dialog.add( 'flash', this.path + 'dialogs/flash.js' );
 
 			// If the "menu" plugin is loaded, register the menu items.
 			if ( editor.addMenuItems ) {
-				editor.addMenuItems({
+				editor.addMenuItems( {
 					flash: {
 						label: editor.lang.flash.properties,
 						command: 'flash',
 						group: 'flash'
 					}
-				});
+				} );
 			}
 
 			editor.on( 'doubleclick', function( evt ) {
@@ -71,14 +73,14 @@
 
 				if ( element.is( 'img' ) && element.data( 'cke-real-element-type' ) == 'flash' )
 					evt.data.dialog = 'flash';
-			});
+			} );
 
 			// If the "contextmenu" plugin is loaded, register the listeners.
 			if ( editor.contextMenu ) {
-				editor.contextMenu.addListener( function( element, selection ) {
+				editor.contextMenu.addListener( function( element ) {
 					if ( element && element.is( 'img' ) && !element.isReadOnly() && element.data( 'cke-real-element-type' ) == 'flash' )
 						return { flash: CKEDITOR.TRISTATE_OFF };
-				});
+				} );
 			}
 		},
 
@@ -87,7 +89,7 @@
 				dataFilter = dataProcessor && dataProcessor.dataFilter;
 
 			if ( dataFilter ) {
-				dataFilter.addRules({
+				dataFilter.addRules( {
 					elements: {
 						'cke:object': function( element ) {
 							var attributes = element.attributes,
@@ -119,8 +121,8 @@
 				}, 5 );
 			}
 		}
-	});
-})();
+	} );
+} )();
 
 CKEDITOR.tools.extend( CKEDITOR.config, {
 	/**
@@ -146,4 +148,4 @@ CKEDITOR.tools.extend( CKEDITOR.config, {
 	 * @member CKEDITOR.config
 	 */
 	flashConvertOnEdit: false
-});
+} );

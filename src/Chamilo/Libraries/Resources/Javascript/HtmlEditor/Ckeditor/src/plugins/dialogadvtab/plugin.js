@@ -1,9 +1,9 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
+( function() {
 
 	function setupAdvParams( element ) {
 		var attrName = this.att;
@@ -37,10 +37,10 @@
 		}
 	}
 
-	var defaultTabConfig = { id:1,dir:1,classes:1,styles:1 };
+	var defaultTabConfig = { id: 1, dir: 1, classes: 1, styles: 1 };
 
 	CKEDITOR.plugins.add( 'dialogadvtab', {
-		requires : 'dialog',
+		requires: 'dialog',
 
 		// Returns allowed content rule for the content created by this plugin.
 		allowedContent: function( tabConfig ) {
@@ -78,20 +78,18 @@
 				id: 'advanced',
 				label: lang.advancedTab,
 				title: lang.advancedTab,
-				elements: [
-					{
+				elements: [ {
 					type: 'vbox',
 					padding: 1,
 					children: []
-				}
-				]
+				} ]
 			};
 
 			var contents = [];
 
 			if ( tabConfig.id || tabConfig.dir ) {
 				if ( tabConfig.id ) {
-					contents.push({
+					contents.push( {
 						id: 'advId',
 						att: 'id',
 						type: 'text',
@@ -99,11 +97,11 @@
 						label: lang.id,
 						setup: setupAdvParams,
 						commit: commitAdvParams
-					});
+					} );
 				}
 
 				if ( tabConfig.dir ) {
-					contents.push({
+					contents.push( {
 						id: 'advLangDir',
 						att: 'dir',
 						type: 'select',
@@ -115,24 +113,24 @@
 							[ lang.notSet, '' ],
 							[ lang.langDirLTR, 'ltr' ],
 							[ lang.langDirRTL, 'rtl' ]
-							],
+						],
 						setup: setupAdvParams,
 						commit: commitAdvParams
-					});
+					} );
 				}
 
-				result.elements[ 0 ].children.push({
+				result.elements[ 0 ].children.push( {
 					type: 'hbox',
 					widths: [ '50%', '50%' ],
 					children: [].concat( contents )
-				});
+				} );
 			}
 
 			if ( tabConfig.styles || tabConfig.classes ) {
 				contents = [];
 
 				if ( tabConfig.styles ) {
-					contents.push({
+					contents.push( {
 						id: 'advStyles',
 						att: 'style',
 						type: 'text',
@@ -163,15 +161,14 @@
 
 						commit: commitAdvParams
 
-					});
+					} );
 				}
 
 				if ( tabConfig.classes ) {
-					contents.push({
+					contents.push( {
 						type: 'hbox',
 						widths: [ '45%', '55%' ],
-						children: [
-							{
+						children: [ {
 							id: 'advCSSClasses',
 							att: 'class',
 							type: 'text',
@@ -181,20 +178,19 @@
 							setup: setupAdvParams,
 							commit: commitAdvParams
 
-						}
-						]
-					});
+						} ]
+					} );
 				}
 
-				result.elements[ 0 ].children.push({
+				result.elements[ 0 ].children.push( {
 					type: 'hbox',
 					widths: [ '50%', '50%' ],
 					children: [].concat( contents )
-				});
+				} );
 			}
 
 			return result;
 		}
-	});
+	} );
 
-})();
+} )();

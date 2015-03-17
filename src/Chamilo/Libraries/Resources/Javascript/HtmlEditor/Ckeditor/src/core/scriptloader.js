@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -14,7 +14,7 @@
  * @class
  * @singleton
  */
-CKEDITOR.scriptLoader = (function() {
+CKEDITOR.scriptLoader = ( function() {
 	var uniqueScripts = {},
 		waitingList = {};
 
@@ -113,12 +113,13 @@ CKEDITOR.scriptLoader = (function() {
 
 					// Create the <script> element.
 					var script = new CKEDITOR.dom.element( 'script' );
-					script.setAttributes({
+					script.setAttributes( {
 						type: 'text/javascript',
-						src: url } );
+						src: url
+					} );
 
 					if ( callback ) {
-						if ( CKEDITOR.env.ie ) {
+						if ( CKEDITOR.env.ie && CKEDITOR.env.version < 11 ) {
 							// FIXME: For IE, we are not able to return false on error (like 404).
 							script.$.onreadystatechange = function() {
 								if ( script.$.readyState == 'loaded' || script.$.readyState == 'complete' ) {
@@ -165,7 +166,7 @@ CKEDITOR.scriptLoader = (function() {
 		 *
 		 * @see CKEDITOR.scriptLoader#load
 		 */
-		queue: (function() {
+		queue: ( function() {
 			var pending = [];
 
 			// Loads the very first script from queue and removes it.
@@ -197,6 +198,6 @@ CKEDITOR.scriptLoader = (function() {
 				if ( pending.length == 1 )
 					loadNext.call( this );
 			};
-		})()
+		} )()
 	};
-})();
+} )();

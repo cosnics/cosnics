@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'hi' ] = {
 		alignLeft: 'दायें',
 		alignRight: 'दायें',
 		alignCenter: 'बीच में',
+		alignJustify: 'ब्लॉक जस्टीफ़ाई',
 		alignTop: 'ऊपर',
 		alignMiddle: 'मध्य',
 		alignBottom: 'नीचे',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'Invalid value.', // MISSING
 		invalidHeight: 'Height must be a number.', // MISSING
 		invalidWidth: 'Width must be a number.', // MISSING

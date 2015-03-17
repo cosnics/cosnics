@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'el' ] = {
 	// ARIA description.
 	editor: 'Επεξεργαστής Πλούσιου Κειμένου',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Πίνακας Επεξεργαστή Πλούσιου Κειμένου',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'el' ] = {
 		alignLeft: 'Αριστερά',
 		alignRight: 'Δεξιά',
 		alignCenter: 'Κέντρο',
+		alignJustify: 'Πλήρης Στοίχιση',
 		alignTop: 'Πάνω',
 		alignMiddle: 'Μέση',
 		alignBottom: 'Κάτω',
+		alignNone: 'Χωρίς',
 		invalidValue	: 'Μη έγκυρη τιμή.',
 		invalidHeight: 'Το ύψος πρέπει να είναι ένας αριθμός.',
 		invalidWidth: 'Το πλάτος πρέπει να είναι ένας αριθμός.',

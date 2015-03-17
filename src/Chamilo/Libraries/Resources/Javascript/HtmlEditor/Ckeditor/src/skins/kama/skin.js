@@ -1,5 +1,5 @@
-﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+/**
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -21,7 +21,7 @@ For this skin, the following tasks are achieved in this file:
 	2. Register browser specific skin files.
 	3. Define the "Chameleon" feature.
 	4. Register the skin icons, to have them used on the development version of
-	  the skin.
+		the skin.
 */
 
 // 1. Register the skin
@@ -55,7 +55,7 @@ CKEDITOR.skin.name = 'kama';
 // The available browser specific files must be set separately for editor.css
 // and dialog.css.
 CKEDITOR.skin.ua_editor = 'ie,iequirks,ie7,ie8';
-CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8,opera';
+CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8';
 
 
 // 3. Define the "Chameleon" feature
@@ -112,7 +112,7 @@ CKEDITOR.skin.chameleon = function( editor, part ) {
 		css = cssId + ' .cke_inner,' +
 			cssId + ' .cke_dialog_tab' +
 			'{' +
-		    'background-color:$color;' +
+			'background-color:$color;' +
 				'background:-webkit-gradient(linear,0 -15,0 40,from(#fff),to($color));' +
 				getLinearBackground( 'top,#fff -15px,$color 40px' ) +
 			'}' +
@@ -233,7 +233,7 @@ CKEDITOR.skin.chameleon = function( editor, part ) {
 // used instead. This means that a skin is not required to provide all icons.
 // Actually, it is not required to provide icons at all.
 
-(function() {
+( function() {
 	// The available icons. This list must match the file names (without
 	// extension) available inside the "icons" folder.
 	var icons = ( 'about,anchor-rtl,anchor,bgcolor,bidiltr,bidirtl,blockquote,' +
@@ -255,6 +255,7 @@ CKEDITOR.skin.chameleon = function( editor, part ) {
 	for ( var i = 0; i < icons.length; i++ ) {
 		CKEDITOR.skin.addIcon( icons[ i ], iconsFolder + icons[ i ] + '.png' );
 	}
-})();
+} )();
 
 // %REMOVE_END%
+

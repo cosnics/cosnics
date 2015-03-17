@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
@@ -15,7 +15,10 @@ This file contains styles to used by Internet Explorer 8 only.
 
 /* 	Without the following, IE8 cannot compensate footer button thick borders
 	on :focus/:active. */
-a.cke_dialog_ui_button_ok:focus span,a.cke_dialog_ui_button_ok:active span,a.cke_dialog_ui_button_cancel:focus span,a.cke_dialog_ui_button_cancel:active span
-	{
+a.cke_dialog_ui_button_ok:focus span,
+a.cke_dialog_ui_button_ok:active span,
+a.cke_dialog_ui_button_cancel:focus span,
+a.cke_dialog_ui_button_cancel:active span
+{
 	display: block;
 }

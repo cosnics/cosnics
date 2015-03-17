@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 CKEDITOR.plugins.setLang( 'forms', 'cy', {
@@ -8,7 +8,7 @@ CKEDITOR.plugins.setLang( 'forms', 'cy', {
 		text: 'Testun (Gwerth)',
 		type: 'Math',
 		typeBtn: 'Botwm',
-		typeSbm: 'Gyrru',
+		typeSbm: 'Anfon',
 		typeRst: 'Ailosod'
 	},
 	checkboxAndRadio: {
@@ -65,4 +65,4 @@ CKEDITOR.plugins.setLang( 'forms', 'cy', {
 		typeTel: 'Rhif Ffôn',
 		typeUrl: 'URL'
 	}
-});
+} );

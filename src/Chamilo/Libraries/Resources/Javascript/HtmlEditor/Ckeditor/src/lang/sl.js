@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'sl' ] = {
 	// ARIA description.
 	editor: 'Bogat Urejevalnik Besedila',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Rich Text Editor plošča',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'sl' ] = {
 		alignLeft: 'Levo',
 		alignRight: 'Desno',
 		alignCenter: 'Sredinsko',
+		alignJustify: 'Obojestranska poravnava',
 		alignTop: 'Na vrh',
 		alignMiddle: 'V sredino',
 		alignBottom: 'Na dno',
+		alignNone: 'Brez poravnave',
 		invalidValue	: 'Neveljavna vrednost.',
 		invalidHeight: 'Višina mora biti število.',
 		invalidWidth: 'Širina mora biti število.',

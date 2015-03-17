@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'ru' ] = {
 	// ARIA description.
 	editor: 'Визуальный текстовый редактор',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Визуальный редактор текста',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'ru' ] = {
 		alignLeft: 'По левому краю',
 		alignRight: 'По правому краю',
 		alignCenter: 'По центру',
+		alignJustify: 'По ширине',
 		alignTop: 'Поверху',
 		alignMiddle: 'Посередине',
 		alignBottom: 'Понизу',
+		alignNone: 'Нет',
 		invalidValue	: 'Недопустимое значение.',
 		invalidHeight: 'Высота задается числом.',
 		invalidWidth: 'Ширина задается числом.',

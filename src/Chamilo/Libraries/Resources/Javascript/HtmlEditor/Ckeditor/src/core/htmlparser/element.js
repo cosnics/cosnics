@@ -1,9 +1,9 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
- 'use strict';
+'use strict';
 
 /**
  * A lightweight representation of an HTML element.
@@ -12,7 +12,7 @@
  * @extends CKEDITOR.htmlParser.node
  * @constructor Creates an element class instance.
  * @param {String} name The element name.
- * @param {Object} attributes And object holding all attributes defined for
+ * @param {Object} attributes An object storing all attributes defined for
  * this element.
  */
 CKEDITOR.htmlParser.element = function( name, attributes ) {
@@ -24,7 +24,7 @@ CKEDITOR.htmlParser.element = function( name, attributes ) {
 	this.name = name;
 
 	/**
-	 * Holds the attributes defined for this element.
+	 * Stores the attributes defined for this element.
 	 *
 	 * @property {Object}
 	 */
@@ -41,7 +41,9 @@ CKEDITOR.htmlParser.element = function( name, attributes ) {
 		prefixed = realName.match( /^cke:(.*)/ );
 	prefixed && ( realName = prefixed[ 1 ] );
 
-	var isBlockLike = !!( CKEDITOR.dtd.$nonBodyContent[ realName ] || CKEDITOR.dtd.$block[ realName ] || CKEDITOR.dtd.$listItem[ realName ] || CKEDITOR.dtd.$tableContent[ realName ] || CKEDITOR.dtd.$nonEditable[ realName ] || realName == 'br' );
+	var isBlockLike = !!( CKEDITOR.dtd.$nonBodyContent[ realName ] || CKEDITOR.dtd.$block[ realName ] ||
+		CKEDITOR.dtd.$listItem[ realName ] || CKEDITOR.dtd.$tableContent[ realName ] ||
+		CKEDITOR.dtd.$nonEditable[ realName ] || realName == 'br' );
 
 	this.isEmpty = !!CKEDITOR.dtd.$empty[ name ];
 	this.isUnknown = !CKEDITOR.dtd[ name ];
@@ -57,9 +59,9 @@ CKEDITOR.htmlParser.element = function( name, attributes ) {
  * Object presentation of CSS style declaration text.
  *
  * @class
- * @constructor Creates a cssStyle class instance.
+ * @constructor Creates a `cssStyle` class instance.
  * @param {CKEDITOR.htmlParser.element/String} elementOrStyleText
- * A html parser element or the inline style text.
+ * An HTML parser element or the inline style text.
  */
 CKEDITOR.htmlParser.cssStyle = function() {
 	var styleText,
@@ -75,26 +77,26 @@ CKEDITOR.htmlParser.cssStyle = function() {
 	( styleText || '' ).replace( /&quot;/g, '"' ).replace( /\s*([^ :;]+)\s*:\s*([^;]+)\s*(?=;|$)/g, function( match, name, value ) {
 		name == 'font-family' && ( value = value.replace( /["']/g, '' ) );
 		rules[ name.toLowerCase() ] = value;
-	});
+	} );
 
 	return {
 
 		rules: rules,
 
 		/**
-		 * Apply the styles onto the specified element or object.
+		 * Applies the styles to the specified element or object.
 		 *
 		 * @param {CKEDITOR.htmlParser.element/CKEDITOR.dom.element/Object} obj
 		 */
 		populate: function( obj ) {
 			var style = this.toString();
-			if ( style ) {
+			if ( style )
 				obj instanceof CKEDITOR.dom.element ? obj.setAttribute( 'style', style ) : obj instanceof CKEDITOR.htmlParser.element ? obj.attributes.style = style : obj.style = style;
-			}
+
 		},
 
 		/**
-		 * Serialize CSS style declaration to string.
+		 * Serializes CSS style declaration to a string.
 		 *
 		 * @returns {String}
 		 */
@@ -108,7 +110,7 @@ CKEDITOR.htmlParser.cssStyle = function() {
 };
 
 /** @class CKEDITOR.htmlParser.element */
-(function() {
+( function() {
 	// Used to sort attribute entries in an array, where the first element of
 	// each object is the attribute name.
 	var sortAttribs = function( a, b ) {
@@ -137,7 +139,7 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		add: fragProto.add,
 
 		/**
-		 * Clone this element.
+		 * Clones this element.
 		 *
 		 * @returns {CKEDITOR.htmlParser.element} The element clone.
 		 */
@@ -146,34 +148,40 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		},
 
 		/**
-		 * Filter this element and its children with given filter.
+		 * Filters this element and its children with the given filter.
 		 *
 		 * @since 4.1
 		 * @param {CKEDITOR.htmlParser.filter} filter
-		 * @returns {Boolean} Method returns `false` when this element has
-		 * been removed or replaced with other. This is an information for
-		 * {@link #filterChildren} that it has to repeat filter on current
+		 * @returns {Boolean} The method returns `false` when this element has
+		 * been removed or replaced with another. This information means that
+		 * {@link #filterChildren} has to repeat the filter on the current
 		 * position in parent's children array.
 		 */
-		filter: function( filter ) {
+		filter: function( filter, context ) {
 			var element = this,
 				originalName, name;
 
+			context = element.getFilterContext( context );
+
+			// Do not process elements with data-cke-processor attribute set to off.
+			if ( context.off )
+				return true;
+
 			// Filtering if it's the root node.
 			if ( !element.parent )
-				filter.onRoot( element );
+				filter.onRoot( context, element );
 
 			while ( true ) {
 				originalName = element.name;
 
-				if ( !( name = filter.onElementName( originalName ) ) ) {
+				if ( !( name = filter.onElementName( context, originalName ) ) ) {
 					this.remove();
 					return false;
 				}
 
 				element.name = name;
 
-				if ( !( element = filter.onElement( element ) ) ) {
+				if ( !( element = filter.onElement( context, element ) ) ) {
 					this.remove();
 					return false;
 				}
@@ -219,19 +227,20 @@ CKEDITOR.htmlParser.cssStyle = function() {
 				// because it iterates with for-in loop even over properties
 				// created during its run.
 				while ( true ) {
-					if ( !( newAttrName = filter.onAttributeName( a ) ) ) {
+					if ( !( newAttrName = filter.onAttributeName( context, a ) ) ) {
 						delete attributes[ a ];
 						break;
 					} else if ( newAttrName != a ) {
 						delete attributes[ a ];
 						a = newAttrName;
 						continue;
-					} else
+					} else {
 						break;
+					}
 				}
 
 				if ( newAttrName ) {
-					if ( ( value = filter.onAttribute( element, newAttrName, value ) ) === false )
+					if ( ( value = filter.onAttribute( context, element, newAttrName, value ) ) === false )
 						delete attributes[ newAttrName ];
 					else
 						attributes[ newAttrName ] = value;
@@ -239,16 +248,16 @@ CKEDITOR.htmlParser.cssStyle = function() {
 			}
 
 			if ( !element.isEmpty )
-				this.filterChildren( filter );
+				this.filterChildren( filter, false, context );
 
 			return true;
 		},
 
 		/**
-		 * Filter this element's children with given filter.
+		 * Filters this element's children with the given filter.
 		 *
 		 * Element's children may only be filtered once by one
-		 * instance of filter.
+		 * instance of the filter.
 		 *
 		 * @method filterChildren
 		 * @param {CKEDITOR.htmlParser.filter} filter
@@ -256,11 +265,11 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		filterChildren: fragProto.filterChildren,
 
 		/**
-		 * Writes the element HTML to a CKEDITOR.htmlWriter.
+		 * Writes the element HTML to the CKEDITOR.htmlWriter.
 		 *
-		 * @param {CKEDITOR.htmlParser.basicWriter} writer The writer to which write the HTML.
+		 * @param {CKEDITOR.htmlParser.basicWriter} writer The writer to which HTML will be written.
 		 * @param {CKEDITOR.htmlParser.filter} [filter] The filter to be applied to this node.
-		 * **Note:** it's unsafe to filter offline (not appended) node.
+		 * **Note:** It is unsafe to filter an offline (not appended) node.
 		 */
 		writeHtml: function( writer, filter ) {
 			if ( filter )
@@ -300,15 +309,15 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		},
 
 		/**
-		 * Send children of this element to the writer.
+		 * Sends children of this element to the writer.
 		 *
-		 * @param {CKEDITOR.htmlParser.basicWriter} writer The writer to which write the HTML.
+		 * @param {CKEDITOR.htmlParser.basicWriter} writer The writer to which HTML will be written.
 		 * @param {CKEDITOR.htmlParser.filter} [filter]
 		 */
 		writeChildrenHtml: fragProto.writeChildrenHtml,
 
 		/**
-		 * Replace this element with its children.
+		 * Replaces this element with its children.
 		 *
 		 * @since 4.1
 		 */
@@ -322,9 +331,9 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		},
 
 		/**
-		 * Execute callback on each node (of given type) in this element.
+		 * Executes a callback on each node (of the given type) in this element.
 		 *
-		 *		// Create <p> element with foo<b>bar</b>bom as its content.
+		 *		// Create a <p> element with foo<b>bar</b>bom as its content.
 		 *		var elP = CKEDITOR.htmlParser.fragment.fromHtml( 'foo<b>bar</b>bom', 'p' );
 		 *		elP.forEach( function( node ) {
 		 *			console.log( node );
@@ -339,10 +348,189 @@ CKEDITOR.htmlParser.cssStyle = function() {
 		 *
 		 * @since 4.1
 		 * @param {Function} callback Function to be executed on every node.
-		 * @param {CKEDITOR.htmlParser.node} callback.node Node passed as argument.
-		 * @param {Number} [type] If specified `callback` will be executed only on nodes of this type.
-		 * @param {Boolean} [skipRoot] Don't execute `callback` on this element.
+		 * **Since 4.3**: If `callback` returned `false`, the descendants of the current node will be ignored.
+		 * @param {CKEDITOR.htmlParser.node} callback.node Node passed as an argument.
+		 * @param {Number} [type] Whether the specified `callback` will be executed only on nodes of this type.
+		 * @param {Boolean} [skipRoot] Do not execute `callback` on this element.
 		 */
-		forEach: fragProto.forEach
-	} );
-})();
+		forEach: fragProto.forEach,
+
+		/**
+		 * Gets this element's first child. If `condition` is given, this method returns
+		 * the first child which satisfies that condition.
+		 *
+		 * @since 4.3
+		 * @param {String/Object/Function} condition Name of a child, a hash of names, or a validator function.
+		 * @returns {CKEDITOR.htmlParser.node}
+		 */
+		getFirst: function( condition ) {
+			if ( !condition )
+				return this.children.length ? this.children[ 0 ] : null;
+
+			if ( typeof condition != 'function' )
+				condition = nameCondition( condition );
+
+			for ( var i = 0, l = this.children.length; i < l; ++i ) {
+				if ( condition( this.children[ i ] ) )
+					return this.children[ i ];
+			}
+			return null;
+		},
+
+		/**
+		 * Gets this element's inner HTML.
+		 *
+		 * @since 4.3
+		 * @returns {String}
+		 */
+		getHtml: function() {
+			var writer = new CKEDITOR.htmlParser.basicWriter();
+			this.writeChildrenHtml( writer );
+			return writer.getHtml();
+		},
+
+		/**
+		 * Sets this element's inner HTML.
+		 *
+		 * @since 4.3
+		 * @param {String} html
+		 */
+		setHtml: function( html ) {
+			var children = this.children = CKEDITOR.htmlParser.fragment.fromHtml( html ).children;
+
+			for ( var i = 0, l = children.length; i < l; ++i )
+				children[ i ].parent = this;
+		},
+
+		/**
+		 * Gets this element's outer HTML.
+		 *
+		 * @since 4.3
+		 * @returns {String}
+		 */
+		getOuterHtml: function() {
+			var writer = new CKEDITOR.htmlParser.basicWriter();
+			this.writeHtml( writer );
+			return writer.getHtml();
+		},
+
+		/**
+		 * Splits this element at the given index.
+		 *
+		 * @since 4.3
+		 * @param {Number} index Index at which the element will be split &mdash; `0` means the beginning,
+		 * `1` after first child node, etc.
+		 * @returns {CKEDITOR.htmlParser.element} The new element following this one.
+		 */
+		split: function( index ) {
+			var cloneChildren = this.children.splice( index, this.children.length - index ),
+				clone = this.clone();
+
+			for ( var i = 0; i < cloneChildren.length; ++i )
+				cloneChildren[ i ].parent = clone;
+
+			clone.children = cloneChildren;
+
+			if ( cloneChildren[ 0 ] )
+				cloneChildren[ 0 ].previous = null;
+
+			if ( index > 0 )
+				this.children[ index - 1 ].next = null;
+
+			this.parent.add( clone, this.getIndex() + 1 );
+
+			return clone;
+		},
+
+		/**
+		 * Adds a class name to the list of classes.
+		 *
+		 * @since 4.4
+		 * @param {String} className The class name to be added.
+		 */
+		addClass: function( className ) {
+			if ( this.hasClass( className ) )
+				return;
+
+			var c = this.attributes[ 'class' ] || '';
+
+			this.attributes[ 'class' ] = c + ( c ? ' ' : '' ) + className;
+		},
+
+		/**
+		 * Removes a class name from the list of classes.
+		 *
+		 * @since 4.3
+		 * @param {String} className The class name to be removed.
+		 */
+		removeClass: function( className ) {
+			var classes = this.attributes[ 'class' ];
+
+			if ( !classes )
+				return;
+
+			// We can safely assume that className won't break regexp.
+			// http://stackoverflow.com/questions/448981/what-characters-are-valid-in-css-class-names
+			classes = CKEDITOR.tools.trim( classes.replace( new RegExp( '(?:\\s+|^)' + className + '(?:\\s+|$)' ), ' ' ) );
+
+			if ( classes )
+				this.attributes[ 'class' ] = classes;
+			else
+				delete this.attributes[ 'class' ];
+		},
+
+		/**
+		 * Checkes whether this element has a class name.
+		 *
+		 * @since 4.3
+		 * @param {String} className The class name to be checked.
+		 * @returns {Boolean} Whether this element has a `className`.
+		 */
+		hasClass: function( className ) {
+			var classes = this.attributes[ 'class' ];
+
+			if ( !classes )
+				return false;
+
+			return ( new RegExp( '(?:^|\\s)' + className + '(?=\\s|$)' ) ).test( classes );
+		},
+
+		getFilterContext: function( ctx ) {
+			var changes = [];
+
+			if ( !ctx ) {
+				ctx = {
+					off: false,
+					nonEditable: false,
+					nestedEditable: false
+				};
+			}
+
+			if ( !ctx.off && this.attributes[ 'data-cke-processor' ] == 'off' )
+				changes.push( 'off', true );
+
+			if ( !ctx.nonEditable && this.attributes.contenteditable == 'false' )
+				changes.push( 'nonEditable', true );
+			// A context to be given nestedEditable must be nonEditable first (by inheritance) (#11372, #11698).
+			// Special case: #11504 - filter starts on <body contenteditable=true>,
+			// so ctx.nonEditable has not been yet set to true.
+			else if ( ctx.nonEditable && !ctx.nestedEditable && this.attributes.contenteditable == 'true' )
+				changes.push( 'nestedEditable', true );
+
+			if ( changes.length ) {
+				ctx = CKEDITOR.tools.copy( ctx );
+				for ( var i = 0; i < changes.length; i += 2 )
+					ctx[ changes[ i ] ] = changes[ i + 1 ];
+			}
+
+			return ctx;
+		}
+	}, true );
+
+	function nameCondition( condition ) {
+		return function( el ) {
+			return el.type == CKEDITOR.NODE_ELEMENT &&
+				( typeof condition == 'string' ? el.name == condition : el.name in condition );
+		};
+	}
+} )();

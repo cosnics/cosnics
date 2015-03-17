@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -20,7 +20,7 @@
 CKEDITOR.lang[ 'fi' ] = {
 	// ARIA description.
 	editor: 'Rikastekstieditori',
-	editorPanel: 'Rich Text Editor panel', // MISSING
+	editorPanel: 'Rikastekstieditoripaneeli',
 
 	// Common messages and labels.
 	common: {
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'fi' ] = {
 		alignLeft: 'Vasemmalle',
 		alignRight: 'Oikealle',
 		alignCenter: 'Keskelle',
+		alignJustify: 'Tasaa molemmat reunat',
 		alignTop: 'Ylös',
 		alignMiddle: 'Keskelle',
 		alignBottom: 'Alas',
+		alignNone: 'Ei asetettu',
 		invalidValue	: 'Virheellinen arvo.',
 		invalidHeight: 'Korkeuden täytyy olla numero.',
 		invalidWidth: 'Leveyden täytyy olla numero.',

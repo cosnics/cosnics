@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -10,20 +10,20 @@ CKEDITOR.addTemplates( 'default', {
 	imagesPath: CKEDITOR.getUrl( CKEDITOR.plugins.getPath( 'templates' ) + 'templates/images/' ),
 
 	// The templates definitions.
-	templates: [
-		{
+	templates: [ {
 		title: 'Image and Title',
 		image: 'template1.gif',
 		description: 'One main image with a title and text that surround the image.',
 		html: '<h3>' +
-			'<img style="margin-right: 10px" height="100" width="100" align="left"/>' +
+			// Use src=" " so image is not filtered out by the editor as incorrect (src is required).
+			'<img src=" " alt="" style="margin-right: 10px" height="100" width="100" align="left" />' +
 			'Type the title here' +
 			'</h3>' +
 			'<p>' +
 			'Type the text here' +
 			'</p>'
 	},
-		{
+	{
 		title: 'Strange Template',
 		image: 'template2.gif',
 		description: 'A template that defines two colums, each one with a title, and some text.',
@@ -51,7 +51,7 @@ CKEDITOR.addTemplates( 'default', {
 			'More text goes here.' +
 			'</p>'
 	},
-		{
+	{
 		title: 'Text and Table',
 		image: 'template3.gif',
 		description: 'A title with some text and a table.',
@@ -83,6 +83,5 @@ CKEDITOR.addTemplates( 'default', {
 				'Type the text here' +
 			'</p>' +
 			'</div>'
-	}
-	]
-});
+	} ]
+} );

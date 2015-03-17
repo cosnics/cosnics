@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -7,7 +7,7 @@
  * @fileOverview Defines the {@link CKEDITOR.skin} class that is used to manage skin parts.
  */
 
-(function() {
+( function() {
 	var cssLoaded = {};
 
 	function getName() {
@@ -50,9 +50,10 @@
 			if ( CKEDITOR.skin.name != getName() ) {
 				CKEDITOR.scriptLoader.load( CKEDITOR.getUrl( getConfigPath() + 'skin.js' ), function() {
 					loadCss( part, fn );
-				});
-			} else
+				} );
+			} else {
 				loadCss( part, fn );
+			}
 		},
 
 		/**
@@ -85,7 +86,7 @@
 				this.icons[ name ] = {
 					path: path,
 					offset: offset || 0,
-					bgsize : bgsize || '16px'
+					bgsize: bgsize || '16px'
 				};
 			}
 		},
@@ -130,29 +131,31 @@
 	};
 
 	function getCssPath( part ) {
-			// Check for ua-specific version of skin part.
-			var uas = CKEDITOR.skin[ 'ua_' + part ], env = CKEDITOR.env;
-			if ( uas ) {
+		// Check for ua-specific version of skin part.
+		var uas = CKEDITOR.skin[ 'ua_' + part ], env = CKEDITOR.env;
+		if ( uas ) {
 
-				// Having versioned UA checked first.
-				uas = uas.split( ',' ).sort( function ( a, b ) { return a > b ? -1 : 1; } );
+			// Having versioned UA checked first.
+			uas = uas.split( ',' ).sort( function( a, b ) {
+				return a > b ? -1 : 1;
+			} );
 
-				// Loop through all ua entries, checking is any of them match the current ua.
-				for ( var i = 0, ua; i < uas.length; i++ ) {
-					ua = uas[ i ];
+			// Loop through all ua entries, checking is any of them match the current ua.
+			for ( var i = 0, ua; i < uas.length; i++ ) {
+				ua = uas[ i ];
 
-					if ( env.ie ) {
-						if ( ( ua.replace( /^ie/, '' ) == env.version ) || ( env.quirks && ua == 'iequirks' ) )
-							ua = 'ie';
-					}
+				if ( env.ie ) {
+					if ( ( ua.replace( /^ie/, '' ) == env.version ) || ( env.quirks && ua == 'iequirks' ) )
+						ua = 'ie';
+				}
 
-					if ( env[ ua ] ) {
-						part += '_' + uas[ i ];
-						break;
-					}
+				if ( env[ ua ] ) {
+					part += '_' + uas[ i ];
+					break;
 				}
 			}
-			return CKEDITOR.getUrl( getConfigPath() + part + '.css' );
+		}
+		return CKEDITOR.getUrl( getConfigPath() + part + '.css' );
 	}
 
 	function loadCss( part, callback ) {
@@ -181,9 +184,9 @@
 
 		/** Sets the color of the editor user interface. This method accepts a color value in
 		 * hexadecimal notation, with a `#` character (e.g. #ffffff).
-		 * 
+		 *
 		 * 		CKEDITOR.instances.editor1.setUiColor( '#ff00ff' );
-		 * 
+		 *
 		 * @method
 		 * @member CKEDITOR.editor
 		 * @param {String} color The desired editor UI color in hexadecimal notation.
@@ -192,19 +195,27 @@
 			var uiStyle = getStylesheet( CKEDITOR.document );
 
 			return ( this.setUiColor = function( color ) {
-				var chameleon = CKEDITOR.skin.chameleon;
-
-				var replace = [ [ uiColorRegexp, color ] ];
 				this.uiColor = color;
 
+				var chameleon = CKEDITOR.skin.chameleon,
+					editorStyleContent = '',
+					panelStyleContent = '';
+
+				if ( typeof chameleon == 'function' ) {
+					editorStyleContent = chameleon( this, 'editor' );
+					panelStyleContent = chameleon( this, 'panel' );
+				}
+
+				var replace = [ [ uiColorRegexp, color ] ];
+
 				// Update general style.
-				updateStylesheets( [ uiStyle ], chameleon( this, 'editor' ), replace );
+				updateStylesheets( [ uiStyle ], editorStyleContent, replace );
 
 				// Update panel styles.
-				updateStylesheets( uiColorMenus, chameleon( this, 'panel' ), replace );
-			}).call( this, color );
+				updateStylesheets( uiColorMenus, panelStyleContent, replace );
+			} ).call( this, color );
 		}
-	});
+	} );
 
 	var uiColorStylesheetId = 'cke_ui_color',
 		uiColorMenus = [],
@@ -214,8 +225,8 @@
 		var node = document.getById( uiColorStylesheetId );
 		if ( !node ) {
 			node = document.getHead().append( 'style' );
-			node.setAttribute( "id", uiColorStylesheetId );
-			node.setAttribute( "type", "text/css" );
+			node.setAttribute( 'id', uiColorStylesheetId );
+			node.setAttribute( 'type', 'text/css' );
 		}
 		return node;
 	}
@@ -244,7 +255,7 @@
 				for ( r = 0; r < replace.length; r++ )
 					content = content.replace( replace[ r ][ 0 ], replace[ r ][ 1 ] );
 
-				if ( CKEDITOR.env.ie )
+				if ( CKEDITOR.env.ie && CKEDITOR.env.version < 11 )
 					styleNodes[ id ].$.styleSheet.cssText += content;
 				else
 					styleNodes[ id ].$.innerHTML += content;
@@ -269,9 +280,9 @@
 
 					var color = editor.getUiColor();
 					// Set uiColor for new panel.
-					if ( color ) {
+					if ( color )
 						updateStylesheets( [ node ], CKEDITOR.skin.chameleon( editor, 'panel' ), [ [ uiColorRegexp, color ] ] );
-					}
+
 				}
 			};
 
@@ -281,8 +292,8 @@
 		// Apply UI color if specified in config.
 		if ( editor.config.uiColor )
 			editor.setUiColor( editor.config.uiColor );
-	});
-})();
+	} );
+} )();
 
 /**
  * The list of file names matching the browser user agent string from

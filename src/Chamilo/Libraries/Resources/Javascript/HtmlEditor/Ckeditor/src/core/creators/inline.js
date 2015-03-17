@@ -1,15 +1,18 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-(function() {
+( function() {
 	/** @class CKEDITOR */
 
 	/**
-	 * Turns a DOM element with `contenteditable` attribute set to `true` into a
-	 * CKEditor instance. Check {@link CKEDITOR.dtd#$editable} for the list of
+	 * Turns a DOM element with the `contenteditable` attribute set to `true` into a
+	 * CKEditor instance. Check {@link CKEDITOR.dtd#$editable} for a list of
 	 * allowed element names.
+	 *
+	 * **Note:** If the DOM element for which inline editing is being enabled does not have
+	 * the `contenteditable` attribute set to `true`, the editor will start in read-only mode.
 	 *
 	 *		<div contenteditable="true" id="content">...</div>
 	 *		...
@@ -110,7 +113,7 @@
 
 	/**
 	 * Calls {@link CKEDITOR#inline} for all page elements with
-	 * `contenteditable` attribute set to `true`.
+	 * the `contenteditable` attribute set to `true`.
 	 *
 	 */
 	CKEDITOR.inlineAll = function() {
@@ -141,11 +144,11 @@
 	CKEDITOR.domReady( function() {
 		!CKEDITOR.disableAutoInline && CKEDITOR.inlineAll();
 	} );
-})();
+} )();
 
 /**
  * Disables creating the inline editor automatically for elements with
- * `contenteditable` attribute set to the `true`.
+ * the `contenteditable` attribute set to `true`.
  *
  *		CKEDITOR.disableAutoInline = true;
  *

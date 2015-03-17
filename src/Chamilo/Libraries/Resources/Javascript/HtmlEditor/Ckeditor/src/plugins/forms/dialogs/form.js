@@ -1,9 +1,9 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 CKEDITOR.dialog.add( 'form', function( editor ) {
-	var autoAttributes = { action:1,id:1,method:1,enctype:1,target:1 };
+	var autoAttributes = { action: 1, id: 1, method: 1, enctype: 1, target: 1 };
 
 	return {
 		title: editor.lang.forms.form.title,
@@ -28,7 +28,7 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 			if ( isInsertMode ) {
 				editor = this.getParentEditor();
 				element = editor.document.createElement( 'form' );
-				!CKEDITOR.env.ie && element.append( editor.document.createElement( 'br' ) );
+				element.appendBogus();
 			}
 
 			if ( isInsertMode )
@@ -52,15 +52,13 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 					contentObj.setup = autoSetup;
 					contentObj.commit = autoCommit;
 				}
-			});
+			} );
 		},
-		contents: [
-			{
+		contents: [ {
 			id: 'info',
 			label: editor.lang.forms.form.title,
 			title: editor.lang.forms.form.title,
-			elements: [
-				{
+			elements: [ {
 				id: 'txtName',
 				type: 'text',
 				label: editor.lang.common.name,
@@ -78,25 +76,24 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 					}
 				}
 			},
-				{
+			{
 				id: 'action',
 				type: 'text',
 				label: editor.lang.forms.form.action,
 				'default': '',
 				accessKey: 'T'
 			},
-				{
+			{
 				type: 'hbox',
 				widths: [ '45%', '55%' ],
-				children: [
-					{
+				children: [ {
 					id: 'id',
 					type: 'text',
 					label: editor.lang.common.id,
 					'default': '',
 					accessKey: 'I'
 				},
-					{
+				{
 					id: 'enctype',
 					type: 'select',
 					label: editor.lang.forms.form.encoding,
@@ -108,15 +105,13 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 						[ 'text/plain' ],
 						[ 'multipart/form-data' ],
 						[ 'application/x-www-form-urlencoded' ]
-						]
-				}
-				]
+					]
+				} ]
 			},
-				{
+			{
 				type: 'hbox',
 				widths: [ '45%', '55%' ],
-				children: [
-					{
+				children: [ {
 					id: 'target',
 					type: 'select',
 					label: editor.lang.common.target,
@@ -129,9 +124,9 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 						[ editor.lang.common.targetTop, '_top' ],
 						[ editor.lang.common.targetSelf, '_self' ],
 						[ editor.lang.common.targetParent, '_parent' ]
-						]
+					]
 				},
-					{
+				{
 					id: 'method',
 					type: 'select',
 					label: editor.lang.forms.form.method,
@@ -140,12 +135,9 @@ CKEDITOR.dialog.add( 'form', function( editor ) {
 					items: [
 						[ 'GET', 'get' ],
 						[ 'POST', 'post' ]
-						]
-				}
-				]
-			}
-			]
-		}
-		]
+					]
+				} ]
+			} ]
+		} ]
 	};
-});
+} );

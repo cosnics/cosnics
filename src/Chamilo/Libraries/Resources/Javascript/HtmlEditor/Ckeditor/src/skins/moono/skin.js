@@ -1,5 +1,5 @@
-﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+/**
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -21,7 +21,7 @@ For this skin, the following tasks are achieved in this file:
 	2. Register browser specific skin files.
 	3. Define the "Chameleon" feature.
 	4. Register the skin icons, to have them used on the development version of
-	  the skin.
+		the skin.
 */
 
 // 1. Register the skin
@@ -45,8 +45,8 @@ CKEDITOR.skin.name = 'moono';
 // underscore and the browser name (e.g. editor_ie.css, dialog_ie8.css).
 //
 // The accepted browser names must match the CKEDITOR.env properties. The most
-// common names are: ie, opera, webkit and gecko. Check the documentation for
-// the complete list:
+// common names are: ie, webkit and gecko. Check the documentation for the complete
+// list:
 // http://docs.ckeditor.com/#!/api/CKEDITOR.env
 //
 // Internet explorer is an expection and the browser version is also accepted
@@ -55,7 +55,7 @@ CKEDITOR.skin.name = 'moono';
 // The available browser specific files must be set separately for editor.css
 // and dialog.css.
 CKEDITOR.skin.ua_editor = 'ie,iequirks,ie7,ie8,gecko';
-CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8,opera';
+CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8';
 
 // 3. Define the "Chameleon" feature
 // -----------------------------------
@@ -80,12 +80,12 @@ CKEDITOR.skin.ua_dialog = 'ie,iequirks,ie7,ie8,opera';
 //
 // The "$color" placeholder can be used in the returned string. It'll be
 // replaced with the desired color.
-CKEDITOR.skin.chameleon = (function() {
+CKEDITOR.skin.chameleon = ( function() {
 	// This method can be used to adjust colour brightness of various element.
 	// Colours are accepted in 7-byte hex format, for example: #00ff00.
 	// Brightness ratio must be a float number within [-1, 1],
 	// where -1 is black, 1 is white and 0 is the original colour.
-	var colorBrightness = (function() {
+	var colorBrightness = ( function() {
 		function channelBrightness( channel, ratio ) {
 			return ( '0' + ( ratio < 0 ?
 					0 | channel * ( 1 + ratio )
@@ -102,24 +102,24 @@ CKEDITOR.skin.chameleon = (function() {
 
 			return '#' + channels.join( '' );
 		};
-	})(),
+	} )(),
 
 	// Use this function just to avoid having to repeat all these rules on
 	// several places of our template.
-	verticalGradient = (function() {
-		var template = new CKEDITOR.template( 'background:#{to};'+
-			'background-image:-webkit-gradient(linear,lefttop,leftbottom,from({from}),to({to}));'+
-			'background-image:-moz-linear-gradient(top,{from},{to});'+
-			'background-image:-webkit-linear-gradient(top,{from},{to});'+
-			'background-image:-o-linear-gradient(top,{from},{to});'+
-			'background-image:-ms-linear-gradient(top,{from},{to});'+
-			'background-image:linear-gradient(top,{from},{to});'+
+	verticalGradient = ( function() {
+		var template = new CKEDITOR.template( 'background:#{to};' +
+			'background-image:-webkit-gradient(linear,lefttop,leftbottom,from({from}),to({to}));' +
+			'background-image:-moz-linear-gradient(top,{from},{to});' +
+			'background-image:-webkit-linear-gradient(top,{from},{to});' +
+			'background-image:-o-linear-gradient(top,{from},{to});' +
+			'background-image:-ms-linear-gradient(top,{from},{to});' +
+			'background-image:linear-gradient(top,{from},{to});' +
 			'filter:progid:DXImageTransform.Microsoft.gradient(gradientType=0,startColorstr=\'{from}\',endColorstr=\'{to}\');' );
 
 		return function( from, to ) {
 			return template.output( { from: from, to: to } );
 		};
-	})(),
+	} )(),
 
 	// Style templates for various user interface parts:
 	// 	* Default editor template.
@@ -271,7 +271,7 @@ CKEDITOR.skin.chameleon = (function() {
 			.replace( /\[/g, '{' )				// Replace brackets with braces.
 			.replace( /\]/g, '}' );
 	};
-})();
+} )();
 
 // %REMOVE_START%
 

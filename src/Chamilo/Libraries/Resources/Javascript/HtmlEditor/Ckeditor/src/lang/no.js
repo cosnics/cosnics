@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'no' ] = {
 		alignLeft: 'Venstre',
 		alignRight: 'Høyre',
 		alignCenter: 'Midtjuster',
+		alignJustify: 'Blokkjuster',
 		alignTop: 'Topp',
 		alignMiddle: 'Midten',
 		alignBottom: 'Bunn',
+		alignNone: 'Ingen',
 		invalidValue	: 'Ugyldig verdi.',
 		invalidHeight: 'Høyde må være et tall.',
 		invalidWidth: 'Bredde må være et tall.',

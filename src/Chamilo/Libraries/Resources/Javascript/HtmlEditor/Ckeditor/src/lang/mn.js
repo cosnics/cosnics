@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -81,9 +81,11 @@ CKEDITOR.lang[ 'mn' ] = {
 		alignLeft: 'Зүүн',
 		alignRight: 'Баруун',
 		alignCenter: 'Төвд',
+		alignJustify: 'Тэгшлэх',
 		alignTop: 'Дээд талд',
 		alignMiddle: 'Дунд',
 		alignBottom: 'Доод талд',
+		alignNone: 'None', // MISSING
 		invalidValue	: 'Invalid value.', // MISSING
 		invalidHeight: 'Өндөр нь тоо байх ёстой.',
 		invalidWidth: 'Өргөн нь тоо байх ёстой.',
