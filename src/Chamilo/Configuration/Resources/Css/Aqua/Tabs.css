@@ -1,7 +1,7 @@
 /*********************************************
  * jQuery CSS: Form tabs ElementFinder
  *********************************************/
-#form_tabs ul.tree-menu,#form_tabs ul.tree-menu ul {
+#form_tabs ul.tree-menu, #form_tabs ul.tree-menu ul {
 	display: block;
 }
 
@@ -89,21 +89,21 @@ ul.tabs-header {
 	background-color: transparent;
 }
 
-.ui-state-default,.ui-widget-content .ui-state-default {
+.ui-state-default, .ui-widget-content .ui-state-default {
 	border: 0px solid #c5dbec;
 }
 
-.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus
-	{
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus,
+	.ui-widget-content .ui-state-focus {
 	border: 0px solid #79b7e7;
 }
 
-.ui-state-active,.ui-widget-content .ui-state-active {
+.ui-state-active, .ui-widget-content .ui-state-active {
 	border: 1px solid #ebebeb;
 }
 
 /* prev, next, prevPage and nextPage buttons */
-a.prev,a.next,a.prevPage,a.nextPage {
+a.prev, a.next, a.prevPage, a.nextPage {
 	display: none;
 	width: 16px;
 	height: 16px;
@@ -118,14 +118,14 @@ a.prev,a.next,a.prevPage,a.nextPage {
 	margin-top: 10px;
 }
 
-.hover,div.vertical_action:hover { /*background-color: #f2f4f4;*/
-	background-image: url(../../Images/Aqua/background_vertical_action.png);
+.hover, div.vertical_action:hover { /*background-color: #f2f4f4;*/
+	background-image: url(../../Images/Aqua/Background/VerticalAction.png);
 	background-repeat: no-repeat;
 	background-position: 0px center;
 }
 
 /* mouseover state */
-a.prev:hover,a.next:hover,a.prevPage:hover,a.nextPage:hover {
+a.prev:hover, a.next:hover, a.prevPage:hover, a.nextPage:hover {
 	background-position: 0px -32px;
 }
 
@@ -141,15 +141,14 @@ a.disabled:hover {
 }
 
 /* next button uses another background image */
-a.next,a.nextPage {
+a.next, a.nextPage {
 	background-image:
 		url(../../Images/Aqua/plugin/jquery/scrollable/bottom.png);
 	clear: right;
 }
 
 .ui-tabs ul li.dynamic_visual_tab {
-	background-image:
-		url(../../Images/Aqua/background_dynamic_visual_tab.png);
+	background-image: url(../../Images/Aqua/Background/DynamicVisualTab.png);
 	background-position: center center;
 	background-repeat: repeat-x;
 }
@@ -195,7 +194,7 @@ div.navi a.active {
 	float: right;
 }
 
-.ui-tabs-paging-prev,.ui-tabs-paging-next {
+.ui-tabs-paging-prev, .ui-tabs-paging-next {
 	position: relative;
 	top: 10px;
 	padding: 0px;
@@ -212,8 +211,9 @@ div.navi a.active {
 		no-repeat;
 }
 
-.ui-tabs-paging-next:hover,.ui-tabs-paging-next:focus,.ui-tabs-paging-next:active,.ui-tabs-paging-prev:hover,.ui-tabs-paging-prev:focus,.ui-tabs-paging-prev:active
-	{
+.ui-tabs-paging-next:hover, .ui-tabs-paging-next:focus,
+	.ui-tabs-paging-next:active, .ui-tabs-paging-prev:hover,
+	.ui-tabs-paging-prev:focus, .ui-tabs-paging-prev:active {
 	background-position: 0px -16px;
 }
 
@@ -284,7 +284,7 @@ div.dynamic_content_menu_content_container.ui-dynamic-content {
 	border-bottom-right-radius: 10px;
 }
 
-div.ui-tabs-panel li.dynamic_content_menu_item.selected,div.ui-tabs-panel div.dynamic_content_menu_content_container
+div.ui-tabs-panel li.dynamic_content_menu_item.selected, div.ui-tabs-panel div.dynamic_content_menu_content_container
 	{
 	background-color: #FFFFFF;
 }
@@ -292,7 +292,7 @@ div.ui-tabs-panel li.dynamic_content_menu_item.selected,div.ui-tabs-panel div.dy
 /**
  * Fix for categories in forms
  */
-div.dynamic_content_menu_item_content div.configuration_form,div.dynamic_content_menu_item_content div.row
+div.dynamic_content_menu_item_content div.configuration_form, div.dynamic_content_menu_item_content div.row
 	{
 	clear: none;
 }

@@ -1,7 +1,7 @@
 /*****************************************************
  *  DATA TABLE STYLES                                *
  *****************************************************/
-.data_table,div.table {
+.data_table, div.table {
 	width: 100%;
 	padding: 0;
 	margin: 0;
@@ -15,7 +15,7 @@
 	border-top: 0px solid #b5cae7;
 }
 
-.data_table th,div.header {
+.data_table th, div.header {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4171b5;
 	border-top: 1px solid white;
@@ -25,7 +25,7 @@
 	text-transform: uppercase;
 	text-align: left;
 	padding: 6px 10px 6px 10px;
-	background: #d4e0f1 url(../../Images/Aqua/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Aqua/Background/TableHeader.png)
 		repeat-x;
 	overflow: hidden;
 }
@@ -40,30 +40,30 @@
 	padding: 6px 10px 6px 10px;
 	vertical-align: top;
 	width: 10%;
-	background: #C6D6ED url(../../Images/Aqua/background_table_header.png)
+	background: #C6D6ED url(../../Images/Aqua/Background/TableHeader.png)
 		repeat-x;
 }
 
 .data_table tr.row_even td.header {
 	background: #EBEBEB
-		url(../../Images/Aqua/background_table_header_grey.png) repeat-x;
+		url(../../Images/Aqua/Background/TableHeaderGrey.png) repeat-x;
 	color: #7b7b7b;
 }
 
-.data_table tr.row_even,div.row_even {
+.data_table tr.row_even, div.row_even {
 	background: #fff;
 }
 
-.data_table tr.row_even:hover,.data_table tr.row_odd:hover,div.row_even:hover,div.row_odd:hover
-	{
+.data_table tr.row_even:hover, .data_table tr.row_odd:hover, div.row_even:hover,
+	div.row_odd:hover {
 	background-color: #f0f0f0;
 }
 
-.data_table tr.row_odd,div.row_odd {
+.data_table tr.row_odd, div.row_odd {
 	background-color: #eef5fa;
 }
 
-.data_table td,div.cell {
+.data_table td, div.cell {
 	border-right: 1px solid #b5cae7;
 	border-top: 1px solid #b5cae7;
 	padding: 6px 10px 6px 10px;
@@ -122,10 +122,10 @@
 	padding: 10px 36px;
 	background-position: 10px 50%;
 	background-repeat: no-repeat;
-	background-image: url(../../Images/Aqua/status_error_mini.png);
+	background-image: url(../../Images/Aqua/Status/ErrorMini.png);
 }
 
-.data_table td.highlight,.data_table th.highlight,.data_table tr.highlight
+.data_table td.highlight, .data_table th.highlight, .data_table tr.highlight
 	{
 	background-color: #4171B5 !important;
 	color: white !important;
@@ -148,7 +148,7 @@
 	border-top: 0px solid transparent;
 }
 
-.invisible_table th,div.header {
+.invisible_table th, div.header {
 	border-top: 1px solid transparent;
 	border-left: 1px solid transparent;
 	border-right: 1px solid transparent;
@@ -164,20 +164,20 @@
 	background: none;
 }
 
-.invisible_table tr.row_even,div.row_even {
+.invisible_table tr.row_even, div.row_even {
 	background: transparent;
 }
 
-.invisible_table tr.row_even:hover,.invisible_table tr.row_odd:hover,div.row_even:hover,div.row_odd:hover
-	{
+.invisible_table tr.row_even:hover, .invisible_table tr.row_odd:hover,
+	div.row_even:hover, div.row_odd:hover {
 	background-color: transparent;
 }
 
-.invisible_table tr.row_odd,div.row_odd {
+.invisible_table tr.row_odd, div.row_odd {
 	background-color: transparent;
 }
 
-.invisible_table td,div.cell {
+.invisible_table td, div.cell {
 	border-right: 1px solid transparent;
 	border-top: 1px solid transparent;
 }
@@ -223,7 +223,7 @@
 	background-color: #fafafa;
 }
 
-.gallery_table tr.row_odd:hover,.gallery_table tr.row_even:hover {
+.gallery_table tr.row_odd:hover, .gallery_table tr.row_even:hover {
 	background-color: #f0f0f0;
 }
 
@@ -244,7 +244,7 @@
 	background-color: #fafafa;
 }
 
-.gallery_table tr.row_even td.col_odd:hover,.gallery_table tr.row_even td.col_even:hover
+.gallery_table tr.row_even td.col_odd:hover, .gallery_table tr.row_even td.col_even:hover
 	{
 	background-color: #f0f0f0;
 }
@@ -257,7 +257,7 @@
 	background-color: #fafafa;
 }
 
-.gallery_table tr.row_odd td.col_even:hover,.gallery_table tr.row_odd td.col_odd:hover
+.gallery_table tr.row_odd td.col_even:hover, .gallery_table tr.row_odd td.col_odd:hover
 	{
 	background-color: #f0f0f0;
 }
@@ -331,7 +331,7 @@
 	text-transform: uppercase;
 	text-align: center;
 	padding: 2px;
-	background: #d4e0f1 url(../../Images/Aqua/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Aqua/Background/TableHeader.png)
 		repeat-x;
 }
 
@@ -396,11 +396,11 @@ th.list {
 	width: 10px;
 }
 
-th.checkbox,th.empty {
+th.checkbox, th.empty {
 	width: 24px;
 }
 
-th.numeric,th.code {
+th.numeric, th.code {
 	width: 50px;
 }
 
@@ -457,7 +457,7 @@ td p {
 	padding: 6px 10px 6px 10px;
 }
 
-.take_assessment tr.row_even td,.take_assessment tr.row_odd td {
+.take_assessment tr.row_even td, .take_assessment tr.row_odd td {
 	color: black;
 }
 
@@ -465,7 +465,7 @@ td p {
 	background-color: #ffffff;
 }
 
-.take_assessment tr.row_odd,.take_assessment tr.row_odd:hover {
+.take_assessment tr.row_odd, .take_assessment tr.row_odd:hover {
 	background-color: #ffffff;
 }
 

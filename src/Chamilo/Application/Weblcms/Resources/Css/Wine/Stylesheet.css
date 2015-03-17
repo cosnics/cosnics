@@ -201,8 +201,8 @@ div.announcements {
 	margin-bottom: 5px;
 }
 
-div.questionform input[type=text],div.row div.questionform input[type=password],div.row div.questionform select
-	{ /*
+div.questionform input[type=text], div.row div.questionform input[type=password],
+	div.row div.questionform select { /*
 	background-image: url(../images/common/buttons/button_link.png);
 	background-repeat: no-repeat;
 	background-position: 2px center;
@@ -212,7 +212,9 @@ div.questionform input[type=text],div.row div.questionform input[type=password],
 	border: 1px solid #dedede;
 }
 
-div.questionform input[type=text]:hover,div.row div.questionform input[type=text]:focus,div.row div.questionform input[type=password]:hover,div.row div.questionform input[type=password]:focus,div.row div.questionform select:hover,div.row div.questionform select:focus
+div.questionform input[type=text]:hover, div.row div.questionform input[type=text]:focus,
+	div.row div.questionform input[type=password]:hover, div.row div.questionform input[type=password]:focus,
+	div.row div.questionform select:hover, div.row div.questionform select:focus
 	{
 	background-color: #f7fbfd;
 	border-color: #4171B5;
@@ -249,7 +251,7 @@ div.questionform input[type=text]:hover,div.row div.questionform input[type=text
 	font-size: 12px;
 }
 
-.head5,.head6 {
+.head5, .head6 {
 	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
@@ -315,7 +317,7 @@ div.publication_actions div.toolbar {
 	float: right;
 }
 
-div.publication_actions div.toolbar ul.toolbar_horizontal,div.publication_actions div.toolbar ul.toolbar_vertical
+div.publication_actions div.toolbar ul.toolbar_horizontal, div.publication_actions div.toolbar ul.toolbar_vertical
 	{
 	display: inline;
 	float: right;
@@ -378,8 +380,8 @@ div.category_title {
  ********************/
 .data_table th.reporting_th {
 	vertical-align: bottom;
-	background: url("../../Images/Aqua/background_table_header.png")
-		repeat-x scroll 0 0 #D4E0F1;
+	background: url("../../Images/Aqua/BackgroundTableHeader.png") repeat-x
+		scroll 0 0 #D4E0F1;
 	text-align: center;
 }
 

@@ -9,11 +9,11 @@ ul.tree-menu li div a.type_survey_order_question {
 }
 
 ul.tree-menu li div a.survey_order_question_checked {
-	background-image: url(../../Images/Aqua/Logo/16_checked.png);
+	background-image: url(../../Images/Aqua/Logo/16Checked.png);
 }
 
 ul.tree-menu li div a.type_survey_order_question_checked {
-	background-image: url(../../Images/Aqua/Logo/16_checked.png);
+	background-image: url(../../Images/Aqua/Logo/16Checked.png);
 }
 
 th.info {
@@ -24,7 +24,7 @@ th.info {
 /* .ranking_row { 
 	width: 120px; 
 } */
-#sortable1,#sortable2 {
+#sortable1, #sortable2 {
 	list-style-type: none;
 	margin: 0;
 	padding: 0 0 2.5em;
@@ -32,7 +32,7 @@ th.info {
 	margin-right: 10px;
 }
 
-#sortable1 li,#sortable2 li {
+#sortable1 li, #sortable2 li {
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 	font-size: 1.2em;
@@ -47,7 +47,7 @@ th.info {
 /* .ui-state-default {
 	width: 120px;
 }  */
-html>body #sortable1 li,#sortable2 li {
+html>body #sortable1 li, #sortable2 li {
 	height: 1.5em;
 	line-height: 1.2em;
 }
