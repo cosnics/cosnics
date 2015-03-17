@@ -77,7 +77,7 @@
 	line-height: 1.5em;
 }
 
-.wiki-pane-content-title,.wiki-pane-content-feedback h3 {
+.wiki-pane-content-title, .wiki-pane-content-feedback h3 {
 	font-size: 20px;
 	font-weight: normal;
 }
@@ -135,8 +135,8 @@
 	overflow: hidden;
 }
 
-.wiki-pane-content-head,.wiki-pane-content-title,.wiki-pane-content-feedback h3,.wiki-pane-content h2
-	{
+.wiki-pane-content-head, .wiki-pane-content-title,
+	.wiki-pane-content-feedback h3, .wiki-pane-content h2 {
 	border-bottom: 1px solid #2e6e9e;
 	clear: both;
 	padding-bottom: 5px;
@@ -248,7 +248,7 @@ table.wikitable {
 	border-collapse: collapse;
 }
 
-.wikitable th,.wikitable td {
+.wikitable th, .wikitable td {
 	border: 1px #aaa solid;
 	padding: 0.2em;
 }
@@ -279,7 +279,7 @@ table.collapsed tr.collapsable {
 	padding: 10px 36px 10px 36px;
 	text-align: justify;
 	background-image:
-		url('../../../../../../Configuration/Resources/Images/Aqua/status_warning_mini.png');
+		url('../../../../../../Configuration/Resources/Images/Aqua/StatusWarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
@@ -290,7 +290,7 @@ table.collapsed tr.collapsable {
 	color: #e17009;
 }
 
-ul.tree-menu li div a.wiki,ul.tree-menu li div a.type_wiki,ul.tree-menu li div a.type_wiki_default
+ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default
 	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

@@ -1,4 +1,5 @@
 @import url('../../../Feedback/Resources/Css/Aqua/Stylesheet.css');
+
 @import url('tags.css');
 
 tr.recycled td { /*text-decoration:line-through;*/
@@ -49,47 +50,47 @@ div.content_object.comic_book {
 }
 
 ul.tree-menu li div a.category_agenda {
-	background-image: url(../../Images/Aqua/Category/agenda.png);
+	background-image: url(../../Images/Aqua/Category/Agenda.png);
 }
 
 ul.tree-menu li div a.category_assessment {
-	background-image: url(../../Images/Aqua/Category/assessment.png);
+	background-image: url(../../Images/Aqua/Category/Assessment.png);
 }
 
 ul.tree-menu li div a.category_collaboration {
-	background-image: url(../../Images/Aqua/Category/collaboration.png);
+	background-image: url(../../Images/Aqua/Category/Collaboration.png);
 }
 
 ul.tree-menu li div a.category_general {
-	background-image: url(../../Images/Aqua/Category/general.png);
+	background-image: url(../../Images/Aqua/Category/General.png);
 }
 
 ul.tree-menu li div a.category_handbook {
-	background-image: url(../../Images/Aqua/Category/handbook.png);
+	background-image: url(../../Images/Aqua/Category/Handbook.png);
 }
 
 ul.tree-menu li div a.category_media {
-	background-image: url(../../Images/Aqua/Category/media.png);
+	background-image: url(../../Images/Aqua/Category/Media.png);
 }
 
 ul.tree-menu li div a.category_news {
-	background-image: url(../../Images/Aqua/Category/news.png);
+	background-image: url(../../Images/Aqua/Category/News.png);
 }
 
 ul.tree-menu li div a.category_peer_assessment {
-	background-image: url(../../Images/Aqua/Category/peer_assessment.png);
+	background-image: url(../../Images/Aqua/Category/PeerAssessment.png);
 }
 
 ul.tree-menu li div a.category_reference {
-	background-image: url(../../Images/Aqua/Category/reference.png);
+	background-image: url(../../Images/Aqua/Category/Reference.png);
 }
 
 ul.tree-menu li div a.category_survey {
-	background-image: url(../../Images/Aqua/Category/survey.png);
+	background-image: url(../../Images/Aqua/Category/Survey.png);
 }
 
 ul.tree-menu li div a.category_video_conferencing {
-	background-image: url(../../Images/Aqua/Category/video_conferencing.png);
+	background-image: url(../../Images/Aqua/Category/VideoConferencing.png);
 }
 
 div#advanced_filter_tabs div.admin_tab {
@@ -102,7 +103,7 @@ div#advanced_filter_tabs .ui-tabs-selected {
 	background-image: none;
 }
 
-div#repository_menu,div#search_parameters {
+div#repository_menu, div#search_parameters {
 	padding: 10px;
 	margin-top: 5px;
 	border: 1px solid #EBEBEB;
@@ -146,11 +147,11 @@ div#search_parameters div.parameter#parameter_all {
 	right: 9px;
 	margin-top: -4px;
 	cursor: pointer;
-	background: url(../../Images/Aqua/action_clear_parameter.png) no-repeat;
+	background: url(../../Images/Aqua/Action/ClearParameter.png) no-repeat;
 }
 
 div#search_parameters div.parameter#parameter_all .clear_parameter {
-	background: url(../../Images/Aqua/action_clear_all_parameter.png)
+	background: url(../../Images/Aqua/Action/ClearAllParameter.png)
 		no-repeat;
 }
 
@@ -164,5 +165,5 @@ div.quota_statistics .data_table td.header {
 }
 
 .type_disabled {
-	background-image: url(../../Images/Aqua/menu/disabled.png) !important;
+	background-image: url(../../Images/Aqua/Menu/Disabled.png) !important;
 }

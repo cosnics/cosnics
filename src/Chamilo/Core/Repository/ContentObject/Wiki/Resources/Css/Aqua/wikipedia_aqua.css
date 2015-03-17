@@ -77,7 +77,7 @@
 	line-height: 1.5em;
 }
 
-.wiki-pane-content-title,.wiki-pane-content-feedback h3 {
+.wiki-pane-content-title, .wiki-pane-content-feedback h3 {
 	font-size: 20px;
 	font-weight: normal;
 }
@@ -134,8 +134,8 @@
 	border-top: 1px solid #e5edf9;
 }
 
-.wiki-pane-content-head,.wiki-pane-content-title,.wiki-pane-content-feedback h3,.wiki-pane-content h2
-	{
+.wiki-pane-content-head, .wiki-pane-content-title,
+	.wiki-pane-content-feedback h3, .wiki-pane-content h2 {
 	border-bottom: 1px solid #2e6e9e;
 	clear: both;
 	padding-bottom: 5px;
@@ -247,7 +247,7 @@ table.wikitable {
 	border-collapse: collapse;
 }
 
-.wikitable th,.wikitable td {
+.wikitable th, .wikitable td {
 	border: 1px #aaa solid;
 	padding: 0.2em;
 }
@@ -278,7 +278,7 @@ table.collapsed tr.collapsable {
 	padding: 10px 36px 10px 36px;
 	text-align: justify;
 	background-image:
-		url('../../../../../../Configuration/Resources/Images/Aqua/status_warning_mini.png');
+		url('../../../../../../Configuration/Resources/Images/Aqua/StatusWarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
@@ -389,7 +389,7 @@ div.emptyPortlet {
 }
 
 /* Navigation Labels */
-div.vectorTabs h5,div.vectorMenu h5 span {
+div.vectorTabs h5, div.vectorMenu h5 span {
 	display: none;
 }
 
@@ -458,7 +458,7 @@ div.vectorTabs li a {
 	background-repeat: no-repeat;
 }
 
-div.vectorTabs li a,div.vectorTabs li a span {
+div.vectorTabs li a, div.vectorTabs li a span {
 	color: #0645ad;
 	cursor: pointer;
 }
@@ -485,14 +485,14 @@ div.vectorTabs a>span {
 	display: block;
 }
 
-div.vectorTabs li.selected a,div.vectorTabs li.selected a span,div.vectorTabs li.selected a:visited
+div.vectorTabs li.selected a, div.vectorTabs li.selected a span, div.vectorTabs li.selected a:visited
 	div.vectorTabs li.selected a:visited span {
 	color: #333333;
 	text-decoration: none;
 }
 
-div.vectorTabs li.new a,div.vectorTabs li.new a span,div.vectorTabs li.new a:visited,div.vectorTabs li.new a:visited span
-	{
+div.vectorTabs li.new a, div.vectorTabs li.new a span, div.vectorTabs li.new a:visited,
+	div.vectorTabs li.new a:visited span {
 	color: #a55858;
 }
 
@@ -581,7 +581,7 @@ body.rtl div.vectorMenu>div.menu {
 
 /* Fixes old versions of FireFox */
 /* @noflip */
-body.rtl div.vectorMenu>div.menu,x:-moz-any-link {
+body.rtl div.vectorMenu>div.menu, x:-moz-any-link {
 	margin-left: 23px;
 }
 
@@ -604,12 +604,12 @@ div.vectorMenu ul {
 }
 
 /* Fixes old versions of FireFox */
-div.vectorMenu ul,x:-moz-any-link {
+div.vectorMenu ul, x:-moz-any-link {
 	min-width: 5em;
 }
 
 /* Returns things back to normal in modern versions of FireFox */
-div.vectorMenu ul,x:-moz-any-link,x:default {
+div.vectorMenu ul, x:-moz-any-link, x:default {
 	min-width: 0;
 }
 
@@ -638,7 +638,7 @@ div.vectorMenu li a {
 	font-size: 0.8em;
 }
 
-div.vectorMenu li.selected a,div.vectorMenu li.selected a:visited {
+div.vectorMenu li.selected a, div.vectorMenu li.selected a:visited {
 	color: #333333;
 	text-decoration: none;
 }
@@ -658,7 +658,7 @@ div.vectorMenu li.selected a,div.vectorMenu li.selected a:visited {
 	margin-left: 0.5em;
 }
 
-#p-search form,#p-search input {
+#p-search form, #p-search input {
 	margin: 0;
 	margin-top: 0.4em;
 }
@@ -811,7 +811,7 @@ div#mw-panel div.portal div.body ul li a:visited {
 	margin-left: 1px;
 }
 
-#preftoc a,#preftoc a:active {
+#preftoc a, #preftoc a:active {
 	display: inline-block;
 	position: relative;
 	color: #0645ad;
@@ -885,7 +885,7 @@ div#mw-panel div.portal div.body ul li a:visited {
 /* 
  * Styles for the user login and create account forms
  */
-#userlogin,#userloginForm {
+#userlogin, #userloginForm {
 	border: solid 1px #cccccc;
 	padding: 1.2em;
 	margin: .5em;
@@ -899,14 +899,14 @@ div#mw-panel div.portal div.body ul li a:visited {
 }
 
 /* Table of Contents */
-#toc,.toc,.mw-warning {
+#toc, .toc, .mw-warning {
 	border: 1px solid #aaa;
 	background-color: #f9f9f9;
 	padding: 5px;
 	font-size: 95%;
 }
 
-#toc h2,.toc h2 {
+#toc h2, .toc h2 {
 	display: inline;
 	border: none;
 	padding: 0;
@@ -914,11 +914,11 @@ div#mw-panel div.portal div.body ul li a:visited {
 	font-weight: bold;
 }
 
-#toc #toctitle,.toc #toctitle,#toc .toctitle,.toc .toctitle {
+#toc #toctitle, .toc #toctitle, #toc .toctitle, .toc .toctitle {
 	text-align: center;
 }
 
-#toc ul,.toc ul {
+#toc ul, .toc ul {
 	list-style-type: none;
 	list-style-image: none;
 	margin-left: 0;
@@ -926,26 +926,32 @@ div#mw-panel div.portal div.body ul li a:visited {
 	text-align: left;
 }
 
-#toc ul ul,.toc ul ul {
+#toc ul ul, .toc ul ul {
 	margin: 0 0 0 2em;
 }
 
 #toc
 
 
+
  
+
 
 
 tbody
 
 
+
  
+
 
 
 tr
 
 
+
  
+
 
 
 td
@@ -953,48 +959,64 @@ td
 .toc
 
 
+
  
+
 
 
 tbody
 
 
+
  
+
 
 
 tr
 
 
+
  
+
 
 
 td
 ,
 {
 font-weight
+
+
 :
+
  
+
 normal
+
+
 ;
-
-
 }
 #toc
 
 
+
  
+
 
 
 tbody
 
 
+
  
+
 
 
 tr
 
 
+
  
+
 
 
 th
@@ -1002,38 +1024,48 @@ th
 .toc
 
 
+
  
+
 
 
 tbody
 
 
+
  
+
 
 
 tr
 
 
+
  
+
 
 
 th
 ,
 {
 font-weight
+
+
 :
+
  
+
 lighter
+
+
 ;
-
-
 }
-#toc .toctoggle,.toc .toctoggle {
+#toc .toctoggle, .toc .toctoggle {
 	font-size: 94%;
 }
 
 /* Images */
-div.floatright,table.floatright {
+div.floatright, table.floatright {
 	clear: right;
 	float: right;
 	position: relative;
@@ -1045,7 +1077,7 @@ div.floatright p {
 	font-style: italic;
 }
 
-div.floatleft,table.floatleft {
+div.floatleft, table.floatleft {
 	float: left;
 	clear: left;
 	position: relative;
@@ -1093,7 +1125,7 @@ div.magnify {
 	background: none !important;
 }
 
-div.magnify a,div.magnify img {
+div.magnify a, div.magnify img {
 	display: block;
 	border: none !important;
 	background: none !important;
@@ -1170,7 +1202,7 @@ img.thumbborder {
 	display: none;
 }
 
-#contentSub,#contentSub2 {
+#contentSub, #contentSub2 {
 	font-size: 84%;
 	line-height: 1.2em;
 	margin: 0 0 1.4em 1em;
@@ -1194,7 +1226,7 @@ span.subpages {
 }
 
 /* Small for tables and similar */
-.small,.small * {
+.small, .small * {
 	font-size: 94%;
 }
 
@@ -1203,11 +1235,11 @@ table.small {
 }
 
 /* Edge Cases for Content */
-h1,h2 {
+h1, h2 {
 	margin-bottom: .6em;
 }
 
-h3,h4,h5 {
+h3, h4, h5 {
 	margin-bottom: .3em;
 }
 
@@ -1221,18 +1253,18 @@ h3,h4,h5 {
 	padding-bottom: 0;
 }
 
-#content a.external,#content a[href^="gopher://"] {
+#content a.external, #content a[href^="gopher://"] {
 	background: url(images/external-link-ltr-icon.png?2) center right
 		no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a[href^="https://"],.link-https {
+#content a[href^="https://"], .link-https {
 	background: url(images/lock-icon.png?2) center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a[href^="mailto:"],.link-mailto {
+#content a[href^="mailto:"], .link-mailto {
 	background: url(images/mail-icon.png?2) center right no-repeat;
 	padding: 0 13px 0 0;
 }
@@ -1242,36 +1274,47 @@ h3,h4,h5 {
 	padding: 0 13px 0 0;
 }
 
-#content a[href^="ftp://"],.link-ftp {
+#content a[href^="ftp://"], .link-ftp {
 	background: url(images/file-icon.png?2) center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a[href^="irc://"],#content a.extiw[href^="irc://"],.link-irc {
+#content a[href^="irc://"], #content a.extiw[href^="irc://"], .link-irc
+	{
 	background: url(images/talk-icon.png?2) center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a.external[href$=".ogg"],#content a.external[href$=".OGG"],#content a.external[href$=".mid"],#content a.external[href$=".MID"],#content a.external[href$=".midi"],#content a.external[href$=".MIDI"],#content a.external[href$=".mp3"],#content a.external[href$=".MP3"],#content a.external[href$=".wav"],#content a.external[href$=".WAV"],#content a.external[href$=".wma"],#content a.external[href$=".WMA"],.link-audio
-	{
+#content a.external[href$=".ogg"], #content a.external[href$=".OGG"],
+	#content a.external[href$=".mid"], #content a.external[href$=".MID"],
+	#content a.external[href$=".midi"], #content a.external[href$=".MIDI"],
+	#content a.external[href$=".mp3"], #content a.external[href$=".MP3"],
+	#content a.external[href$=".wav"], #content a.external[href$=".WAV"],
+	#content a.external[href$=".wma"], #content a.external[href$=".WMA"],
+	.link-audio {
 	background: url("images/audio-icon.png?2") center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a.external[href$=".ogm"],#content a.external[href$=".OGM"],#content a.external[href$=".avi"],#content a.external[href$=".AVI"],#content a.external[href$=".mpeg"],#content a.external[href$=".MPEG"],#content a.external[href$=".mpg"],#content a.external[href$=".MPG"],.link-video
-	{
+#content a.external[href$=".ogm"], #content a.external[href$=".OGM"],
+	#content a.external[href$=".avi"], #content a.external[href$=".AVI"],
+	#content a.external[href$=".mpeg"], #content a.external[href$=".MPEG"],
+	#content a.external[href$=".mpg"], #content a.external[href$=".MPG"],
+	.link-video {
 	background: url("images/video-icon.png?2") center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
-#content a.external[href$=".pdf"],#content a.external[href$=".PDF"],#content a.external[href*=".pdf#"],#content a.external[href*=".PDF#"],#content a.external[href*=".pdf?"],#content a.external[href*=".PDF?"],.link-document
-	{
+#content a.external[href$=".pdf"], #content a.external[href$=".PDF"],
+	#content a.external[href*=".pdf#"], #content a.external[href*=".PDF#"],
+	#content a.external[href*=".pdf?"], #content a.external[href*=".PDF?"],
+	.link-document {
 	background: url("images/document-icon.png?2") center right no-repeat;
 	padding: 0 13px 0 0;
 }
 
 /* Interwiki Styling  (Disabled) */
-#content a.extiw,#content a.extiw:active {
+#content a.extiw, #content a.extiw:active {
 	color: #36b;
 	background: none;
 	padding: 0;
@@ -1286,7 +1329,7 @@ h3,h4,h5 {
 }
 
 /* Icon for Usernames */
-#pt-userpage,#pt-anonuserpage,#pt-login {
+#pt-userpage, #pt-anonuserpage, #pt-login {
 	background: url(images/user-icon.png?1) left top no-repeat;
 	padding-left: 15px !important;
 	text-transform: none;
@@ -1313,11 +1356,11 @@ div#bodyContent {
 }
 
 /* Watch/Unwatch Icon Styling */
-#ca-unwatch.icon,#ca-watch.icon {
+#ca-unwatch.icon, #ca-watch.icon {
 	margin-right: 1px;
 }
 
-#ca-unwatch.icon a,#ca-watch.icon a {
+#ca-unwatch.icon a, #ca-watch.icon a {
 	margin: 0;
 	padding: 0;
 	outline: none;
@@ -1346,12 +1389,12 @@ div#bodyContent {
 	background-position: -19px 60%;
 }
 
-#ca-unwatch.icon a.loading,#ca-watch.icon a.loading {
+#ca-unwatch.icon a.loading, #ca-watch.icon a.loading {
 	background-image: url(images/watch-icon-loading.gif?1);
 	background-position: center 60%;
 }
 
-#ca-unwatch.icon a span,#ca-watch.icon a span {
+#ca-unwatch.icon a span, #ca-watch.icon a span {
 	display: none;
 }
 
@@ -1412,7 +1455,7 @@ span.texhtml {
 }
 
 /* Stop floats from intruding into edit area in previews */
-#editform,#toolbar,#wpTextbox1 {
+#editform, #toolbar, #wpTextbox1 {
 	clear: both;
 }
 
@@ -1436,7 +1479,7 @@ h2#filehistory {
 	clear: both;
 }
 
-table.filehistory th,table.filehistory td {
+table.filehistory th, table.filehistory td {
 	vertical-align: top;
 }
 
@@ -1444,7 +1487,7 @@ table.filehistory th {
 	text-align: left;
 }
 
-table.filehistory td.mw-imagepage-filesize,table.filehistory th.mw-imagepage-filesize
+table.filehistory td.mw-imagepage-filesize, table.filehistory th.mw-imagepage-filesize
 	{
 	white-space: nowrap;
 }
@@ -1456,7 +1499,7 @@ table.filehistory td.filehistory-selected {
 /*
  * rev_deleted stuff
  */
-li span.deleted,span.history-deleted {
+li span.deleted, span.history-deleted {
 	text-decoration: line-through;
 	color: #888;
 	font-style: italic;
@@ -1565,8 +1608,8 @@ body.ltr .magnify {
 }
 
 /* Convenience links to edit block, delete and protect reasons */
-p.mw-ipb-conveniencelinks,p.mw-protect-editreasons,p.mw-filedelete-editreasons,p.mw-delete-editreasons,p.mw-revdel-editreasons
-	{
+p.mw-ipb-conveniencelinks, p.mw-protect-editreasons, p.mw-filedelete-editreasons,
+	p.mw-delete-editreasons, p.mw-revdel-editreasons {
 	font-size: 90%;
 	float: right;
 }
@@ -1831,7 +1874,7 @@ form#powersearch {
 	color: #888;
 }
 
-table.mw-userrights-groups * td,table.mw-userrights-groups * th {
+table.mw-userrights-groups * td, table.mw-userrights-groups * th {
 	padding-right: 1.5em;
 }
 
@@ -1862,7 +1905,7 @@ table.os-suggest-results {
 	width: 100%;
 }
 
-.os-suggest-result,.os-suggest-result-hl {
+.os-suggest-result, .os-suggest-result-hl {
 	white-space: nowrap;
 	background-color: white;
 	background-color: Window;
@@ -1871,7 +1914,7 @@ table.os-suggest-results {
 	padding: 2px;
 }
 
-.os-suggest-result-hl,.os-suggest-result-hl-webkit {
+.os-suggest-result-hl, .os-suggest-result-hl-webkit {
 	background-color: #4C59A6;
 	color: white;
 }
@@ -1922,7 +1965,7 @@ table.os-suggest-results {
 }
 
 /** Generic minor/bot/newpage styling */
-.newpage,.minor,.bot {
+.newpage, .minor, .bot {
 	font-weight: bold;
 }
 
@@ -1956,7 +1999,7 @@ h4.mw-specialpagesgroup {
 	font-weight: bold;
 }
 
-#shared-image-dup,#shared-image-conflict {
+#shared-image-dup, #shared-image-conflict {
 	font-style: italic;
 }
 
@@ -1965,7 +2008,7 @@ table.mw-emailuser-table {
 	width: 98%;
 }
 
-td#mw-emailuser-sender,td#mw-emailuser-recipient {
+td#mw-emailuser-sender, td#mw-emailuser-recipient {
 	font-weight: bold;
 }
 
@@ -1974,7 +2017,7 @@ table.allpageslist {
 	background-color: transparent;
 }
 
-table.mw-allpages-table-form,table.mw-allpages-table-chunk {
+table.mw-allpages-table-form, table.mw-allpages-table-chunk {
 	background-color: transparent;
 	width: 100%;
 }
@@ -1983,7 +2026,7 @@ td.mw-allpages-alphaindexline {
 	text-align: right;
 }
 
-td.mw-allpages-nav,p.mw-allpages-nav {
+td.mw-allpages-nav, p.mw-allpages-nav {
 	text-align: right;
 	font-size: smaller;
 	margin-bottom: 1em;
@@ -1994,7 +2037,7 @@ table.mw-allpages-table-form tr {
 }
 
 /* Special:Prefixindex styling */
-table#mw-prefixindex-list-table,table#mw-prefixindex-nav-table {
+table#mw-prefixindex-list-table, table#mw-prefixindex-nav-table {
 	width: 98%;
 	background-color: transparent;
 }
@@ -2024,15 +2067,15 @@ div.mw-warning-with-logexcerpt ul li {
 }
 
 /* (show/hide) revision deletion links */
-span.mw-revdelundel-link,strong.mw-revdelundel-link {
+span.mw-revdelundel-link, strong.mw-revdelundel-link {
 	font-size: 90%;
 }
 
-span.mw-revdelundel-hidden,input.mw-revdelundel-hidden {
+span.mw-revdelundel-hidden, input.mw-revdelundel-hidden {
 	visibility: hidden;
 }
 
-td.mw-revdel-checkbox,th.mw-revdel-checkbox {
+td.mw-revdel-checkbox, th.mw-revdel-checkbox {
 	padding-right: 10px;
 	text-align: center;
 }
@@ -2058,7 +2101,7 @@ table.wikitable {
 	border-collapse: collapse;
 }
 
-.wikitable th,.wikitable td {
+.wikitable th, .wikitable td {
 	border: 1px #aaa solid;
 	padding: 0.2em;
 }
@@ -2088,7 +2131,7 @@ table.collapsed tr.collapsable {
 	font-size: larger;
 }
 
-.errorbox,.successbox {
+.errorbox, .successbox {
 	font-size: larger;
 	border: 2px solid;
 	padding: .5em 1em;
@@ -2107,7 +2150,7 @@ table.collapsed tr.collapsable {
 	background-color: #dfd;
 }
 
-.errorbox h2,.successbox h2 {
+.errorbox h2, .successbox h2 {
 	font-size: 1em;
 	font-weight: bold;
 	display: inline;
@@ -2156,7 +2199,7 @@ table.collapsed tr.collapsable {
 	border-collapse: collapse;
 }
 
-.TablePager,.TablePager td,.TablePager th {
+.TablePager, .TablePager td, .TablePager th {
 	border: 1px solid #aaaaaa;
 	padding: 0 0.15em 0 0.15em;
 }
@@ -2173,7 +2216,7 @@ table.collapsed tr.collapsable {
 	background-color: #eeeeff
 }
 
-.imagelist td,.imagelist th {
+.imagelist td, .imagelist th {
 	white-space: nowrap
 }
 
@@ -2250,7 +2293,7 @@ table.mw_metadata {
 	border-collapse: collapse;
 }
 
-table.mw_metadata td,table.mw_metadata th {
+table.mw_metadata td, table.mw_metadata th {
 	text-align: center;
 	border: 1px solid #aaaaaa;
 	padding-left: 0.1em;
@@ -2362,7 +2405,7 @@ a.sortheader {
 	margin: 0 0.3em;
 }
 
-h2,h3 {
+h2, h3 {
 	color: black;
 	background: none;
 	font-weight: normal;

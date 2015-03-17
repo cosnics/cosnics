@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
-ul.tree-menu li div a.matterhorn,ul.tree-menu li div a.type_matterhorn,ul.tree-menu li div a.type_matterhorn_default
-	{
+ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
+	ul.tree-menu li div a.type_matterhorn_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
@@ -96,7 +96,7 @@ ul.tree-menu li div a.matterhorn,ul.tree-menu li div a.type_matterhorn,ul.tree-m
 
 /* prev, next, prevPage and nextPage buttons */
 a.scrollable-segments-browse {
-	background: url(../../Images/Aqua/action_scrollable.png) no-repeat;
+	background: url(../../Images/Aqua/Action/Scrollable.png) no-repeat;
 	display: block;
 	width: 30px;
 	height: 30px;
