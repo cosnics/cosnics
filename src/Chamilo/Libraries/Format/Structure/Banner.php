@@ -6,7 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -84,19 +83,6 @@ class Banner
         $this->viewMode = $viewMode;
     }
 
-    private static function get_languages()
-    {
-        return \Chamilo\Configuration\Storage\DataManager :: get_languages();
-    }
-
-    private static function is_allowed_quick_language()
-    {
-        return PlatformSetting :: get('allow_user_change_platform_language', \Chamilo\Core\User\Manager :: context()) ==
-             1 && PlatformSetting :: get(
-                'allow_user_quick_change_platform_language',
-                \Chamilo\Core\User\Manager :: context()) == 1;
-    }
-
     /**
      * Creates the HTML output for the banner.
      */
@@ -132,47 +118,6 @@ class Banner
         $output[] = '<a name="top"></a>';
         $output[] = '<div id="header">  <!-- header section start -->';
         $output[] = '<div id="header1"> <!-- top of banner with institution name/hompage link -->';
-
-        // add quick language list in header: update your institution's CSS accordingly
-        // if you want to use this feature
-        // css id of the list: header_quick_language
-        if (self :: is_allowed_quick_language())
-        {
-            $languages = self :: get_languages();
-
-            if (count($languages) > 1)
-            {
-                $output[] = '<ul id="header_quick_language"> <!-- quick language buttons -->';
-
-                $current_language = LocalSetting :: get('platform_language');
-
-                $redirect = new Redirect();
-                $currentUrl = $redirect->getCurrentUrl();
-
-                foreach ($languages as $isocode => $language)
-                {
-                    if ($isocode == $current_language)
-                    {
-                        $item = $isocode;
-                    }
-                    else
-                    {
-                        $redirect = new Redirect(
-                            array(
-                                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_QUICK_LANG,
-                                \Chamilo\Core\User\Manager :: PARAM_CHOICE => $isocode,
-                                \Chamilo\Core\User\Manager :: PARAM_REFER => $currentUrl));
-
-                        $item = '<a href="' . $redirect->getUrl() . '">' . $isocode . '</a>';
-                    }
-
-                    $output[] = '<li>' . $item . '</li>';
-                }
-
-                $output[] = '</ul>';
-            }
-        }
 
         $output[] = '<div class="banner"><a href="' . Path :: getInstance()->getBasePath(true) .
              'index.php" target="_top"><span class="logo">' . PlatformSetting :: get('site_name', 'Chamilo\Core\Admin') .

@@ -20,7 +20,7 @@ abstract class MenuItem extends Bar
      *
      * @return string
      */
-    public function get_item_url()
+    public function getContent()
     {
         $html = array();
 

@@ -51,9 +51,15 @@ class Login extends Block
         {
             $user = $this->get_user();
 
+            $profilePhotoUrl = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+
             $html[] = '<br />';
             $max_height = PlatformSetting :: get('restrict_picture_height', \Chamilo\Core\User\Manager :: context()) ? 'max-height:100px' : null;
-            $html[] = '<img src="' . htmlspecialchars($user->get_full_picture_url()) . '" style="max-width: 100%; ' .
+            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" style="max-width: 100%; ' .
                  $max_height . '" />';
             $html[] = '<br /><br />';
             $html[] = htmlspecialchars($user->get_fullname()) . '<br />';
