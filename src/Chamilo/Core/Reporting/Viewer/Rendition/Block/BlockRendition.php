@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block;
 
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\Implementation\AbstractBlockRenditionImplementation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -17,15 +18,15 @@ abstract class BlockRendition
 
     /**
      *
-     * @var \core\reporting\BlockRenditionImplementation
+     * @var \core\reporting\AbstractBlockRenditionImplementation
      */
     private $rendition_implementation;
 
     /**
      *
-     * @param \core\reporting\viewer\BlockRenditionImplementation $rendition_implementation
+     * @param \core\reporting\viewer\AbstractBlockRenditionImplementation $rendition_implementation
      */
-    public function __construct(BlockRenditionImplementation $rendition_implementation)
+    public function __construct(AbstractBlockRenditionImplementation $rendition_implementation)
     {
         $this->rendition_implementation = $rendition_implementation;
     }

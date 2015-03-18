@@ -121,6 +121,16 @@ abstract class ReportingTemplate
     }
 
     /**
+     *  \brief Returns whether the report is Portrait or Landscape.
+     *
+     *  @return 'L' or 'P'. Default implementation returns 'P'.
+     */
+    public function get_paper_orientation()
+    {
+        return 'P';
+	}
+    
+    /**
      *
      * @return string
      */

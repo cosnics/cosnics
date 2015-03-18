@@ -212,7 +212,7 @@ class Path
     {
         return $this->cache[self :: PLUGIN][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
             $namespace,
-            $web) . 'plugin' . ($web ? '/' : DIRECTORY_SEPARATOR);
+            $web) . 'Plugin' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
     /**

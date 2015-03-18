@@ -52,7 +52,7 @@ class LicensePage extends InstallWizardPage
     public function set_form_defaults()
     {
         $defaults = array();
-        $defaults['license'] = implode("", file(realpath(__DIR__ . '/../../../../../../documentation/license.txt')));
+        $defaults['license'] = implode("", file(realpath(__DIR__ . '/../../../../../../LICENSE')));
         $this->setDefaults($defaults);
     }
 }

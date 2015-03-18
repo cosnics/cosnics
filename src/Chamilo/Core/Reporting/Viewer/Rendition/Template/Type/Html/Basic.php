@@ -196,6 +196,17 @@ class Basic extends Html
                 Theme :: getInstance()->getCommonImagePath('Export/Excel'),
                 $this->get_context()->get_url($parameters)));
 
+        $parameters = $this->get_context()->get_parameters();
+        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_SAVE;
+        $parameters[Manager :: PARAM_SHOW_ALL] = 1;
+        $parameters[Manager :: PARAM_FORMAT] = TemplateRendition :: FORMAT_PDF;
+
+        $action_bar->add_common_action(
+            new ToolbarItem(
+                Translation :: get('ExportToPdf'),
+                Theme :: getInstance()->getCommonImagePath('Export/Pdf'),
+                $this->get_context()->get_url($parameters)));
+
         return $action_bar;
     }
 }

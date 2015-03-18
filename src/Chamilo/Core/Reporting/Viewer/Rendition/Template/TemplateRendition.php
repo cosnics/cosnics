@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Template;
 
 use Chamilo\Core\Reporting\Viewer\NoBlockTabsAllowed;
+use Chamilo\Core\Reporting\Viewer\Rendition\Template\Implementation\AbstractTemplateRenditionImplementation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -16,6 +17,7 @@ abstract class TemplateRendition
     const FORMAT_JSON = 'json';
     const FORMAT_CSV = 'csv';
     const FORMAT_XLSX = 'xlsx';
+    const FORMAT_PDF = 'pdf';
     const VIEW_BASIC = 'basic';
 
     /**
@@ -28,7 +30,7 @@ abstract class TemplateRendition
      *
      * @param \core\reporting\viewer\TemplateRenditionImplementation $rendition_implementation
      */
-    public function __construct(TemplateRenditionImplementation $rendition_implementation)
+    public function __construct(AbstractTemplateRenditionImplementation $rendition_implementation)
     {
         $this->rendition_implementation = $rendition_implementation;
     }

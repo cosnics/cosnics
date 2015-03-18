@@ -246,7 +246,8 @@ class Header
              $this->getLanguageCode() . '">';
         $html[] = '<head>';
 
-        foreach ($this->getHtmlHeaders() as $index => & $html_header)
+        $html_headers = $this->getHtmlHeaders();
+        foreach ($html_headers as $index => & $html_header)
         {
             $html[] = $html_header;
         }
