@@ -113,8 +113,15 @@ class Path
      */
     public function getStoragePath($namespace = null, $web = false)
     {
-        return $this->cache[self :: STORAGE][(string) $namespace][(string) $web] = realpath(
-            $this->getBasePath($web) . '../files/') . ($web ? '/' : DIRECTORY_SEPARATOR) .
+        if ($web)
+        {
+            throw new \Exception('Storage is not directly accessible');
+        }
+
+        $basePath = realpath($this->getBasePath($web) . '../files/');
+
+        return $this->cache[self :: STORAGE][(string) $namespace][(string) $web] = $basePath .
+             ($web ? '/' : DIRECTORY_SEPARATOR) .
              ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 

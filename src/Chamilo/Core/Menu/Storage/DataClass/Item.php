@@ -82,6 +82,11 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         return $this->get_default_property(self :: PROPERTY_PARENT);
     }
 
+    public function get_parent_object()
+    {
+        return DataManager :: retrieve_item($this->get_parent());
+    }
+
     public function set_parent($parent)
     {
         $this->set_default_property(self :: PROPERTY_PARENT, $parent);

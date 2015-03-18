@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Theme;
 class ApplicationItem extends Bar
 {
 
-    public function get_item_url()
+    public function getContent()
     {
         $application = $this->get_item()->get_application();
 
@@ -34,7 +34,8 @@ class ApplicationItem extends Bar
             $url = 'index.php?application=' . $this->get_item()->get_application();
         }
 
-        $selected = $this->get_item()->is_selected();
+        $selected = $this->get_item()->is_selected() ||
+             ($this->get_item()->get_parent() != 0 && $this->get_item()->get_parent_object()->is_selected());
 
         if ($selected && $this->get_item()->get_parent() == 0)
         {

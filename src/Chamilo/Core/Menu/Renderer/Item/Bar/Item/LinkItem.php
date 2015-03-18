@@ -14,13 +14,13 @@ use Chamilo\Libraries\Platform\Translation;
 class LinkItem extends Bar
 {
 
-    public function get_item_url()
+    public function getContent()
     {
         $html = array();
         $html[] = '<a href="' . $this->get_item()->get_url() . '" target="' . $this->get_item()->get_target_string() .
              '">' . $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
         $html[] = '</a>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }
