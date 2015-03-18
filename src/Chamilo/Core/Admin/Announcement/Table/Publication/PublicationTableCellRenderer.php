@@ -68,8 +68,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 if ($publication[Publication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' .
-                         Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
@@ -124,16 +123,16 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
             if ($publication[Publication :: PROPERTY_HIDDEN])
             {
-                $visibility_img = 'action_invisible';
+                $visibility_img = 'Action/Invisible';
             }
             elseif ($publication[Publication :: PROPERTY_FROM_DATE] == 0 &&
                  $publication[Publication :: PROPERTY_TO_DATE] == 0)
             {
-                $visibility_img = 'action_visible';
+                $visibility_img = 'Action/Visible';
             }
             else
             {
-                $visibility_img = 'action_period';
+                $visibility_img = 'Action/Period';
             }
 
             $toolbar->add_item(

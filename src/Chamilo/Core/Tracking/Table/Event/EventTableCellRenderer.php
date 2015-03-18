@@ -40,7 +40,7 @@ class EventTableCellRenderer extends DataClassTableCellRenderer implements Table
                 new ToolbarItem(
                     ($event->get_active() == 1) ? Translation :: get('Deactivate') : Translation :: get('Activate'),
                     ($event->get_active() == 1) ? Theme :: getInstance()->getCommonImagePath('Action/Visible') : Theme :: getInstance()->getCommonImagePath(
-                        'action_invisible'),
+                        'Action/Invisible'),
                     $this->get_component()->get_change_active_url('event', $event->get_id()),
                     ToolbarItem :: DISPLAY_ICON));
 

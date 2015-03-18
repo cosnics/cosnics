@@ -66,11 +66,11 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             if ($this->get_component()->get_parent()->allowed_to_change_category_visibility($category->get_id()))
             {
-                $image = 'action_visible';
+                $image = 'Action/Visible';
                 $text = 'Visible';
                 if (! $category->get_visibility())
                 {
-                    $image = 'action_visible_na';
+                    $image = 'Action/VisibleNa';
                     $text = 'Invisible';
                 }
                 $toolbar->add_item(

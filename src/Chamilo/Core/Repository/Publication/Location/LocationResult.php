@@ -115,7 +115,7 @@ abstract class LocationResult
             if (! empty($link))
             {
                 $data_row[] = Theme :: getInstance()->getCommonImage(
-                    'action_right',
+                    'Action/Right',
                     'png',
                     Translation :: get('ViewPublication'),
                     $link,
@@ -166,7 +166,7 @@ abstract class LocationResult
         $this->table->set_header(
             $key ++,
             Theme :: getInstance()->getCommonImage(
-                'action_search',
+                'Action/Search',
                 'png',
                 Translation :: get('ViewPublication'),
                 null,

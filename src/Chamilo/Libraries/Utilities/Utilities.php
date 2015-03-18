@@ -32,8 +32,7 @@ class Utilities
     private static $camel_us_map = array();
 
     /**
-     * Splits a Google-style search query.
-     * For example, the query /"chamilo repository" utilities/ would be parsed into
+     * Splits a Google-style search query. For example, the query /"chamilo repository" utilities/ would be parsed into
      * array('chamilo repository', 'utilities').
      *
      * @param $pattern The query.
@@ -61,9 +60,9 @@ class Utilities
      *
      * @param $query string The query as given by the end user.
      * @param $properties mixed The learning object properties which should be taken into account for the condition. For
-     *        example, array('title','type') will yield a Condition which can be used to search for learning objects
-     *        on the properties 'title' or 'type'. By default the properties are 'title' and 'description'. If the
-     *        condition should apply to a single property, you can pass a string instead of an array.
+     *            example, array('title','type') will yield a Condition which can be used to search for learning objects
+     *            on the properties 'title' or 'type'. By default the properties are 'title' and 'description'. If the
+     *            condition should apply to a single property, you can pass a string instead of an array.
      * @return Condition The condition.
      * @deprecated Use the function get_conditions() in action_bar_renderer to access the search property. This function
      *             uses this method to create the conditions.
@@ -129,8 +128,7 @@ class Utilities
     }
 
     /**
-     * Orders the given learning objects by their title.
-     * Note that the ordering happens in-place; there is no return
+     * Orders the given learning objects by their title. Note that the ordering happens in-place; there is no return
      * value.
      *
      * @param $objects array The learning objects to order.
@@ -383,8 +381,7 @@ class Utilities
     }
 
     /**
-     * Strips the tags on request, and truncates if necessary a given string to the given length in characters.
-     * Adds a
+     * Strips the tags on request, and truncates if necessary a given string to the given length in characters. Adds a
      * character at the end (either specified or default ...) when the string is truncated. Boolean $strip to indicate
      * if the tags within the string have to be stripped
      *
@@ -392,7 +389,7 @@ class Utilities
      * @param $length int The limit of the resulting length in characters.
      * @param $strip boolean Indicates if the tags within the string have to be stripped.
      * @param $char string A UTF-8 encoded character put at the end of the result string indicating truncation, by
-     *        default it is the horizontal ellipsis (\u2026)
+     *            default it is the horizontal ellipsis (\u2026)
      * @return string The result string, html-entities (if any) are converted to normal UTF-8 characters.
      */
     public static function truncate_string($string, $length = 200, $strip = true, $char = "\xE2\x80\xA6")
@@ -452,11 +449,11 @@ class Utilities
     {
         if ($value)
         {
-            $icon = 'action_setting_true';
+            $icon = 'Action/SettingTrue';
         }
         else
         {
-            $icon = 'action_setting_false';
+            $icon = 'Action/SettingFalse';
         }
         return '<img src="' . Theme :: getInstance()->getCommonImagePath($icon) . '">';
     }
@@ -672,8 +669,7 @@ class Utilities
     }
 
     /**
-     * Get the current query string (e.g.
-     * "?foo=bar&faa=bor")
+     * Get the current query string (e.g. "?foo=bar&faa=bor")
      *
      * @param $append array optional array of key/value pairs to be appended to the current QS.
      * @return string

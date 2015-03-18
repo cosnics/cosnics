@@ -138,7 +138,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 $actions[] = Text :: create_link(
                     $url,
                     Theme :: getInstance()->getCommonImage(
-                        'action_delete',
+                        'Action/Delete',
                         'png',
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                         null,
@@ -150,7 +150,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                 $actions[] = Text :: create_link(
                     $assessment_url,
                     Theme :: getInstance()->getCommonImage(
-                        'action_reporting',
+                        'Action/Reporting',
                         'png',
                         Translation :: get('Details'),
                         null,

@@ -102,11 +102,11 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
 
                         if (in_array($j, $option->get_matches()))
                         {
-                            $result = Theme :: getInstance()->getCommonImage('action_confirm');
+                            $result = Theme :: getInstance()->getCommonImage('Action/Confirm');
                         }
                         else
                         {
-                            $result = Theme :: getInstance()->getCommonImage('action_delete');
+                            $result = Theme :: getInstance()->getCommonImage('Action/Delete');
                         }
                     }
                     else
@@ -115,7 +115,7 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
 
                         if (in_array($j, $option->get_matches()))
                         {
-                            $result = Theme :: getInstance()->getCommonImage('action_metadata');
+                            $result = Theme :: getInstance()->getCommonImage('Action/Metadata');
                         }
                         else
                         {

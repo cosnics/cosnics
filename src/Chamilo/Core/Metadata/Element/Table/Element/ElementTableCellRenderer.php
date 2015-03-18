@@ -37,7 +37,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case ElementTableColumnModel :: COLUMN_CONTROLLED_VOCABULARY :
                 $has_controlled_vocabulary = DataManager :: element_has_controlled_vocabulary($result->get_id()) ? 'true' : 'false';
 
-                return Theme :: getInstance()->getCommonImage('action_setting_' . $has_controlled_vocabulary);
+                return Theme :: getInstance()->getCommonImage('Action/Setting' . $has_controlled_vocabulary);
                 break;
         }
 

@@ -18,7 +18,7 @@ class MergerTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         switch ($column->get_name())
         {
             case Theme :: getInstance()->getCommonImage(
-                'action_category',
+                'Action/Category',
                 'png',
                 Translation :: get('Type'),
                 null,
