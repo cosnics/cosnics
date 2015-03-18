@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: complex_browser_table_column_model.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib.repository_manager.component.complex_browser
  */
 /**
@@ -21,7 +21,7 @@ use Chamilo\Libraries\Platform\Translation;
 class ComplexTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
     const SUBITEMS = 'subitems';
-    
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableColumnModel::initialize_columns()
      */
@@ -30,10 +30,10 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
         $this->add_column(
             new StaticTableColumn(
                 Theme :: getInstance()->getCommonImage(
-                    'action_category', 
-                    'png', 
-                    Translation :: get('Type'), 
-                    null, 
+                    'Action/Category',
+                    'png',
+                    Translation :: get('Type'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON)));
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE, false));

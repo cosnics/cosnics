@@ -31,27 +31,27 @@ class SharedTableColumnModel extends DataClassTableColumnModel
     public function initialize_columns()
     {
         $this->add_column(new StaticTableColumn(Translation :: get(self :: SHAREWITH)));
-        
+
         if ($this->get_component()->get_view() == Manager :: SHARED_VIEW_ALL_OBJECTS ||
              $this->get_component()->get_view() == Manager :: SHARED_VIEW_OWN_OBJECTS)
         {
             $this->add_column(self :: get_rights_column());
         }
-        
+
         if ($this->get_component()->get_view() == Manager :: SHARED_VIEW_ALL_OBJECTS ||
              $this->get_component()->get_view() == Manager :: SHARED_VIEW_OTHERS_OBJECTS)
         {
             $this->add_column(self :: get_sharing_column());
         }
-        
+
         $this->add_column(
             new StaticTableColumn(
-                self :: PROPERTY_TYPE, 
+                self :: PROPERTY_TYPE,
                 Theme :: getInstance()->getCommonImage(
-                    'action_category', 
-                    'png', 
-                    Translation :: get('Type'), 
-                    null, 
+                    'Action/Category',
+                    'png',
+                    Translation :: get('Type'),
+                    null,
                     ToolbarItem :: DISPLAY_ICON)));
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
@@ -66,7 +66,7 @@ class SharedTableColumnModel extends DataClassTableColumnModel
 
     /**
      * Gets the sharing column
-     * 
+     *
      * @return StaticTableColumn
      */
     public static function get_sharing_column()
@@ -80,7 +80,7 @@ class SharedTableColumnModel extends DataClassTableColumnModel
 
     /**
      * Gets the sharing column
-     * 
+     *
      * @return StaticTableColumn
      */
     public static function get_rights_column()

@@ -108,7 +108,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
                 $reporting_data->add_data_category_row(
                     $category_name,
                     Translation :: get('Action'),
-                    Text :: create_link($url, Theme :: getInstance()->getCommonImage('action_delete')));
+                    Text :: create_link($url, Theme :: getInstance()->getCommonImage('Action/Delete')));
             }
             // $i++;
         }

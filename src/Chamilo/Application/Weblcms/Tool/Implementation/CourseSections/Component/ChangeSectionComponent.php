@@ -85,7 +85,7 @@ class ChangeSectionComponent extends Manager
             if ($tool->visible || $section->get_name() == 'course_admin')
             {
                 $lcms_action = 'make_invisible';
-                $visible_image = 'action_visible';
+                $visible_image = 'Action/Visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->name))
                 {
@@ -97,7 +97,7 @@ class ChangeSectionComponent extends Manager
             else
             {
                 $lcms_action = 'make_visible';
-                $visible_image = 'action_invisible';
+                $visible_image = 'Action/Invisible';
                 $tool_image = 'tool_' . $tool->name . '_na';
                 $link_class = ' class="invisible"';
             }

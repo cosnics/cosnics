@@ -40,7 +40,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                      '"/>';
                 return $url;
             case Theme :: getInstance()->getCommonImage(
-                'action_category',
+                'Action/Category',
                 'png',
                 Translation :: get('Type'),
                 null,

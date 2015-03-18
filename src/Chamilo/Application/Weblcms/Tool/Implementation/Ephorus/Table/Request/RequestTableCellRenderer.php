@@ -80,12 +80,12 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             if (! $object->get_optional_property(Request :: PROPERTY_VISIBLE_IN_INDEX))
             {
-                $icon = 'action_invisible';
+                $icon = 'Action/Invisible';
                 $translation = Translation :: get('AddDocumentToIndex');
             }
             else
             {
-                $icon = 'action_visible';
+                $icon = 'Action/Visible';
                 $translation = Translation :: get('RemoveDocumentFromIndex');
             }
 

@@ -32,7 +32,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
 
             case Theme :: getInstance()->getCommonImage(
-                'action_category',
+                'Action/Category',
                 'png',
                 Translation :: get('Type'),
                 null,

@@ -45,7 +45,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return '<a href="' . htmlentities($this->browser->get_content_object_viewing_url($content_object)) .
                      '" title="' . $title . '">' . $title_short . '</a>';
             case Theme :: getInstance()->getCommonImage(
-                'action_category',
+                'Action/Category',
                 'png',
                 Translation :: get('Type'),
                 null,

@@ -34,8 +34,7 @@ use HTML_Table;
  */
 
 /**
- * Tool list renderer which displays all course tools on a fixed location.
- * Disabled tools will be shown in a disabled
+ * Tool list renderer which displays all course tools on a fixed location. Disabled tools will be shown in a disabled
  * looking way.
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
@@ -313,14 +312,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($publication->is_hidden() == 0)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_HIDE_PUBLICATION;
-                $visible_image = 'action_visible';
+                $visible_image = 'Action/Visible';
                 $tool_image = Theme :: ICON_MEDIUM;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
-                $visible_image = 'action_invisible';
+                $visible_image = 'Action/Invisible';
                 $tool_image = Theme :: ICON_MEDIUM . '_na';
                 $link_class = ' class="invisible"';
             }
@@ -460,7 +459,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($tool_visible || $section->get_type() == CourseSection :: TYPE_ADMIN)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_INVISIBLE;
-                $visible_image = 'action_visible';
+                $visible_image = 'Action/Visible';
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
                 {
@@ -472,7 +471,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
-                $visible_image = 'action_invisible';
+                $visible_image = 'Action/Invisible';
                 $tool_image = Theme :: ICON_MEDIUM . '_na';
                 $link_class = ' class="invisible"';
             }

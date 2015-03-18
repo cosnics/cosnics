@@ -148,7 +148,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
         }
 
         $type_image = Theme :: getInstance()->getCommonImage(
-            'action_category',
+            'Action/Category',
             'png',
             Translation :: get('Type'),
             null,

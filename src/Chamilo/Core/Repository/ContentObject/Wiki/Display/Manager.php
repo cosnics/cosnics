@@ -425,7 +425,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         $html[] = '<div class="clear"></div>';
         $html[] = '<div class="wiki-pane-top"><a href=#top>' . Theme :: getInstance()->getCommonImage(
-            'action_ajax_add',
+            'Action/AjaxAdd',
             'png',
             Translation :: get('BackToTop')) . '</a></div>';
         $html[] = '<div class="clear"></div>';

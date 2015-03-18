@@ -237,7 +237,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         if (! $first)
         {
-            $up_img = 'action_up';
+            $up_img = 'Action/Up';
             $up_url = $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_UP,
@@ -265,7 +265,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         if (! $last)
         {
-            $down_img = 'action_down';
+            $down_img = 'Action/Down';
             $down_url = $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_DOWN,
@@ -298,17 +298,17 @@ abstract class ContentObjectPublicationListRenderer
             true);
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
-            $visibility_img = 'action_invisible';
+            $visibility_img = 'Action/Invisible';
         }
 
         elseif ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
              $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
         {
-            $visibility_img = 'action_visible';
+            $visibility_img = 'Action/Visible';
         }
         else
         {
-            $visibility_img = 'action_period';
+            $visibility_img = 'Action/Period';
             $visibility_url = 'javascript:void(0)';
         }
         $visibility_link = '<a href="' . $visibility_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath(
@@ -896,16 +896,16 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type));
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
-                $visibility_image = 'action_invisible';
+                $visibility_image = 'Action/Invisible';
             }
             elseif ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
                  $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
             {
-                $visibility_image = 'action_visible';
+                $visibility_image = 'Action/Visible';
             }
             else
             {
-                $visibility_image = 'action_period';
+                $visibility_image = 'Action/Period';
                 $visibility_url = '#';
             }
 

@@ -47,17 +47,17 @@ class UserRightsTableCellRenderer extends DataClassTableCellRenderer implements 
                 array_splice($rights, $copy_right, 1);
                 if ($column->get_right_id() == RepositoryRights :: COPY_RIGHT)
                 {
-                    return Theme :: getInstance()->getCommonImage('action_setting_true', 'png');
+                    return Theme :: getInstance()->getCommonImage('Action/SettingTrue', 'png');
                 }
             }
 
             if ($column->get_right_id() <= max($rights))
             {
-                return Theme :: getInstance()->getCommonImage('action_setting_true', 'png');
+                return Theme :: getInstance()->getCommonImage('Action/SettingTrue', 'png');
             }
             else
             {
-                return Theme :: getInstance()->getCommonImage('action_setting_false', 'png');
+                return Theme :: getInstance()->getCommonImage('Action/SettingFalse', 'png');
             }
         }
 
