@@ -8,11 +8,11 @@ div.manage {
 	padding-bottom: 10px;
 }
 
-div.manage ul.toolbar, div.manage ul.toolbar_horizontal {
+div.manage ul.toolbar,div.manage ul.toolbar_horizontal {
 	float: none;
 }
 
-div.manage ul.toolbar li, div.manage ul.toolbar_horizontal li {
+div.manage ul.toolbar li,div.manage ul.toolbar_horizontal li {
 	float: none;
 	display: inline;
 }
@@ -34,20 +34,17 @@ div.portal_block {
 	text-align: justify;
 	/*margin-bottom: 35px;*/
 	margin: 0px 0px 1em 0px;
-	padding: 15px 15px 15px 60px;
+	padding: 15px;
 	background-position: 15px 15px;
 	background-repeat: no-repeat;
 	clear: both;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
+	position: relative;
 }
 
 div.portal_block div.title {
 	font-family: Ubuntu, verdana, sans-serif;
 	font-weight: bold;
 	font-size: 140%;
-	border-bottom: 1px dotted #D3D3D3;
 	width: 100%;
 	padding-bottom: 0.3em;
 	margin-bottom: 0.3em;
@@ -103,14 +100,24 @@ div.portal_block div.extra div.forum {
 	float: right;
 }
 
+div.portal-block-badge {
+	background-color: #2d89ef;
+	border: 0 none;
+	bottom: -3px;
+	color: white;
+	font-family: iconFont;
+	font-size: 16px;
+	line-height: 16px;
+	position: absolute;
+	right: 17px;
+	width: 36px;
+}
+
 div.empty_portal_column {
 	background-color: #faf1e3;
 	margin: 0px 0px 1em 0px;
 	padding: 14.5px 14.5px 14.5px 14.5px;
 	clear: both;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
 }
 
 #tab_menu {
@@ -139,12 +146,6 @@ div.empty_portal_column {
 }
 
 #tab_menu li {
-	-moz-border-radius-topright: 10px;
-	-moz-border-radius-topleft: 10px;
-	border-radius-topright: 10px;
-	border-radius-topleft: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-webkit-border-top-left-radius: 10px;
 	float: left;
 	margin: -1px 2px 0px 0px;
 	padding: 0px 9px 0px 9px;
@@ -238,21 +239,12 @@ div.deleteColumn {
 .blockSortHelper {
 	border: 1px dashed #c0c0c0;
 	background-color: #F2F2F2;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
 	margin: 0px 0px 1em 0px;
 }
 
 .tabSortHelper {
 	border: 1px dashed #c0c0c0;
 	background-color: #F2F2F2;
-	-moz-border-radius-topright: 10px;
-	-moz-border-radius-topleft: 10px;
-	border-radius-topright: 10px;
-	border-radius-topleft: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-webkit-border-top-left-radius: 10px;
 }
 
 .droppable-active {
@@ -324,10 +316,6 @@ div#portal-block-container div#list div#packages div#packages-list span.package
 	cursor: pointer;
 	color: #4D4D4D;
 	padding: 3px 6px 3px 6px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	/*	padding: 3px 6px 3px 28px;*/
 	padding: 3px 6px 3px 6px;
 	background-repeat: no-repeat;
 	background-position: 6px center;
@@ -477,9 +465,6 @@ div#portal-block-container div#remove-block-container {
 	padding: 10px;
 	background-color: #FFFFFF;
 	border: 1px solid black;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 
 a.home-modal-close {
