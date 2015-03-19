@@ -39,7 +39,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
             throw new NotAllowedException();
         }
 
-        $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(LearningPath :: context());
+        $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(LearningPath :: package());
 
         $selected_template_id = TypeSelector :: get_selection();
 

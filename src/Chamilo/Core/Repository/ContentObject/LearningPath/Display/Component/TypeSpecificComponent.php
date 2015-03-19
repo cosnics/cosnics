@@ -22,8 +22,8 @@ class TypeSpecificComponent extends Manager implements ApplicationSupport
     {
         parent :: run();
 
-        $object_namespace = $this->get_current_node()->get_content_object()->context();
-        $integration_namespace = $object_namespace . '\integration\\' . __NAMESPACE__;
+        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $integration_namespace = $object_namespace . '\Integration\\' . __NAMESPACE__;
 
         $factory = new ApplicationFactory($this->getRequest(), $integration_namespace, $this->get_user(), $this);
         return $factory->run();

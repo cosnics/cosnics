@@ -61,10 +61,10 @@ class Menu extends HTML_Menu
 
         $learning_path_item = array();
         $learning_path_item['title'] = $this->get_title($this->path->get_root());
-        $learning_path_item['class'] = 'type_' .
-             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-                    $this->path->get_root()->get_content_object()->get_type()));
+
+        $objectType = $this->path->get_root()->get_content_object()->get_type_name();
+
+        $learning_path_item['class'] = 'type_' . $objectType;
         $learning_path_item['url'] = $this->get_url($this->path->get_root()->get_id());
 
         $sub_items = $this->get_menu_items($this->path->get_root());
@@ -112,11 +112,10 @@ class Menu extends HTML_Menu
 
             if ($this->context->get_parent()->is_allowed_to_view_content_object($child))
             {
+                $objectType = $this->path->get_root()->get_content_object()->get_type_name();
+
                 $menu_item['url'] = $this->get_url($child->get_id());
-                $menu_item['class'] = 'type_' .
-                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-                            $child->get_content_object()->get_type()));
+                $menu_item['class'] = 'type_' . $objectType;
             }
             else
             {

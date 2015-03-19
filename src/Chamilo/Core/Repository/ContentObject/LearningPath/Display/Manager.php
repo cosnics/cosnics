@@ -129,7 +129,6 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
         else
         {
-
             $this->tabs_renderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
@@ -289,7 +288,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 if ($this->get_current_node()->get_content_object() instanceof LearningPath)
                 {
                     $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
-                        LearningPath :: context());
+                        LearningPath :: package());
 
                     $selected_template_id = TypeSelector :: get_selection();
 
@@ -561,8 +560,8 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function get_node_specific_tabs(ComplexContentObjectPathNode $node)
     {
-        $object_namespace = $node->get_content_object()->context();
-        $integration_class_name = $object_namespace . '\integration\\' . __NAMESPACE__ . '\Manager';
+        $object_namespace = $node->get_content_object()->package();
+        $integration_class_name = $object_namespace . '\Integration\\' . __NAMESPACE__ . '\Manager';
 
         if (class_exists($integration_class_name))
         {
