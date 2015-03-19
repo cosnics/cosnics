@@ -26,9 +26,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDispl
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Preview extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements
     GlossaryDisplaySupport, LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport,
-    GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport
+    BlogDisplaySupport, WikiDisplaySupport
 {
 
     function run()
