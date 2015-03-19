@@ -194,7 +194,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('CopyToTemplates'),
-                Theme :: getInstance()->getCommonImagePath('ExportTemplate'),
+                Theme :: getInstance()->getCommonImagePath('Export/Template'),
                 $this->get_repository_browser()->get_url(
                     array(
                         Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
