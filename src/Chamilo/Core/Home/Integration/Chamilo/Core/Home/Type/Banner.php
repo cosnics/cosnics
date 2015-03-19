@@ -51,7 +51,7 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         }
 
         $html = array();
-        $html[] = '<div class="portal_block portal_banner" id="portal_block_' . $block_id .
+        $html[] = '<div class="portal-block portal_banner" id="portal_block_' . $block_id .
              '" style="background-image: url(' . $icon_url . ');">';
         $html[] = $title;
         $html[] = '<div class="entry-content description"' . $description_style . '">';
