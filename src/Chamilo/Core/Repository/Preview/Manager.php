@@ -19,10 +19,10 @@ abstract class Manager extends Application
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
 
     // Available actions
-    const ACTION_DISPLAY = 'display';
-    const ACTION_RENDITION = 'rendition';
-    const ACTION_REPORTING = 'reporting';
-    const ACTION_RESET = 'reset';
+    const ACTION_DISPLAY = 'Display';
+    const ACTION_RENDITION = 'Rendition';
+    const ACTION_REPORTING = 'Reporting';
+    const ACTION_RESET = 'Reset';
 
     // The Default action
     const DEFAULT_ACTION = self :: ACTION_DISPLAY;

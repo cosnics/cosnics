@@ -12,5 +12,5 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const ACTION_CREATE_GLOSSARY_ITEM = 'glossary_item_creator';
+    const ACTION_CREATE_GLOSSARY_ITEM = 'GlossaryItemCreator';
 }

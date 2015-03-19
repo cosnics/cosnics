@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'rights';
-    const ACTION_BROWSE = 'browser';
+    const ACTION_BROWSE = 'Browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

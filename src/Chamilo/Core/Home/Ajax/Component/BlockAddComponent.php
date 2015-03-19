@@ -22,7 +22,7 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
     const PARAM_COLUMN = 'column';
     const PARAM_ORDER = 'order';
     const PROPERTY_BLOCK = 'block';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -35,54 +35,54 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         $block_data = explode('&', $jquery);
         $blocks = array();
-        
+
         foreach ($block_data as $block)
         {
             $block_split = explode('=', $block);
             $blocks[] = $block_split[1];
         }
-        
+
         return $blocks;
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-        
+
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $column_data = explode('_', $this->getPostDataValue(self :: PARAM_COLUMN));
         $blocks = $this->unserialize_jquery($this->getPostDataValue(self :: PARAM_ORDER));
-        
+
         $block = new Block();
         $block->set_column($column_data[2]);
         $block->set_title(
             Translation :: get(
                 (string) StringUtilities :: getInstance()->createString(
-                    $this->getPostDataValue(self :: PARAM_COMPONENT))->upperCamelize(), 
-                null, 
+                    $this->getPostDataValue(self :: PARAM_COMPONENT))->upperCamelize(),
+                null,
                 $this->getPostDataValue(self :: PARAM_CONTEXT)));
         $registration = DataManager :: retrieve_home_block_registration_by_context_and_block(
-            $this->getPostDataValue(self :: PARAM_CONTEXT), 
+            $this->getPostDataValue(self :: PARAM_CONTEXT),
             $this->getPostDataValue(self :: PARAM_COMPONENT));
         $block->set_registration_id($registration->get_id());
         $block->set_visibility('1');
         $block->set_user($user_id);
         $block->create();
-        
+
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            User :: class_name(), 
+            User :: class_name(),
             (int) Session :: get_user_id());
-        
+
         $renderer = Renderer :: factory(Renderer :: TYPE_BASIC, $user);
         $html = BlockRendition :: factory($renderer, $block)->as_html();
-        
+
         $result = new JsonAjaxResult(200);
         $result->set_property(self :: PROPERTY_BLOCK, $html);
         $result->display();

@@ -10,12 +10,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Format\Structure\Page;
 
 /**
- * $Id: tracking_manager.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
- *
- * @package tracking.lib.tracking_manager
- */
-
-/**
  * A tracking manager provides some functionalities to the admin to manage his trackers and events.
  * For each
  * functionality a component is available.
@@ -32,14 +26,14 @@ abstract class Manager extends Application
     const PARAM_EXTRA = 'extra';
 
     // Actions
-    const ACTION_BROWSE_EVENTS = 'admin_event_browser';
-    const ACTION_VIEW_EVENT = 'admin_event_viewer';
-    const ACTION_CHANGE_ACTIVE = 'activity_changer';
-    const ACTION_ACTIVATE_EVENT = 'event_activator';
-    const ACTION_DEACTIVATE_EVENT = 'event_deactivator';
-    const ACTION_EMPTY_TRACKER = 'empty_tracker';
-    const ACTION_EMPTY_EVENT_TRACKERS = 'empty_event_tracker';
-    const ACTION_ARCHIVE = 'archiver';
+    const ACTION_BROWSE_EVENTS = 'AdminEventBrowser';
+    const ACTION_VIEW_EVENT = 'AdminEventViewer';
+    const ACTION_CHANGE_ACTIVE = 'ActivityChanger';
+    const ACTION_ACTIVATE_EVENT = 'EventActivator';
+    const ACTION_DEACTIVATE_EVENT = 'EventDeactivator';
+    const ACTION_EMPTY_TRACKER = 'EmptyTracker';
+    const ACTION_EMPTY_EVENT_TRACKERS = 'EmptyEventTracker';
+    const ACTION_ARCHIVE = 'Archiver';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_EVENTS;

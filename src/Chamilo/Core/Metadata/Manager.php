@@ -40,14 +40,14 @@ abstract class Manager extends Application
     const PARAM_METADATA_ATTRIBUTE_VALUE = 'metadata_attribute_value';
     const PARAM_MOVE = 'move';
     const PARAM_CONTROLLED_VOCABULARY_ID = 'controlled_vocabulary_id';
-    const ACTION_EXPORT_METADATA = 'metadata_exporter';
-    const ACTION_IMPORT_METADATA = 'metadata_importer';
+    const ACTION_EXPORT_METADATA = 'MetadataExporter';
+    const ACTION_IMPORT_METADATA = 'MetadataImporter';
     const DEFAULT_ACTION = self :: ACTION_ATTRIBUTE;
-    const ACTION_SCHEMA = 'schema';
-    const ACTION_ELEMENT = 'element';
-    const ACTION_ATTRIBUTE = 'attribute';
-    const ACTION_VALUE = 'value';
-    const ACTION_CONTROLLED_VOCABULARY = 'controlled_vocabulary';
+    const ACTION_SCHEMA = 'Schema';
+    const ACTION_ELEMENT = 'Element';
+    const ACTION_ATTRIBUTE = 'Attribute';
+    const ACTION_VALUE = 'Value';
+    const ACTION_CONTROLLED_VOCABULARY = 'ControlledVocabulary';
 
     private $display_order_total = array();
 

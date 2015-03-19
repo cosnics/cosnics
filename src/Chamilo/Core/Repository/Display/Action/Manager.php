@@ -16,12 +16,12 @@ use Exception;
 abstract class Manager extends Application
 {
     const PARAM_ACTION = \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION;
-    const ATTACHMENT_VIEWER_COMPONENT = 'attachment_viewer';
-    const CONTENT_OBJECT_UPDATER_COMPONENT = 'content_object_updater';
-    const CREATOR_COMPONENT = 'creator';
-    const DELETER_COMPONENT = 'deleter';
-    const REPORTING_TEMPLATE_VIEWER_COMPONENT = 'reporting_template_viewer';
-    const UPDATER_COMPONENT = 'updater';
+    const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
+    const CONTENT_OBJECT_UPDATER_COMPONENT = 'ContentObjectUpdater';
+    const CREATOR_COMPONENT = 'Creator';
+    const DELETER_COMPONENT = 'Deleter';
+    const REPORTING_TEMPLATE_VIEWER_COMPONENT = 'ReportingTemplateViewer';
+    const UPDATER_COMPONENT = 'Updater';
     const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Action\Manager :: DEFAULT_ACTION;
 
     public static function factory($type, $application)

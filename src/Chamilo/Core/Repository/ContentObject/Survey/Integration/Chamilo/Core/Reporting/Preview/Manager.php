@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Integration\Chamilo\Core\Report
 abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager
 {
     // Actions
-    const ACTION_TABLE = 'table';
+    const ACTION_TABLE = 'Table';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_TABLE;

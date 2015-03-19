@@ -21,7 +21,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const PARAM_FEED_IDENTIFIER = 'identifier';
     const FEED_TYPE_GENERAL = 1;
     const FEED_TYPE_MY_VIDEO = 2;
-    const ACTION_STREAM = 'streamer';
+    const ACTION_STREAM = 'Streamer';
 
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()

@@ -33,15 +33,15 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     const PARAM_ATTACHMENT_ID = 'attachment_id';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
-    const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'deleter';
-    const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'viewer';
-    const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'updater';
-    const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'creator';
-    const ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM = 'mover';
-    const ACTION_CHANGE_PARENT = 'parent_changer';
-    const ACTION_VIEW_ATTACHMENT = 'attachment_viewer';
-    const ACTION_PREVIEW = 'preview';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'Deleter';
+    const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'Viewer';
+    const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
+    const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
+    const ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM = 'Mover';
+    const ACTION_CHANGE_PARENT = 'ParentChanger';
+    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    const ACTION_PREVIEW = 'Preview';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

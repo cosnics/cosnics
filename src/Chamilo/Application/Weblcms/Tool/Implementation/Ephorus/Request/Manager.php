@@ -18,11 +18,11 @@ abstract class Manager extends Application
      */
     const PARAM_ACTION = 'request_action';
     const PARAM_REQUEST_ID = 'request_id';
-    const ACTION_CREATE = 'creator';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_VIEW_RESULT = 'result_viewer';
-    const ACTION_EXPORT_RESULT = 'result_exporter';
-    const ACTION_CHANGE_INDEX_VISIBILITY = 'index_visibility_changer';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_VIEW_RESULT = 'ResultViewer';
+    const ACTION_EXPORT_RESULT = 'ResultExporter';
+    const ACTION_CHANGE_INDEX_VISIBILITY = 'IndexVisibilityChanger';
     const DEFAULT_ACTION = self :: ACTION_VIEW_RESULT;
 
     /**

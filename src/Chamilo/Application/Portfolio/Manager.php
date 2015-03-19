@@ -18,8 +18,8 @@ abstract class Manager extends Application
     const PARAM_USER_ID = 'user_id';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
-    const ACTION_HOME = 'home';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_HOME = 'Home';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_HOME;

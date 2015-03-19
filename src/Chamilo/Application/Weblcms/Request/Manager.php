@@ -9,12 +9,12 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'request_action';
     const PARAM_REQUEST_ID = 'request_id';
     const PARAM_RESET_CACHE = 'reset_cache';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_CREATE = 'creator';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_DENY = 'denier';
-    const ACTION_GRANT = 'granter';
-    const ACTION_RIGHTS = 'rights';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_DENY = 'Denier';
+    const ACTION_GRANT = 'Granter';
+    const ACTION_RIGHTS = 'Rights';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     public function request_allowed()

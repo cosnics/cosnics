@@ -17,7 +17,7 @@ abstract class Manager extends Application
     const PARAM_VIEW = 'view';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
+    const ACTION_BROWSE = 'Browser';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

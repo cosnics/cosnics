@@ -62,7 +62,6 @@ class User extends DataClass
     const PROPERTY_ACTIVE = 'active';
     const PROPERTY_SECURITY_TOKEN = 'security_token';
     const PROPERTY_APPROVED = 'approved';
-    const ACTION_CREATE_USER = 'create';
     const NAME_FORMAT_FIRST = 0;
     const NAME_FORMAT_LAST = 1;
     const ANONYMOUS_ID = "1";

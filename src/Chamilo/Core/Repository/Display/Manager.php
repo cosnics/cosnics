@@ -20,12 +20,12 @@ abstract class Manager extends Application
     const PARAM_DIRECTION = 'direction';
     const PARAM_TYPE = 'type';
     const PARAM_ATTACHMENT_ID = 'attachment_id';
-    const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'deleter';
-    const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'updater';
-    const ACTION_UPDATE_CONTENT_OBJECT = 'content_object_updater';
-    const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'creator';
-    const ACTION_VIEW_ATTACHMENT = 'attachment_viewer';
-    const ACTION_VIEW_COMPLEX_CONTENT_OBJECT = 'viewer';
+    const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'Deleter';
+    const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
+    const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
+    const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
+    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    const ACTION_VIEW_COMPLEX_CONTENT_OBJECT = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
     protected $menu;

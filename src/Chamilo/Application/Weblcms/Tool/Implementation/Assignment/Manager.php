@@ -20,18 +20,18 @@ use Chamilo\Libraries\Platform\Translation;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
 {
     // Browse actions
-    const ACTION_BROWSE_SUBMISSIONS = 'submissions_browser';
-    const ACTION_BROWSE_SUBMITTERS = 'submitters_browser';
-    const ACTION_STUDENT_BROWSE_SUBMISSIONS = 'student_submissions_browser';
+    const ACTION_BROWSE_SUBMISSIONS = 'SubmissionsBrowser';
+    const ACTION_BROWSE_SUBMITTERS = 'SubmittersBrowser';
+    const ACTION_STUDENT_BROWSE_SUBMISSIONS = 'StudentSubmissionsBrowser';
     // Submission actions
-    const ACTION_DELETE_SUBMISSION = 'submission_deleter';
-    const ACTION_DOWNLOAD_SUBMISSIONS = 'submissions_downloader';
-    const ACTION_SUBMIT_SUBMISSION = 'submission_submit';
-    const ACTION_VIEW_SUBMISSION = 'submission_viewer';
+    const ACTION_DELETE_SUBMISSION = 'SubmissionDeleter';
+    const ACTION_DOWNLOAD_SUBMISSIONS = 'SubmissionsDownloader';
+    const ACTION_SUBMIT_SUBMISSION = 'SubmissionSubmit';
+    const ACTION_VIEW_SUBMISSION = 'SubmissionViewer';
     // Feedback actions
-    const ACTION_DELETE_FEEDBACK = 'feedback_deleter';
-    const ACTION_EDIT_FEEDBACK = 'feedback_updater';
-    const ACTION_GIVE_FEEDBACK = 'submission_feedback';
+    const ACTION_DELETE_FEEDBACK = 'FeedbackDeleter';
+    const ACTION_EDIT_FEEDBACK = 'FeedbackUpdater';
+    const ACTION_GIVE_FEEDBACK = 'SubmissionFeedback';
     // Parameters
     const PARAM_ATTACHMENT_TYPE = 'attachment_type';
     const PARAM_FEEDBACK_ID = 'feedback_id';

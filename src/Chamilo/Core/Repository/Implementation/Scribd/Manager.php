@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
     const REPOSITORY_TYPE = 'scribd';
-    const ACTION_DATA_OBJECT_VIEWER = 'data_object_viewer';
+    const ACTION_DATA_OBJECT_VIEWER = 'DataObjectViewer';
     const PARAM_DOWNLOAD_FORMAT = 'download_format';
 
     /**

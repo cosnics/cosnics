@@ -14,7 +14,7 @@ abstract class Manager extends Application
 {
     const PARAM_ACTION = 'survey_rights_action';
     const PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID = 'location_entity_right_group_id';
-    const ACTION_PUBLISHER = 'publisher';
+    const ACTION_PUBLISHER = 'Publisher';
     const DEFAULT_ACTION = self :: ACTION_PUBLISHER;
 
     public function get_tabs($current_tab, $content)

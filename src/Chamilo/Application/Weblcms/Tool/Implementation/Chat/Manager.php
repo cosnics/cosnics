@@ -11,6 +11,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Chat;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_VIEW_CHAT = 'viewer';
+    const ACTION_VIEW_CHAT = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW_CHAT;
 }

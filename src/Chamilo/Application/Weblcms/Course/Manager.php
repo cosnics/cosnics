@@ -32,16 +32,16 @@ abstract class Manager extends Application
      * ACTIONS *
      * **************************************************************************************************************
      */
-    const ACTION_BROWSE = 'browse';
-    const ACTION_BROWSE_UNSUBSCRIBED_COURSES = 'browse_unsubscribed_courses';
-    const ACTION_BROWSE_SUBSCRIBED_COURSES = 'browse_subscribed_courses';
-    const ACTION_CREATE = 'create';
-    const ACTION_DELETE = 'delete';
-    const ACTION_QUICK_CREATE = 'quick_create';
-    const ACTION_QUICK_UPDATE = 'quick_update';
-    const ACTION_SUBSCRIBE = 'subscribe';
-    const ACTION_UNSUBSCRIBE = 'unsubscribe';
-    const ACTION_UPDATE = 'update';
+    const ACTION_BROWSE = 'Browse';
+    const ACTION_BROWSE_UNSUBSCRIBED_COURSES = 'BrowseUnsubscribedCourses';
+    const ACTION_BROWSE_SUBSCRIBED_COURSES = 'BrowseSubscribedCourses';
+    const ACTION_CREATE = 'Create';
+    const ACTION_DELETE = 'Delete';
+    const ACTION_QUICK_CREATE = 'QuickCreate';
+    const ACTION_QUICK_UPDATE = 'QuickUpdate';
+    const ACTION_SUBSCRIBE = 'Subscribe';
+    const ACTION_UNSUBSCRIBE = 'Unsubscribe';
+    const ACTION_UPDATE = 'Update';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

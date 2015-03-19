@@ -11,13 +11,13 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder;
 abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 {
     // Actions
-    const ACTION_MERGE_SURVEY_PAGE = 'merger';
-    const ACTION_SELECT_QUESTIONS = 'question_selecter';
-    const ACTION_CONFIGURE_PAGE = 'configure';
-    const ACTION_CHANGE_QUESTION_VISIBILITY = 'visibility_changer';
-    const ACTION_CONFIGURE_QUESTION = 'configure_question';
-    const ACTION_DELETE_CONFIG = 'config_deleter';
-    const ACTION_UPDATE_CONFIG = 'config_updater';
+    const ACTION_MERGE_SURVEY_PAGE = 'Merger';
+    const ACTION_SELECT_QUESTIONS = 'QuestionSelecter';
+    const ACTION_CONFIGURE_PAGE = 'Configure';
+    const ACTION_CHANGE_QUESTION_VISIBILITY = 'VisibilityChanger';
+    const ACTION_CONFIGURE_QUESTION = 'ConfigureQuestion';
+    const ACTION_DELETE_CONFIG = 'ConfigDeleter';
+    const ACTION_UPDATE_CONFIG = 'ConfigUpdater';
 
     // Parameters
     const PARAM_QUESTION_ID = 'question';
