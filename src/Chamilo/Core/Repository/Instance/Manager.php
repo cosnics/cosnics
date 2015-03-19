@@ -27,13 +27,13 @@ abstract class Manager extends Application
     const PARAM_IMPLEMENTATION = 'implementation';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
-    const ACTION_ACTIVATE = 'activator';
-    const ACTION_DEACTIVATE = 'deactivator';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_CREATE = 'creator';
-    const ACTION_RIGHTS = 'rights_editor';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_ACTIVATE = 'Activator';
+    const ACTION_DEACTIVATE = 'Deactivator';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_RIGHTS = 'RightsEditor';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

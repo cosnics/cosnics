@@ -33,15 +33,15 @@ abstract class Manager extends Application
      * Actions *
      * **************************************************************************************************************
      */
-    const ACTION_ACTIVATE = 'activate';
-    const ACTION_BROWSE = 'browse';
-    const ACTION_CHANGE_ACTIVATION = 'change_activation';
-    const ACTION_CREATE = 'create';
-    const ACTION_DEACTIVATE = 'deactivate';
-    const ACTION_DELETE = 'delete';
-    const ACTION_MOVE = 'mover';
-    const ACTION_UPDATE = 'update';
-    const ACTION_VIEW = 'view';
+    const ACTION_ACTIVATE = 'Activate';
+    const ACTION_BROWSE = 'Browse';
+    const ACTION_CHANGE_ACTIVATION = 'ChangeActivation';
+    const ACTION_CREATE = 'Create';
+    const ACTION_DEACTIVATE = 'Deactivate';
+    const ACTION_DELETE = 'Delete';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_UPDATE = 'Update';
+    const ACTION_VIEW = 'View';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

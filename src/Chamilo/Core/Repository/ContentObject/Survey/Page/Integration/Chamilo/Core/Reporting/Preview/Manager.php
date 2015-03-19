@@ -12,7 +12,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core
 {
 
     // Actions
-    const ACTION_TABLE = 'table';
+    const ACTION_TABLE = 'Table';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_TABLE;

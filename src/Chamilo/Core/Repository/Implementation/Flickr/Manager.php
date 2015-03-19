@@ -23,8 +23,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const FEED_TYPE_MOST_INTERESTING = 2;
     const FEED_TYPE_MOST_RECENT = 3;
     const FEED_TYPE_MY_PHOTOS = 4;
-    const ACTION_LOGIN = 'login';
-    const ACTION_LOGOUT = 'logout';
+    const ACTION_LOGIN = 'Login';
+    const ACTION_LOGOUT = 'Logout';
 
     /**
      *

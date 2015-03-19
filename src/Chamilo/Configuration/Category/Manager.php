@@ -13,16 +13,16 @@ abstract class Manager extends Application
     const PARAM_DIRECTION = 'direction';
     const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
     const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
-    const ACTION_BROWSE_CATEGORIES = 'browser';
-    const ACTION_CREATE_CATEGORY = 'creator';
-    const ACTION_UPDATE_CATEGORY = 'updater';
-    const ACTION_DELETE_CATEGORY = 'deleter';
-    const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'visibility_toggler';
-    const ACTION_MOVE_CATEGORY = 'mover';
-    const ACTION_CHANGE_CATEGORY_PARENT = 'parent_changer';
-    const ACTION_AJAX_MOVE_CATEGORIES = 'ajax_category_mover';
-    const ACTION_AJAX_DELETE_CATEGORIES = 'ajax_category_deleter';
-    const ACTION_IMPACT_VIEW = 'impact_view';
+    const ACTION_BROWSE_CATEGORIES = 'Browser';
+    const ACTION_CREATE_CATEGORY = 'Creator';
+    const ACTION_UPDATE_CATEGORY = 'Updater';
+    const ACTION_DELETE_CATEGORY = 'Deleter';
+    const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'Visibility_toggler';
+    const ACTION_MOVE_CATEGORY = 'Mover';
+    const ACTION_CHANGE_CATEGORY_PARENT = 'ParentChanger';
+    const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';
+    const ACTION_AJAX_DELETE_CATEGORIES = 'AjaxCategoryDeleter';
+    const ACTION_IMPACT_VIEW = 'ImpactView';
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CATEGORIES;
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 

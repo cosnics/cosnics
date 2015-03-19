@@ -25,19 +25,19 @@ use Chamilo\Libraries\Platform\Translation;
 class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     // Actions
-    const ACTION_FEEDBACK = 'feedback';
-    const ACTION_BOOKMARK = 'bookmarker';
-    const ACTION_ACTIVITY = 'activity';
-    const ACTION_RIGHTS = 'rights';
-    const ACTION_MOVE = 'mover';
-    const ACTION_SORT = 'sorter';
-    const ACTION_MANAGE = 'manager';
-    const ACTION_USER = 'user';
-    const ACTION_BUILD_PREREQUISITES = 'prerequisites_builder';
-    const ACTION_TYPE_SPECIFIC = 'type_specific';
-    const ACTION_BUILD = 'builder';
-    const ACTION_REPORTING = 'reporting';
-    const ACTION_ATTEMPT = 'attempt';
+    const ACTION_FEEDBACK = 'Feedback';
+    const ACTION_BOOKMARK = 'Bookmarker';
+    const ACTION_ACTIVITY = 'Activity';
+    const ACTION_RIGHTS = 'Rights';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_SORT = 'Sorter';
+    const ACTION_MANAGE = 'Manager';
+    const ACTION_USER = 'User';
+    const ACTION_BUILD_PREREQUISITES = 'PrerequisitesBuilder';
+    const ACTION_TYPE_SPECIFIC = 'TypeSpecific';
+    const ACTION_BUILD = 'Builder';
+    const ACTION_REPORTING = 'Reporting';
+    const ACTION_ATTEMPT = 'Attempt';
 
     // Parameters
     const PARAM_STEP = 'step';

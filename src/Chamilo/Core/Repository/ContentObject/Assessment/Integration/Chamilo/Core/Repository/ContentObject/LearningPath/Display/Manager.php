@@ -11,8 +11,8 @@ use Chamilo\Libraries\Platform\Translation;
 
 abstract class Manager extends Application
 {
-    const ACTION_MASTERY = 'mastery';
-    const ACTION_CONFIGURE = 'configurer';
+    const ACTION_MASTERY = 'Mastery';
+    const ACTION_CONFIGURE = 'Configurer';
     const PARAM_ACTION = 'type_action';
     const DEFAULT_ACTION = self :: ACTION_MASTERY;
 

@@ -24,11 +24,11 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
 {
-    const ACTION_VIEW_DOCUMENTS = 'viewer';
-    const ACTION_DOWNLOAD = 'downloader';
-    const ACTION_ZIP_AND_DOWNLOAD = 'zip_and_download';
-    const ACTION_SLIDESHOW = 'slideshow';
-    const ACTION_SLIDESHOW_SETTINGS = 'slideshow_settings';
+    const ACTION_VIEW_DOCUMENTS = 'Viewer';
+    const ACTION_DOWNLOAD = 'Downloader';
+    const ACTION_ZIP_AND_DOWNLOAD = 'ZipAndDownload';
+    const ACTION_SLIDESHOW = 'Slideshow';
+    const ACTION_SLIDESHOW_SETTINGS = 'SlideshowSettings';
 
     public static function get_allowed_types()
     {

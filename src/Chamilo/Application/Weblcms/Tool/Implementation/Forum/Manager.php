@@ -19,13 +19,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
 {
-    const ACTION_BROWSE_FORUMS = 'browser';
-    const ACTION_VIEW_FORUM = 'viewer';
-    const ACTION_PUBLISH_FORUM = 'publisher';
-    const ACTION_MANAGE_CATEGORIES = 'category_manager';
-    const ACTION_CHANGE_LOCK = 'change_lock';
-    const ACTION_FORUM_SUBSCRIBE = 'forum_subscribe';
-    const ACTION_FORUM_UNSUBSCRIBE = 'forum_unsubscribe';
+    const ACTION_BROWSE_FORUMS = 'Browser';
+    const ACTION_VIEW_FORUM = 'Viewer';
+    const ACTION_PUBLISH_FORUM = 'Publisher';
+    const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
+    const ACTION_CHANGE_LOCK = 'ChangeLock';
+    const ACTION_FORUM_SUBSCRIBE = 'ForumSubscribe';
+    const ACTION_FORUM_UNSUBSCRIBE = 'ForumUnsubscribe';
     const PARAM_SUBSCRIBE_ID = 'subscribe';
     const PARAM_FORUM_ID = 'forum_id';
 

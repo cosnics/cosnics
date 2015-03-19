@@ -17,8 +17,8 @@ abstract class Manager extends Application
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
     const PARAM_BLOCK_ID = 'block_id';
-    const ACTION_VIEW = 'viewer';
-    const ACTION_SAVE = 'saver';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_SAVE = 'Saver';
     const DEFAULT_ACTION = self :: ACTION_VIEW;
 
     /**

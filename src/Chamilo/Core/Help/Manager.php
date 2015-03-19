@@ -32,8 +32,8 @@ abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'help';
     const PARAM_HELP_ITEM = 'help_item';
-    const ACTION_UPDATE_HELP_ITEM = 'updater';
-    const ACTION_BROWSE_HELP_ITEMS = 'browser';
+    const ACTION_UPDATE_HELP_ITEM = 'Updater';
+    const ACTION_BROWSE_HELP_ITEMS = 'Browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE_HELP_ITEMS;
 
     /**

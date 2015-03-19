@@ -64,19 +64,19 @@ abstract class Manager extends Application
     const PARAM_ALLOW_SELECTED_REQUESTS = 'allow_selected_requests';
     const PARAM_REFUSE_SELECTED_REQUESTS = 'refuse_selected_requests';
     const PARAM_TEMPLATE_ID = 'template_id';
-    const ACTION_VIEW_WEBLCMS_HOME = 'home';
-    const ACTION_VIEW_COURSE = 'course_viewer';
-    const ACTION_IMPORT_COURSES = 'course_importer';
-    const ACTION_IMPORT_COURSE_USERS = 'course_user_importer';
-    const ACTION_MANAGER_SORT = 'sorter';
-    const ACTION_COURSE_CATEGORY_MANAGER = 'course_category_manager';
-    const ACTION_ADMIN_REQUEST_BROWSER = 'admin_request_browser';
-    const ACTION_REPORTING = 'reporting';
-    const ACTION_REQUEST = 'request';
-    const ACTION_COURSE_TYPE_MANAGER = 'course_type_manager';
-    const ACTION_ADMIN_COURSE_MANAGER = 'admin_course_manager';
-    const ACTION_COURSE_MANAGER = 'course_manager';
-    const ACTION_CREATE_BOOKMARK = 'course_bookmark_creator';
+    const ACTION_VIEW_WEBLCMS_HOME = 'Home';
+    const ACTION_VIEW_COURSE = 'CourseViewer';
+    const ACTION_IMPORT_COURSES = 'CourseImporter';
+    const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
+    const ACTION_MANAGER_SORT = 'Sorter';
+    const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
+    const ACTION_ADMIN_REQUEST_BROWSER = 'AminRequestBrowser';
+    const ACTION_REPORTING = 'Reporting';
+    const ACTION_REQUEST = 'Request';
+    const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
+    const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
+    const ACTION_COURSE_MANAGER = 'CourseManager';
+    const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const DEFAULT_ACTION = self :: ACTION_VIEW_WEBLCMS_HOME;
 
     /**
