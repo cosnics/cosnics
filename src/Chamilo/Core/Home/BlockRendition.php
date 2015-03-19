@@ -215,7 +215,7 @@ class BlockRendition
     public function get_icon()
     {
         $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_block_info()->get_context(), 4);
-        return Theme :: getInstance()->getImagePath($context, 'Logo/' . Theme :: ICON_MEDIUM);
+        return Theme :: getInstance()->getImagePath($context, 'Logo/' . Theme :: ICON_MINI);
     }
 
     public function as_html($view = '')
@@ -255,8 +255,7 @@ class BlockRendition
         }
 
         $html = array();
-        $html[] = '<div class="portal_block" id="portal_block_' . $block_id . '" style="background-image: url(' .
-             $icon_url . ');">';
+        $html[] = '<div class="portal-block" id="portal_block_' . $block_id . '">';
         $html[] = $title;
         $html[] = '<div class="entry-content description"' . $description_style . '>';
 
@@ -354,6 +353,11 @@ class BlockRendition
 
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
+
+        $icon_url = $this->get_icon();
+
+        $html[] = '<div class="portal-block-badge"><img src="' . $icon_url . '" /></div>';
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

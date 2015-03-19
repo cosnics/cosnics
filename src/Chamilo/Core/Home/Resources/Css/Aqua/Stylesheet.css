@@ -29,7 +29,7 @@ div.portal_column { /*padding:15px;*/
 	min-height: 5px;
 }
 
-div.portal_block {
+div.portal-block {
 	background-color: #f6f6f6;
 	text-align: justify;
 	/*margin-bottom: 35px;*/
@@ -41,20 +41,20 @@ div.portal_block {
 	position: relative;
 }
 
-div.portal_block div.title {
+div.portal-block div.title {
 	font-family: Ubuntu, verdana, sans-serif;
 	font-weight: bold;
-	font-size: 140%;
+	font-size: 16px;
 	width: 100%;
-	padding-bottom: 0.3em;
-	margin-bottom: 0.3em;
-	color: #000066;
+	margin-bottom: 10px;
+	color: #565656;
 	clear: both;
 	position: relative;
 	cursor: move;
+	line-height: 16px;
 }
 
-div.portal_block div.title a {
+div.portal-block div.title a {
 	display: none;
 	float: right;
 	font-weight: normal;
@@ -65,7 +65,7 @@ div.portal_block div.title a {
 	margin-left: 4px;
 }
 
-div.portal_block div.title input.block-title {
+div.portal-block div.title input.block-title {
 	padding-top: 1px;
 	padding-right: 2px;
 	padding-bottom: 1px;
@@ -74,12 +74,12 @@ div.portal_block div.title input.block-title {
 	background-color: #FAF1E3;
 }
 
-div.portal_block div.description {
+div.portal-block div.description {
 	width: 100%;
 	clear: both;
 }
 
-div.portal_block div.description_contains {
+div.portal-block div.description_contains {
 	width: 100%;
 	border-bottom: 1px dotted #D3D3D3;
 	padding-bottom: 0.3em;
@@ -87,30 +87,33 @@ div.portal_block div.description_contains {
 	clear: both;
 }
 
-div.portal_block div.extra {
+div.portal-block div.extra {
 	width: 100%;
 	clear: both;
 }
 
-div.portal_block div.extra div.more {
+div.portal-block div.extra div.more {
 	float: left;
 }
 
-div.portal_block div.extra div.forum {
+div.portal-block div.extra div.forum {
 	float: right;
 }
 
 div.portal-block-badge {
-	background-color: #2d89ef;
+	background-color: #262f52;
 	border: 0 none;
-	bottom: -3px;
+	bottom: 0px;
 	color: white;
-	font-family: iconFont;
-	font-size: 16px;
+	/* 	font-family: iconFont; */
+	/* 	font-size: 16px; */
 	line-height: 16px;
 	position: absolute;
 	right: 17px;
 	width: 36px;
+	height: 21px;
+	padding-top: 5px;
+	text-align: center;
 }
 
 div.empty_portal_column {
