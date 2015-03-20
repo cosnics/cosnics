@@ -250,10 +250,10 @@ div.applications li {
 .navbar ul li div.item-account {
 	display: none;
 	width: 200px;
-	height: 200px;
+	height: 100px;
 	overflow: hidden;
 	background-color: #262F52;
-	/* 	background-color: black; */
+	background-color: #2f3a66;
 	clear: both;
 	white-space: normal;
 	position: fixed;
@@ -275,9 +275,44 @@ div.item-account div.item-account-photo {
 	float: left;
 }
 
+div.item-account div.item-account-photo a {
+	height: auto;
+	line-height: normal;
+	padding: 0px;
+	margin: 0px;
+}
+
 div.item-account div.item-account-photo img {
 	max-width: 64px;
 	max-height: 64px;
+	z-index: 10;
+}
+
+div.item-account div.item-account-photo div.item-account-photo-edit {
+	width: 64px;
+	height: 16px;
+	line-height: 16px;
+	position: relative;
+	top: -16px;
+	font-size: 10px;
+	padding: 4px 0x;
+	color: white;
+	z-index: 100;
+	background-color: rgba(38, 47, 82, 0.5);
+	text-align: center;
+	display: none;
+}
+
+div.item-account div.item-account-photo div.item-account-photo-edit a
+{
+	margin: 0px;
+	padding: 0px;
+	color: white;
+}
+
+div.item-account div.item-account-photo:hover div.item-account-photo-edit
+	{
+	display: block;
 }
 
 div.item-account div.item-account-data {
@@ -287,14 +322,28 @@ div.item-account div.item-account-data {
 	float: left;
 }
 
-div.item-account div.item-account-data span.item-account-data-name {
+span.item-account-data-name,span.item-account-data-email,span.item-account-data-my-account
+	{
+	display: block;
+}
+
+span.item-account-data-name {
 	font-size: 14px;
 	font-weight: bold;
 	color: white;
 }
 
-div.item-account div.item-account-data span.item-account-data-email {
+span.item-account-data-email {
 	font-size: 13px;
+}
+
+span.item-account-data-my-account {
+	margin-top: 8px;
+}
+
+span.item-account-data-my-account a {
+	margin: 0px !important;
+	padding: 0px !important;
 }
 
 div.item-account div.item-account-logout {
@@ -309,9 +358,17 @@ div.item-account div.item-account-logout {
 	color: white;
 	line-height: 16px;
 	background-color: #2f3a66;
+	background-color: #262F52;
 }
 
-div.item-account div.item-account-logout img {
+div.item-account div.item-account-logout a {
+	height: auto;
+	line-height: normal;
+	padding: 0px;
+}
+
+div.item-account div.item-account-logout img,span.item-account-data-my-account img
+	{
 	vertical-align: middle;
 	margin-right: 5px;
 }

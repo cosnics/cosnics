@@ -76,11 +76,25 @@ class WidgetItem extends Bar
 
         $profileHtml[] = '<div class="item-account">';
         $profileHtml[] = '<div class="item-account-photo">';
-        $profileHtml[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '"/>';
+
+        $editProfilePicture = Translation :: get('EditProfilePictureOverlay', null, 'Chamilo\Core\User');
+
+        $profileHtml[] = '<div class="item-account-photo-base">';
+        $profileHtml[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" />';
+        $profileHtml[] = '<div class="item-account-photo-edit">';
+        $profileHtml[] = '<a href="' . $this->get_url() . '">';
+        $profileHtml[] = $editProfilePicture;
+        $profileHtml[] = '</a>';
+        $profileHtml[] = '</div>';
+        $profileHtml[] = '</div>';
+
         $profileHtml[] = '</div>';
         $profileHtml[] = '<div class="item-account-data">';
         $profileHtml[] = '<span class="item-account-data-name">' . $user->get_fullname() . '</span>';
         $profileHtml[] = '<span class="item-account-data-email">' . $user->get_email() . '</span>';
+        $profileHtml[] = '<span class="item-account-data-my-account"><a href="' . $this->get_url() . '">';
+
+        $profileHtml[] = Translation :: get('MyAccount', null, 'Chamilo\Core\User') . '</a></span>';
         $profileHtml[] = '</div>';
         $profileHtml[] = '<div class="clear"></div>';
 
@@ -88,7 +102,18 @@ class WidgetItem extends Bar
             'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
             'LogoutItem');
 
-        $profileHtml[] = '<div class="item-account-logout"><img src="' . $imagePath . '" />Logout</div>';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: context(),
+                Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
+
+        $profileHtml[] = '<div class="item-account-logout">';
+        $profileHtml[] = '<a href="' . $redirect->getUrl() . '">';
+        $profileHtml[] = '<img src="' . $imagePath . '" />';
+        $profileHtml[] = Translation :: get('Logout', null, 'Chamilo\Core\User');
+        $profileHtml[] = '</a>';
+        $profileHtml[] = '</div>';
+
         $profileHtml[] = '</div>';
 
         $html[] = implode(PHP_EOL, $profileHtml);
