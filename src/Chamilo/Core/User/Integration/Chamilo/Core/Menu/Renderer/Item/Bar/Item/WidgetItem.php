@@ -20,33 +20,58 @@ use Chamilo\Configuration\Configuration;
 class WidgetItem extends Bar
 {
 
+    /**
+     *
+     * @param string $action
+     * @return string
+     */
+    public function getUserUrl($action)
+    {
+        $redirect = new Redirect(
+            array(Application :: PARAM_CONTEXT => Manager :: context(), Application :: PARAM_ACTION => $action));
+        return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getAccountUrl()
     {
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => Manager :: context(),
-                Application :: PARAM_ACTION => Manager :: ACTION_VIEW_ACCOUNT));
-        return $redirect->getUrl();
+        return $this->getUserUrl(Manager :: ACTION_VIEW_ACCOUNT);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getPictureUrl()
     {
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => Manager :: context(),
-                Application :: PARAM_ACTION => Manager :: ACTION_CHANGE_PICTURE));
-        return $redirect->getUrl();
+        return $this->getUserUrl(Manager :: ACTION_CHANGE_PICTURE);
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function getSettingsUrl()
+    {
+        return $this->getUserUrl(Manager :: ACTION_USER_SETTINGS);
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getLogoutUrl()
     {
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => Manager :: context(),
-                Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
-        return $redirect->getUrl();
+        return $this->getUserUrl(Manager :: ACTION_LOGOUT);
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Menu\Renderer\Item\Bar\Bar::render()
+     */
     public function render()
     {
         $html = array();
@@ -116,9 +141,31 @@ class WidgetItem extends Bar
         $profileHtml[] = '<div class="item-account-data">';
         $profileHtml[] = '<span class="item-account-data-name">' . $user->get_fullname() . '</span>';
         $profileHtml[] = '<span class="item-account-data-email">' . $user->get_email() . '</span>';
-        $profileHtml[] = '<span class="item-account-data-my-account"><a href="' . $this->getAccountUrl() . '">';
+        $profileHtml[] = '<span class="item-account-data-my-account">';
 
-        $profileHtml[] = Translation :: get('MyAccount', null, 'Chamilo\Core\User') . '</a></span>';
+        $imagePath = Theme :: getInstance()->getImagePath(
+            'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
+            'Widget/MyAccount');
+
+        $profileHtml[] = '<a href="' . $this->getAccountUrl() . '">';
+        // $profileHtml[] = '<img src="' . $imagePath . '" title="' .
+        // Translation :: get('MyAccount', null, 'Chamilo\Core\User') . '" />';
+        $profileHtml[] = Translation :: get('MyAccount', null, 'Chamilo\Core\User');
+        $profileHtml[] = '</a>';
+
+        $profileHtml[] = ' - ';
+
+        $imagePath = Theme :: getInstance()->getImagePath(
+            'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
+            'Widget/Settings');
+
+        $profileHtml[] = '<a href="' . $this->getSettingsUrl() . '">';
+        // $profileHtml[] = '<img src="' . $imagePath . '" title="' .
+        // Translation :: get('Settings', null, 'Chamilo\Core\User') . '" />';
+        $profileHtml[] = Translation :: get('Settings', null, 'Chamilo\Core\User');
+        $profileHtml[] = '</a>';
+
+        $profileHtml[] = '</span>';
         $profileHtml[] = '</div>';
         $profileHtml[] = '<div class="clear"></div>';
 

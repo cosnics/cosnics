@@ -104,6 +104,7 @@ span.item-account-data-my-account a {
 	margin: 0px !important;
 	padding: 0px !important;
 	font-size: 11px;
+	display: inline !important;
 }
 
 div.item-account div.item-account-logout {
