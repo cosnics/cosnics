@@ -8,6 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -19,12 +20,30 @@ use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 class WidgetItem extends Bar
 {
 
-    public function get_url()
+    public function getAccountUrl()
     {
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: context(),
                 Application :: PARAM_ACTION => Manager :: ACTION_VIEW_ACCOUNT));
+        return $redirect->getUrl();
+    }
+
+    public function getPictureUrl()
+    {
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: context(),
+                Application :: PARAM_ACTION => Manager :: ACTION_CHANGE_PICTURE));
+        return $redirect->getUrl();
+    }
+
+    public function getLogoutUrl()
+    {
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: context(),
+                Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
         return $redirect->getUrl();
     }
 
@@ -38,7 +57,7 @@ class WidgetItem extends Bar
         $html[] = '<ul>';
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
-        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_url() . '">';
+        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->getAccountUrl() . '">';
 
         if ($this->get_item()->show_icon())
         {
@@ -81,18 +100,23 @@ class WidgetItem extends Bar
 
         $profileHtml[] = '<div class="item-account-photo-base">';
         $profileHtml[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" />';
-        $profileHtml[] = '<div class="item-account-photo-edit">';
-        $profileHtml[] = '<a href="' . $this->get_url() . '">';
-        $profileHtml[] = $editProfilePicture;
-        $profileHtml[] = '</a>';
-        $profileHtml[] = '</div>';
+
+        if (Configuration :: get(\Chamilo\Core\User\Manager :: context(), 'allow_change_user_picture'))
+        {
+            $profileHtml[] = '<div class="item-account-photo-edit">';
+            $profileHtml[] = '<a href="' . $this->getPictureUrl() . '">';
+            $profileHtml[] = $editProfilePicture;
+            $profileHtml[] = '</a>';
+            $profileHtml[] = '</div>';
+        }
+
         $profileHtml[] = '</div>';
 
         $profileHtml[] = '</div>';
         $profileHtml[] = '<div class="item-account-data">';
         $profileHtml[] = '<span class="item-account-data-name">' . $user->get_fullname() . '</span>';
         $profileHtml[] = '<span class="item-account-data-email">' . $user->get_email() . '</span>';
-        $profileHtml[] = '<span class="item-account-data-my-account"><a href="' . $this->get_url() . '">';
+        $profileHtml[] = '<span class="item-account-data-my-account"><a href="' . $this->getAccountUrl() . '">';
 
         $profileHtml[] = Translation :: get('MyAccount', null, 'Chamilo\Core\User') . '</a></span>';
         $profileHtml[] = '</div>';
@@ -102,13 +126,8 @@ class WidgetItem extends Bar
             'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
             'LogoutItem');
 
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => Manager :: context(),
-                Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
-
         $profileHtml[] = '<div class="item-account-logout">';
-        $profileHtml[] = '<a href="' . $redirect->getUrl() . '">';
+        $profileHtml[] = '<a href="' . $this->getLogoutUrl() . '">';
         $profileHtml[] = '<img src="' . $imagePath . '" />';
         $profileHtml[] = Translation :: get('Logout', null, 'Chamilo\Core\User');
         $profileHtml[] = '</a>';
