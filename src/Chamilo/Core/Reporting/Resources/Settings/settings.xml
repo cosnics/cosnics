@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Reporting">
+	<settings>
+    <category name="column_width">
+      <setting name="min_relative_width" field="text" default="0.1">
+        <validations>
+          <validation rule="numeric" message="MustBeReportingCellRelativeWidth" />
+        </validations>
+      </setting>
+    </category>
+    
+    <category name="heading_cell_style">
+      <setting name="heading_cell_alignment" field="text" default="L">
+        <validations>
+          <validation rule="regex" format="/^[LCRJ]$/" message="MustBeReportingCellAlignment" />
+        </validations>
+      </setting>
+      
+      <setting name="heading_cell_text_color" field="text" default="255, 255, 255">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+
+      <setting name="heading_cell_background_color" field="text" default="150, 150, 150">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+      
+      <setting name="heading_cell_border_color" field="text" default="0, 0, 0">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+      
+      <setting name="heading_cell_font" field="text" default="Arial, , 10">
+        <validations>
+          <validation rule="regex" format="/^\w+\s*,\s*[BIU]?\s*,\s*\d+\s*$/" message="MustBeReportingCellFont" />
+        </validations>
+      </setting>
+    </category>
+
+    <category name="data_cell_style">
+      <setting name="data_cell_alignment" field="text" default="L">
+        <validations>
+          <validation rule="regex" format="/^[LCRJ]$/" message="MustBeReportingCellAlignment" />
+        </validations>
+      </setting>
+      
+      <setting name="data_cell_text_color" field="text" default="0, 0, 0">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+
+      <setting name="data_cell_background_color" field="text" default="255, 255, 255">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+      
+      <setting name="data_cell_border_color" field="text" default="0, 0, 0">
+        <validations>
+          <validation rule="regex" format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/" message="MustBeReportingCellColor" />
+        </validations>
+      </setting>
+            
+      <setting name="data_cell_font" field="text" default="Arial, , 10">
+        <validations>
+          <validation rule="regex" format="/^\w+\s*,\s*[BIU]?\s*,\s*\d+\s*$/" message="MustBeReportingCellFont" />
+        </validations>
+      </setting>
+    </category>
+	</settings>
+</package>

@@ -65,7 +65,7 @@ class ReportingDataCellStyle
 
     public function set_text_color($text_color)
     {
-        $this->text_color = $text_color;
+        $this->text_color = $this->parse_color($text_color);
     }
 
     public function get_background_color()
@@ -75,7 +75,7 @@ class ReportingDataCellStyle
 
     public function set_background_color($background_color)
     {
-        $this->background_color = $background_color;
+        $this->background_color = $this->parse_color($background_color);
     }
 
     public function get_border_color()
@@ -85,7 +85,7 @@ class ReportingDataCellStyle
 
     public function set_border_color($border_color)
     {
-        $this->border_color = $border_color;
+        $this->border_color = $this->parse_color($border_color);
     }
 
     public function get_font()
@@ -95,7 +95,51 @@ class ReportingDataCellStyle
 
     public function set_font($font)
     {
-        $this->font = $font;
+        $this->font = $this->parse_font($font);
+    }
+
+    /**
+     *  \brief Parses R, G, B values.
+     *
+     *  @param $color
+     *  - Can be a string: e.g. '255, 255, 255'
+     *  - Can be an array: e.g. [255, 255, 255]
+     *
+     *  @return array: e.g. [255, 255, 255].
+     */
+    private function parse_color($color)
+    {
+        $color_array = $color;
+        if (! is_array($color_array))
+        {
+            $color_array = explode(',', $color_array);
+        }
+
+        return array_map('intval', $color_array);
+    }
+
+    /**
+     *  \brief Parses font definition.
+     *
+     *  @param $font
+     *  - Can be a string: e.g. 'Arial, B, 12'
+     *  - Can be an array: e.g. ['Arial', 'B', 10]
+     *
+     *  @return array: e.g. ['Arial', 'B', 10].
+     */
+    private function parse_font($font)
+    {
+        $font_array = $font;
+        if (! is_array($font_array))
+        {
+            $font_array = explode(',', $font_array);
+        }
+
+        $result[] = trim($font_array[0]);
+        $result[] = trim($font_array[1]);
+        $result[] = intval($font_array[2]);
+
+        return $result;
     }
 }
 ?>

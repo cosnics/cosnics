@@ -298,7 +298,7 @@ class ReportingData
         $sum_of_max_lengths = array_sum($max_row_lengths);
         $relative_widths = array_map(function($item) use ($sum_of_max_lengths) { return $item / $sum_of_max_lengths; }, $max_row_lengths);
         // Avoid zero widths by clipping relative widths to a minimum.
-        $min_relative_width = 0.1;
+        $min_relative_width = floatval(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'min_relative_width'));
         $relative_widths = array_map(function($item) use ($min_relative_width) { return max($item, $min_relative_width); }, $relative_widths);
         // Normalize again after clipping.
         $sum_of_relative_widths = array_sum($relative_widths);

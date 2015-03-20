@@ -59,7 +59,19 @@ class ReportingDataStyle
     function __construct()
     {
         $this->heading_cell_style = new ReportingDataCellStyle();
+        $this->heading_cell_style->set_alignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
+        $this->heading_cell_style->set_text_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
+        $this->heading_cell_style->set_background_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_background_color'));
+        $this->heading_cell_style->set_border_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
+        $this->heading_cell_style->set_font(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_font'));
+
         $this->data_cell_style = new ReportingDataCellStyle();
+        $this->data_cell_style->set_alignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_alignment'));
+        $this->data_cell_style->set_text_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_text_color'));
+        $this->data_cell_style->set_background_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_background_color'));
+        $this->data_cell_style->set_border_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_border_color'));
+        $this->data_cell_style->set_font(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_font'));
+
         $this->relative_width = 0.0;
     }
 
