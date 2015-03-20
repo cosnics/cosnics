@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\User\Form\PictureForm;
 
 /**
  *
@@ -16,12 +15,12 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AccountComponent extends ProfileComponent implements NoContextComponent
+class PictureComponent extends ProfileComponent implements NoContextComponent
 {
 
     /**
      *
-     * @var \Chamilo\Core\User\Form\AccountForm
+     * @var \Chamilo\Core\User\Form\PictureForm
      */
     private $form;
 
@@ -30,8 +29,6 @@ class AccountComponent extends ProfileComponent implements NoContextComponent
      */
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->remove(1);
-
         // not allowed for anonymous user
         if ($this->get_user()->is_anonymous_user())
         {
@@ -40,13 +37,11 @@ class AccountComponent extends ProfileComponent implements NoContextComponent
 
         Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
-        $user = $this->get_user();
-
-        $this->form = new AccountForm(AccountForm :: TYPE_EDIT, $user, $this->get_url());
+        $this->form = new PictureForm($this->get_user(), $this->get_url());
 
         if ($this->form->validate())
         {
-            $success = $this->form->update_account();
+            $success = $this->form->update();
             if (! $success)
             {
                 if (isset($_FILES['picture_uri']) && $_FILES['picture_uri']['error'])
@@ -63,10 +58,11 @@ class AccountComponent extends ProfileComponent implements NoContextComponent
                 $neg_message = 'UserProfileNotUpdated';
                 $pos_message = 'UserProfileUpdated';
             }
+
             $this->redirect(
                 Translation :: get($success ? $pos_message : $neg_message),
                 ($success ? false : true),
-                array(Application :: PARAM_ACTION => self :: ACTION_VIEW_ACCOUNT));
+                array(Application :: PARAM_ACTION => self :: ACTION_CHANGE_PICTURE));
         }
         else
         {

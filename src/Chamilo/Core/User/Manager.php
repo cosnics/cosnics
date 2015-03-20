@@ -41,6 +41,7 @@ abstract class Manager extends Application
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
     const ACTION_VIEW_ACCOUNT = 'Account';
+    const ACTION_CHANGE_PICTURE = 'Picture';
     const ACTION_EMAIL = 'Emailer';
     const ACTION_RESET_PASSWORD = 'ResetPassword';
     const ACTION_CHANGE_USER = 'ChangeUser';
