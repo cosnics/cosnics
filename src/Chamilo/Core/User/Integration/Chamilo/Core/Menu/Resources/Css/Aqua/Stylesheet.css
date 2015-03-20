@@ -1,0 +1,8 @@
+@CHARSET "ISO-8859-1";
+
+.navbar ul li a img.item-icon-account {
+	max-height: 32px;
+	max-width: 32px;
+	margin: -4px -9px;
+	padding: 0px;
+}

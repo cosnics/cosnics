@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: account_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -60,10 +62,16 @@ class AccountForm extends FormValidator
      */
     public function build_basic_form()
     {
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
+
         // Show user picture
         $this->addElement(
             'html',
-            '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
+            '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
                  '" style="position:absolute; right: 40px; z-index:1; border:1px solid black; max-width: 150px; margin-top: 10px"/>');
 
         $this->addElement('category', Translation :: get('PersonalDetails'));

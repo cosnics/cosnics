@@ -28,6 +28,15 @@ class Login extends Block
         return false;
     }
 
+    public function as_html($view = '')
+    {
+        if (! $this->get_user() || ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
+             $this->get_user()->is_anonymous_user()))
+        {
+            return parent :: as_html($view);
+        }
+    }
+
     public function display_content()
     {
         $html = array();
