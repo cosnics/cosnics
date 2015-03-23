@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExportTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -26,9 +27,9 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 ToolbarItem :: DISPLAY_ICON) :
                 return $object->get_icon_image(Theme :: ICON_MINI);
             case ContentObject :: PROPERTY_TITLE :
-                return Utilities :: truncate_string($object->get_title(), 50);
+                return StringUtilities :: getInstance()->truncate($object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(Utilities :: truncate_string($object->get_description(), 50));
+                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($object->get_description(), 50));
         }
         return parent :: render_cell($column, $object);
     }

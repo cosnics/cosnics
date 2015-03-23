@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: complex_browser_table_cell_renderer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -50,7 +51,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case ContentObject :: PROPERTY_TITLE :
                 $title = htmlspecialchars($content_object->get_title());
                 $title_short = $title;
-                $title_short = Utilities :: truncate_string($title_short, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title_short, 53, false);
 
                 if ($content_object instanceof ComplexContentObjectSupport)
                 {
@@ -69,7 +70,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $title_short;
             case ContentObject :: PROPERTY_DESCRIPTION :
                 $description = $content_object->get_description();
-                return Utilities :: truncate_string($description, 75);
+                return StringUtilities :: getInstance()->truncate($description, 75);
             case Translation :: get(ComplexTableColumnModel :: SUBITEMS) :
                 if ($cloi->is_complex())
                 {

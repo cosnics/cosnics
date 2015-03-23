@@ -97,8 +97,8 @@ class PublicationForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $to = Utilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
+            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
         }
         
         $publication = $this->publication;
@@ -126,8 +126,8 @@ class PublicationForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $to = Utilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
+            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
         }
         
         $ids = unserialize($values['ids']);

@@ -18,6 +18,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -140,7 +141,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 break;
             case ContentObject :: PROPERTY_DESCRIPTION :
                 $data = $publication[ContentObject :: PROPERTY_DESCRIPTION];
-                $data = Utilities :: truncate_string($data, 100);
+                $data = StringUtilities :: getInstance()->truncate($data, 100);
         }
 
         if ($data)

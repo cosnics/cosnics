@@ -140,7 +140,7 @@ class ValidateSettings extends HTML_QuickForm_Rule
     {
         $sd = $parameters[0];
         $date = $sd['Y'] . '-' . $sd['F'] . '-' . $sd['d'];
-        $date = Utilities :: time_from_datepicker_without_timepicker($date);
+        $date = DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($date);
         
         if ($date == 0)
         {
@@ -148,12 +148,12 @@ class ValidateSettings extends HTML_QuickForm_Rule
                 'last_time_archived', 
                 'core\tracking');
             
-            $setting_date = Utilities :: time_from_datepicker_without_timepicker($setting->get_value());
+            $setting_date = DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($setting->get_value());
             return $date >= $setting_date;
         }
         else
         {
-            $start_date = Utilities :: time_from_datepicker_without_timepicker($date);
+            $start_date = DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($date);
             return $start_date < $date;
         }
     }

@@ -278,4 +278,12 @@ class Path
             $namespace,
             $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
+
+    /*
+     * Checks if string is HTTP or FTP uri @param string $uri @return boolean
+     */
+    public function isWebUri($uri)
+    {
+        return ((stripos($uri, 'http://') === 0) || (stripos($uri, 'https://') === 0) || (stripos($uri, 'ftp://') === 0));
+    }
 }

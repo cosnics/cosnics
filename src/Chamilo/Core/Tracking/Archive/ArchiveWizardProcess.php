@@ -73,8 +73,8 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
         $enddate = $exports['end_date'];
         list($eyear, $emonth, $eday) = split('-', $enddate);
 
-        $startdate = Utilities :: time_from_datepicker_without_timepicker($startdate);
-        $enddate = Utilities :: time_from_datepicker_without_timepicker($enddate, 23, 59, 59);
+        $startdate = DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($startdate);
+        $enddate = DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($enddate, 23, 59, 59);
 
         $period = $exports['period'];
 
@@ -157,7 +157,7 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
                             }
                             else
                             {
-                                $date = Utilities :: time_from_datepicker($result->get_date());
+                                $date = DatetimeUtilities :: time_from_datepicker($result->get_date());
 
                                 foreach ($storage_units as $start_time => $storage_unit)
                                 {

@@ -28,7 +28,7 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         {
             $start_time = DatetimeUtilities :: format_locale_date(null, $assessment_attempt->get_start_time());
             $end_time = DatetimeUtilities :: format_locale_date(null, $assessment_attempt->get_end_time());
-            $time = Utilities :: format_seconds_to_hours($assessment_attempt->get_total_time());
+            $time = DatetimeUtilities :: format_seconds_to_hours($assessment_attempt->get_total_time());
             $score = $this->get_score_bar($assessment_attempt->get_total_score());
             
             $reporting_data->add_category($counter);

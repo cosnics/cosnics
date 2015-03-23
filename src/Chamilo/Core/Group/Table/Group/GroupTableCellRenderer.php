@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class GroupTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -37,7 +38,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
                 }
-                return Utilities :: truncate_string($description);
+                return StringUtilities :: getInstance()->truncate($description);
             case Translation :: get(GroupTableColumnModel :: USERS, null, \Chamilo\Core\User\Manager :: context()) :
                 return $group->count_users();
             case Translation :: get(GroupTableColumnModel :: SUBGROUPS) :

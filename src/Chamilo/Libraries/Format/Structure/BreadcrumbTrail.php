@@ -6,7 +6,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -182,7 +182,7 @@ class BreadcrumbTrail
             foreach ($breadcrumbtrail as $breadcrumb)
             {
                 $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">' .
-                     Utilities :: truncate_string($breadcrumb->get_name(), 50, true) . '</a></li>';
+                     StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true) . '</a></li>';
             }
         }
 

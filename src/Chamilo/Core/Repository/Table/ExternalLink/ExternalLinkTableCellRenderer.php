@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -34,7 +35,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
                     false,
                     $external_instance->get_implementation());
             case \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TITLE :
-                return Utilities :: truncate_string($external_instance->get_title(), 50);
+                return StringUtilities :: getInstance()->truncate($external_instance->get_title(), 50);
         }
 
         return parent :: render_cell($column, $object);

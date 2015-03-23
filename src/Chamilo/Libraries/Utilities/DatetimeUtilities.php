@@ -270,4 +270,70 @@ class DatetimeUtilities
             $translator->get('NovemberLong', null, Utilities :: COMMON_LIBRARIES),
             $translator->get('DecemberLong', null, Utilities :: COMMON_LIBRARIES));
     }
+
+    /**
+     * Converts a date/time value retrieved from a FormValidator datepicker element to the corresponding UNIX itmestamp.
+     *
+     * @param $string string The date/time value.
+     * @return int The UNIX timestamp.
+     */
+    public static function time_from_datepicker($string)
+    {
+        list($date, $time) = split(' ', $string);
+        list($year, $month, $day) = split('-', $date);
+        list($hours, $minutes, $seconds) = split(':', $time);
+        return mktime($hours, $minutes, $seconds, $month, $day, $year);
+    }
+
+    /**
+     * Converts a date/time value retrieved from a FormValidator datepicker without timepicker element to the
+     * corresponding UNIX itmestamp.
+     *
+     * @param $string string The date/time value.
+     * @return int The UNIX timestamp.
+     */
+    public static function time_from_datepicker_without_timepicker($string, $h = 0, $m = 0, $s = 0)
+    {
+        list($year, $month, $day) = split('-', $string);
+        return mktime($h, $m, $s, $month, $day, $year);
+    }
+
+    public static function format_seconds_to_hours($seconds)
+    {
+        $hours = floor($seconds / 3600);
+        $rest = $seconds % 3600;
+
+        $minutes = floor($rest / 60);
+        $seconds = $rest % 60;
+
+        if ($minutes < 10)
+        {
+            $minutes = '0' . $minutes;
+        }
+
+        if ($seconds < 10)
+        {
+            $seconds = '0' . $seconds;
+        }
+
+        return $hours . ':' . $minutes . ':' . $seconds;
+    }
+
+    public static function format_seconds_to_minutes($seconds)
+    {
+        $minutes = floor($seconds / 60);
+        $seconds = $seconds % 60;
+
+        if ($minutes < 10)
+        {
+            $minutes = '0' . $minutes;
+        }
+
+        if ($seconds < 10)
+        {
+            $seconds = '0' . $seconds;
+        }
+
+        return $minutes . ':' . $seconds;
+    }
 }

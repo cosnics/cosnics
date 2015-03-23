@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\ComplexTableCellRenderer
 {
@@ -23,7 +24,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
 
                 $title = htmlspecialchars($cloi->get_ref_object()->get_title());
                 $title_short = $title;
-                $title_short = Utilities :: truncate_string($title_short, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title_short, 53, false);
 
                 if ($cloi instanceof ComplexContentObjectSupport)
                 {

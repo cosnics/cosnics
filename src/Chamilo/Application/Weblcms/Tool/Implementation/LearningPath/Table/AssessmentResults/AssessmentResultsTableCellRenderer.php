@@ -43,7 +43,7 @@ class AssessmentResultsTableCellRenderer extends DataClassTableCellRenderer impl
             case Translation :: get('Score') :
                 return $assessment_attempt->get_score() . '%';
             case Translation :: get('Time') :
-                return Utilities :: format_seconds_to_hours($assessment_attempt->get_total_time());
+                return DatetimeUtilities :: format_seconds_to_hours($assessment_attempt->get_total_time());
         }
 
         return parent :: render_cell($column, $assessment_attempt);

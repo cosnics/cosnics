@@ -473,14 +473,15 @@ class User extends DataClass
     {
         $uri = $this->get_picture_uri();
         return ((strlen($uri) > 0) &&
-             (Utilities :: is_web_uri($uri) || file_exists(Path :: getInstance()->getProfilePicturePath() . $uri)));
+             (Path :: getInstance()->isWebUri($uri) || file_exists(
+                Path :: getInstance()->getProfilePicturePath() . $uri)));
     }
 
     public function get_full_picture_url()
     {
         if ($this->has_picture())
         {
-            if (Utilities :: is_web_uri($this->get_picture_uri()))
+            if (Path :: getInstance()->isWebUri($this->get_picture_uri()))
             {
                 // also allow full uri values (if uri set by LDAP parser class)
                 return $this->get_picture_uri();

@@ -9,7 +9,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_title()
     {
         $object = $this->get_object();
-        return '<h3>' . $object->get_title() . ' (' . Utilities :: format_seconds_to_minutes($object->get_duration()) .
+        return '<h3>' . $object->get_title() . ' (' . DatetimeUtilities :: format_seconds_to_minutes($object->get_duration()) .
              ')</h3>';
     }
 

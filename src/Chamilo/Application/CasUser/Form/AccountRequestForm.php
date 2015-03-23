@@ -151,8 +151,8 @@ class AccountRequestForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $until = Utilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
+            $until = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
         }
         
         $account_request->set_valid_from($from);
@@ -181,8 +181,8 @@ class AccountRequestForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
-            $until = Utilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_FROM_DATE]);
+            $until = DatetimeUtilities :: time_from_datepicker($values[self :: PARAM_TO_DATE]);
         }
         
         $account_request->set_valid_from($from);

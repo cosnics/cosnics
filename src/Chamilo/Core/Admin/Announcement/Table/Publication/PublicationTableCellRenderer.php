@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PublicationTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -33,7 +34,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 break;
             case ContentObject :: PROPERTY_TITLE :
                 $title_short = $content_object->get_title();
-                $title_short = Utilities :: truncate_string($title_short, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title_short, 53, false);
 
                 $style = $publication[Publication :: PROPERTY_HIDDEN] ? ' style="color: gray;"' : '';
 
@@ -75,7 +76,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 break;
             case ContentObject :: PROPERTY_DESCRIPTION :
                 $data = $publication[ContentObject :: PROPERTY_DESCRIPTION];
-                $data = Utilities :: truncate_string($data, 100);
+                $data = StringUtilities :: getInstance()->truncate($data, 100);
         }
 
         if ($data)

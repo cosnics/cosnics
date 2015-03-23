@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -36,7 +36,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
-                return Utilities :: truncate_string($title, 53, false);
+                return StringUtilities :: getInstance()->truncate($title, 53, false);
             case AnswerFeedbackTypeTableColumnModel :: PROPERTY_FEEDBACK_TYPE :
                 return Theme :: getInstance()->getImage(
                     'answer_feedback_type/' . $complex_content_object_item->get_show_answer_feedback(),

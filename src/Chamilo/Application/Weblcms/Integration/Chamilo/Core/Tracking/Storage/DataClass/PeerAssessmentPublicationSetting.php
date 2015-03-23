@@ -23,7 +23,7 @@ class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\Da
         $this->set_direct_subscribe_available($parameters[self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE]);
         $this->set_unsubscribe_available($parameters[self :: PROPERTY_UNSUBSCRIBE_AVAILABLE]);
         $this->set_subscription_deadline(
-            Utilities :: time_from_datepicker_without_timepicker($parameters[self :: PROPERTY_SUBSCRIPTION_DEADLINE]));
+            DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($parameters[self :: PROPERTY_SUBSCRIPTION_DEADLINE]));
         $this->set_min_group_members($parameters[self :: PROPERTY_MIN_GROUP_MEMBERS]);
         $this->set_max_group_members($parameters[self :: PROPERTY_MAX_GROUP_MEMBERS]);
         $this->set_filter_min_max($parameters[self :: PROPERTY_FILTER_MIN_MAX]);
