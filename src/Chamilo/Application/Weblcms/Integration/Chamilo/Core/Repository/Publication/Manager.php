@@ -13,8 +13,8 @@ use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
 {

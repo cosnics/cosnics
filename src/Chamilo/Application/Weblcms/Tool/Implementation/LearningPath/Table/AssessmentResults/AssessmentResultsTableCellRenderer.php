@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Renders the cells of the table

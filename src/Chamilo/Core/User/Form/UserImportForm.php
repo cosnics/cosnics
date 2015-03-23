@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * $Id: user_import_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
