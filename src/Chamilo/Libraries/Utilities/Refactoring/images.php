@@ -21,23 +21,25 @@ foreach ($packageNamespaces as $packageNamespace)
     $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
          DIRECTORY_SEPARATOR;
 
-//     $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
-//         DIRECTORY_SEPARATOR;
+    // $sourceResourceImagePathCC = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Images' .
+    // DIRECTORY_SEPARATOR;
 
-//     Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
+    // Filesystem :: move_file($sourceResourceImagePath, $sourceResourceImagePathCC);
 
     $files = Filesystem :: get_directory_content($sourceResourceImagePath, Filesystem :: LIST_FILES, true);
 
     foreach ($files as $file)
     {
+        $file = str_replace($basePath, '', $file);
         $parts = explode('/', $file);
-        $last = array_pop($parts);
 
-        $parts[] = StringUtilities :: getInstance()->createString($last)->upperCamelize()->__toString();
+        foreach ($parts as $key => $part)
+        {
+            $parts[$key] = StringUtilities :: getInstance()->createString($part)->upperCamelize()->__toString();
+        }
 
         $newFile = implode('/', $parts);
-        
-//         var_dump($newFile);
+        $newFile = $basePath . $newFile;
 
         Filesystem :: move_file($file, $newFile);
     }
