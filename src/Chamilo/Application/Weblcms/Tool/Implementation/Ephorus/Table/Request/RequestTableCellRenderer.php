@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * CellRenderer for ephorus requests browser table.
@@ -36,7 +37,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(
-                    Utilities :: truncate_string(
+                    StringUtilities :: getInstance()->truncate(
                         $object->get_default_property(ContentObject :: PROPERTY_DESCRIPTION),
                         50));
             case RequestTableColumnModel :: COLUMN_NAME_AUTHOR :

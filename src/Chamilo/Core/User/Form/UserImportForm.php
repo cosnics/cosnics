@@ -148,13 +148,13 @@ class UserImportForm extends FormValidator
 
                 $act_date = $csvuser[User :: PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
-                    $act_date = Utilities :: time_from_datepicker($act_date);
+                    $act_date = DatetimeUtilities :: time_from_datepicker($act_date);
 
                 $user->set_activation_date($act_date);
 
                 $exp_date = $csvuser[User :: PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
-                    $exp_date = Utilities :: time_from_datepicker($exp_date);
+                    $exp_date = DatetimeUtilities :: time_from_datepicker($exp_date);
 
                 $user->set_expiration_date($exp_date);
 
@@ -201,13 +201,13 @@ class UserImportForm extends FormValidator
 
                 $act_date = $csvuser[User :: PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
-                    $act_date = Utilities :: time_from_datepicker($act_date);
+                    $act_date = DatetimeUtilities :: time_from_datepicker($act_date);
 
                 $user->set_activation_date($act_date);
 
                 $exp_date = $csvuser[User :: PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
-                    $exp_date = Utilities :: time_from_datepicker($exp_date);
+                    $exp_date = DatetimeUtilities :: time_from_datepicker($exp_date);
 
                 $user->set_expiration_date($exp_date);
 

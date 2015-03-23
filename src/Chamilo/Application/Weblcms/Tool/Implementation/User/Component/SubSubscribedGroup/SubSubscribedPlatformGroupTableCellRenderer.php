@@ -4,12 +4,12 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubs
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * * *************************************************************************** Cell renderer for a course subgroup
  * browser table.
- * 
+ *
  * @author Stijn Van Hoecke ****************************************************************************
  */
 class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRenderer
@@ -21,7 +21,7 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
-            
+
             case Group :: PROPERTY_NAME :
                 $title = parent :: render_cell($column, $group);
                 $title_short = $title;
@@ -30,19 +30,19 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
                     $title_short = mb_substr($title_short, 0, 50) . '&hellip;';
                 }
                 return $title_short;
-            
+
             case Group :: PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent :: render_cell($column, $group));
-                return Utilities :: truncate_string($description);
+                return StringUtilities :: getInstance()->truncate($description);
             case Translation :: get(
-                SubSubscribedPlatformGroupTableColumnModel :: USERS, 
-                null, 
+                SubSubscribedPlatformGroupTableColumnModel :: USERS,
+                null,
                 \Chamilo\Core\User\Manager :: context()) :
                 return $group->count_users();
             case Translation :: get(SubSubscribedPlatformGroupTableColumnModel :: SUBGROUPS) :
                 return $group->count_subgroups(true, true);
         }
-        
+
         return parent :: render_cell($column, $group);
     }
 }

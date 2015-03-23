@@ -58,7 +58,7 @@ class ProgressDetailsBlock extends ReportingBlock
             $reporting_data->add_data_category_row(
                 $category,
                 Translation :: get('Time'),
-                Utilities :: format_seconds_to_hours($item_attempt->get_total_time()));
+                DatetimeUtilities :: format_seconds_to_hours($item_attempt->get_total_time()));
 
             if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
             {
@@ -92,7 +92,7 @@ class ProgressDetailsBlock extends ReportingBlock
         $reporting_data->add_data_category_row(
             $category,
             Translation :: get('Time'),
-            '<span style="font-weight: bold;">' . Utilities :: format_seconds_to_hours($current_node->get_total_time()) .
+            '<span style="font-weight: bold;">' . DatetimeUtilities :: format_seconds_to_hours($current_node->get_total_time()) .
                  '</span>');
 
         return $reporting_data;

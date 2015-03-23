@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table cell renderer for the ContentObjectAlternative data class
@@ -77,7 +78,7 @@ class ContentObjectAlternativeTableCellRenderer extends RecordTableCellRenderer 
                     ToolbarItem :: DISPLAY_ICON);
 
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: truncate_string(strip_tags($result[ContentObject :: PROPERTY_DESCRIPTION]), 125);
+                return StringUtilities :: getInstance()->truncate(strip_tags($result[ContentObject :: PROPERTY_DESCRIPTION]), 125);
         }
 
         return parent :: render_cell($column, $result);

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class MergerTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -26,9 +27,9 @@ class MergerTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
 
             case ContentObject :: PROPERTY_TITLE :
-                return Utilities :: truncate_string($content_object->get_title(), 50);
+                return StringUtilities :: getInstance()->truncate($content_object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
+                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
         }
 
         return parent :: render_cell($column, $content_object);

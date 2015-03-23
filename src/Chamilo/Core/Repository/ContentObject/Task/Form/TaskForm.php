@@ -569,7 +569,7 @@ class TaskForm extends ContentObjectForm
                 break;
             case 3 :
                 $object->set_frequency_count(0);
-                $object->set_until(Utilities :: time_from_datepicker($values[Task :: PROPERTY_UNTIL]));
+                $object->set_until(DatetimeUtilities :: time_from_datepicker($values[Task :: PROPERTY_UNTIL]));
         }
 
         return $object;

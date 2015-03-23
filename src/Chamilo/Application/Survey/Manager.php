@@ -367,8 +367,8 @@ abstract class Manager extends Application
         }
         else
         {
-            $publication->set_from_date(Utilities :: time_from_datepicker($attributes['from_date']));
-            $publication->set_to_date(Utilities :: time_from_datepicker($attributes['to_date']));
+            $publication->set_from_date(DatetimeUtilities :: time_from_datepicker($attributes['from_date']));
+            $publication->set_to_date(DatetimeUtilities :: time_from_datepicker($attributes['to_date']));
         }
 
         $publication->set_type($attributes[Publication :: PROPERTY_TYPE]);

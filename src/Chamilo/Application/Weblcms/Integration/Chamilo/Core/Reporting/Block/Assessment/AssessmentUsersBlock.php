@@ -129,7 +129,7 @@ class AssessmentUsersBlock extends AssessmentBlock
             $max_score = $this->get_score_bar($user_attempt_summary_data['max_score']);
         }
 
-        $time = Utilities :: format_seconds_to_hours($user_attempt_summary_data['time']);
+        $time = DatetimeUtilities :: format_seconds_to_hours($user_attempt_summary_data['time']);
 
         if ($user_attempt_summary_data['count'] > 0)
         {

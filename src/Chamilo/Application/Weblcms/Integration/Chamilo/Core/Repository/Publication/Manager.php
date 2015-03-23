@@ -192,8 +192,8 @@ class Manager implements PublicationInterface
 
         if ($options['forever'] == 0)
         {
-            $publication->set_from_date(Utilities :: time_from_datepicker($options['from_date']));
-            $publication->set_to_date(Utilities :: time_from_datepicker($options['to_date']));
+            $publication->set_from_date(DatetimeUtilities :: time_from_datepicker($options['from_date']));
+            $publication->set_to_date(DatetimeUtilities :: time_from_datepicker($options['to_date']));
         }
 
         if (! $publication->create())

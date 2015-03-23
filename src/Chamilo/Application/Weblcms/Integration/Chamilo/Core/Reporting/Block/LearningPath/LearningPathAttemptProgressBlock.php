@@ -102,7 +102,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
             {
                 $status = Translation :: get($tracker_data['completed'] ? 'Completed' : 'Incomplete');
                 $score = round($tracker_data['score'] / $tracker_data['size']) . '%';
-                $time = Utilities :: format_seconds_to_hours($tracker_data['time']);
+                $time = DatetimeUtilities :: format_seconds_to_hours($tracker_data['time']);
                 $total += $tracker_data['time'];
             }
             else
@@ -173,7 +173,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
         $reporting_data->add_data_category_row(
             $category_name,
             Translation :: get('Time'),
-            '<span style="font-weight: bold;">' . Utilities :: format_seconds_to_hours($total) . '</span>');
+            '<span style="font-weight: bold;">' . DatetimeUtilities :: format_seconds_to_hours($total) . '</span>');
 
         $reporting_data->hide_categories();
         return $reporting_data;

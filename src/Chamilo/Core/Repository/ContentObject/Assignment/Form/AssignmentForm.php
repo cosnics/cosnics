@@ -225,8 +225,8 @@ class AssignmentForm extends ContentObjectForm
     {
         $object = new Assignment();
         $values = $this->exportValues();
-        $object->set_start_time(Utilities :: time_from_datepicker($values[Assignment :: PROPERTY_START_TIME]));
-        $object->set_end_time(Utilities :: time_from_datepicker($values[Assignment :: PROPERTY_END_TIME]));
+        $object->set_start_time(DatetimeUtilities :: time_from_datepicker($values[Assignment :: PROPERTY_START_TIME]));
+        $object->set_end_time(DatetimeUtilities :: time_from_datepicker($values[Assignment :: PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_group_submissions($values[Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS]);
@@ -257,8 +257,8 @@ class AssignmentForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $object->set_start_time(Utilities :: time_from_datepicker($values[Assignment :: PROPERTY_START_TIME]));
-        $object->set_end_time(Utilities :: time_from_datepicker($values[Assignment :: PROPERTY_END_TIME]));
+        $object->set_start_time(DatetimeUtilities :: time_from_datepicker($values[Assignment :: PROPERTY_START_TIME]));
+        $object->set_end_time(DatetimeUtilities :: time_from_datepicker($values[Assignment :: PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment :: PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_group_submissions($values[Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment :: PROPERTY_ALLOW_LATE_SUBMISSIONS]);

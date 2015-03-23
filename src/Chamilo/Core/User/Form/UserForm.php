@@ -304,8 +304,8 @@ class UserForm extends FormValidator
         }
         else
         {
-            $act_date = Utilities :: time_from_datepicker($values['ExpirationDatefrom_date']);
-            $exp_date = Utilities :: time_from_datepicker($values['ExpirationDateto_date']);
+            $act_date = DatetimeUtilities :: time_from_datepicker($values['ExpirationDatefrom_date']);
+            $exp_date = DatetimeUtilities :: time_from_datepicker($values['ExpirationDateto_date']);
             $user->set_activation_date($act_date);
             $user->set_expiration_date($exp_date);
         }
@@ -378,8 +378,8 @@ class UserForm extends FormValidator
             }
             else
             {
-                $act_date = Utilities :: time_from_datepicker($values['ExpirationDatefrom_date']);
-                $exp_date = Utilities :: time_from_datepicker($values['ExpirationDateto_date']);
+                $act_date = DatetimeUtilities :: time_from_datepicker($values['ExpirationDatefrom_date']);
+                $exp_date = DatetimeUtilities :: time_from_datepicker($values['ExpirationDateto_date']);
                 $user->set_activation_date($act_date);
                 $user->set_expiration_date($exp_date);
             }

@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Extension on the content object publication table cell renderer for this tool
@@ -108,7 +109,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE_SUBMITTERS));
         return '<a href="' . $url . '">' .
-             Utilities :: truncate_string($publication[ContentObject :: PROPERTY_TITLE], 50) . '</a>';
+             StringUtilities :: getInstance()->truncate($publication[ContentObject :: PROPERTY_TITLE], 50) . '</a>';
     }
 
     /**
@@ -124,6 +125,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_STUDENT_BROWSE_SUBMISSIONS,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]));
         return '<a href="' . $url . '">' .
-             Utilities :: truncate_string($publication[ContentObject :: PROPERTY_TITLE], 50) . '</a>';
+             StringUtilities :: getInstance()->truncate($publication[ContentObject :: PROPERTY_TITLE], 50) . '</a>';
     }
 }

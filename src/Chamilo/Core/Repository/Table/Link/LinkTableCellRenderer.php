@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -47,13 +48,13 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             case Attributes :: PROPERTY_DATE :
                 return date('Y-m-d, H:i', $object->get_date());
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: truncate_string($object->get_description(), 50);
+                return StringUtilities :: getInstance()->truncate($object->get_description(), 50);
             case ContentObject :: PROPERTY_TITLE :
                 $url = $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
                         Manager :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
-                return '<a href="' . $url . '">' . Utilities :: truncate_string($object->get_title(), 50) . '</a>';
+                return '<a href="' . $url . '">' . StringUtilities :: getInstance()->truncate($object->get_title(), 50) . '</a>';
             case ContentObject :: PROPERTY_TYPE :
                 return $object->get_icon_image();
         }

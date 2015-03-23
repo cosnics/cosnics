@@ -654,8 +654,8 @@ class ContentObjectPublicationForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
-            $to = Utilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
         }
 
         $publication->set_category_id($category);
