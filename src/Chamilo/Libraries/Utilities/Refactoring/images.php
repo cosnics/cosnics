@@ -30,8 +30,8 @@ foreach ($packageNamespaces as $packageNamespace)
 
     foreach ($files as $file)
     {
-        $file = str_replace($basePath, '', $file);
-        $parts = explode('/', $file);
+        $oldFile = str_replace($basePath, '', $file);
+        $parts = explode('/', $oldFile);
 
         foreach ($parts as $key => $part)
         {
@@ -41,7 +41,7 @@ foreach ($packageNamespaces as $packageNamespace)
         $newFile = implode('/', $parts);
         $newFile = $basePath . $newFile;
 
-        Filesystem :: move_file($file, $newFile);
+        Filesystem :: move_file($file, $newFile, true);
     }
 
     echo $packageNamespace . '<br />';
