@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Slideshare;
 
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {
@@ -16,7 +16,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_display_properties()
     {
         $properties = parent :: get_display_properties();
-        
+
         return $properties;
     }
 

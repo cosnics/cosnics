@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Vimeo;
 
 use Chamilo\Core\Repository\External\General\Streaming\StreamingMediaExternalObjectDisplay;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
 {
@@ -19,7 +19,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     {
         $properties = parent :: get_display_properties();
         $properties[Translation :: get('Tags')] = $this->get_object()->get_tags_string();
-        
+
         return $properties;
     }
 

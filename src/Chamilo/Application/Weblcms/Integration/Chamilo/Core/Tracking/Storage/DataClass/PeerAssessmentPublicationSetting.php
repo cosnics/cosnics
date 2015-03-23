@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
@@ -23,7 +23,8 @@ class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\Da
         $this->set_direct_subscribe_available($parameters[self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE]);
         $this->set_unsubscribe_available($parameters[self :: PROPERTY_UNSUBSCRIBE_AVAILABLE]);
         $this->set_subscription_deadline(
-            DatetimeDatetimeUtilities :: time_from_datepicker_without_timepicker($parameters[self :: PROPERTY_SUBSCRIPTION_DEADLINE]));
+            DatetimeUtilities :: time_from_datepicker_without_timepicker(
+                $parameters[self :: PROPERTY_SUBSCRIPTION_DEADLINE]));
         $this->set_min_group_members($parameters[self :: PROPERTY_MIN_GROUP_MEMBERS]);
         $this->set_max_group_members($parameters[self :: PROPERTY_MAX_GROUP_MEMBERS]);
         $this->set_filter_min_max($parameters[self :: PROPERTY_FILTER_MIN_MAX]);
@@ -36,17 +37,17 @@ class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\Da
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE, 
-                self :: PROPERTY_UNSUBSCRIBE_AVAILABLE, 
-                self :: PROPERTY_SUBSCRIPTION_DEADLINE, 
-                self :: PROPERTY_MIN_GROUP_MEMBERS, 
-                self :: PROPERTY_MAX_GROUP_MEMBERS, 
-                self :: PROPERTY_FILTER_MIN_MAX, 
-                self :: PROPERTY_FILTER_SELF, 
-                self :: PROPERTY_FILTER_MIN_MAX, 
-                self :: PROPERTY_ANONYMOUS_FEEDBACK, 
-                self :: PROPERTY_FILTER_MIN_MAX, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE,
+                self :: PROPERTY_UNSUBSCRIBE_AVAILABLE,
+                self :: PROPERTY_SUBSCRIPTION_DEADLINE,
+                self :: PROPERTY_MIN_GROUP_MEMBERS,
+                self :: PROPERTY_MAX_GROUP_MEMBERS,
+                self :: PROPERTY_FILTER_MIN_MAX,
+                self :: PROPERTY_FILTER_SELF,
+                self :: PROPERTY_FILTER_MIN_MAX,
+                self :: PROPERTY_ANONYMOUS_FEEDBACK,
+                self :: PROPERTY_FILTER_MIN_MAX,
                 self :: PROPERTY_ENABLE_USER_RESULTS_EXPORT));
     }
 

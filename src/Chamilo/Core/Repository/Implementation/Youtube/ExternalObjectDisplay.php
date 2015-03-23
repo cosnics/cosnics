@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Youtube;
 
 use Chamilo\Core\Repository\External\General\Streaming\StreamingMediaExternalObjectDisplay;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
 {
