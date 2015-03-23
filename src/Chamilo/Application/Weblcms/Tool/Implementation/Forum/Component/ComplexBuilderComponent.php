@@ -1,0 +1,18 @@
+<?php
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Component;
+
+use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+
+/**
+ *
+ * @author Stijn Van Hoecke
+ */
+class ComplexBuilderComponent extends Manager implements DelegateComponent
+{
+
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+    }
+}
