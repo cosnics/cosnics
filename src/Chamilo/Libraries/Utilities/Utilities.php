@@ -86,7 +86,7 @@ class Utilities
             $pattern_conditions = array();
             foreach ($properties as $index => $property)
             {
-                $pattern_conditions[] = new PatternMatchCondition($property->get_property(), $q);
+                $pattern_conditions[] = new PatternMatchCondition($property, $q);
             }
             if (count($pattern_conditions) > 1)
             {
@@ -97,8 +97,7 @@ class Utilities
                 $cond[] = $pattern_conditions[0];
             }
         }
-        $result = new AndCondition($cond);
-        return $result;
+        return new AndCondition($cond);
     }
 
     /**
