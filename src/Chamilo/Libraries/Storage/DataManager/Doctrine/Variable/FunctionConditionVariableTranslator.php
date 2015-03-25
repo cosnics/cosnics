@@ -42,10 +42,22 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
                     break;
             }
 
-            $strings[] = '(';
-            $strings[] = static :: render(
-                $this->get_condition_variable()->get_condition_variable());
-            $strings[] = ')';
+            if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+            {
+                $strings[] = '(';
+            }
+            else
+            {
+                $strings[] = ' ';
+            }
+
+            $strings[] = static :: render($this->get_condition_variable()->get_condition_variable());
+
+            if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+            {
+                $strings[] = ')';
+            }
+
             if ($this->get_condition_variable()->get_alias())
             {
                 $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
