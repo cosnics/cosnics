@@ -275,8 +275,8 @@ function AliasNbPages($alias='{nb}')
 
 function Error($msg)
 {
-	// Fatal error
-	die('<b>FPDF error:</b> '.$msg);
+    throw new \Exception($msg);
+	//die('<b>FPDF error:</b> '.$msg);
 }
 
 function Open()
@@ -532,7 +532,7 @@ function SetFont($family, $style='', $size=0)
 				$this->AddFont($family,$style);
 		}
 		else
-			$this->Error('Undefined font: '.$family.' '.$style);
+			$this->Error('Undefined font: "'.$family.' '.$style . '". Supported fonts: ' . implode(', ', $this->CoreFonts));
 	}
 	// Select it
 	$this->FontFamily = $family;

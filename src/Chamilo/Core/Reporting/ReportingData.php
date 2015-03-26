@@ -308,7 +308,7 @@ class ReportingData
         foreach ($relative_widths as $row_name => $relative_width)
         {
             $style = new ReportingDataStyle();
-            $style->set_relative_width($relative_width);
+            $style->setRelativeWidth($relative_width);
             
             if ($row_name == "#CATEGORY#")
             {

@@ -32,15 +32,22 @@ class Basic extends Pdf
     {
         require_once Path :: getInstance()->getPluginPath() . 'fpdf/mc_table.php';
 
-		$this->pdf_mc_table = new PDF_MC_Table($this->get_template()->get_paper_orientation(), 'mm', 'A4');
+		$this->pdf_mc_table = new PDF_MC_Table($this->get_template()->getStyle()->getPaperOrientation(), 'mm', 'A4');
 
 		$this->pdf_mc_table->SetMargins(10, 5);
 		$this->pdf_mc_table->SetAutoPageBreak(true, 17);
 
-        $this->pdf_mc_table->SetHeader(Theme :: getInstance()->getCommonImagePath('LogoReport'), Translation :: get(
-                                           ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()),
-                                           null,
-                                           ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template())), date('d-m-Y'));
+        $this->pdf_mc_table->SetHeader(
+            Theme :: getInstance()->getCommonImagePath('LogoReport'), 
+            Translation :: get(
+                ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()),
+                null,
+                ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template())), 
+            date('d-m-Y'),
+            $this->get_template()->getStyle());
+
+
+        $this->pdf_mc_table->SetFooter(Translation :: get("PdfReportFooter"), $this->get_template()->getStyle());
         		
 		$this->pdf_mc_table->AddPage();
 
