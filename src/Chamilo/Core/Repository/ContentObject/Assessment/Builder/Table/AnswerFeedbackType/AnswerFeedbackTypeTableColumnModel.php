@@ -24,8 +24,6 @@ class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel imple
     const PROPERTY_FEEDBACK_TYPE = 'FeedbackType';
 
     /**
-     *
-     * @see \libraries\format\TableColumnModel::initialize_columns()
      */
     public function initialize_columns()
     {
@@ -41,13 +39,13 @@ class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel imple
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE, false));
 
         $feedback_type_image = Theme :: getInstance()->getImage(
-            'answer_feedback_type/logo',
+            'AnswerFeedbackType/Logo',
             'png',
             Translation :: get(self :: PROPERTY_FEEDBACK_TYPE),
             null,
             ToolbarItem :: DISPLAY_ICON,
             false,
-            $this->get_component()->get_root_content_object()->context());
+            'Chamilo/Core/Repository/ContentObject/Assessment');
 
         $this->add_column(new StaticTableColumn(self :: PROPERTY_FEEDBACK_TYPE, $feedback_type_image));
     }
