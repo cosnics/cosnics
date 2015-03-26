@@ -36,7 +36,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $content_object = $this->get_root_content_object();
         }
-
         $html = array();
 
         $html[] = $this->render_header();
@@ -70,7 +69,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $html[] = '<div>';
         }
-
         $html[] = $this->get_complex_content_object_table_html();
         $html[] = '</div>';
         $html[] = '<div class="clear">&nbsp;</div>';

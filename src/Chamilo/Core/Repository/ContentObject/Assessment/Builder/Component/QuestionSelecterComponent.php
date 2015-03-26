@@ -71,7 +71,7 @@ class QuestionSelecterComponent extends Manager
         foreach ($question_ids as $question_id)
         {
             $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($question_id);
-            $cloi = ComplexContentObjectItem :: factory($question->get_type());
+            $cloi = ComplexContentObjectItem :: factory($question->package());
             $cloi->set_ref($question_id);
             $cloi->set_parent($parent);
             $cloi->set_user_id($this->get_user_id());

@@ -413,7 +413,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     public static function exists($content_object_type)
     {
-        $class_name = $content_object_type . '\builder\Manager';
+        $class_name = $content_object_type . '\Builder\Manager';
         return class_exists($class_name);
     }
 
