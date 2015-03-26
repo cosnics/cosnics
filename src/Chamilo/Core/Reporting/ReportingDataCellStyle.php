@@ -8,6 +8,8 @@ namespace Chamilo\Core\Reporting;
  *
  * @package reporting.lib
  * @author Andras Zolnay
+ *
+ * @see ReportingTemplateStyle
  */
 class ReportingDataCellStyle
 {
