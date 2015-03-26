@@ -25,19 +25,19 @@ use Chamilo\Libraries\Platform\Translation;
 class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     // Actions
-    const ACTION_FEEDBACK = 'feedback';
-    const ACTION_BOOKMARK = 'bookmarker';
-    const ACTION_ACTIVITY = 'activity';
-    const ACTION_RIGHTS = 'rights';
-    const ACTION_MOVE = 'mover';
-    const ACTION_SORT = 'sorter';
-    const ACTION_MANAGE = 'manager';
-    const ACTION_USER = 'user';
-    const ACTION_BUILD_PREREQUISITES = 'prerequisites_builder';
-    const ACTION_TYPE_SPECIFIC = 'type_specific';
-    const ACTION_BUILD = 'builder';
-    const ACTION_REPORTING = 'reporting';
-    const ACTION_ATTEMPT = 'attempt';
+    const ACTION_FEEDBACK = 'Feedback';
+    const ACTION_BOOKMARK = 'Bookmarker';
+    const ACTION_ACTIVITY = 'Activity';
+    const ACTION_RIGHTS = 'Rights';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_SORT = 'Sorter';
+    const ACTION_MANAGE = 'Manager';
+    const ACTION_USER = 'User';
+    const ACTION_BUILD_PREREQUISITES = 'PrerequisitesBuilder';
+    const ACTION_TYPE_SPECIFIC = 'TypeSpecific';
+    const ACTION_BUILD = 'Builder';
+    const ACTION_REPORTING = 'Reporting';
+    const ACTION_ATTEMPT = 'Attempt';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -129,7 +129,6 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
         else
         {
-
             $this->tabs_renderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
@@ -289,7 +288,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
                 if ($this->get_current_node()->get_content_object() instanceof LearningPath)
                 {
                     $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
-                        LearningPath :: context());
+                        LearningPath :: package());
 
                     $selected_template_id = TypeSelector :: get_selection();
 
@@ -561,8 +560,8 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function get_node_specific_tabs(ComplexContentObjectPathNode $node)
     {
-        $object_namespace = $node->get_content_object()->context();
-        $integration_class_name = $object_namespace . '\integration\\' . __NAMESPACE__ . '\Manager';
+        $object_namespace = $node->get_content_object()->package();
+        $integration_class_name = $object_namespace . '\Integration\\' . __NAMESPACE__ . '\Manager';
 
         if (class_exists($integration_class_name))
         {

@@ -15,9 +15,9 @@ abstract class Manager extends Application
 {
     const PARAM_ACTION = 'survey_rights_action';
     const PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID = 'location_entity_right_group_id';
-    const ACTION_MAILER = 'mailer';
-    const ACTION_ADMINISTRATOR = 'administrator';
-    const ACTION_INVITEE = 'invitee';
+    const ACTION_MAILER = 'Mailer';
+    const ACTION_ADMINISTRATOR = 'Administrator';
+    const ACTION_INVITEE = 'Invitee';
     const DEFAULT_ACTION = self :: ACTION_INVITEE;
 
     public static function launch($application)

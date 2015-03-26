@@ -113,11 +113,10 @@ class Path
      */
     public function getStoragePath($namespace = null, $web = false)
     {
-        if ($web)
-        {
-            throw new \Exception('Storage is not directly accessible');
-        }
-
+        // if ($web)
+        // {
+        // throw new \Exception('Storage is not directly accessible');
+        // }
         $basePath = realpath($this->getBasePath($web) . '../files/');
 
         return $this->cache[self :: STORAGE][(string) $namespace][(string) $web] = $basePath .
@@ -278,5 +277,13 @@ class Path
         return $this->cache[self :: FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ? $this->classnameUtilities->namespaceToPath(
             $namespace,
             $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+    }
+
+    /*
+     * Checks if string is HTTP or FTP uri @param string $uri @return boolean
+     */
+    public function isWebUri($uri)
+    {
+        return ((stripos($uri, 'http://') === 0) || (stripos($uri, 'https://') === 0) || (stripos($uri, 'ftp://') === 0));
     }
 }

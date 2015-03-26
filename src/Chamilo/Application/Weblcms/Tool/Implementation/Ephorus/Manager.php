@@ -10,13 +10,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_PUBLISH_DOCUMENT = 'document_publisher';
-    const ACTION_EPHORUS_REQUEST = 'ephorus_request';
-    const ACTION_ASSIGNMENT_EPHORUS_REQUEST = 'assignment_ephorus_request';
-    const ACTION_PUBLISH_LATEST_DOCUMENTS = 'assignment_latest_documents_publisher';
-    const ACTION_ASSIGNMENT_BROWSER = 'assignment_browser';
-    const ACTION_INDEX_VISIBILITY_CHANGER = 'index_visibility_changer';
-    // const ACTION_HIDE_ON_INDEX = 'index_hider';
+    const ACTION_PUBLISH_DOCUMENT = 'DocumentPublisher';
+    const ACTION_EPHORUS_REQUEST = 'EphorusRequest';
+    const ACTION_ASSIGNMENT_EPHORUS_REQUEST = 'AssignmentEphorusRequest';
+    const ACTION_PUBLISH_LATEST_DOCUMENTS = 'AssignmentLatestDocumentsPublisher';
+    const ACTION_ASSIGNMENT_BROWSER = 'AssignmentBrowser';
+    const ACTION_INDEX_VISIBILITY_CHANGER = 'IndexVisibilityChanger';
+    // const ACTION_HIDE_ON_INDEX = 'IndexHider';
     const PARAM_CONTENT_OBJECT_IDS = 'co_ids';
     const PARAM_REQUEST_IDS = 'req_ids';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

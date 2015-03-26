@@ -9,14 +9,14 @@ abstract class Manager extends Application
     const PARAM_EXPORT_REGISTRATION_ID = 'export_registration_id';
     const PARAM_EXPORT_TEMPLATE_ID = 'export_template_id';
     const PARAM_EXPORT_ID = 'export_id';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_CREATE = 'creator';
-    const ACTION_EDIT = 'editor';
-    const ACTION_EDIT_EXPORT_RIGHTS = 'rights_editor';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_EXPORT = 'export';
-    const ACTION_DELETE_EXPORT = 'export_deleter';
-    const ACTION_CONVERT_ANSWERS = 'convert_answers';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_EDIT = 'Editor';
+    const ACTION_EDIT_EXPORT_RIGHTS = 'RightsEditor';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_EXPORT = 'Export';
+    const ACTION_DELETE_EXPORT = 'ExportDeleter';
+    const ACTION_CONVERT_ANSWERS = 'ConvertAnswers';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     // url

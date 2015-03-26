@@ -6,19 +6,19 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'browser';
-    const ACTION_CREATE = 'creator';
-    const ACTION_DOWNLOAD = 'downloader';
-    const ACTION_EXPORT = 'exporter';
-    const ACTION_IMPORT = 'importer';
-    const ACTION_VIEW = 'viewer';
-    const ACTION_SELECT = 'selecter';
-    const ACTION_EDIT = 'editor';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_CONFIGURE = 'configurer';
-    const ACTION_INTERNAL_SYNC = 'internal_syncer';
-    const ACTION_EXTERNAL_SYNC = 'external_syncer';
-    const ACTION_FOLDER = 'folder';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_DOWNLOAD = 'Downloader';
+    const ACTION_EXPORT = 'Exporter';
+    const ACTION_IMPORT = 'Importer';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_SELECT = 'Selecter';
+    const ACTION_EDIT = 'Editor';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_CONFIGURE = 'Configurer';
+    const ACTION_INTERNAL_SYNC = 'InternalSyncer';
+    const ACTION_EXTERNAL_SYNC = 'ExternalSyncer';
+    const ACTION_FOLDER = 'Folder';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

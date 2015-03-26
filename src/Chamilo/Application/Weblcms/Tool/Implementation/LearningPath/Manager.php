@@ -24,11 +24,11 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
 {
-    const ACTION_DOWNLOAD_DOCUMENTS = 'document_saver';
-    const ACTION_IMPORT_SCORM = 'scorm_importer';
-    const ACTION_VIEW_ASSESSMENT_RESULTS = 'assessment_results_viewer';
-    const ACTION_EXPORT_RAW_RESULTS = 'assessment_raw_results_exporter';
-    const ACTION_VIEW_STATISTICS = 'statistics_viewer';
+    const ACTION_DOWNLOAD_DOCUMENTS = 'DocumentSaver';
+    const ACTION_IMPORT_SCORM = 'ScormImporter';
+    const ACTION_VIEW_ASSESSMENT_RESULTS = 'AssessmentResultsViewer';
+    const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
+    const ACTION_VIEW_STATISTICS = 'StatisticsViewer';
     const PARAM_ASSESSMENT_ID = 'assessment';
     const PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID = 'lpi_attempt';
     const PARAM_OBJECT_ID = 'object_id';

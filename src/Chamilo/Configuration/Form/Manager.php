@@ -22,10 +22,10 @@ abstract class Manager extends Application
     const PARAM_DYNAMIC_FORM_ELEMENT_ID = 'dynfo_el_id';
     const PARAM_DYNAMIC_FORM_ELEMENT_TYPE = 'dynfo_el_type';
     const PARAM_DELETE_FORM_ELEMENETS = 'delete_elements';
-    const ACTION_BUILD_DYNAMIC_FORM = 'builder';
-    const ACTION_ADD_FORM_ELEMENT = 'add_element';
-    const ACTION_DELETE_FORM_ELEMENT = 'delete_element';
-    const ACTION_UPDATE_FORM_ELEMENT = 'update_element';
+    const ACTION_BUILD_DYNAMIC_FORM = 'Builder';
+    const ACTION_ADD_FORM_ELEMENT = 'AddElement';
+    const ACTION_DELETE_FORM_ELEMENT = 'DeleteElement';
+    const ACTION_UPDATE_FORM_ELEMENT = 'UpdateElement';
     const TYPE_BUILDER = 0;
     const TYPE_VIEWER = 1;
     const TYPE_EXECUTER = 2;

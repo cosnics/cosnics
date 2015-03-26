@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Slideshare;
 
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {
@@ -9,14 +9,14 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_title()
     {
         $object = $this->get_object();
-        return '<h3>' . $object->get_title() . ' (' . Utilities :: format_seconds_to_minutes($object->get_duration()) .
+        return '<h3>' . $object->get_title() . ' (' . DatetimeUtilities :: format_seconds_to_minutes($object->get_duration()) .
              ')</h3>';
     }
 
     public function get_display_properties()
     {
         $properties = parent :: get_display_properties();
-        
+
         return $properties;
     }
 

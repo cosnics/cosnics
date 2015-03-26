@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class PublicationForm extends FormValidator
 {
@@ -275,8 +276,8 @@ class PublicationForm extends FormValidator
         }
         else
         {
-            $from = Utilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
-            $to = Utilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
         }
 
         $publication->set_from_date($from);

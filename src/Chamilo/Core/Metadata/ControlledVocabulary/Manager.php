@@ -7,10 +7,9 @@ abstract class Manager extends Application
 {
     const PARAM_ACTION = 'vocabulary_action';
     const PARAM_CONTROLLED_VOCABULARY_ID = 'controlled_vocabulary_id';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_CREATE = 'creator';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_CREATE = 'Creator';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
-
 }

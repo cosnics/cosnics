@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
@@ -62,7 +63,7 @@ class ExportTemplateTableCellRenderer extends DataClassTableCellRenderer impleme
                 {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
                 }
-                return Utilities :: truncate_string($description);
+                return StringUtilities :: getInstance()->truncate($description);
         }
 
         return parent :: render_cell($column, $export_template);

@@ -21,11 +21,11 @@ abstract class Manager extends Application
     const PARAM_RIGHT_ID = 'right_id';
 
     // Actions
-    const ACTION_EDIT_SIMPLE_RIGHTS = 'simple_rights_editor';
-    const ACTION_EDIT_ADVANCED_RIGHTS = 'advanced_rights_editor';
-    const ACTION_MANAGE = 'manager';
-    const ACTION_SET_ENTITY_RIGHTS = 'entity_rights_setter';
-    const ACTION_CHANGE_INHERIT = 'inherit_changer';
+    const ACTION_EDIT_SIMPLE_RIGHTS = 'SimpleRightsEditor';
+    const ACTION_EDIT_ADVANCED_RIGHTS = 'AdvancedRightsEditor';
+    const ACTION_MANAGE = 'Manager';
+    const ACTION_SET_ENTITY_RIGHTS = 'EntityRightsSetter';
+    const ACTION_CHANGE_INHERIT = 'InheritChanger';
     const DEFAULT_ACTION = self :: ACTION_EDIT_SIMPLE_RIGHTS;
 
     // Additional properties

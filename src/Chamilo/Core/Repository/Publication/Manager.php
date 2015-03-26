@@ -18,10 +18,10 @@ abstract class Manager extends Application
     const PARAM_PUBLICATION_ID = 'publication';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
-    const ACTION_PUBLISH = 'publisher';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_PUBLISH = 'Publisher';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

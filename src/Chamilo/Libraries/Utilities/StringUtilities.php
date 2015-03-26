@@ -99,17 +99,17 @@ class StringUtilities
         {
             return false;
         }
-        
+
         if ($forHumans)
         {
             $string = trim(str_replace('&nbsp;', '', strip_tags($string)));
         }
-        
+
         if (strlen($string) === 0)
         {
             return true;
         }
-        
+
         return false;
     }
 
@@ -156,4 +156,21 @@ class StringUtilities
         return '<a href="' . $hmail . '"' . $style_class . '>' . $hclickable_text . '</a>';
     }
 
+    /**
+     *
+     * @param string $string
+     * @param integer $length
+     * @param boolean $stripTags
+     * @param string $character
+     * @return string
+     */
+    public function truncate($string, $length = 200, $stripTags = true, $character = "\xE2\x80\xA6")
+    {
+        if ($stripTags)
+        {
+            $string = strip_tags($string);
+        }
+
+        return (string) $this->createString($string)->safeTruncate($length, $character);
+    }
 }

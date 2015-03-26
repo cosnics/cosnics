@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  *
@@ -261,7 +262,7 @@ $(document).ready(function(){
     public function get_title()
     {
         $object = $this->get_object();
-        return '<h3>' . $object->get_title() . ' (' . Utilities :: format_seconds_to_minutes(
+        return '<h3>' . $object->get_title() . ' (' . DatetimeUtilities :: format_seconds_to_minutes(
             $object->get_duration() / 1000) . ')</h3>';
     }
 

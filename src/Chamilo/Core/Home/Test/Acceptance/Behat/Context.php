@@ -15,7 +15,7 @@ class Context extends RawMinkContext
      */
     public function iShouldSeeBlock($title)
     {
-        $this->featureContext->assertElementContainsText('.portal_block .title', $title);
+        $this->featureContext->assertElementContainsText('.portal-block .title', $title);
 
     }
 

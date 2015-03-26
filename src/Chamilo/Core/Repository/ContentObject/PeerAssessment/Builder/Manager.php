@@ -12,20 +12,20 @@ use Chamilo\Libraries\Platform\Translation;
 
 abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 {
-    const ACTION_BROWSE_ATTEMPTS = 'attempt_browser';
+    const ACTION_BROWSE_ATTEMPTS = 'AttemptBrowser';
     const PARAM_ATTEMPT = 'attempt';
     const PARAM_GROUP = 'group';
     const PARAM_WIZARD_PAGE = 'wizard_page';
-    const ACTION_CREATE_ATTEMPT = 'attempt_creator';
-    const ACTION_EDIT_ATTEMPT = 'attempt_updater';
-    const ACTION_DELETE_ATTEMPT = 'attempt_deleter';
-    const ACTION_BROWSE_GROUPS = 'group_browser';
-    const ACTION_VIEW_GROUPS = 'group_viewer';
-    const ACTION_CREATE_GROUP = 'group_creator';
-    const ACTION_EDIT_GROUP = 'group_updater';
-    const ACTION_DELETE_GROUP = 'group_deleter';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_EDIT_SETTINGS = 'settings_editor';
+    const ACTION_CREATE_ATTEMPT = 'AttemptCreator';
+    const ACTION_EDIT_ATTEMPT = 'AttemptUpdater';
+    const ACTION_DELETE_ATTEMPT = 'AttemptDeleter';
+    const ACTION_BROWSE_GROUPS = 'GroupBrowser';
+    const ACTION_VIEW_GROUPS = 'GroupViewer';
+    const ACTION_CREATE_GROUP = 'GroupCreator';
+    const ACTION_EDIT_GROUP = 'GroupUpdater';
+    const ACTION_DELETE_GROUP = 'GroupDeleter';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_EDIT_SETTINGS = 'SettingsEditor';
 
     /**
      *

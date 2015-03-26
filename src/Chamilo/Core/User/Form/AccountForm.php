@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: account_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -60,11 +62,11 @@ class AccountForm extends FormValidator
      */
     public function build_basic_form()
     {
-        // Show user picture
-        $this->addElement(
-            'html',
-            '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
-                 '" style="position:absolute; right: 40px; z-index:1; border:1px solid black; max-width: 150px; margin-top: 10px"/>');
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
 
         $this->addElement('category', Translation :: get('PersonalDetails'));
         // Name
@@ -232,28 +234,6 @@ class AccountForm extends FormValidator
                 'html',
                 ResourceManager :: get_instance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Password.js'));
-            $this->addElement('category');
-        }
-
-        // Picture
-        if (PlatformSetting :: get('allow_change_user_picture', Manager :: context()) == 1)
-        {
-            $this->addElement('category', Translation :: get('PlatformOptions'));
-            $this->addElement(
-                'file',
-                User :: PROPERTY_PICTURE_URI,
-                ($this->user->has_picture() ? Translation :: get('UpdateImage') : Translation :: get('AddImage')));
-            $this->addElement('static', null, null, Translation :: get('AllowedProfileImageFormats'));
-            if ($this->form_type == self :: TYPE_EDIT && $this->user->has_picture())
-            {
-                $this->addElement('checkbox', 'remove_picture', null, Translation :: get('DelImage'));
-            }
-            $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF');
-            $this->addRule(
-                User :: PROPERTY_PICTURE_URI,
-                Translation :: get('OnlyImagesAllowed'),
-                'filetype',
-                $allowed_picture_types);
             $this->addElement('category');
         }
 

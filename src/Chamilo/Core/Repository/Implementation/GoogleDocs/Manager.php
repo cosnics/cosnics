@@ -15,8 +15,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const REPOSITORY_TYPE = 'google_docs';
     const PARAM_EXPORT_FORMAT = 'export_format';
     const PARAM_FOLDER = 'folder';
-    const ACTION_LOGIN = 'login';
-    const ACTION_LOGOUT = 'logout';
+    const ACTION_LOGIN = 'Login';
+    const ACTION_LOGOUT = 'Logout';
 
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()

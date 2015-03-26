@@ -22,16 +22,16 @@ use Exception;
 abstract class Manager extends Application
 {
     const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION;
-    const BROWSER_COMPONENT = 'browser';
-    const CREATOR_COMPONENT = 'creator';
-    const DELETER_COMPONENT = 'deleter';
-    const MOVER_COMPONENT = 'mover';
-    const PARENT_CHANGER_COMPONENT = 'parent_changer';
-    const UPDATER_COMPONENT = 'updater';
-    const VIEWER_COMPONENT = 'viewer';
-    const ATTACHMENT_VIEWER_COMPONENT = 'attachment_viewer';
-    const ACTION_PREVIEW = 'preview';
-    const DEFAULT_ACTION = self ::BROWSER_COMPONENT;
+    const BROWSER_COMPONENT = 'Browser';
+    const CREATOR_COMPONENT = 'Creator';
+    const DELETER_COMPONENT = 'Deleter';
+    const MOVER_COMPONENT = 'Mover';
+    const PARENT_CHANGER_COMPONENT = 'ParentChanger';
+    const UPDATER_COMPONENT = 'Updater';
+    const VIEWER_COMPONENT = 'Viewer';
+    const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
+    const ACTION_PREVIEW = 'Preview';
+    const DEFAULT_ACTION = self :: BROWSER_COMPONENT;
 
     public static function factory($type, $application)
     {

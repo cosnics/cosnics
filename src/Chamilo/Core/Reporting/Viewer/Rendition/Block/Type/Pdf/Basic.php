@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -37,17 +36,17 @@ class Basic extends Pdf
         // Heading
         if ($reportingData->is_row_heading_visible())
         {
-            $heading_data = array();
+            $headingData = array();
             if ($reportingData->is_categories_visible())
             {
-                $heading_data[] = '';
+                $headingData[] = '';
             }
             foreach ($reportingData->get_rows() as $row_index => $row_name)
             {
-                $heading_data[] = $row_name;
+                $headingData[] = $row_name;
             }
             
-            $pdfMcTable->SetHeading($heading_data);
+            $pdfMcTable->SetHeading($headingData);
             $pdfMcTable->Heading();
         }
         else
@@ -60,19 +59,23 @@ class Basic extends Pdf
         $pdfMcTable->SetTextColor(0);
         foreach ($reportingData->get_categories() as $category_index => $category_name)
         {
-            $row_data = array();
+            $rowData = array();
             if ($reportingData->is_categories_visible())
             {
-                $row_data[] = $category_name;
+                $rowData[] = $category_name;
             }
             
             foreach ($reportingData->get_rows() as $row_index => $row_name)
             {
-                $reportingData_data = $reportingData->get_data();
-                $row_data[] = $this->transcode_string($reportingData_data[$category_index][$row_index], false, 'UTF-8', 'CP1252');
+                $reportingDataData = $reportingData->get_data();
+                $rowData[] = $this->transcode_string(
+                    $reportingDataData[$category_index][$row_index],
+                    false,
+                    'UTF-8',
+                    'CP1252');
             }
             
-            $split_row_data = $this->split_row_data($pdfMcTable, $row_data);
+            $split_row_data = $this->split_row_data($pdfMcTable, $rowData);
             foreach ($split_row_data as $new_row_data)
             {
                 $pdfMcTable->Row($new_row_data);
@@ -99,12 +102,12 @@ class Basic extends Pdf
      *
      *  @return array of array.
      */
-    private function split_row_data($pdfMcTable, $row_data)
+    private function split_row_data($pdfMcTable, $rowData)
     {
         // Split each row item into array of items where each item fits on a page.
         $split_row_items = array();
         $max_row_item_count = 0;
-        foreach ($row_data as $column_index => $row_item)
+        foreach ($rowData as $column_index => $row_item)
         {
             $split_item = $this->split_row_item($pdfMcTable, $column_index, $row_item);
             $split_row_items[] = $split_item;
@@ -115,21 +118,21 @@ class Basic extends Pdf
         $rows = array();
         for($i = 0; $i < $max_row_item_count; $i ++)
         {
-            $row_data = array();
+            $rowData = array();
             
             foreach ($split_row_items as $split_item)
             {
                 if ($i < count($split_item))
                 {
-                    $row_data[] = $split_item[$i];
+                    $rowData[] = $split_item[$i];
                 }
                 else
                 {
-                    $row_data[] = '';
+                    $rowData[] = '';
                 }
             }
 
-            $rows[] = $row_data; 
+            $rows[] = $rowData; 
         }   
 
         return $rows;
@@ -149,7 +152,7 @@ class Basic extends Pdf
         
         if ($max_page_length <= 0)
         {
-            throw new Exception('Invalid PDF export maximum page length');
+            throw new \Exception('Invalid PDF export maximum page length');
         }
 
         $column_item_length = strlen($row_item);
@@ -168,7 +171,7 @@ class Basic extends Pdf
                 $current_page_string  = substr($row_item, $start, $max_page_length);
                 if (! $current_page_string)
                 {
-                    throw new Exception('Invalid page start index.');
+                    throw new \Exception('Invalid page start index.');
                 }
 
                 $next_page_string  = substr($row_item, $start + $max_page_length, $max_page_length);
@@ -190,12 +193,14 @@ class Basic extends Pdf
                         $current_page_length = $current_matches[1][1];
                         $start_increment = $current_matches[2][1];
                     }
-                    else if (! empty($current_matches[2][0]))
+                    else
+                        if (! empty($current_matches[2][0]))
                     {   // Page break directly after word 
                         $current_page_length = $max_page_length;
                         $start_increment = $max_page_length + strlen($next_matches[2][0]);
                     }
-                    else if (! empty($next_matches[1][0]))
+                        else
+                            if (! empty($next_matches[1][0]))
                     {  // Page break directly before first word of next page.
                         $current_page_length = $current_matches[1][1];
                         $start_increment = $max_page_length;
@@ -217,7 +222,6 @@ class Basic extends Pdf
 
 	/**
 	 *  \brief Simple HTML to plain text converter:
-	 *
 	 *  Features:
 	 *  - ordered and unordered lists
 	 *  - normalizes new lines
@@ -227,8 +231,8 @@ class Basic extends Pdf
 	 *  @param $input_encoding Passed to iconv as input character set
 	 *  @param $output_encoding Passed to iconv as output character set and also to html_entity_decode.
 	 */
-    private function transcode_string(
-		$text, $should_create_single_line = false, $input_encoding = 'UTF-8', $output_encoding = 'UTF-8')
+    private function transcode_string($text, $should_create_single_line = false, $input_encoding = 'UTF-8',
+        $output_encoding = 'UTF-8')
     {
         $text = iconv($input_encoding, $output_encoding, $text);
 
@@ -251,12 +255,13 @@ class Basic extends Pdf
 		$text = trim($text);
 
 		// Handle ordered list
-		$text = preg_replace_callback(
-			"/<ol>(.*)<\/ol>/isU", array('self', 'replace_ordered_list'), $text);
+        $text = preg_replace_callback("/<ol>(.*)<\/ol>/isU", array('self', 'replace_ordered_list'), $text);
 
 		// Handle unordered list
 		$text = preg_replace_callback(
-			"/<ul(\s+class=\".*\")?(\s+style=\".*\")?\s*>(.*)<\/ul>/isU", array('self', 'replace_unordered_list'), $text);
+            "/<ul(\s+class=\".*\")?(\s+style=\".*\")?\s*>(.*)<\/ul>/isU",
+            array('self', 'replace_unordered_list'),
+            $text);
 		
 		// Replace dot character chr(149) with its encoded equivalent
         $text = str_replace(chr(149), html_entity_decode('&bull;', $decode_flags, $output_encoding), $text);
@@ -290,7 +295,10 @@ class Basic extends Pdf
 
 	private function replace_unordered_list($unordered_list_match)
 	{
-        preg_match_all("/<li(\s+class=\".*\")?(\s+style=\".*\")?\s*>(.*)<\/li>/isU", $unordered_list_match[3], $list_matches);
+        preg_match_all(
+            "/<li(\s+class=\".*\")?(\s+style=\".*\")?\s*>(.*)<\/li>/isU",
+            $unordered_list_match[3],
+            $list_matches);
 		$result = array();
 		foreach ($list_matches[3] as $list_item)
 		{

@@ -8,11 +8,11 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'attribute_action';
     const PARAM_ATTRIBUTE_ID = 'attribute_id';
     const PARAM_MOVE = 'move';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_CREATE = 'creator';
-    const ACTION_MOVE = 'mover';
-    const ACTION_VOCABULATE = 'vocabulator';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_VOCABULATE = 'Vocabulator';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 }

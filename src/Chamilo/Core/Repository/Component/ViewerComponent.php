@@ -113,15 +113,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             'ICON' => Theme :: getInstance()->getImage(
                                 'Logo/16',
                                 'png',
-                                Translation :: get(
-                                    'TypeName',
-                                    null,
-                                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type())),
+                                Translation :: get('TypeName', null, $object->package()),
                                 null,
                                 ToolbarItem :: DISPLAY_ICON,
                                 false,
-                                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type()))),
-                        self :: context())));
+                                $object->package())),
+                        self :: package())));
 
             if ($object->get_state() == ContentObject :: STATE_RECYCLED)
             {
@@ -344,8 +341,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                     if ($object instanceof ComplexContentObjectSupport)
                     {
-                        if (\Chamilo\Core\Repository\Builder\Action\Manager :: exists(
-                            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type())))
+                        if (\Chamilo\Core\Repository\Builder\Manager :: exists($object->package()))
                         {
                             $clo_url = $this->get_browse_complex_content_object_url($object);
                             $target = null;

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -57,7 +57,7 @@ class SearchCompleteComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             $response[] = array(
                 'id' => $object->get_id(),
-                'label' => Utilities :: truncate_string($object->get_title(), 23),
+                'label' => StringUtilities :: getInstance()->truncate($object->get_title(), 23),
                 'value' => $object->get_title());
         }
 

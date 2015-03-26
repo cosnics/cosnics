@@ -7,12 +7,12 @@ use Chamilo\Libraries\Format\Structure\Page;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'lynx';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_SOURCE = 'source';
-    const ACTION_REMOTE = 'remote';
-    const ACTION_UPGRADE = 'upgrader';
-    const ACTION_CONTENT_OBJECT_UPGRADE = 'content_object_upgrader';
-    const ACTION_APPLICATION_UPGRADE = 'application_upgrader';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_SOURCE = 'Source';
+    const ACTION_REMOTE = 'Remote';
+    const ACTION_UPGRADE = 'Upgrader';
+    const ACTION_CONTENT_OBJECT_UPGRADE = 'ContentObjectUpgrader';
+    const ACTION_APPLICATION_UPGRADE = 'ApplicationUpgrader';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

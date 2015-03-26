@@ -24,10 +24,8 @@ abstract class MenuItem extends Bar
     {
         $html = array();
 
-        if ($this->get_item()->get_parent() == 0)
-        {
-            $selected = $this->get_item()->is_selected();
-        }
+        $selected = $this->get_item()->is_selected() ||
+             ($this->get_item()->get_parent() != 0 && $this->get_item()->get_parent_object()->is_selected());
 
         $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_url() . '">';
 

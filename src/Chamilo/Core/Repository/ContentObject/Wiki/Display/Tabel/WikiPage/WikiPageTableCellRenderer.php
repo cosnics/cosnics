@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -47,7 +48,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                             ']]',
                             '',
                             str_ireplace('[[', '', str_ireplace('=', '', $wiki_page->get_description())));
-                        return Utilities :: truncate_string($description, 50);
+                        return StringUtilities :: getInstance()->truncate($description, 50);
                 }
             }
 

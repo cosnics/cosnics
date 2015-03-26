@@ -8,8 +8,8 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'action';
     const PARAM_TEMPLATE_ID = 'template_id';
     const PARAM_TEMPLATE_FUNCTION_PARAMETERS = 'template_function_parameters';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_VIEW = 'viewer';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_VIEW = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     // Url Creation

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ToolPublicationsBlock extends ToolBlock
 {
@@ -101,7 +101,7 @@ class ToolPublicationsBlock extends ToolBlock
             $reporting_data->add_data_category_row(
                 $index,
                 Translation :: get('Description'),
-                Utilities :: truncate_string($des, 50));
+                StringUtilities :: getInstance()->truncate($des, 50));
 
             $course_visit_data = $this->get_course_visit_summary_from_publication($content_object_publication);
             $this->add_reporting_data_from_course_visit_as_row($index, $reporting_data, $course_visit_data);

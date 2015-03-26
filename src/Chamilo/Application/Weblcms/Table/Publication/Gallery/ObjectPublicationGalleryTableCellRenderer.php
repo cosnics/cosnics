@@ -7,21 +7,21 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\RecordGalleryTable\RecordGalleryTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Cell renderer for the content object publications gallery table
- * 
+ *
  * @author Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record gallery table
  */
-class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRenderer implements 
+class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
     /**
      * Renders a cell
-     * 
+     *
      * @param mixed $publication
      *
      * @return string
@@ -29,31 +29,31 @@ class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRe
     public function render_cell($publication)
     {
         $object = $this->get_component()->get_content_object_from_publication($publication);
-        
+
         $html = array();
-        
+
         $html[] = parent :: render_cell($publication);
-        $html[] = '<h3>' . Utilities :: truncate_string($object->get_title(), 25) . '</h3>';
-        
+        $html[] = '<h3>' . StringUtilities :: getInstance()->truncate($object->get_title(), 25) . '</h3>';
+
         $details_url = $this->get_component()->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW));
-        
+
         $thumbnail = ContentObjectRenditionImplementation :: launch(
-            $object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_THUMBNAIL, 
+            $object,
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_THUMBNAIL,
             $this);
-        
+
         $html[] = '<a href="' . $details_url . '">' . $thumbnail . '</a>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the actions toolbar
-     * 
+     *
      * @param mixed $publication
      *
      * @return String

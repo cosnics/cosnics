@@ -15,8 +15,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     // Actions
-    const ACTION_VIEW_ASSESSMENT = 'assessment_viewer';
-    const ACTION_VIEW_ASSESSMENT_RESULT = 'results_viewer';
+    const ACTION_VIEW_ASSESSMENT = 'AssessmentViewer';
+    const ACTION_VIEW_ASSESSMENT_RESULT = 'ResultsViewer';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_ASSESSMENT;

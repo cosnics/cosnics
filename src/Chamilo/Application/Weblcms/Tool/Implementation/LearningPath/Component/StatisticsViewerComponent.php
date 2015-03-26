@@ -34,9 +34,9 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 class StatisticsViewerComponent extends Manager implements DelegateComponent
 {
     const PARAM_STAT = 'stats_action';
-    const ACTION_DELETE_LP_ATTEMPT = 'delete_lp_attempt';
-    const ACTION_DELETE_LPI_ATTEMPT = 'delete_lpi_attempt';
-    const ACTION_DELETE_LPI_ATTEMPTS = 'delete_lpi_attempts';
+    const ACTION_DELETE_LP_ATTEMPT = 'DeleteLpAttempt';
+    const ACTION_DELETE_LPI_ATTEMPT = 'DeleteLpiAttempt';
+    const ACTION_DELETE_LPI_ATTEMPTS = 'DeleteLpiAttempts';
     const PARAM_ITEM_ID = 'item_id';
     const PARAM_DELETE_ID = 'delete_id';
 

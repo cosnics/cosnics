@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class SharedTableCellRenderer extends DataClassTableCellRenderer
 {
@@ -38,10 +39,10 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
                      '" title="' . htmlentities($content_object->get_type_string()) . '">' . $image . '</a>';
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
-                $title_short = Utilities :: truncate_string($title, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title, 53, false);
                 return $title_short;
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: truncate_string($content_object->get_description(), 50);
+                return StringUtilities :: getInstance()->truncate($content_object->get_description(), 50);
             case RepositoryTableColumnModel :: PROPERTY_VERSION :
                 if ($content_object instanceof Versionable)
                 {

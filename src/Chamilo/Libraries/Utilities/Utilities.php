@@ -32,7 +32,8 @@ class Utilities
     private static $camel_us_map = array();
 
     /**
-     * Splits a Google-style search query. For example, the query /"chamilo repository" utilities/ would be parsed into
+     * Splits a Google-style search query.
+     * For example, the query /"chamilo repository" utilities/ would be parsed into
      * array('chamilo repository', 'utilities').
      *
      * @param $pattern The query.
@@ -60,9 +61,9 @@ class Utilities
      *
      * @param $query string The query as given by the end user.
      * @param $properties mixed The learning object properties which should be taken into account for the condition. For
-     *            example, array('title','type') will yield a Condition which can be used to search for learning objects
-     *            on the properties 'title' or 'type'. By default the properties are 'title' and 'description'. If the
-     *            condition should apply to a single property, you can pass a string instead of an array.
+     *        example, array('title','type') will yield a Condition which can be used to search for learning objects
+     *        on the properties 'title' or 'type'. By default the properties are 'title' and 'description'. If the
+     *        condition should apply to a single property, you can pass a string instead of an array.
      * @return Condition The condition.
      * @deprecated Use the function get_conditions() in action_bar_renderer to access the search property. This function
      *             uses this method to create the conditions.
@@ -85,7 +86,7 @@ class Utilities
             $pattern_conditions = array();
             foreach ($properties as $index => $property)
             {
-                $pattern_conditions[] = new PatternMatchCondition($property->get_property(), $q);
+                $pattern_conditions[] = new PatternMatchCondition($property, $q);
             }
             if (count($pattern_conditions) > 1)
             {
@@ -96,39 +97,12 @@ class Utilities
                 $cond[] = $pattern_conditions[0];
             }
         }
-        $result = new AndCondition($cond);
-        return $result;
+        return new AndCondition($cond);
     }
 
     /**
-     * Converts a date/time value retrieved from a FormValidator datepicker element to the corresponding UNIX itmestamp.
-     *
-     * @param $string string The date/time value.
-     * @return int The UNIX timestamp.
-     */
-    public static function time_from_datepicker($string)
-    {
-        list($date, $time) = split(' ', $string);
-        list($year, $month, $day) = split('-', $date);
-        list($hours, $minutes, $seconds) = split(':', $time);
-        return mktime($hours, $minutes, $seconds, $month, $day, $year);
-    }
-
-    /**
-     * Converts a date/time value retrieved from a FormValidator datepicker without timepicker element to the
-     * corresponding UNIX itmestamp.
-     *
-     * @param $string string The date/time value.
-     * @return int The UNIX timestamp.
-     */
-    public static function time_from_datepicker_without_timepicker($string, $h = 0, $m = 0, $s = 0)
-    {
-        list($year, $month, $day) = split('-', $string);
-        return mktime($h, $m, $s, $month, $day, $year);
-    }
-
-    /**
-     * Orders the given learning objects by their title. Note that the ordering happens in-place; there is no return
+     * Orders the given learning objects by their title.
+     * Note that the ordering happens in-place; there is no return
      * value.
      *
      * @param $objects array The learning objects to order.
@@ -197,23 +171,6 @@ class Utilities
     private static function by_id_desc($content_object_1, $content_object_2)
     {
         return ($content_object_1->get_id() < $content_object_2->get_id() ? 1 : - 1);
-    }
-
-    /**
-     * Checks if a file is an HTML document.
-     */
-    // TODO: SCARA - MOVED / FROM: document_form_class / TO: Utilities or some other relevant class.
-    public static function is_html_document($path)
-    {
-        return (preg_match('/\.x?html?$/', $path) === 1);
-    }
-
-    /*
-     * Checks if string is HTTP or FTP uri
-     */
-    public static function is_web_uri($uri)
-    {
-        return ((stripos($uri, 'http://') === 0) || (stripos($uri, 'https://') === 0) || (stripos($uri, 'ftp://') === 0));
     }
 
     public static function add_block_hider()
@@ -341,73 +298,6 @@ class Utilities
         return implode(PHP_EOL, $html);
     }
 
-    public static function format_seconds_to_hours($seconds)
-    {
-        $hours = floor($seconds / 3600);
-        $rest = $seconds % 3600;
-
-        $minutes = floor($rest / 60);
-        $seconds = $rest % 60;
-
-        if ($minutes < 10)
-        {
-            $minutes = '0' . $minutes;
-        }
-
-        if ($seconds < 10)
-        {
-            $seconds = '0' . $seconds;
-        }
-
-        return $hours . ':' . $minutes . ':' . $seconds;
-    }
-
-    public static function format_seconds_to_minutes($seconds)
-    {
-        $minutes = floor($seconds / 60);
-        $seconds = $seconds % 60;
-
-        if ($minutes < 10)
-        {
-            $minutes = '0' . $minutes;
-        }
-
-        if ($seconds < 10)
-        {
-            $seconds = '0' . $seconds;
-        }
-
-        return $minutes . ':' . $seconds;
-    }
-
-    /**
-     * Strips the tags on request, and truncates if necessary a given string to the given length in characters. Adds a
-     * character at the end (either specified or default ...) when the string is truncated. Boolean $strip to indicate
-     * if the tags within the string have to be stripped
-     *
-     * @param $string string The input string, UTF-8 encoded.
-     * @param $length int The limit of the resulting length in characters.
-     * @param $strip boolean Indicates if the tags within the string have to be stripped.
-     * @param $char string A UTF-8 encoded character put at the end of the result string indicating truncation, by
-     *            default it is the horizontal ellipsis (\u2026)
-     * @return string The result string, html-entities (if any) are converted to normal UTF-8 characters.
-     */
-    public static function truncate_string($string, $length = 200, $strip = true, $char = "\xE2\x80\xA6")
-    {
-        if ($strip)
-        {
-            $string = strip_tags($string);
-        }
-
-        $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
-        if (mb_strlen($string, 'UTF-8') > $length)
-        {
-            $string = mb_substr($string, 0, $length - mb_strlen($char, 'UTF-8'), 'UTF-8') . $char;
-        }
-
-        return $string;
-    }
-
     public static function extract_xml_file($file, $extra_options = array())
     {
         require_once 'XML/Unserializer.php';
@@ -465,54 +355,6 @@ class Utilities
     public static function htmlentities($string)
     {
         return htmlentities($string, ENT_COMPAT, 'UTF-8');
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public static function get_usable_memory()
-    {
-        $val = trim(@ini_get('memory_limit'));
-
-        if (preg_match('/(\\d+)([mkg]?)/i', $val, $regs))
-        {
-            $memory_limit = (int) $regs[1];
-            switch ($regs[2])
-            {
-
-                case 'k' :
-                case 'K' :
-                    $memory_limit *= 1024;
-                    break;
-
-                case 'm' :
-                case 'M' :
-                    $memory_limit *= 1048576;
-                    break;
-
-                case 'g' :
-                case 'G' :
-                    $memory_limit *= 1073741824;
-                    break;
-            }
-
-            // how much memory PHP requires at the start of export (it is really a little less)
-            if ($memory_limit > 6100000)
-            {
-                $memory_limit -= 6100000;
-            }
-
-            // allow us to consume half of the total memory available
-            $memory_limit /= 2;
-        }
-        else
-        {
-            // set the buffer to 1M if we have no clue how much memory PHP will give us :P
-            $memory_limit = 1048576;
-        }
-
-        return $memory_limit;
     }
 
     /**
@@ -669,7 +511,8 @@ class Utilities
     }
 
     /**
-     * Get the current query string (e.g. "?foo=bar&faa=bor")
+     * Get the current query string (e.g.
+     * "?foo=bar&faa=bor")
      *
      * @param $append array optional array of key/value pairs to be appended to the current QS.
      * @return string

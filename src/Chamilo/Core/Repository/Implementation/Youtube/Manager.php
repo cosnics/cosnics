@@ -19,8 +19,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const FEED_TYPE_GENERAL = 1;
     const FEED_TYPE_MYVIDEOS = 2;
     const FEED_STANDARD_TYPE = 3;
-    const ACTION_LOGIN = 'login';
-    const ACTION_LOGOUT = 'logout';
+    const ACTION_LOGIN = 'Login';
+    const ACTION_LOGOUT = 'Logout';
 
     /**
      *

@@ -12,8 +12,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core
 {
 
     // Actions
-    const ACTION_TABLE = 'table';
-    const ACTION_GRAPH = 'graph';
+    const ACTION_TABLE = 'Table';
+    const ACTION_GRAPH = 'Graph';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_GRAPH;
