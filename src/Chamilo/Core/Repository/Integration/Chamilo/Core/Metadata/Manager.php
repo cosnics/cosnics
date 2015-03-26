@@ -16,7 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
 abstract class Manager extends Application
 {
     const PARAM_ACTION = 'metadata_action';
-    const ACTION_EDIT_METADATA_BATCH = 'metadata_batch_editor';
+    const ACTION_EDIT_METADATA_BATCH = 'MetadataBatchEditor';
     const DEFAULT_ACTION = self :: ACTION_EDIT_METADATA_BATCH;
 
     /**

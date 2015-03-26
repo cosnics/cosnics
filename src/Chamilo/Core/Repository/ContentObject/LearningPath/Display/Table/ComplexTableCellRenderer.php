@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: learning_path_browser_table_cell_renderer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -58,7 +59,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 $title = htmlspecialchars($content_object->get_title());
                 $title_short = $title;
 
-                $title_short = Utilities :: truncate_string($title_short, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title_short, 53, false);
 
                 if ($content_object->get_type() == LearningPath :: class_name())
                 {

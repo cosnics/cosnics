@@ -22,14 +22,14 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     // Actions
-    const ACTION_FEEDBACK = 'feedback';
-    const ACTION_BOOKMARK = 'bookmarker';
-    const ACTION_ACTIVITY = 'activity';
-    const ACTION_RIGHTS = 'rights';
-    const ACTION_MOVE = 'mover';
-    const ACTION_SORT = 'sorter';
-    const ACTION_MANAGE = 'manager';
-    const ACTION_USER = 'user';
+    const ACTION_FEEDBACK = 'Feedback';
+    const ACTION_BOOKMARK = 'Bookmarker';
+    const ACTION_ACTIVITY = 'Activity';
+    const ACTION_RIGHTS = 'Rights';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_SORT = 'Sorter';
+    const ACTION_MANAGE = 'Manager';
+    const ACTION_USER = 'User';
 
     // Parameters
     const PARAM_STEP = 'step';

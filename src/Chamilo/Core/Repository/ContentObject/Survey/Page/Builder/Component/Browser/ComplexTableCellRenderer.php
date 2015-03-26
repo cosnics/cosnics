@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: survey_page_browser_table_cell_renderer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -29,7 +28,7 @@ class ComplexTableCellRenderer extends ComplexTableCellRenderer
                 (string) StringUtilities :: getInstance()->createString(ContentObject :: PROPERTY_TITLE)->upperCamelize()) :
                 $title = htmlspecialchars($complex_content_object_item->get_title());
                 $title_short = $title;
-                $title_short = Utilities :: truncate_string($title_short, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title_short, 53, false);
 
                 if ($complex_content_object_item instanceof ComplexContentObjectSupport)
                 {

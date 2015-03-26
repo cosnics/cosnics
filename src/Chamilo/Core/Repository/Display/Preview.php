@@ -15,7 +15,7 @@ use Exception;
 abstract class Preview extends Application
 {
     const PARAM_ACTION = 'preview_action';
-    const ACTION_VIEW = 'viewer';
+    const ACTION_VIEW = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW;
 
     public static function get_default_action()

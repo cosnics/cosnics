@@ -9,6 +9,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_DELETE_COURSE = 'course_deleter';
+    const ACTION_DELETE_COURSE = 'CourseDeleter';
     const DEFAULT_ACTION = self :: ACTION_DELETE_COURSE;
 }

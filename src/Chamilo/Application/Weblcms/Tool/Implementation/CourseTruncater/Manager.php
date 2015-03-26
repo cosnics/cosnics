@@ -9,6 +9,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_BROWSE = 'browser';
+    const ACTION_BROWSE = 'Browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 }

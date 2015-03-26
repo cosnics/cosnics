@@ -16,11 +16,11 @@ abstract class Manager extends Application
     const PARAM_MESSAGE = 'message';
     const PARAM_WARNING_MESSAGE = 'warning_message';
     const PARAM_ERROR_MESSAGE = 'error_message';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_VIEW = 'viewer';
-    const ACTION_SEND_MAIL = 'send_mail';
-    const ACTION_TEST_MAIL = 'test_mail';
-    const ACTION_DELETE = 'delete';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_SEND_MAIL = 'SendMail';
+    const ACTION_TEST_MAIL = 'TestMail';
+    const ACTION_DELETE = 'Delete';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     // url

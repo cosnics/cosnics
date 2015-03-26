@@ -31,19 +31,19 @@ abstract class Manager extends Application implements NoContextComponent
     const CLASS_NAME = __CLASS__;
 
     // Actions
-    const ACTION_VIEW_EXTERNAL_REPOSITORY = 'viewer';
-    const ACTION_EXPORT_EXTERNAL_REPOSITORY = 'exporter';
-    const ACTION_IMPORT_EXTERNAL_REPOSITORY = 'importer';
-    const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'browser';
-    const ACTION_DOWNLOAD_EXTERNAL_REPOSITORY = 'downloader';
-    const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'uploader';
-    const ACTION_SELECT_EXTERNAL_REPOSITORY = 'selecter';
-    const ACTION_EDIT_EXTERNAL_REPOSITORY = 'editor';
-    const ACTION_DELETE_EXTERNAL_REPOSITORY = 'deleter';
-    const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'configurer';
-    const ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY = 'external_syncer';
-    const ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY = 'internal_syncer';
-    const ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY = 'new_folder';
+    const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';
+    const ACTION_EXPORT_EXTERNAL_REPOSITORY = 'Exporter';
+    const ACTION_IMPORT_EXTERNAL_REPOSITORY = 'Importer';
+    const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'Browser';
+    const ACTION_DOWNLOAD_EXTERNAL_REPOSITORY = 'Downloader';
+    const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'Uploader';
+    const ACTION_SELECT_EXTERNAL_REPOSITORY = 'Selecter';
+    const ACTION_EDIT_EXTERNAL_REPOSITORY = 'Editor';
+    const ACTION_DELETE_EXTERNAL_REPOSITORY = 'Deleter';
+    const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'Configurer';
+    const ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY = 'ExternalSyncer';
+    const ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY = 'InternalSyncer';
+    const ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY = 'NewFolder';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;

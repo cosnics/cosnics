@@ -273,15 +273,21 @@ class ApplicationFactory
      */
     private function getClassName($action)
     {
-        $classname = $this->getContext() . '\Component\\' .
-             (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
+        $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 
         if (! class_exists($classname))
         {
-            $trail = BreadcrumbTrail :: get_instance();
-            $trail->add(new Breadcrumb('#', Translation :: get($classname)));
+            // TODO: Temporary fallback for backwards compatibility
+            $classname = $this->getContext() . '\Component\\' .
+                 (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
 
-            throw new ClassNotExistException($classname);
+            if (! class_exists($classname))
+            {
+                $trail = BreadcrumbTrail :: get_instance();
+                $trail->add(new Breadcrumb('#', Translation :: get($classname)));
+
+                throw new ClassNotExistException($classname);
+            }
         }
 
         return $classname;

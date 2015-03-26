@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PublicationTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -31,7 +32,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
             case Attributes :: PROPERTY_TITLE :
                 $url = $publication_attributes->get_url();
                 return '<a href="' . $url . '"><span title="' . $publication_attributes->get_title() . '">' .
-                     Utilities :: truncate_string($publication_attributes->get_title(), 50) . '</span></a>';
+                     StringUtilities :: getInstance()->truncate($publication_attributes->get_title(), 50) . '</span></a>';
             case Attributes :: PROPERTY_DATE :
                 return date('Y-m-d, H:i', $publication_attributes->get_date());
         }

@@ -10,7 +10,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Enter description here . ..
+ * Enter description here .
+ * ..
  *
  * @author Renaat De Muynck
  * @method PeerAssessmentDisplaySupport get_parent()
@@ -25,23 +26,23 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_GROUP_USERS = 'group_users';
     const PARAM_EXPORT_TYPE = 'export_type';
     const ACTION_TAKE_PEER_ASSESSMENT = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-    const ACTION_CLOSE_USER_ATTEMPT = 'user_attempt_closer';
-    const ACTION_TOGGLE_CLOSE_USER_ATTEMPT = 'user_attempt_closed_toggler';
-    const ACTION_CLOSE_ATTEMPT = 'attempt_closer';
-    const ACTION_OPEN_USER_ATTEMPT = 'user_attempt_opener';
-    const ACTION_VIEW_USER_ATTEMPT_STATUS = 'user_attempt_status_viewer';
-    const ACTION_VIEW_USER_STATUS = 'user_status_viewer';
-    const ACTION_VIEW_USER_RESULTS = 'user_results_viewer';
-    const ACTION_VIEW_USER_REPORT = 'user_report_viewer';
-    const ACTION_VIEW_ATTEMPT = 'attempt_viewer';
-    const ACTION_TOGGLE_ATTEMPT_VISIBILITY = 'attempt_visibility_toggler';
-    const ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE = 'direct_group_subscribe_browser';
-    const ACTION_SUBSCRIBE_USER = 'user_group_subscriber';
-    const ACTION_UNSUBSCRIBE_USER = 'user_group_unsubscriber';
-    const ACTION_OVERVIEW_STATUS = 'status_viewer';
-    const ACTION_OVERVIEW_RESULTS = 'results_viewer';
-    const ACTION_EXPORT_USER_RESULT = 'user_result_exporter';
-    const ACTION_EXPORT_RESULT = 'result_exporter';
+    const ACTION_CLOSE_USER_ATTEMPT = 'UserAttemptCloser';
+    const ACTION_TOGGLE_CLOSE_USER_ATTEMPT = 'UserAttemptClosedToggler';
+    const ACTION_CLOSE_ATTEMPT = 'AttemptCloser';
+    const ACTION_OPEN_USER_ATTEMPT = 'UserAttemptOpener';
+    const ACTION_VIEW_USER_ATTEMPT_STATUS = 'UserAttemptStatusViewer';
+    const ACTION_VIEW_USER_STATUS = 'UserStatusViewer';
+    const ACTION_VIEW_USER_RESULTS = 'UserResultsViewer';
+    const ACTION_VIEW_USER_REPORT = 'UserReportViewer';
+    const ACTION_VIEW_ATTEMPT = 'AttemptViewer';
+    const ACTION_TOGGLE_ATTEMPT_VISIBILITY = 'AttemptVisibilityToggler';
+    const ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE = 'DirectGroupSubscribeBrowser';
+    const ACTION_SUBSCRIBE_USER = 'UserGroupSubscriber';
+    const ACTION_UNSUBSCRIBE_USER = 'UserGroupUnsubscriber';
+    const ACTION_OVERVIEW_STATUS = 'StatusViewer';
+    const ACTION_OVERVIEW_RESULTS = 'ResultsViewer';
+    const ACTION_EXPORT_USER_RESULT = 'UserResultExporter';
+    const ACTION_EXPORT_RESULT = 'ResultExporter';
     const EXPORT_TYPE_EXCEL = 'excel';
     const EXPORT_TYPE_CSV = 'csv';
 

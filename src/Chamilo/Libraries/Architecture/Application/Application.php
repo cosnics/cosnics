@@ -29,7 +29,7 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 abstract class Application
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     /**
      *

@@ -22,23 +22,23 @@ use Exception;
 abstract class Manager extends Application
 {
     const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION;
-    const ACTION_VIEW = 'viewer';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_PUBLISH = 'publisher';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
-    const ACTION_MOVE = 'mover';
-    const ACTION_UPDATE_CONTENT_OBJECT = 'content_object_updater';
-    const ACTION_UPDATE_PUBLICATION = 'publication_updater';
-    const ACTION_SHARE_CONTENT_OBJECTS = 'share_content_objects';
-    const MOVE_TO_CATEGORY_COMPONENT = 'category_mover';
-    const INTRODUCTION_PUBLISHER_COMPONENT = 'introduction_publisher';
-    const MANAGE_CATEGORIES_COMPONENT = 'category_manager';
-    const VIEW_REPORTING_COMPONENT = 'reporting_viewer';
-    const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'complex_builder';
-    const DISPLAY_COMPLEX_CONTENT_OBJECT_COMPONENT = 'complex_display';
-    const RIGHTS_EDITOR_COMPONENT = 'rights_editor';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_PUBLISH = 'Publisher';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
+    const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
+    const ACTION_SHARE_CONTENT_OBJECTS = 'ShareContentObjects';
+    const MOVE_TO_CATEGORY_COMPONENT = 'CategoryMover';
+    const INTRODUCTION_PUBLISHER_COMPONENT = 'IntroductionPublisher';
+    const MANAGE_CATEGORIES_COMPONENT = 'CategoryManager';
+    const VIEW_REPORTING_COMPONENT = 'ReportingViewer';
+    const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexBuilder';
+    const DISPLAY_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexDisplay';
+    const RIGHTS_EDITOR_COMPONENT = 'RightsEditor';
     const DEFAULT_ACTION = \Chamilo\Application\Weblcms\Tool\Manager :: DEFAULT_ACTION;
 
     public static function factory($type, $tool_component)

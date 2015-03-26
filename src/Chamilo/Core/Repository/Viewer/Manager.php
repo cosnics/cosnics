@@ -21,12 +21,12 @@ abstract class Manager extends Application
     const PARAM_PUBLISH_SELECTED = 'viewer_selected';
     const PARAM_IMPORT_TYPE = 'import_type';
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
-    const ACTION_CREATOR = 'creator';
-    const ACTION_BROWSER = 'browser';
-    const ACTION_PUBLISHER = 'publisher';
-    const ACTION_VIEWER = 'viewer';
-    const ACTION_IMPORTER = 'importer';
-    const ACTION_IMPORTED_SELECTER = 'imported_selecter';
+    const ACTION_CREATOR = 'Creator';
+    const ACTION_BROWSER = 'Browser';
+    const ACTION_PUBLISHER = 'Publisher';
+    const ACTION_VIEWER = 'Viewer';
+    const ACTION_IMPORTER = 'Importer';
+    const ACTION_IMPORTED_SELECTER = 'ImportedSelecter';
     const DEFAULT_ACTION = self :: ACTION_CREATOR;
 
     /**

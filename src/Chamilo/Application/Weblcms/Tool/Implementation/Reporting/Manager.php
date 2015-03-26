@@ -11,7 +11,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
     const PARAM_REPORTING_TOOL = 'reporting_tool';
     const PARAM_QUESTION = 'question';
-    const ACTION_VIEW_REPORT = 'viewer';
+    const ACTION_VIEW_REPORT = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW_REPORT;
-
 }

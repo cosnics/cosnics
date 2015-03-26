@@ -12,6 +12,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Search;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_SEARCH = 'searcher';
+    const ACTION_SEARCH = 'Searcher';
     const DEFAULT_ACTION = self :: ACTION_SEARCH;
 }

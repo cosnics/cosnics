@@ -11,11 +11,11 @@ abstract class Manager extends Application
     const PARAM_DELETE = 'delete';
     const PARAM_COPY_FROM_TEMPLATES = 'copy_template';
     const PARAM_TEMPLATE_ID = 'template_id';
-    const ACTION_IMPORT = 'importer';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_CREATE = 'creator';
-    const ACTION_COPY = 'copier';
+    const ACTION_IMPORT = 'Importer';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_COPY = 'Copier';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     public function get_delete_template_url($template_id)

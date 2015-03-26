@@ -4,10 +4,8 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
-// require_once Path :: getInstance()->getPluginPath() . '/pChart/pChart/pChart.class';
-// require_once Path :: getInstance()->getPluginPath() . '/pChart/pChart/pData.class';
 /**
  *
  * @author Hans De Bisschop & Magali Gillard
@@ -55,7 +53,7 @@ abstract class Chart extends Html
             $chart = array();
             $chart_description = array();
             $chart_data = array();
-            
+
             $chart_description['Position'] = 'Name';
             $chart_description['Values'] = array();
             $chart_description['Description'] = array();
@@ -65,14 +63,14 @@ abstract class Chart extends Html
                 $chart_description['Description']['Serie' . $row_id] = trim(
                     trim(trim(html_entity_decode(strip_tags($row_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0"));
             }
-            
+
             $chart[1] = $chart_description;
-            
+
             foreach ($reporting_data->get_categories() as $category_id => $category_name)
             {
                 $category_array = array();
                 $category_array['Name'] = trim(
-                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')), 
+                    trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')),
                     "\xC2\xA0");
                 foreach ($reporting_data->get_rows() as $row_id => $row_name)
                 {
@@ -80,7 +78,7 @@ abstract class Chart extends Html
                 }
                 $chart_data[] = $category_array;
             }
-            
+
             $chart[0] = $chart_data;
             return $chart;
         }
@@ -94,10 +92,10 @@ abstract class Chart extends Html
             {
                 if ($key2 == "Name")
                 {
-                    $value[$key2] = Utilities :: truncate_string(
-                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 
-                        30, 
-                        false, 
+                    $value[$key2] = StringUtilities :: getInstance()->truncate(
+                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')),
+                        30,
+                        false,
                         '...');
                 }
             }

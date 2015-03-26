@@ -10,13 +10,8 @@ use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
 
 /**
- * $Id: category_menu.class.php 191 2009-11-13 11:50:28Z chellee $
- * 
- * @package application.common.category_manager
- */
-/**
  * This class provides a navigation menu to allow a user to browse through his reservations categories
- * 
+ *
  * @author Sven Vanpoucke
  */
 class Menu extends HTML_Menu
@@ -44,7 +39,7 @@ class Menu extends HTML_Menu
         $this->menu_items = $menu_items;
         // $menu = $this->get_menu();
         parent :: __construct($menu_items);
-        
+
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
         $this->forceCurrentUrl($this->get_url());
     }
@@ -66,7 +61,7 @@ class Menu extends HTML_Menu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -85,7 +80,7 @@ class Menu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

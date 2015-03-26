@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 abstract class Manager extends Application
 {
@@ -23,26 +23,26 @@ abstract class Manager extends Application
     const PARAM_SURVEY_PAGE_ID = 'page_id';
     const PARAM_SURVEY_QUESTION_ID = 'question_id';
     const PARAM_MAIL_ID = 'mail_id';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_PUBLICATION_RIGHTS = 'publication_rights';
-    const ACTION_APPLICATION_RIGHTS = 'application_rights';
-    const ACTION_EDIT = 'editor';
-    const ACTION_PUBLISH = 'publisher';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_TAKE = 'taker';
-    const ACTION_VIEW = 'viewer';
-    const ACTION_REPORTING_FILTER = 'reporting_filter';
-    const ACTION_REPORTING = 'reporting';
-    const ACTION_EXPORT = 'exporter';
-    const ACTION_SUBSCRIBE_EMAIL = 'subscribe_email';
-    const ACTION_INVITE_USER = 'inviter';
-    const ACTION_INVITE_TEMPLATE_USER = 'subscribe_template_user';
-    const ACTION_BROWSE_PARTICIPANTS = 'participant_browser';
-    const ACTION_CANCEL_INVITATION = 'invitation_canceler';
-    const ACTION_EXPORT_RESULTS = 'results_exporter';
-    const ACTION_MAIL_INVITEES = 'mail';
-    const ACTION_INVITE_EXTERNAL_USERS = 'inviter';
-    const ACTION_DELETE_PARTICIPANT = 'participant_deleter';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_PUBLICATION_RIGHTS = 'PublicationRights';
+    const ACTION_APPLICATION_RIGHTS = 'ApplicationRights';
+    const ACTION_EDIT = 'Editor';
+    const ACTION_PUBLISH = 'Publisher';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_TAKE = 'Taker';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_REPORTING_FILTER = 'ReportingFilter';
+    const ACTION_REPORTING = 'Reporting';
+    const ACTION_EXPORT = 'Exporter';
+    const ACTION_SUBSCRIBE_EMAIL = 'SubscribeEmail';
+    const ACTION_INVITE_USER = 'Inviter';
+    const ACTION_INVITE_TEMPLATE_USER = 'SubscribeTemplateUser';
+    const ACTION_BROWSE_PARTICIPANTS = 'ParticipantBrowser';
+    const ACTION_CANCEL_INVITATION = 'InvitationCanceler';
+    const ACTION_EXPORT_RESULTS = 'ResultsExporter';
+    const ACTION_MAIL_INVITEES = 'Mail';
+    const ACTION_INVITE_EXTERNAL_USERS = 'Inviter';
+    const ACTION_DELETE_PARTICIPANT = 'ParticipantDeleter';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     function get_application_name()
@@ -367,8 +367,8 @@ abstract class Manager extends Application
         }
         else
         {
-            $publication->set_from_date(Utilities :: time_from_datepicker($attributes['from_date']));
-            $publication->set_to_date(Utilities :: time_from_datepicker($attributes['to_date']));
+            $publication->set_from_date(DatetimeUtilities :: time_from_datepicker($attributes['from_date']));
+            $publication->set_to_date(DatetimeUtilities :: time_from_datepicker($attributes['to_date']));
         }
 
         $publication->set_type($attributes[Publication :: PROPERTY_TYPE]);

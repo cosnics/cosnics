@@ -11,9 +11,9 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
-    const ACTION_EMAIL = 'emailer';
+    const ACTION_EMAIL = 'Emailer';
     const DEFAULT_ACTION = self :: ACTION_EMAIL;
-    const PARAM_ACTION = 'eaction';
+    const PARAM_ACTION = 'email_action';
 
     private $target_users;
 

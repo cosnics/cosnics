@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: user.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -62,7 +61,6 @@ class User extends DataClass
     const PROPERTY_ACTIVE = 'active';
     const PROPERTY_SECURITY_TOKEN = 'security_token';
     const PROPERTY_APPROVED = 'approved';
-    const ACTION_CREATE_USER = 'create';
     const NAME_FORMAT_FIRST = 0;
     const NAME_FORMAT_LAST = 1;
     const ANONYMOUS_ID = "1";
@@ -474,14 +472,15 @@ class User extends DataClass
     {
         $uri = $this->get_picture_uri();
         return ((strlen($uri) > 0) &&
-             (Utilities :: is_web_uri($uri) || file_exists(Path :: getInstance()->getProfilePicturePath() . $uri)));
+             (Path :: getInstance()->isWebUri($uri) || file_exists(
+                Path :: getInstance()->getProfilePicturePath() . $uri)));
     }
 
     public function get_full_picture_url()
     {
         if ($this->has_picture())
         {
-            if (Utilities :: is_web_uri($this->get_picture_uri()))
+            if (Path :: getInstance()->isWebUri($this->get_picture_uri()))
             {
                 // also allow full uri values (if uri set by LDAP parser class)
                 return $this->get_picture_uri();

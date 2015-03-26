@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PublicationDetailBlock extends ToolBlock
 {
@@ -65,7 +65,7 @@ class PublicationDetailBlock extends ToolBlock
         $reporting_data->add_data_category_row(
             Translation :: get('Description'),
             Translation :: get('count'),
-            Utilities :: truncate_string($descr, 50));
+            StringUtilities :: getInstance()->truncate($descr, 50));
 
         $course_visit = $this->get_course_visit_summary_from_publication($content_object_publication);
 

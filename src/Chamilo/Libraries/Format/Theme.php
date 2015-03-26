@@ -238,7 +238,7 @@ class Theme
         }
 
         return $this->pathUtilities->getResourcesPath($context, $web) . 'Images' . $directory_separator .
-            ucfirst($this->getTheme()) . $directory_separator;
+             $this->getTheme() . $directory_separator;
     }
 
     /**

@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_VIEW_NOTES = 'viewer';
+    const ACTION_VIEW_NOTES = 'Viewer';
 
     public static function get_allowed_types()
     {

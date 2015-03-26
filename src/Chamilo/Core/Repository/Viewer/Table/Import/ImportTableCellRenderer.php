@@ -6,6 +6,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImportTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -17,9 +18,9 @@ class ImportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
             case ContentObject :: PROPERTY_TYPE :
                 return $object->get_icon_image(Theme :: ICON_MINI);
             case ContentObject :: PROPERTY_TITLE :
-                return Utilities :: truncate_string($object->get_title(), 50);
+                return StringUtilities :: getInstance()->truncate($object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(Utilities :: truncate_string($object->get_description(), 50));
+                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($object->get_description(), 50));
         }
         return parent :: render_cell($column, $object);
     }

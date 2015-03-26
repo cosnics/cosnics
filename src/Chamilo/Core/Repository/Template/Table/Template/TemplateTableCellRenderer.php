@@ -7,8 +7,8 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class TemplateTableCellRenderer extends RepositoryTableCellRenderer
 {
@@ -19,7 +19,7 @@ class TemplateTableCellRenderer extends RepositoryTableCellRenderer
         {
             case ContentObject :: PROPERTY_TITLE :
                 $title = DataClassTableCellRenderer :: render_cell($column, $content_object);
-                $title_short = Utilities :: truncate_string($title, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title, 53, false);
                 return '<a href="' .
                      htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) . '" title="' .
                      $title . '">' . $title_short . '</a>';

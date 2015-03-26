@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  *
@@ -65,7 +65,7 @@ class ProgressBlock extends ReportingBlock
             $reporting_data->add_data_category_row(
                 $category,
                 Translation :: get('Time'),
-                Utilities :: format_seconds_to_hours($node->get_total_time()));
+                DatetimeUtilities :: format_seconds_to_hours($node->get_total_time()));
 
             $actions = array();
 
@@ -117,7 +117,7 @@ class ProgressBlock extends ReportingBlock
         $reporting_data->add_data_category_row(
             $category_name,
             Translation :: get('Time'),
-            '<span style="font-weight: bold;">' . Utilities :: format_seconds_to_hours($total_time) . '</span>');
+            '<span style="font-weight: bold;">' . DatetimeUtilities :: format_seconds_to_hours($total_time) . '</span>');
 
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data() && $attempt_count > 0)
         {

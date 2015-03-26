@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -25,12 +26,13 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                      '" title="' . htmlentities($content_object->get_type_string()) . '">' . $image . '</a>';
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
-                $title_short = Utilities :: truncate_string($title, 53, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title, 50, false);
                 return '<a href="' .
                      Utilities :: htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                      '" title="' . $title . '">' . $title_short . '</a>';
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
+                return Utilities :: htmlentities(
+                    StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
             case ContentObject :: PROPERTY_CREATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
                     Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),

@@ -9,10 +9,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder;
 abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 {
     // Actions
-    const ACTION_MERGE_ASSESSMENT = 'assessment_merger';
-    const ACTION_SELECT_QUESTIONS = 'question_selecter';
-    const ACTION_RANDOMIZE = 'randomizer';
-    const ACTION_ANSWER_FEEDBACK_TYPE = 'answer_feedback_type';
+    const ACTION_MERGE_ASSESSMENT = 'AssessmentMerger';
+    const ACTION_SELECT_QUESTIONS = 'QuestionSelecter';
+    const ACTION_RANDOMIZE = 'Randomizer';
+    const ACTION_ANSWER_FEEDBACK_TYPE = 'AnswerFeedbackType';
 
     // Parameters
     const PARAM_ADD_SELECTED_QUESTIONS = 'add_selected_questions';

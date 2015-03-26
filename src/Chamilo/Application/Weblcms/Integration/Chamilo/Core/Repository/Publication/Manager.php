@@ -13,8 +13,8 @@ use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
 {
@@ -192,8 +192,8 @@ class Manager implements PublicationInterface
 
         if ($options['forever'] == 0)
         {
-            $publication->set_from_date(Utilities :: time_from_datepicker($options['from_date']));
-            $publication->set_to_date(Utilities :: time_from_datepicker($options['to_date']));
+            $publication->set_from_date(DatetimeUtilities :: time_from_datepicker($options['from_date']));
+            $publication->set_to_date(DatetimeUtilities :: time_from_datepicker($options['to_date']));
         }
 
         if (! $publication->create())

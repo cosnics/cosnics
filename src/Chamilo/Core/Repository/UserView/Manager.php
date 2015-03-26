@@ -17,10 +17,10 @@ abstract class Manager extends Application
     const PARAM_USER_VIEW_ID = 'user_view_id';
 
     // Actions
-    const ACTION_BROWSE = 'browser';
-    const ACTION_CREATE = 'creator';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_CREATE = 'Creator';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

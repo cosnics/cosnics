@@ -26,10 +26,10 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'linker_alternative_action';
     const PARAM_CONTENT_OBJECT_ID = \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID;
     const PARAM_CONTENT_OBJECT_ALTERNATIVE_ID = 'content_object_alternative_id';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_CREATE = 'creator';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_CREATE = 'Creator';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

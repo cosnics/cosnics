@@ -18,10 +18,10 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'share_action';
     const PARAM_TARGET_USERS = 'target_users';
     const PARAM_TARGET_GROUPS = 'target_groups';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_ADD_ENTITIES = 'create';
-    const ACTION_REMOVE_ENTITY = 'delete';
-    const ACTION_UPDATE_ENTITY = 'update';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_ADD_ENTITIES = 'Create';
+    const ACTION_REMOVE_ENTITY = 'Delete';
+    const ACTION_UPDATE_ENTITY = 'Update';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

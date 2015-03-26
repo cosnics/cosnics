@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: recycle_bin_browser_table_cell_renderer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -78,7 +79,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
 
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(Utilities :: truncate_string($content_object->get_description(), 50));
+                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
         }
         return parent :: render_cell($column, $content_object);
     }

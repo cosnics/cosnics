@@ -70,29 +70,29 @@ abstract class Manager extends Application
      * Actions *
      * **************************************************************************************************************
      */
-    const ACTION_BROWSE = 'browser';
-    const ACTION_VIEW = 'viewer';
-    const ACTION_PUBLISH = 'publisher';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_UPDATE = 'updater';
-    const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
-    const ACTION_MOVE = 'mover';
-    const ACTION_MOVE_TO_CATEGORY = 'category_mover';
-    const ACTION_PUBLISH_INTRODUCTION = 'introduction_publisher';
-    const ACTION_MANAGE_CATEGORIES = 'category_manager';
-    const ACTION_VIEW_REPORTING_TEMPLATE = 'reporting_viewer';
-    const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'complex_builder';
-    const ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT = 'complex_display';
-    const ACTION_SHOW_PUBLICATION = 'show_publication';
-    const ACTION_HIDE_PUBLICATION = 'hide_publication';
-    const ACTION_EVALUATE_TOOL_PUBLICATION = 'evaluate';
-    const ACTION_EDIT_RIGHTS = 'rights_editor';
-    const ACTION_UPDATE_CONTENT_OBJECT = 'content_object_updater';
-    const ACTION_UPDATE_PUBLICATION = 'publication_updater';
-    const ACTION_SHARE_CONTENT_OBJECTS = 'share_content_objects';
-    const ACTION_VIEW_ATTACHMENT = 'attachment_viewer';
-    const ACTION_CREATE_BOOKMARK = 'course_bookmark_creator';
-    const ACTION_MAIL_PUBLICATION = 'publication_mailer';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_PUBLISH = 'Publisher';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_UPDATE = 'Updater';
+    const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
+    const ACTION_MOVE = 'Mover';
+    const ACTION_MOVE_TO_CATEGORY = 'CategoryMover';
+    const ACTION_PUBLISH_INTRODUCTION = 'IntroductionPublisher';
+    const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
+    const ACTION_VIEW_REPORTING_TEMPLATE = 'ReportingViewer';
+    const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'ComplexBuilder';
+    const ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT = 'ComplexDisplay';
+    const ACTION_SHOW_PUBLICATION = 'ShowPublication';
+    const ACTION_HIDE_PUBLICATION = 'HidePublication';
+    const ACTION_EVALUATE_TOOL_PUBLICATION = 'Evaluate';
+    const ACTION_EDIT_RIGHTS = 'RightsEditor';
+    const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
+    const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
+    const ACTION_SHARE_CONTENT_OBJECTS = 'ShareContentObjects';
+    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+    const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
     /**

@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class LearningPathAttemptProgressDetailsBlock extends ToolBlock
 {
@@ -70,7 +69,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
             $data[Translation :: get('Status')] = Translation :: get(
                 $tracker->get_status() == 'completed' ? 'Completed' : 'Incomplete');
             $data[Translation :: get('Score')] = $tracker->get_score() . '%';
-            $data[Translation :: get('Time')] = Utilities :: format_seconds_to_hours($tracker->get_total_time());
+            $data[Translation :: get('Time')] = DatetimeUtilities :: format_seconds_to_hours($tracker->get_total_time());
             $total += $tracker->get_total_time();
 
             $category_name = ($index + 1);
@@ -90,7 +89,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
             $reporting_data->add_data_category_row(
                 $category_name,
                 Translation :: get('Time'),
-                Utilities :: format_seconds_to_hours($tracker->get_total_time()));
+                DatetimeUtilities :: format_seconds_to_hours($tracker->get_total_time()));
 
             if ($this->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION) ==
                  \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: ACTION_VIEW_STATISTICS)
@@ -123,7 +122,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
         $reporting_data->add_data_category_row(
             $category,
             Translation :: get('Time'),
-            '<span style="font-weight: bold;">' . Utilities :: format_seconds_to_hours($total) . '</span>');
+            '<span style="font-weight: bold;">' . DatetimeUtilities :: format_seconds_to_hours($total) . '</span>');
 
         $reporting_data->hide_categories();
         return $reporting_data;

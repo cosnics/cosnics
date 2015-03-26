@@ -21,13 +21,12 @@ abstract class Manager extends Application
     const PARAM_SECTION = 'section';
     const PARAM_CONTEXT = 'context';
     const PARAM_REGISTRATION_TYPE = 'type';
-    const ACTION_BROWSE = 'browser';
-    const ACTION_ACTIVATE = 'activator';
-    const ACTION_DEACTIVATE = 'deactivator';
-    const ACTION_INSTALL = 'installer';
-    const ACTION_REMOVE = 'remover';
-    const ACTION_UPGRADE = 'upgrader';
-    const ACTION_VIEW = 'viewer';
+    const ACTION_BROWSE = 'Browser';
+    const ACTION_ACTIVATE = 'Activator';
+    const ACTION_DEACTIVATE = 'Deactivator';
+    const ACTION_INSTALL = 'Installer';
+    const ACTION_REMOVE = 'Remover';
+    const ACTION_UPGRADE = 'Upgrader';
+    const ACTION_VIEW = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
-
 }

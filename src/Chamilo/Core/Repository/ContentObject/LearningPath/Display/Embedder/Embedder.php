@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -37,7 +36,7 @@ abstract class Embedder
      * @param \core\repository\content_object\learning_path\ComplexContentObjectPathNode $node
      */
     public function __construct(\Chamilo\Libraries\Architecture\Application\Application $application,
-        ContentObject $node)
+        ComplexContentObjectPathNode $node)
     {
         $this->application = $application;
         $this->node = $node;
@@ -92,7 +91,8 @@ abstract class Embedder
 
         // We need the second parent as the first one is just the display itself, since the embedder is a child of the
         // display execution wise and the required context is that of the display itself
-        $namespace = $this->get_application()->get_application()->context() . '\integration\\' . __NAMESPACE__;
+        $namespace = $this->get_application()->get_application()->package() .
+             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
 
         $html[] = '<script type="text/javascript">';
         $html[] = '    var trackerId = "' . $attempt_data->get_id() . '";';
@@ -135,7 +135,8 @@ abstract class Embedder
     static public function factory(\Chamilo\Libraries\Architecture\Application\Application $application,
         ComplexContentObjectPathNode $node)
     {
-        $namespace = $node->get_content_object()->context() . '\integration\\' . __NAMESPACE__;
+        $namespace = $node->get_content_object()->package() .
+             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
         $class_name = $namespace . '\Embedder';
 
         return new $class_name($application, $node);

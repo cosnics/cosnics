@@ -15,13 +15,13 @@ abstract class Manager extends Application
     const PARAM_OBJECT = 'object';
 
     // Properties
-    const ACTION_VIEW = 'viewer';
-    const ACTION_CREATE = 'publisher';
-    const ACTION_DELETE = 'deleter';
-    const ACTION_EDIT = 'editor';
-    const ACTION_VIEW_ATTACHMENT = 'attachment_viewer';
-    const ACTION_EXPORT = 'exporter';
-    const ACTION_IMPORT = 'importer';
+    const ACTION_VIEW = 'Viewer';
+    const ACTION_CREATE = 'Publisher';
+    const ACTION_DELETE = 'Deleter';
+    const ACTION_EDIT = 'Editor';
+    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    const ACTION_EXPORT = 'Exporter';
+    const ACTION_IMPORT = 'Importer';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW;

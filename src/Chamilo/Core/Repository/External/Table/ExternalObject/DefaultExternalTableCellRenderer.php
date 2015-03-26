@@ -6,9 +6,9 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
-class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implements 
+class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
 {
 
@@ -19,12 +19,12 @@ class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implem
             case ExternalObject :: PROPERTY_TYPE :
                 return $object->get_icon_image();
             case ExternalObject :: PROPERTY_TITLE :
-                $title_short = Utilities :: truncate_string($object->get_title(), 50, false);
+                $title_short = StringUtilities :: getInstance()->truncate($object->get_title(), 50, false);
                 return '<a href="' .
                      htmlentities($this->get_component()->get_external_repository_object_viewing_url($object)) .
                      '" title="' . $object->get_title() . '">' . $title_short . '</a>';
             case ExternalObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: truncate_string($object->get_description(), 50);
+                return StringUtilities :: getInstance()->truncate($object->get_description(), 50);
             case ExternalObject :: PROPERTY_CREATED :
                 return DatetimeUtilities :: format_locale_date(null, $object->get_created());
         }

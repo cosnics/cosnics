@@ -12,8 +12,8 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Integrat
 abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager
 {
     // Actions
-    const ACTION_TABLE = 'table';
-    const ACTION_GRAPH = 'graph';
+    const ACTION_TABLE = 'Table';
+    const ACTION_GRAPH = 'Graph';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_GRAPH;

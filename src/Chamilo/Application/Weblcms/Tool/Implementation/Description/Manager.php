@@ -19,7 +19,7 @@ use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Descript
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_VIEW_DESCRIPTIONS = 'viewer';
+    const ACTION_VIEW_DESCRIPTIONS = 'Viewer';
 
     public static function get_allowed_types()
     {
