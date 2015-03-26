@@ -13,88 +13,85 @@ class Basic extends Pdf
 {
     public function render()
     {
-        $pdf_mc_table = $this->get_context()->get_pdf_mc_table();
+        $pdfMcTable = $this->get_context()->get_pdf_mc_table();
+     
+        $this->renderBlockTitle($pdfMcTable);
         
-        $title_font = array('Arial', 'B', 11);
-        if (method_exists($this->get_block(), 'get_title_font'))
-        {
-            $title_font = $this->get_block()->get_title_font();
-        }
-        $pdf_mc_table->SetFont($title_font[0], $title_font[1], $title_font[2]);
-        
-        $pdf_mc_table->MultiCell(0, 3, $this->transcode_string($this->get_block()->get_title(), false, 'UTF-8', 'CP1252'), 0);
-        $pdf_mc_table->Ln();
-        
-        $reporting_data = $this->get_block()->get_data();
+        $reportingData = $this->get_block()->get_data();
         
         // If all styles are NULL, creates them automatically 
-        $reporting_data->setStyleAutomatically();
-        
-        $table_font = array('Arial', '', 9);
-        if (method_exists($this->get_block(), 'get_table_font'))
-        {
-            $table_font = $this->get_block()->get_table_font();
-        }
-        $pdf_mc_table->SetFont($table_font[0], $table_font[1], $table_font[2]);
-        
+        $reportingData->setStyleAutomatically();
+
         // Column Style
         $column_type = array();
-        if ($reporting_data->is_categories_visible())
+        if ($reportingData->is_categories_visible())
         {
-            $column_type[] = $reporting_data->get_category_style();
+            $column_type[] = $reportingData->get_category_style();
         }
-        foreach ($reporting_data->get_rows() as $row_index => $row_name)
+        foreach ($reportingData->get_rows() as $row_index => $row_name)
         {
-            $column_type[] = $reporting_data->get_row_style($row_name);
+            $column_type[] = $reportingData->get_row_style($row_name);
         }
-        $pdf_mc_table->SetColumnType($column_type);
+        $pdfMcTable->SetColumnType($column_type);
         
         // Heading
-        if ($reporting_data->is_row_heading_visible())
+        if ($reportingData->is_row_heading_visible())
         {
             $heading_data = array();
-            if ($reporting_data->is_categories_visible())
+            if ($reportingData->is_categories_visible())
             {
                 $heading_data[] = '';
             }
-            foreach ($reporting_data->get_rows() as $row_index => $row_name)
+            foreach ($reportingData->get_rows() as $row_index => $row_name)
             {
                 $heading_data[] = $row_name;
             }
             
-            $pdf_mc_table->SetHeading($heading_data);
-            $pdf_mc_table->Heading();
+            $pdfMcTable->SetHeading($heading_data);
+            $pdfMcTable->Heading();
         }
         else
         {
-            $pdf_mc_table->SetHeading(null);
+            $pdfMcTable->SetHeading(null);
         }
         
         // Data
-        $pdf_mc_table->SetFillColor(255, 255, 255);
-        $pdf_mc_table->SetTextColor(0);
-        foreach ($reporting_data->get_categories() as $category_index => $category_name)
+        $pdfMcTable->SetFillColor(255, 255, 255);
+        $pdfMcTable->SetTextColor(0);
+        foreach ($reportingData->get_categories() as $category_index => $category_name)
         {
             $row_data = array();
-            if ($reporting_data->is_categories_visible())
+            if ($reportingData->is_categories_visible())
             {
                 $row_data[] = $category_name;
             }
             
-            foreach ($reporting_data->get_rows() as $row_index => $row_name)
+            foreach ($reportingData->get_rows() as $row_index => $row_name)
             {
-                $reporting_data_data = $reporting_data->get_data();
-                $row_data[] = $this->transcode_string($reporting_data_data[$category_index][$row_index], false, 'UTF-8', 'CP1252');
+                $reportingData_data = $reportingData->get_data();
+                $row_data[] = $this->transcode_string($reportingData_data[$category_index][$row_index], false, 'UTF-8', 'CP1252');
             }
             
-            $split_row_data = $this->split_row_data($pdf_mc_table, $row_data);
+            $split_row_data = $this->split_row_data($pdfMcTable, $row_data);
             foreach ($split_row_data as $new_row_data)
             {
-                $pdf_mc_table->Row($new_row_data);
+                $pdfMcTable->Row($new_row_data);
             }
         }
         
-        $pdf_mc_table->Ln(20);        
+        $pdfMcTable->Ln(20);        
+    }
+
+
+    private function renderBlockTitle($pdfMcTable)
+    {
+        $titleFont = $this->get_block()->getStyle()->getTitleFont();
+        $pdfMcTable->SetFont($titleFont[0], $titleFont[1], $titleFont[2]);
+
+        $titleTextColor = $this->get_block()->getStyle()->getTitleTextColor();
+        $pdfMcTable->SetTextColor($titleTextColor[0], $titleTextColor[1], $titleTextColor[2]);
+
+        $pdfMcTable->MultiCell(0, $pdfMcTable->FontSize * 1.8, $this->transcode_string($this->get_block()->get_title(), false, 'UTF-8', 'CP1252'), 0);
     }
     
     /**
@@ -102,14 +99,14 @@ class Basic extends Pdf
      *
      *  @return array of array.
      */
-    private function split_row_data($pdf_mc_table, $row_data)
+    private function split_row_data($pdfMcTable, $row_data)
     {
         // Split each row item into array of items where each item fits on a page.
         $split_row_items = array();
         $max_row_item_count = 0;
         foreach ($row_data as $column_index => $row_item)
         {
-            $split_item = $this->split_row_item($pdf_mc_table, $column_index, $row_item);
+            $split_item = $this->split_row_item($pdfMcTable, $column_index, $row_item);
             $split_row_items[] = $split_item;
             $max_row_item_count = max($max_row_item_count, count($split_item));
         }
@@ -143,11 +140,11 @@ class Basic extends Pdf
      *
      *  @return array of strings.
      */
-    private function split_row_item($pdf_mc_table, $column_index, $row_item)
+    private function split_row_item($pdfMcTable, $column_index, $row_item)
     {
         $character_per_surface_unit = .085;
       
-        $column_surface = $pdf_mc_table->GetWidth($column_index) * $pdf_mc_table->GetAbsoluteHeight(1.);
+        $column_surface = $pdfMcTable->GetWidth($column_index) * $pdfMcTable->GetAbsoluteHeight(1.);
         $max_page_length = (int)($column_surface * $character_per_surface_unit);
         
         if ($max_page_length <= 0)

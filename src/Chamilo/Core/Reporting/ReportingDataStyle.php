@@ -17,7 +17,7 @@ namespace Chamilo\Core\Reporting;
  *
  * - Report logo: Logo included in reports can be customized in Chamilo/Configuration/Resources/Images/<Theme>/LogoReport.png. 
  * 
- * - PDF report orientation: By overriding the function get_paper_orientation() in concrete reporing template classes, templates can decide
+ * - PDF report orientation: By overriding the function getPaperOrientation() in concrete reporing template classes, templates can decide
  *   whether to use landscape or portrait orientation.
  *
  * - Report column styles: Chamilo administrators can customize the default style for all reports via the Administation module.  Nevertheless,
@@ -25,13 +25,13 @@ namespace Chamilo\Core\Reporting;
  * to data rows. The following example shows how to define the heading colors and define the column widths:
  *
  * $style = new ReportingDataStyle();
- * $style->get_heading_cell_style()->set_text_color(array(255, 255, 255));
- * $style->get_heading_cell_style()->set_background_color(array(150, 150, 150));
+ * $style->getHeadingCellStyle()->setTextColor(array(255, 255, 255));
+ * $style->getHeadingCellStyle()->setBackgroundColor(array(150, 150, 150));
  *
- * $style->set_relative_width(0.2);
+ * $style->setRelativeWidth(0.2);
  * $reporting_data->add_row(Translation :: get('Title'), $style);
  *
- * $style->set_relative_width(0.15);
+ * $style->setRelativeWidth(0.15);
  * $reporting_data->add_row(Translation :: get('NumberOfSubmissions'), $style);
  */
 class ReportingDataStyle
@@ -41,38 +41,43 @@ class ReportingDataStyle
      *
      *  @var ReportingDataCellStyle
      */
-    private $heading_cell_style;
+    private $headingCellStyle;
     /**
      *  Stores properies (e.g. font, text color, etc.) of the data cells.
      *
      *  @var ReportingDataCellStyle
      */
-    private $data_cell_style;
+    private $dataCellStyle;
     /**
      *  Row (actually column) width given relative to the page width.
      *
      *  Value is expected to be within [0..1].
      */
-    private $relative_width;
+    private $relativeWidth;
 
 
     function __construct()
     {
-        $this->heading_cell_style = new ReportingDataCellStyle();
-        $this->heading_cell_style->set_alignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_alignment'));
-        $this->heading_cell_style->set_text_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
-        $this->heading_cell_style->set_background_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_background_color'));
-        $this->heading_cell_style->set_border_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
-        $this->heading_cell_style->set_font(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_font'));
+        $this->headingCellStyle = new ReportingDataCellStyle();
+        $this->headingCellStyle->setAlignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cellAlignment'));
+        $this->headingCellStyle->setTextColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_text_color'));
+        $this->headingCellStyle->setBackgroundColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_background_color'));
+        $this->headingCellStyle->setBorderColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_border_color'));
+        $this->headingCellStyle->setFont([\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_font_family'),
+                                          \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_font_style'),
+                                          \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'heading_cell_font_size')]);
+        
 
-        $this->data_cell_style = new ReportingDataCellStyle();
-        $this->data_cell_style->set_alignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_alignment'));
-        $this->data_cell_style->set_text_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_text_color'));
-        $this->data_cell_style->set_background_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_background_color'));
-        $this->data_cell_style->set_border_color(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_border_color'));
-        $this->data_cell_style->set_font(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_font'));
-
-        $this->relative_width = 0.0;
+        $this->dataCellStyle = new ReportingDataCellStyle();
+        $this->dataCellStyle->setAlignment(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cellAlignment'));
+        $this->dataCellStyle->setTextColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_text_color'));
+        $this->dataCellStyle->setBackgroundColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_background_color'));
+        $this->dataCellStyle->setBorderColor(\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_border_color'));
+        $this->dataCellStyle->setFont([\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_font_family'),
+                                       \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_font_style'),
+                                       \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Reporting', 'data_cell_font_size')]);
+        
+        $this->relativeWidth = 0.0;
     }
 
 
@@ -81,40 +86,40 @@ class ReportingDataStyle
      */
     function __clone()
     {
-        $this->heading_cell_style = clone $this->heading_cell_style;
-        $this->data_cell_style = clone $this->data_cell_style;
+        $this->headingCellStyle = clone $this->headingCellStyle;
+        $this->dataCellStyle = clone $this->dataCellStyle;
     }
 
     
     /**
      *  @return Returns the ReportingDataCellStyle object for the heading cell.
      *
-     *  Usage: reporting_data_style->get_heading_cell_style()->set_alignment('C');
+     *  Usage: reporting_data_style->getHeadingCellStyle()->setAlignment('C');
      */
-    public function get_heading_cell_style()
+    public function getHeadingCellStyle()
     {
-        return $this->heading_cell_style;
+        return $this->headingCellStyle;
     }
 
    /**
      *  @return Returns the ReportingDataCellStyle object for data cells.
      *
-     *  Usage: reporting_data_style->get_data_cell_style()->set_alignment('C');
+     *  Usage: reporting_data_style->getDataCellStyle()->setAlignment('C');
      */
-    public function get_data_cell_style()
+    public function getDataCellStyle()
     {
-        return $this->data_cell_style;
+        return $this->dataCellStyle;
     }
 
     // setter and getter functions
-    public function get_relative_width()
+    public function getRelativeWidth()
     {
-        return $this->relative_width;
+        return $this->relativeWidth;
     }
 
-    public function set_relative_width($relative_width)
+    public function setRelativeWidth($relativeWidth)
     {
-        $this->relative_width = $relative_width;
+        $this->relativeWidth = $relativeWidth;
     }
 }
 ?>

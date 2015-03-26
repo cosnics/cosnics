@@ -5,11 +5,14 @@ class PDF_MC_Table extends FPDF
 {
 	var $columnType;
 	var $heading;
-	var $headingPadded;
 	/**
-	 *  @brief array(logoFilename, middleText, rightRext)
+	 *  @brief array(logoFilename, middleText, rightRext, style)
 	 */
 	var $header;
+	/**
+	 *  @brief array(text, style)
+	 */
+	var $footer;
 	
 	function SetColumnType($type)
 	{
@@ -19,16 +22,25 @@ class PDF_MC_Table extends FPDF
 	function SetHeading($headingData)
 	{
 		$this->heading = $headingData;
-        $this->headingPadded = false;
 	}
 	
 	/**
 	 *  Header structure: 
 	 *  logo              middle text        right text
 	 */
-	function SetHeader($logoFilename, $middleText, $rightText)
+	function SetHeader($logoFilename, $middleText, $rightText, $style)
 	{
-		$this->header = array($logoFilename, $middleText, $rightText);
+		$this->header = array($logoFilename, $middleText, $rightText, $style);
+	}
+
+	/**
+	 *  Footer: centered text.
+     *
+     *  @var $text The string 'PAGENUMBER' will be replaced by current page number.         
+	 */
+	function SetFooter($text, $style)
+	{
+		$this->footer = array($text, $style);
 	}
 
 	function Row($data)
@@ -38,6 +50,8 @@ class PDF_MC_Table extends FPDF
         $max_image_height = 0;
 		for($i=0;$i<count($data);$i++)
 		{
+            $this->Font($data, $i);
+
             if ($this->IsImage($data[$i]))
             {
                 $max_image_height = max($max_image_height, $this->GetImageHeight($this->GetWidth($i), $data[$i]));
@@ -54,9 +68,9 @@ class PDF_MC_Table extends FPDF
 		}
 		else
 		{
-			$cellHeight = $this->FontSize + 1;
-		}
-
+            $cellHeight = $this->FontSize + 1;
+        }
+        
 		$h=$cellHeight*$nb;
 
         $image_bottom_margin = 3;
@@ -79,6 +93,9 @@ class PDF_MC_Table extends FPDF
 			$x=$this->GetX();
 			$y=$this->GetY();
 
+            // Draw background of cell, because Multicell leaves the background of empty lines white.
+            $this->Rect($x,$y,$w,$h, 'F');
+		
 			//Print the image or text
             if ($this->IsImage($data[$i]))
             {
@@ -86,11 +103,11 @@ class PDF_MC_Table extends FPDF
             }
             else
             {
-                $this->MultiCell($w,$cellHeight,$data[$i],0,$a,1);
+                $this->MultiCell($w,$cellHeight,$data[$i],0,$a,0);
             }
            
 			//Draw the border
-			$this->Rect($x,$y,$w,$h);
+			$this->Rect($x,$y,$w,$h, '');
 			//Put the position to the right of the cell
 			$this->SetXY($x+$w,$y);
 		}
@@ -102,43 +119,11 @@ class PDF_MC_Table extends FPDF
 	{
 		if ($this->heading)
 		{
-            if (! $this->headingPadded)
-            {
-                $this->heading = $this->PaddedHeading($this->heading);
-                $this->headingPadded = true;
-            }
-    
 			$this->Row($this->heading);	
 		}
 	}
 
-    /**
-     *  @note Heading data is padded with whitespace because otherwise short cells are filled only partially with the fill color.
-     *        Idea is appending heading data with whitespaces as long as NbLines return the maximum retrieved before padding.
-     */
-	function PaddedHeading($headingData)
-	{
-        $maxLineCount = 0;
-        foreach ($headingData as $columnIndex => $data)
-        {
-            $maxLineCount = max($maxLineCount, $this->NbLines($this->GetWidth($columnIndex),$data));
-        }
-                
-        foreach ($headingData as $columnIndex => $data)
-        {
-            $paddedData = $data;
-            while ($this->NbLines($this->GetWidth($columnIndex), $paddedData) < $maxLineCount)
-            {
-                $paddedData .= ' ';
-            } 
-            
-            $paddedHeading[] = $paddedData;
-        }
-
-        return $paddedHeading;
-	}
-
-	function CheckPageBreak($h, $data)
+    function CheckPageBreak($h, $data)
 	{
 		//If the height h would cause an overflow, add a new page immediately
 		if($this->GetY()+$h>$this->PageBreakTrigger)
@@ -157,7 +142,7 @@ class PDF_MC_Table extends FPDF
 		$cw=&$this->CurrentFont['cw'];
 		if($w==0)
 			$w=$this->w-$this->rMargin-$this->x;
-		$wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+		$wmax=($w-2*$this->cMargin)*1000/($this->FontSize);
 		$s=str_replace("\r",'',$txt);
 		$nb=strlen($s);
 		if($nb>0 and $s[$nb-1]=="\n")
@@ -199,6 +184,7 @@ class PDF_MC_Table extends FPDF
 			else
 				$i++;
 		}
+
 		return $nl;
 	}
 
@@ -210,11 +196,11 @@ class PDF_MC_Table extends FPDF
         {
             if ($data === $this->heading)
             {
-                $color = $this->columnType[$columnIndex]->get_heading_cell_style()->get_text_color();
+                $color = $this->columnType[$columnIndex]->getHeadingCellStyle()->getTextColor();
             }
             else
             {
-                $color = $this->columnType[$columnIndex]->get_data_cell_style()->get_text_color();
+                $color = $this->columnType[$columnIndex]->getDataCellStyle()->getTextColor();
             }
 		}
 
@@ -229,11 +215,11 @@ class PDF_MC_Table extends FPDF
         {
             if ($data === $this->heading)
             {
-                $color = $this->columnType[$columnIndex]->get_heading_cell_style()->get_background_color();
+                $color = $this->columnType[$columnIndex]->getHeadingCellStyle()->getBackgroundColor();
             }
             else
             {
-                $color = $this->columnType[$columnIndex]->get_data_cell_style()->get_background_color();
+                $color = $this->columnType[$columnIndex]->getDataCellStyle()->getBackgroundColor();
             }
         }
 
@@ -248,11 +234,11 @@ class PDF_MC_Table extends FPDF
         {
             if ($data === $this->heading)
             {
-                $color = $this->columnType[$columnIndex]->get_heading_cell_style()->get_border_color();
+                $color = $this->columnType[$columnIndex]->getHeadingCellStyle()->getBorderColor();
             }
             else
             {
-                $color = $this->columnType[$columnIndex]->get_data_cell_style()->get_border_color();
+                $color = $this->columnType[$columnIndex]->getDataCellStyle()->getBorderColor();
             }
         }
 
@@ -267,11 +253,11 @@ class PDF_MC_Table extends FPDF
         {
             if ($data === $this->heading)
             {
-                $font = $this->columnType[$columnIndex]->get_heading_cell_style()->get_font();
+                $font = $this->columnType[$columnIndex]->getHeadingCellStyle()->getFont();
             }
             else
             {
-                $font = $this->columnType[$columnIndex]->get_data_cell_style()->get_font();
+                $font = $this->columnType[$columnIndex]->getDataCellStyle()->getFont();
             }
         }
 
@@ -285,25 +271,41 @@ class PDF_MC_Table extends FPDF
 			return;
 		}
 
+        $font = $this->header[3]->getHeaderFont();
+        $this->SetFont($font[0], $font[1], $font[2]);
+        
+        $textHeight = $this->FontSize * 1.5;
+		
 		if ($this->header[0])
 		{
-			$this->Image($this->header[0], $this->GetX(), $this->GetY() + 1, 0, 7);
+			$this->Image($this->header[0], $this->GetX(), $this->GetY(), 0, $textHeight);
 		}
 		$this->SetX($this->GetAbsoluteWidth(1. / 3.));
 
-		$this->SetFont('Arial', 'B', 10);
-		$this->Cell($this->GetAbsoluteWidth(1. / 3.), 8, $this->header[1], 0, 0, 'C');
-		$this->Cell($this->GetAbsoluteWidth(1. / 3.), 8, $this->header[2], 0, 0, 'R');
-		$this->Ln(8);
-		$this->Line($this->GetX(), $this->GetY(), $this->GetX() + $this->GetAbsoluteWidth(1.), $this->GetY());
-		$this->Ln(8);
+        $titleTextColor = $this->header[3]->getHeaderTextColor();
+        $this->SetTextColor($titleTextColor[0], $titleTextColor[1], $titleTextColor[2]);
+        $this->Cell($this->GetAbsoluteWidth(1. / 3.), $textHeight, $this->header[1], 0, 0, 'C');
+		$this->Cell($this->GetAbsoluteWidth(1. / 3.), $textHeight, $this->header[2], 0, 0, 'R');
+		$this->Ln($textHeight);
+        
+        $titleLineColor = $this->header[3]->getHeaderLineColor();
+        $this->SetDrawColor($titleLineColor[0], $titleLineColor[1], $titleLineColor[2]);
+        $this->Line($this->GetX(), $this->GetY(), $this->GetX() + $this->GetAbsoluteWidth(1.), $this->GetY());
+		$this->Ln($textHeight);
 	}
 	
 	function Footer()
 	{
-		$this->SetY(-15);
-		$this->SetFont('Arial', 'B', 10);
-		$this->Cell(0, 8, '- '. $this->PageNo() . ' -', 0, 0, 'C');
+        $font = $this->footer[1]->getFooterFont();
+        $this->SetFont($font[0], $font[1], $font[2]);
+
+        $textColor = $this->footer[1]->getFooterTextColor();
+        $this->SetTextColor($textColor[0], $textColor[1], $textColor[2]);
+        
+        $textHeight = $this->FontSize * 1.5;
+		
+        $this->SetY(-$this->bMargin + 2);
+		$this->Cell(0, $textHeight, str_replace('PAGENUMBER', $this->PageNo(),  $this->footer[0]), 0, 0, 'C');
 	}
 	
 	function GetWidth($columnIndex)
@@ -312,7 +314,7 @@ class PDF_MC_Table extends FPDF
 
         if ($this->columnType[$columnIndex])
         {
-            $relative_width = $this->columnType[$columnIndex]->get_relative_width();
+            $relative_width = $this->columnType[$columnIndex]->getRelativeWidth();
         }
 
 		return $this->GetAbsoluteWidth($relative_width);
@@ -358,11 +360,11 @@ class PDF_MC_Table extends FPDF
         {
             if ($data === $this->heading)
             {
-                $alignment = $this->columnType[$columnIndex]->get_heading_cell_style()->get_alignment();
+                $alignment = $this->columnType[$columnIndex]->getHeadingCellStyle()->getAlignment();
             }
             else
             {
-                $alignment = $this->columnType[$columnIndex]->get_data_cell_style()->get_alignment();
+                $alignment = $this->columnType[$columnIndex]->getDataCellStyle()->getAlignment();
             }
         }
 

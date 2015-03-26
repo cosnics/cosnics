@@ -121,13 +121,16 @@ abstract class ReportingTemplate
     }
 
     /**
-     *  \brief Returns whether the report is Portrait or Landscape.
+     *  @brief Return template style containing properties such as title font size or paper orientation.
      *
-     *  @return 'L' or 'P'. Default implementation returns 'P'.
+     *  Default implementation retrieves values from the cental configuration. See
+     *  src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
+     *
+     *  Templates can override this function and return a ReportingTemplateStyle object with custom properties.
      */
-    public function get_paper_orientation()
+    public function getStyle()
     {
-        return 'P';
+        return new ReportingTemplateStyle();
 	}
     
     /**
