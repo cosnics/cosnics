@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Reporting;
 
 /**
- * $Id: ReportingDataStyle.php
+ * $Id: ReportingBlockStyle.php
  *
- * Class stores properties of a reporting data row.
- * Note that reporting data rows are actually columns in PDF, excel, ods, etc files.   
+ * Class stores style of a reporting block.
  *
  * @package reporting.lib
  * @author Andras Zolnay
  *
+ * @see ReportingTemplateStyle
  */
 class ReportingBlockStyle
 {
