@@ -32,27 +32,27 @@ class BrowserComponent extends Manager implements DelegateComponent
         $links = array();
 
         $links[] = new LinkTypeSelectorOption(
-            __NAMESPACE__,
-            'merge_assessment',
+            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            'MergeAssessment',
             $this->get_url(
                 array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_MERGE_ASSESSMENT)));
 
         $links[] = new LinkTypeSelectorOption(
-            __NAMESPACE__,
-            'select_questions',
+            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            'SelectQuestions',
             $this->get_url(
                 array(
                     \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                     \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)));
 
         $links[] = new LinkTypeSelectorOption(
-            __NAMESPACE__,
-            'randomize_question_options',
+            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            'RandomizeQuestionOptions',
             $this->get_url(array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_RANDOMIZE)));
 
         $links[] = new LinkTypeSelectorOption(
-            __NAMESPACE__,
-            'answer_feedback_type',
+            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            'AnswerFeedbackType',
             $this->get_url(
                 array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_ANSWER_FEEDBACK_TYPE)));
 
