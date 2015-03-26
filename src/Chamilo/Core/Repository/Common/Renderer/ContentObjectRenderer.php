@@ -218,8 +218,7 @@ abstract class ContentObjectRenderer implements TableSupport
             $label = Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES);
             $image = Theme :: getInstance()->getCommonImagePath('Action/Build');
 
-            if (\Chamilo\Core\Repository\Builder\Action\Manager :: exists(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())))
+            if (\Chamilo\Core\Repository\Builder\Manager :: exists($content_object->package()))
             {
                 $actions[] = new ToolbarItem(
                     $label,
