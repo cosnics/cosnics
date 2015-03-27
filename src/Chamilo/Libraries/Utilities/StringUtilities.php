@@ -95,6 +95,11 @@ class StringUtilities
      */
     public function isNullOrEmpty($string, $forHumans = false)
     {
+        if (is_null($string))
+        {
+            return true;
+        }
+
         if (! is_string($string))
         {
             return false;
