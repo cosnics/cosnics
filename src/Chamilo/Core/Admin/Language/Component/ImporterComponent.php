@@ -357,7 +357,7 @@ class ImporterComponent extends Manager
         $table->set_header(
             1,
             Theme :: getInstance()->getImage(
-                'action/language',
+                'Action/Language',
                 'png',
                 Translation :: get('Language'),
                 null,
@@ -367,7 +367,7 @@ class ImporterComponent extends Manager
         $table->set_header(
             2,
             Theme :: getInstance()->getImage(
-                'action/local',
+                'Action/Local',
                 'png',
                 Translation :: get('LocalVariableCount'),
                 null,
@@ -377,7 +377,7 @@ class ImporterComponent extends Manager
         $table->set_header(
             3,
             Theme :: getInstance()->getImage(
-                'action/import',
+                'Action/Import',
                 'png',
                 Translation :: get('ImportVariableCount'),
                 null,
@@ -387,7 +387,7 @@ class ImporterComponent extends Manager
         $table->set_header(
             4,
             Theme :: getInstance()->getImage(
-                'action/extra',
+                'Action/Extra',
                 'png',
                 Translation :: get('LocalExtraCount'),
                 null,
@@ -397,7 +397,7 @@ class ImporterComponent extends Manager
         $table->set_header(
             5,
             Theme :: getInstance()->getImage(
-                'action/empty',
+                'Action/Empty',
                 'png',
                 Translation :: get('LocalNonEmptyCount'),
                 null,
