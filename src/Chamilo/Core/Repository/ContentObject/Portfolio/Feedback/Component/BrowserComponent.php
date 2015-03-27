@@ -194,7 +194,7 @@ class BrowserComponent extends Manager
                     $html[] = '</div>';
 
                     $html[] = '<div class="photo" style="text-align: center;">' . Theme :: getInstance()->getImage(
-                        'action/feedback',
+                        'Action/Feedback',
                         'png',
                         null,
                         null,
