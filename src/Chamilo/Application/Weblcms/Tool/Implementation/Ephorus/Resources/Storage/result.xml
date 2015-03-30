@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="result">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="request_id" type="integer" unsigned="1" default="0" />
+		<property name="url" type="text" length="255" />
+		<property name="mimetype" type="text" length="20" />
+		<property name="type" type="text" length="20" />
+		<property name="percentage" type="integer" unsigned="1" default="0" />
+		<property name="original_guid" type="text" length="50" />
+		<property name="student_number" type="text" length="50" />
+		<property name="student_name" type="text" length="50" />
+		<property name="diff" type="text" />
+	</properties>
+	<index name="request_id">
+		<indexproperty name="request_id" />
+	</index>
+</object>

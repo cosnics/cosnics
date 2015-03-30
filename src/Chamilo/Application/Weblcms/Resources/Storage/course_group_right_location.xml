@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_group_right_location">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="course_group_id" type="integer" unsigned="1" notnull="1" />
+		<property name="right_id" type="integer" unsigned="1" notnull="1" />
+		<property name="location_id" type="integer" unsigned="1" notnull="1" />
+		<property name="value" type="integer" length="1" unsigned="1" notnull="1" />
+	</properties>
+	<index name="course_group_right_location" type="unique">
+		<indexproperty name="course_group_id" />
+		<indexproperty name="right_id" />
+		<indexproperty name="location_id" />
+	</index>
+	<index name="course_group_id">
+		<indexproperty name="course_group_id" />
+	</index>
+	<index name="right_id">
+		<indexproperty name="right_id" />
+	</index>
+	<index name="location_id">
+		<indexproperty name="location_id" />
+	</index>
+</object>
