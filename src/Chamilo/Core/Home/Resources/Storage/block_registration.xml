@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="block_registration">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="context" type="text" length="255" unsigned="1" notnull="1" />
+		<property name="block" type="text" length="255" unsigned="1" notnull="1" fixed="true" />
+	</properties>
+	<index name="context">
+		<indexproperty name="context" />
+	</index>
+	<index name="block">
+		<indexproperty name="block" />
+	</index>
+</object>
