@@ -334,8 +334,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 new ToolbarItem(
                                     Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
                                     Theme :: getInstance()->getCommonImagePath('Action/Share'),
-                                    $this->get_share_content_objects_url($object->get_id()),
-                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                    $this->get_share_content_objects_url($object->get_id())));
                         }
                     }
 
@@ -343,38 +342,41 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         if (\Chamilo\Core\Repository\Builder\Manager :: exists($object->package()))
                         {
-                            $clo_url = $this->get_browse_complex_content_object_url($object);
-                            $target = null;
-                            $onclick = null;
+
+                            $action_bar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                                    $this->get_browse_complex_content_object_url($object),
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+                            $preview_url = $this->get_preview_content_object_url($object);
+                            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                            $action_bar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                                    $preview_url,
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    false,
+                                    $onclick,
+                                    '_blank'));
                         }
                         else
                         {
-                            $clo_url = $this->get_preview_content_object_url($object);
-                            $onclick = '" onclick="javascript:openPopup(\'' . $clo_url . '\'); return false;';
-                            $target = '_blank';
+
+                            $preview_url = $this->get_preview_content_object_url($object);
+                            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                            $action_bar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
+                                    $preview_url,
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    false,
+                                    $onclick,
+                                    '_blank'));
                         }
-
-                        $action_bar->add_common_action(
-                            new ToolbarItem(
-                                Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                                $clo_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                                false,
-                                $onclick,
-                                $target));
-
-                        $preview_url = $this->get_preview_content_object_url($object);
-                        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-                        $action_bar->add_common_action(
-                            new ToolbarItem(
-                                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-                                $preview_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                                false,
-                                $onclick,
-                                '_blank'));
                     }
                 }
                 else

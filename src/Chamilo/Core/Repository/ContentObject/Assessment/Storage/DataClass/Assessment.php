@@ -106,15 +106,15 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     public function get_allowed_types()
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            __NAMESPACE__ . '\Display',
+            self :: package(),
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();
 
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
-            $types[] = $namespace . '\\' .
-                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace, true);
+            $types[] = $namespace . '\Storage\DataClass\\' .
+                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }
 
         return $types;

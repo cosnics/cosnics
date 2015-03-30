@@ -250,32 +250,4 @@ class Redirect
 
         return implode('', $parts);
     }
-
-    /**
-     *
-     * @param string[] $parameters
-     * @param string[] $filterParameters
-     * @param boolean $encodeEntities
-     * @return string
-     * @deprecated No longer use this static method, it's only available for backwards compatibility
-     */
-    public static function get_url($parameters = array (), $filterParameters = array(), $encodeEntities = false)
-    {
-        $redirect = new self($parameters, $filterParameters, $encodeEntities);
-        return $redirect->getUrl();
-    }
-
-    /**
-     *
-     * @param string[] $parameters
-     * @param string[] $filterParameters
-     * @param boolean $encodeEntities
-     * @return string
-     * @deprecated No longer use this static method, it's only available for backwards compatibility
-     */
-    public static function url($parameters = array (), $filterParameters = array(), $encodeEntities = false)
-    {
-        $redirect = new self($parameters, $filterParameters, $encodeEntities);
-        $redirect->toUrl();
-    }
 }
