@@ -318,14 +318,14 @@ class ManagerSendMailComponent extends Manager
                 case Mail :: PARTICIPANT_TYPE :
                     $parameters[Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_TAKE;
                     $parameters[Manager :: PARAM_PUBLICATION_ID] = $this->publication_id;
-                    $url = Path :: getInstance()->getBasePath(true) . $this->get_link($parameters);
+                    $url = $this->get_link($parameters);
                     $fullbody[] = '<a href=' . $url . '>' . Translation :: get('ClickToTakeSurvey') . '</a>';
                     $selected_tab = BrowserComponent :: TAB_MAILS_TO_PARTICIPANTS;
                     break;
                 case Mail :: EXPORT_TYPE :
                     $parameters[Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Export\Manager :: ACTION_EXPORT;
                     $parameters[Manager :: PARAM_PUBLICATION_ID] = $this->publication_id;
-                    $url = Path :: getInstance()->getBasePath(true) . $this->get_link($parameters);
+                    $url = $this->get_link($parameters);
                     $fullbody[] = '<a href=' . $url . '>' . Translation :: get('ClickToExportResults') . '</a>';
                     $selected_tab = BrowserComponent :: TAB_MAILS_TO_EXPORTERS;
                     break;

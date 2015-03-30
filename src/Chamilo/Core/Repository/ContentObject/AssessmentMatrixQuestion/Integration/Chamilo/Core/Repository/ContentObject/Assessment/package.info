@@ -12,7 +12,6 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-				<dependency type="registration">
 					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
