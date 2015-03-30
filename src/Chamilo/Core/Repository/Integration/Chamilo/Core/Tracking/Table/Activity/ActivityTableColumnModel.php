@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table column model for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActivityTableColumnModel extends DataClassTableColumnModel
@@ -28,13 +28,15 @@ class ActivityTableColumnModel extends DataClassTableColumnModel
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: PROPERTY_TYPE_ICON, 
+                self :: PROPERTY_TYPE_ICON,
                 Theme :: getInstance()->getImage(
-                    'action/activity', 
-                    'png', 
-                    Translation :: get('ActivityType'), 
-                    null, 
-                    ToolbarItem :: DISPLAY_ICON, false, 'Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\\')));
+                    'Action/Activity',
+                    'png',
+                    Translation :: get('ActivityType'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    'Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\\')));
         $this->add_column(new DataClassPropertyTableColumn(Activity :: class_name(), Activity :: PROPERTY_TYPE));
         $this->add_column(new DataClassPropertyTableColumn(Activity :: class_name(), Activity :: PROPERTY_CONTENT));
         $this->add_column(new StaticTableColumn(self :: PROPERTY_USER, Translation :: get('User')));

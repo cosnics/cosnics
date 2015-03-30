@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
 
                 $html[] = '<div class="photo" style="text-align: center;">' .
-                     Theme :: getInstance()->getImage('action/feedback', 'png', null, null, null, false, __NAMESPACE__) .
+                     Theme :: getInstance()->getImage('Action/Feedback', 'png', null, null, null, false, __NAMESPACE__) .
                      '</div>';
                 $html[] = '<div class="actions"></div>';
 

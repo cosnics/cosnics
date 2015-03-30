@@ -83,7 +83,7 @@ abstract class Manager extends Application
         if ($this->get_action() != self :: ACTION_DISPLAY && $this->get_content_object()->is_complex_content_object())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'action/display',
+                'Action/Display',
                 'png',
                 Translation :: get('DisplayPreview'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_DISPLAY)),
@@ -96,7 +96,7 @@ abstract class Manager extends Application
         if ($is_display_action && $is_complex_object && $this->getPreview()->getComponent()->supports_reset())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'action/reset',
+                'Action/Reset',
                 'png',
                 Translation :: get('ResetDisplayPreview'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RESET)),
@@ -106,7 +106,7 @@ abstract class Manager extends Application
         if ($this->get_action() != self :: ACTION_RENDITION)
         {
             $html[] = Theme :: getInstance()->getImage(
-                'action/rendition',
+                'Action/Rendition',
                 'png',
                 Translation :: get('RenditionPreview'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RENDITION)),
@@ -116,7 +116,7 @@ abstract class Manager extends Application
         if ($this->get_action() != self :: ACTION_REPORTING && $this->has_reporting())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'action/reporting',
+                'Action/Reporting',
                 'png',
                 Translation :: get('ReportingPreview'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_REPORTING)),
@@ -155,7 +155,7 @@ abstract class Manager extends Application
     public static function reporting($content_object)
     {
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
-        $reporting_manager_class = $namespace . '\integration\core\reporting\preview\Manager';
+        $reporting_manager_class = $namespace . '\integration\Core\Reporting\Preview\Manager';
 
         return class_exists($reporting_manager_class);
     }

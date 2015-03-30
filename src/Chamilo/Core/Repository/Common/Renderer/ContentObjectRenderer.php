@@ -204,39 +204,48 @@ abstract class ContentObjectRenderer implements TableSupport
 
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-        $actions[] = new ToolbarItem(
-            Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-            $preview_url,
-            ToolbarItem :: DISPLAY_ICON,
-            false,
-            $onclick,
-            '_blank');
 
         if ($content_object instanceof ComplexContentObjectSupport)
         {
-            $label = Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES);
-            $image = Theme :: getInstance()->getCommonImagePath('Action/Build');
-
             if (\Chamilo\Core\Repository\Builder\Manager :: exists($content_object->package()))
             {
                 $actions[] = new ToolbarItem(
-                    $label,
-                    $image,
+                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
                     $this->get_repository_browser()->get_browse_complex_content_object_url($content_object),
                     ToolbarItem :: DISPLAY_ICON);
-            }
-            else
-            {
+
                 $actions[] = new ToolbarItem(
-                    $label,
-                    $image,
+                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
                     $preview_url,
                     ToolbarItem :: DISPLAY_ICON,
                     false,
                     $onclick,
                     '_blank');
             }
+            else
+            {
+                $actions[] = new ToolbarItem(
+                    Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
+                    $preview_url,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    $onclick,
+                    '_blank');
+            }
+        }
+        else
+        {
+            $actions[] = new ToolbarItem(
+                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                $preview_url,
+                ToolbarItem :: DISPLAY_ICON,
+                false,
+                $onclick,
+                '_blank');
         }
 
         if ($content_object->get_type() == 'core\repository\content_object\file\File')

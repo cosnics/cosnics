@@ -39,7 +39,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
     public function get_allowed_types()
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            'Chamilo\Core\Repository\ContentObject\LearningPath',
+           self :: package(),
             \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
         $types = array();
 
