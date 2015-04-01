@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Extension of the generic installer for content objects
- * 
+ *
  * @author Hans De Bisschop
  */
 abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Action\Installer
@@ -32,55 +32,53 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
 
     /**
      * Perform additional installation steps
-     * 
+     *
      * @return boolean
      */
     public function extra()
     {
         if (! $this->register_templates())
         {
-            var_dump("templates");
             return false;
         }
-        
+
         if (! $this->import_content_object())
         {
-            var_dump("import");
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Import a sample content object (if available)
-     * 
+     *
      * @return boolean
      */
     public function import_content_object()
     {
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this);
         $file = Path :: getInstance()->namespaceToFullPath($context) . '/php/package/install/example.cpo';
-        
+
         if (file_exists($file))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_PLATFORMADMIN), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_PLATFORMADMIN),
                 new StaticConditionVariable(1));
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieves(User :: class_name(), $condition)->next_result();
-            
+
             \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $user->get_id());
-            
+
             $parameters = ImportParameters :: factory(
-                ContentObjectImport :: FORMAT_CPO, 
-                $user->get_id(), 
-                0, 
+                ContentObjectImport :: FORMAT_CPO,
+                $user->get_id(),
+                0,
                 FileProperties :: from_path($file));
             $import = ContentObjectImportController :: factory($parameters);
             $import->run();
-            
+
             \Chamilo\Libraries\Platform\Session\Session :: unregister('_uid');
-            
+
             if ($import->has_messages(ContentObjectImportController :: TYPE_ERROR))
             {
                 $message = Translation :: get('ContentObjectImportFailed');
@@ -99,27 +97,27 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
     {
         $templates_path = Path :: getInstance()->namespaceToFullPath(static :: package()) . 'Template' .
              DIRECTORY_SEPARATOR;
-        
+
         try
         {
             $template_file_names = Filesystem :: get_directory_content($templates_path, Filesystem :: LIST_FILES, false);
-            
+
             foreach ($template_file_names as $template_file_name)
             {
                 $template_name = pathinfo($template_file_name, PATHINFO_FILENAME);
                 $template_extension = pathinfo($template_file_name, PATHINFO_EXTENSION);
-                
+
                 if ($template_extension == 'xml')
                 {
                     $template_registration = new TemplateRegistration();
                     $template_registration->set_content_object_type(static :: package());
                     $template_registration->set_name($template_name);
-                    
+
                     if ($template_name == 'default')
                     {
                         $template_registration->set_default(true);
                     }
-                    
+
                     try
                     {
                         $template_registration->set_template(Template :: get(static :: package(), $template_name));
@@ -128,14 +126,14 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
                     {
                         return false;
                     }
-                    
+
                     if (! $template_registration->create())
                     {
                         return false;
                     }
                 }
             }
-            
+
             return true;
         }
         catch (\Exception $exception)
