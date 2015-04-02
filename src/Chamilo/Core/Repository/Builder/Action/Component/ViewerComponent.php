@@ -25,17 +25,14 @@ class ViewerComponent extends Manager
      */
     public function run()
     {
-        $id = Request :: get(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $id = Request :: get(\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($id)
         {
             $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
                 $id);
-
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
                 $complex_content_object_item->get_ref());
-
             if (\Chamilo\Core\Repository\Storage\DataManager :: is_helper_type($content_object->get_type()))
             {
                 $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
@@ -46,7 +43,7 @@ class ViewerComponent extends Manager
             $this->get_complex_content_object_breadcrumbs();
             $parameters = array(
                 \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id(),
-                \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $id);
+                \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $id);
             $trail->add(
                 new Breadcrumb(
                     $this->get_url($parameters),

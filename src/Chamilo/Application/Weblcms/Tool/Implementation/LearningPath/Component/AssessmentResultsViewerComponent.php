@@ -28,8 +28,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * This component renders the assessment attempts from the learning path.
- * Depending on the parameters in the URL, it
+ * This component renders the assessment attempts from the learning path. Depending on the parameters in the URL, it
  * will show an overview of all the assessment attempts or a detail from one attempt.
  *
  * @author Bert De Clercq (Hogeschool Gent)
@@ -118,8 +117,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     public function get_ccoi_id()
     {
-        return Request :: get(
-            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        return Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
     }
 
     /**
@@ -133,8 +131,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders an overview of the assessment attempt in the learning path.
-     * On top there's a description of the
+     * Renders an overview of the assessment attempt in the learning path. On top there's a description of the
      * assessment with some info about the attempts such as the average score of all the attempts.
      */
     public function view_assessment_results()
@@ -187,8 +184,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders a detailed overview of a single assessment attempt.
-     * A course admin can change scores and add feedback.
+     * Renders a detailed overview of a single assessment attempt. A course admin can change scores and add feedback.
      */
     public function view_single_result()
     {
@@ -259,7 +255,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID),
             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS => $this->get_user_id(),
             self :: PARAM_ATTEMPT_ID => $this->get_attempt_id(),
-            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
             self :: PARAM_ASSESSMENT_ID => $this->get_assessment_id());
 
         $this->redirect(Translation :: get('LpiAttemptDeleted'), false, $params, array());
@@ -285,8 +281,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns an action bar if the user has edit rights.
-     * The action bar includes a button to download the assessment
+     * Returns an action bar if the user has edit rights. The action bar includes a button to download the assessment
      * attempts documents and a button to delete the assessment attempts.
      *
      * @return ActionBarRenderer
@@ -307,7 +302,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                             \Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION => $this->get_publication_id(),
                             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS => $this->get_user_id(),
                             self :: PARAM_ATTEMPT_ID => $this->get_attempt_id(),
-                            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
+                            \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
                             self :: PARAM_ASSESSMENT_ID => $this->get_assessment_id())),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
@@ -439,7 +434,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS,
             self :: PARAM_ATTEMPT_ID,
-            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
             self :: PARAM_ASSESSMENT_ID);
     }
 
@@ -460,7 +455,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_publication_id(),
                     \Chamilo\Application\Weblcms\Manager :: PARAM_USERS => $this->get_user_id(),
                     self :: PARAM_ATTEMPT_ID => $this->get_attempt_id(),
-                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
+                    \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_ccoi_id(),
                     self :: PARAM_ASSESSMENT_ID => $this->get_assessment_id())),
             $this->assessment->get_title());
 
@@ -539,7 +534,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
                 LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ITEM_ID),
             new StaticConditionVariable(
                 Request :: get(
-                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)));
+                    \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
