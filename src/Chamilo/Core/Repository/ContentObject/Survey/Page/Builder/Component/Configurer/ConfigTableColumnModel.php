@@ -11,19 +11,13 @@ class ConfigTableColumnModel extends DataClassTableColumnModel implements TableC
 
     public function initialize_columns()
     {
-        $columns = array();
-        $columns[] = new DataClassPropertyTableColumn(PageConfig :: CLASS_NAME, PageConfig :: PROPERTY_NAME);
-        $columns[] = new DataClassPropertyTableColumn(
-            PageConfig :: CLASS_NAME, 
-            PageConfig :: PROPERTY_DESCRIPTION);
-        $columns[] = new DataClassPropertyTableColumn(
-            PageConfig :: CLASS_NAME, 
-            PageConfig :: PROPERTY_CONFIG_CREATED);
-        $columns[] = new DataClassPropertyTableColumn(
-            PageConfig :: CLASS_NAME, 
-            PageConfig :: PROPERTY_CONFIG_UPDATED);
-        
-        return $columns;
+        $this->add_column(new DataClassPropertyTableColumn(PageConfig :: class_name(), PageConfig :: PROPERTY_NAME));
+        $this->add_column(
+            new DataClassPropertyTableColumn(PageConfig :: class_name(), PageConfig :: PROPERTY_DESCRIPTION));
+        $this->add_column(
+            new DataClassPropertyTableColumn(PageConfig :: class_name(), PageConfig :: PROPERTY_CONFIG_CREATED));
+        $this->add_column(
+            new DataClassPropertyTableColumn(PageConfig :: class_name(), PageConfig :: PROPERTY_CONFIG_UPDATED));
     }
 }
 ?>

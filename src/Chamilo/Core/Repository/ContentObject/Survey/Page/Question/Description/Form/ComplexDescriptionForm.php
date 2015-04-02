@@ -35,38 +35,14 @@ class ComplexDescriptionForm extends ComplexContentObjectItemForm
         
         return $defaults;
     }
-    
-    // Inherited
-    function create_complex_content_object_item()
-    {
-        $cloi = $this->get_complex_content_object_item();
-        $values = $this->exportValues();
-        $cloi->set_visible($values[ComplexDescription :: PROPERTY_VISIBLE]);
-        return parent :: create_complex_content_object_item();
-    }
 
-    function create_cloi_from_values($values)
+    function update_from_values($values)
     {
         $cloi = $this->get_complex_content_object_item();
         $cloi->set_visible($values[ComplexDescription :: PROPERTY_VISIBLE]);
-        return parent :: create_complex_content_object_item();
+        return parent :: update();
     }
-
-    function update_cloi_from_values($values)
-    {
-        $cloi = $this->get_complex_content_object_item();
-        $cloi->set_visible($values[ComplexDescription :: PROPERTY_VISIBLE]);
-        return parent :: update_complex_content_object_item();
-    }
-    
-    // Inherited
-    function update_complex_content_object_item()
-    {
-        $cloi = $this->get_complex_content_object_item();
-        $values = $this->exportValues();
-        $cloi->set_visible($values[ComplexDescription :: PROPERTY_VISIBLE]);
-        return parent :: update_complex_content_object_item();
-    }
+  
 }
 
 ?>

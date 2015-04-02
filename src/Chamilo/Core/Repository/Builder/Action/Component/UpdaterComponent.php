@@ -31,13 +31,13 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $trail = BreadcrumbTrail :: get_instance();
 
         $complex_content_object_item_id = Request :: get(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $parent_complex_content_object_item = Request :: get(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         $parameters = array(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $parent_complex_content_object_item,
-            \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id);
+            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id);
 
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
             $complex_content_object_item_id);
@@ -47,7 +47,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         if (! \Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager :: is_content_object_editable(
             $content_object->get_id()))
         {
-            $parameters[\Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
+            $parameters[\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
             $this->redirect(
                 Translation :: get('UpdateNotAllowed'),
                 false,
@@ -112,7 +112,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $complex_content_object_item->update();
             }
 
-            $parameters[\Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
+            $parameters[\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
 
             $this->redirect(
                 Translation :: get(

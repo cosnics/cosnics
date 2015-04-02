@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 abstract class Manager extends Application
 {
@@ -27,7 +26,7 @@ abstract class Manager extends Application
 
     public function get_tabs($current_tab, $content)
     {
-        $tabs = new DynamicVisualTabsRenderer(Utilities :: get_classname_from_namespace(__NAMESPACE__, true), $content);
+        $tabs = new DynamicVisualTabsRenderer($this->class_name(false), $content);
 
         $tabs->add_tab(
             new DynamicVisualTab(
@@ -75,9 +74,12 @@ abstract class Manager extends Application
                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
                 Translation :: get('ParticipantBrowserComponent')));
     }
-
-    function get_parameters()
+    
+    public function get_parameters()
     {
-        return array(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        $parameters = parent :: get_parameters();
+        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $parameters;
     }
+    
 }

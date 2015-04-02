@@ -8,7 +8,6 @@ use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class ViewerComponent extends Manager implements DelegateComponent, SurveyDisplaySupport
 {
@@ -60,7 +60,13 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
         $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
 
-        \Chamilo\Core\Repository\Display\Manager :: launch(Survey :: class_name(), $this);
+        $factory = new ApplicationFactory(
+            $this->getRequest(),
+            \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
+            $this->get_user(),
+            $this);
+         
+        return $factory->run();
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

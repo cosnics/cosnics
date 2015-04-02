@@ -21,7 +21,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 
     // Parameters
     const PARAM_QUESTION_ID = 'question';
-    const PARAM_SURVEY_PAGE_ID = 'survey_page';
+    const PARAM_SURVEY_PAGE_ID = 'object';
     const PARAM_COMPLEX_QUESTION_ITEM_ID = 'complex_question_item_id';
     const PARAM_CONFIG_ID = 'config_id';
 

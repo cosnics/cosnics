@@ -26,7 +26,7 @@ class ViewerComponent extends Manager
     public function run()
     {
         $id = Request :: get(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($id)
         {
@@ -46,7 +46,7 @@ class ViewerComponent extends Manager
             $this->get_complex_content_object_breadcrumbs();
             $parameters = array(
                 \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id(),
-                \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $id);
+                \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $id);
             $trail->add(
                 new Breadcrumb(
                     $this->get_url($parameters),

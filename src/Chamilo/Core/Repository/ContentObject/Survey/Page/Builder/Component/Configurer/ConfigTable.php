@@ -7,8 +7,9 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
-class ConfigTable extends DataClassTable
+class ConfigTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager :: PARAM_CONFIG_ID;
 

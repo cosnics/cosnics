@@ -12,6 +12,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class PublisherComponent extends Manager
 {
@@ -23,19 +25,20 @@ class PublisherComponent extends Manager
     {
         if (! Rights :: get_instance()->publication_is_allowed())
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
 
         $html = array();
+        $html[] = $this->render_header();
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            $repository_viewer = \Chamilo\Core\Repository\Viewer\Manager :: construct($this);
-            // $repository_viewer->set_maximum_select(RepoViewer :: SELECT_SINGLE);
-            $repository_viewer->run();
+            $factory = new ApplicationFactory(
+                $this->getRequest(),
+                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                $this->get_user(),
+                $this);
+            return $factory->run();
         }
         else
         {
@@ -113,10 +116,8 @@ class PublisherComponent extends Manager
             {
                 $html[] = $form->toHtml();
                 $html[] = '<div style="clear: both;"></div>';
-
-                $this->display_header();
-                echo implode(PHP_EOL, $html);
-                $this->display_footer();
+                $html[] = $this->render_footer();
+                return implode(PHP_EOL, $html);
             }
         }
     }
