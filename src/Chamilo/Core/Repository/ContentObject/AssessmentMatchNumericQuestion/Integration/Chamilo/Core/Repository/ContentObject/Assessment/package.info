@@ -3,8 +3,10 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment</context>
-		<type>Chamilo\Repository\ContentObject\Integration</type>
+		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment
+		</context>
+		<type>Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration
+		</type>
 		<category />
 		<authors />
 		<version>5.0.0</version>
@@ -12,7 +14,8 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-								<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion</id>
+					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion
+					</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">

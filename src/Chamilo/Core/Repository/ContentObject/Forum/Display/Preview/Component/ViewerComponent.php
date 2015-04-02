@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Component;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 
-class ViewComponent extends \Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Manager implements
     ForumDisplaySupport
 {
 
