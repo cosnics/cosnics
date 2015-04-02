@@ -70,7 +70,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
             if ($object instanceof Assessment)
             {
                 $params = $this->get_parent()->get_parameters();
-                $params[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wrapper_id;
+                $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wrapper_id;
                 Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS) ? $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = Request :: get(
                     \Chamilo\Application\Weblcms\Manager :: PARAM_USERS) : $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = Session :: get_user_id();
                 Request :: get(

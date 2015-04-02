@@ -67,8 +67,7 @@ class MediawikiLinkHolderArray
     }
 
     /**
-     * Clear all stored link holders.
-     * Make sure you don't have any text left using these link holders, before you call
+     * Clear all stored link holders. Make sure you don't have any text left using these link holders, before you call
      * this
      */
     function clear()
@@ -79,8 +78,7 @@ class MediawikiLinkHolderArray
     }
 
     /**
-     * Make a link placeholder.
-     * The text returned can be later resolved to a real link with replaceLinkHolders(). This
+     * Make a link placeholder. The text returned can be later resolved to a real link with replaceLinkHolders(). This
      * is done for two reasons: firstly to avoid further parsing of interwiki links, and secondly to allow all existence
      * checks and article length checks (for stub links) to be bundled into a single query.
      */
@@ -95,13 +93,13 @@ class MediawikiLinkHolderArray
         {
             // Separate the link trail from the rest of the link
             list($inside, $trail) = MediaWikiLinker :: splitTrail($trail);
-            
+
             $entry = array('title' => $nt, 'text' => $prefix . $text . $inside, 'pdbk' => $nt->getPrefixedDBkey());
             if ($query !== '')
             {
                 $entry['query'] = $query;
             }
-            
+
             if ($nt->isExternal())
             {
                 // Use a globally unique ID to keep the objects mergable
@@ -154,21 +152,21 @@ class MediawikiLinkHolderArray
         {
             return;
         }
-        
+
         $colours = array();
         $linkCache = MediawikiLinkCache :: singleton();
         $output = $this->parent->getOutput();
-        
+
         $threshold = 0;
-        
+
         // Sort by namespace
         ksort($this->internals);
-        
+
         // Generate query
         $query = false;
         $current = null;
         $title_conditions = array();
-        
+
         foreach ($this->internals as $ns => $entries)
         {
             foreach ($entries as $index => $entry)
@@ -176,14 +174,14 @@ class MediawikiLinkHolderArray
                 $key = "$ns:$index";
                 $title = $entry['title'];
                 $pdbk = $entry['pdbk'];
-                
+
                 // Skip invalid entries.
                 // Result will be ugly, but prevents crash.
                 if (is_null($title))
                 {
                     continue;
                 }
-                
+
                 // Check if it's a static known link, e.g. interwiki
                 if ($title->isAlwaysKnown())
                 {
@@ -211,48 +209,48 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $title_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE), 
+                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE),
                         new StaticConditionVariable($title->getText()));
                 }
             }
         }
-        
+
         $title_condition = new OrCondition($title_conditions);
-        
+
         // $complex_wiki_page_id = Request :: get(\core\repository\display\action\Manager ::
         // PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         // $complex_wiki_page = RepositoryDataManager ::retrieve_complex_content_object_item($complex_wiki_page_id);
-        
+
         $wiki = $this->parent->get_mediawiki_parser_context()->get_wiki();
         // $wiki = $complex_wiki_page->get_parent_object();
         $wiki_pages = $wiki->get_wiki_pages_by_title($title_condition);
         $wiki_complex_ids = array();
-        
+
         while ($wiki_page = $wiki_pages->next_result())
         {
             $title = MediawikiTitle :: makeTitle(NS_MAIN, $wiki_page->get_title());
             $pdbk = $title->getPrefixedDBkey();
             $linkCache->addGoodLinkObj($wiki_page->get_id(), $title, 1024, 0);
             $colours[$pdbk] = MediawikiLinker :: getLinkColour($title, $threshold);
-            
+
             $complex_wiki_page_conditions = array();
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_PARENT), 
+                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem :: PROPERTY_PARENT),
                 new StaticConditionVariable($wiki->get_id()));
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_REF), 
+                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem :: PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
-            
+
             $current_complex_wiki_page = \core\repository\storage\DataManager :: retrieve_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(), 
+                ComplexContentObjectItem :: class_name(),
                 new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->next_result();
             $wiki_complex_ids[$pdbk] = $current_complex_wiki_page->get_id();
         }
-        
+
         // Construct search and replace arrays
         $replacePairs = array();
         foreach ($this->internals as $ns => $entries)
@@ -270,26 +268,26 @@ class MediawikiLinkHolderArray
                     $colours[$pdbk] = 'new';
                     $output->addLink($title, 0);
                     $replacePairs[$searchkey] = MediawikiLinker :: makeBrokenLinkObj(
-                        $title, 
-                        $entry['text'], 
+                        $title,
+                        $entry['text'],
                         $this->parent->get_mediawiki_parser_context()->get_parameters());
                 }
                 else
                 {
                     $query_parameters = $this->parent->get_mediawiki_parser_context()->get_parameters();
-                    $query_parameters[\core\repository\display\action\Manager :: PARAM_ACTION] = \core\repository\content_object\wiki\display\Manager :: ACTION_VIEW_WIKI_PAGE;
-                    $query_parameters[\core\repository\display\action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
-                    
+                    $query_parameters[\core\repository\display\Manager :: PARAM_ACTION] = \core\repository\content_object\wiki\display\Manager :: ACTION_VIEW_WIKI_PAGE;
+                    $query_parameters[\core\repository\display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
+
                     $replacePairs[$searchkey] = MediawikiLinker :: makeColouredLinkObj(
-                        $title, 
-                        $colours[$pdbk], 
-                        $entry['text'], 
+                        $title,
+                        $colours[$pdbk],
+                        $entry['text'],
                         $query_parameters);
                 }
             }
         }
         $replacer = new HashtableReplacer($replacePairs, 1);
-        
+
         // Do the thing
         $text = preg_replace_callback('/(<!--LINK .*?-->)/', $replacer->cb(), $text);
     }
@@ -301,7 +299,7 @@ class MediawikiLinkHolderArray
         {
             return '';
         }
-        
+
         // If the target is just a fragment, with no title, we return the frag-
         // ment text. Otherwise, we return the title text itself.
         if ($target->getPrefixedText() === '' and $target->getFragment() !== '')
@@ -320,7 +318,7 @@ class MediawikiLinkHolderArray
         {
             return;
         }
-        
+
         // Make interwiki link HTML
         $sk = $this->parent->getOptions()->getSkin();
         $replacePairs = array();
@@ -329,13 +327,13 @@ class MediawikiLinkHolderArray
             $replacePairs[$key] = $sk->link($link['title'], $link['text']);
         }
         $replacer = new HashtableReplacer($replacePairs, 1);
-        
+
         $text = preg_replace_callback('/<!--IWLINK (.*?)-->/', $replacer->cb(), $text);
     }
 
     /**
      * Replace <!--LINK--> link placeholders with plain text of links (not HTML-formatted).
-     * 
+     *
      * @param string $text
      * @return string
      */

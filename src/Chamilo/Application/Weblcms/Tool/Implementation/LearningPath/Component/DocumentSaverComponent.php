@@ -40,8 +40,7 @@ class DocumentSaverComponent extends Manager
 
         $this->retrieve_assessment_documents(
             Request :: get(self :: PARAM_ATTEMPT_ID),
-            Request :: get(
-                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID),
+            Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID),
             Request :: get(self :: PARAM_ASSESSMENT_ID));
     }
 
@@ -206,8 +205,8 @@ class DocumentSaverComponent extends Manager
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = Request :: get(
             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
         $params[self :: PARAM_ATTEMPT_ID] = Request :: get(self :: PARAM_ATTEMPT_ID);
-        $params[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = Request :: get(
-            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = Request :: get(
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $params[self :: PARAM_ASSESSMENT_ID] = Request :: get(self :: PARAM_ASSESSMENT_ID);
         $params[self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID] = Request :: get(
             self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID);
