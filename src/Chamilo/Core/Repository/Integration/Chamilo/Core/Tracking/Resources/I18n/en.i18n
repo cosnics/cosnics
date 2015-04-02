@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = 
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Tracking"
+Type = "Activity"
+Date = "Date"
+Content = "Content"
+TypeIcon = "-"
+ObjectCreated = "Object created"
+ObjectDeleted = "Object deleted"
+ObjectUpdated = "Object updated"
+ObjectRecycled = "Opject removed permanently"
+ObjectRestored = "Object resored"
+ItemAddedToObject = "Item added to object"
+ItemDeletedFromObject = "Item deleted from object"
+ItemMovedInObject = "Item moved in object"
+ItemUpdatedInObject = "Item updated in object"
