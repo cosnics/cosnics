@@ -101,8 +101,11 @@ class ReportingComponent extends Manager implements PreviewSupport
 
     public function get_preview_context()
     {
-        $content_object_type = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+        $namespace =  ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
             $this->get_content_object()->get_type());
-        return $content_object_type . '\integration\core\reporting\preview';
+        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
+        
+        return $contentObjectNamespace . '\Integration\Chamilo\Core\Reporting\Preview';
+      
     }
 }
