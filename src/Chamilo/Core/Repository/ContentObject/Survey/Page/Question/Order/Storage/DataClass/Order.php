@@ -31,8 +31,8 @@ class Order extends ContentObject implements Versionable
     const PROPERTY_OPTIONS = 'options';
     
     // Display types
-    const DISPLAY_TYPE_ONE_COLUMN = 'one_column';
-    const DISPLAY_TYPE_TWO_COLUMN = 'two_column';
+    const DISPLAY_TYPE_ONE_COLUMN = 'OneColumn';
+    const DISPLAY_TYPE_TWO_COLUMN = 'TwoColumn';
 
     private $options = array();
 

@@ -30,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ParticipantBrowserComponent extends Manager implements TableSupport
 {
@@ -51,32 +52,26 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
 
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->pid))
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+           throw new NotAllowedException();
         }
 
         $this->survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->pid);
         $this->survey = $this->survey_publication->get_publication_object();
-
         $this->action_bar = $this->get_action_bar();
 
-        $this->display_header();
-        echo $this->action_bar->as_html();
-        echo '<div id="action_bar_browser">';
-
-        echo '<div>';
-        echo $this->get_tables();
-        echo '</div>';
-        echo '</div>';
-        $this->display_footer();
+        $html = array();
+        
+        $html[] = $this->render_header();
+        $html[] = $this->action_bar->as_html();
+        $html[] = $this->get_tables();
+        $html[] = $this->render_footer();
+        
+        return implode(PHP_EOL, $html);
     }
 
     function get_tables()
     {
-        $renderer_name = Utilities :: get_classname_from_object($this, true);
-        $tabs = new DynamicTabsRenderer($renderer_name);
+        $tabs = new DynamicTabsRenderer($this->class_name(false));
 
         $parameters = $this->get_parameters();
         $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
@@ -106,12 +101,9 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
                 Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
 
+        $html = array();
         $html[] = $tabs->render();
-
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-
-        return implode($html, "\n");
+        return implode(PHP_EOL, $html);
     }
 
     function get_action_bar()
@@ -296,11 +288,6 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
         }
 
         return $condition;
-    }
-
-    function get_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_ID);
     }
 
     public function get_table_condition($object_table_class_name)

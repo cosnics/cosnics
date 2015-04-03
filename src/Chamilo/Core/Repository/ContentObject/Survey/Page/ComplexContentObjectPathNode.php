@@ -6,7 +6,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @package repository\content_object\survey_page
  */
-class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode
+class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
 {
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_QUESTION_NR = 'question_nr';

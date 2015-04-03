@@ -25,6 +25,7 @@ abstract class ContentObjectRenditionImplementation extends AbstractContentObjec
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() .
              (string) StringUtilities :: getInstance()->createString($view)->upperCamelize() . 'RenditionImplementation';
+        
         if (! class_exists($class, true))
         {
             return new DummyContentObjectRenditionImplementation($context, $content_object, $format, $view);

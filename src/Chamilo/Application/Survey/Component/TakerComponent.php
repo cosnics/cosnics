@@ -7,7 +7,6 @@ use Chamilo\Application\Survey\Storage\DataClass\Answer;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class TakerComponent extends Manager implements DelegateComponent
 
@@ -58,7 +58,14 @@ class TakerComponent extends Manager implements DelegateComponent
         $this->survey = $this->publication->get_publication_object();
 
         $this->started();
-        \Chamilo\Core\Repository\Display\Manager :: launch(Survey :: class_name(), $this);
+        
+        $factory = new ApplicationFactory(
+            $this->getRequest(),
+            \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
+            $this->get_user(),
+            $this);
+         
+        return $factory->run();
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

@@ -127,6 +127,7 @@ class Rights extends RightsUtil
 
     public function get_publication_location($publication_id)
     {
+            
         return self :: get_location_by_identifier(
             __NAMESPACE__, 
             self :: TYPE_PUBLICATION, 

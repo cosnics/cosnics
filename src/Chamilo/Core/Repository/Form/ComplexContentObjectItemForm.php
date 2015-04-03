@@ -66,8 +66,12 @@ abstract class ComplexContentObjectItemForm extends FormValidator
             return null;
         }
         
-        $class = $namespace . '\Complex' .
-             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace, true) . 'Form';
+        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+            $complex_content_object_item->class_name());
+        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
+        $objectName = ClassnameUtilities :: getInstance()->getClassnameFromObject($complex_content_object_item);
+        
+        $class = $contentObjectNamespace . '\Form\\'.$objectName.'Form';
         
         return new $class($complex_content_object_item, $action, $method);
     }

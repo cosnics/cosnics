@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\PointInPolygon;
  * 
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.score_calculator
  */
-class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay
+class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\ScoreCalculator
 {
 
     public function calculate_score()

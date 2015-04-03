@@ -17,8 +17,11 @@ class InviteeComponent extends Manager
         {
             throw new NotAllowedException();
         }
+
+        
         
         $publication_id = Request :: get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+       
         
         $form = new RightsForm($this, $this->get_url(), Rights :: PARTICIPATE_RIGHT, $publication_id);
         
@@ -32,9 +35,13 @@ class InviteeComponent extends Manager
         }
         else
         {
-            $this->display_header();
-            echo $this->get_tabs(self :: ACTION_INVITEE, $form->toHtml())->render();
-            $this->display_footer();
+            $html = array();
+            
+            $html[] = $this->render_header();
+            $html[] = $this->get_tabs(self :: ACTION_INVITEE, $form->toHtml())->render();
+            $html[] = $this->render_footer();
+                      
+            return implode(PHP_EOL, $html);
         }
     }
 }

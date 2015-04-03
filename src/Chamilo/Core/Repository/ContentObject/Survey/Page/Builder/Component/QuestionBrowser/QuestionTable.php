@@ -6,8 +6,9 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
-class QuestionTable extends DataClassTable
+class QuestionTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager :: PARAM_COMPLEX_QUESTION_ITEM_ID;
 

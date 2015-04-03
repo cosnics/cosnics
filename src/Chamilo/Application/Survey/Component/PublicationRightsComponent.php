@@ -18,7 +18,8 @@ class PublicationRightsComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Survey\Rights\Publication\Manager :: context(),
             $this->get_user(),
             $this);
-        $factory->run();
+             
+        return $factory->run();
     }
 }
 ?>
