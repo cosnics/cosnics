@@ -51,7 +51,7 @@ abstract class ContentObjectForm extends FormValidator
      * **************************************************************************************************************
      */
     const TAB_CONTENT_OBJECT = 'ContentObject';
-    const TAB_METADATA = 'Test';
+    const TAB_METADATA = 'Metadata';
 
     /**
      * ***************************************************************************************************************
@@ -160,9 +160,8 @@ abstract class ContentObjectForm extends FormValidator
         $tabs_generator->add_tab(
             new DynamicFormTab(
                 self :: TAB_CONTENT_OBJECT,
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_CONTENT_OBJECT)->upperCamelize()),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_CONTENT_OBJECT),
+                Translation :: get('TypeName', null, $this->get_content_object()->package()),
+                Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
 
         $entityService = new EntityService();
