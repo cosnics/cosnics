@@ -106,6 +106,8 @@ class EditorComponent extends Manager implements DelegateComponent
 
             if ($form->validate())
             {
+                var_dump($_POST);
+                exit;
                 $success = $form->update_content_object();
 
                 if ($success)
