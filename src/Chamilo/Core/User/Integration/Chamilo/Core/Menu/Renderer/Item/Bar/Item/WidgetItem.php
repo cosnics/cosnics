@@ -182,6 +182,8 @@ class WidgetItem extends Bar
 
         $profileHtml[] = '</div>';
 
+        $profileHtml[] = '<div class="clear"></div>';
+
         $html[] = implode(PHP_EOL, $profileHtml);
 
         $html[] = '</li>';
