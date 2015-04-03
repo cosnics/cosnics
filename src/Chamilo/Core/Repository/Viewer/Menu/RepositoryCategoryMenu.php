@@ -37,7 +37,6 @@ class RepositoryCategoryMenu extends ContentObjectCategoryMenu
         $filter_count_on_types = array(), $exclude_types = array())
     {
         $this->parent = $parent;
-        
         parent :: __construct(
             $owner, 
             $current_category, 
