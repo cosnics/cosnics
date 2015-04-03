@@ -51,7 +51,7 @@ abstract class ContentObjectForm extends FormValidator
      * **************************************************************************************************************
      */
     const TAB_CONTENT_OBJECT = 'ContentObject';
-    const TAB_METADATA = 'Metadata';
+    const TAB_METADATA = 'Test';
 
     /**
      * ***************************************************************************************************************
