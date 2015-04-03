@@ -8,12 +8,9 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -49,26 +46,14 @@ class EditorComponent extends Manager implements DelegateComponent
             $template_registration = $object->get_template_registration();
             $template = $template_registration->get_template();
 
-            $content_object_type_image = 'Logo/template/' . $template_registration->get_name() . '/16';
+            $content_object_type_image = 'Logo/Template/' . $template_registration->get_name() . '/16';
 
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
                     Translation :: get(
                         'EditContentObject',
-                        array(
-                            'CONTENT_OBJECT' => $object->get_title(),
-                            'ICON' => Theme :: getInstance()->getImage(
-                                $content_object_type_image,
-                                'png',
-                                Translation :: get(
-                                    $template->translate('TypeName'),
-                                    null,
-                                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type())),
-                                null,
-                                ToolbarItem :: DISPLAY_ICON,
-                                false,
-                                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type()))))));
+                        array('CONTENT_OBJECT' => $object->get_title()))));
 
             if (! ($object->get_owner_id() == $this->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
                 RepositoryRights :: COLLABORATE_RIGHT,
@@ -107,7 +92,7 @@ class EditorComponent extends Manager implements DelegateComponent
             if ($form->validate())
             {
                 var_dump($_POST);
-                exit;
+                exit();
                 $success = $form->update_content_object();
 
                 if ($success)
