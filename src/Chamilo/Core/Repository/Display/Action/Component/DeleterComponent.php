@@ -66,8 +66,8 @@ class DeleterComponent extends Manager
                 $message,
                 (! $succes),
                 array(
-                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()),
+                    \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                    \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()),
                 array(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
         }
         else

@@ -325,7 +325,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                              $this->get_url(
                                 array(
                                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: ACTION_VIEW_FORUM,
+                                    \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: ACTION_VIEW_FORUM,
                                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])) .
                              '">' . $forum->get_title() . '</a><br />' . strip_tags($forum->get_description());
                     }
@@ -366,9 +366,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_VIEW,
                                 self :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: ACTION_VIEW_TOPIC,
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: ACTION_VIEW_TOPIC,
                                 'pid' => $forum->get_id(),
-                                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $forum->get_last_topic_changed_cloi(),
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $forum->get_last_topic_changed_cloi(),
                                 \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: PARAM_LAST_POST => $last_post->get_id()));
 
                         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(

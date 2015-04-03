@@ -36,7 +36,7 @@ class ContentObjectUpdaterComponent extends Manager
                 'post',
                 $this->get_url(
                     array(
-                        \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager :: ACTION_UPDATE_CONTENT_OBJECT,
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager :: ACTION_UPDATE_CONTENT_OBJECT,
                         'pid' => $pid)));
 
             if ($form->validate() || Request :: get('validated'))

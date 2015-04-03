@@ -89,8 +89,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 Request :: get(
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_LEARNING_PATH_ITEM_ID));
             $this->set_parameter(
-                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                Request :: get(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
             return $this->publication->get_content_object();
         }
     }
@@ -252,7 +252,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->publication->get_id(),
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_SHOW_PROGRESS => 'true',
-                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
+                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_DETAILS => $details));
     }
 
@@ -342,7 +342,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         return array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_LEARNING_PATH_ITEM_ID,
-            \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP);
     }
 

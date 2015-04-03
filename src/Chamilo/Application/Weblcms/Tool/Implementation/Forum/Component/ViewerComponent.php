@@ -46,7 +46,7 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
         if (is_null(Request :: get(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION)))
         {
             Request :: set_get(
-                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION,
+                \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION,
                 \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: ACTION_VIEW_FORUM);
         }
 
