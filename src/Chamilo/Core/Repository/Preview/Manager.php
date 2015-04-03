@@ -17,13 +17,13 @@ abstract class Manager extends Application
 {
     // Parameters
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
-
+    
     // Available actions
     const ACTION_DISPLAY = 'Display';
     const ACTION_RENDITION = 'Rendition';
     const ACTION_REPORTING = 'Reporting';
     const ACTION_RESET = 'Reset';
-
+    
     // The Default action
     const DEFAULT_ACTION = self :: ACTION_DISPLAY;
 
@@ -41,16 +41,16 @@ abstract class Manager extends Application
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $application = null)
     {
         parent :: __construct($request, $user, $application);
-
+        
         $content_object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
             $content_object_id);
-
+        
         if (! $this->content_object instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
-
+        
         $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $this->content_object->get_id());
     }
 
@@ -60,72 +60,72 @@ abstract class Manager extends Application
     public function render_header()
     {
         $html = array();
-
+        
         $page = Page :: getInstance();
         $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
-
+        
         $html[] = $page->getHeader()->toHtml();
         $html[] = '<div class="warning-banner">';
-
+        
         $translation = Translation :: get(
-            'PreviewModeWarning',
-            null,
+            'PreviewModeWarning', 
+            null, 
             ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_content_object()));
-
+        
         if ($translation == 'PreviewModeWarning')
         {
             $translation = Translation :: get('PreviewModeWarning');
         }
-
+        
         $html[] = $translation;
         $html[] = '<div class="actions">';
-
+        
         if ($this->get_action() != self :: ACTION_DISPLAY && $this->get_content_object()->is_complex_content_object())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'Action/Display',
-                'png',
-                Translation :: get('DisplayPreview'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_DISPLAY)),
+                'Action/Display', 
+                'png', 
+                Translation :: get('DisplayPreview'), 
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_DISPLAY)), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         $is_complex_object = $this->get_content_object()->is_complex_content_object();
         $is_display_action = $this->get_action() == self :: ACTION_DISPLAY;
-
+        
         if ($is_display_action && $is_complex_object && $this->getPreview()->getComponent()->supports_reset())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'Action/Reset',
-                'png',
-                Translation :: get('ResetDisplayPreview'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RESET)),
+                'Action/Reset', 
+                'png', 
+                Translation :: get('ResetDisplayPreview'), 
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RESET)), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         if ($this->get_action() != self :: ACTION_RENDITION)
         {
             $html[] = Theme :: getInstance()->getImage(
-                'Action/Rendition',
-                'png',
-                Translation :: get('RenditionPreview'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RENDITION)),
+                'Action/Rendition', 
+                'png', 
+                Translation :: get('RenditionPreview'), 
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RENDITION)), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         if ($this->get_action() != self :: ACTION_REPORTING && $this->has_reporting())
         {
             $html[] = Theme :: getInstance()->getImage(
-                'Action/Reporting',
-                'png',
-                Translation :: get('ReportingPreview'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_REPORTING)),
+                'Action/Reporting', 
+                'png', 
+                Translation :: get('ReportingPreview'), 
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_REPORTING)), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -155,8 +155,10 @@ abstract class Manager extends Application
     public static function reporting($content_object)
     {
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
-        $reporting_manager_class = $namespace . '\integration\Core\Reporting\Preview\Manager';
-
+        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
+        
+        $reporting_manager_class = $contentObjectNamespace . '\Integration\Chamilo\Core\Reporting\Preview\Manager';
+        
         return class_exists($reporting_manager_class);
     }
 
@@ -170,20 +172,20 @@ abstract class Manager extends Application
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($content_object);
         }
-
+        
         if (! $content_object instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
-
+        
         $action = $content_object->is_complex_content_object() ? self :: ACTION_DISPLAY : self :: ACTION_RENDITION;
-
+        
         $redirect = new Redirect(
             array(
-                self :: PARAM_CONTEXT => self :: context(),
-                self :: PARAM_ACTION => $action,
+                self :: PARAM_CONTEXT => self :: context(), 
+                self :: PARAM_ACTION => $action, 
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
-
+        
         return $redirect->getUrl();
     }
 

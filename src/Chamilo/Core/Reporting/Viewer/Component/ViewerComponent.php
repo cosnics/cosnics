@@ -25,7 +25,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = $this->render_header();
         $html[] = TemplateRenditionImplementation :: launch($this, $this->get_template(), $format, $view);
         $html[] = $this->render_footer();
-
+            
         return implode(PHP_EOL, $html);
     }
 }
