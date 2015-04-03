@@ -21,7 +21,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         $answer = null)
     {
         $display_type = ucfirst($this->get_content_object()->get_display_type());
-        
+               
         $rendition = ContentObjectRenditionImplementation :: factory(
             $this->get_content_object(), 
             $this->get_format(), 

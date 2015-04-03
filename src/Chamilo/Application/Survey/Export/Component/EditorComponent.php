@@ -54,9 +54,13 @@ class EditorComponent extends Manager
             }
             else
             {
-                $this->display_header();
-                $form->display();
-                $this->display_footer();
+                $html = array();
+                
+                $html[] = $this->render_header();
+                $html[] = $form->toHtml();
+                $html[] = $this->render_footer();
+                
+                return implode(PHP_EOL, $html);
             }
         }
     }

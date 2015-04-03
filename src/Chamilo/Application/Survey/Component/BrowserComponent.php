@@ -40,19 +40,16 @@ class BrowserComponent extends Manager implements TableSupport
     function run()
     {
         $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_PARTICIPATE);
-
         $this->action_bar = $this->get_action_bar();
-
-        $this->display_header();
-
-        echo $this->action_bar->as_html();
-        echo '<div id="action_bar_browser">';
-
-        echo $this->get_tables();
-
-        echo '</div>';
-        echo '</div>';
-        $this->display_footer();
+        
+        $html = array();
+        
+        $html[] = $this->render_header();
+        $html[] = $this->action_bar->as_html();
+        $html[] = $this->get_tables();
+        $html[] = $this->render_footer();
+        
+        return implode(PHP_EOL, $html);
     }
 
     function get_tables()

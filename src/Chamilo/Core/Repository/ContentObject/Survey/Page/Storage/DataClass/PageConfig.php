@@ -5,6 +5,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class PageConfig
 {
+    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    
     const CLASS_NAME = __CLASS__;
     const PROPERTY_ID = 'id';
     const PROPERTY_NAME = 'name';

@@ -185,8 +185,11 @@ abstract class AssessmentQuestionResultDisplay
     {
         $type = $complex_content_object_question->get_ref_object()->get_type();
 
-        $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
-             '\ResultDisplay';
+        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) .
+        '\ResultDisplay';
+        
+//         $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
+//              '\ResultDisplay';
         $question_result_display = new $class(
             $assessment_result_processor,
             $complex_content_object_question,

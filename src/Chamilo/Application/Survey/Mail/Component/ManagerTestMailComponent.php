@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Mail\Mail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ManagerTestMailComponent extends Manager
 {
@@ -33,10 +34,7 @@ class ManagerTestMailComponent extends Manager
         
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
         
         $form = new MailTestForm(
@@ -51,9 +49,13 @@ class ManagerTestMailComponent extends Manager
         }
         else
         {
-            $this->display_header();
-            echo $form->toHtml();
-            $this->display_footer();
+            $html = array();
+            
+            $html[] = $this->render_header();
+            $html[] =$form->toHtml();
+            $html[] = $this->render_footer();
+            
+            return implode(PHP_EOL, $html);
         }
     }
 

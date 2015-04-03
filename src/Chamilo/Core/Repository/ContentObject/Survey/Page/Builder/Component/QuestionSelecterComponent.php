@@ -24,14 +24,15 @@ class QuestionSelecterComponent extends Manager
 
     function run()
     {
-        $survey_id = Request :: get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
-        if ($survey_id)
+        $page_id = $this->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        
+        if ($page_id)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem :: class_name(),
                     ComplexContentObjectItem :: PROPERTY_PARENT),
-                new StaticConditionVariable($survey_id));
+                new StaticConditionVariable($page_id));
 
             $clois = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
                 ComplexContentObjectItem :: class_name(),

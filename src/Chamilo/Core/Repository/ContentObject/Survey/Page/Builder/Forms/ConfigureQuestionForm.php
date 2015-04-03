@@ -45,7 +45,7 @@ class ConfigureQuestionForm extends FormValidator
         parent :: __construct(self :: FORM_NAME, self :: FORM_METHOD_POST, $parent->get_url());
         
         $this->parent = $parent;
-        
+               
         $this->survey_page = $this->parent->get_root_content_object();
         
         $this->complex_question_id = Request :: get(Manager :: PARAM_COMPLEX_QUESTION_ITEM_ID);
@@ -244,7 +244,7 @@ class ConfigureQuestionForm extends FormValidator
     function create_config()
     {
         $values = $this->exportValues();
-        
+         
         $config = array();
         $config[PageConfig :: PROPERTY_NAME] = $values[PageConfig :: PROPERTY_NAME];
         $config[PageConfig :: PROPERTY_DESCRIPTION] = $values[PageConfig :: PROPERTY_DESCRIPTION];

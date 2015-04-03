@@ -25,10 +25,9 @@ class EditorComponent extends Manager
             Publication :: class_name(), 
             Request :: get(self :: PARAM_PUBLICATION_ID));
         
-        if (! Rights :: is_allowed_in_surveys_subtree(
+        if (! Rights :: get_instance()->is_right_granted(
             Rights :: RIGHT_EDIT, 
-            $publication->get_id(), 
-            Rights :: TYPE_PUBLICATION))
+            $publication->get_id()))
         
         {
            throw new NotAllowedException();
@@ -51,9 +50,14 @@ class EditorComponent extends Manager
         }
         else
         {
-            $this->display_header();
-            $form->display();
-            $this->display_footer();
+            $html = array();
+            
+            $html[] = $this->render_header();
+            $html[] =$form->toHtml();
+            $html[] = $this->render_footer();
+            
+            return implode(PHP_EOL, $html);
+          
         }
     }
 
@@ -68,9 +72,5 @@ class EditorComponent extends Manager
                 Translation :: get('BrowserComponent')));
     }
 
-    function get_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_ID);
-    }
 }
 ?>
