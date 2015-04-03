@@ -65,8 +65,11 @@ abstract class ScoreCalculator
     {
         $type = $question->get_type();
         
-        $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
-             '\ScoreCalculator';
+        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) .
+        '\ScoreCalculator';
+        
+//         $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
+//              '\ScoreCalculator';
         
         $score_calculator = new $class($question, $answer, $weight);
         return $score_calculator;
