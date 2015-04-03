@@ -185,8 +185,8 @@ abstract class QuestionDisplay
         $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
             $complex_content_object_question->get_ref());
         $type = $question->get_type();
-
-        $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
+        
+        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) .
              '\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);
         return $question_display;

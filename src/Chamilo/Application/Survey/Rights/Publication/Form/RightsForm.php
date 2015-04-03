@@ -54,6 +54,7 @@ class RightsForm extends FormValidator
     public function setDefaults()
     {
         $default_elements = new AdvancedElementFinderElements();
+               
         $targets_entities = Rights :: get_instance()->get_publication_targets_entities(
             $this->right, 
             $this->publication_id);
@@ -82,6 +83,7 @@ class RightsForm extends FormValidator
         $rights_util = Rights :: get_instance();
         
         $location = $rights_util->get_publication_location($this->publication_id);
+       
         
         $targets_entities = Rights :: get_instance()->get_publication_targets_entities(
             $this->right, 

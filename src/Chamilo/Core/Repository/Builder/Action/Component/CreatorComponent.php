@@ -57,13 +57,14 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function run()
     {
+        
         $this->get_complex_content_object_breadcrumbs();
 
         $this->type_selection = TypeSelector :: get_selection();
-
+        
         $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
         $exclude[] = $this->get_root_content_object()->get_id();
-
+        
         if ($this->type_selection)
         {
             if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())

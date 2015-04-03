@@ -14,7 +14,6 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -24,6 +23,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -57,10 +57,7 @@ class ManagerSendMailComponent extends Manager
 
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
 
         switch ($this->type)
@@ -186,10 +183,15 @@ class ManagerSendMailComponent extends Manager
         }
         else
         {
-            $this->display_header();
-            echo $this->get_survey_html($survey_publication);
-            echo $form->toHtml();
-            $this->display_footer();
+            
+            $html = array();
+            
+            $html[] = $this->render_header();
+            $html[] = $this->get_survey_html($survey_publication);
+            $html[] =$form->toHtml();
+            $html[] = $this->render_footer();
+            
+            return implode(PHP_EOL, $html);
         }
     }
 
@@ -318,14 +320,14 @@ class ManagerSendMailComponent extends Manager
                 case Mail :: PARTICIPANT_TYPE :
                     $parameters[Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_TAKE;
                     $parameters[Manager :: PARAM_PUBLICATION_ID] = $this->publication_id;
-                    $url = Path :: getInstance()->getBasePath(true) . $this->get_link($parameters);
+                    $url = $this->get_link($parameters);
                     $fullbody[] = '<a href=' . $url . '>' . Translation :: get('ClickToTakeSurvey') . '</a>';
                     $selected_tab = BrowserComponent :: TAB_MAILS_TO_PARTICIPANTS;
                     break;
                 case Mail :: EXPORT_TYPE :
                     $parameters[Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Export\Manager :: ACTION_EXPORT;
                     $parameters[Manager :: PARAM_PUBLICATION_ID] = $this->publication_id;
-                    $url = Path :: getInstance()->getBasePath(true) . $this->get_link($parameters);
+                    $url = $this->get_link($parameters);
                     $fullbody[] = '<a href=' . $url . '>' . Translation :: get('ClickToExportResults') . '</a>';
                     $selected_tab = BrowserComponent :: TAB_MAILS_TO_EXPORTERS;
                     break;

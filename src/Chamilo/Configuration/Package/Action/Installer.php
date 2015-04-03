@@ -64,13 +64,10 @@ abstract class Installer extends Action
         {
             $this->add_message(
                 self :: TYPE_NORMAL,
-                '<span class="subtitle">' . Translation :: get('Various', null, 'core\install') . '</span>');
+                '<span class="subtitle">' . Translation :: get('Various', null, 'Chamilo\Core\Install') . '</span>');
             if (! $this->extra())
             {
-                var_dump($this);
-                exit();
-
-                return $this->failed(Translation :: get('VariousFailed', null, 'core\install'));
+                return $this->failed(Translation :: get('VariousFailed', null, 'Chamilo\Core\Install'));
             }
             else
             {
@@ -143,8 +140,7 @@ abstract class Installer extends Action
     }
 
     /**
-     * Parses an XML file describing a storage unit.
-     * For defining the 'type' of the field, the same definition is used
+     * Parses an XML file describing a storage unit. For defining the 'type' of the field, the same definition is used
      * as the PEAR::MDB2 package. See http://pear.php.net/manual/en/package.database. mdb2.datatypes.php
      *
      * @param $file string The complete path to the XML-file from which the storage unit definition should be read.

@@ -69,7 +69,7 @@ class AssessmentResultsTableCellRenderer extends DataClassTableCellRenderer impl
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_component()->get_publication_id(),
                         \Chamilo\Application\Weblcms\Manager :: PARAM_USERS => $this->get_component()->get_user_id(),
                         Manager :: PARAM_ATTEMPT_ID => $this->get_component()->get_attempt_id(),
-                        \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_component()->get_ccoi_id(),
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_component()->get_ccoi_id(),
                         Manager :: PARAM_ASSESSMENT_ID => $this->get_component()->get_assessment_id(),
                         Manager :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID => $assessment_attempt->get_id())),
                 ToolbarItem :: DISPLAY_ICON));

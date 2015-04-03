@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
-class ViewComponent extends \Chamilo\Core\Repository\ContentObject\Glossary\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Glossary\Display\Preview\Manager implements
     GlossaryDisplaySupport
 {
 

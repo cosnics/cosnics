@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             'select_questions',
             $this->get_url(
                 array(
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_SELECT_QUESTIONS,
                     \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)));
 
         $links[] = new LinkTypeSelectorOption(

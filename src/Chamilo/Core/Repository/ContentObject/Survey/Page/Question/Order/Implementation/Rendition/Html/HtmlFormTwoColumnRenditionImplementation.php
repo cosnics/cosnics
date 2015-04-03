@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Implementation\Rendition\Html\Form;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Implementation\Rendition\Html;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Form\ComplexOrderForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Implementation\Rendition\Html\HtmlFormRenditionImplementation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Storage\DataClass\ComplexOrder;
 
 /**
  *
@@ -22,7 +22,7 @@ class HtmlFormTwoColumnRenditionImplementation extends HtmlFormRenditionImplemen
 
     private $question;
 
-    function render(FormValidator $formvalidator, ComplexOrderForm $complex_content_object_item, $answer = null)
+    function render(FormValidator $formvalidator, ComplexOrder $complex_content_object_item, $answer = null)
     {
         $renderer = $formvalidator->get_renderer();
         $this->question = $this->get_content_object();

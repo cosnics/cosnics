@@ -30,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -52,20 +53,20 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (! Rights :: is_right_granted(Rights :: RIGHT_EXPORT_RESULT, $this->publication_id))
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
 
         $this->action_bar = $this->get_action_bar();
 
-        $output = $this->get_tabs_html();
-
-        $this->display_header();
-        echo $this->action_bar->as_html() . '<br />';
-        echo $output;
-        $this->display_footer();
+        $html = array();
+        
+        $html[] = $this->render_header();
+        $html[] = $this->action_bar->as_html();
+        $html[] = $this->get_tabs_html();
+        $html[] = $this->render_footer();
+        
+        return implode(PHP_EOL, $html);
+       
     }
 
     function get_tabs_html()

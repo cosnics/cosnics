@@ -1,16 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\QuestionBrowser\QuestionTable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Forms\ConfigureQuestionForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 
 class ConfigureQuestionComponent extends Manager
 {
@@ -19,12 +16,15 @@ class ConfigureQuestionComponent extends Manager
 
     function run()
     {
+       
+        $this->page_id = $this->getRequest()->get(self :: PARAM_SURVEY_PAGE_ID);       
         $form = new ConfigureQuestionForm($this);
 
         if ($form->validate())
         {
             $created = $form->create_config();
 
+            
             $message = $created ? Translation :: get('QuestionConfigurationCreated') : Translation :: get(
                 'QuestionConfigurationNotCreated');
             $this->redirect(
@@ -45,29 +45,6 @@ class ConfigureQuestionComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    private function get_table()
-    {
-        $parameters = $this->get_parameters();
-        $table = new QuestionTable($this, $parameters, $this->get_condition());
-        return $table->as_html();
-    }
-
-    function get_condition()
-    {
-        $page_id = Request :: get(self :: PARAM_SURVEY_PAGE_ID);
-        $condition = new EqualityCondition(
-            ComplexContentObjectItem :: PROPERTY_PARENT,
-            $page_id,
-            ComplexContentObjectItem :: get_table_name());
-        return $condition;
-    }
-
-    function get_complex_content_object_table_html($show_subitems_column = true, $model = null, $renderer = null)
-    {
-        // return parent :: get_complex_content_object_table_html($show_subitems_column, $model, new
-        // SurveyBrowserTableCellRenderer($this, $this->get_complex_content_object_table_condition()));
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

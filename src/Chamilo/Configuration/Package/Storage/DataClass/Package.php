@@ -390,7 +390,6 @@ class Package extends DataClass
         {
             throw new Exception(Translation :: get('MultipackageFileNotAllowed', array('CONTEXT' => $context)));
         }
-
         return self :: parse_package($dom_xpath, $package_list->item(0));
     }
 

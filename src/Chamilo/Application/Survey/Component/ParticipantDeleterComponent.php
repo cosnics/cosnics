@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ParticipantDeleterComponent extends Manager
 {
@@ -26,8 +27,7 @@ class ParticipantDeleterComponent extends Manager
             $publication_id, 
             Rights :: TYPE_PUBLICATION))
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoRights')));
-            exit();
+            throw new NotAllowedException();
         }
         
         $ids = Request :: get(self :: PARAM_PARTICIPANT_ID);

@@ -110,10 +110,12 @@ abstract class QuestionDisplay
     {
         $content_object = $complex_content_object_path_node->get_content_object();
         
-        $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type()) .
-             '\Display\Display';
-        $question_display = new $class($formvalidator, $complex_content_object_path_node, $answer);
+        $class = '\Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Integration\Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Display';
         
+//         $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type()) .
+//              '\Display\Display';
+        $question_display = new $class($formvalidator, $complex_content_object_path_node, $answer);
+              
         return $question_display;
     }
 }

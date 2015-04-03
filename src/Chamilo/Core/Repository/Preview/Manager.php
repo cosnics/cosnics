@@ -189,7 +189,7 @@ abstract class Manager extends Application
 
     public function getPreview()
     {
-        $contentObjectClassname = $this->get_content_object()->get_type();
+        $contentObjectClassname = $this->get_content_object()->package();
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
             $contentObjectClassname);
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);

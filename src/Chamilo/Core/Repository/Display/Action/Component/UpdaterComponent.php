@@ -35,9 +35,9 @@ class UpdaterComponent extends Manager
                 'post',
                 $this->get_url(
                     array(
-                        \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
-                        \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())));
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())));
 
             if ($form->validate())
             {
@@ -78,7 +78,7 @@ class UpdaterComponent extends Manager
                         Utilities :: COMMON_LIBRARIES));
 
                 $params = array();
-                $params[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
                 $this->redirect($message, (! $succes), $params);
@@ -90,8 +90,8 @@ class UpdaterComponent extends Manager
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
-                                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())),
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())),
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES)));
 
                 $html = array();

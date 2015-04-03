@@ -40,8 +40,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 $component = $factory->getComponent();
                 $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
                 $component->set_parameter(
-                    \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION,
-                    \Chamilo\Core\Repository\Display\Action\Manager :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM);
+                    \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION,
+                    \Chamilo\Core\Repository\Display\Manager :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM);
                 $component->set_parameter('cid', $complex_content_object_item_id);
                 $component->set_parameter('type', $type);
                 return $component->run();

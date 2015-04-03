@@ -158,8 +158,9 @@ class ApplicationFactory
     private function createComponent($action)
     {
         $class = $this->getClassName($action);
+        
         $component = new $class($this->getRequest(), $this->getUser(), $this->getApplication());
-
+              
         $component->set_parameter($this->getActionParameter(), $action);
 
         if (! $this->getApplication() instanceof Application)

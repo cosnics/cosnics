@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class CreatorComponent extends Manager
 {
@@ -60,17 +61,20 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $this->display_header();
-                $form->display();
-                $this->display_footer();
+                
+                $html = array();
+                
+                $html[] = $this->render_header();
+                $html[] = $form->toHtml();
+                $html[] = $this->render_footer();
+                
+                return implode(PHP_EOL, $html);
+              
             }
         }
         else
         {
-            $this->display_header();
-            $this->display_error_message(Translation :: get('NotAllowed'));
-            $this->display_footer();
-            exit();
+            throw new NotAllowedException();
         }
     }
 

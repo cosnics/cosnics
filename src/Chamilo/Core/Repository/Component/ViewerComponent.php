@@ -66,12 +66,14 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     public function run()
     {
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+
         if ($id)
         {
             $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
             $this->tabs = new DynamicTabsRenderer($renderer_name);
 
             $object = DataManager :: retrieve_content_object($id);
+
             if (! $object)
             {
                 return $this->display_error_page(
@@ -196,9 +198,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 {
                     $html[] = '<br />' . $this->action_bar->as_html();
                 }
-
                 $html[] = $display->render();
             }
+
             $this->add_links_to_content_object_tabs($object);
 
             $html[] = $this->tabs->render();
