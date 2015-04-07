@@ -15,6 +15,10 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Ehb\Core\Metadata\Service\EntityService;
+use Ehb\Core\Metadata\Relation\Service\RelationService;
+use Ehb\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -51,9 +55,7 @@ class EditorComponent extends Manager implements DelegateComponent
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
-                    Translation :: get(
-                        'EditContentObject',
-                        array('CONTENT_OBJECT' => $object->get_title()))));
+                    Translation :: get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))));
 
             if (! ($object->get_owner_id() == $this->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
                 RepositoryRights :: COLLABORATE_RIGHT,
@@ -91,12 +93,18 @@ class EditorComponent extends Manager implements DelegateComponent
 
             if ($form->validate())
             {
-                var_dump($_POST);
-                exit();
                 $success = $form->update_content_object();
 
                 if ($success)
                 {
+                    $values = $form->exportValues();
+                    $entityService = new RepositoryEntityService();
+                    $entityService->updateEntitySchemaValues(
+                        new RelationService(),
+                        new ElementService(),
+                        $object,
+                        $values[EntityService :: PROPERTY_METADATA_SCHEMA]);
+
                     Event :: trigger(
                         'activity',
                         Manager :: context(),

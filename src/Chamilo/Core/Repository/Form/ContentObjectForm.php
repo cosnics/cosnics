@@ -26,7 +26,6 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Ehb\Core\Metadata\Service\EntityService;
 use Ehb\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
@@ -164,10 +163,8 @@ abstract class ContentObjectForm extends FormValidator
                 Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
 
-        $entityService = new EntityService();
         $repositoryEntityService = new RepositoryEntityService();
-        $schemaInstances = $repositoryEntityService->getSchemaInstancesForContentObject(
-            $entityService,
+        $schemaInstances = $repositoryEntityService->getSchemaInstancesForEntity(
             new RelationService(),
             $this->get_content_object());
 
