@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Browser;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Table\Browser;
 
 use Chamilo\Core\Repository\Table\Complex\ComplexTableColumnModel;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;

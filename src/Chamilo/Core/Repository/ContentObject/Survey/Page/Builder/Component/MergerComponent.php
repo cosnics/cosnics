@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Merger\MergerTable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\table\Merger\MergerTable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;

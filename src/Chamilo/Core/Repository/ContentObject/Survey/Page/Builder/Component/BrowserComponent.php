@@ -43,15 +43,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             'merge',
             $this->get_url(
                 array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_MERGE_SURVEY_PAGE)));
-
-        $links[] = new LinkTypeSelectorOption(
-            __NAMESPACE__,
-            'select_questions',
-            $this->get_url(
-                array(
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_SELECT_QUESTIONS,
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)));
-
+       
         $links[] = new LinkTypeSelectorOption(
             __NAMESPACE__,
             'config',

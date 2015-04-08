@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\QuestionBrowser\QuestionTable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Table\QuestionBrowser\QuestionTable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Forms\ConfigureQuestionForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;

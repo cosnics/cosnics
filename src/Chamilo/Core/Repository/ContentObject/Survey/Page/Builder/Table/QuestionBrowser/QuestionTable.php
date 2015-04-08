@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\QuestionBrowser;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Table\QuestionBrowser;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;

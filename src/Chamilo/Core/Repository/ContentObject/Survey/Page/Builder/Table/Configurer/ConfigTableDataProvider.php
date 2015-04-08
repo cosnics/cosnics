@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Configurer;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Table\Configurer;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\PageConfig;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;

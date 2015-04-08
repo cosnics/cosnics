@@ -43,9 +43,6 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
     function run()
     {
-        $this->survey_id = Request :: get(self :: PARAM_SURVEY_ID);
-        $this->survey = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($this->survey_id);
-
         $this->publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
 
         $this->invitee_id = Request :: get(self :: PARAM_INVITEE_ID);
@@ -59,15 +56,18 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
         }
 
         $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publication_id);
-
+        $this->survey = $this->publication->get_publication_object();
+        
         $factory = new ApplicationFactory(
             $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
             $this->get_user(),
             $this);
-         
-        return $factory->run();
-    }
+
+        $component = $factory->getComponent();
+        $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
+        
+        return $component->run();    }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
@@ -83,11 +83,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
                 Translation :: get('ParticipantBrowserComponent')));
     }
-
-    function get_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_ID, self :: PARAM_SURVEY_ID, self :: PARAM_INVITEE_ID);
-    }
+ 
 
     function started()
     {

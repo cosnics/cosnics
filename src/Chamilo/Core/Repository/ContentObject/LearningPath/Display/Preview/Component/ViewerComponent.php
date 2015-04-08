@@ -33,9 +33,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function run()
     {
+        $className = $this->get_root_content_object()->package() . '\Display';
+        
         $factory = new ApplicationFactory(
             $this->getRequest(),
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: context(),
+            $className,
             $this->get_user(),
             $this);
         return $factory->run();
@@ -210,9 +212,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::retrieve_learning_path_tracker()
      */
     function retrieve_learning_path_tracker()
-    {
+    {        
         $attempt = PreviewStorage :: get_instance()->retrieve_learning_path_attempt(
-            parent :: get_root_content_object()->get_id());
+            $this->get_parent()->get_root_content_object()->get_id());
 
         if (! $attempt instanceof AbstractAttempt)
         {
