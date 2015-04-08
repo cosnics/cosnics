@@ -100,6 +100,7 @@ class EditorComponent extends Manager implements DelegateComponent
                     $values = $form->exportValues();
                     $entityService = new RepositoryEntityService();
                     $entityService->updateEntitySchemaValues(
+                        $this->get_user(),
                         new RelationService(),
                         new ElementService(),
                         $object,
