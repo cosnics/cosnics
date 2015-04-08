@@ -12,6 +12,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios
@@ -461,7 +463,7 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             {
                 $revert_url = $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_USER));
                 $image_url = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/' . self :: ACTION_USER);
-
+                 
                 $html[] = '<div class="portfolio-virtual-user">';
                 $html[] = Translation :: get(
                     'ViewingPortfolioAsUser',
@@ -471,8 +473,14 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
             }
         }
 
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->get_root_content_object()->get_owner()->get_id()));
+        
         $html[] = '<div class="portfolio-photo">';
-        $html[] = '<img src="' . $this->get_root_content_object()->get_owner()->get_full_picture_url() . '" />';
+        $html[] = '<img src="' .  $profilePhotoUrl->getUrl() . '" />';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '<br />';

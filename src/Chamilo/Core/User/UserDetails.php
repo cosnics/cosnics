@@ -4,6 +4,8 @@ namespace Chamilo\Core\User;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 class UserDetails
 {
@@ -52,7 +54,14 @@ class UserDetails
         $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
             __NAMESPACE__,
             'Logo/22') . ');">';
-        $html[] = '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
+        
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
+        
+        $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
              '" style="margin: 10px;max-height: 150px; border:1px solid black;float: right; display: inline;"/>';
         $html[] = '<div class="title">';
         $html[] = $this->user->get_fullname();

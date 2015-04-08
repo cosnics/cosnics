@@ -14,6 +14,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: user_detail.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -96,7 +98,13 @@ class UserDetailComponent extends Manager
         $table->setHeaderContents(0, 0, Translation :: get('UserInformation'));
         $table->setCellAttributes(0, 0, array('colspan' => 3, 'style' => 'text-align: center;'));
 
-        $table->setCellContents(1, 2, '<img src="' . $user->get_full_picture_url() . '" />');
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+        
+        $table->setCellContents(1, 2, '<img src="' . $profilePhotoUrl->getUrl() . '" />');
         $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
 
         $attributes = array(

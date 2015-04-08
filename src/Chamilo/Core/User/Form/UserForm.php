@@ -14,6 +14,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: user_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -66,10 +68,16 @@ class UserForm extends FormValidator
      * Creates a basic form
      */
     public function build_basic_form()
-    {
+    { 
+        $profilePhotoUrl = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
+        
         $this->addElement(
             'html',
-            '<img src="' . $this->user->get_full_picture_url() . '" alt="' . $this->user->get_fullname() .
+            '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
                  '" style="position:absolute; right: 10px; z-index:1; border:1px solid black; max-width: 150px;"/>');
         // Lastname
         $this->addElement('text', User :: PROPERTY_LASTNAME, Translation :: get('LastName'), array("size" => "50"));
