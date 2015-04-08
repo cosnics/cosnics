@@ -266,6 +266,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $entityFormService = new EntityFormService($schemaInstance, $this->get_content_object(), $this);
         $entityFormService->addElements();
+        $entityFormService->setDefaults();
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
