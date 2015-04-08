@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
 use CpChart\Classes\pData;
 use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 
@@ -23,9 +22,9 @@ class BarChart extends Chart
             return false;
         }
 
-        $base_path = 'temp/' . md5(serialize(array('bar_chart', $reporting_data))) . '.png';
-        $path = Path :: getInstance()->getStoragePath() . $base_path;
-
+        $md5 = md5(serialize(array('bar_chart', $reporting_data)));
+        $path = $this->getFilePath($md5);
+       
         if (! file_exists($path))
         {
             $number_of_rows = count($reporting_data->get_rows());
@@ -60,9 +59,7 @@ class BarChart extends Chart
                 $chart_data->addPoints($data_row, $row_name);
             }
 
-            $chart_data->loadPalette(
-                Theme :: getInstance()->getCssPath('Chamilo\Configuration') . 'plugin/pchart/tones.txt',
-                TRUE);
+            $chart_data->loadPalette('spring.color');
 
             if ($number_of_rows > 1)
             {
@@ -117,7 +114,7 @@ class BarChart extends Chart
             /* Set the default font properties */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() . 'szymach/c-pchart/src/Resources/fontspchart/fonts/Verdana.ttf',
+                    'FontName' => Path :: getInstance()->getVendorPath() . 'szymach/c-pchart/src/Resources/fonts/Verdana.ttf',
                     'FontSize' => 8,
                     'R' => 0,
                     'G' => 0,
@@ -165,7 +162,7 @@ class BarChart extends Chart
             /* Render the picture */
             $chart_canvas->render($path);
         }
-
-        return Path :: getInstance()->getStoragePath(true) . $base_path;
+        
+        return $this->getUrl($md5);
     }
 }

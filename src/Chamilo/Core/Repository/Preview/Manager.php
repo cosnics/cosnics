@@ -154,10 +154,8 @@ abstract class Manager extends Application
      */
     public static function reporting($content_object)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
-        
-        $reporting_manager_class = $contentObjectNamespace . '\Integration\Chamilo\Core\Reporting\Preview\Manager';
+        $package = $content_object->package();
+        $reporting_manager_class = $package . '\Integration\Chamilo\Core\Reporting\Preview\Manager';
         
         return class_exists($reporting_manager_class);
     }
@@ -191,12 +189,10 @@ abstract class Manager extends Application
 
     public function getPreview()
     {
-        $contentObjectClassname = $this->get_content_object()->package();
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $contentObjectClassname);
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
-        $namespace = $contentObjectNamespace . '\Display\Preview';
-        $factory = new ApplicationFactory($this->getRequest(), $namespace, $this->get_user(), $this);
+        $package = $this->get_content_object()->package();
+        $context = $package . '\Display\Preview';
+        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        
         return $factory;
     }
 }

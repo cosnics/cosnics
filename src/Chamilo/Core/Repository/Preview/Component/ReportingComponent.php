@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Preview\Component;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\PreviewSupport;
 use Chamilo\Core\Repository\Preview\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -43,8 +42,6 @@ class ReportingComponent extends Manager implements PreviewSupport
 
         if (count($available_actions) > 1)
         {
-            $html = array();
-
             $html[] = '<div class="reporting-container">';
             $html[] = '<div class="reporting-body">';
             $html[] = '<div class="reporting-container">';
@@ -101,11 +98,8 @@ class ReportingComponent extends Manager implements PreviewSupport
 
     public function get_preview_context()
     {
-        $namespace =  ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->get_content_object()->get_type());
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
-        
-        return $contentObjectNamespace . '\Integration\Chamilo\Core\Reporting\Preview';
+       $package = $this->get_content_object()->package();
+        return $package . '\Integration\Chamilo\Core\Reporting\Preview';
       
     }
 }
