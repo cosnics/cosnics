@@ -12,7 +12,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 {
     // Actions
     const ACTION_MERGE_SURVEY_PAGE = 'Merger';
-    const ACTION_SELECT_QUESTIONS = 'QuestionSelecter';
     const ACTION_CONFIGURE_PAGE = 'Configure';
     const ACTION_CHANGE_QUESTION_VISIBILITY = 'VisibilityChanger';
     const ACTION_CONFIGURE_QUESTION = 'ConfigureQuestion';

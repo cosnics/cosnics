@@ -65,7 +65,10 @@ class TakerComponent extends Manager implements DelegateComponent
             $this->get_user(),
             $this);
          
-        return $factory->run();
+        $component = $factory->getComponent();
+        $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
+        
+        return $component->run();
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -79,12 +82,6 @@ class TakerComponent extends Manager implements DelegateComponent
                 Translation :: get('BrowserComponent')));
     }
 
-    function get_parameters()
-    {
-        return array(
-            self :: PARAM_PUBLICATION_ID,
-            \Chamilo\Core\Repository\ContentObject\Survey\Display\Component\ViewerComponent :: PARAM_STEP);
-    }
 
     // try out for interface SurveyTaker
     function started()

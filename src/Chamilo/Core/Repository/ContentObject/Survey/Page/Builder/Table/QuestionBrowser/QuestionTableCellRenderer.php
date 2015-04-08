@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\QuestionBrowser;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Table\QuestionBrowser;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Storage\DataClass\ComplexOpen;

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt;
 
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt;
-
 /**
  *
  * @package core\repository\content_object\learning_path\display$LearningPathQuestionAttempt
@@ -10,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQue
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractQuestionAttempt extends AbstractQuestionAttempt
+abstract class AbstractQuestionAttempt extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt
 {
     const PROPERTY_ITEM_ATTEMPT_ID = 'item_attempt_id';
 

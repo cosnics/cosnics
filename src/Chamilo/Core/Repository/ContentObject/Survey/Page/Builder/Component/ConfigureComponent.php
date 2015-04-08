@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\Configurer\ConfigTable;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\QuestionBrowser\QuestionTable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\table\Configurer\ConfigTable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Component\table\QuestionBrowser\QuestionTable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Builder\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
