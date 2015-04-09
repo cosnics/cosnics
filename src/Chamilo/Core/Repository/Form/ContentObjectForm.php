@@ -32,6 +32,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Ehb\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 use Ehb\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
+use Ehb\Core\Metadata\Service\InstanceFormService;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -51,6 +52,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     const TAB_CONTENT_OBJECT = 'ContentObject';
     const TAB_METADATA = 'Metadata';
+    const TAB_ADD_METADATA = 'AddMetadata';
 
     /**
      * ***************************************************************************************************************
@@ -163,20 +165,37 @@ abstract class ContentObjectForm extends FormValidator
                 Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
 
+        $relationService = new RelationService();
         $repositoryEntityService = new RepositoryEntityService();
-        $schemaInstances = $repositoryEntityService->getSchemaInstancesForEntity(
-            new RelationService(),
+
+        $availableSchemaIds = $repositoryEntityService->getAvailableSchemaIdsForEntity(
+            $relationService,
             $this->get_content_object());
 
-        while ($schemaInstance = $schemaInstances->next_result())
+        if (count($availableSchemaIds) > 0)
         {
-            $schema = $schemaInstance->getSchema();
+            $schemaInstances = $repositoryEntityService->getSchemaInstancesForEntity(
+                new RelationService(),
+                $this->get_content_object());
+
+            while ($schemaInstance = $schemaInstances->next_result())
+            {
+                $schema = $schemaInstance->getSchema();
+                $tabs_generator->add_tab(
+                    new DynamicFormTab(
+                        'schema-' . $schema->get_id(),
+                        $schema->get_name(),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
+                        'build_metadata_form',
+                        array($schemaInstance)));
+            }
+
             $tabs_generator->add_tab(
                 new DynamicFormTab(
-                    'schema-' . $schema->get_id(),
-                    $schema->get_name(),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
-                    'build_metadata_form',
+                    'add-schema',
+                    Translation :: get('AddMetadataSchema', null, 'Ehb\Core\Metadata'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
+                    'build_metadata_choice_form',
                     array($schemaInstance)));
         }
 
@@ -267,6 +286,15 @@ abstract class ContentObjectForm extends FormValidator
         $entityFormService = new EntityFormService($schemaInstance, $this->get_content_object(), $this);
         $entityFormService->addElements();
         $entityFormService->setDefaults();
+    }
+
+    public function build_metadata_choice_form()
+    {
+        $relationService = new RelationService();
+        $repositoryEntityService = new RepositoryEntityService();
+
+        $instanceFormService = new InstanceFormService($this->get_content_object(), $this);
+        $instanceFormService->addElements($repositoryEntityService, $relationService);
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)

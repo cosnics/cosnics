@@ -19,10 +19,7 @@ class RepositoryEntityService extends EntityService
 
     /**
      *
-     * @param EntityService $entityService
-     * @param RelationService $relationService
-     * @param ContentObject $contentObject
-     * @return integer[]
+     * @see \Ehb\Core\Metadata\Service\EntityService::getAvailableSchemaIdsForEntity()
      */
     public function getAvailableSchemaIdsForEntity(RelationService $relationService, ContentObject $contentObject)
     {
