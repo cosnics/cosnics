@@ -14,6 +14,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: whois_online.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
@@ -109,7 +111,14 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $html[] = $user->get_email() . '<br />';
         $html[] = $user->get_status_name() . '<br />';
         $html[] = '</div><div style="float: right; max-width: 400px;">';
-        $html[] = '<img src="' . $user->get_full_picture_url() . '" />';
+        
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user_id));
+        
+        $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" />';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

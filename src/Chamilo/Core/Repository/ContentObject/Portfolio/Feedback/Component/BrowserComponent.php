@@ -15,6 +15,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * Render a list of feedback
@@ -147,7 +149,14 @@ class BrowserComponent extends Manager
                 $html[] = '</div>';
 
                 $html[] = '<div class="photo">';
-                $html[] = '<img style="width: 32px;" src="' . $feedback->get_user()->get_full_picture_url() . '" />';
+                
+                $profilePhotoUrl = new Redirect(
+                    array(
+                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                        Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                        \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
+                
+                $html[] = '<img style="width: 32px;" src="' . $profilePhotoUrl->getUrl() . '" />';
                 $html[] = '</div>';
 
                 $html[] = '<div class="actions">';

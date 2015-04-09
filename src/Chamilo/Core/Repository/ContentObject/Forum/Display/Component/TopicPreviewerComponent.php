@@ -19,6 +19,8 @@ use Exception;
 use HTML_Table;
 use Pager;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: topic_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -230,7 +232,12 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
 
             if ($user)
             {
-                $info = '<br /><img style="max-width: 100px;" src="' . $user->get_full_picture_url() . '" /><br /><br />' .
+                $profilePhotoUrl = new Redirect(
+                    array(
+                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                        Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                        \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+                $info = '<br /><img style="max-width: 100px;" src="' . $profilePhotoUrl->getUrl() . '" /><br /><br />' .
                      DatetimeUtilities :: format_locale_date(null, $post->get_creation_date());
             }
             else

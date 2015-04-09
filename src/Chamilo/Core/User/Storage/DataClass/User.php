@@ -476,26 +476,6 @@ class User extends DataClass
                 Path :: getInstance()->getProfilePicturePath() . $uri)));
     }
 
-    public function get_full_picture_url()
-    {
-        if ($this->has_picture())
-        {
-            if (Path :: getInstance()->isWebUri($this->get_picture_uri()))
-            {
-                // also allow full uri values (if uri set by LDAP parser class)
-                return $this->get_picture_uri();
-            }
-            else
-            {
-                return Path :: getInstance()->getProfilePicturePath(true) . $this->get_picture_uri();
-            }
-        }
-        else
-        {
-            return Theme :: getInstance()->getCommonImagePath('Unknown');
-        }
-    }
-
     public function get_full_picture_path()
     {
         if ($this->has_picture())

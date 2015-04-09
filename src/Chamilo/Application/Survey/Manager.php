@@ -5,7 +5,6 @@ use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Component\ViewerComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 abstract class Manager extends Application
 {
@@ -214,9 +213,6 @@ abstract class Manager extends Application
                 self :: PARAM_ACTION => self :: ACTION_INVITE_TEMPLATE_USER,
                 self :: PARAM_PUBLICATION_ID => $publication_id));
     }
-
    
-            $publication->set_from_date(DatetimeUtilities :: time_from_datepicker($attributes['from_date']));
-            $publication->set_to_date(DatetimeUtilities :: time_from_datepicker($attributes['to_date']));
 }
 ?>
