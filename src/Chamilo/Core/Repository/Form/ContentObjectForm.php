@@ -156,7 +156,7 @@ abstract class ContentObjectForm extends FormValidator
 
     public function prepareTabs()
     {
-        $tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
+        $tabs_generator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
 
         $tabs_generator->add_tab(
             new DynamicFormTab(
@@ -193,7 +193,7 @@ abstract class ContentObjectForm extends FormValidator
             $tabs_generator->add_tab(
                 new DynamicFormTab(
                     'add-schema',
-                    null,
+                    Translation :: get('AddMetadataSchema', null, 'Ehb\Core\Metadata'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
                     'build_metadata_choice_form'));
         }

@@ -148,6 +148,9 @@ abstract class Manager extends Application
     const ACTION_TEMPLATE = 'Template';
 
     // Tabs
+    const TABS_FILTER = 'advanced_filter';
+    const TABS_CONTENT_OBJECT = 'content_object';
+
     const TAB_CATEGORY = 'Category';
     const TAB_OBJECT_TYPE = 'ObjectType';
     const TAB_SEARCH = 'Search';
@@ -203,7 +206,7 @@ abstract class Manager extends Application
         $html = array();
 
         $html[] = '<div id="repository_tree_container">';
-        $tabs = new DynamicTabsRenderer('advanced_filter');
+        $tabs = new DynamicTabsRenderer(self :: TABS_FILTER);
 
         $hide_sharing = PlatformSetting :: get('hide_sharing', __NAMESPACE__) === 1 ? true : false;
         if (! $hide_sharing)
@@ -224,7 +227,7 @@ abstract class Manager extends Application
             $this->get_allowed_content_object_types(),
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: TAB_SEARCH,
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_SEARCH),
                     self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
                 array(self :: PARAM_CATEGORY_ID)));
 
@@ -243,17 +246,17 @@ abstract class Manager extends Application
             $selected_type,
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => 'object_type',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
                     FilterData :: FILTER_TYPE => '__SELECTION__',
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => 'object_type',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
                     Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
                 array(self :: PARAM_CATEGORY_ID, self :: PARAM_CONTENT_OBJECT_ID)),
             $selected_category,
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => 'object_type',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
                     FilterData :: FILTER_TYPE => '__CATEGORY__',
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => 'object_type',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
                     Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
                 array(self :: PARAM_CATEGORY_ID, self :: PARAM_CONTENT_OBJECT_ID)));
 
@@ -271,7 +274,7 @@ abstract class Manager extends Application
             $this->get_url(
                 array(
                     FilterData :: FILTER_USER_VIEW => '__VIEW__',
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: TAB_USERVIEW)));
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_USERVIEW))));
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_USERVIEW,
@@ -758,7 +761,9 @@ abstract class Manager extends Application
      */
     private function get_category_menu($force_search = false)
     {
-        $this->set_parameter(DynamicTabsRenderer :: PARAM_SELECTED_TAB, self :: TAB_CATEGORY);
+        $this->set_parameter(
+            DynamicTabsRenderer :: PARAM_SELECTED_TAB,
+            array(self :: TABS_FILTER => self :: TAB_CATEGORY));
 
         if (! isset($this->category_menu))
         {
@@ -1052,7 +1057,7 @@ abstract class Manager extends Application
                 self :: PARAM_ACTION => self :: ACTION_BROWSE_SHARED_CONTENT_OBJECTS,
                 self :: PARAM_CATEGORY_ID => null,
                 self :: PARAM_SHARED_VIEW => $view,
-                DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: TAB_CATEGORY));
+                DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_CATEGORY)));
     }
 
     public function get_copy_content_object_url($content_object_id)

@@ -95,7 +95,16 @@ class DynamicTabsRenderer
 
     public function get_selected_tab()
     {
-        $selected_tab = Request :: get(self :: PARAM_SELECTED_TAB);
+        $selected_tabs = Request :: get(self :: PARAM_SELECTED_TAB);
+
+        // TODO: Added this for backwards compatibility from when the one request variable was shared between all
+        // instances
+        if (! is_array($selected_tabs) && ! empty($selected_tabs))
+        {
+            $selected_tab = $selected_tabs;
+        }
+
+        $selected_tab = $selected_tabs[$this->get_name()];
 
         if ($selected_tab)
         {
