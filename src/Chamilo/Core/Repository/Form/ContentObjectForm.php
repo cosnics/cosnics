@@ -183,7 +183,7 @@ abstract class ContentObjectForm extends FormValidator
                 $schema = $schemaInstance->getSchema();
                 $tabs_generator->add_tab(
                     new DynamicFormTab(
-                        'schema-' . $schema->get_id(),
+                        'schema-' . $schemaInstance->get_id(),
                         $schema->get_name(),
                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
                         'build_metadata_form',
@@ -193,10 +193,9 @@ abstract class ContentObjectForm extends FormValidator
             $tabs_generator->add_tab(
                 new DynamicFormTab(
                     'add-schema',
-                    Translation :: get('AddMetadataSchema', null, 'Ehb\Core\Metadata'),
+                    null,
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
-                    'build_metadata_choice_form',
-                    array($schemaInstance)));
+                    'build_metadata_choice_form'));
         }
 
         $tabs_generator->render();
@@ -1004,12 +1003,16 @@ EOT;
      */
     public function validate()
     {
-        if ($this->isSubmitted() && $this->form_type == self :: TYPE_COMPARE)
+        if ($this->isSubmitted())
         {
             $values = $this->exportValues();
-            if (! isset($values['object']) || ! isset($values['compare']))
+
+            if ($this->form_type == self :: TYPE_COMPARE)
             {
-                return false;
+                if (! isset($values['object']) || ! isset($values['compare']))
+                {
+                    return false;
+                }
             }
         }
 

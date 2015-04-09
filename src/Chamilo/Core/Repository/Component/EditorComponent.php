@@ -19,6 +19,8 @@ use Ehb\Core\Metadata\Service\EntityService;
 use Ehb\Core\Metadata\Relation\Service\RelationService;
 use Ehb\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
+use Ehb\Core\Metadata\Service\InstanceService;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -95,6 +97,10 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $success = $form->update_content_object();
 
+                $parameters = array();
+                $parameters[Application :: PARAM_ACTION] = self :: ACTION_BROWSE_CONTENT_OBJECTS;
+                $parameters[FilterData :: FILTER_CATEGORY] = $object->get_parent_id();
+
                 if ($success)
                 {
                     $values = $form->exportValues();
@@ -115,13 +121,20 @@ class EditorComponent extends Manager implements DelegateComponent
                             Activity :: PROPERTY_DATE => time(),
                             Activity :: PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                             Activity :: PROPERTY_CONTENT => $object->get_title()));
+
+                    $instanceService = new InstanceService();
+
+                    if ($instanceService->updateInstances(
+                        $this->get_user(),
+                        $object,
+                        (array) $values[InstanceService :: PROPERTY_METADATA_ADD_SCHEMA]))
+                    {
+                        $parameters[Application :: PARAM_ACTION] = self :: ACTION_EDIT_CONTENT_OBJECTS;
+                        $parameters[self :: PARAM_CONTENT_OBJECT_ID] = $object->get_id();
+
+                        $this->simple_redirect($parameters);
+                    }
                 }
-
-                $category_id = $object->get_parent_id();
-
-                $parameters = array();
-                $parameters[Application :: PARAM_ACTION] = self :: ACTION_BROWSE_CONTENT_OBJECTS;
-                $parameters[FilterData :: FILTER_CATEGORY] = $category_id;
 
                 $this->redirect(
                     Translation :: get(
