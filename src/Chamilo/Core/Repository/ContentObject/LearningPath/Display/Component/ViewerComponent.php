@@ -66,6 +66,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
 
         $learning_path_item_attempt = $this->get_current_node()->get_current_attempt();
+        
         if (! $learning_path_item_attempt instanceof AbstractItemAttempt)
         {
             $learning_path_item_attempt = $this->get_parent()->create_learning_path_item_tracker(
@@ -78,7 +79,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $learning_path_item_attempt->set_start_time(time());
             $learning_path_item_attempt->update();
         }
-
+        
         $embedder = Embedder :: factory($this, $this->get_current_node());
         $this->get_tabs_renderer()->set_content($embedder->run());
 

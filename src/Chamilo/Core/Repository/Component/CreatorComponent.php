@@ -91,7 +91,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             $content_object_form = ContentObjectForm :: factory(
                 ContentObjectForm :: TYPE_CREATE,
                 $object,
-                'create',
+                'create_content_object',
                 'post',
                 $this->get_url(array(TypeSelector :: PARAM_SELECTION => $this->template_id)),
                 null);

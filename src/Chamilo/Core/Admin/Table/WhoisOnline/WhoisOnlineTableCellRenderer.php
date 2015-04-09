@@ -4,6 +4,8 @@ namespace Chamilo\Core\Admin\Table\WhoisOnline;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: whois_online_table_cell_renderer.class.php 166 2009-11-12 11:03:06Z vanpouckesven $
@@ -50,8 +52,15 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
             case User :: PROPERTY_PICTURE_URI :
                 if ($this->get_component()->get_user()->is_platform_admin())
                 {
+                    
+                    $profilePhotoUrl = new Redirect(
+                        array(
+                            Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                            Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                            \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+                    
                     return '<a href="' . $this->get_component()->get_url(array('uid' => $user->get_id())) . '">' .
-                         '<img style="max-width: 100px; max-height: 100px;" src="' . $user->get_full_picture_url() .
+                         '<img style="max-width: 100px; max-height: 100px;" src="' . $profilePhotoUrl->getUrl() .
                          '" alt="' . Translation :: get('UserPicture', array(), \Chamilo\Core\User\Manager :: context()) .
                          '" /></a>';
                 }

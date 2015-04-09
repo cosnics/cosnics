@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Complex;
 
-use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
@@ -16,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ComplexTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_CLOI_ID;
+    const TABLE_IDENTIFIER = \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
     public function get_implemented_form_actions()
     {
@@ -33,5 +32,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
         
         $actions->add_form_action(
             new TableFormAction($action, Translation :: get('MoveSelected', null, Utilities :: COMMON_LIBRARIES), false));
+    
+        return $actions;
     }
 }

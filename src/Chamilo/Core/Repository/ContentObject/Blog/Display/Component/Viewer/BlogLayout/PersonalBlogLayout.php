@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * A personal blog layout with the user picture on the side
@@ -27,7 +29,12 @@ class PersonalBlogLayout extends BlogLayout
         if ($owner)
         {
             $name = $owner->get_fullname();
-            $picture = $owner->get_full_picture_url();
+            $profilePhotoUrl = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $owner->get_id()));
+            $picture = $profilePhotoUrl->getUrl();
         }
         else
         {

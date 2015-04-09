@@ -21,7 +21,7 @@ class ViewerComponent extends Manager
      */
     function run()
     {
-        $this->current_step = Request :: get(self :: PARAM_STEP, 1);
+        $this->current_step = $this->getRequest()->get(self :: PARAM_STEP, 1);
 
         if ($this->is_form_submitted())
         {

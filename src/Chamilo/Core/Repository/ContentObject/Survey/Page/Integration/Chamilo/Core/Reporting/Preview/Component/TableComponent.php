@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Integration\Chamilo\Core\R
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Integration\Chamilo\Core\Reporting\Preview\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Integration\Chamilo\Core\Reporting\Template\TableTemplate;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class TableComponent extends Manager implements TemplateSupport
 {
@@ -20,8 +21,13 @@ class TableComponent extends Manager implements TemplateSupport
         {
             throw new NotAllowedException();
         }
-
-        \Chamilo\Core\Reporting\Viewer\Manager :: launch($this, TableTemplate :: class_name());
+        
+        $factory = new ApplicationFactory($this->getRequest(), '\Chamilo\Core\Reporting\Viewer', $this->get_user(), $this);
+        $viewer = $factory->getComponent();
+        $viewer->set_template_by_name(TableTemplate :: class_name());
+        
+        return $viewer->run();
+      
     }
 
     /*

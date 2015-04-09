@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 /**
  *
@@ -567,8 +568,14 @@ class Manager extends \Chamilo\Core\Repository\Display\Manager
         {
             try
             {
-                $manager = new $integration_class_name($this->get_user(), $this);
-                return $manager->get_node_tabs($node);
+                $factory = new ApplicationFactory(
+                    $this->getRequest(),
+                    $integration_class_name :: context(),
+                    $this->get_user(),
+                    $this);
+                $component = $factory->getComponent();
+
+                return $component->get_node_tabs($node);
             }
             catch (\Exception $exception)
             {
