@@ -16,10 +16,11 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Ehb\Core\Metadata\Service\InstanceService;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 
 /**
  * $Id: creator.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -98,17 +99,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
             if ($content_object_form->validate())
             {
+                $values = $content_object_form->exportValues();
                 $object = $content_object_form->create_content_object();
-
-                Event :: trigger(
-                    'activity',
-                    Manager :: context(),
-                    array(
-                        Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_CREATED,
-                        Activity :: PROPERTY_USER_ID => $this->get_user_id(),
-                        Activity :: PROPERTY_DATE => time(),
-                        Activity :: PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
-                        Activity :: PROPERTY_CONTENT => $object->get_title()));
 
                 if (! $object)
                 {
@@ -120,16 +112,45 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                         true,
                         array(self :: PARAM_ACTION => self :: ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type));
                 }
+                else
+                {
+                    Event :: trigger(
+                        'activity',
+                        Manager :: context(),
+                        array(
+                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_CREATED,
+                            Activity :: PROPERTY_USER_ID => $this->get_user_id(),
+                            Activity :: PROPERTY_DATE => time(),
+                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
+                            Activity :: PROPERTY_CONTENT => $object->get_title()));
+
+                    $instanceService = new InstanceService();
+                    $selectedTab = $instanceService->updateInstances(
+                        $this->get_user(),
+                        $object,
+                        (array) $values[InstanceService :: PROPERTY_METADATA_ADD_SCHEMA]);
+
+                    if ($selectedTab)
+                    {
+                        $parameters = array();
+                        $parameters[Application :: PARAM_ACTION] = self :: ACTION_EDIT_CONTENT_OBJECTS;
+                        $parameters[self :: PARAM_CONTENT_OBJECT_ID] = $object->get_id();
+                        $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = array(
+                            self :: TABS_CONTENT_OBJECT => $selectedTab);
+
+                        $this->simple_redirect($parameters);
+                    }
+                }
 
                 if (is_array($object))
                 {
                     $parent = $object[0]->get_parent_id();
-                    $type_name = $object[0]->get_type_name();
+                    $typeContext = $object[0]->package();
                 }
                 else
                 {
                     $parent = $object->get_parent_id();
-                    $type_name = $object->get_type_name();
+                    $typeContext = $object->package();
                 }
 
                 $parameters = array();
@@ -139,11 +160,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 $this->redirect(
                     Translation :: get(
                         'ObjectCreated',
-                        array(
-                            'OBJECT' => Translation :: get(
-                                'TypeName',
-                                null,
-                                ContentObject :: get_content_object_type_namespace($type_name))),
+                        array('OBJECT' => Translation :: get('TypeName', null, $typeContext)),
                         Utilities :: COMMON_LIBRARIES),
                     false,
                     $parameters);
