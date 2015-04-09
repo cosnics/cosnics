@@ -39,7 +39,6 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
-
         $html = array();
 
         $html[] = $this->render_header();

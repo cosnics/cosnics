@@ -13,12 +13,14 @@ class DisplayComponent extends Manager
      */
     public function run()
     {
+
         if (! $this->get_content_object()->is_complex_content_object())
         {
-            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
+              throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
         $factory = $this->getPreview();
+
         return $factory->run();
     }
 

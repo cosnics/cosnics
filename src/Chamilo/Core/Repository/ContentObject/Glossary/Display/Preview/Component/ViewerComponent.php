@@ -10,6 +10,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Glossary\Di
 
     public function run()
     {
+
         $factory = new ApplicationFactory(
             $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager :: context(),

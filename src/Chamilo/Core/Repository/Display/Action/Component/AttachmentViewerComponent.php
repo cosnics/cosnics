@@ -35,11 +35,10 @@ class AttachmentViewerComponent extends Manager
          * Retrieve data and check if it is a valid attachment
          */
 
-        $attachment_id = Request :: get(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ATTACHMENT_ID);
+        $attachment_id = Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_ATTACHMENT_ID);
         if (is_null($attachment_id))
         {
-            throw new ParameterNotDefinedException(
-                \Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ATTACHMENT_ID);
+            throw new ParameterNotDefinedException(\Chamilo\Core\Repository\Display\Manager :: PARAM_ATTACHMENT_ID);
         }
 
         $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
@@ -66,8 +65,7 @@ class AttachmentViewerComponent extends Manager
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(
-                    array(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ATTACHMENT_ID => $attachment_id)),
+                $this->get_url(array(\Chamilo\Core\Repository\Display\Manager :: PARAM_ATTACHMENT_ID => $attachment_id)),
                 Translation :: get('ViewAttachment')));
 
         Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);

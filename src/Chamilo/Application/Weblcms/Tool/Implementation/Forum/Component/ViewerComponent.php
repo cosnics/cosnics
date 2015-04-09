@@ -43,7 +43,7 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
 
-        if (is_null(Request :: get(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION)))
+        if (is_null(Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION)))
         {
             Request :: set_get(
                 \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION,

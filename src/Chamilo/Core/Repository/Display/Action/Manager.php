@@ -22,7 +22,7 @@ abstract class Manager extends Application
     const DELETER_COMPONENT = 'Deleter';
     const REPORTING_TEMPLATE_VIEWER_COMPONENT = 'ReportingTemplateViewer';
     const UPDATER_COMPONENT = 'Updater';
-    const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Action\Manager :: DEFAULT_ACTION;
+    const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Manager :: DEFAULT_ACTION;
 
     public static function factory($type, $application)
     {

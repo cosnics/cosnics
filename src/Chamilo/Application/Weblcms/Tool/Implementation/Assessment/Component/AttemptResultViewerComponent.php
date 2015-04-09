@@ -118,7 +118,7 @@ class AttemptResultViewerComponent extends Manager
 
         $this->add_assessment_title_breadcrumb($assessment);
 
-        Request :: set_get(\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION, self :: ACTION_VIEW_RESULTS);
+        Request :: set_get(\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION, self :: ACTION_VIEW_RESULTS);
 
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($assessment->get_type()) . '\display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
