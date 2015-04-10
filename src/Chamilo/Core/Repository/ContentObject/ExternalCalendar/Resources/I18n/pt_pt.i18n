@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\external_calendar
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "External calendar"
+EventCount = "Number of events"
+Properties = "Properties"
+ICalURL = "URI"
+Title = ""
+Description = ""

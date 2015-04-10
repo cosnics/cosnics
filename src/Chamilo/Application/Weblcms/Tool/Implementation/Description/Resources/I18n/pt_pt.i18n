@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\description
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Description"
+DescriptionToolBrowserComponent = "Browse descriptions"
+DescriptionToolViewerComponent = "View description"
+DescriptionToolEvaluateComponent = "Evaluate description"
+DescriptionToolIntroductionPublisherComponent = "Publish introduction"
+DescriptionToolMoverComponent = "Move description"
+DescriptionToolPublisherComponent = "Publish description"
+DescriptionToolUpdaterComponent = "Update description"
