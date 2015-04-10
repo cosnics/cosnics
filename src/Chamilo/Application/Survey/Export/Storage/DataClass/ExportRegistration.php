@@ -66,10 +66,5 @@ class ExportRegistration extends DataClass
     {
         return DataManager :: get_instance();
     }
-
-    static function get_table_name()
-    {
-        return self :: TABLE_NAME;
-    }
 }
 ?>

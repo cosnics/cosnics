@@ -146,10 +146,5 @@ class ManagerTestMailComponent extends Manager
                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
                 Translation :: get('BrowserComponent')));
     }
-
-    function get_parameters()
-    {
-        return array(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
-    }
 }
 ?>

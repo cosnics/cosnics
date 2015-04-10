@@ -21,6 +21,7 @@ class ViewerComponent extends Manager
      */
     function run()
     {
+             
         $this->current_step = $this->getRequest()->get(self :: PARAM_STEP, 1);
 
         if ($this->is_form_submitted())
@@ -141,7 +142,7 @@ class ViewerComponent extends Manager
         return $this->get_root_content_object()->get_complex_content_object_path()->get_node($current_step)->get_next_page_step();
     }
 
-    public function is_form_submitted()
+    private function is_form_submitted()
     {
         return ! is_null(Request :: post('_qf__' . Form :: FORM_NAME));
     }
@@ -165,8 +166,12 @@ class ViewerComponent extends Manager
     {
         $html = array();
         $paramaters = $this->get_parameters();
-        $paramaters[Manager :: PARAM_AJAX_CONTEXT] = ClassnameUtilities :: getInstance()->getNamespaceFromObject(
+        
+        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject(
             $this->get_parent());
+        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace,1).'\Ajax';
+        
+        $paramaters[Manager :: PARAM_AJAX_CONTEXT] = $ajaxContext;
         $paramaters[Manager :: PARAM_STEP] = $this->get_current_step();
         foreach ($paramaters as $name => $value)
         {
@@ -196,15 +201,14 @@ class ViewerComponent extends Manager
 
     public function get_answer($complex_question_id)
     {
-        return $this->get_parent()->get_answer($this->current_step, $complex_question_id);
+        return $this->get_parent()->get_answer($complex_question_id);
     }
 
     public function save_answers()
     {
         if ($this->get_current_complex_content_object_item() instanceof ComplexPage)
         {
-            $answers = array();
-
+           
             $nodes = $this->get_current_content_object()->get_complex_content_object_path()->get_nodes();
 
             foreach ($nodes as $node)
@@ -213,15 +217,20 @@ class ViewerComponent extends Manager
                 {
                     $complex_content_object_item = $node->get_complex_content_object_item();
                     $answer_ids = $complex_content_object_item->get_answer_ids();
+                    $answers = array();
+                    
                     foreach ($answer_ids as $answer_id)
                     {
                         $answer = Request :: post($answer_id);
                         if ($answer)
                         {
-                            $this->get_parent()->save_answer(
-                                $this->current_step,
-                                $complex_content_object_item->get_id());
+                            $answers[$answer_id] = Request :: post($answer_id);
                         }
+                    }
+                    
+                    if(count($answers) > 0){
+                        $this->get_parent()->save_answer($complex_content_object_item->get_id(), $answers);
+                        
                     }
                 }
             }

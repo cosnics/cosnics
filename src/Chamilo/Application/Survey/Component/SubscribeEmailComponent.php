@@ -78,10 +78,6 @@ class SubscribeEmailComponent extends Manager
                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
                 Translation :: get('ParticipantBrowserComponent')));
     }
-
-    function get_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_ID);
-    }
+   
 }
 ?>

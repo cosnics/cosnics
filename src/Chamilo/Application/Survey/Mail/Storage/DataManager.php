@@ -8,5 +8,5 @@ namespace Chamilo\Application\Survey\Mail\Storage;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'survey_mail';
+    const PREFIX = 'survey_';
 }

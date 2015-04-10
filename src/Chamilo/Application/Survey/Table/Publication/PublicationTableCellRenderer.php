@@ -42,13 +42,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
 
                     case BrowserComponent :: TAB_EXPORT :
                         $url = '<a href="' .
-                             htmlentities($this->get_component()->get_survey_publication_export_excel_url($object)) .
-                             '" title="' . $title . '">' . $title . '</a>';
-                        break;
-
-                    case BrowserComponent :: TAB_REPORT :
-                        $url = '<a href="' .
-                             htmlentities($this->get_component()->get_reporting_survey_publication_url($object)) .
+                             htmlentities($this->get_component()->get_survey_publication_export_url($object)) .
                              '" title="' . $title . '">' . $title . '</a>';
                         break;
 
@@ -109,19 +103,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                         new ToolbarItem(
                             Translation :: get('ExportToExcel', array(), reporting),
                             Theme :: getInstance()->getCommonImagePath('Export/Excel'),
-                            $this->get_component()->get_survey_publication_export_excel_url($object),
-                            ToolbarItem :: DISPLAY_ICON));
-                }
-                break;
-
-            case BrowserComponent :: TAB_REPORT :
-                if (Rights :: get_instance()->is_right_granted(Rights :: RIGHT_REPORTING, $object->get_id()))
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('ViewReport', array(), reporting),
-                            Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
-                            $this->get_component()->get_reporting_survey_publication_url($object),
+                            $this->get_component()->get_survey_publication_export_url($object),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 break;

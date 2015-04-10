@@ -25,7 +25,7 @@ class ParticipantTableCellRenderer extends DataClassTableCellRenderer implements
             new ToolbarItem(
                 Translation :: get('RemoveSelectedResults'),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_component()->get_survey_participant_delete_url($object),
+                $this->get_component()->get_survey_participant_delete_url($object->get_user_id()),
                 ToolbarItem :: DISPLAY_ICON));
 
         return $toolbar->as_html();
