@@ -12,6 +12,10 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -31,6 +35,11 @@ class BrowserComponent extends Manager implements TableSupport
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
+        }
+
+        if (! $this->getSchemaId())
+        {
+            throw new NoObjectSelectedException(Translation :: get('Schema', null, 'Ehb\Core\Metadata\Schema'));
         }
 
         $html = array();
@@ -72,7 +81,10 @@ class BrowserComponent extends Manager implements TableSupport
             new ToolbarItem(
                 Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Create'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+                $this->get_url(
+                    array(
+                        self :: PARAM_ACTION => self :: ACTION_CREATE,
+                        \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $this->getSchemaId()))));
 
         return $action_bar;
     }
@@ -86,7 +98,21 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        return $this->action_bar->get_conditions(
+        $conditions = array();
+
+        $searchCondition = $this->action_bar->get_conditions(
             array(new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_NAME)));
+
+        if ($searchCondition)
+        {
+            $conditions[] = $searchCondition;
+        }
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID),
+            ComparisonCondition :: EQUAL,
+            new StaticConditionVariable($this->getSchemaId()));
+
+        return new AndCondition($conditions);
     }
 }

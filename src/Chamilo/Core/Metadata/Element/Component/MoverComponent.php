@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Component to move metadata_element object
- * 
+ *
  * @author Sven Vanpoucke
  */
 class MoverComponent extends Manager
@@ -29,11 +29,13 @@ class MoverComponent extends Manager
             if ($move = Request :: get(Manager :: PARAM_MOVE))
             {
                 $metadata_element->move($move);
-                
+
                 $this->redirect(
-                    '', 
-                    false, 
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE), 
+                    '',
+                    false,
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE,
+                        \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $metadata_element->get_schema_id()),
                     $this->get_additional_parameters());
             }
             else
@@ -49,7 +51,7 @@ class MoverComponent extends Manager
 
     /**
      * Adds additional breadcrumbs
-     * 
+     *
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -58,8 +60,8 @@ class MoverComponent extends Manager
         $breadcrumb_trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE), 
-                    $this->get_additional_parameters()), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
+                    $this->get_additional_parameters()),
                 Translation :: get('BrowserComponent')));
     }
 
