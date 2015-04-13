@@ -1,22 +1,25 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Package;
 
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider;
+
 /**
- * Installer for this package
- * 
- * @package repository\integration\core\metadata
+ *
+ * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Package
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Configuration\Package\Action\Installer
+class Installer extends \Ehb\Core\Metadata\Action\Installer
 {
 
-    public static function get_additional_packages()
+    /**
+     *
+     * @see \Ehb\Core\Metadata\Action\Installer::getPropertyProviderTypes()
+     */
+    public function getPropertyProviderTypes()
     {
-        $installers = array();
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type';
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Property';
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Alternative';
-        
-        return $installers;
+        return array(ContentObjectPropertyProvider :: class_name());
     }
 }
