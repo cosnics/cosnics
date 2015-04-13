@@ -12,7 +12,7 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository</id>
+					<id>Chamilo\Core\Repository\Implementation\Matterhorn</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">

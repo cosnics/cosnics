@@ -3,7 +3,7 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
+		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment
 		</context>
 		<type>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration
 		</type>
@@ -14,8 +14,7 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion
-					</id>
+					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">

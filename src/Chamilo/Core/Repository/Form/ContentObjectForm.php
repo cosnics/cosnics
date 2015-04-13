@@ -30,9 +30,9 @@ use Ehb\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Ehb\Core\Metadata\Service\EntityFormService;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 use Ehb\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
 use Ehb\Core\Metadata\Service\InstanceFormService;
+use Chamilo\Core\Repository\Integration\Ehb\Core\Metadata\Service\RepositoryEntityService;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $

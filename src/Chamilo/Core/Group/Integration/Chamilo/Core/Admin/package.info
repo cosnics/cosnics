@@ -12,11 +12,11 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository</id>
+					<id>Chamilo\Core\Group</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">
-					<id>Chamilo\Core\Home</id>
+					<id>Chamilo\Core\Admin</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 			</dependencies>
