@@ -12,8 +12,6 @@ use DOMXPath;
 use Exception;
 
 /**
- *
- * @package core.lynx.package
  * @author Hans De Bisschop
  */
 class Package extends DataClass
