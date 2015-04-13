@@ -3,7 +3,7 @@
 .navbar ul li a img.item-icon-account {
 	max-height: 32px;
 	max-width: 32px;
-	margin: -4px -9px;
+	margin: -6px -9px -4px -9px;
 	padding: 0px;
 }
 
@@ -81,7 +81,7 @@ div.item-account div.item-account-data {
 	float: left;
 }
 
-span.item-account-data-name,span.item-account-data-email,span.item-account-data-my-account
+span.item-account-data-name, span.item-account-data-email, span.item-account-data-my-account
 	{
 	display: block;
 }
@@ -128,7 +128,7 @@ div.item-account div.item-account-logout a {
 	padding: 0px;
 }
 
-div.item-account div.item-account-logout img,span.item-account-data-my-account img
+div.item-account div.item-account-logout img, span.item-account-data-my-account img
 	{
 	vertical-align: middle;
 	margin-right: 5px;

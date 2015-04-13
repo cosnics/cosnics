@@ -1,5 +1,5 @@
-div.formw div.bootstrap-tagsinput input,div.row div.formw div.bootstrap-tagsinput input:hover,div.row div.formw div.bootstrap-tagsinput input:focus
-	{
+div.formw div.bootstrap-tagsinput input, div.row div.formw div.bootstrap-tagsinput input:hover,
+	div.row div.formw div.bootstrap-tagsinput input:focus {
 	background-color: #F5F5F5;
 	min-width: 200px;
 	min-height: 18px;
@@ -7,19 +7,19 @@ div.formw div.bootstrap-tagsinput input,div.row div.formw div.bootstrap-tagsinpu
 
 div.formw div.bootstrap-tagsinput {
 	min-width: 400px;
-	background-color: #FFFFFF;
 	border: none;
 	border-radius: 0px;
 	box-shadow: none;
 	padding: 2px 4px 2px 0px;
+	margin-bottom: 0px;
 }
 
 .bootstrap-tagsinput .tag {
-	background-color: #f1d4d4;
+	background-color: #D4E0F1;
 	padding: 2px 4px;
-	border: 1px solid #e7b5b5;
+	border: 1px solid #B5CAE7;
 	border-radius: 3px;
-	color: #b54141;
+	color: #4171B5 !important;
 }
 
 .dropdown-menu {
@@ -56,9 +56,10 @@ div.formw div.bootstrap-tagsinput {
 	white-space: nowrap;
 }
 
-.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus,.dropdown-submenu:hover>a,.dropdown-submenu:focus>a,.dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus
-	{
-	color: #b54141;
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a,
+	.dropdown-submenu:focus>a, .dropdown-menu>.active>a, .dropdown-menu>.active>a:hover,
+	.dropdown-menu>.active>a:focus {
+	color: #4171B5;
 	text-decoration: none;
-	background-color: #f1d4d4;
+	background-color: #D4E0F1;
 }

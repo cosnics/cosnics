@@ -8,16 +8,19 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Ehb\Core\Metadata\Service\EntityService;
+use Ehb\Core\Metadata\Relation\Service\RelationService;
+use Ehb\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
+use Ehb\Core\Metadata\Service\InstanceService;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -49,26 +52,12 @@ class EditorComponent extends Manager implements DelegateComponent
             $template_registration = $object->get_template_registration();
             $template = $template_registration->get_template();
 
-            $content_object_type_image = 'Logo/template/' . $template_registration->get_name() . '/16';
+            $content_object_type_image = 'Logo/Template/' . $template_registration->get_name() . '/16';
 
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
-                    Translation :: get(
-                        'EditContentObject',
-                        array(
-                            'CONTENT_OBJECT' => $object->get_title(),
-                            'ICON' => Theme :: getInstance()->getImage(
-                                $content_object_type_image,
-                                'png',
-                                Translation :: get(
-                                    $template->translate('TypeName'),
-                                    null,
-                                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type())),
-                                null,
-                                ToolbarItem :: DISPLAY_ICON,
-                                false,
-                                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type()))))));
+                    Translation :: get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))));
 
             if (! ($object->get_owner_id() == $this->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
                 RepositoryRights :: COLLABORATE_RIGHT,
@@ -108,8 +97,21 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $success = $form->update_content_object();
 
+                $parameters = array();
+                $parameters[Application :: PARAM_ACTION] = self :: ACTION_BROWSE_CONTENT_OBJECTS;
+                $parameters[FilterData :: FILTER_CATEGORY] = $object->get_parent_id();
+
                 if ($success)
                 {
+                    $values = $form->exportValues();
+                    $entityService = new RepositoryEntityService();
+                    $entityService->updateEntitySchemaValues(
+                        $this->get_user(),
+                        new RelationService(),
+                        new ElementService(),
+                        $object,
+                        $values[EntityService :: PROPERTY_METADATA_SCHEMA]);
+
                     Event :: trigger(
                         'activity',
                         Manager :: context(),
@@ -119,13 +121,23 @@ class EditorComponent extends Manager implements DelegateComponent
                             Activity :: PROPERTY_DATE => time(),
                             Activity :: PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                             Activity :: PROPERTY_CONTENT => $object->get_title()));
+
+                    $instanceService = new InstanceService();
+                    $selectedTab = $instanceService->updateInstances(
+                        $this->get_user(),
+                        $object,
+                        (array) $values[InstanceService :: PROPERTY_METADATA_ADD_SCHEMA]);
+
+                    if ($selectedTab)
+                    {
+                        $parameters[Application :: PARAM_ACTION] = self :: ACTION_EDIT_CONTENT_OBJECTS;
+                        $parameters[self :: PARAM_CONTENT_OBJECT_ID] = $object->get_id();
+                        $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = array(
+                            self :: TABS_CONTENT_OBJECT => $selectedTab);
+
+                        $this->simple_redirect($parameters);
+                    }
                 }
-
-                $category_id = $object->get_parent_id();
-
-                $parameters = array();
-                $parameters[Application :: PARAM_ACTION] = self :: ACTION_BROWSE_CONTENT_OBJECTS;
-                $parameters[FilterData :: FILTER_CATEGORY] = $category_id;
 
                 $this->redirect(
                     Translation :: get(
