@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_numeric_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Nummerische Zuordnungsfrage"
+PossibleAnswer = "Mögliche Antwort"
+Tolerance = "Toleranz"
+Options = "Optionen"
+ToleranceType = "Toleranztyp"
+AddItem = "Eine Position hinzufügen"
+Feedback = "Feedback"
+Score = "Punktzahl"
+Answer = "Antwort"
+Comment = "Kommentar"
+Weight = "Gewicht"
+Absolute = "Insgesamt"
+Relative = "Relativ"
+Title = "Titel"
+Description = "Beschreibung"
+Properties = ""
+Hint = ""
