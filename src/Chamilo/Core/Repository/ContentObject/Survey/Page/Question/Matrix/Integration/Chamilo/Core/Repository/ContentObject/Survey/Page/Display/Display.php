@@ -97,6 +97,7 @@ class Display extends QuestionDisplay
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
+       
         $formvalidator->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(

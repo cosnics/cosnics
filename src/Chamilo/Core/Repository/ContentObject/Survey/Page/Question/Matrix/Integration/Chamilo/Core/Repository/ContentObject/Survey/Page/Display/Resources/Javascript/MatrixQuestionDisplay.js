@@ -168,7 +168,7 @@
 	$(document).ready(function() {
 
 //		$('.question.SurveyMatrix').not('[style="display: none;"]').each(getAnswer);
-		$(document).on('change', '.question.SurveyMatrix input', proces_answer);
+		$(document).on('change', '.question.Matrix input', proces_answer);
 
 	});
 

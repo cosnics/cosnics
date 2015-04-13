@@ -145,9 +145,5 @@ class Export extends DataClass
         $this->set_default_property(self :: PROPERTY_TEMPLATE_DESCRIPTION, $template_description);
     }
 
-    static function get_table_name()
-    {
-        return self :: TABLE_NAME;
-    }
 }
 ?>

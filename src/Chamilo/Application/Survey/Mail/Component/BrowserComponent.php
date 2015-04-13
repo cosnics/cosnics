@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class BrowserComponent extends Manager implements TableSupport
@@ -57,16 +56,17 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->action_bar->as_html();
         $html[] = $this->get_tabs_html();
         $html[] = $this->render_footer();
-        
+       
         return implode(PHP_EOL, $html);
     }
 
     function get_tabs_html()
     {
         $html = array();
+       
+        var_dump($this->get_parameters());
         
-        $renderer_name = Utilities :: get_classname_from_object($this, true);
-        $tabs = new DynamicVisualTabsRenderer($renderer_name);
+        $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
         $params = $this->get_parameters();
         $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
@@ -194,11 +194,6 @@ class BrowserComponent extends Manager implements TableSupport
                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
                         Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID))), 
                 Translation :: get('ParticipantBrowserComponent')));
-    }
-
-    function get_parameters()
-    {
-        return array(Manager :: PARAM_PUBLICATION_ID);
     }
 
     public function get_table_condition($object_table_class_name)

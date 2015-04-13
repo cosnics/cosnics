@@ -109,11 +109,10 @@ abstract class QuestionDisplay
     static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
     {
         $content_object = $complex_content_object_path_node->get_content_object();
-        
-        $class = '\Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Integration\Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Display';
-        
-//         $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type()) .
-//              '\Display\Display';
+        $pakckage = $content_object->package();
+      
+        $class = $pakckage.'\Integration\Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Display';
+
         $question_display = new $class($formvalidator, $complex_content_object_path_node, $answer);
               
         return $question_display;

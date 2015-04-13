@@ -18,7 +18,7 @@ class ExporterComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Survey\Export\Manager :: context(),
             $this->get_user(),
             $this);
-        $factory->run();
+        return $factory->run();
     }
 }
 ?>
