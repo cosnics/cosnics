@@ -11,12 +11,17 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
 
 /**
- * Controller to update the controlled vocabulary
+ * Controller to update the schema
  *
- * @package core\metadata
+ * @package Ehb\Core\Metadata\Schema\Component
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UpdaterComponent extends Manager
 {
@@ -39,7 +44,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new SchemaForm($this->get_url(), $schema);
+        $form = new SchemaForm($schema, new EntityTranslationFormService($schema), $this->get_url());
 
         if ($form->validate())
         {
@@ -50,7 +55,15 @@ class UpdaterComponent extends Manager
                 $schema->set_namespace($values[Schema :: PROPERTY_NAMESPACE]);
                 $schema->set_name($values[Schema :: PROPERTY_NAME]);
                 $schema->set_url($values[Schema :: PROPERTY_URL]);
+
                 $success = $schema->update();
+
+                if ($success)
+                {
+                    $entityTranslationService = new EntityTranslationService($schema);
+                    $success = $entityTranslationService->updateEntityTranslations(
+                        $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
+                }
 
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
@@ -82,8 +95,7 @@ class UpdaterComponent extends Manager
     /**
      * Adds additional breadcrumbs
      *
-     * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
-     * @param BreadcrumbTrail $breadcrumb_trail
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumb_trail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
@@ -98,7 +110,7 @@ class UpdaterComponent extends Manager
     /**
      * Returns the additional parameters
      *
-     * @return array
+     * @return string[]
      */
     public function get_additional_parameters()
     {

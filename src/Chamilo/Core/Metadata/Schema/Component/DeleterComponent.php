@@ -14,6 +14,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Controller to delete the schema
+ *
+ * @package Ehb\Core\Metadata\Schema\Component
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DeleterComponent extends Manager
 {
@@ -27,44 +33,44 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $schema_ids = Request :: get(self :: PARAM_SCHEMA_ID);
-        
+
         try
         {
             if (empty($schema_ids))
             {
                 throw new NoObjectSelectedException(Translation :: get('Schema'));
             }
-            
+
             if (! is_array($schema_ids))
             {
                 $schema_ids = array($schema_ids);
             }
-            
+
             foreach ($schema_ids as $schema_id)
             {
                 $schema = DataManager :: retrieve_by_id(Schema :: class_name(), $schema_id);
-                
+
                 if ($schema->is_fixed())
                 {
                     throw new NotAllowedException();
                 }
-                
+
                 if (! $schema->delete())
                 {
                     throw new \Exception(
                         Translation :: get(
-                            'ObjectNotDeleted', 
-                            array('OBJECT' => Translation :: get('Schema')), 
+                            'ObjectNotDeleted',
+                            array('OBJECT' => Translation :: get('Schema')),
                             Utilities :: COMMON_LIBRARIES));
                 }
             }
-            
+
             $success = true;
             $message = Translation :: get(
-                'ObjectDeleted', 
-                array('OBJECT' => Translation :: get('Schema')), 
+                'ObjectDeleted',
+                array('OBJECT' => Translation :: get('Schema')),
                 Utilities :: COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
@@ -72,30 +78,28 @@ class DeleterComponent extends Manager
             $success = false;
             $message = $ex->getMessage();
         }
-        
+
         $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
     }
 
     /**
      * Adds additional breadcrumbs
-     * 
-     * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
-     * @param BreadcrumbTrail $breadcrumb_trail
+     *
+     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumb_trail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
         $breadcrumb_trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE), 
-                    array(self :: PARAM_SCHEMA_ID)), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
+                    array(self :: PARAM_SCHEMA_ID)),
                 Translation :: get('BrowserComponent')));
     }
 
     /**
-     * @inerhitDoc
-     * 
-     * @return array \common\libraries\multitype
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
      */
     public function get_additional_parameters()
     {

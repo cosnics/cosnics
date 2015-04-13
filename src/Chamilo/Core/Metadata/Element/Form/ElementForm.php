@@ -1,25 +1,10 @@
 <?php
 namespace Chamilo\Core\Metadata\Element\Form;
 
-use Chamilo\Core\Metadata\Attribute\Entity\AttributeEntity;
-use Chamilo\Core\Metadata\Element\Ajax\Component\ElementEntityFeedComponent;
-use Chamilo\Core\Metadata\Element\Entity\ElementEntity;
-use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\ElementNesting;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\ElementRelAttribute;
-use Chamilo\Core\Metadata\Element\Storage\DataManager;
 use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -30,152 +15,108 @@ class ElementForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param string $form_url
      * @param Element $element
      */
-    public function __construct($form_url, $element = null)
+    public function __construct($form_url, Element $element)
     {
         parent :: __construct('element', 'post', $form_url);
-        
-        $this->build_form($element);
-        
-        if ($element && $element->is_identified())
+
+        $this->element = $element;
+        $this->build_form();
+
+        if ($this->element->is_identified())
         {
-            $this->set_defaults($element);
+            $this->set_defaults();
         }
     }
 
     /**
      * Builds this form
      */
-    protected function build_form(Element $element)
+    protected function build_form()
     {
-        $parameters = new DataClassRetrievesParameters();
-        $parameters->set_order_by(
-            array(new OrderBy(new PropertyConditionVariable(Schema :: class_name(), Schema :: PROPERTY_NAMESPACE))));
-        $schemas = \Chamilo\Core\Metadata\Storage\DataManager :: retrieves(Schema :: class_name());
-        
-        while ($schema = $schemas->next_result())
-        {
-            $options[$schema->get_id()] = $schema->get_namespace() . ' - ' . $schema->get_name();
-        }
-        
-        $this->addElement(
-            'select', 
-            Element :: PROPERTY_SCHEMA_ID, 
-            Translation :: get('Prefix', null, 'core\metadata'), 
-            $options);
-        
+        $schema = \Chamilo\Core\Metadata\Storage\DataManager :: retrieve_by_id(
+            Schema :: class_name(),
+            $this->element->get_schema_id());
+        $schemaName = $schema->get_namespace() . ' - ' . $schema->get_name();
+
+        $this->addElement('static', null, Translation :: get('Prefix', null, 'Ehb\Core\Metadata'), $schemaName);
+
         $this->addRule(
-            Element :: PROPERTY_SCHEMA_ID, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            Element :: PROPERTY_SCHEMA_ID,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement(
-            'text', 
-            Element :: PROPERTY_NAME, 
+            'text',
+            Element :: PROPERTY_NAME,
             Translation :: get('Name', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
-            Element :: PROPERTY_NAME, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            Element :: PROPERTY_NAME,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement(
-            'text', 
-            Element :: PROPERTY_DISPLAY_NAME, 
+            'text',
+            Element :: PROPERTY_DISPLAY_NAME,
             Translation :: get('DisplayName', null, 'core\metadata'));
         $this->addRule(
-            Element :: PROPERTY_DISPLAY_NAME, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            Element :: PROPERTY_DISPLAY_NAME,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
-        $types = new AdvancedElementFinderElementTypes();
-        
-        $types->add_element_type(
-            new AdvancedElementFinderElementType(
-                'elements', 
-                Translation :: get('Elements'), 
-                Manager :: context(), 
-                'element_entity_feed', 
-                $element ? array(ElementEntityFeedComponent :: PARAM_ELEMENT_ID => $element->get_id()) : array()));
-        
-        $types->add_element_type(AttributeEntity :: get_element_finder_type());
+
         $this->addElement(
-            'advanced_element_finder', 
-            Manager :: PROPERTY_ASSOCIATIONS, 
-            Translation :: get('Associations'), 
-            $types);
-        
+            'radio',
+            Element :: PROPERTY_VALUE_TYPE,
+            Translation :: get('ValueType'),
+            Translation :: get('ValueTypePredefined'),
+            Element :: VALUE_TYPE_PREDEFINED);
+
+        $this->addElement(
+            'radio',
+            Element :: PROPERTY_VALUE_TYPE,
+            null,
+            Translation :: get('ValueTypeUser'),
+            Element :: VALUE_TYPE_USER);
+
+        $this->addElement(
+            'radio',
+            Element :: PROPERTY_VALUE_TYPE,
+            null,
+            Translation :: get('ValueTypeBoth'),
+            Element :: VALUE_TYPE_BOTH);
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
-        
+
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
      * Sets the default values
-     * 
+     *
      * @param Element $element
      */
-    protected function set_defaults($element)
+    protected function set_defaults()
     {
         $defaults = array();
-        
-        $defaults[Element :: PROPERTY_SCHEMA_ID] = $element->get_schema_id();
-        $defaults[Element :: PROPERTY_NAME] = $element->get_name();
-        $defaults[Element :: PROPERTY_DISPLAY_NAME] = $element->get_display_name();
-        
-        // Get the default associations
-        $default_elements = new AdvancedElementFinderElements();
-        
-        // Element nesting
-        $element_entity = ElementEntity :: get_instance();
-        
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ElementNesting :: class_name(), ElementNesting :: PROPERTY_PARENT_ELEMENT_ID), 
-            new StaticConditionVariable($element->get_id()));
-        
-        $element_nestings = DataManager :: retrieves(
-            ElementNesting :: class_name(), 
-            new DataClassRetrievesParameters($condition));
-        
-        while ($element_nesting = $element_nestings->next_result())
-        {
-            $default_elements->add_element(
-                $element_entity->get_element_finder_element($element_nesting->get_child_element_id()));
-        }
-        
-        // Element-Attribute relations
-        $attribute_entity = AttributeEntity :: get_instance();
-        
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ElementRelAttribute :: class_name(), 
-                ElementRelAttribute :: PROPERTY_ELEMENT_ID), 
-            new StaticConditionVariable($element->get_id()));
-        
-        $element_rel_attributes = DataManager :: retrieves(
-            ElementRelAttribute :: class_name(), 
-            new DataClassRetrievesParameters($condition));
-        
-        while ($element_rel_attribute = $element_rel_attributes->next_result())
-        {
-            $default_elements->add_element(
-                $attribute_entity->get_element_finder_element($element_rel_attribute->get_attribute_id()));
-        }
-        
-        $this->getElement(Manager :: PROPERTY_ASSOCIATIONS)->setDefaultValues($default_elements);
-        
+
+        $defaults[Element :: PROPERTY_SCHEMA_ID] = $this->element->get_schema_id();
+        $defaults[Element :: PROPERTY_NAME] = $this->element->get_name();
+        $defaults[Element :: PROPERTY_DISPLAY_NAME] = $this->element->get_display_name();
+        $defaults[Element :: PROPERTY_VALUE_TYPE] = $this->element->get_value_type();
+
         $this->setDefaults($defaults);
     }
 }

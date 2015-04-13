@@ -1477,23 +1477,6 @@ class ContentObject extends CompositeDataClass
         return array();
     }
 
-    /**
-     * Checks if the given identifier is the name of a default object property.
-     *
-     * @param $name string The identifier.
-     * @return boolean True if the identifier is a property name, false otherwise.
-     */
-    static public function is_default_property_name($name)
-
-    {
-        return in_array($name, self :: get_default_property_names());
-    }
-
-    static public function is_additional_property_name($name)
-
-    {
-        return in_array($name, self :: get_additional_property_names());
-    }
 
     /**
      * Get all properties of this type of object that should be taken into account to calculate the used disk space.
