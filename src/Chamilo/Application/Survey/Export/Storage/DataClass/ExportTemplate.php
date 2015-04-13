@@ -183,10 +183,6 @@ class ExportTemplate extends DataClass
         return $export_registration->get_type();
     }
 
-    static function get_table_name()
-    {
-        return self :: TABLE_NAME;
-    }
 }
 
 ?>

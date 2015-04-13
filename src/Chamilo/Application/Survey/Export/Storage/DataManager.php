@@ -8,5 +8,5 @@ namespace Chamilo\Application\Survey\Export\Storage;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'survey_export';
+    const PREFIX = 'survey_';
 }

@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ViewerComponent extends Manager implements TableSupport
@@ -75,8 +74,7 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $html = array();
         
-        $renderer_name = Utilities :: get_classname_from_object($this, true);
-        $tabs = new DynamicVisualTabsRenderer($renderer_name);
+        $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
         $params = $this->get_parameters();
         $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
@@ -303,11 +301,6 @@ class ViewerComponent extends Manager implements TableSupport
                         self :: PARAM_ACTION => self :: ACTION_BROWSE, 
                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
                 Translation :: get('BrowserComponent')));
-    }
-
-    function get_parameters()
-    {
-        return array(Manager :: PARAM_PUBLICATION_ID, Manager :: PARAM_PUBLICATION_MAIL_ID);
     }
 
     public function get_table_condition($object_table_class_name)

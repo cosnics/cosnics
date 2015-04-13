@@ -18,7 +18,8 @@ class MailComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Survey\Mail\Manager :: context(),
             $this->get_user(),
             $this);
-        $factory->run();
+        var_dump($this->get_parameters());
+        return $factory->run();
     }
 }
 ?>

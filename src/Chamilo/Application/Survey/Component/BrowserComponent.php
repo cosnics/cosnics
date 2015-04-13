@@ -89,15 +89,6 @@ class BrowserComponent extends Manager implements TableSupport
                 $this->get_url($params), 
                 $this->get_table_type() == self :: TAB_EXPORT));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_REPORT;
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                self :: TAB_REPORT, 
-                Translation :: get('Reporting'), 
-                Theme :: getInstance()->getCommonImagePath() . 'action_view_results.png', 
-                $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_REPORT));
-        
         $table = new PublicationTable($this);
         $tabs->set_content($table->as_html());
         

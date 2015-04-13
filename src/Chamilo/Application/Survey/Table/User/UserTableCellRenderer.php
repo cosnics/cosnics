@@ -30,7 +30,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             new ToolbarItem(
                 Translation :: get('ViewSurvey'),
                 Theme :: getInstance()->getCommonImagePath('Action/Next'),
-                $this->get_component()->get_survey_invitee_publication_viewer_url(
+                $this->get_component()->get_survey_publication_viewer_url(
                     $this->get_component()->get_publication_id(),
                     $user->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
@@ -38,9 +38,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             new ToolbarItem(
                 Translation :: get('CancelInvitation'),
                 Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
-                $this->get_component()->get_survey_cancel_invitation_url(
-                    $this->get_component()->get_publication_id(),
-                    $user->get_id()),
+                $this->get_component()->get_survey_participant_delete_url($user->get_id()),
                 ToolbarItem :: DISPLAY_ICON));
 
         return $toolbar->as_html();

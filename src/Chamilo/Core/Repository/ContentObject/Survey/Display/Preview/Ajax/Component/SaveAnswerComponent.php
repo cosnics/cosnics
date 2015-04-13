@@ -36,12 +36,12 @@ class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\
         $complex_question_id = $parameters[self :: PARAM_COMPLEX_QUESTION_ID];
         $answer = $parameters[self :: PARAM_ANSWER];
         
-        $this->save_answer($step, $complex_question_id, $answer);
+        $this->save_answer($complex_question_id, $answer);
         
         $result->display();
     }
 
-    function save_answer($step, $complex_question_id, $answer)
+    function save_answer($complex_question_id, $answer)
     {
         if (! Session :: retrieve(self :: TEMPORARY_STORAGE))
         {
@@ -51,7 +51,7 @@ class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
         $answer_id = $answer[self :: PARAM_ANSWER_ID];
         $answer_value = $answer[self :: PARAM_ANSWER_VALUE];
-        $answers[$step][$complex_question_id][$answer_id] = $answer_value;
+        $answers[$complex_question_id][$answer_id] = $answer_value;
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
     }
 }

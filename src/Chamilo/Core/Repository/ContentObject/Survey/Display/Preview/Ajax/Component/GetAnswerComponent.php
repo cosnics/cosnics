@@ -53,7 +53,7 @@ class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\D
                 if (! ($complex_content_object_item instanceof ComplexDescription))
                 {
                     $complex_question_id = $complex_content_object_item->get_id();
-                    $question_answers[$step][$complex_question_id] = $this->get_answer($step, $complex_question_id);
+                    $question_answers[$step][$complex_question_id] = $this->get_answer($complex_question_id);
                 }
             }
         }
@@ -69,11 +69,11 @@ class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\D
         $result->display();
     }
 
-    private function get_answer($step, $complex_question_id)
+    private function get_answer($complex_question_id)
     {
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        
-        $answer = $answers[$step][$complex_question_id];
+               
+        $answer = $answers[$complex_question_id];
         
         if ($answer)
         {

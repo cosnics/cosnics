@@ -45,9 +45,10 @@ class ComplexMatrix extends ComplexContentObjectItem implements PageDisplayItem
         $answer_ids = array();
         $content_object = $this->get_ref_object();
         
-        foreach ($content_object->get_options() as $option)
+        foreach ($content_object->get_options()->as_array() as $option)
         {
-            if ($content_object->get_matrix_type() == self :: MATRIX_TYPE_CHECKBOX)
+          
+            if ($content_object->get_matrix_type() == Matrix :: MATRIX_TYPE_CHECKBOX)
             {
                 foreach ($content_object->get_matches() as $match)
                 {

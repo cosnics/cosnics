@@ -29,7 +29,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class BrowserComponent extends Manager implements TableSupport
@@ -73,8 +72,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $html = array();
 
-        $renderer_name = Utilities :: get_classname_from_object($this, true);
-        $tabs = new DynamicTabsRenderer($renderer_name);
+        $tabs = new DynamicTabsRenderer(self :: class_name());
 
         $table = new ExportTemplateTable($this);
         $tabs->add_tab(

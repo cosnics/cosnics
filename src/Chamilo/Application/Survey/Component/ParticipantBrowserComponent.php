@@ -49,6 +49,8 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
     function run()
     {
         $this->pid = Request :: get(self :: PARAM_PUBLICATION_ID);
+        
+        $this->set_parameter(self :: PARAM_PUBLICATION_ID, $this->pid);
 
         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->pid))
         {
@@ -309,6 +311,27 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
     public function get_publication_id()
     {
         return $this->pid;
+    }
+    
+    function get_survey_participant_publication_viewer_url($survey_participant_tracker)
+    {
+        $survey_id = DataManager :: retrieve_by_id(
+            Publication :: class_name(),
+            $survey_participant_tracker->get_survey_publication_id())->get_content_object_id();
+        return $this->get_url(
+            array(
+                Manager :: PARAM_ACTION => Manager :: ACTION_VIEW,
+                Manager :: PARAM_PUBLICATION_ID => $survey_participant_tracker->get_survey_publication_id(),
+                Manager :: PARAM_INVITEE_ID => $survey_participant_tracker->get_user_id()));
+    }
+    
+    
+    function get_survey_participant_delete_url($user_id)
+    {
+        return $this->get_url(
+            array(
+                Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_PARTICIPANT,
+                self :: PARAM_PARTICIPANT_ID => $user_id));
     }
 }
 ?>

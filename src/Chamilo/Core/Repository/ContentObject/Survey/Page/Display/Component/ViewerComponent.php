@@ -26,8 +26,12 @@ class ViewerComponent extends Manager
     {
         $html = array();
         $paramaters = $this->get_parent()->get_parameters();
-        $paramaters[self :: PARAM_AJAX_CONTEXT] = ClassnameUtilities :: getInstance()->getNamespaceFromObject(
+        
+        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject(
             $this->get_parent());
+        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace,1).'\Ajax';
+        
+        $paramaters[self :: PARAM_AJAX_CONTEXT] = $ajaxContext;
         foreach ($paramaters as $name => $value)
         {
             $html[] = '<input type="hidden" value="' . $value . '" name="param_' . $name . '">';
