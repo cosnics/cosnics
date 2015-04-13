@@ -18,9 +18,9 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Ehb\Core\Metadata\Service\EntityService;
 use Ehb\Core\Metadata\Relation\Service\RelationService;
 use Ehb\Core\Metadata\Element\Service\ElementService;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 use Ehb\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Core\Repository\Integration\Ehb\Core\Metadata\Service\RepositoryEntityService;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $

@@ -12,7 +12,7 @@
 		<pre-depends>
 			<dependency type="server">
 				<id>php</id>
-				<version operator="4">5.3.3</version>
+				<version operator="4">5.4</version>
 				<relation>1</relation>
 			</dependency>
 		</pre-depends>

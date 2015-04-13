@@ -3,7 +3,7 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
+		<context>Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment
 		</context>
 		<type>Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration
 		</type>

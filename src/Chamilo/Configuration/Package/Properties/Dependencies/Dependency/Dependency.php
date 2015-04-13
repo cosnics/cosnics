@@ -54,12 +54,12 @@ abstract class Dependency
     {
         $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
              'Dependency';
-        
+
         if (! class_exists($class))
         {
             throw new Exception(Translation :: get('TypeDoesNotExist', array('type' => $type)));
         }
-        
+
         return new $class();
     }
 
@@ -109,7 +109,7 @@ abstract class Dependency
     public static function dom_node($dom_xpath, $dom_node)
     {
         $dependency = self :: factory($dom_node->getAttribute('type'));
-        $dependency->set_id($dom_xpath->query('id', $dom_node)->item(0)->nodeValue);
+        $dependency->set_id(trim($dom_xpath->query('id', $dom_node)->item(0)->nodeValue));
         return $dependency;
     }
 
