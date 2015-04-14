@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Integration\Chamilo\Core\Reporting\Template\ProgressDetailsTemplate;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Integration\Chamilo\Core\Reporting\Template\ProgressTemplate;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Template\ProgressDetailsTemplate;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Template\ProgressTemplate;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
