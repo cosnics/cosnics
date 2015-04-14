@@ -108,7 +108,7 @@ class DataManager
     /**
      * Write an instance of a DataClass object to the storage layer
      *
-     * @param $object \libraries\storage\DataClass
+     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
      * @return boolean
      */
     public static function create(DataClass $object)
@@ -130,7 +130,7 @@ class DataManager
      *
      * @param $class string
      * @param $parameters \libraries\storage\DataClassRetrieveParameters
-     * @return \libraries\storage\DataClass
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public static function retrieve($class, $parameters = null)
     {
@@ -149,7 +149,7 @@ class DataManager
         {
             $base_class = $class;
         }
-        
+
         if (! DataClassCache :: exists($base_class, $parameters))
         {
             try
@@ -219,7 +219,7 @@ class DataManager
      *
      * @param $class string
      * @param $id int
-     * @return \libraries\storage\DataClass
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public static function retrieve_by_id($class, $id)
     {
@@ -303,7 +303,7 @@ class DataManager
     /**
      * Update an instance of a DataClass object in the storage layer
      *
-     * @param $object \libraries\storage\DataClass
+     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
      * @return boolean
      */
     public static function update(DataClass $object)
@@ -347,7 +347,7 @@ class DataManager
     /**
      * Delete an instance of a DataClass object from the storage layer
      *
-     * @param $object \libraries\storage\DataClass
+     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
      * @return boolean
      */
     public static function delete(DataClass $object)

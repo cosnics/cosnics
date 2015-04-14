@@ -13,7 +13,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Table cell renderer for the schema
  *
+ * @package Ehb\Core\Metadata\Schema\Table\Schema
+ * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SchemaTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -21,15 +25,24 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
     /**
      * Returns the actions toolbar
      *
-     * @param mixed $result
-     *
-     * @return String
+     * @param \Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema $schema
+     * @return string
      */
-    public function get_actions($result)
+    public function get_actions($schema)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
-        if ($result->is_fixed())
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation :: get('Elements'),
+                Theme :: getInstance()->getCommonImagePath('Action/Element'),
+                $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_ELEMENT,
+                        Manager :: PARAM_SCHEMA_ID => $schema->get_id())),
+                ToolbarItem :: DISPLAY_ICON));
+
+        if ($schema->is_fixed())
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -54,7 +67,7 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                            Manager :: PARAM_SCHEMA_ID => $result->get_id())),
+                            Manager :: PARAM_SCHEMA_ID => $schema->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
 
             $toolbar->add_item(
@@ -64,7 +77,7 @@ class SchemaTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                            Manager :: PARAM_SCHEMA_ID => $result->get_id())),
+                            Manager :: PARAM_SCHEMA_ID => $schema->get_id())),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
         }

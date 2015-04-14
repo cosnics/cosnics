@@ -5,13 +5,19 @@ use Chamilo\Core\Metadata\Schema\Form\SchemaForm;
 use Chamilo\Core\Metadata\Schema\Manager;
 use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
 
 /**
  * Controller to create the schema
+ *
+ * @package Ehb\Core\Metadata\Schema\Component
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CreatorComponent extends Manager
 {
@@ -26,7 +32,9 @@ class CreatorComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new SchemaForm($this->get_url());
+        $schema = new Schema();
+
+        $form = new SchemaForm($schema, new EntityTranslationFormService($schema), $this->get_url());
 
         if ($form->validate())
         {
@@ -34,11 +42,18 @@ class CreatorComponent extends Manager
             {
                 $values = $form->exportValues();
 
-                $schema = new Schema();
                 $schema->set_namespace($values[Schema :: PROPERTY_NAMESPACE]);
                 $schema->set_name($values[Schema :: PROPERTY_NAME]);
                 $schema->set_url($values[Schema :: PROPERTY_URL]);
+
                 $success = $schema->create();
+
+                if ($success)
+                {
+                    $entityTranslationService = new EntityTranslationService($schema);
+                    $success = $entityTranslationService->createEntityTranslations(
+                        $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
+                }
 
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
@@ -65,19 +80,5 @@ class CreatorComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    /**
-     * Adds additional breadcrumbs
-     *
-     * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
-     * @param BreadcrumbTrail $breadcrumb_trail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
-    {
-        $breadcrumb_trail->add(
-            new Breadcrumb(
-                $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent')));
     }
 }
