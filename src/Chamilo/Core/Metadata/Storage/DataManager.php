@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Storage;
 /**
  * This class represents the data manager for this package
  *
- * @package Ehb\Core\Metadata\Storage
+ * @package Chamilo\Core\Metadata\Storage
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Form;
 
-use Chamilo\Core\Metadata\Value\Element\Form\Handler\ElementValueEditorFormHandler;
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\ContentObjectMetadataValueCreator;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -193,7 +191,7 @@ abstract class ContentObjectForm extends FormValidator
             $tabs_generator->add_tab(
                 new DynamicFormTab(
                     'add-schema',
-                    Translation :: get('AddMetadataSchema', null, 'Ehb\Core\Metadata'),
+                    Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
                     'build_metadata_choice_form'));
         }

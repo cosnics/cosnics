@@ -29,12 +29,12 @@ class CreatorComponent extends Manager
 
         if (is_null($this->getSelectedElementId()))
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Ehb\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
 
         if (is_null($this->getSelectedUserId()))
         {
-            throw new NoObjectSelectedException(Translation :: get('User', null, 'Ehb\Core\Metadata\Vocabulary'));
+            throw new NoObjectSelectedException(Translation :: get('User', null, 'Chamilo\Core\Metadata\Vocabulary'));
         }
 
         $vocabulary = new Vocabulary();

@@ -11,7 +11,7 @@
         var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
         var parameters = {
-            'application' : 'Ehb\\Core\\Metadata\\Vocabulary\\Ajax',
+            'application' : 'Chamilo\\Core\\Metadata\\Vocabulary\\Ajax',
             'go' : 'Vocabulary'
         };
 

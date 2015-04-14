@@ -50,7 +50,7 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                     null,
                     ToolbarItem :: DISPLAY_ICON,
                     false,
-                    'Ehb\Core\Metadata\Element');
+                    'Chamilo\Core\Metadata\Element');
                 break;
         }
 

@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
 
 /**
  *
- * @package Ehb\Core\Metadata\Schema\Instance\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

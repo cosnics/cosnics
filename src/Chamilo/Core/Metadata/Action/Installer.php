@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Provider\Storage\DataClass\Registration;
 /**
  * Extension of the generic installer for metadata integrations
  *
- * @package Ehb\Core\Metadata\Action
+ * @package Chamilo\Core\Metadata\Action
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

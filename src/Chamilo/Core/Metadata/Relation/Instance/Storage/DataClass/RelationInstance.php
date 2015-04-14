@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
- * @package Ehb\Core\Metadata\Relation\Instance\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -42,9 +42,11 @@ class RelationInstance extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self :: PROPERTY_ENTITY_ID;
-        $extended_property_names[] = self :: PROPERTY_SCHEMA_ID;
+        $extended_property_names[] = self :: PROPERTY_SOURCE_TYPE;
+        $extended_property_names[] = self :: PROPERTY_SOURCE_ID;
+        $extended_property_names[] = self :: PROPERTY_TARGET_TYPE;
+        $extended_property_names[] = self :: PROPERTY_TARGET_ID;
+        $extended_property_names[] = self :: PROPERTY_RELATION_ID;
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_CREATION_DATE;
 
@@ -61,54 +63,90 @@ class RelationInstance extends DataClass
      *
      * @return string
      */
-    public function get_entity_type()
+    public function get_source_type()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self :: PROPERTY_SOURCE_TYPE);
     }
 
     /**
      *
-     * @param string $entityType
+     * @param string $sourceType
      */
-    public function set_entity_type($entityType)
+    public function set_source_type($sourceType)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+        $this->set_default_property(self :: PROPERTY_SOURCE_TYPE, $sourceType);
     }
 
     /**
      *
      * @return string
      */
-    public function get_entity_id()
+    public function get_source_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self :: PROPERTY_SOURCE_ID);
     }
 
     /**
      *
-     * @param string $entityId
+     * @param string $sourceId
      */
-    public function set_entity_id($entityId)
+    public function set_source_id($sourceId)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entityId);
+        $this->set_default_property(self :: PROPERTY_SOURCE_ID, $sourceId);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_target_type()
+    {
+        return $this->get_default_property(self :: PROPERTY_TARGET_TYPE);
+    }
+
+    /**
+     *
+     * @param string $targetType
+     */
+    public function set_target_type($targetType)
+    {
+        $this->set_default_property(self :: PROPERTY_TARGET_TYPE, $targetType);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_target_id()
+    {
+        return $this->get_default_property(self :: PROPERTY_TARGET_ID);
+    }
+
+    /**
+     *
+     * @param string $targetId
+     */
+    public function set_target_id($targetId)
+    {
+        $this->set_default_property(self :: PROPERTY_TARGET_ID, $targetId);
     }
 
     /**
      *
      * @return int
      */
-    public function get_schema_id()
+    public function get_relation_id()
     {
-        return $this->get_default_property(self :: PROPERTY_SCHEMA_ID);
+        return $this->get_default_property(self :: PROPERTY_RELATION_ID);
     }
 
     /**
      *
-     * @param int $schemaId
+     * @param int $relationId
      */
-    public function set_schema_id($schemaId)
+    public function set_relation_id($relationId)
     {
-        $this->set_default_property(self :: PROPERTY_SCHEMA_ID, $schemaId);
+        $this->set_default_property(self :: PROPERTY_RELATION_ID, $relationId);
     }
 
     /**

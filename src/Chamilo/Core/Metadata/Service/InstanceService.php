@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
- * @package Ehb\Core\Metadata\Service
+ * @package Chamilo\Core\Metadata\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

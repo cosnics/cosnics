@@ -39,7 +39,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (! $this->getSchemaId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Schema', null, 'Ehb\Core\Metadata\Schema'));
+            throw new NoObjectSelectedException(Translation :: get('Schema', null, 'Chamilo\Core\Metadata\Schema'));
         }
 
         $html = array();

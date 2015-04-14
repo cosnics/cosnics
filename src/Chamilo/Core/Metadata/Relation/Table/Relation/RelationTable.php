@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Table for the schema
  *
- * @package Ehb\Core\Metadata\Relation\Table\Relation
+ * @package Chamilo\Core\Metadata\Relation\Table\Relation
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

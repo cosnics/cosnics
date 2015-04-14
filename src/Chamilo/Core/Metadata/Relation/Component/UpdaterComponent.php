@@ -15,7 +15,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 /**
  * Controller to update the schema
  *
- * @package Ehb\Core\Metadata\Relation\Component
+ * @package Chamilo\Core\Metadata\Relation\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

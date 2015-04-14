@@ -5,18 +5,17 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  * This class represents a selection condition that requires an equality.
  * An example of an instance would be a condition
  * that requires that the id of a DataClass be the number 4.
- * 
+ *
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @package common.libraries
- * @deprecated Old class to provide backwards compatibility
  */
 class EqualityCondition extends ComparisonCondition
 {
 
     /**
      * Constructor
-     * 
+     *
      * @param $name string
      * @param $value string
      * @param $storage_unit string

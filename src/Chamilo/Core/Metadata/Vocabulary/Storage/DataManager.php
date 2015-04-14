@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
  *
- * @package Ehb\Core\Metadata\Vocabulary\Storage
+ * @package Chamilo\Core\Metadata\Vocabulary\Storage
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

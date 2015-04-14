@@ -10,7 +10,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 /**
  * Form for the schema
  *
- * @package Ehb\Core\Metadata\Schema\Form
+ * @package Chamilo\Core\Metadata\Schema\Form
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

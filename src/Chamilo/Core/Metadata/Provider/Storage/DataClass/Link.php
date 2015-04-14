@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  *
- * @package Ehb\Core\Metadata\Provider\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Provider\Storage\DataClass
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

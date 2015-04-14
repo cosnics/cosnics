@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * This class describes a metadata schema
  *
- * @package Ehb\Core\Metadata\Relation\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Relation\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

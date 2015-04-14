@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Table cell renderer for the schema
  *
- * @package Ehb\Core\Metadata\Schema\Table\Schema
+ * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
