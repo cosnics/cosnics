@@ -773,10 +773,6 @@ EOT;
 
         $values = $this->exportValues();
 
-        $metadata_form_handler = new ElementValueEditorFormHandler(
-            new ContentObjectMetadataValueCreator($this->content_object));
-        $metadata_form_handler->handle_form($values);
-
         // Process includes
         ContentObjectIncludeParser :: parse_includes($this);
 
@@ -915,13 +911,6 @@ EOT;
 
         $tags = explode(',', $values[TagsFormBuilder :: PROPERTY_TAGS]);
         DataManager :: set_tags_for_content_objects($tags, array($object->get_id()), Session :: get_user_id());
-
-        \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_content_object(
-            $object->get_id());
-
-        $metadata_form_handler = new ElementValueEditorFormHandler(
-            new ContentObjectMetadataValueCreator($this->content_object));
-        $metadata_form_handler->handle_form($values);
 
         // Process includes
         ContentObjectIncludeParser :: parse_includes($this);
