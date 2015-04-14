@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 abstract class PageDisplay
 {
@@ -62,9 +61,8 @@ abstract class PageDisplay
     static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node)
     {
         $content_object = $complex_content_object_path_node->get_content_object();
-        
-        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($content_object->get_type(), 3) .
-             '\Integration\Chamilo\Core\Repository\ContentObject\Survey\Display\Display';
+        $package = $content_object->package();
+        $class = $package.'\Integration\Chamilo\Core\Repository\ContentObject\Survey\Display\Display';
         $page_display = new $class($formvalidator, $complex_content_object_path_node);
         
         return $page_display;

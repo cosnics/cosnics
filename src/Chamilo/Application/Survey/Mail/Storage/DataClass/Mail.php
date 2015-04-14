@@ -3,7 +3,6 @@ namespace Chamilo\Application\Survey\Mail\Storage\DataClass;
 
 use Chamilo\Application\Survey\Mail\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class Mail extends DataClass
 {
@@ -258,10 +257,5 @@ class Mail extends DataClass
         $this->set_default_property(self :: PROPERTY_SEND_DATE, $send_date);
     }
 
-    static function get_table_name()
-    {
-        return Utilities :: get_classname_from_namespace(self :: CLASS_NAME, true);
-    }
 }
-
 ?>

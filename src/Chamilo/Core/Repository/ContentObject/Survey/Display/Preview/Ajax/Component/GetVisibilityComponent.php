@@ -67,7 +67,7 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                     $question_visibility[$complex_question_id] = false;
                 }
                 
-                $answer = $this->get_answer($step, $complex_question_id);
+                $answer = $this->get_answer($complex_question_id);
                 
                 if ($answer)
                 {
@@ -137,11 +137,11 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
         }
     }
 
-    private function get_answer($step, $complex_question_id)
+    private function get_answer($complex_question_id)
     {
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
         
-        $answer = $answers[$step][$complex_question_id];
+        $answer = $answers[$complex_question_id];
         
         if ($answer)
         {

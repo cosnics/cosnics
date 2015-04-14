@@ -21,12 +21,12 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
         return $factory->run();
     }
 
-    public function get_answer($step, $complex_question_id)
+    public function get_answer($complex_question_id)
     {
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
 
-        $answer = $answers[$step][$complex_question_id];
-
+        $answer = $answers[$complex_question_id];
+        
         if ($answer)
         {
             return $answer;
@@ -37,7 +37,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
         }
     }
 
-    function save_answer($step, $complex_question_id, $answer)
+    function save_answer($complex_question_id, $answer)
     {
         if (! Session :: retrieve(self :: TEMPORARY_STORAGE))
         {
@@ -45,7 +45,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
         }
 
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        $answers[$step][$complex_question_id] = $answer;
+      
+        
+        $answers[$complex_question_id] = $answer;
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
     }
 }

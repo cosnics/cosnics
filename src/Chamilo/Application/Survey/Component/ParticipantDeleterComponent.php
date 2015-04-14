@@ -11,6 +11,8 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 class ParticipantDeleterComponent extends Manager
 {
@@ -22,12 +24,9 @@ class ParticipantDeleterComponent extends Manager
     {
         $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
         
-        if (! Rights :: is_allowed_in_surveys_subtree(
-            Rights :: RIGHT_INVITE, 
-            $publication_id, 
-            Rights :: TYPE_PUBLICATION))
+        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
         {
-            throw new NotAllowedException();
+            throw new NotAllowedException(false);
         }
         
         $ids = Request :: get(self :: PARAM_PARTICIPANT_ID);
@@ -39,18 +38,21 @@ class ParticipantDeleterComponent extends Manager
             {
                 $ids = array($ids);
             }
-            
-            $condition = new InCondition(
-                new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_ID), 
+            $conditions = array();
+            $conditions[] = new EqualityCondition( new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), $publication_id);
+            $conditions[] = new InCondition(
+                new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_USER_ID), 
                 $ids);
-            $succes = DataManager :: deletes(Participant :: class_name(), $condition);
+            $succes = DataManager :: deletes(Participant :: class_name(), new AndCondition($conditions));
             
             if ($succes)
             {
-                $answer_condition = new InCondition(
-                    new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_SURVEY_PARTICIPANT_ID), 
+                $conditions = array();
+                $conditions[] = new EqualityCondition( new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID), $publication_id);
+                $conditions[] = new InCondition(
+                    new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID), 
                     $ids);
-                $succes = DataManager :: deletes(Participant :: class_name(), $answer_condition);
+                $succes = DataManager :: deletes(Answer :: class_name(), new AndCondition($conditions));
             }
             
             if (! $succes)

@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Survey\Mail\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class UserMail extends DataClass
 {
@@ -80,9 +79,5 @@ class UserMail extends DataClass
         $this->set_default_property(self :: PROPERTY_STATUS, $status);
     }
 
-    static function get_table_name()
-    {
-        return Utilities :: get_classname_from_namespace(self :: CLASS_NAME, true);
-    }
 }
 ?>

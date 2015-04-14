@@ -107,7 +107,7 @@ class TakerComponent extends Manager implements DelegateComponent
 
     function save_answer($complex_question_id, $answer, $context_path)
     {
-        $conditions[] = new EqualityCondition(
+       $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
@@ -121,7 +121,8 @@ class TakerComponent extends Manager implements DelegateComponent
             new StaticConditionVariable($context_path));
         $condition = new AndCondition($conditions);
         $answer_object = DataManager :: retrieve(Answer :: CLASS_NAME, new DataClassRetrieveParameters($condition));
-
+       
+        
         if ($answer_object)
         {
             $answer_object->set_answer($answer);
@@ -160,7 +161,7 @@ class TakerComponent extends Manager implements DelegateComponent
 
         if ($answer_object)
         {
-            $answer_object->get_answer();
+            return $answer_object->get_answer();
         }
         else
         {
