@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\attribute
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Attribute Manager"
+BrowserComponent = "Browse attributes"
+CreatorComponent = "Create attribute"
+DeleterComponent = "Delete attribute"
+UpdaterComponent = "Update attribute"
+VocabulatorComponent = "Manage controlled vocabulary"
+AttributeControlledVocabulary = "Controlled vocabulary for the attribute"
+Attributes = "Attributes"
