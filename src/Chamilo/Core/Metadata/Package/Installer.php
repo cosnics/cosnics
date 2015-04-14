@@ -113,6 +113,31 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 Element :: PROPERTY_FIXED => 1));
 
         $schemaInstaller = new \Chamilo\Core\Metadata\Schema\Action\Installer($schemaDefinition);
-        return $schemaInstaller->run();
+        if (! $schemaInstaller->run())
+        {
+            return false;
+        }
+
+        $schemaDefinition = array();
+        $schemaDefinition[Schema :: class_name()] = array(
+            Schema :: PROPERTY_NAMESPACE => 'ct',
+            Schema :: PROPERTY_NAME => 'Chamilo Tags',
+            Schema :: PROPERTY_DESCRIPTION => '',
+            Schema :: PROPERTY_URL => 'http://www.chamilo.org/',
+            Schema :: PROPERTY_FIXED => '1');
+
+        $schemaDefinition[Element :: class_name()] = array(
+            'tags' => array(
+                Element :: PROPERTY_VALUE_TYPE => Element :: VALUE_TYPE_VOCABULARY_USER,
+                Element :: PROPERTY_VALUE_LIMIT => 0,
+                Element :: PROPERTY_FIXED => 1));
+
+        $schemaInstaller = new \Chamilo\Core\Metadata\Schema\Action\Installer($schemaDefinition);
+        if (! $schemaInstaller->run())
+        {
+            return false;
+        }
+
+        return true;
     }
 }

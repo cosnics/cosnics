@@ -19,7 +19,7 @@ use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Ehb\Core\Metadata\Service\InstanceService;
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 
 /**
