@@ -15,10 +15,10 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Ehb\Core\Metadata\Service\EntityService;
-use Ehb\Core\Metadata\Relation\Service\RelationService;
-use Ehb\Core\Metadata\Element\Service\ElementService;
-use Ehb\Core\Metadata\Service\InstanceService;
+use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Core\Repository\Integration\Ehb\Core\Metadata\Service\RepositoryEntityService;
 
