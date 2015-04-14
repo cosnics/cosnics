@@ -32,7 +32,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
-use Chamilo\Core\Repository\Integration\Ehb\Core\Metadata\Service\RepositoryEntityService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
