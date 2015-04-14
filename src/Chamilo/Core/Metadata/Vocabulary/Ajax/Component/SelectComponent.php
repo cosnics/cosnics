@@ -50,7 +50,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
 
         if (! $this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Ehb\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
 
         if (! $this->getSelectedElement()->usesVocabulary())
@@ -91,7 +91,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
             }
 
             $resource_manager = ResourceManager :: get_instance();
-            $plugin_path = Path :: getInstance()->getJavascriptPath('Ehb\Core\Metadata', true) .
+            $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
                  'Plugin/Bootstrap/Tagsinput/';
 
             $html[] = '<script type="text/javascript">';
@@ -103,7 +103,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-typeahead.js');
             $html[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
             $html[] = $resource_manager->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Ehb\Core\Metadata', true) . 'Selection.js');
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Selection.js');
         }
         else
         {

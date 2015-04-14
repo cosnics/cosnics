@@ -59,12 +59,12 @@ class VocabularyForm extends FormValidator
         $this->addElement(
             'static',
             null,
-            Translation :: get('Element', null, 'Ehb\Core\Metadata'),
+            Translation :: get('Element', null, 'Chamilo\Core\Metadata'),
             $element->render_name());
 
         if ($this->vocabulary->isForEveryone())
         {
-            $displayUser = Translation :: get('PredefinedValues', null, 'Ehb\Core\Metadata\Element');
+            $displayUser = Translation :: get('PredefinedValues', null, 'Chamilo\Core\Metadata\Element');
         }
         else
         {
@@ -80,7 +80,7 @@ class VocabularyForm extends FormValidator
             }
         }
 
-        $this->addElement('static', null, Translation :: get('User', null, 'Ehb\Core\Metadata'), $displayUser);
+        $this->addElement('static', null, Translation :: get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
 
         $this->addElement(
             'text',

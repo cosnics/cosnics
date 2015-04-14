@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  *
- * @package Ehb\Core\Metadata\Component
+ * @package Chamilo\Core\Metadata\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

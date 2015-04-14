@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * This interface provides the class structure to provide and renders the properties to link to a metadata element
  *
- * @package Ehb\Core\Metadata\Provider
+ * @package Chamilo\Core\Metadata\Provider
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

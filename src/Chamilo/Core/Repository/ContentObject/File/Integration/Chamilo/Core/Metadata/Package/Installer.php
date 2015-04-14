@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Metadata\Package;
 
+use Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider;
+
 /**
  *
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Package
@@ -9,6 +11,11 @@ namespace Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Me
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Core\Metadata\Action\Installer
+class Installer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action\Installer
 {
+
+    public function getPropertyProviderTypes()
+    {
+        return array(ContentObjectPropertyProvider :: class_name());
+    }
 }

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * Controller to delete the schema
  *
- * @package Ehb\Core\Metadata\Schema\Component
+ * @package Chamilo\Core\Metadata\Schema\Component
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

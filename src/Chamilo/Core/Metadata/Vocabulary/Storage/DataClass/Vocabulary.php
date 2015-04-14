@@ -8,7 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 /**
  * This class describes a metadata vocabulary
  *
- * @package Ehb\Core\Metadata\Vocabulary\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Vocabulary\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
 
 /**
  *
- * @package Ehb\Core\Metadata\Relation\Instance\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

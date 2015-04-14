@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
- * @package Ehb\Core\Metadata\Schema\Storage
+ * @package Chamilo\Core\Metadata\Schema\Storage
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

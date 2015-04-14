@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
- * @package Ehb\Core\Metadata\Vocabulary\Component
+ * @package Chamilo\Core\Metadata\Vocabulary\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (! $this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Ehb\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
 
         $content = $this->getContent();
@@ -76,7 +76,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
         else
         {
-            $breadcrumbTitle = Translation :: get('ValueTypePredefined', null, 'Ehb\Core\Metadata\Element');
+            $breadcrumbTitle = Translation :: get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
         }
 
         BreadcrumbTrail :: get_instance()->add(

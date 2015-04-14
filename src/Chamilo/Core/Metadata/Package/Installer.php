@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
 
 /**
  *
- * @package Ehb\Core\Metadata\Package
+ * @package Chamilo\Core\Metadata\Package
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,7 +18,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function extra()
     {
-        if (! $this->installDublinCore())
+        if (! $this->installDefaultSchemas())
         {
             return false;
         }
@@ -40,7 +40,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    public function installDublinCore()
+    public function installDefaultSchemas()
     {
         $schemaDefinition = array();
         $schemaDefinition[Schema :: class_name()] = array(
@@ -121,7 +121,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $schemaDefinition = array();
         $schemaDefinition[Schema :: class_name()] = array(
             Schema :: PROPERTY_NAMESPACE => 'ct',
-            Schema :: PROPERTY_NAME => 'Chamilo Tags',
+            Schema :: PROPERTY_NAME => 'Tags',
             Schema :: PROPERTY_DESCRIPTION => '',
             Schema :: PROPERTY_URL => 'http://www.chamilo.org/',
             Schema :: PROPERTY_FIXED => '1');

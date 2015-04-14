@@ -17,7 +17,7 @@ use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
 
 /**
  *
- * @package Ehb\Core\Metadata\Service
+ * @package Chamilo\Core\Metadata\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -168,7 +168,7 @@ class EntityFormService
                 $vocabularyAction = new ToolbarItem(
                     Translation :: get('ShowVocabulary'),
                     Theme :: getInstance()->getImagePath(
-                        'Ehb\Core\Metadata\Element',
+                        'Chamilo\Core\Metadata\Element',
                         'ValueType/' . $element->get_value_type()),
                     $vocabularyUrl,
                     ToolbarItem :: DISPLAY_ICON,
@@ -201,7 +201,7 @@ class EntityFormService
     private function addDependencies()
     {
         $resource_manager = ResourceManager :: get_instance();
-        $plugin_path = Path :: getInstance()->getJavascriptPath('Ehb\Core\Metadata', true) .
+        $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
              'Plugin/Bootstrap/Tagsinput/';
 
         $dependencies = array();
@@ -210,7 +210,7 @@ class EntityFormService
         $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.js');
         $dependencies[] = $resource_manager->get_resource_html($plugin_path . 'bootstrap-tagsinput.css');
         $dependencies[] = $resource_manager->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Ehb\Core\Metadata', true) . 'Input.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Input.js');
 
         $this->formValidator->addElement('html', implode(PHP_EOL, $dependencies));
     }
