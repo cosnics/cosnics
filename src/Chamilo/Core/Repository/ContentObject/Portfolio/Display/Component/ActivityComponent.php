@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity\ActivityTable;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -15,18 +13,16 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends Manager implements TableSupport, DelegateComponent
+class ActivityComponent extends TabComponent implements TableSupport
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         $activity_table = new ActivityTable($this);
-        $this->get_tabs_renderer()->set_content($activity_table->as_html());
 
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add(
@@ -37,7 +33,7 @@ class ActivityComponent extends Manager implements TableSupport, DelegateCompone
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs_renderer()->render();
+        $html[] = $activity_table->as_html();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

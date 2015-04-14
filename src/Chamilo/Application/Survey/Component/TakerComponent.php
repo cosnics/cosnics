@@ -8,8 +8,6 @@ use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -70,18 +68,6 @@ class TakerComponent extends Manager implements DelegateComponent
         
         return $component->run();
     }
-
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                        BrowserComponent :: PARAM_TABLE_TYPE => BrowserComponent :: TAB_PARTICIPATE)),
-                Translation :: get('BrowserComponent')));
-    }
-
 
     // try out for interface SurveyTaker
     function started()

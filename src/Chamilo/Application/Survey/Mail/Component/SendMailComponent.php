@@ -24,10 +24,12 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
-class ManagerSendMailComponent extends Manager
+class SendMailComponent extends Manager
 {
 
     private $invitees;
@@ -98,9 +100,9 @@ class ManagerSendMailComponent extends Manager
                 $this->started = array();
                 $this->finished = array();
 
-                $condition = new EqualityCondition(Participant :: PROPERTY_SURVEY_PUBLICATION_ID, $this->publication_id);
+                $condition = new EqualityCondition(new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), new StaticConditionVariable($this->publication_id));
                 $parameters = new DataClassRetrievesParameters($condition);
-                $participants = DataManager :: get_instance()->retrieves(Participant :: class_name(), $parameters);
+                $participants = DataManager :: retrieves(Participant :: class_name(), $parameters);
 
                 while ($participant = $participants->next_result())
                 {
@@ -137,7 +139,7 @@ class ManagerSendMailComponent extends Manager
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
                 {
-                    $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
+                    $group = DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
                     $group_user_ids = array_merge($group_user_ids, $group->get_users(true, true));
                 }
                 $group_user_ids = array_unique($group_user_ids);
@@ -155,7 +157,7 @@ class ManagerSendMailComponent extends Manager
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
                 {
-                    $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
+                    $group = DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
                     $group_user_ids = array_merge($group_user_ids, $group->get_users(true, true));
                 }
                 $group_user_ids = array_unique($group_user_ids);
@@ -467,29 +469,29 @@ class ManagerSendMailComponent extends Manager
         }
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
-                        \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
-                Translation :: get('ParticipantBrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
-                Translation :: get('BrowserComponent')));
-    }
+//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     {
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
+//                 Translation :: get('BrowserComponent')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
+//                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
+//                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
+//                 Translation :: get('ParticipantBrowserComponent')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         self :: PARAM_ACTION => self :: ACTION_BROWSE,
+//                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
+//                 Translation :: get('BrowserComponent')));
+//     }
 }
 ?>

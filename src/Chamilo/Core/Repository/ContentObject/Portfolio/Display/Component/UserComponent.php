@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\User\UserTable;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
@@ -22,7 +20,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserComponent extends Manager implements DelegateComponent, TableSupport
+class UserComponent extends TabComponent implements TableSupport
 {
 
     /**
@@ -34,21 +32,19 @@ class UserComponent extends Manager implements DelegateComponent, TableSupport
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         // Check whether portfolio rights are enabled and whether the user can actually set them
         if (! $this->get_parent() instanceof PortfolioComplexRights ||
              ! $this->get_parent()->is_allowed_to_set_content_object_rights())
         {
             $message = Display :: warning_message(Translation :: get('ComplexRightsNotSupported'));
-            $this->get_tabs_renderer()->set_content($message);
 
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $message;
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -92,13 +88,13 @@ class UserComponent extends Manager implements DelegateComponent, TableSupport
         $html = array();
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $table->as_html();
-
-        $this->get_tabs_renderer()->set_content(implode(PHP_EOL, $html));
-
+        
+        $axtionBar = implode(PHP_EOL, $html);
+        
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs_renderer()->render();
+        $html[] = $axtionBar;
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

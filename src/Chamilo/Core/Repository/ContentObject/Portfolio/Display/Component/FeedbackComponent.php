@@ -1,11 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * Feedback management of the portfolio item or folder
@@ -13,15 +11,14 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FeedbackComponent extends Manager implements DelegateComponent, FeedbackSupport
+class FeedbackComponent extends TabComponent implements FeedbackSupport
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         if (! $this->get_parent()->is_allowed_to_view_feedback($this->get_current_node()) &&
              ! $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
@@ -36,12 +33,10 @@ class FeedbackComponent extends Manager implements DelegateComponent, FeedbackSu
             $this);
         $result = $factory->run();
 
-        $this->get_tabs_renderer()->set_content($result);
-
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs_renderer()->render();
+        $html[] = $result;
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

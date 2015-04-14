@@ -24,7 +24,7 @@ class MailJobManager
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_UUID, '0');
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_STATUS, MailJob :: STATUS_NEW);
         $condition = new AndCondition($conditions);
-        $mail_jobs = DataManager :: get_instance()->retrieve_mail_jobs($condition);
+        $mail_jobs = DataManager :: retrieve_mail_jobs($condition);
 
         $UUID = uniqid($_SERVER['SERVER_ADDR'], true);
 
@@ -40,7 +40,7 @@ class MailJobManager
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_UUID, $UUID);
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_STATUS, MailJob :: STATUS_NEW);
         $condition = new AndCondition($conditions);
-        $mail_jobs = DataManager :: get_instance()->retrieve_mail_jobs($condition);
+        $mail_jobs = DataManager :: retrieve_mail_jobs($condition);
 
         $user_ids = array();
         $user_publication_ids = array();
@@ -59,7 +59,7 @@ class MailJobManager
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($mail_tracker->get_user_id());
             $to_email = $user->get_email();
 
-            $publication_mail = DataManager :: get_instance()->retrieve_survey_publication_mail(
+            $publication_mail = DataManager :: retrieve_survey_publication_mail(
                 $mail_tracker->get_survey_publication_mail_id());
             $user_ids[] = $publication_mail->get_sender_user_id();
 
@@ -167,7 +167,7 @@ class MailJobManager
     {
         $message = array();
 
-        $publication = DataManager :: get_instance()->retrieve_survey_publication($publication_id);
+        $publication = DataManager :: retrieve_survey_publication($publication_id);
 
         $click_message = Translation :: get('ClickToGoToMailManager');
         $parameters = array();

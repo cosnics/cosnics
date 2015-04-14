@@ -21,8 +21,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager implements DelegateComponent, TableSupport
 {
     const TAB_MAILS_TO_PARTICIPANTS = 1;
     const TAB_MAILS_TO_EXPORTERS = 2;
@@ -64,8 +65,6 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $html = array();
        
-        var_dump($this->get_parameters());
-        
         $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
         $params = $this->get_parameters();
@@ -179,22 +178,22 @@ class BrowserComponent extends Manager implements TableSupport
         return $action_bar;
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
-                Translation :: get('BrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
-                        Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID))), 
-                Translation :: get('ParticipantBrowserComponent')));
-    }
+//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     {
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
+//                 Translation :: get('BrowserComponent')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
+//                         Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID))), 
+//                 Translation :: get('ParticipantBrowserComponent')));
+//     }
 
     public function get_table_condition($object_table_class_name)
     {

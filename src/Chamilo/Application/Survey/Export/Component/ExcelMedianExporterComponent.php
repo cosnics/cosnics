@@ -795,7 +795,7 @@ class ExcelMedianExporterComponent extends Manager
         $this->participants[self :: SURVEY_COUNT] = count($surveys);
 
         // $condition = new InCondition(PublicationGroup :: PROPERTY_SURVEY_PUBLICATION, $ids);
-        // $publication_rel_groups = DataManager :: get_instance()->retrieve_survey_publication_groups($condition);
+        // $publication_rel_groups = DataManager :: retrieve_survey_publication_groups($condition);
         //
         // $groups = array();
         // $group_user_ids = array();
@@ -806,7 +806,7 @@ class ExcelMedianExporterComponent extends Manager
         //
         // while ($publication_rel_group = $publication_rel_groups->next_result())
         // {
-        // $group = GroupDataManager :: get_instance()->retrieve_group($publication_rel_group->get_group_id());
+        // $group = GroupDataManager :: retrieve_group($publication_rel_group->get_group_id());
         // $id = $group->get_id();
         // if (in_array($id, $op_groups))
         // {
@@ -820,7 +820,7 @@ class ExcelMedianExporterComponent extends Manager
         // $user_ids = array();
         //
         // $condition = new InCondition(PublicationUser :: PROPERTY_SURVEY_PUBLICATION, $ids);
-        // $publication_rel_users = DataManager :: get_instance()->retrieve_survey_publication_users($condition);
+        // $publication_rel_users = DataManager :: retrieve_survey_publication_users($condition);
         //
         // while ($publication_rel_user = $publication_rel_users->next_result())
         // {

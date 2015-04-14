@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -16,25 +14,23 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BookmarkerComponent extends Manager implements DelegateComponent
+class BookmarkerComponent extends TabComponent
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         if (! $this->get_parent() instanceof PortfolioBookmarkSupport)
         {
             $message = Display :: error_message(Translation :: get('BookmarksNotSupported'), true);
-            $this->get_tabs_renderer()->set_content($message);
 
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $message;
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -68,12 +64,10 @@ class BookmarkerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->get_tabs_renderer()->set_content($form->toHtml());
-
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

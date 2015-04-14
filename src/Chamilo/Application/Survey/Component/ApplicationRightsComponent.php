@@ -15,6 +15,10 @@ class ApplicationRightsComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Survey\Rights\Application\Manager :: context(),
             $this->get_user(),
             $this);
+        
+//         $component = $factory->getComponent();
+//         $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
+        
         return $factory->run();
     }
 }

@@ -35,7 +35,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         foreach ($template_ids as $template_id)
         {
             
-            $template = DataManager :: get_instance()->retrieve_export_template_by_id($template_id);
+            $template = DataManager :: retrieve_export_template_by_id($template_id);
             
             if ($this->get_user()->is_platform_admin() || $template->get_owner_id() == $this->get_user_id())
             {

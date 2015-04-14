@@ -10,6 +10,8 @@ class ViewerComponent extends Manager
 
     function run()
     {
+        parent :: run();
+        
         $form = new Form($this);
 
         $html = array();

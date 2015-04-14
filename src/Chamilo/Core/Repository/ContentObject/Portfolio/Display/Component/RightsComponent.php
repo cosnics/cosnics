@@ -2,9 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Form\RightsForm;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -18,15 +16,14 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsComponent extends Manager implements DelegateComponent
+class RightsComponent extends TabComponent
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('RightsComponent')));
 
@@ -76,12 +73,10 @@ class RightsComponent extends Manager implements DelegateComponent
                 $this->redirect($message, ! $succes);
             }
 
-            $this->get_tabs_renderer()->set_content($form->toHtml());
-
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -89,12 +84,11 @@ class RightsComponent extends Manager implements DelegateComponent
         else
         {
             $message = Display :: error_message(Translation :: get('ComplexRightsNotSupported'), true);
-            $this->get_tabs_renderer()->set_content($message);
 
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $message;
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

@@ -28,7 +28,7 @@ class EditorComponent extends Manager
             Rights :: TYPE_PUBLICATION))
         {
             
-            $template = DataManager :: get_instance()->retrieve_export_template_by_id($id);
+            $template = DataManager :: retrieve_export_template_by_id($id);
             
             $form = new ExportTemplateForm(ExportTemplateForm :: TYPE_EDIT, $this->get_url(), $template);
             

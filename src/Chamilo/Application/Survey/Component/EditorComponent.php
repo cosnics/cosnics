@@ -6,9 +6,6 @@ use Chamilo\Application\Survey\Manager;
 use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -59,17 +56,6 @@ class EditorComponent extends Manager
             return implode(PHP_EOL, $html);
           
         }
-    }
-
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_MY_PUBLICATIONS)), 
-                Translation :: get('BrowserComponent')));
     }
 
 }
