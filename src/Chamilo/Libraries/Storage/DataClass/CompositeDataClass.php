@@ -43,7 +43,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * Gets the additional property names Should be overridden when needed
-     * 
+     *
      * @return array the aditional property names
      */
     public static function get_additional_property_names()
@@ -53,7 +53,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * Gets an additional (type-specific) property of this object by name.
-     * 
+     *
      * @param $name string The name of the property.
      */
     public function get_additional_property($name)
@@ -64,7 +64,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * Sets an additional (type-specific) property of this object by name.
-     * 
+     *
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
@@ -75,7 +75,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * Gets the additional (type-specific) properties of this object.
-     * 
+     *
      * @return array An associative array containing the properties.
      */
     public function get_additional_properties()
@@ -86,12 +86,17 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * Sets the additional (type-specific) properties of this object.
-     * 
+     *
      * @param array An associative array containing the properties.
      */
     public function set_additional_properties($additional_properties)
     {
         $this->set_specific_properties(self :: PROPERTIES_ADDITIONAL, $additional_properties);
+    }
+
+    static public function is_additional_property_name($name)
+    {
+        return in_array($name, static :: get_additional_property_names());
     }
 
     public static function is_extended()
@@ -116,15 +121,15 @@ abstract class CompositeDataClass extends DataClass
         {
             return;
         }
-        
+
         $data_manager = $this->package() . '\Storage\DataManager';
-        
+
         $this->set_additional_properties($data_manager :: retrieve_composite_data_class_additional_properties($this));
     }
 
     /**
      * Get the fully qualified class name of the DataClass object
-     * 
+     *
      * @return string
      */
     public static function parent_class_name()

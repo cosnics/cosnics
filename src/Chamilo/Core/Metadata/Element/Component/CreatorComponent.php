@@ -1,13 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Element\Component;
 
-use Chamilo\Core\Metadata\Attribute\Entity\AttributeEntity;
-use Chamilo\Core\Metadata\Element\Entity\ElementEntity;
 use Chamilo\Core\Metadata\Element\Form\ElementForm;
 use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\ElementNesting;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\ElementRelAttribute;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,7 +26,11 @@ class CreatorComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new ElementForm($this->get_url());
+        $element = new Element();
+        $element->set_schema_id($this->getSchemaId());
+        $element->set_value_type(Element :: VALUE_TYPE_PREDEFINED);
+
+        $form = new ElementForm($this->get_url(), $element);
 
         if ($form->validate())
         {
@@ -38,46 +38,10 @@ class CreatorComponent extends Manager
             {
                 $values = $form->exportValues();
 
-                $element = new Element();
-                $element->set_schema_id($values[Element :: PROPERTY_SCHEMA_ID]);
                 $element->set_name($values[Element :: PROPERTY_NAME]);
                 $element->set_display_name($values[Element :: PROPERTY_DISPLAY_NAME]);
+                $element->set_value_type($values[Element :: PROPERTY_VALUE_TYPE]);
                 $success = $element->create();
-
-                if ($values[self :: PROPERTY_ASSOCIATIONS])
-                {
-                    foreach ($values[self :: PROPERTY_ASSOCIATIONS][ElementEntity :: ENTITY_TYPE] as $element_id)
-                    {
-                        try
-                        {
-                            $element_nesting = new ElementNesting();
-                            $element_nesting->set_parent_element_id($element->get_id());
-                            $element_nesting->set_child_element_id($element_id);
-                            $success = $element_nesting->create();
-                        }
-                        catch (\Exception $ex)
-                        {
-                            $success = false;
-                            $message = $ex->getMessage();
-                        }
-                    }
-
-                    foreach ($values[self :: PROPERTY_ASSOCIATIONS][AttributeEntity :: ENTITY_TYPE] as $attribute_id)
-                    {
-                        try
-                        {
-                            $element_rel_attribute = new ElementRelAttribute();
-                            $element_rel_attribute->set_attribute_id($attribute_id);
-                            $element_rel_attribute->set_element_id($element->get_id());
-                            $success = $element_rel_attribute->create();
-                        }
-                        catch (\Exception $ex)
-                        {
-                            $success = false;
-                            $message = $ex->getMessage();
-                        }
-                    }
-                }
 
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
@@ -118,5 +82,10 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE)),
                 Translation :: get('BrowserComponent')));
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID);
     }
 }

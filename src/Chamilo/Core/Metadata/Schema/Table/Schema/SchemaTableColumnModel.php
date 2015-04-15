@@ -8,8 +8,12 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Table column model for the schema
- * 
+ *
+ * @package Chamilo\Core\Metadata\Schema\Table\Schema
+ * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SchemaTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {

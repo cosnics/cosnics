@@ -1,21 +1,22 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Attribute\Storage\DataClass\Attribute;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class describes a metadata schema
- * 
- * @author Sven Vanpoucke
+ *
+ * @package Chamilo\Core\Metadata\Schema\Storage\DataClass
  * @author Jens Vanderheyden
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Schema extends DataClass
 {
+    use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -23,79 +24,32 @@ class Schema extends DataClass
      */
     const PROPERTY_NAMESPACE = 'namespace';
     const PROPERTY_NAME = 'name';
+    const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_URL = 'url';
     const PROPERTY_FIXED = 'fixed';
-
-    /**
-     * ***************************************************************************************************************
-     * Variables *
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * An array of elements that belong to this schema
-     * 
-     * @var Element[]
-     */
-    private $elements;
-
-    /**
-     * An array of attributes that belong to this schema
-     * 
-     * @var Attribute[]
-     */
-    private $attributes;
 
     /**
      * **************************************************************************************************************
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
-     * @param array $extended_property_names
      *
-     * @return array The property names.
+     * @param string[] $extended_property_names
+     *
+     * @return string[] The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         $extended_property_names[] = self :: PROPERTY_NAMESPACE;
         $extended_property_names[] = self :: PROPERTY_NAME;
+        $extended_property_names[] = self :: PROPERTY_DESCRIPTION;
         $extended_property_names[] = self :: PROPERTY_URL;
         $extended_property_names[] = self :: PROPERTY_FIXED;
-        
-        return parent :: get_default_property_names($extended_property_names);
-    }
-    
-    /*
-     * Creates this object in the database
-     */
-    public function create()
-    {
-        if (! parent :: create())
-        {
-            return false;
-        }
-        
-        return true;
-    }
 
-    /**
-     * Returns the dependencies for this dataclass
-     * 
-     * @return string[string]
-     */
-    protected function get_dependencies()
-    {
-        return array(
-            Element :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID), 
-                new StaticConditionVariable($this->get_id())), 
-            Attribute :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(Attribute :: class_name(), Attribute :: PROPERTY_SCHEMA_ID), 
-                new StaticConditionVariable($this->get_id())));
+        return parent :: get_default_property_names($extended_property_names);
     }
 
     /**
@@ -103,10 +57,10 @@ class Schema extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the namespace
-     * 
+     *
      * @return string
      */
     public function get_namespace()
@@ -116,7 +70,7 @@ class Schema extends DataClass
 
     /**
      * Sets the namespace
-     * 
+     *
      * @param string $namespace
      */
     public function set_namespace($namespace)
@@ -126,7 +80,7 @@ class Schema extends DataClass
 
     /**
      * Returns the name
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -136,7 +90,7 @@ class Schema extends DataClass
 
     /**
      * Sets the name
-     * 
+     *
      * @param string $name
      */
     public function set_name($name)
@@ -145,8 +99,28 @@ class Schema extends DataClass
     }
 
     /**
+     * Returns the description
+     *
+     * @return string
+     */
+    public function get_description()
+    {
+        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+    }
+
+    /**
+     * Sets the description
+     *
+     * @param string $description
+     */
+    public function set_description($description)
+    {
+        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+    }
+
+    /**
      * Returns the url
-     * 
+     *
      * @return string
      */
     public function get_url()
@@ -156,7 +130,7 @@ class Schema extends DataClass
 
     /**
      * Sets the url
-     * 
+     *
      * @param string $url
      */
     public function set_url($url)
@@ -166,7 +140,7 @@ class Schema extends DataClass
 
     /**
      * Returns whether or not this element is fixed
-     * 
+     *
      * @return string
      */
     public function is_fixed()
@@ -176,51 +150,11 @@ class Schema extends DataClass
 
     /**
      * Sets whether or not the element is fixed
-     * 
+     *
      * @param string $fixed
      */
     public function set_fixed($fixed)
     {
         $this->set_default_property(self :: PROPERTY_FIXED, $fixed);
-    }
-
-    /**
-     * Sets the elements that belong to this schema
-     * 
-     * @param \Chamilo\Core\Metadata\element\storage\data_class\Element[] $elements
-     */
-    public function set_elements($elements)
-    {
-        $this->elements = $elements;
-    }
-
-    /**
-     * Returns the elements that belong to this schema
-     * 
-     * @return \Chamilo\Core\Metadata\element\storage\data_class\Element[]
-     */
-    public function get_elements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * Sets the attributes that belong to this schema
-     * 
-     * @param \Chamilo\Core\Metadata\attribute\storage\data_class\Attribute[] $attributes
-     */
-    public function set_attributes($attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    /**
-     * Returns the attributes that belong to this schema
-     * 
-     * @return \Chamilo\Core\Metadata\attribute\storage\data_class\Attribute[]
-     */
-    public function get_attributes()
-    {
-        return $this->attributes;
     }
 }

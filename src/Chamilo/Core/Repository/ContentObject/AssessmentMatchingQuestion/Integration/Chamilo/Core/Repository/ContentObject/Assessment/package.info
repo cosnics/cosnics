@@ -5,8 +5,7 @@
 		<code>Display</code>
 		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment
 		</context>
-	<type>Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integration
-		</type>
+		<type>Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integration</type>
 		<category />
 		<authors />
 		<version>5.0.0</version>
@@ -14,8 +13,7 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion
-					</id>
+					<id>Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">

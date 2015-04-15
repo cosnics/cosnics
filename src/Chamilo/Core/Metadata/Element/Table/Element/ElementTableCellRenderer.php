@@ -34,10 +34,41 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case ElementTableColumnModel :: COLUMN_PREFIX :
                 return $result->get_namespace();
                 break;
-            case ElementTableColumnModel :: COLUMN_CONTROLLED_VOCABULARY :
-                $has_controlled_vocabulary = DataManager :: element_has_controlled_vocabulary($result->get_id()) ? 'true' : 'false';
+            case ElementTableColumnModel :: COLUMN_VALUE_PREDEFINED :
+                $image = 'Action/Value/Predefined';
+                $image .= $result->is_value_predefined() ? '' : 'Na';
+                $link = $result->is_value_predefined() ? $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULARY,
+                        \Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager :: ACTION_BROWSE,
+                        Manager :: PARAM_ELEMENT_ID => $result->get_id())) : null;
 
-                return Theme :: getInstance()->getCommonImage('Action/Setting' . $has_controlled_vocabulary);
+                return Theme :: getInstance()->getImage(
+                    $image,
+                    'png',
+                    Translation :: get('PredefinedValues', null, $this->get_component()->package()),
+                    $link,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    $this->get_component()->package());
+                break;
+            case ElementTableColumnModel :: COLUMN_VALUE_USER :
+                $image = 'Action/Value/User';
+                $image .= $result->is_value_user_defined() ? '' : 'Na';
+                $link = $result->is_value_user_defined() ? $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULARY,
+                        \Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager :: ACTION_USER,
+                        Manager :: PARAM_ELEMENT_ID => $result->get_id())) : null;
+
+                return Theme :: getInstance()->getImage(
+                    $image,
+                    'png',
+                    Translation :: get('UserValues', null, $this->get_component()->package()),
+                    $link,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    $this->get_component()->package());
                 break;
         }
 
@@ -51,11 +82,11 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
      *
      * @return String
      */
-    public function get_actions($result)
+    public function get_actions($element)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
-        if ($result->is_fixed())
+        if ($element->is_fixed())
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -80,7 +111,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                            Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+                            Manager :: PARAM_ELEMENT_ID => $element->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
 
             $toolbar->add_item(
@@ -90,37 +121,15 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                            Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+                            Manager :: PARAM_ELEMENT_ID => $element->get_id())),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
         }
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/ControlledVocabulary'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_VOCABULATE,
-                        Manager :: PARAM_ELEMENT_ID => $result->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('MetadataDefaultValues', null, 'core\metadata'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/Default'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => null,
-                        \Chamilo\Core\Metadata\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Manager :: ACTION_VALUE,
-                        \Chamilo\Core\Metadata\Value\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Value\Manager :: ACTION_ELEMENT,
-                        Manager :: PARAM_ELEMENT_ID => $result->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
-        $limit = DataManager :: get_display_order_total_for_schema($result->get_schema_id());
+        $limit = DataManager :: get_display_order_total_for_schema($element->get_schema_id());
 
         // show move up button
-        if ($result->get_display_order() != "1" && $limit != "1")
+        if ($element->get_display_order() != 1 && $limit != 1)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -129,7 +138,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
-                            Manager :: PARAM_ELEMENT_ID => $result->get_id(),
+                            Manager :: PARAM_ELEMENT_ID => $element->get_id(),
                             Manager :: PARAM_MOVE => - 1)),
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -144,7 +153,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         }
 
         // show move down button
-        if ($result->get_display_order() < $limit)
+        if ($element->get_display_order() < $limit)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -154,7 +163,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
                             Manager :: PARAM_MOVE => 1,
-                            Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+                            Manager :: PARAM_ELEMENT_ID => $element->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else

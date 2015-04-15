@@ -15,10 +15,6 @@
 					<id>Chamilo\Configuration</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
-				<dependency type="registration">
-					<id>Chamilo\Core\Metadata</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
 			</dependencies>
 		</pre-depends>
 		<extra>

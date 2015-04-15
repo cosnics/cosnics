@@ -7,6 +7,8 @@
 		<property name="display_name" type="text" length="255" notnull="1" />
 		<property name="fixed" length="1" type="integer" notnull="1" />
 		<property name="display_order" type="integer" notnull="1" />
+		<property name="value_type" type="integer" notnull="1" />
+		<property name="value_limit" unsigned="1" type="integer" notnull="1" />
 	</properties>
 	<index name="unique_element_name" type="unique">
 		<indexproperty name="name" />
