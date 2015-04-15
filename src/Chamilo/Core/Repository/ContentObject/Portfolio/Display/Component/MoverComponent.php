@@ -2,12 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -21,14 +19,14 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MoverComponent extends Manager implements DelegateComponent
+class MoverComponent extends TabComponent
 {
     const PARAM_NEW_PARENT = 'new_parent';
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
         
         $selected_steps = Request :: get(self :: PARAM_STEP);

@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
-class AttachmentViewerComponent extends Manager
+class AttachmentViewerComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
         $factory = new ApplicationFactory(
             $this->getRequest(),

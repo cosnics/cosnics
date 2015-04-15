@@ -349,7 +349,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         Translation :: get('MoveDown'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN), 
+                            'Tab/' . self :: ACTION_SORT . self :: SORT_DOWN), 
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_SORT, 
@@ -368,7 +368,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         Translation :: get('MoveDownNotAvailable'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_DOWN . 'Na'), 
+                            'Tab/' . self :: ACTION_SORT . self :: SORT_DOWN . 'Na'), 
                         null, 
                         false, 
                         false, 
@@ -384,7 +384,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         Translation :: get('MoveUp'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP), 
+                            'Tab/' . self :: ACTION_SORT . self :: SORT_UP), 
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_SORT, 
@@ -403,7 +403,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         Translation :: get('MoveUpNotAvailable'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
-                            'Tab/' . self :: ACTION_SORT . '_' . self :: SORT_UP . 'Na'), 
+                            'Tab/' . self :: ACTION_SORT . self :: SORT_UP . 'Na'), 
                         null, 
                         false, 
                         false, 
@@ -423,8 +423,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
-        $html = array();
-        
         $html = array();
         
         $html[] = parent :: render_header();

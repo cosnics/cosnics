@@ -28,8 +28,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_SORT = 'sort';
     
     // Sorting
-    const SORT_UP = 'up';
-    const SORT_DOWN = 'down';
+    const SORT_UP = 'Up';
+    const SORT_DOWN = 'Down';
     
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;

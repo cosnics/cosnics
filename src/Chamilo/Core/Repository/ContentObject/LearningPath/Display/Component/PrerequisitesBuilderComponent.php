@@ -2,9 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\PrerequisitesBuilderForm;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -15,13 +13,11 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package repository.lib.complex_builder.learning_path.component
  */
-class PrerequisitesBuilderComponent extends Manager implements DelegateComponent
+class PrerequisitesBuilderComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
-        parent :: run();
-
         $complex_content_object_item = $this->get_current_complex_content_object_item();
 
         $menu_trail = $this->get_complex_content_object_breadcrumbs();
@@ -55,12 +51,10 @@ class PrerequisitesBuilderComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->get_tabs_renderer()->set_content($form->toHtml());
-
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs_renderer()->render();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
