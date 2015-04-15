@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block name="course_type_course_list">
+	<settings>
+		<category name="display">
+			<setting name="show_when_empty" field="radio" default="1">
+				<options type="static">
+					<option name="true" value="1" />
+					<option name="false" value="0" />
+				</options>
+			</setting>
+		</category>
+		<category name="object">
+			<setting name="course_type" field="select" default="0">
+				<options type="dynamic" source="get_all_course_types" />
+			</setting>
+		</category>
+	</settings>
+</block>
