@@ -104,7 +104,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 Element :: PROPERTY_VALUE_LIMIT => 0,
                 Element :: PROPERTY_FIXED => 1),
             'title' => array(
-                Element :: PROPERTY_VALUE_TYPE => Element :: VALUE_TYPE_VOCABULARY_USER,
+                Element :: PROPERTY_VALUE_TYPE => Element :: VALUE_TYPE_FREE,
                 Element :: PROPERTY_VALUE_LIMIT => 1,
                 Element :: PROPERTY_FIXED => 1),
             'type' => array(

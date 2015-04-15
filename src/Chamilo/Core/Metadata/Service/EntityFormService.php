@@ -14,6 +14,8 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
 
 /**
  *
@@ -46,15 +48,24 @@ class EntityFormService
 
     /**
      *
+     * @var \Chamilo\Core\User\Storaga\DataClass\User
+     */
+    private $user;
+
+    /**
+     *
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
+     * @param \Chamilo\Core\User\Storaga\DataClass\User $user
      */
-    public function __construct(SchemaInstance $schemaInstance, DataClass $entity, FormValidator $formValidator)
+    public function __construct(SchemaInstance $schemaInstance, DataClass $entity, FormValidator $formValidator,
+        User $user)
     {
         $this->schemaInstance = $schemaInstance;
         $this->entity = $entity;
         $this->formValidator = $formValidator;
+        $this->user = $user;
     }
 
     /**
@@ -109,6 +120,24 @@ class EntityFormService
     public function setFormValidator($formValidator)
     {
         $this->formValidator = $formValidator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storaga\DataClass\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storaga\DataClass\User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     public function addElements()
@@ -220,21 +249,33 @@ class EntityFormService
         $defaults = array();
 
         $elementService = new ElementService();
-        $elements = $elementService->getElementsForSchemaInstance($this->schemaInstance);
+        $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
+
+        $vocabularyService = new VocabularyService();
 
         while ($element = $elements->next_result())
         {
+
             if ($element->usesVocabulary())
             {
-                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $this->schemaInstance->get_schema_id() .
-                     '][' . $this->schemaInstance->get_id() . '][' . $element->get_id() . '][' .
-                     EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']';
+                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                     $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
+                     $element->get_id() . '][' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']';
 
                 $options = array();
 
                 $elementInstanceVocabularies = $elementService->getElementInstanceVocabulariesForSchemaInstanceAndElement(
-                    $this->schemaInstance,
+                    $this->getSchemaInstance(),
                     $element)->as_array();
+
+                if (count($elementInstanceVocabularies) == 0)
+                {
+                    $elementInstanceVocabularies = $vocabularyService->getFallbackVocabulariesForUserEntitySchemaInstanceElement(
+                        $this->getUser(),
+                        $this->getEntity(),
+                        $this->getSchemaInstance(),
+                        $element);
+                }
 
                 if (count($elementInstanceVocabularies) > 0)
                 {
@@ -252,19 +293,24 @@ class EntityFormService
             }
             else
             {
-                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $this->schemaInstance->get_schema_id() .
-                     '][' . $this->schemaInstance->get_id() . '][' . $element->get_id() . ']';
+                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                     $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
+                     $element->get_id() . ']';
                 $elementInstanceVocabulary = $elementService->getElementInstanceVocabularyForSchemaInstanceAndElement(
-                    $this->schemaInstance,
+                    $this->getSchemaInstance(),
                     $element);
 
-                if ($elementInstanceVocabulary instanceof Vocabulary)
+                if ($elementInstanceVocabulary instanceof Vocabulary && $elementInstanceVocabulary->get_value())
                 {
                     $elementValue = $elementInstanceVocabulary->get_value();
                 }
                 else
                 {
-                    $elementValue = '';
+                    $elementValue = $vocabularyService->getFallbackValueForUserEntitySchemaInstanceElement(
+                        $this->getUser(),
+                        $this->getEntity(),
+                        $this->getSchemaInstance(),
+                        $element);
                 }
             }
 
