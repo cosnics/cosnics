@@ -15,6 +15,10 @@
 					<id>Chamilo\Core\Repository\ContentObject\Link</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
+				<dependency type="registration">
+					<id>Chamilo\Core\Repository\ContentObject\Portfolio</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
 			</dependencies>
 		</pre-depends>
 	</package>

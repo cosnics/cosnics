@@ -6,6 +6,7 @@
 		<property name="name" type="text" length="255" notnull="1" />
 		<property name="url" type="text" length="255" notnull="1" />
 		<property name="fixed" length="1" type="integer" notnull="1" />
+		<property name="description" type="text" notnull="1" />
 	</properties>
 	<index name="namespace" type="unique">
 		<indexproperty name="namespace" />

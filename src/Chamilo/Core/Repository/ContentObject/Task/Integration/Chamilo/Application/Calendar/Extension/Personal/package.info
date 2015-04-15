@@ -3,17 +3,24 @@
 	<package>
 		<name>Personal</name>
 		<code>Personal</code>
-		<context>Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Application\Calendar\Extension\Personal</context>
+		<context>Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Application\Calendar\Extension\Personal
+		</context>
 		<type>Chamilo\Core\Repository\ContentObject\Task\Integration</type>
 		<category>agenda</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />
 		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Core\Repository</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
+			<dependencies operator="1">
+				<dependency type="registration">
+					<id>Chamilo\Core\Repository\ContentObject\Task</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+				<dependency type="registration">
+					<id>Chamilo\Application\Calendar\Extension\Personal</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+			</dependencies>
 		</pre-depends>
 	</package>
 </packages>

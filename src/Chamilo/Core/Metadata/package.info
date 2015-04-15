@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
 	<package>
-		<name>Metadata</name>
+		<name>New Metadata</name>
 		<code>Metadata</code>
 		<context>Chamilo\Core\Metadata</context>
 		<type>Chamilo\Core</type>

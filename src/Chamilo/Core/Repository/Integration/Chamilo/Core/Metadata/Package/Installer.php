@@ -2,21 +2,13 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Package;
 
 /**
- * Installer for this package
- * 
- * @package repository\integration\core\metadata
+ *
+ * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Package
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Configuration\Package\Action\Installer
+class Installer extends \Chamilo\Core\Metadata\Action\Installer
 {
-
-    public static function get_additional_packages()
-    {
-        $installers = array();
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type';
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Property';
-        $installers[] = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Alternative';
-        
-        return $installers;
-    }
 }

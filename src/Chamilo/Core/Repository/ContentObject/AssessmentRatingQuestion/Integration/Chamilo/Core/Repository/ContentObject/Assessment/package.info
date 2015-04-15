@@ -3,7 +3,8 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display</context>
+		<context>Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment
+		</context>
 		<type>Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration</type>
 		<category />
 		<authors />

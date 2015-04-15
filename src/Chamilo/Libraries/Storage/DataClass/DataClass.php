@@ -259,7 +259,7 @@ abstract class DataClass
      */
     public static function is_default_property_name($name)
     {
-        return in_array($name, self :: get_default_property_names());
+        return in_array($name, static :: get_default_property_names());
     }
 
     /**

@@ -1,11 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Form;
 
-use Chamilo\Core\Metadata\Value\Element\Form\ElementValueEditorFormBuilder;
-use Chamilo\Core\Metadata\Value\Element\Form\Handler\ElementValueEditorFormHandler;
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\ContentObjectMetadataValueCreator;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -27,6 +24,13 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Core\Metadata\Service\EntityFormService;
+use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Service\InstanceFormService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -44,8 +48,9 @@ abstract class ContentObjectForm extends FormValidator
      * Tabs *
      * **************************************************************************************************************
      */
-    const TAB_CONTENT_OBJECT = 'content_object';
-    const TAB_METADATA = 'metadata';
+    const TAB_CONTENT_OBJECT = 'ContentObject';
+    const TAB_METADATA = 'Metadata';
+    const TAB_ADD_METADATA = 'AddMetadata';
 
     /**
      * ***************************************************************************************************************
@@ -97,23 +102,7 @@ abstract class ContentObjectForm extends FormValidator
         $this->additional_elements = $additional_elements;
         $this->allow_new_version = $allow_new_version;
 
-        if ($this->form_type == self :: TYPE_EDIT || $this->form_type == self :: TYPE_REPLY)
-        {
-            $this->build_editing_form();
-        }
-        elseif ($this->form_type == self :: TYPE_CREATE)
-        {
-            $this->build_creation_form();
-        }
-        elseif ($this->form_type == self :: TYPE_COMPARE)
-        {
-            $this->build_version_compare_form();
-        }
-
-        $this->add_metadata_form();
-
-        $this->add_attachments_form();
-        $this->add_additional_elements();
+        $this->prepareTabs();
 
         if ($this->form_type != self :: TYPE_COMPARE)
         {
@@ -161,6 +150,72 @@ abstract class ContentObjectForm extends FormValidator
     protected function get_content_object_class()
     {
         return (string) StringUtilities :: getInstance()->createString($this->get_content_object_type())->upperCamelize();
+    }
+
+    public function prepareTabs()
+    {
+        $tabs_generator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
+
+        $tabs_generator->add_tab(
+            new DynamicFormTab(
+                self :: TAB_CONTENT_OBJECT,
+                Translation :: get('TypeName', null, $this->get_content_object()->package()),
+                Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
+                'build_general_form'));
+
+        $relationService = new RelationService();
+        $repositoryEntityService = new RepositoryEntityService();
+
+        $availableSchemaIds = $repositoryEntityService->getAvailableSchemaIdsForEntity(
+            $relationService,
+            $this->get_content_object());
+
+        if (count($availableSchemaIds) > 0)
+        {
+            $schemaInstances = $repositoryEntityService->getSchemaInstancesForEntity(
+                new RelationService(),
+                $this->get_content_object());
+
+            while ($schemaInstance = $schemaInstances->next_result())
+            {
+                $schema = $schemaInstance->getSchema();
+                $tabs_generator->add_tab(
+                    new DynamicFormTab(
+                        'schema-' . $schemaInstance->get_id(),
+                        $schema->get_name(),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
+                        'build_metadata_form',
+                        array($schemaInstance)));
+            }
+
+            $tabs_generator->add_tab(
+                new DynamicFormTab(
+                    'add-schema',
+                    Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
+                    'build_metadata_choice_form'));
+        }
+
+        $tabs_generator->render();
+    }
+
+    public function build_general_form()
+    {
+        if ($this->form_type == self :: TYPE_EDIT || $this->form_type == self :: TYPE_REPLY)
+        {
+            $this->build_editing_form();
+        }
+        elseif ($this->form_type == self :: TYPE_CREATE)
+        {
+            $this->build_creation_form();
+        }
+        elseif ($this->form_type == self :: TYPE_COMPARE)
+        {
+            $this->build_version_compare_form();
+        }
+
+        $this->add_attachments_form();
+        $this->add_additional_elements();
     }
 
     /**
@@ -223,23 +278,20 @@ abstract class ContentObjectForm extends FormValidator
     /**
      * Adds the metadata form for this type
      */
-    public function add_metadata_form()
+    public function build_metadata_form(SchemaInstance $schemaInstance)
     {
-        $elements = \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type\Storage\DataManager :: retrieve_metadata_elements_for_content_object_type(
-            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->content_object->get_type()));
+        $entityFormService = new EntityFormService($schemaInstance, $this->get_content_object(), $this);
+        $entityFormService->addElements();
+        $entityFormService->setDefaults();
+    }
 
-        if (count($elements) > 0)
-        {
-            $this->addElement('category', Translation :: get('Metadata', null, 'core\metadata'));
+    public function build_metadata_choice_form()
+    {
+        $relationService = new RelationService();
+        $repositoryEntityService = new RepositoryEntityService();
 
-            $form_builder = new ElementValueEditorFormBuilder($this);
-            $form_builder->build_form(
-                $elements,
-                \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Storage\DataManager :: retrieve_element_values_for_content_object_as_array(
-                    $this->content_object->get_id()));
-
-            $this->addElement('category');
-        }
+        $instanceFormService = new InstanceFormService($this->get_content_object(), $this);
+        $instanceFormService->addElements($repositoryEntityService, $relationService);
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
@@ -435,7 +487,7 @@ EOT;
             $this->addGroup($group);
         }
 
-        $this->add_tags_input();
+        // $this->add_tags_input();
 
         $value = PlatformSetting :: get('description_required', Manager :: context());
         $required = ($value == 1) ? true : false;
@@ -646,7 +698,8 @@ EOT;
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
@@ -717,10 +770,6 @@ EOT;
         DataManager :: set_tags_for_content_objects($tags, array($object->get_id()), Session :: get_user_id());
 
         $values = $this->exportValues();
-
-        $metadata_form_handler = new ElementValueEditorFormHandler(
-            new ContentObjectMetadataValueCreator($this->content_object));
-        $metadata_form_handler->handle_form($values);
 
         // Process includes
         ContentObjectIncludeParser :: parse_includes($this);
@@ -861,13 +910,6 @@ EOT;
         $tags = explode(',', $values[TagsFormBuilder :: PROPERTY_TAGS]);
         DataManager :: set_tags_for_content_objects($tags, array($object->get_id()), Session :: get_user_id());
 
-        \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_content_object(
-            $object->get_id());
-
-        $metadata_form_handler = new ElementValueEditorFormHandler(
-            new ContentObjectMetadataValueCreator($this->content_object));
-        $metadata_form_handler->handle_form($values);
-
         // Process includes
         ContentObjectIncludeParser :: parse_includes($this);
 
@@ -948,12 +990,16 @@ EOT;
      */
     public function validate()
     {
-        if ($this->isSubmitted() && $this->form_type == self :: TYPE_COMPARE)
+        if ($this->isSubmitted())
         {
             $values = $this->exportValues();
-            if (! isset($values['object']) || ! isset($values['compare']))
+
+            if ($this->form_type == self :: TYPE_COMPARE)
             {
-                return false;
+                if (! isset($values['object']) || ! isset($values['compare']))
+                {
+                    return false;
+                }
             }
         }
 

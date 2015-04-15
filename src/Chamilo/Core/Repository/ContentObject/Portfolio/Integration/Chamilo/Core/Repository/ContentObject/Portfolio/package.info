@@ -3,7 +3,8 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\Portfolio\Integration\Chamilo\Core\Repository\ContentObject\Portfolio</context>
+		<context>Chamilo\Core\Repository\ContentObject\Portfolio\Integration\Chamilo\Core\Repository\ContentObject\Portfolio
+		</context>
 		<type>Chamilo\Core\Repository\ContentObject\Portfolio\Integration</type>
 		<category />
 		<authors />
