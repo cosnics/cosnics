@@ -3,14 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTranslator;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends TabComponent
 {
 
     private $learning_path_trackers;
@@ -21,10 +19,8 @@ class ViewerComponent extends Manager implements DelegateComponent
     const TRACKER_LEARNING_PATH = 'tracker_learning_path';
     const TRACKER_LEARNING_PATH_ITEM = 'tracker_learning_path_item';
 
-    public function run()
+    public function build()
     {
-        parent :: run();
-
         $show_progress = Request :: get(self :: PARAM_SHOW_PROGRESS);
         $learning_path = $this->get_parent()->get_root_content_object();
 
@@ -81,12 +77,11 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
         
         $embedder = Embedder :: factory($this, $this->get_current_node());
-        $this->get_tabs_renderer()->set_content($embedder->run());
 
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs_renderer()->render();
+        $html[] = $embedder->run();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

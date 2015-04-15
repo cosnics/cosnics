@@ -23,7 +23,6 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        parent :: run();
         
         $selected_steps = Request :: get(self :: PARAM_STEP);
         if (! is_array($selected_steps))

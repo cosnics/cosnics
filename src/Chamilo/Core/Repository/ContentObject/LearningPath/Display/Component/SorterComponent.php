@@ -25,8 +25,6 @@ class SorterComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        parent :: run();
-
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             $direction = Request :: get(self :: PARAM_SORT, self :: SORT_UP);
