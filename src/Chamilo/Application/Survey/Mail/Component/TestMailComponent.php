@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
-class ManagerTestMailComponent extends Manager
+class TestMailComponent extends Manager
 {
 
     private $invitees;
@@ -107,11 +107,12 @@ class ManagerTestMailComponent extends Manager
             else
             {
                 
-                $logs['mail send'] = 'false';
+                $logs['mail send'] = 'true';
             }
             $end = time();
             $logs['end'] = date('D, d M Y H:i:s', $end);
             $logs['time'] = $end - $start . ' secs';
+            var_dump($logs);
         }
         
         $end = time();
@@ -120,31 +121,33 @@ class ManagerTestMailComponent extends Manager
         $meta_logs['mails asked'] = $email_asked_count;
         $meta_logs['failed'] = $failed_count;
         $meta_logs['succeed'] = $email_asked_count - $failed_count;
+        
+        var_dump($meta_logs);
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
-                Translation :: get('BrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
-                        \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))), 
-                Translation :: get('ParticipantBrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
-                Translation :: get('BrowserComponent')));
-    }
+//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     {
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
+//                 Translation :: get('BrowserComponent')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
+//                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
+//                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))), 
+//                 Translation :: get('ParticipantBrowserComponent')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         self :: PARAM_ACTION => self :: ACTION_BROWSE, 
+//                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
+//                 Translation :: get('BrowserComponent')));
+//     }
 }
 ?>

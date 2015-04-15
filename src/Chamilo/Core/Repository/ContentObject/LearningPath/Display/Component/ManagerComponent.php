@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Item\ItemTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -16,16 +14,14 @@ use Chamilo\Libraries\Platform\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ManagerComponent extends Manager implements DelegateComponent, TableSupport
+class ManagerComponent extends TabComponent implements TableSupport
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
-
         if (! $this->get_parent()->is_allowed_to_view_content_object($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -34,12 +30,11 @@ class ManagerComponent extends Manager implements DelegateComponent, TableSuppor
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('ManagerComponent')));
 
         $table = new ItemTable($this);
-        $this->get_tabs_renderer()->set_content($table->as_html());
 
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs_renderer()->render();
+        $html[] = $table->as_html();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

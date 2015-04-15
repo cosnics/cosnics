@@ -32,7 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
-class ParticipantBrowserComponent extends Manager implements TableSupport
+class ParticipantBrowserComponent extends Manager implements  TableSupport
 {
     const TAB_PARTICIPANTS = 1;
     const TAB_USERS = 2;
@@ -332,6 +332,13 @@ class ParticipantBrowserComponent extends Manager implements TableSupport
             array(
                 Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_PARTICIPANT,
                 self :: PARAM_PARTICIPANT_ID => $user_id));
+    }
+    
+    public function get_parameters()
+    {
+        $parameters = parent :: get_parameters();
+        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $parameters;
     }
 }
 ?>

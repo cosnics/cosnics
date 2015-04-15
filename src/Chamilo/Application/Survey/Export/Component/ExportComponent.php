@@ -38,7 +38,7 @@ class ExportComponent extends Manager
             {
                 $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'application\survey');
                 
-                $export_template = DataManager :: get_instance()->retrieve_export_template_by_id($id);
+                $export_template = DataManager :: retrieve_export_template_by_id($id);
                 
                 $args = array();
                 $args[Export :: PROPERTY_EXPORT_REGISTRATION_ID] = $export_template->get_export_registration_id();

@@ -42,7 +42,7 @@ class ExportJobManager
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_UUID, '0');
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_STATUS, ExportJob :: STATUS_NEW);
         // $condition = new AndCondition($conditions);
-        // $export_jobs = DataManager :: get_instance()->retrieve_export_jobs($condition);
+        // $export_jobs = DataManager :: retrieve_export_jobs($condition);
 
         // $UUID = uniqid($_SERVER['SERVER_ADDR'], true);
 
@@ -58,7 +58,7 @@ class ExportJobManager
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_UUID, $UUID);
         // $conditions[] = new EqualityCondition(ExportJob :: PROPERTY_STATUS, ExportJob :: STATUS_NEW);
         // $condition = new AndCondition($conditions);
-        // $export_jobs = DataManager :: get_instance()->retrieve_export_jobs($condition);
+        // $export_jobs = DataManager :: retrieve_export_jobs($condition);
 
         // while ($export_job = $export_jobs->next_result())
         // {

@@ -96,7 +96,7 @@ class MailGroupForm extends FormValidator
                     foreach ($group_ids as $group_id)
                     {
                         
-                        $group = \Chamilo\Core\Group\Storage\DataManager :: get_instance()->retrieve_group($group_id);
+                        $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_group($group_id);
                         $ids = $group->get_users(true, true);
                         $group_user_ids = array_merge($group_user_ids, $ids);
                     }

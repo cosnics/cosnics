@@ -57,23 +57,23 @@ abstract class Manager extends Application
         return $tabs;
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent', array(), '\application\survey')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
-                        \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
-                Translation :: get('ParticipantBrowserComponent')));
-    }
+//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     {
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
+//                 Translation :: get('BrowserComponent', array(), '\application\survey')));
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
+//                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
+//                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
+//                 Translation :: get('ParticipantBrowserComponent')));
+//     }
     
     public function get_parameters()
     {

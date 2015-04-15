@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\ComplexLearningPathItem;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\ComplexLearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
@@ -12,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -24,16 +22,14 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
+class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
-
         if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -236,36 +232,5 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     {
         return $this->get_root_content_object()->get_allowed_types();
     }
-
-    /**
-     *
-     * @see \core\repository\content_object\learning_path\display\Manager::render_header()
-     */
-    public function render_header()
-    {
-        $tabs_renderer = $this->get_tabs_renderer();
-        $html = array();
-
-        $html[] = parent :: render_header();
-        $html[] = $tabs_renderer->header();
-        $html[] = $tabs_renderer :: body_header();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @see \core\repository\content_object\learning_path\display\Manager::render_footer()
-     */
-    public function render_footer()
-    {
-        $tabs_renderer = $this->get_tabs_renderer();
-        $html = array();
-
-        $html[] = $tabs_renderer :: body_footer();
-        $html[] = $tabs_renderer->footer();
-        $html[] = parent :: render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
+  
 }

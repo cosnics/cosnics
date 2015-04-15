@@ -9,10 +9,7 @@ use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -69,21 +66,6 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
         
         return $component->run();    }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE_PARTICIPANTS,
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
-                Translation :: get('ParticipantBrowserComponent')));
-    }
- 
 
     function started()
     {

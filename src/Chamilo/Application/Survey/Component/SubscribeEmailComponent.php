@@ -4,8 +4,6 @@ namespace Chamilo\Application\Survey\Component;
 use Chamilo\Application\Survey\Form\SubscribeMailForm;
 use Chamilo\Application\Survey\Manager;
 use Chamilo\Application\Survey\Rights\Rights;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -64,20 +62,6 @@ class SubscribeEmailComponent extends Manager
         }
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)), 
-                Translation :: get('BrowserComponent')));
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE_PARTICIPANTS, 
-                        self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
-                Translation :: get('ParticipantBrowserComponent')));
-    }
    
 }
 ?>

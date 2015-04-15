@@ -73,15 +73,33 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
     {
         $html = array();
         
+        $html[] = $this->renderHeader();
+        $html[] = $this->content;
+        $html[] = $this->renderFooter();
+        
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderHeader(){
+
+        $html = array();
         $html[] = $this->header();
         $html[] = self :: body_header();
-        $html[] = $this->content;
+
+        return implode(PHP_EOL, $html);
+        
+    }
+    
+    public function renderFooter(){
+        
+        $html = array();
+            
         $html[] = self :: body_footer();
         $html[] = $this->footer();
         
         return implode(PHP_EOL, $html);
     }
-
+    
     public static function body_header()
     {
         $html = array();

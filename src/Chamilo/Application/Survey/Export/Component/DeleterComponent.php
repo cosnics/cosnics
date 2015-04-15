@@ -34,7 +34,7 @@ class DeleterComponent extends Manager
             {
                 foreach ($ids as $id)
                 {
-                    $template = DataManager :: get_instance()->retrieve_export_template_by_id($id);
+                    $template = DataManager :: retrieve_export_template_by_id($id);
                     
                     if (! $template->delete())
                     {

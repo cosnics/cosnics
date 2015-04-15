@@ -34,13 +34,20 @@ abstract class Manager extends Application
         return $tabs;
     }
 
-    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+//     {
+//         $breadcrumbtrail->add(
+//             new Breadcrumb(
+//                 $this->get_url(
+//                     array(
+//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
+//                 Translation :: get('BrowserComponent', array(), '\Chamilo\Application\Survey')));
+//     }
+
+    public function get_parameters()
     {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent', array(), '\Chamilo\Application\Survey')));
+        $parameters = parent :: get_parameters();
+        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $parameters;
     }
 }

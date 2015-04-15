@@ -52,6 +52,7 @@ abstract class Manager extends Application
      */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $parent)
     {
+        
         parent :: __construct($request, $user, $parent);
 
         $action = Request :: get(self :: PARAM_ACTION);

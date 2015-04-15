@@ -53,4 +53,12 @@ abstract class Manager extends Application
         return $this->get_url(
             array(self :: PARAM_ACTION => self :: ACTION_TEST_MAIL, self :: PARAM_PUBLICATION_ID => $publication_id));
     }
+    
+    public function get_parameters()
+    {
+        $parameters = parent :: get_parameters();
+        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $parameters;
+    }
+    
 }

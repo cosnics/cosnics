@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -23,15 +21,14 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UpdaterComponent extends Manager implements DelegateComponent
+class UpdaterComponent extends TabComponent
 {
 
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
-        parent :: run();
 
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
@@ -125,12 +122,10 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 $trail->add(
                     new Breadcrumb($this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), $title));
 
-                $this->get_tabs_renderer()->set_content($form->toHtml());
-
                 $html = array();
 
                 $html[] = $this->render_header();
-                $html[] = $this->get_tabs_renderer()->render();
+                $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);

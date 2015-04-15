@@ -178,7 +178,7 @@ class ExportTemplate extends DataClass
 
     function get_type()
     {
-        $export_registration = DataManager :: get_instance()->retrieve_export_registration_by_id(
+        $export_registration = DataManager :: retrieve_export_registration_by_id(
             $this->get_export_registration_id());
         return $export_registration->get_type();
     }
