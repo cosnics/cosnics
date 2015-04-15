@@ -19,7 +19,6 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
     // Properties
     const PROPERTY_TITLE = 'title';
     const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_TAGS = 'tags';
     const PROPERTY_OWNER_FULLNAME = 'owner_fullname';
     const PROPERTY_CREATION_DATE = 'creation_date';
     const PROPERTY_MODIFICATION_DATE = 'modification_date';
@@ -36,7 +35,6 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
         return array(
             self :: PROPERTY_TITLE,
             self :: PROPERTY_DESCRIPTION,
-            self :: PROPERTY_TAGS,
             self :: PROPERTY_OWNER_FULLNAME,
             self :: PROPERTY_CREATION_DATE,
             self :: PROPERTY_MODIFICATION_DATE,
@@ -55,13 +53,8 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
     {
         switch ($property)
         {
-            case self :: PROPERTY_TAGS :
-                $tags = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_tags_for_content_object(
-                    $contentObject->get_id());
-
-                return implode(', ', $tags);
             case self :: PROPERTY_OWNER_FULLNAME :
-                $author = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+                $author = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                     \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                     $contentObject->get_owner_id());
                 if ($author)
@@ -75,9 +68,18 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
             case self :: PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities :: format_locale_date(null, $contentObject->get_modification_date());
             case self :: PROPERTY_IDENTIFIER :
-                return '\core\repository\content_object:' . $contentObject->get_id();
+                return '\Chamilo\Core\Repository\ContentObject:' . $contentObject->get_id();
+            case self :: PROPERTY_DESCRIPTION :
+                return strip_tags($contentObject->get_description());
         }
 
-        return $contentObject->get_default_property($property);
+        if ($contentObject->is_default_property_name($property))
+        {
+            return $contentObject->get_default_property($property);
+        }
+        else
+        {
+            return $contentObject->get_additional_property($property);
+        }
     }
 }

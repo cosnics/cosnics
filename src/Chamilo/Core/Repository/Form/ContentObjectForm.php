@@ -280,7 +280,11 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function build_metadata_form(SchemaInstance $schemaInstance)
     {
-        $entityFormService = new EntityFormService($schemaInstance, $this->get_content_object(), $this);
+        $entityFormService = new EntityFormService(
+            $schemaInstance,
+            $this->get_content_object(),
+            $this,
+            $this->get_content_object()->get_owner());
         $entityFormService->addElements();
         $entityFormService->setDefaults();
     }

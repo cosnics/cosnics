@@ -137,6 +137,12 @@ class EditorComponent extends Manager implements DelegateComponent
 
                         $this->simple_redirect($parameters);
                     }
+                    else
+                    {
+                        $selectedTabs = $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB];
+                        unset($selectedTabs[self :: TABS_CONTENT_OBJECT]);
+                        $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = $selectedTabs;
+                    }
                 }
 
                 $this->redirect(

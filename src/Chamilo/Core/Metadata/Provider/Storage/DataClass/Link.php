@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Provider\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  *
@@ -13,6 +14,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Link extends DataClass
 {
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Provider\Storage\DataClass\Registration
+     */
+    private $providerRegistration;
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -102,5 +110,17 @@ class Link extends DataClass
     public function set_provider_registration_id($providerRegistrationId)
     {
         $this->set_default_property(self :: PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
+    }
+
+    public function getProviderRegistration()
+    {
+        if (! isset($this->providerRegistration))
+        {
+            $this->providerRegistration = DataManager :: retrieve_by_id(
+                Registration :: class_name(),
+                $this->get_provider_registration_id());
+        }
+
+        return $this->providerRegistration;
     }
 }

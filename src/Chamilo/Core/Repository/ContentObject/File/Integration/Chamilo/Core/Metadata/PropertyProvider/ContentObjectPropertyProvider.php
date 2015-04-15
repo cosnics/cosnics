@@ -53,13 +53,6 @@ class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration
                 return $contentObject->get_extension();
         }
 
-        if (! $contentObject->is_default_property_name($property))
-        {
-            return $contentObject->get_additional_property($property);
-        }
-        else
-        {
-            return parent :: renderProperty($property, $contentObject);
-        }
+        return parent :: renderProperty($property, $contentObject);
     }
 }
