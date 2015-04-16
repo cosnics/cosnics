@@ -39,7 +39,7 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 }
                 else
                 {
-                    $image = 'Action/Value/UserDefined';
+                    $image = 'Action/Value/User';
                     $translationVariable = 'UserDefined';
                 }
 
