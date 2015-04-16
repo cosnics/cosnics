@@ -26,7 +26,7 @@ trait EntityTranslationTrait
             $entityTranslationService = new EntityTranslationService($this);
             $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode();
         }
-
+        
         return $this->translations;
     }
 }

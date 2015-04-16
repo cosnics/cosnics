@@ -32,10 +32,10 @@ class RelationInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -49,7 +49,7 @@ class RelationInstance extends DataClass
         $extended_property_names[] = self :: PROPERTY_RELATION_ID;
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_CREATION_DATE;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -58,7 +58,7 @@ class RelationInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return string

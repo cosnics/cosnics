@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table for the schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -24,18 +24,18 @@ class SchemaTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      * Returns the implemented form actions
-     *
+     * 
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-
+        
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),
+                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE), 
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
-
+        
         return $actions;
     }
 }

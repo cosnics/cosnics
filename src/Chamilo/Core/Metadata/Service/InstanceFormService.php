@@ -78,40 +78,40 @@ class InstanceFormService
     public function addElements(EntityService $entityService, RelationService $relationService)
     {
         $availableSchemas = $entityService->getAvailableSchemasForEntity($relationService, $this->getEntity());
-
+        
         while ($availableSchema = $availableSchemas->next_result())
         {
             $this->formValidator->addElement(
-                'checkbox',
-                InstanceService :: PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']',
-                $availableSchema->get_name(),
-                null,
-                null,
+                'checkbox', 
+                InstanceService :: PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']', 
+                $availableSchema->get_name(), 
+                null, 
+                null, 
                 $availableSchema->get_id());
-
+            
             // $this->formValidator->addGroup($schemaGroup, null, $availableSchema->get_name(), null, false);
         }
-
+        
         // $this->addDependencies();
-
+        
         // $elementService = new ElementService();
         // $elements = $elementService->getElementsForSchemaInstance($this->schemaInstance);
-
+        
         // while ($element = $elements->next_result())
         // {
         // $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $this->schemaInstance->get_schema_id() .
         // '][' . $this->schemaInstance->get_id() . '][' . $element->get_id() . ']';
-
+        
         // if ($element->usesVocabulary())
         // {
         // $uniqueIdentifier = UUID :: v4();
-
+        
         // $class = 'metadata-input';
         // if ($element->isVocabularyUserDefined())
         // {
         // $class .= ' metadata-input-new';
         // }
-
+        
         // $tagElementGroup = array();
         // $tagElementGroup[] = $this->formValidator->createElement(
         // 'text',
@@ -124,7 +124,7 @@ class InstanceFormService
         // 'data-schema-instance-id' => $this->schemaInstance->get_id(),
         // 'data-element-id' => $element->get_id(),
         // 'data-element-value-limit' => $element->get_value_limit()));
-
+        
         // if ($element->isVocabularyUserDefined())
         // {
         // $tagElementGroup[] = $this->formValidator->createElement(
@@ -133,7 +133,7 @@ class InstanceFormService
         // null,
         // array('id' => 'new-' . $uniqueIdentifier));
         // }
-
+        
         // $urlRenderer = new Redirect(
         // array(
         // Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: context(),
@@ -143,7 +143,7 @@ class InstanceFormService
         // $vocabularyUrl = $urlRenderer->getUrl();
         // $onclick = 'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl .
         // '\'); return false;';
-
+        
         // $vocabularyAction = new ToolbarItem(
         // Translation :: get('ShowVocabulary'),
         // Theme :: getInstance()->getImagePath(
@@ -154,13 +154,13 @@ class InstanceFormService
         // false,
         // $onclick,
         // '_blank');
-
+        
         // $tagElementGroup[] = $this->formValidator->createElement(
         // 'static',
         // null,
         // null,
         // $vocabularyAction->as_html());
-
+        
         // $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
         // }
         // else
@@ -177,7 +177,7 @@ class InstanceFormService
     public function setDefaults()
     {
         $defaults = array();
-
+        
         $this->formValidator->setDefaults($defaults);
     }
 }

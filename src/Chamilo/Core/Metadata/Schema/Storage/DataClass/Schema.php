@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class describes a metadata schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Schema extends DataClass
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
-
+    
     /**
      * **************************************************************************************************************
      * Properties *
@@ -33,10 +33,10 @@ class Schema extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -48,7 +48,7 @@ class Schema extends DataClass
         $extended_property_names[] = self :: PROPERTY_DESCRIPTION;
         $extended_property_names[] = self :: PROPERTY_URL;
         $extended_property_names[] = self :: PROPERTY_FIXED;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -57,10 +57,10 @@ class Schema extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the namespace
-     *
+     * 
      * @return string
      */
     public function get_namespace()
@@ -70,7 +70,7 @@ class Schema extends DataClass
 
     /**
      * Sets the namespace
-     *
+     * 
      * @param string $namespace
      */
     public function set_namespace($namespace)
@@ -80,7 +80,7 @@ class Schema extends DataClass
 
     /**
      * Returns the name
-     *
+     * 
      * @return string
      */
     public function get_name()
@@ -90,7 +90,7 @@ class Schema extends DataClass
 
     /**
      * Sets the name
-     *
+     * 
      * @param string $name
      */
     public function set_name($name)
@@ -100,7 +100,7 @@ class Schema extends DataClass
 
     /**
      * Returns the description
-     *
+     * 
      * @return string
      */
     public function get_description()
@@ -110,7 +110,7 @@ class Schema extends DataClass
 
     /**
      * Sets the description
-     *
+     * 
      * @param string $description
      */
     public function set_description($description)
@@ -120,7 +120,7 @@ class Schema extends DataClass
 
     /**
      * Returns the url
-     *
+     * 
      * @return string
      */
     public function get_url()
@@ -130,7 +130,7 @@ class Schema extends DataClass
 
     /**
      * Sets the url
-     *
+     * 
      * @param string $url
      */
     public function set_url($url)
@@ -140,7 +140,7 @@ class Schema extends DataClass
 
     /**
      * Returns whether or not this element is fixed
-     *
+     * 
      * @return string
      */
     public function is_fixed()
@@ -150,7 +150,7 @@ class Schema extends DataClass
 
     /**
      * Sets whether or not the element is fixed
-     *
+     * 
      * @param string $fixed
      */
     public function set_fixed($fixed)

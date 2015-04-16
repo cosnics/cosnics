@@ -17,7 +17,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'vocabulary_action';
     const PARAM_VOCABULARY_ID = 'vocabulary_id';
     const PARAM_USER_ID = 'user_id';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_USER = 'User';
@@ -25,7 +25,7 @@ abstract class Manager extends Application
     const ACTION_UPDATE = 'Updater';
     const ACTION_CREATE = 'Creator';
     const ACTION_DEFAULT = 'Default';
-
+    
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 

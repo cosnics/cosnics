@@ -91,7 +91,7 @@ class PropertyProviderService
         $providerLink = $this->getProviderLink($element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
-
+        
         return $provider->renderProperty($providerRegistration->get_property_name(), $this->getEntity());
     }
 
@@ -103,16 +103,16 @@ class PropertyProviderService
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->getEntity()->class_name()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID),
+            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID), 
             new StaticConditionVariable($element->get_id()));
-
+        
         $condition = new AndCondition($conditions);
-
+        
         $providerLink = DataManager :: retrieve(Link :: class_name(), new DataClassRetrieveParameters($condition));
-
+        
         if ($providerLink instanceof Link)
         {
             return $providerLink;

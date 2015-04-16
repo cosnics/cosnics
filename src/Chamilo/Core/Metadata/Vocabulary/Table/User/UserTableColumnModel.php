@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 
 /**
  * Table column model for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport

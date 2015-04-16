@@ -31,10 +31,10 @@ class SchemaInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -46,7 +46,7 @@ class SchemaInstance extends DataClass
         $extended_property_names[] = self :: PROPERTY_SCHEMA_ID;
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_CREATION_DATE;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -55,7 +55,7 @@ class SchemaInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return string
@@ -116,7 +116,7 @@ class SchemaInstance extends DataClass
         {
             $this->schema = DataManager :: retrieve_by_id(Schema :: class_name(), $this->get_schema_id());
         }
-
+        
         return $this->schema;
     }
 

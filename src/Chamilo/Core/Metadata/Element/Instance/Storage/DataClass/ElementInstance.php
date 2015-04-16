@@ -31,10 +31,10 @@ class ElementInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -46,7 +46,7 @@ class ElementInstance extends DataClass
         $extendedPropertyNames[] = self :: PROPERTY_VOCABULARY_ID;
         $extendedPropertyNames[] = self :: PROPERTY_USER_ID;
         $extendedPropertyNames[] = self :: PROPERTY_CREATION_DATE;
-
+        
         return parent :: get_default_property_names($extendedPropertyNames);
     }
 
@@ -55,7 +55,7 @@ class ElementInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return integer

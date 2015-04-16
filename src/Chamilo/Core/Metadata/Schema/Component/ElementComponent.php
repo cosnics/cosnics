@@ -23,9 +23,9 @@ class ElementComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
-            \Chamilo\Core\Metadata\Element\Manager :: context(),
-            $this->get_user(),
+            $this->getRequest(), 
+            \Chamilo\Core\Metadata\Element\Manager :: context(), 
+            $this->get_user(), 
             $this);
         return $factory->run();
     }

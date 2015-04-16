@@ -27,10 +27,10 @@ class EntityTranslation extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -41,7 +41,7 @@ class EntityTranslation extends DataClass
         $extended_property_names[] = self :: PROPERTY_ENTITY_ID;
         $extended_property_names[] = self :: PROPERTY_ISOCODE;
         $extended_property_names[] = self :: PROPERTY_VALUE;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -50,7 +50,7 @@ class EntityTranslation extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return integer
@@ -89,7 +89,7 @@ class EntityTranslation extends DataClass
 
     /**
      * Get the ISO 639-1 code of the language
-     *
+     * 
      * @return string
      */
     public function get_isocode()
@@ -99,7 +99,7 @@ class EntityTranslation extends DataClass
 
     /**
      * Set the ISO 639-1 code of the language
-     *
+     * 
      * @param string $isocode
      */
     public function set_isocode($isocode)

@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * This class describes a metadata vocabulary
- *
+ * 
  * @package Chamilo\Core\Metadata\Vocabulary\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -39,10 +39,10 @@ class Vocabulary extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -53,7 +53,7 @@ class Vocabulary extends DataClass
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_DEFAULT_VALUE;
         $extended_property_names[] = self :: PROPERTY_VALUE;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -62,7 +62,7 @@ class Vocabulary extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return integer
@@ -110,7 +110,7 @@ class Vocabulary extends DataClass
         {
             return null;
         }
-
+        
         return DataManager :: retrieve_by_id(User :: class_name(), $this->get_user_id());
     }
 

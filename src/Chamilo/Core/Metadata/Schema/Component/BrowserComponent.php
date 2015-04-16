@@ -26,7 +26,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      * The action bar of this browser
-     *
+     * 
      * @var ActionBarRenderer
      */
     private $action_bar;
@@ -40,13 +40,13 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -56,38 +56,38 @@ class BrowserComponent extends Manager implements TableSupport
     public function as_html()
     {
         $html = array();
-
+        
         $this->action_bar = $this->get_action_bar();
         $html[] = $this->action_bar->as_html();
-
+        
         $table = new SchemaTable($this);
         $html[] = $table->as_html();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Builds the action bar
-     *
+     * 
      * @return ActionBarRenderer
      */
     protected function get_action_bar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
         $action_bar->set_search_url($this->get_url());
-
+        
         $action_bar->add_common_action(
             new ToolbarItem(
-                Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Create'), 
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
-
+        
         return $action_bar;
     }
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition
