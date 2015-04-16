@@ -16,6 +16,8 @@ use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
+use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
+use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 
 /**
  *
@@ -145,81 +147,137 @@ class EntityFormService
         $this->addDependencies();
 
         $elementService = new ElementService();
-        $elements = $elementService->getElementsForSchemaInstance($this->schemaInstance);
+        $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
+
+        $propertyProviderService = new PropertyProviderService($this->getEntity(), $this->getSchemaInstance());
 
         while ($element = $elements->next_result())
         {
-            $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $this->schemaInstance->get_schema_id() .
-                 '][' . $this->schemaInstance->get_id() . '][' . $element->get_id() . ']';
-
-            if ($element->usesVocabulary())
+            try
             {
-                $uniqueIdentifier = UUID :: v4();
+                $providerLink = $propertyProviderService->getProviderLink($element);
+                $vocabularyService = new VocabularyService();
 
-                $class = 'metadata-input';
-                if ($element->isVocabularyUserDefined())
+                if ($element->usesVocabulary())
                 {
-                    $class .= ' metadata-input-new';
-                }
+                    $providedVocabularies = $vocabularyService->getProvidedVocabulariesForUserEntitySchemaInstanceElement(
+                        $this->getUser(),
+                        $this->getEntity(),
+                        $this->getSchemaInstance(),
+                        $element);
 
-                $tagElementGroup = array();
-                $tagElementGroup[] = $this->formValidator->createElement(
-                    'text',
-                    $elementName . '[' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']',
-                    null,
-                    array(
-                        'id' => $uniqueIdentifier,
-                        'class' => $class,
-                        'data-schema-id' => $this->schemaInstance->get_schema_id(),
-                        'data-schema-instance-id' => $this->schemaInstance->get_id(),
-                        'data-element-id' => $element->get_id(),
-                        'data-element-value-limit' => $element->get_value_limit()));
+                    $html = array();
 
-                if ($element->isVocabularyUserDefined())
-                {
-                    $tagElementGroup[] = $this->formValidator->createElement(
-                        'hidden',
-                        $elementName . '[' . EntityService :: PROPERTY_METADATA_SCHEMA_NEW . ']',
+                    foreach ($providedVocabularies as $providedVocabulary)
+                    {
+                        $html[] = '<span class="locked-tag forbidden-action">';
+                        $html[] = $providedVocabulary->get_value();
+                        $html[] = '</span>';
+                    }
+
+                    $this->formValidator->addElement(
+                        'static',
                         null,
-                        array('id' => 'new-' . $uniqueIdentifier));
+                        $element->get_display_name(),
+                        implode(PHP_EOL, $html));
                 }
+                else
+                {
+                    $providedValue = $vocabularyService->getProvidedValueForUserEntitySchemaInstanceElement(
+                        $this->getUser(),
+                        $this->getEntity(),
+                        $this->getSchemaInstance(),
+                        $element);
 
-                $urlRenderer = new Redirect(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: context(),
-                        Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: ACTION_SELECT,
-                        \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: PARAM_ELEMENT_IDENTIFIER => $uniqueIdentifier,
-                        \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $element->get_id()));
-                $vocabularyUrl = $urlRenderer->getUrl();
-                $onclick = 'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl .
-                     '\'); return false;';
+                    $html = array();
 
-                $vocabularyAction = new ToolbarItem(
-                    Translation :: get('ShowVocabulary'),
-                    Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Metadata\Element',
-                        'ValueType/' . $element->get_value_type()),
-                    $vocabularyUrl,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
-                    $onclick,
-                    '_blank');
+                    $html[] = '<div class="provided-element-value forbidden-action">';
+                    $html[] = $providedValue;
+                    $html[] = '</div>';
 
-                $tagElementGroup[] = $this->formValidator->createElement(
-                    'static',
-                    null,
-                    null,
-                    $vocabularyAction->as_html());
-
-                $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
+                    $this->formValidator->addElement(
+                        'static',
+                        null,
+                        $element->get_display_name(),
+                        implode(PHP_EOL, $html));
+                }
             }
-            else
+            catch (NoProviderAvailableException $exception)
             {
-                $this->formValidator->addElement(
-                    'textarea',
-                    $elementName,
-                    $element->get_display_name(),
-                    array('cols' => 60, 'rows' => 6, 'maxlength' => 1000));
+                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                     $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
+                     $element->get_id() . ']';
+
+                if ($element->usesVocabulary())
+                {
+
+                    $uniqueIdentifier = UUID :: v4();
+
+                    $class = 'metadata-input';
+                    if ($element->isVocabularyUserDefined())
+                    {
+                        $class .= ' metadata-input-new';
+                    }
+
+                    $tagElementGroup = array();
+                    $tagElementGroup[] = $this->formValidator->createElement(
+                        'text',
+                        $elementName . '[' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']',
+                        null,
+                        array(
+                            'id' => $uniqueIdentifier,
+                            'class' => $class,
+                            'data-schema-id' => $this->getSchemaInstance()->get_schema_id(),
+                            'data-schema-instance-id' => $this->getSchemaInstance()->get_id(),
+                            'data-element-id' => $element->get_id(),
+                            'data-element-value-limit' => $element->get_value_limit()));
+
+                    if ($element->isVocabularyUserDefined())
+                    {
+                        $tagElementGroup[] = $this->formValidator->createElement(
+                            'hidden',
+                            $elementName . '[' . EntityService :: PROPERTY_METADATA_SCHEMA_NEW . ']',
+                            null,
+                            array('id' => 'new-' . $uniqueIdentifier));
+                    }
+
+                    $urlRenderer = new Redirect(
+                        array(
+                            Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: context(),
+                            Application :: PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: ACTION_SELECT,
+                            \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: PARAM_ELEMENT_IDENTIFIER => $uniqueIdentifier,
+                            \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $element->get_id()));
+                    $vocabularyUrl = $urlRenderer->getUrl();
+                    $onclick = 'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl .
+                         '\'); return false;';
+
+                    $vocabularyAction = new ToolbarItem(
+                        Translation :: get('ShowVocabulary'),
+                        Theme :: getInstance()->getImagePath(
+                            'Chamilo\Core\Metadata\Element',
+                            'ValueType/' . $element->get_value_type()),
+                        $vocabularyUrl,
+                        ToolbarItem :: DISPLAY_ICON,
+                        false,
+                        $onclick,
+                        '_blank');
+
+                    $tagElementGroup[] = $this->formValidator->createElement(
+                        'static',
+                        null,
+                        null,
+                        $vocabularyAction->as_html());
+
+                    $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
+                }
+                else
+                {
+                    $this->formValidator->addElement(
+                        'textarea',
+                        $elementName,
+                        $element->get_display_name(),
+                        array('cols' => 60, 'rows' => 6, 'maxlength' => 1000));
+                }
             }
         }
     }
@@ -252,69 +310,73 @@ class EntityFormService
         $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
 
         $vocabularyService = new VocabularyService();
+        $propertyProviderService = new PropertyProviderService($this->getEntity(), $this->getSchemaInstance());
 
         while ($element = $elements->next_result())
         {
-
-            if ($element->usesVocabulary())
+            try
             {
-                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
-                     $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
-                     $element->get_id() . '][' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']';
-
-                $options = array();
-
-                $elementInstanceVocabularies = $elementService->getElementInstanceVocabulariesForSchemaInstanceAndElement(
-                    $this->getSchemaInstance(),
-                    $element)->as_array();
-
-                if (count($elementInstanceVocabularies) == 0)
-                {
-                    $elementInstanceVocabularies = $vocabularyService->getFallbackVocabulariesForUserEntitySchemaInstanceElement(
-                        $this->getUser(),
-                        $this->getEntity(),
-                        $this->getSchemaInstance(),
-                        $element);
-                }
-
-                if (count($elementInstanceVocabularies) > 0)
-                {
-                    foreach ($elementInstanceVocabularies as $elementInstanceVocabulary)
-                    {
-                        $item = new \stdClass();
-                        $item->id = $elementInstanceVocabulary->get_id();
-                        $item->value = $elementInstanceVocabulary->get_value();
-
-                        $options[] = $item;
-                    }
-                }
-
-                $elementValue = json_encode($options);
+                $providerLink = $propertyProviderService->getProviderLink($element);
+                continue;
             }
-            else
+            catch (NoProviderAvailableException $exception)
             {
-                $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
-                     $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
-                     $element->get_id() . ']';
-                $elementInstanceVocabulary = $elementService->getElementInstanceVocabularyForSchemaInstanceAndElement(
-                    $this->getSchemaInstance(),
-                    $element);
-
-                if ($elementInstanceVocabulary instanceof Vocabulary && $elementInstanceVocabulary->get_value())
+                if ($element->usesVocabulary())
                 {
-                    $elementValue = $elementInstanceVocabulary->get_value();
+                    $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                         $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
+                         $element->get_id() . '][' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']';
+
+                    $options = array();
+
+                    $elementInstanceVocabularies = $elementService->getElementInstanceVocabulariesForSchemaInstanceAndElement(
+                        $this->getSchemaInstance(),
+                        $element)->as_array();
+
+                    if (count($elementInstanceVocabularies) == 0)
+                    {
+                        $elementInstanceVocabularies = $vocabularyService->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
+                            $this->getUser(),
+                            $this->getEntity(),
+                            $this->getSchemaInstance(),
+                            $element);
+                    }
+
+                    if (count($elementInstanceVocabularies) > 0)
+                    {
+                        foreach ($elementInstanceVocabularies as $elementInstanceVocabulary)
+                        {
+                            $item = new \stdClass();
+                            $item->id = $elementInstanceVocabulary->get_id();
+                            $item->value = $elementInstanceVocabulary->get_value();
+
+                            $options[] = $item;
+                        }
+                    }
+
+                    $elementValue = json_encode($options);
                 }
                 else
                 {
-                    $elementValue = $vocabularyService->getFallbackValueForUserEntitySchemaInstanceElement(
-                        $this->getUser(),
-                        $this->getEntity(),
+                    $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                         $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
+                         $element->get_id() . ']';
+                    $elementInstanceVocabulary = $elementService->getElementInstanceVocabularyForSchemaInstanceAndElement(
                         $this->getSchemaInstance(),
                         $element);
-                }
-            }
 
-            $defaults[$elementName] = $elementValue;
+                    if ($elementInstanceVocabulary instanceof Vocabulary && $elementInstanceVocabulary->get_value())
+                    {
+                        $elementValue = $elementInstanceVocabulary->get_value();
+                    }
+                    else
+                    {
+                        $elementValue = '';
+                    }
+                }
+
+                $defaults[$elementName] = $elementValue;
+            }
         }
 
         $this->formValidator->setDefaults($defaults);

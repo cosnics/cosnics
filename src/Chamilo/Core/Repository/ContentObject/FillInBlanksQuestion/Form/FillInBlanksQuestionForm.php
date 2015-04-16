@@ -170,7 +170,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         if (! $this->isSubmitted())
         {
             $object = $this->get_content_object();
-            if ($object->get_number_of_questions() != 0)
+            if ($object->get_answer_text())
             {
                 // $options = $object->get_answers();
                 $defaults[FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT] = $object->get_answer_text();

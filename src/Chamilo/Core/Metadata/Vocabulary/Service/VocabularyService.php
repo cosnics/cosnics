@@ -111,7 +111,7 @@ class VocabularyService
         try
         {
             $propertyProviderService = new PropertyProviderService($entity, $schemaInstance);
-            $providedPropertyValues = (array) $propertyProviderService->getPropertyValue($element);
+            $providedPropertyValues = (array) $propertyProviderService->getPropertyValues($element);
 
             if (count($providedPropertyValues) > 0)
             {
@@ -164,7 +164,7 @@ class VocabularyService
         try
         {
             $propertyProviderService = new PropertyProviderService($entity, $schemaInstance);
-            $providedPropertyValues = (array) $propertyProviderService->getPropertyValue($element);
+            $providedPropertyValues = (array) $propertyProviderService->getPropertyValues($element);
 
             return implode(PHP_EOL, $providedPropertyValues);
         }
