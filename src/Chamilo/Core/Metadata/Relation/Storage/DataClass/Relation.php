@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class describes a metadata schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Relation\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Relation extends DataClass
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
-
+    
     /**
      * **************************************************************************************************************
      * Properties *
@@ -30,10 +30,10 @@ class Relation extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -42,7 +42,7 @@ class Relation extends DataClass
     {
         $extended_property_names[] = self :: PROPERTY_NAME;
         $extended_property_names[] = self :: PROPERTY_DISPLAY_NAME;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -51,10 +51,10 @@ class Relation extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the name
-     *
+     * 
      * @return string
      */
     public function get_name()
@@ -64,7 +64,7 @@ class Relation extends DataClass
 
     /**
      * Sets the name
-     *
+     * 
      * @param string $name
      */
     public function set_name($name)
@@ -74,7 +74,7 @@ class Relation extends DataClass
 
     /**
      * Returns the display_name
-     *
+     * 
      * @return string
      */
     public function get_display_name()
@@ -84,7 +84,7 @@ class Relation extends DataClass
 
     /**
      * Sets the display_name
-     *
+     * 
      * @param string $display_name
      */
     public function set_display_name($display_name)

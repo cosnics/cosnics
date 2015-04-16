@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider
 
 /**
  * Table data provider for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableDataProvider extends RecordTableDataProvider
@@ -14,7 +14,7 @@ class UserTableDataProvider extends RecordTableDataProvider
 
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -30,7 +30,7 @@ class UserTableDataProvider extends RecordTableDataProvider
 
     /**
      * Counts the data
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      *
      * @return int

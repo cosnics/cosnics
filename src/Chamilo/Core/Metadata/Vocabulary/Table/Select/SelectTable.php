@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SelectTable extends DataClassTable implements TableFormActionsSupport
@@ -18,22 +18,22 @@ class SelectTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      * Returns the implemented form actions
-     *
+     * 
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-
+        
         if ($this->get_component()->getSelectedElement()->get_value_limit() != 1)
         {
             $actions->add_form_action(
                 new TableFormAction(
                     array(
-                        \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId()),
+                        \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->get_component()->getSelectedElementId()), 
                     Translation :: get('UseSelected')));
         }
-
+        
         return $actions;
     }
 }

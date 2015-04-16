@@ -26,52 +26,52 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         if (is_null($this->getSelectedElementId()))
         {
             throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
-
+        
         if (is_null($this->getSelectedUserId()))
         {
             throw new NoObjectSelectedException(Translation :: get('User', null, 'Chamilo\Core\Metadata\Vocabulary'));
         }
-
+        
         $vocabulary = new Vocabulary();
         $vocabulary->set_element_id($this->getSelectedElementId());
         $vocabulary->set_user_id($this->getSelectedUserId());
-
+        
         $form = new VocabularyForm(
-            $vocabulary,
-            new EntityTranslationFormService($vocabulary),
+            $vocabulary, 
+            new EntityTranslationFormService($vocabulary), 
             $this->get_url(
                 array(
-                    \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(),
+                    \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(), 
                     self :: PARAM_USER_ID => $this->getSelectedUserId())));
-
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
+                
                 $vocabulary->set_value($values[Vocabulary :: PROPERTY_VALUE]);
                 $vocabulary->set_default_value(isset($values[Vocabulary :: PROPERTY_DEFAULT_VALUE]) ? 1 : 0);
-
+                
                 $success = $vocabulary->create();
-
+                
                 if ($success)
                 {
                     $entityTranslationService = new EntityTranslationService($vocabulary);
                     $success = $entityTranslationService->createEntityTranslations(
                         $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
                 }
-
+                
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
+                
                 $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Vocabulary')),
+                    $translation, 
+                    array('OBJECT' => Translation :: get('Vocabulary')), 
                     Utilities :: COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
@@ -79,23 +79,23 @@ class CreatorComponent extends Manager
                 $success = false;
                 $message = $ex->getMessage();
             }
-
+            
             $this->redirect(
-                $message,
-                ! $success,
+                $message, 
+                ! $success, 
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                    \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(),
+                    self :: PARAM_ACTION => self :: ACTION_BROWSE, 
+                    \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(), 
                     self :: PARAM_USER_ID => $this->getSelectedUserId()));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class describes a metadata vocabulary
- *
+ * 
  * @package Chamilo\Core\Metadata\Vocabulary\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -29,10 +29,10 @@ class Registration extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Get the default properties
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -42,7 +42,7 @@ class Registration extends DataClass
         $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
         $extended_property_names[] = self :: PROPERTY_PROVIDER_CLASS;
         $extended_property_names[] = self :: PROPERTY_PROPERTY_NAME;
-
+        
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -51,7 +51,7 @@ class Registration extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      *
      * @return string

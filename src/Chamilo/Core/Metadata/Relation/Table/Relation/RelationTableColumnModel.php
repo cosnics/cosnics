@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Table column model for the schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

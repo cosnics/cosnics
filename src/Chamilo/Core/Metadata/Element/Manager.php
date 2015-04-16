@@ -16,7 +16,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'element_action';
     const PARAM_ELEMENT_ID = 'element_id';
     const PARAM_MOVE = 'move';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
@@ -24,7 +24,7 @@ abstract class Manager extends Application
     const ACTION_CREATE = 'Creator';
     const ACTION_MOVE = 'Mover';
     const ACTION_VOCABULARY = 'Vocabulary';
-
+    
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 

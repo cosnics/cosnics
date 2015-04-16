@@ -62,25 +62,25 @@ class EntityTranslationService
     {
         $conditions = array();
         $translationsIndexedByIsocode = array();
-
+        
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(EntityTranslation :: class_name(), EntityTranslation :: PROPERTY_ENTITY_TYPE),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(EntityTranslation :: class_name(), EntityTranslation :: PROPERTY_ENTITY_TYPE), 
+            ComparisonCondition :: EQUAL, 
             new StaticConditionVariable($this->getEntity()->class_name()));
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(EntityTranslation :: class_name(), EntityTranslation :: PROPERTY_ENTITY_ID),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(EntityTranslation :: class_name(), EntityTranslation :: PROPERTY_ENTITY_ID), 
+            ComparisonCondition :: EQUAL, 
             new StaticConditionVariable($this->getEntity()->get_id()));
-
+        
         $translations = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            EntityTranslation :: class_name(),
+            EntityTranslation :: class_name(), 
             new DataClassRetrievesParameters(new AndCondition($conditions)));
-
+        
         while ($translation = $translations->next_result())
         {
             $translationsIndexedByIsocode[$translation->get_isocode()] = $translation;
         }
-
+        
         return $translationsIndexedByIsocode;
     }
 
@@ -98,13 +98,13 @@ class EntityTranslationService
             $translation->set_entity_id($this->getEntity()->get_id());
             $translation->set_isocode($isocode);
             $translation->set_value($value);
-
+            
             if (! $translation->create())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -116,14 +116,14 @@ class EntityTranslationService
     public function updateEntityTranslations($entityTranslations)
     {
         $translations = $this->getEntity()->getTranslations();
-
+        
         foreach ($entityTranslations as $isocode => $value)
         {
             if ($translations[$isocode] instanceof EntityTranslation)
             {
                 $translation = $translations[$isocode];
                 $translation->set_value($value);
-
+                
                 if (! $translation->update())
                 {
                     return false;
@@ -136,14 +136,14 @@ class EntityTranslationService
                 $translation->set_entity_id($this->getEntity()->get_id());
                 $translation->set_isocode($isocode);
                 $translation->set_value($value);
-
+                
                 if (! $translation->create())
                 {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 }

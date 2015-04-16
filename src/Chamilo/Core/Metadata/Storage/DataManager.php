@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Storage;
 
 /**
  * This class represents the data manager for this package
- *
+ * 
  * @package Chamilo\Core\Metadata\Storage
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

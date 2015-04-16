@@ -25,13 +25,13 @@ abstract class Manager extends Application
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
     {
         parent :: __construct($request, $user, $application);
-
+        
         Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
