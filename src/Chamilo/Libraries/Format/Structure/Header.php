@@ -267,6 +267,10 @@ class Header
             $html[] = '<!--   Begin Of script Output   -->';
             $html[] = '<div id="helpbox" class="helpdialog"></div>';
         }
+        else {
+            $html[] = '<div id="main" class="main-headerless"> <!-- start of #main-headerless wrapper -->';
+        }
+
 
         return implode(PHP_EOL, $html);
     }

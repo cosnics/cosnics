@@ -118,7 +118,8 @@ class ContentObject extends CompositeDataClass
     private $includes;
 
     /**
-     * The state that this object had when it was retrieved. Used to determine if the state of its children should be
+     * The state that this object had when it was retrieved.
+     * Used to determine if the state of its children should be
      * updated upon updating the object.
      */
     private $oldState;
@@ -147,7 +148,7 @@ class ContentObject extends CompositeDataClass
      * @param $id int The numeric ID of the object. May be omitted if creating a new object.
      * @param $defaultProperties array The default properties of the object. Associative array.
      * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
-     *            they are unknown at construction of the object; in this case, they will be retrieved when needed.
+     *        they are unknown at construction of the object; in this case, they will be retrieved when needed.
      */
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -831,9 +832,9 @@ class ContentObject extends CompositeDataClass
         // TRANSACTION
         $success = DataManager :: transactional(
             function ($c) use($create_in_batch, $content_object) { // checks wether to create a new content object or
-              // version:
-              // if the ID is set, we create a new version,
-              // otherwise a new CO.
+                                                                   // version:
+                                                                   // if the ID is set, we create a new version,
+                                                                   // otherwise a new CO.
                 $orig_id = $content_object->get_id();
                 $version = isset($orig_id);
 
@@ -997,7 +998,8 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * Instructs the data manager to update the object, making any modifications permanent. Also sets the object's
+     * Instructs the data manager to update the object, making any modifications permanent.
+     * Also sets the object's
      * modification date to the current time if the update is a true update. A true update is an update that implicates
      * a change to a property that affects the object itself; changing the object's category, for instance, should not
      * change the last modification date.
@@ -1239,7 +1241,8 @@ class ContentObject extends CompositeDataClass
             }
         }
 
-        if (DataManager :: delete_content_object_publications($this) && $this->delete_assisting_content_objects())
+        if (\Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager :: delete_content_object_publications(
+            $this) && $this->delete_assisting_content_objects())
         {
             return true;
         }
@@ -1339,7 +1342,8 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * Determines whether this object may be moved to the object with the given ID. By default, a object may be moved to
+     * Determines whether this object may be moved to the object with the given ID.
+     * By default, a object may be moved to
      * another object if the other object is not the object itself, the object is not an ancestor of the other object,
      * and the other object is a category.
      *
@@ -1363,7 +1367,8 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * Determines whether this object supports attachments, i.e. whether other objects may be attached to it.
+     * Determines whether this object supports attachments, i.e.
+     * whether other objects may be attached to it.
      *
      * @return boolean True if attachments are supported, false otherwise.
      * @deprecated Use instanceof AttachmentSupport directly from now on
@@ -1476,7 +1481,6 @@ class ContentObject extends CompositeDataClass
     {
         return array();
     }
-
 
     /**
      * Get all properties of this type of object that should be taken into account to calculate the used disk space.
@@ -1736,7 +1740,8 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * Creates a security code. The following values are used because they only change in special cases (copy, import).
+     * Creates a security code.
+     * The following values are used because they only change in special cases (copy, import).
      * This is important because it is hardcoded into some fields with included content e.g. description was used: If a
      * change was made to the description of an included object, the security code in the including object wouldn't
      * match anymore unless replaced.
@@ -1752,7 +1757,7 @@ class ContentObject extends CompositeDataClass
      * Function that updates the embedded links in fields like description
      *
      * @param $mapping array Each key(old_id) is mapped to its new object (an object is needed to calculate the security
-     *            code)
+     *        code)
      */
     public function update_include_links(array $mapping)
     {

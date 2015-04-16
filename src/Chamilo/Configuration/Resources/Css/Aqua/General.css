@@ -264,6 +264,12 @@ div#emulator {
 	background-color: #FFFFFF;
 }
 
+.main-headerless {
+	margin: 0px;
+	width: 100%;
+	padding: 10px;
+}
+
 /* "menu" classes for menu/navigation section in main index.php  */
 .menu {
 	float: right;

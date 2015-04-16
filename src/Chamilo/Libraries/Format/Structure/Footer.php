@@ -218,6 +218,12 @@ class Footer
 
             $output[] = '   </div> <!-- end of #footer -->';
         }
+        else
+        {
+            $output[] = '<div class="clear">&nbsp;</div>';
+            $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
+            $output[] = '</div> <!-- end of #main-headerless" -->';
+        }
 
         $output[] = '  </div> <!-- end of #outerframe opened in header -->';
         $output[] = ' </body>';
