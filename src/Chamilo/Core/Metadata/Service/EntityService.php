@@ -20,6 +20,8 @@ use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
+use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 
 /**
  *
@@ -245,25 +247,35 @@ class EntityService
     private function processEntityElement(User $currentUser, ElementService $elementService,
         SchemaInstance $schemaInstance, Element $element, DataClass $entity, $submittedElementValues)
     {
-        if ($element->usesVocabulary())
+        $propertyProviderService = new PropertyProviderService($entity, $schemaInstance);
+
+        try
         {
-            return $this->processEntityVocabularyElement(
-                $currentUser,
-                $elementService,
-                $schemaInstance,
-                $element,
-                $entity,
-                $submittedElementValues);
+            $providerLink = $propertyProviderService->getProviderLink($element);
+            return true;
         }
-        else
+        catch (NoProviderAvailableException $exception)
         {
-            return $this->processEntityFreeElement(
-                $currentUser,
-                $elementService,
-                $schemaInstance,
-                $element,
-                $entity,
-                $submittedElementValues);
+            if ($element->usesVocabulary())
+            {
+                return $this->processEntityVocabularyElement(
+                    $currentUser,
+                    $elementService,
+                    $schemaInstance,
+                    $element,
+                    $entity,
+                    $submittedElementValues);
+            }
+            else
+            {
+                return $this->processEntityFreeElement(
+                    $currentUser,
+                    $elementService,
+                    $schemaInstance,
+                    $element,
+                    $entity,
+                    $submittedElementValues);
+            }
         }
     }
 

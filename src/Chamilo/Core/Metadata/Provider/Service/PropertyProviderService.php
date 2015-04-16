@@ -86,20 +86,13 @@ class PropertyProviderService
      *
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getPropertyValue(Element $element)
+    public function getPropertyValues(Element $element)
     {
         $providerLink = $this->getProviderLink($element);
+        $providerRegistration = $providerLink->getProviderRegistration();
+        $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
 
-        if ($providerLink instanceof Link)
-        {
-            $providerRegistration = $providerLink->getProviderRegistration();
-            $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
-            return $provider->renderProperty($providerRegistration->get_property_name(), $this->getEntity());
-        }
-        else
-        {
-            throw new NoProviderAvailableException();
-        }
+        return $provider->renderProperty($providerRegistration->get_property_name(), $this->getEntity());
     }
 
     /**
@@ -118,7 +111,16 @@ class PropertyProviderService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager :: retrieve(Link :: class_name(), new DataClassRetrieveParameters($condition));
+        $providerLink = DataManager :: retrieve(Link :: class_name(), new DataClassRetrieveParameters($condition));
+
+        if ($providerLink instanceof Link)
+        {
+            return $providerLink;
+        }
+        else
+        {
+            throw new NoProviderAvailableException();
+        }
     }
 
     /**
