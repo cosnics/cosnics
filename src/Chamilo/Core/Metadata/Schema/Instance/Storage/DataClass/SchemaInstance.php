@@ -5,6 +5,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 
 /**
  *
@@ -31,10 +38,10 @@ class SchemaInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -46,7 +53,7 @@ class SchemaInstance extends DataClass
         $extended_property_names[] = self :: PROPERTY_SCHEMA_ID;
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_CREATION_DATE;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -55,7 +62,7 @@ class SchemaInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      *
      * @return string
@@ -116,7 +123,7 @@ class SchemaInstance extends DataClass
         {
             $this->schema = DataManager :: retrieve_by_id(Schema :: class_name(), $this->get_schema_id());
         }
-        
+
         return $this->schema;
     }
 
@@ -159,5 +166,51 @@ class SchemaInstance extends DataClass
     public function set_creation_date($creationDate)
     {
         $this->set_default_property(self :: PROPERTY_CREATION_DATE, $creationDate);
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @return string[string]
+     */
+    protected function get_dependencies()
+    {
+        $dependencies = array();
+
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $dependencies[RelationInstance :: class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+
+        $dependencies[ElementInstance :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ElementInstance :: class_name(),
+                ElementInstance :: PROPERTY_SCHEMA_INSTANCE_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        return $dependencies;
     }
 }
