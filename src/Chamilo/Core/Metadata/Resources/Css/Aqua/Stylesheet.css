@@ -80,6 +80,11 @@ div.provided-element-value {
 	background-color: #F5F5F5;
 	border: 1px solid #DEDEDE;
 	color: gray;
+	display: inline-block;
+}
+
+div.locked-tags {
+	display: inline-block;
 }
 
 span.locked-tag {
@@ -90,6 +95,10 @@ span.locked-tag {
 	border-radius: 3px;
 	color: gray !important;
 	line-height: 22px;
+}
+
+div.provided-element-value+img, div.locked-tags+img {
+	vertical-align: middle;
 }
 
 .forbidden-action {

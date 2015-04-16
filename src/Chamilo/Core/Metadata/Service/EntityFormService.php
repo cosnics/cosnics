@@ -158,6 +158,14 @@ class EntityFormService
                 $providerLink = $propertyProviderService->getProviderLink($element);
                 $vocabularyService = new VocabularyService();
 
+                $providedIcon = new ToolbarItem(
+                    Translation :: get('ShowVocabulary'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/Provided'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON);
+
+                $providedElement = $this->formValidator->createElement('static', null, null, $providedIcon->as_html());
+
                 if ($element->usesVocabulary())
                 {
                     $providedVocabularies = $vocabularyService->getProvidedVocabulariesForUserEntitySchemaInstanceElement(
@@ -168,6 +176,8 @@ class EntityFormService
 
                     $html = array();
 
+                    $html[] = '<div class="locked-tags">';
+
                     foreach ($providedVocabularies as $providedVocabulary)
                     {
                         $html[] = '<span class="locked-tag forbidden-action">';
@@ -175,11 +185,19 @@ class EntityFormService
                         $html[] = '</span>';
                     }
 
-                    $this->formValidator->addElement(
+                    $html[] = '</div>';
+
+                    $tagElementGroup = array();
+
+                    $tagElementGroup[] = $this->formValidator->createElement(
                         'static',
                         null,
                         $element->get_display_name(),
                         implode(PHP_EOL, $html));
+
+                    $tagElementGroup[] = $providedElement;
+
+                    $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
                 }
                 else
                 {
@@ -195,11 +213,17 @@ class EntityFormService
                     $html[] = $providedValue;
                     $html[] = '</div>';
 
-                    $this->formValidator->addElement(
+                    $tagElementGroup = array();
+
+                    $tagElementGroup[] = $this->formValidator->createElement(
                         'static',
                         null,
                         $element->get_display_name(),
                         implode(PHP_EOL, $html));
+
+//                     $tagElementGroup[] = $providedElement;
+
+                    $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
                 }
             }
             catch (NoProviderAvailableException $exception)

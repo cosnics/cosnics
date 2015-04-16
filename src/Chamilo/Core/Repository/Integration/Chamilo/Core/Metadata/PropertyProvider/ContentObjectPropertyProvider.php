@@ -69,8 +69,6 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
                 return DatetimeUtilities :: format_locale_date(null, $contentObject->get_modification_date());
             case self :: PROPERTY_IDENTIFIER :
                 return '\Chamilo\Core\Repository\ContentObject:' . $contentObject->get_id();
-            case self :: PROPERTY_DESCRIPTION :
-                return strip_tags($contentObject->get_description());
         }
 
         if ($contentObject->is_default_property_name($property))
