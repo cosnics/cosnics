@@ -6,10 +6,19 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
+use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Metadata\Provider\Storage\DataClass\Link;
 
 /**
  * This class describes an element in a metadata schema
- * 
+ *
  * @author Jens Vanderheyden - VUB Brussel
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -23,7 +32,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     const PROPERTY_DISPLAY_ORDER = 'display_order';
     const PROPERTY_VALUE_TYPE = 'value_type';
     const PROPERTY_VALUE_LIMIT = 'value_limit';
-    
+
     // Value types
     const VALUE_TYPE_FREE = 1;
     const VALUE_TYPE_VOCABULARY_PREDEFINED = 2;
@@ -41,10 +50,10 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param array $default_properties
      * @param array $optional_properties
      */
@@ -56,7 +65,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Get the default properties
-     * 
+     *
      * @param array $extended_property_names
      *
      * @return array The property names.
@@ -70,7 +79,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         $extended_property_names[] = self :: PROPERTY_DISPLAY_ORDER;
         $extended_property_names[] = self :: PROPERTY_VALUE_TYPE;
         $extended_property_names[] = self :: PROPERTY_VALUE_LIMIT;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -79,10 +88,10 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the schema_id
-     * 
+     *
      * @return int
      */
     public function get_schema_id()
@@ -92,7 +101,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the schema_id
-     * 
+     *
      * @param int $schema_id
      */
     public function set_schema_id($schema_id)
@@ -102,7 +111,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the name
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -112,7 +121,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the name
-     * 
+     *
      * @param string $name
      */
     public function set_name($name)
@@ -122,7 +131,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the display_name
-     * 
+     *
      * @return string
      */
     public function get_display_name()
@@ -132,7 +141,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the display_name
-     * 
+     *
      * @param string $display_name
      */
     public function set_display_name($display_name)
@@ -142,7 +151,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns whether or not this element is fixed
-     * 
+     *
      * @return string
      */
     public function is_fixed()
@@ -152,7 +161,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets whether or not the element is fixed
-     * 
+     *
      * @param string $fixed
      */
     public function set_fixed($fixed)
@@ -162,7 +171,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the display_order
-     * 
+     *
      * @return int
      */
     public function get_display_order()
@@ -172,7 +181,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the display_order
-     * 
+     *
      * @param int display_order
      */
     public function set_display_order($display_order)
@@ -182,7 +191,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the value_type
-     * 
+     *
      * @return int
      */
     public function get_value_type()
@@ -192,7 +201,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the value_type
-     * 
+     *
      * @param int $value_type
      */
     public function set_value_type($value_type)
@@ -219,7 +228,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the value_limit
-     * 
+     *
      * @return int
      */
     public function get_value_limit()
@@ -229,7 +238,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Sets the value_limit
-     * 
+     *
      * @param int $value_limit
      */
     public function set_value_limit($value_limit)
@@ -247,10 +256,10 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * Helper functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the prefix of the schema namespace
-     * 
+     *
      * @return string
      */
     public function get_namespace()
@@ -258,23 +267,23 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         if (! $this->namespace)
         {
             $schema = \Chamilo\Core\Metadata\Storage\DataManager :: retrieve_by_id(
-                Schema :: class_name(), 
+                Schema :: class_name(),
                 $this->get_schema_id());
-            
+
             if (! $schema)
             {
                 return false;
             }
-            
+
             $this->set_namespace($schema->get_namespace());
         }
-        
+
         return $this->namespace;
     }
 
     /**
      * Sets the prefix of the schema namespace
-     * 
+     *
      * @param string $namespace
      */
     public function set_namespace($namespace)
@@ -284,20 +293,20 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Renders the name of this attribute with the prefix of the namespace
-     * 
+     *
      * @return string
      */
     public function render_name()
     {
         $pref = $this->get_namespace();
         $prefix = (empty($pref)) ? '' : $this->get_namespace() . ':';
-        
+
         return $prefix . $this->get_name();
     }
 
     /**
      * Moves this object with the display order
-     * 
+     *
      * @param int $direction
      *
      * @return bool
@@ -305,7 +314,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function move($direction)
     {
         $this->set_display_order($this->get_display_order() + $direction);
-        
+
         return $this->update();
     }
 
@@ -314,10 +323,10 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * Display order functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -327,11 +336,76 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()
     {
         return array(new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_SCHEMA_ID));
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @return string[string]
+     */
+    protected function get_dependencies()
+    {
+        $dependencies = array();
+
+        $dependencies[EntityTranslation :: class_name()] = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation :: class_name(),
+                        EntityTranslation :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation :: class_name(),
+                        EntityTranslation :: PROPERTY_ENTITY_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $dependencies[RelationInstance :: class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+
+        $dependencies[ElementInstance :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(ElementInstance :: class_name(), ElementInstance :: PROPERTY_ELEMENT_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        $dependencies[Vocabulary :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        $dependencies[Link :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        return $dependencies;
     }
 }

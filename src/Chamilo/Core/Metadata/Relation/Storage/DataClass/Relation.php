@@ -2,10 +2,17 @@
 namespace Chamilo\Core\Metadata\Relation\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
+use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class describes a metadata schema
- * 
+ *
  * @package Chamilo\Core\Metadata\Relation\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -16,7 +23,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Relation extends DataClass
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
-    
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -30,10 +37,10 @@ class Relation extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -42,7 +49,7 @@ class Relation extends DataClass
     {
         $extended_property_names[] = self :: PROPERTY_NAME;
         $extended_property_names[] = self :: PROPERTY_DISPLAY_NAME;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -51,10 +58,10 @@ class Relation extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the name
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -64,7 +71,7 @@ class Relation extends DataClass
 
     /**
      * Sets the name
-     * 
+     *
      * @param string $name
      */
     public function set_name($name)
@@ -74,7 +81,7 @@ class Relation extends DataClass
 
     /**
      * Returns the display_name
-     * 
+     *
      * @return string
      */
     public function get_display_name()
@@ -84,11 +91,64 @@ class Relation extends DataClass
 
     /**
      * Sets the display_name
-     * 
+     *
      * @param string $display_name
      */
     public function set_display_name($display_name)
     {
         $this->set_default_property(self :: PROPERTY_DISPLAY_NAME, $display_name);
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @return string[string]
+     */
+    protected function get_dependencies()
+    {
+        $dependencies = array();
+
+        $dependencies[EntityTranslation :: class_name()] = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation :: class_name(),
+                        EntityTranslation :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        EntityTranslation :: class_name(),
+                        EntityTranslation :: PROPERTY_ENTITY_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $dependencies[RelationInstance :: class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
+
+        return $dependencies;
     }
 }
