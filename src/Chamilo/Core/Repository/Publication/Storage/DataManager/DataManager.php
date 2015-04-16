@@ -16,7 +16,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Determines where in this application the given learning object has been published.
-     * 
+     *
      * @param int $attributes_type
      * @param int $identifier
      * @param \libraries\storage\Condition $condition
@@ -25,39 +25,44 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param multitype:ObjectTableOrder $order_property
      * @return multitype:mixed
      */
-    public static function get_content_object_publication_attributes($identifier, $attributes_type = null, $condition = null, 
+    public static function get_content_object_publication_attributes($identifier, $attributes_type = null, $condition = null,
         $count = null, $offset = null, $order_property = null)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository');
         $publication_attributes = array();
-        
+
         foreach ($registrations as $registration)
         {
-            $manager_class = $registration->get_context() . '\Manager';
-            $application_attributes = $manager_class :: get_content_object_publication_attributes(
-                $identifier, 
-                $attributes_type, 
-                $condition);
-            
-            if (! is_null($application_attributes) && count($application_attributes) > 0)
+            $manager_class = $registration->get_context() . '\Publication\Manager';
+
+            if (class_exists($manager_class))
             {
-                $publication_attributes = array_merge($publication_attributes, $application_attributes);
+                $application_attributes = $manager_class :: get_content_object_publication_attributes(
+                    $identifier,
+                    $attributes_type,
+                    $condition);
+
+                if (! is_null($application_attributes) && count($application_attributes) > 0)
+                {
+                    $publication_attributes = array_merge($publication_attributes, $application_attributes);
+                }
             }
         }
-        
+
         // Sort the publication attributes
         if (count($order_property) > 0)
         {
             $order_column = $order_property[0]->get_property();
             $order_direction = $order_property[0]->get_direction();
             $ordering_values = array();
-            
+
             foreach ($publication_attributes as $key => $publication_attribute)
             {
                 $ordering_values[$key] = (string) strtolower(
                     $publication_attribute->get_default_property($order_column));
             }
-            
+
             switch ($order_direction)
             {
                 case SORT_ASC :
@@ -67,17 +72,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     arsort($ordering_values);
                     break;
             }
-            
+
             $ordered_publication_attributes = array();
-            
+
             foreach ($ordering_values as $key => $value)
             {
                 $ordered_publication_attributes[] = $publication_attributes[$key];
             }
-            
+
             $publication_attributes = $ordered_publication_attributes;
         }
-        
+
         if (isset($offset))
         {
             if (isset($count))
@@ -89,7 +94,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $publication_attributes = array_splice($publication_attributes, $offset);
             }
         }
-        
+
         // Return the requested subset
         return new ArrayResultSet($publication_attributes);
     }
@@ -102,7 +107,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Count the number of publications for a content object
-     * 
+     *
      * @param int $attributes_type
      * @param int $identifier
      * @param \libraries\storage\Condition $condition
@@ -112,13 +117,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
         $info = 0;
-        
+
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
             $info += $manager_class :: count_publication_attributes($attributes_type, $identifier, $condition);
         }
-        
+
         return $info;
     }
 
@@ -131,18 +136,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function delete_content_object_publications($object)
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
-        
+
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
             $result = $manager_class :: delete_content_object_publications($object->get_id());
-            
+
             if (! $result)
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -155,54 +160,54 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function content_object_is_published($id)
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
-        
+
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
             $result = $manager_class :: content_object_is_published($id);
-            
+
             if ($result)
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     public static function any_content_object_is_published($ids)
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
-        
+
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
             $result = $manager_class :: any_content_object_is_published($ids);
-            
+
             if ($result)
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     public static function is_content_object_editable($id)
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
-        
+
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
             $result = $manager_class :: is_content_object_editable($id);
-            
+
             if (! $result)
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 }
