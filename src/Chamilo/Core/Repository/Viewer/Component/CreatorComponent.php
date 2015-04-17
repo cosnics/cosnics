@@ -29,12 +29,12 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         else
         {
             $type_selection = TypeSelector :: get_selection();
-
+                     
             if ($type_selection)
             {
                 $type_selector = TypeSelector :: populate($this->get_types(), $this->get_user_id());
                 $all_types = $type_selector->get_unique_content_object_template_ids();
-
+                
                 if (! in_array($type_selection, $all_types))
                 {
                     throw new NoObjectSelectedException(

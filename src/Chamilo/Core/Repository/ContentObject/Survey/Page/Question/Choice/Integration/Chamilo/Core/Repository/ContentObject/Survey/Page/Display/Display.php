@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Display;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Integration\Chamilo\Core\Repository\ContentObject\Survey\Page\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Form\ChoiceForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;

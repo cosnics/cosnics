@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+
 /**
  * A class implements the <code>PageComplexDisplaySupport</code> interface to indicate that it will serve as a
  * launch
@@ -8,9 +10,55 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces;
  * 
  * @author Hans De Bisschop
  */
-interface PageDisplaySupport extends \Chamilo\Core\Repository\Display\DisplaySupport
+interface PageDisplaySupport
 {
     
-    // public function get_answer();
+      /**
+     * Determine the complex content object that should be displayed
+     * 
+     * @return ContentObject
+     * @todo Fix DisplaySupport conflicts
+     */
+    public function get_root_content_object();
+
+    
+    public function get_answer($complex_question_id);
+
+    /**
+     * Return a URI-template for the page tree menu
+     * 
+     * @return string
+     */
+    public function get_page_tree_menu_url();
+  
+    /**
+     * Is the user allowed to edit the content for the given node
+     * 
+     * @param ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node);
+
+    /**
+     * Is the user allowed to view the content for the given node
+     * 
+     * @param ComplexContentObjectPathNode $node
+     * @return boolean
+     */
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node);
+
+    /**
+     *
+     * @return \libraries\format\DynamicVisualTab[]
+     */
+    public function get_page_additional_tabs();
+
+    /**
+     * Determine whether the page being displayed is the user's own page
+     * 
+     * @return boolean
+     */
+    public function is_own_page();
+   
 }
 ?>
