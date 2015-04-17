@@ -18,8 +18,6 @@ class XmlRepositoryFeedComponent extends \Chamilo\Core\Repository\Implementation
 
     public function run()
     {
-        Translation :: set_application('user');
-
         $conditions = array();
 
         $query_condition = Utilities :: query_to_condition(

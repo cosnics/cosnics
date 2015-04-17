@@ -24,7 +24,7 @@ class LinkApplicationItem extends Bar
 
         $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_item()->get_url() . '" target="' .
              $this->get_item()->get_target_string() . '">' .
-             $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);

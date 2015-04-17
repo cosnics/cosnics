@@ -60,7 +60,7 @@ class Page
     {
         if (is_null(static :: $instance))
         {
-            $header = new Header(self :: VIEW_MODE_FULL, Translation :: get_instance()->get_language(), 'ltr');
+            $header = new Header(self :: VIEW_MODE_FULL, Translation :: getInstance()->getLanguageIsocode(), 'ltr');
             $footer = new Footer(self :: VIEW_MODE_FULL);
 
             self :: $instance = new static(self :: VIEW_MODE_FULL, $header, $footer);

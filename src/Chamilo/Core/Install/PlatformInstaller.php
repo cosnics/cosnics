@@ -146,7 +146,7 @@ class PlatformInstaller
 
     private function initialize_install()
     {
-        Translation :: get_instance()->set_language($this->installer_config->get_platform_language());
+        Translation :: getInstance()->setLanguageIsocode($this->installer_config->get_platform_language());
     }
 
     private function perform_preprod()

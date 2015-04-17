@@ -55,7 +55,7 @@ class CategoryItem extends Renderer
             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
         $html[] = '<ul>';
 

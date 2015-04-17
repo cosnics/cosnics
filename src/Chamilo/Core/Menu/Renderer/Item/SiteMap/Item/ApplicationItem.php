@@ -40,7 +40,7 @@ class ApplicationItem extends SiteMap
         }
         else
         {
-            $title = $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+            $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         }
         
         $html[] = '<a href="' . $url . '">' . $title;

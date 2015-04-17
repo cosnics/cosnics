@@ -53,7 +53,7 @@ class ApplicationItem extends Bar
         }
         else
         {
-            $title = $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+            $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         }
 
         $html[] = '<a ' . $class . 'href="' . $url . '">';

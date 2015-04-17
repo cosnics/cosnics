@@ -21,7 +21,7 @@ class CategoryItem extends Renderer
         $html[] = '<div class="category">';
         $html[] = '<h1>';
         $html[] = '<a href="#">' .
-             $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language()) . '</a>';
+             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) . '</a>';
         $html[] = '</h1>';
         
         if ($this->get_item()->has_children())

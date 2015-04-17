@@ -20,8 +20,6 @@ class XmlQuestionFeedComponent extends \Chamilo\Application\Survey\Ajax\Manager
 
     public function run()
     {
-        Translation :: set_application(Manager :: APPLICATION_NAME);
-
         $conditions = array();
 
         $publication_id = $_GET[Manager :: PARAM_PUBLICATION_ID];

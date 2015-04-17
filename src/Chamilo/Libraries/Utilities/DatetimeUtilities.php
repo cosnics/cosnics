@@ -89,9 +89,9 @@ class DatetimeUtilities
 
     private static function default_date_time_format()
     {
-        $translator = Translation :: get_instance();
-        $short_date = $translator->get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES);
-        $time = $translator->get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES);
+        $translator = Translation :: getInstance();
+        $short_date = $translator->getTranslation('DateFormatShort', null, Utilities :: COMMON_LIBRARIES);
+        $time = $translator->getTranslation('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES);
         $dateFormat = "{$short_date},  {$time}";
         return $dateFormat;
     }
@@ -172,16 +172,16 @@ class DatetimeUtilities
             return $result;
         }
 
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return $result = array(
-            $translator->get('SundayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MondayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('TuesdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('WednesdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('ThursdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('FridayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('SaturdayShort', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('SundayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MondayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('TuesdayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('WednesdayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('ThursdayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('FridayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('SaturdayShort', null, Utilities :: COMMON_LIBRARIES));
     }
 
     /**
@@ -197,16 +197,16 @@ class DatetimeUtilities
         {
             return $result;
         }
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return $result = array(
-            $translator->get('SundayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MondayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('TuesdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('WednesdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('ThursdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('FridayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('SaturdayLong', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('SundayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MondayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('TuesdayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('WednesdayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('ThursdayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('FridayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('SaturdayLong', null, Utilities :: COMMON_LIBRARIES));
     }
 
     /**
@@ -223,21 +223,21 @@ class DatetimeUtilities
             return $result;
         }
 
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return $result = array(
-            $translator->get('JanuaryShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('FebruaryShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MarchShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('AprilShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('JuneShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('JulyShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('AugustShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('SeptemberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('OctoberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('NovemberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('DecemberShort', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('JanuaryShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('FebruaryShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MarchShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('AprilShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MayShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('JuneShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('JulyShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('AugustShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('SeptemberShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('OctoberShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('NovemberShort', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('DecemberShort', null, Utilities :: COMMON_LIBRARIES));
     }
 
     /**
@@ -254,21 +254,21 @@ class DatetimeUtilities
             return $result;
         }
 
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return $result = array(
-            $translator->get('JanuaryLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('FebruaryLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MarchLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('AprilLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('MayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('JuneLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('JulyLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('AugustLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('SeptemberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('OctoberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('NovemberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->get('DecemberLong', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('JanuaryLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('FebruaryLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MarchLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('AprilLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('MayLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('JuneLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('JulyLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('AugustLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('SeptemberLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('OctoberLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('NovemberLong', null, Utilities :: COMMON_LIBRARIES),
+            $translator->getTranslation('DecemberLong', null, Utilities :: COMMON_LIBRARIES));
     }
 
     /**

@@ -15,8 +15,6 @@ class TranslationComponent extends \Chamilo\Libraries\Ajax\Manager
 
         $string = (string) StringUtilities :: getInstance()->createString($string)->upperCamelize();
 
-        Translation :: set_application($application);
-
         if ($application && $application != 'undefined')
         {
             $namespace = $application;

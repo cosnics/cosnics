@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Sabre\VObject;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -441,16 +442,16 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
 
     public static function get_byday_options()
     {
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return $result = array(
-            1 => $translator->get("Monday"),
-            2 => $translator->get("Tuesday"),
-            3 => $translator->get("Wednesday"),
-            4 => $translator->get("Thursday"),
-            5 => $translator->get("Friday"),
-            6 => $translator->get("Saturday"),
-            7 => $translator->get("Sunday"));
+            1 => $translator->getTranslation("Monday", null, Utilities :: COMMON_LIBRARIES),
+            2 => $translator->getTranslation("Tuesday", null, Utilities :: COMMON_LIBRARIES),
+            3 => $translator->getTranslation("Wednesday", null, Utilities :: COMMON_LIBRARIES),
+            4 => $translator->getTranslation("Thursday", null, Utilities :: COMMON_LIBRARIES),
+            5 => $translator->getTranslation("Friday", null, Utilities :: COMMON_LIBRARIES),
+            6 => $translator->getTranslation("Saturday", null, Utilities :: COMMON_LIBRARIES),
+            7 => $translator->getTranslation("Sunday", null, Utilities :: COMMON_LIBRARIES));
     }
 
     public static function get_bymonthday_options()
@@ -491,21 +492,21 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
 
     public static function get_bymonth_options()
     {
-        $translator = Translation :: get_instance();
+        $translator = Translation :: getInstance();
 
         return array(
-            1 => $translator->get("January"),
-            2 => $translator->get("February"),
-            3 => $translator->get("March"),
-            4 => $translator->get("April"),
-            5 => $translator->get("May"),
-            6 => $translator->get("June"),
-            7 => $translator->get("Juli"),
-            8 => $translator->get("August"),
-            9 => $translator->get("September"),
-            10 => $translator->get("October"),
-            11 => $translator->get("November"),
-            12 => $translator->get("December"));
+            1 => $translator->getTranslation("January", null, Utilities :: COMMON_LIBRARIES),
+            2 => $translator->getTranslation("February", null, Utilities :: COMMON_LIBRARIES),
+            3 => $translator->getTranslation("March", null, Utilities :: COMMON_LIBRARIES),
+            4 => $translator->getTranslation("April", null, Utilities :: COMMON_LIBRARIES),
+            5 => $translator->getTranslation("May", null, Utilities :: COMMON_LIBRARIES),
+            6 => $translator->getTranslation("June", null, Utilities :: COMMON_LIBRARIES),
+            7 => $translator->getTranslation("Juli", null, Utilities :: COMMON_LIBRARIES),
+            8 => $translator->getTranslation("August", null, Utilities :: COMMON_LIBRARIES),
+            9 => $translator->getTranslation("September", null, Utilities :: COMMON_LIBRARIES),
+            10 => $translator->getTranslation("October", null, Utilities :: COMMON_LIBRARIES),
+            11 => $translator->getTranslation("November", null, Utilities :: COMMON_LIBRARIES),
+            12 => $translator->getTranslation("December", null, Utilities :: COMMON_LIBRARIES));
     }
 
     public static function get_bymonth_string($month)

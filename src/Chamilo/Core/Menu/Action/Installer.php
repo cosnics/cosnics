@@ -111,7 +111,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 (string) StringUtilities :: getInstance()->createString($info->get_category())->upperCamelize(),
                 null,
                 self :: context(),
-                Translation :: get_instance()->get_language());
+                Translation :: getInstance()->getLanguageIsocode());
 
             $conditions = array();
             $conditions[] = new EqualityCondition(
@@ -119,7 +119,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 new StaticConditionVariable($category_name));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_ISOCODE),
-                new StaticConditionVariable(Translation :: get_instance()->get_language()));
+                new StaticConditionVariable(Translation :: getInstance()->getLanguageIsocode()));
 
             $parameters = new DataClassDistinctParameters(new AndCondition($conditions), ItemTitle :: PROPERTY_ITEM_ID);
             DataClassResultCache :: truncate(ItemTitle :: class_name());
@@ -171,7 +171,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $item = new ApplicationItem();
         $item_title = new ItemTitle();
         $item_title->set_title(Translation :: get('TypeName', null, $context));
-        $item_title->set_isocode(Translation :: get_instance()->get_language());
+        $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
         $item_titles = new ItemTitles(new ArrayResultSet(array($item_title)));
 
         $item->set_titles($item_titles);

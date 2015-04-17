@@ -140,7 +140,8 @@ abstract class Installer extends Action
     }
 
     /**
-     * Parses an XML file describing a storage unit. For defining the 'type' of the field, the same definition is used
+     * Parses an XML file describing a storage unit.
+     * For defining the 'type' of the field, the same definition is used
      * as the PEAR::MDB2 package. See http://pear.php.net/manual/en/package.database. mdb2.datatypes.php
      *
      * @param $file string The complete path to the XML-file from which the storage unit definition should be read.
@@ -212,7 +213,7 @@ abstract class Installer extends Action
 
         $this->add_message(
             self :: TYPE_NORMAL,
-            Translation :: get_instance()->get('StorageUnitCreation', null, 'Chamilo\Core\Install') . ': <em>' .
+            Translation :: getInstance()->getTranslation('StorageUnitCreation', null, 'Chamilo\Core\Install') . ': <em>' .
                  $storage_unit_info['name'] . '</em>');
 
         $context = ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
@@ -226,8 +227,8 @@ abstract class Installer extends Action
             $storage_unit_info['indexes']))
         {
             return $this->failed(
-                Translation :: get_instance()->get('StorageUnitCreationFailed', null, 'Chamilo\Core\Install') . ': <em>' .
-                     $storage_unit_info['name'] . '</em>');
+                Translation :: getInstance()->getTranslation('StorageUnitCreationFailed', null, 'Chamilo\Core\Install') .
+                     ': <em>' . $storage_unit_info['name'] . '</em>');
         }
         else
         {
