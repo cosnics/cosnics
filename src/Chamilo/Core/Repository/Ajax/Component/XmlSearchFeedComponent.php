@@ -19,8 +19,6 @@ class XmlSearchFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     function run()
     {
-        Translation :: set_application(\Chamilo\Core\Repository\Manager :: context());
-
         $conditions = array();
 
         $query_condition = Utilities :: query_to_condition(

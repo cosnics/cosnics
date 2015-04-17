@@ -40,7 +40,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
             $popup_link = str_replace($char, "\\" . $char, $popup_link);
             $hour_minute_devider = str_replace($char, "\\" . $char, $hour_minute_devider);
         }
-        $editor_lang = Translation :: get_language();
+        $editor_lang = Translation :: getInstance()->getLanguageIsocode();
         if (empty($editor_lang))
         {
             // if there was no valid iso-code, use the english one

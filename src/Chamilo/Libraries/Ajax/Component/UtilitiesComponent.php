@@ -65,7 +65,6 @@ class UtilitiesComponent extends \Chamilo\Libraries\Ajax\Manager
                 $string = Request :: post(self :: PARAM_STRING);
                 $parameters = Request :: post(self :: PARAM_PARAMETERS);
 
-                // Translation :: set_application($context);
                 $string = (string) StringUtilities :: getInstance()->createString($string)->upperCamelize();
                 $properties[self :: PROPERTY_RESULT] = Translation :: get($string, $parameters, $context);
                 break;

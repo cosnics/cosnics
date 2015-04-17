@@ -89,7 +89,7 @@ class ItemTitles
 
     public function get_current_translation()
     {
-        return $this->get_translation(Translation :: get_instance()->get_language());
+        return $this->get_translation(Translation :: getInstance()->getLanguageIsocode());
     }
 
     public function get_title($sort)

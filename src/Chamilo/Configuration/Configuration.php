@@ -153,6 +153,7 @@ class Configuration
     /**
      *
      * @return mixed
+     * @deprecated Use \Chamilo\Configuration\Configuration :: get_instance()->get_setting(array($keys)) now
      */
     public static function get()
     {

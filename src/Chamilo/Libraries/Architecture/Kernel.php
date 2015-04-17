@@ -341,8 +341,6 @@ class Kernel
         $this->context = $this->determineContext();
         $this->context = Application :: context_fallback($this->context);
 
-        Translation :: set_application($this->context);
-
         return $this;
     }
 

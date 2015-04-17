@@ -21,7 +21,7 @@ class HTML_QuickForm_Rule_JqueryDate extends HTML_QuickForm_Rule
     public function validate($date)
     {
 
-        $language = Translation :: get_instance()->get_language();
+        $language = Translation :: getInstance()->getLanguageIsocode();
 
         if($language == 'nl')
         {

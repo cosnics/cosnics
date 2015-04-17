@@ -142,7 +142,7 @@ abstract class Remover extends Action
 
         $this->add_message(
             self :: TYPE_NORMAL,
-            Translation :: get_instance()->get('StorageUnitRemoval', null, 'core\install') . ': <em>' .
+            Translation :: getInstance()->getTranslation('StorageUnitRemoval', null, 'core\install') . ': <em>' .
                  $storage_unit_name . '</em>');
 
         $data_manager = static :: context() . '\DataManager';
@@ -150,7 +150,7 @@ abstract class Remover extends Action
         if (! $data_manager :: drop_storage_unit($storage_unit_name))
         {
             return $this->failed(
-                Translation :: get_instance()->get('StorageUnitRemovalFailed', null, 'core\install') . ': <em>' .
+                Translation :: getInstance()->getTranslation('StorageUnitRemovalFailed', null, 'core\install') . ': <em>' .
                      $storage_unit_name . '</em>');
         }
         else

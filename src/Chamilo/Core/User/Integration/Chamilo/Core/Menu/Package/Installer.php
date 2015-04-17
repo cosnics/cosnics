@@ -31,7 +31,7 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
         {
             $item_title = new ItemTitle();
             $item_title->set_title(Translation :: get('MyAccount'));
-            $item_title->set_isocode(Translation :: get_instance()->get_language());
+            $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
             $item_title->set_item_id($my_account->get_id());
             if (! $item_title->create())
             {

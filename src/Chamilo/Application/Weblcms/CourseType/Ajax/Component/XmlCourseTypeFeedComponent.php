@@ -19,8 +19,6 @@ class XmlCourseTypeFeedComponent extends \Chamilo\Application\Weblcms\CourseType
 
     public function run()
     {
-        Translation :: set_application('weblcms');
-
         $query = Request :: get('query');
         $exclude = Request :: get('exclude');
 

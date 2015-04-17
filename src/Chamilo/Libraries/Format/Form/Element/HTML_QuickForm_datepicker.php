@@ -42,7 +42,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             $popup_link = str_replace($char, "\\" . $char, $popup_link);
             $hour_minute_devider = str_replace($char, "\\" . $char, $hour_minute_devider);
         }
-        $editor_lang = Translation :: get_language();
+        $editor_lang = Translation :: getInstance()->getLanguageIsocode();
         if (empty($editor_lang))
         {
             // if there was no valid iso-code, use the english one
@@ -114,7 +114,8 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     /**
      * Inheritance of setValue due to limitations of the date element When the default value is bigger then the maximum
-     * possible selected value the default year is the lowest possible year. This can give serious problems when using
+     * possible selected value the default year is the lowest possible year.
+     * This can give serious problems when using
      * multiple timestamps and compare
      *
      * @param String $value

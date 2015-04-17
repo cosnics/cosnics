@@ -59,7 +59,7 @@ $MonthsLong = array(
     Translation :: get("NovemberLong", null, Utilities :: COMMON_LIBRARIES),
     Translation :: get("DecemberLong", null, Utilities :: COMMON_LIBRARIES));
 
-$iso_lang = Translation :: get_language();
+$iso_lang = Translation :: getInstance()->getLanguageIsocode();
 if (empty($iso_lang))
 {
     // if there was no valid iso-code, use the english one

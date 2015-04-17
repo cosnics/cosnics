@@ -76,7 +76,7 @@ class WidgetItem extends Bar
     {
         $html = array();
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         $selected = $this->get_item()->is_selected();
 
         $html[] = '<ul>';

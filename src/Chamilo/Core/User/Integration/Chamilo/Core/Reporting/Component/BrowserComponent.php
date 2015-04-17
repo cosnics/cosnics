@@ -43,10 +43,10 @@ class BrowserComponent extends Manager
 
     private function get_data($class_name)
     {
-        $title = Translation :: get_instance()->get($class_name :: PROPERTY_NAME);
+        $title = Translation :: get($class_name :: PROPERTY_NAME);
         $title_url = '<a href="' . htmlentities($this->get_viewer_url($class_name :: TEMPLATE_ID)) . '" title="' . $title .
              '">' . $title . '</a>';
-        $description = Translation :: get_instance()->get($class_name :: PROPERTY_DESCRIPTION);
+        $description = Translation :: get($class_name :: PROPERTY_DESCRIPTION);
         return array($title_url, $description);
     }
 }

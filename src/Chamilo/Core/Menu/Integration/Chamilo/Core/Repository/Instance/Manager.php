@@ -40,7 +40,7 @@ class Manager
             new StaticConditionVariable($category_name));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ItemTitle :: class_name(), ItemTitle :: PROPERTY_ISOCODE),
-            new StaticConditionVariable(Translation :: get_instance()->get_language()));
+            new StaticConditionVariable(Translation :: getInstance()->getLanguageIsocode()));
 
         $parameters = new DataClassDistinctParameters(new AndCondition($conditions), ItemTitle :: PROPERTY_ITEM_ID);
         DataClassResultCache :: truncate(ItemTitle :: class_name());
@@ -100,7 +100,7 @@ class Manager
         {
             $item_title = new ItemTitle();
             $item_title->set_title($instance->get_title());
-            $item_title->set_isocode(Translation :: get_instance()->get_language());
+            $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
             $item_title->set_item_id($item->get_id());
             if (! $item_title->create())
             {

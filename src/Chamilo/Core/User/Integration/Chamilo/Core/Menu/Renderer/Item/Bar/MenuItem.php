@@ -29,7 +29,7 @@ abstract class MenuItem extends Bar
 
         $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_url() . '">';
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: get_instance()->get_language());
+        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
         if ($this->get_item()->show_icon())
         {
