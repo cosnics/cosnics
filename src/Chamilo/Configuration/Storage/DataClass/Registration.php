@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: registration.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
- * 
+ *
  * @package admin.lib
  * @author Hans De Bisschop
  */
@@ -43,19 +43,19 @@ class Registration extends DataClass
 
     /**
      * Get the default properties of registrations.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_ID, 
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_CATEGORY, 
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_STATUS, 
-                self :: PROPERTY_VERSION, 
+                self :: PROPERTY_ID,
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_CATEGORY,
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_STATUS,
+                self :: PROPERTY_VERSION,
                 self :: PROPERTY_CONTEXT));
     }
 
@@ -69,7 +69,7 @@ class Registration extends DataClass
 
     /**
      * Returns the type of this registration.
-     * 
+     *
      * @return int The type
      */
     public function get_type()
@@ -79,7 +79,7 @@ class Registration extends DataClass
 
     /**
      * Returns the category of this registration.
-     * 
+     *
      * @return string the category
      */
     public function get_category()
@@ -89,7 +89,7 @@ class Registration extends DataClass
 
     /**
      * Returns the name of this registration.
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -104,7 +104,7 @@ class Registration extends DataClass
 
     /**
      * Returns the status of this registration.
-     * 
+     *
      * @return int the status
      */
     public function get_status()
@@ -114,7 +114,7 @@ class Registration extends DataClass
 
     /**
      * Returns the version of the registered item.
-     * 
+     *
      * @return String the version
      */
     public function get_version()
@@ -124,7 +124,7 @@ class Registration extends DataClass
 
     /**
      * Sets the type of this registration.
-     * 
+     *
      * @param $id Int the registration type.
      */
     public function set_type($type)
@@ -134,7 +134,7 @@ class Registration extends DataClass
 
     /**
      * Sets the category of this registration.
-     * 
+     *
      * @param $category string the registration category.
      */
     public function set_category($category)
@@ -144,7 +144,7 @@ class Registration extends DataClass
 
     /**
      * Sets the name of this registration.
-     * 
+     *
      * @param $name int the name.
      */
     public function set_name($name)
@@ -159,7 +159,7 @@ class Registration extends DataClass
 
     /**
      * Sets the status of this registration.
-     * 
+     *
      * @param $status int the status.
      */
     public function set_status($status)
@@ -169,7 +169,7 @@ class Registration extends DataClass
 
     /**
      * Sets the version of this registered item.
-     * 
+     *
      * @param $version String the version.
      */
     public function set_version($version)
@@ -184,37 +184,37 @@ class Registration extends DataClass
 
     /**
      * Activates the registration
-     * 
+     *
      * @param $with_update boolean - include update or not
      * @return boolean
      */
     public function activate($with_update = false)
     {
         $this->set_status(true);
-        
+
         if ($with_update)
         {
             return $this->update();
         }
-        
+
         true;
     }
 
     /**
      * Deactivates the registration
-     * 
+     *
      * @param $with_update boolean - include update or not
      * @return boolean
      */
     public function deactivate($with_update = false)
     {
         $this->set_status(false);
-        
+
         if ($with_update)
         {
             return $this->update();
         }
-        
+
         return true;
     }
 
@@ -229,21 +229,21 @@ class Registration extends DataClass
         {
             return true;
         }
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_CODE), 
+            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_CODE),
             new StaticConditionVariable($this->get_name()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_SECTION), 
+            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_SECTION),
             new StaticConditionVariable($this->get_type()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_CATEGORY), 
+            new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_CATEGORY),
             new StaticConditionVariable($this->get_category()));
         $condition = new AndCondition($conditions);
-        
+
         $remote_package = \Chamilo\Core\Lynx\Remote\DataManager :: retrieve(
-            \Chamilo\Core\Lynx\Remote\DataClass\Package :: class_name(), 
+            \Chamilo\Core\Lynx\Remote\DataClass\Package :: class_name(),
             new DataClassRetrieveParameters($condition));
         if ($remote_package instanceof \Chamilo\Core\Lynx\Remote\DataClass\Package)
         {
@@ -270,13 +270,13 @@ class Registration extends DataClass
     public static function get_types()
     {
         return array(
-            self :: TYPE_APPLICATION, 
-            self :: TYPE_CONTENT_OBJECT, 
-            self :: TYPE_CORE, 
-            self :: TYPE_LANGUAGE, 
-            self :: TYPE_EXTERNAL_REPOSITORY_MANAGER, 
-            self :: TYPE_VIDEO_CONFERENCING_MANAGER, 
-            self :: TYPE_EXTENSION, 
+            self :: TYPE_APPLICATION,
+            self :: TYPE_CONTENT_OBJECT,
+            self :: TYPE_CORE,
+            self :: TYPE_LANGUAGE,
+            self :: TYPE_EXTERNAL_REPOSITORY_MANAGER,
+            self :: TYPE_VIDEO_CONFERENCING_MANAGER,
+            self :: TYPE_EXTENSION,
             self :: TYPE_LIBRARY);
     }
 
@@ -301,7 +301,7 @@ class Registration extends DataClass
         {
             return $success;
         }
-        
+
         \Chamilo\Configuration\Configuration :: reset();
         return $success;
     }
