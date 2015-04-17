@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNo
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class Display extends QuestionDisplay
 {
@@ -33,8 +34,9 @@ class Display extends QuestionDisplay
             $html[] = '<td>';
 
             $html[] = '<div class="datepicker" id=" . $complex_question->get_id() . "></div>';
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 1);
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Date.js' .
+                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'DateDisplay.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';
@@ -51,8 +53,9 @@ class Display extends QuestionDisplay
             $html[] = '<tr>';
             $html[] = '<td>';
             $html[] = '<div class="timepicker" id=" . $complex_question->get_id() . "></div>';
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 1);
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Time.js' .
+                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'TimeDisplay.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';

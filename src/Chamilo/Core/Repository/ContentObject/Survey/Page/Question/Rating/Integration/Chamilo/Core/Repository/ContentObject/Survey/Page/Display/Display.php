@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class Display extends QuestionDisplay
 {
@@ -48,13 +49,11 @@ class Display extends QuestionDisplay
         }
 
         $renderer->setElementTemplate($element_template, $question_name);
-
+        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 1);
         $formvalidator->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating',
-                    true) . 'SurveyRatingQuestion'));
+                Path :: getInstance()->getJavascriptPath($namespace, true) . 'RatingQuestionDisplay.js'));
     }
 
     function add_borders()

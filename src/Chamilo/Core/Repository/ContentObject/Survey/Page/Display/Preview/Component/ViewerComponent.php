@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Comp
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -11,7 +13,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
  * @author Eduard Vossen
  * @author Magali Gillard
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Manager implements
     PageDisplaySupport
 {
     const TEMPORARY_STORAGE = 'survey_page_preview';
@@ -48,5 +50,31 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
             return null;
         }
     }
+  
+    function get_page_tree_menu_url()
+    {
+        return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
+            \Chamilo\Core\Repository\Preview\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
+            \Chamilo\Core\Repository\Preview\Manager :: ACTION_DISPLAY . '&' .
+            \Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID . '=' .
+            $this->get_root_content_object()->get_id() . '&' .
+            \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager :: PARAM_STEP . '=%s';
+    }
+    
+  
+    public function get_page_additional_tabs()
+    {
+        return array();
+    }
+    
+    /**
+     *
+     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
+     */
+    public function is_own_page()
+    {
+        return $this->get_root_content_object()->get_owner_id() == $this->get_user_id();
+    }
+    
 }
 ?>

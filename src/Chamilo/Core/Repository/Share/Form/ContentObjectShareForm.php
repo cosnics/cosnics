@@ -119,8 +119,6 @@ class ContentObjectShareForm extends FormValidator
             $types->add_element_type($entity->get_element_finder_type());
         }
         
-        var_dump($types);
-        
         $this->addElement('advanced_element_finder', self :: PARAM_TARGET, Translation :: get('Targets'), $types);
         
         $buttons[] = $this->createElement(
