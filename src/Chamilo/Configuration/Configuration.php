@@ -10,6 +10,9 @@ use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\Common\ClassLoader;
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\File\Cache\CacheFactory;
+use Chamilo\Libraries\File\Cache\Cache;
+use Chamilo\Libraries\File\Cache\CacheUnavailableException;
 
 /**
  * This class represents the current configuration
@@ -265,9 +268,14 @@ class Configuration
      */
     private function load_settings()
     {
-        $storage = Path :: getInstance()->getCachePath(__NAMESPACE__) . 'configuration.settings';
+        $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__, 'configuration.settings');
+        $cache = $cacheFactory->getCache();
 
-        if (! file_exists($storage))
+        try
+        {
+            $this->settings = $cache->get();
+        }
+        catch (CacheUnavailableException $exception)
         {
             $settings = DataManager :: retrieves(Setting :: class_name());
 
@@ -276,11 +284,7 @@ class Configuration
                 $this->settings[$setting->get_application()][$setting->get_variable()] = $setting->get_value();
             }
 
-            Filesystem :: write_to_file($storage, serialize($this->settings));
-        }
-        else
-        {
-            $this->settings = unserialize(file_get_contents($storage));
+            $cache->set($this->settings);
         }
     }
 
@@ -289,9 +293,14 @@ class Configuration
      */
     private function load_registrations()
     {
-        $storage = Path :: getInstance()->getCachePath(__NAMESPACE__) . 'configuration.registrations';
+        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
+        $cache = $cacheFactory->getCache();
 
-        if (! file_exists($storage))
+        try
+        {
+            $this->registrations = $cache->get();
+        }
+        catch (CacheUnavailableException $exception)
         {
             $registrations = DataManager :: retrieves(Registration :: class_name());
 
@@ -301,11 +310,7 @@ class Configuration
                 $this->registrations[self :: REGISTRATION_CONTEXT][$registration->get_context()] = $registration;
             }
 
-            Filesystem :: write_to_file($storage, serialize($this->registrations));
-        }
-        else
-        {
-            $this->registrations = unserialize(file_get_contents($storage));
+            $cache->set($this->registrations);
         }
     }
 
