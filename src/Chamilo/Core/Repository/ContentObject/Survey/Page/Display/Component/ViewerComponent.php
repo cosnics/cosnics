@@ -2,18 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\Viewer\Form;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\TabComponent;
 
-class ViewerComponent extends Manager
+class ViewerComponent extends TabComponent
 {
 
-    function run()
+    function build()
     {
-        parent :: run();
-        
+               
         $form = new Form($this);
-
+              
         $html = array();
 
         $html[] = $this->render_header();

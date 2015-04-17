@@ -75,7 +75,19 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
 
     function get_allowed_types()
     {
-        return array(Page :: class_name(), Survey :: class_name());
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository\ContentObject\Survey' , 
+            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $types = array();
+        
+        foreach ($registrations as $registration)
+        {
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
+            $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $types[] = $namespace.'\Storage\DataClass\\'.$classname;
+        }
+        
+        return $types;
     }
 
     function get_table()

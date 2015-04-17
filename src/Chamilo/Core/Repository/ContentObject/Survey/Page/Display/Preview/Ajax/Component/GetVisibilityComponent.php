@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\PageConfig;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -72,16 +71,16 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
         
         if (count($question_answers) > 0)
         {
-            $configs = $content_object->get_config();
+            $configs = $content_object->getConfiguration();
             
             foreach ($question_answers as $complex_question_id => $answers)
             {
                 foreach ($configs as $config)
                 {
-                    $from_question_id = $config[PageConfig :: PROPERTY_FROM_VISIBLE_QUESTION_ID];
+                    $from_question_id = $config->getComplexQuestionId();
                     if ($complex_question_id == $from_question_id)
                     {
-                        $answer_matches = $config[PageConfig :: PROPERTY_ANSWER_MATCHES];
+                        $answer_matches = $config->getAnswerMatches();
                         $visible = false;
                         if (count($answer_matches) == count($answers))
                         {
@@ -110,7 +109,7 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                         
                         if ($visible)
                         {
-                            foreach ($config[PageConfig :: PROPERTY_TO_VISIBLE_QUESTION_IDS] as $id)
+                            foreach ($config->getToVisibleQuestionIds() as $id)
                             {
                                 $question_visibility[$id] = true;
                             }
