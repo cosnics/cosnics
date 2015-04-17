@@ -2,8 +2,10 @@
 namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Cache\CacheFactory;
+use Chamilo\Libraries\File\Cache\Cache;
+use Chamilo\Libraries\File\Cache\CacheUnavailableException;
 
 /**
  * $Id: translation.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
@@ -76,6 +78,12 @@ class Translation
     private $reserved_words = array('true', 'false', 'on', 'off', 'null', 'yes', 'no', 'none');
 
     /**
+     *
+     * @var \Chamilo\Libraries\File\Cache\Cache
+     */
+    private $cache;
+
+    /**
      * Constructor
      *
      * @param string $language
@@ -101,15 +109,12 @@ class Translation
 
         if ($this->use_caching)
         {
-            $cache_file = Path :: getInstance()->getCachePath() . 'translation/' . $this->language;
-
-            if (file_exists($cache_file))
+            try
             {
-                $cached_translations = file_get_contents($cache_file);
-                if ($cached_translations)
-                {
-                    $instance->strings[$this->language] = unserialize($cached_translations);
-                }
+                $instance->strings[$this->language] = $this->getCache($this->language)->get();
+            }
+            catch (CacheUnavailableException $exception)
+            {
             }
         }
     }
@@ -152,13 +157,24 @@ class Translation
         {
             $translationMap = array();
 
-            foreach($parameters as $key => $value)
+            foreach ($parameters as $key => $value)
             {
                 $translationMap['{' . $key . '}'] = $value;
             }
 
             return strtr($translation, $translationMap);
         }
+    }
+
+    public function getCache($language)
+    {
+        if (! isset($this->cache[$language]))
+        {
+            $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__ . '\Translation', $language);
+            $this->cache[$language] = $cacheFactory->getCache();
+        }
+
+        return $this->cache[$language];
     }
 
     /**
@@ -317,10 +333,7 @@ class Translation
     public static function cache($language)
     {
         $instance = self :: get_instance();
-        $strings = $instance->strings[$language];
-        Filesystem :: write_to_file(
-            Path :: getInstance()->getCachePath() . 'translation/' . $language,
-            serialize($strings));
+        $instance->getCache($language)->set($instance->strings[$language]);
     }
 
     /**
@@ -330,19 +343,14 @@ class Translation
     public static function load_cache($language)
     {
         $instance = self :: get_instance();
-        $cache_file = Path :: getInstance()->getCachePath() . 'translation/' . $language;
 
-        if (file_exists($cache_file))
+        try
         {
-            $cached_translations = file_get_contents($cache_file);
-            if ($cached_translations)
-            {
-                $translations = unserialize($cached_translations);
-                if ($translations != false)
-                {
-                    $instance->strings[$language] = $translations;
-                }
-            }
+            $cache = $instance->getCache($language);
+            $instance->strings[$language] = $cache->get();
+        }
+        catch (CacheUnavailableException $exception)
+        {
         }
     }
 

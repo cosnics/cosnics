@@ -49,6 +49,7 @@ class SerializeCache extends Cache
      */
     public function set($data)
     {
+        $this->cacheValue = $data;
         Filesystem :: write_to_file($this->getCachePath(), serialize($data));
     }
 

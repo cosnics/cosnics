@@ -42,6 +42,7 @@ class PhpCache extends Cache
      */
     public function set($data)
     {
+        $this->cacheValue = $data;
         Filesystem :: write_to_file($this->getCachePath(), sprintf('<?php return %s;', var_export($data, true)));
     }
 
@@ -51,6 +52,11 @@ class PhpCache extends Cache
      */
     public function truncate()
     {
+        if ($this->verifyCache())
+        {
+            $this->cacheValue = null;
+            Filesystem :: remove($this->getCachePath());
+        }
     }
 
     /**
