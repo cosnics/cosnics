@@ -113,7 +113,6 @@ abstract class ComplexContentObjectPath
         
         if (! isset($this->nodes[$node_id]))
         {
-            var_dump($node_id);
             throw new Exception(Translation :: get('NodeDoesntExist'));
         }
         return $this->nodes[$node_id];

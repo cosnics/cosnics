@@ -1,17 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Storage\DataClass\Choice;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Storage\DataClass\DateTime;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\Description;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Gender\Storage\DataClass\Gender;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Storage\DataClass\Matching;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Storage\DataClass\Open;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Storage\DataClass\Order;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\DataClass\Rating;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -22,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 
 /**
  *
@@ -34,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Page extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
 {
-    const PROPERTY_CONFIG = 'config';
+    const PROPERTY_CONFIGURATION = 'configuration';
     const CLASS_NAME = __CLASS__;
 
     private $complex_content_objects_cache;
@@ -48,39 +38,43 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
 
     static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_CONFIG);
+        return array(self :: PROPERTY_CONFIGURATION);
     }
 
-    function get_config()
+    function getConfiguration()
     {
-        if ($result = unserialize($this->get_additional_property(self :: PROPERTY_CONFIG)))
-        {
-            return $result;
-        }
-        return array();
-    }
-
-    function set_config($value)
-    {
-        $this->set_additional_property(self :: PROPERTY_CONFIG, serialize($value));
+        $order = array(
+            new OrderBy(
+                new PropertyConditionVariable(
+                    Configuration :: class_name(), 
+                    Configuration :: PROPERTY_DISPLAY_ORDER, 
+                    SORT_ASC)));
+        
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID), 
+            new StaticConditionVariable($this->get_id()));
+        $complex_content_objects = DataManager :: retrieves(
+            Configuration :: class_name(), 
+            new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
+        
+        return $complex_content_objects;
     }
 
     function get_allowed_types()
     {
-        $allowed_types = array();
-        $allowed_types[] = Rating :: class_name();
-        $allowed_types[] = Open :: class_name();
-        $allowed_types[] = MultipleChoice :: class_name();
-        $allowed_types[] = Matching :: class_name();
-        $allowed_types[] = Select :: class_name();
-        $allowed_types[] = Matrix :: class_name();
-        $allowed_types[] = Description :: class_name();
-        $allowed_types[] = DateTime :: class_name();
-        $allowed_types[] = Choice :: class_name();
-        $allowed_types[] = Gender :: class_name();
-        $allowed_types[] = Order :: class_name();
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository\ContentObject\Survey\Page', 
+            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $types = array();
         
-        return $allowed_types;
+        foreach ($registrations as $registration)
+        {
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 7);
+            $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $types[] = $namespace . '\Storage\DataClass\\' . $classname;
+        }
+        
+        return $types;
     }
 
     function get_questions($complex_items = false)
@@ -119,7 +113,6 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
     function get_table()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
-        ;
     }
 }
 ?>

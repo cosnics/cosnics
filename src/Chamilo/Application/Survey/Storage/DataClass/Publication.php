@@ -51,13 +51,13 @@ class Publication extends DataClass
     {
         $location = Rights :: get_instance()->get_publication_location($this->get_id());
         
-        if (! $location->remove())
+        if (! $location->delete())
         {
             return false;
         }
         
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_PUBLICATION_ID), 
+            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), 
             new StaticConditionVariable($this->get_id()));
         $participants = DataManager :: retrieves(Participant :: CLASS_NAME, new DataClassRetrievesParameters($condition)); 
         while ($participant = $participants->next_result())

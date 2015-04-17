@@ -168,15 +168,18 @@ function renderHtmlEditor(editorName, editorOptions, editorLabel,
 	if (typeof editorLabel != "undefined") {
 		parameters.label = editorLabel;
 	}
-
+	
+	parameters.application='Chamilo\\Libraries\\Ajax';
+	parameters.go='HtmlEditorInstance';
+	
 	var ajaxParameters = $.extend(defaults, parameters);
+		
+	ajaxUri = getPath('WEB_PATH')
+	+ 'index.php';
 
 	var result = doAjaxPost(
-			rootWebPath
-					+ "libraries/html/formvalidator/form_validator_html_editor_instance.php",
+			ajaxUri,
 			ajaxParameters);
-
-	// alert(result);
 
 	return result;
 }
