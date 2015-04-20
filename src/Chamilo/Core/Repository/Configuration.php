@@ -3,13 +3,14 @@ namespace Chamilo\Core\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
+use Chamilo\Libraries\File\Cache\CacheUnavailableException;
+use Chamilo\Libraries\File\Cache\CacheFactory;
+use Chamilo\Libraries\File\Cache\Cache;
 
 /**
  * This class represents the current configuration
- * 
+ *
  * @package libraries
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -21,7 +22,7 @@ class Configuration
 
     /**
      * Instance of this class for the singleton pattern.
-     * 
+     *
      * @var Configuration
      */
     private static $instance;
@@ -42,7 +43,7 @@ class Configuration
 
     /**
      * Returns the instance of this class.
-     * 
+     *
      * @return Configuration The instance.
      */
     public static function get_instance()
@@ -56,28 +57,29 @@ class Configuration
 
     private function initialize()
     {
-        $storage = Path :: getInstance()->getCachePath(__NAMESPACE__) . 'configuration.registrations';
-        
-        if (! file_exists($storage))
+        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
+        $cache = $cacheFactory->getCache();
+
+        try
+        {
+            $this->registrations = $cache->get();
+        }
+        catch (CacheUnavailableException $exception)
         {
             $registrations = DataManager :: retrieves(TemplateRegistration :: class_name());
-            
+
             while ($registration = $registrations->next_result())
             {
                 $this->registrations[self :: REGISTRATION_ID][$registration->get_id()] = $registration;
                 $this->registrations[self :: REGISTRATION_USER_ID][$registration->get_user_id()][$registration->get_content_object_type()][] = $registration;
-                
+
                 if ($registration->get_default())
                 {
                     $this->registrations[self :: REGISTRATION_DEFAULT][$registration->get_content_object_type()] = $registration;
                 }
             }
-            
-            Filesystem :: write_to_file($storage, serialize($this->registrations));
-        }
-        else
-        {
-            $this->registrations = unserialize(file_get_contents($storage));
+
+            $cache->set($this->registrations);
         }
     }
 
@@ -119,7 +121,7 @@ class Configuration
 
     /**
      * Get the template registrations for a specific content object type and/or user_id
-     * 
+     *
      * @param string[] $types
      * @param int $user_id
      * @return TemplateRegistration[]
@@ -127,38 +129,38 @@ class Configuration
     public function get_registrations_by_types($types, $user_id = null)
     {
         $registered_types = array();
-        
+
         if (! is_array($types))
         {
             $types = array($types);
         }
-        
+
         foreach ($types as $type)
         {
             $common_registrations = $this->registrations[self :: REGISTRATION_USER_ID][0][$type];
-            
+
             if (count($common_registrations) > 0)
             {
                 $registered_types = array_merge($registered_types, $common_registrations);
             }
-            
+
             if ($user_id)
             {
                 $user_registrations = $this->registrations[self :: REGISTRATION_USER_ID][$user_id][$type];
-                
+
                 if (count($user_registrations) > 0)
                 {
                     $registered_types = array_merge($registered_types, $user_registrations);
                 }
             }
         }
-        
+
         return $registered_types;
     }
 
     /**
      * Get the template registrations for a specific content object type and/or user_id
-     * 
+     *
      * @param string[] $types
      * @param int $user_id
      * @return TemplateRegistration[]

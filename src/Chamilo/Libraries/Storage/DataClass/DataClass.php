@@ -15,7 +15,7 @@ use Exception;
  */
 abstract class DataClass
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Constants
     const CLASS_NAME = __CLASS__;
@@ -746,7 +746,8 @@ abstract class DataClass
     public static function get_table_name()
     {
         $data_manager = static :: package() . '\Storage\DataManager';
-        return $data_manager :: PREFIX . ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), true);
+        return $data_manager :: PREFIX .
+             ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), true);
     }
 
     public static function is_extended()
@@ -761,5 +762,14 @@ abstract class DataClass
     public static function package()
     {
         return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context(), 2);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return Translation :: get('ToStringNotImplemented', array('TYPE' => static :: class_name()));
     }
 }

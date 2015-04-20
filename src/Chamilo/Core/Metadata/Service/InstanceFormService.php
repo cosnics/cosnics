@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata\Service;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Entity\EntityFactory;
 
 /**
  *
@@ -50,6 +51,15 @@ class InstanceFormService
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getEntityType()
+    {
+        return get_class($this->entity);
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      */
     public function setEntity($entity)
@@ -77,41 +87,43 @@ class InstanceFormService
 
     public function addElements(EntityService $entityService, RelationService $relationService)
     {
-        $availableSchemas = $entityService->getAvailableSchemasForEntity($relationService, $this->getEntity());
-        
+        $entityFactory = EntityFactory :: getInstance();
+        $entity = $entityFactory->getEntity($this->getEntity()->class_name());
+        $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $entity);
+
         while ($availableSchema = $availableSchemas->next_result())
         {
             $this->formValidator->addElement(
-                'checkbox', 
-                InstanceService :: PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']', 
-                $availableSchema->get_name(), 
-                null, 
-                null, 
+                'checkbox',
+                InstanceService :: PROPERTY_METADATA_ADD_SCHEMA . '[' . $availableSchema->get_id() . ']',
+                $availableSchema->get_name(),
+                null,
+                null,
                 $availableSchema->get_id());
-            
+
             // $this->formValidator->addGroup($schemaGroup, null, $availableSchema->get_name(), null, false);
         }
-        
+
         // $this->addDependencies();
-        
+
         // $elementService = new ElementService();
         // $elements = $elementService->getElementsForSchemaInstance($this->schemaInstance);
-        
+
         // while ($element = $elements->next_result())
         // {
         // $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $this->schemaInstance->get_schema_id() .
         // '][' . $this->schemaInstance->get_id() . '][' . $element->get_id() . ']';
-        
+
         // if ($element->usesVocabulary())
         // {
         // $uniqueIdentifier = UUID :: v4();
-        
+
         // $class = 'metadata-input';
         // if ($element->isVocabularyUserDefined())
         // {
         // $class .= ' metadata-input-new';
         // }
-        
+
         // $tagElementGroup = array();
         // $tagElementGroup[] = $this->formValidator->createElement(
         // 'text',
@@ -124,7 +136,7 @@ class InstanceFormService
         // 'data-schema-instance-id' => $this->schemaInstance->get_id(),
         // 'data-element-id' => $element->get_id(),
         // 'data-element-value-limit' => $element->get_value_limit()));
-        
+
         // if ($element->isVocabularyUserDefined())
         // {
         // $tagElementGroup[] = $this->formValidator->createElement(
@@ -133,7 +145,7 @@ class InstanceFormService
         // null,
         // array('id' => 'new-' . $uniqueIdentifier));
         // }
-        
+
         // $urlRenderer = new Redirect(
         // array(
         // Application :: PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager :: context(),
@@ -143,7 +155,7 @@ class InstanceFormService
         // $vocabularyUrl = $urlRenderer->getUrl();
         // $onclick = 'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl .
         // '\'); return false;';
-        
+
         // $vocabularyAction = new ToolbarItem(
         // Translation :: get('ShowVocabulary'),
         // Theme :: getInstance()->getImagePath(
@@ -154,13 +166,13 @@ class InstanceFormService
         // false,
         // $onclick,
         // '_blank');
-        
+
         // $tagElementGroup[] = $this->formValidator->createElement(
         // 'static',
         // null,
         // null,
         // $vocabularyAction->as_html());
-        
+
         // $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);
         // }
         // else
@@ -177,7 +189,7 @@ class InstanceFormService
     public function setDefaults()
     {
         $defaults = array();
-        
+
         $this->formValidator->setDefaults($defaults);
     }
 }

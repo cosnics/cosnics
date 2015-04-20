@@ -30,7 +30,8 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Service\RepositoryEntityService;
+use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Core\Metadata\Entity\EntityFactory;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -164,17 +165,19 @@ abstract class ContentObjectForm extends FormValidator
                 'build_general_form'));
 
         $relationService = new RelationService();
-        $repositoryEntityService = new RepositoryEntityService();
+        $entityService = new EntityService();
 
-        $availableSchemaIds = $repositoryEntityService->getAvailableSchemaIdsForEntity(
-            $relationService,
-            $this->get_content_object());
+        $entityFactory = EntityFactory :: getInstance();
+        $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
+
+        $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
 
         if (count($availableSchemaIds) > 0)
         {
-            $schemaInstances = $repositoryEntityService->getSchemaInstancesForEntity(
-                new RelationService(),
-                $this->get_content_object());
+            $entity = $entityFactory->getEntity(
+                $this->get_content_object()->class_name(),
+                $this->get_content_object()->get_id());
+            $schemaInstances = $entityService->getSchemaInstancesForEntity(new RelationService(), $entity);
 
             while ($schemaInstance = $schemaInstances->next_result())
             {
@@ -292,10 +295,10 @@ abstract class ContentObjectForm extends FormValidator
     public function build_metadata_choice_form()
     {
         $relationService = new RelationService();
-        $repositoryEntityService = new RepositoryEntityService();
+        $entityService = new EntityService();
 
         $instanceFormService = new InstanceFormService($this->get_content_object(), $this);
-        $instanceFormService->addElements($repositoryEntityService, $relationService);
+        $instanceFormService->addElements($entityService, $relationService);
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
