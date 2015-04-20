@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation;
 
 /**
  *
@@ -27,15 +28,17 @@ class RelationInstance extends DataClass
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_CREATION_DATE = 'creation_date';
 
+    private $relation;
+
     /**
      * **************************************************************************************************************
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -49,7 +52,7 @@ class RelationInstance extends DataClass
         $extended_property_names[] = self :: PROPERTY_RELATION_ID;
         $extended_property_names[] = self :: PROPERTY_USER_ID;
         $extended_property_names[] = self :: PROPERTY_CREATION_DATE;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -58,7 +61,7 @@ class RelationInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      *
      * @return string
@@ -147,6 +150,20 @@ class RelationInstance extends DataClass
     public function set_relation_id($relationId)
     {
         $this->set_default_property(self :: PROPERTY_RELATION_ID, $relationId);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation
+     */
+    public function getRelation()
+    {
+        if (! isset($this->relation))
+        {
+            $this->relation = DataManager :: retrieve_by_id(Relation :: class_name(), $this->get_relation_id());
+        }
+
+        return $this->relation;
     }
 
     /**

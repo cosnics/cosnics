@@ -30,7 +30,6 @@ class Relation extends DataClass
      * **************************************************************************************************************
      */
     const PROPERTY_NAME = 'name';
-    const PROPERTY_DISPLAY_NAME = 'display_name';
 
     /**
      * **************************************************************************************************************
@@ -48,7 +47,6 @@ class Relation extends DataClass
     public static function get_default_property_names($extended_property_names = array())
     {
         $extended_property_names[] = self :: PROPERTY_NAME;
-        $extended_property_names[] = self :: PROPERTY_DISPLAY_NAME;
 
         return parent :: get_default_property_names($extended_property_names);
     }
@@ -77,26 +75,6 @@ class Relation extends DataClass
     public function set_name($name)
     {
         $this->set_default_property(self :: PROPERTY_NAME, $name);
-    }
-
-    /**
-     * Returns the display_name
-     *
-     * @return string
-     */
-    public function get_display_name()
-    {
-        return $this->get_default_property(self :: PROPERTY_DISPLAY_NAME);
-    }
-
-    /**
-     * Sets the display_name
-     *
-     * @param string $display_name
-     */
-    public function set_display_name($display_name)
-    {
-        $this->set_default_property(self :: PROPERTY_DISPLAY_NAME, $display_name);
     }
 
     /**
