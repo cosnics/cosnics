@@ -296,8 +296,11 @@ abstract class ContentObjectForm extends FormValidator
     {
         $relationService = new RelationService();
         $entityService = new EntityService();
+        $entity = EntityFactory :: getInstance()->getEntity(
+            $this->get_content_object()->class_name(),
+            $this->get_content_object()->get_id());
 
-        $instanceFormService = new InstanceFormService($this->get_content_object(), $this);
+        $instanceFormService = new InstanceFormService($entity, $this);
         $instanceFormService->addElements($entityService, $relationService);
     }
 
