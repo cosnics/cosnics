@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Display\Component\Viewer\Menu;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
 
-class ViewerComponent extends Manager
+class ViewerComponent extends TabComponent
 {
     const FORM_BACK = 'back';
     const FORM_NEXT = 'next';
@@ -19,7 +19,7 @@ class ViewerComponent extends Manager
     /**
      * Runs this component and displays its output.
      */
-    function run()
+    function build()
     {
              
         $this->current_step = $this->getRequest()->get(self :: PARAM_STEP, 1);
@@ -88,33 +88,33 @@ class ViewerComponent extends Manager
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(1)->get_last_page_step();
     }
 
-    public function render_header()
-    {
-        $survey_menu = new Menu($this);
-        $html = array();
+//     public function render_header()
+//     {
+//         $survey_menu = new Menu($this);
+//         $html = array();
 
-        $html[] = parent :: render_header();
-        $html[] = '<div style="width: 17%; overflow: auto; float: left;">';
-        $html[] = $survey_menu->render_as_tree() . '<br />';
-        $html[] = '</div>';
-        $html[] = '<div style="width: 82%; float: right; padding-left: 10px; min-height: 500px;">';
-        $html[] = $this->get_progress_bar();
+//         $html[] = parent :: render_header();
+//         $html[] = '<div style="width: 17%; overflow: auto; float: left;">';
+//         $html[] = $survey_menu->render_as_tree() . '<br />';
+//         $html[] = '</div>';
+//         $html[] = '<div style="width: 82%; float: right; padding-left: 10px; min-height: 500px;">';
+//         $html[] = $this->get_progress_bar();
 
-        return implode(PHP_EOL, $html);
-    }
+//         return implode(PHP_EOL, $html);
+//     }
 
-    public function render_footer()
-    {
-        $html = array();
+//     public function render_footer()
+//     {
+//         $html = array();
 
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
-        $html[] = $this->get_hidden_fields();
-        $html[] = parent :: render_footer();
+//         $html[] = '</div>';
+//         $html[] = '</div>';
+//         $html[] = '<div class="clear">&nbsp;</div>';
+//         $html[] = $this->get_hidden_fields();
+//         $html[] = parent :: render_footer();
 
-        return implode(PHP_EOL, $html);
-    }
+//         return implode(PHP_EOL, $html);
+//     }
 
     private function get_progress_bar()
     {
@@ -127,10 +127,10 @@ class ViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function get_current_step()
-    {
-        return $this->current_step;
-    }
+//     public function get_current_step()
+//     {
+//         return $this->current_step;
+//     }
 
     private function get_previous_step($current_step)
     {

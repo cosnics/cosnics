@@ -51,12 +51,12 @@ div.question div.title {
 	/*margin-bottom: 10px;*/
 }
 
-div.question div.title div.number,div.question div.title div.text {
+/* div.question div.title div.number,div.question div.title div.text {
 	border: 1px solid #CECECE;
 	background: #D90223
 		url(../../../../../../common/libraries/resources/images/ruby/background_table_header.png)
 		repeat-x;
-}
+} */
 
 div.question div.title div.number {
 	float: left;

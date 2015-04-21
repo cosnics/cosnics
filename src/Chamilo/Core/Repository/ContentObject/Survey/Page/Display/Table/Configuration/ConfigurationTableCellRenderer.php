@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 
 class ConfigurationTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -40,29 +41,36 @@ class ConfigurationTableCellRenderer extends DataClassTableCellRenderer implemen
                 ;
                 break;
         }
+        
+        return parent :: render_cell($column, $config);
     }
 
-    function get_actions($config)
+    function get_actions($configuration)
     {
+        $parameters = array();
+        $parameters[Manager :: PARAM_ACTION]= Manager :: ACTION_CREATE_CONFIGURATION;
+        $parameters[Manager :: PARAM_CONFIGURATION_ID]= $configuration->get_id();
+        
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get(
+                Translation :: getInstance()->getTranslation(
                     'Edit',
-                    array('OBJECT' => Translation :: get('PageConfig')),
+                    array('OBJECT' => Translation :: getInstance()->getTranslation('PageConfig')),
                     Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_component()->get_config_update_url($config->get_id()),
+                $this->get_component()->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON));
-
+        
+        $parameters[Manager :: PARAM_ACTION]= Manager :: ACTION_DELETE_CONFIGURATION;
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get(
+                Translation :: getInstance()->getTranslation(
                     'Delete',
-                    array('OBJECT' => Translation :: get('PageConfig')),
+                    array('OBJECT' => Translation :: getInstance()->getTranslation('PageConfig')),
                     Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_component()->get_config_delete_url($config->get_id()),
+                $this->get_component()->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON,
                 true));
         return $toolbar->as_html();

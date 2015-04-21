@@ -168,9 +168,9 @@ abstract class ContentObjectForm extends FormValidator
         $entityService = new EntityService();
 
         $entityFactory = EntityFactory :: getInstance();
-        $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
+//         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
-        $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
+//         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
 
         if (count($availableSchemaIds) > 0)
         {
