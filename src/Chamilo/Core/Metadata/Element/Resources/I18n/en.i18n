@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\element
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Element Manager"
+BrowserComponent = "Browse elements"
+CreatorComponent = "Create element"
+UpdaterComponent = "Update element"
+DeleterComponent = "Delete element"
+MoverComponent = "Move element"
+VocabulatorComponent = "Manage controlled vocabulary"
+ElementControlledVocabulary = "Controlled vocabulary for the element"
+Associations = "Associations"
+Elements = "Elements"
+MoveDirectionNotSelected = "Move direction not selected"
