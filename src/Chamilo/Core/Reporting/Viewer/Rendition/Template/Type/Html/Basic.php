@@ -60,8 +60,8 @@ class Basic extends Html
                     ClassnameUtilities :: getInstance()->getNamespaceFromObject($block));
                 $html[] = '<h2>';
                 $html[] = '<img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
-                    $block->context(),
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($block, true)) . '"/> ';
+                    ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 1),
+                    ClassnameUtilities :: getInstance()->getClassnameFromObject($block)) . '"/> ';
                 $html[] = $title;
                 $html[] = '</h2>';
                 $html[] = BlockRenditionImplementation :: launch(
@@ -116,8 +116,8 @@ class Basic extends Html
                             $key,
                             $title,
                             Theme :: getInstance()->getImagePath(
-                                $block->context(),
-                                ClassnameUtilities :: getInstance()->getClassnameFromObject($block, true)),
+                                ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 1),
+                                ClassnameUtilities :: getInstance()->getClassnameFromObject($block)),
                             $this->get_context()->get_url($block_parameters),
                             $is_current_block));
                 }

@@ -133,12 +133,7 @@ div.announcements {
 }
 
 div.questionform input[type=text],div.row div.questionform input[type=password],div.row div.questionform select
-	{ /*
-	background-image: url(../images/common/buttons/button_link.png);
-	background-repeat: no-repeat;
-	background-position: 2px center;
-	padding-left: 20px;
-	*/
+	{ 
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 }

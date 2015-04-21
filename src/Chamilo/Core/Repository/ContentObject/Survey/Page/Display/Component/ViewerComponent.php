@@ -4,22 +4,35 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\Viewer\Form;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\TabComponent;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 
 class ViewerComponent extends TabComponent
 {
 
     function build()
     {
-               
-        $form = new Form($this);
-              
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $form->toHtml();
+        
+        if ($this->get_current_node()->is_root())
+        {
+            $form = new Form($this);
+            $html[] = $form->toHtml();
+        }
+        else
+        {
+            $html[] = ContentObjectRenditionImplementation :: launch(
+                $this->get_current_content_object(), 
+                ContentObjectRendition :: FORMAT_HTML, 
+                ContentObjectRendition :: VIEW_FULL, 
+                $this);
+        }
+        
         $html[] = $this->get_hidden_fields();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -28,9 +41,8 @@ class ViewerComponent extends TabComponent
         $html = array();
         $paramaters = $this->get_parent()->get_parameters();
         
-        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject(
-            $this->get_parent());
-        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace,1).'\Ajax';
+        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_parent());
+        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace, 1) . '\Ajax';
         
         $paramaters[self :: PARAM_AJAX_CONTEXT] = $ajaxContext;
         foreach ($paramaters as $name => $value)

@@ -47,6 +47,15 @@ class QuestionManagerComponent extends TabComponent implements TableSupport
         
         return new AndCondition($conditions);
     }
+    
+    /**
+     *
+     * @see \libraries\SubManager::get_additional_parameters()
+     */
+    public function get_additional_parameters()
+    {
+        return array(self :: PARAM_STEP);
+    }
 
 }
 

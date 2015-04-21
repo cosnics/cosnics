@@ -87,6 +87,8 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
             $types[] = $namespace.'\Storage\DataClass\\'.$classname;
         }
         
+        $types[] = self :: class_name();
+
         return $types;
     }
 

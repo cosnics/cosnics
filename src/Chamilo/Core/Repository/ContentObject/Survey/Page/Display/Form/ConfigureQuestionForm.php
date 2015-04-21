@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 
 /**
  * @author Eduard.Vossen
@@ -31,6 +32,10 @@ class ConfigureQuestionForm extends FormValidator
 
     private $parent;
     
+    /**
+     * @var Configuration
+     */
+    private $configuration;
     
     /**
      * @var Page
@@ -41,18 +46,15 @@ class ConfigureQuestionForm extends FormValidator
 
     private $complex_question_id;
 
-    private $config_index;
+    private $config_id;
 
     private $answer;
 
     private $complex_content_object_path_node;
 
-    function __construct($parent, $config_index)
+    function __construct($parent, $config_id)
     {
         parent :: __construct(self :: FORM_NAME, self :: FORM_METHOD_POST, $parent->get_url());
-        
-        $selected_complex_content_object_item = $parent->get_current_complex_content_object_item();
-        $content_object = $parent->get_current_content_object();
         
         $this->parent = $parent;
                
@@ -60,9 +62,9 @@ class ConfigureQuestionForm extends FormValidator
         
         $this->complex_content_object_path_node = $this->parent->get_current_node();
         
-        $this->complex_question = $selected_complex_content_object_item;
+        $this->complex_question =  $parent->get_current_complex_content_object_item();
         
-        if ($config_index)
+        if ($config_id)
         {
             $this->form_type = self :: TYPE_EDIT;
         }
@@ -74,9 +76,9 @@ class ConfigureQuestionForm extends FormValidator
                 
         if ($this->form_type == self :: TYPE_EDIT)
         {
-            $this->config_index = $config_index;
-            $configs = $this->page->get_config();
-            $this->answer = $configs[$this->config_index][Configuration :: PROPERTY_ANSWER_MATCHES];
+            $this->config_id = $config_id;
+            $this->configuration = DataManager::retrieve_by_id(Configuration::class_name(), $config_id);
+            $this->answer =  $this->configuration->getAnswerMatches();
             $this->build_editing_form();
             $this->setDefaults();
         }
@@ -103,7 +105,7 @@ class ConfigureQuestionForm extends FormValidator
         
         $question_display = \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay :: factory(
             $this, 
-            $this->complex_content_object_path_node);
+            $this->complex_content_object_path_node, $this->answer);
      
         $question_display->run();
         
@@ -161,7 +163,6 @@ class ConfigureQuestionForm extends FormValidator
     function build_editing_form()
     {
         $this->build_basic_form();
-        $this->addElement('hidden', Configuration :: PROPERTY_CONFIG_CREATED);
         
         $buttons[] = $this->createElement(
             'style_submit_button', 
@@ -234,7 +235,7 @@ class ConfigureQuestionForm extends FormValidator
     function create_configuration()
     {
         $values = $this->exportValues();
-         
+
         $configuration = new Configuration();
         $configuration->setPageId($this->page->get_id());
         $configuration->setName($values[Configuration :: PROPERTY_NAME]);
@@ -243,16 +244,26 @@ class ConfigureQuestionForm extends FormValidator
         $configuration->setToVisibleQuestionIds($this->get_to_visible_question_ids($values));
         $configuration->setAnswerMatches($this->create_answers($values));
         
-        
         $duplicate = $this->isDuplicate($configuration);
-        
+             
         if (! $duplicate)
         {
             $time = time();
-            $configuration->setCreated($time);
             $configuration->setUpdated($time);
             
-            return $configuration->create();
+            if($this->configuration){
+                $configuration->set_id($this->configuration->get_id());
+                $succes = $configuration->update();
+                
+            }else{
+                $configuration->setCreated($time);
+                $succes = $configuration->create();
+            }
+ 
+            if($succes){
+               $this->configuration = $configuration; 
+            }
+            return $succes;
         }
         else
         {
@@ -282,7 +293,7 @@ class ConfigureQuestionForm extends FormValidator
         
         foreach ($configs as $conf)
         {
-            $answer_diff = array_diff(
+           $answer_diff = array_diff_assoc(
                 $configuration->getAnswerMatches(), 
                 $conf->getAnswerMatches());
             $same_from_id = $configuration->getComplexQuestionId() ==
@@ -290,6 +301,8 @@ class ConfigureQuestionForm extends FormValidator
             $to_ids_diff = array_diff(
                 $configuration->getToVisibleQuestionIds(), 
                 $conf->getToVisibleQuestionIds());
+            
+            
             if ($same_from_id && count($answer_diff) == 0 && count($to_ids_diff) == 0)
             {
                 return true;
@@ -305,14 +318,13 @@ class ConfigureQuestionForm extends FormValidator
      */
     function setDefaults($defaults = array ())
     {
-        if ($this->config_index)
+        if ($this->config_id)
         {
-            $configs = $this->page->get_config();
-            $config = $configs[$this->config_index];
-            $defaults[Configuration :: PROPERTY_NAME] = $config[Configuration :: PROPERTY_NAME];
-            $defaults[Configuration :: PROPERTY_DESCRIPTION] = $config[Configuration :: PROPERTY_DESCRIPTION];
+            $configuration = $this->getConfiguration();
+            $defaults[Configuration :: PROPERTY_NAME] = $configuration->getName();
+            $defaults[Configuration :: PROPERTY_DESCRIPTION] = $configuration->getDescription();
             
-            foreach ($config[Configuration :: PROPERTY_TO_VISIBLE_QUESTION_IDS] as $id)
+            foreach ($configuration->getToVisibleQuestionIds() as $id)
             {
                 $defaults[self :: TO_VISIBLE_QUESTION_ID . '_' . $id] = 1;
             }
@@ -353,5 +365,10 @@ class ConfigureQuestionForm extends FormValidator
         
         return $complex_question_ids;
     }
+    
+    public function getConfiguration(){
+        return $this->configuration;
+    }
+    
 }
 ?>

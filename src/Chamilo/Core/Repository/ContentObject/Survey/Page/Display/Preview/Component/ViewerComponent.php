@@ -69,7 +69,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
     
     /**
      *
-     * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
+     * @see \core\repository\content_object\page\display\PortfolioDisplaySupport::is_own_page()
      */
     public function is_own_page()
     {
