@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  * This class describes a metadata vocabulary
@@ -17,7 +17,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Link;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Registration extends DataClass
+class ProviderRegistration extends DataClass
 {
     /**
      * **************************************************************************************************************
@@ -119,8 +119,10 @@ class Registration extends DataClass
     {
         $dependencies = array();
 
-        $dependencies[Link :: class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_PROVIDER_REGISTRATION_ID),
+        $dependencies[ProviderLink :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ProviderLink :: class_name(),
+                ProviderLink :: PROPERTY_PROVIDER_REGISTRATION_ID),
             new StaticConditionVariable($this->get_id()));
 
         return $dependencies;

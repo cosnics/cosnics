@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Link extends DataClass
+class ProviderLink extends DataClass
 {
 
     /**
@@ -117,7 +117,7 @@ class Link extends DataClass
         if (! isset($this->providerRegistration))
         {
             $this->providerRegistration = DataManager :: retrieve_by_id(
-                Registration :: class_name(),
+                ProviderRegistration :: class_name(),
                 $this->get_provider_registration_id());
         }
 

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  * This class describes an element in a metadata schema
@@ -402,8 +402,8 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
             new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($this->get_id()));
 
-        $dependencies[Link :: class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID),
+        $dependencies[ProviderLink :: class_name()] = new EqualityCondition(
+            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($this->get_id()));
 
         return $dependencies;

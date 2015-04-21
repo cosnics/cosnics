@@ -23,7 +23,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
 
-        $relation = new \Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation();
+        $relation = new \Chamilo\Core\Metadata\Storage\DataClass\Relation();
         $relation->set_name('isAvailableFor');
         if ($relation->create())
         {

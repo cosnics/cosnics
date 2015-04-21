@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Relation\Service;
 
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -22,10 +22,10 @@ class RelationService
     public function getRelationByName($relationName)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Relation :: class_name(), Relation :: PROPERTY_NAME), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Relation :: class_name(), Relation :: PROPERTY_NAME),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($relationName));
-        
+
         return DataManager :: retrieve(Relation :: class_name(), new DataClassRetrieveParameters($condition));
     }
 }
