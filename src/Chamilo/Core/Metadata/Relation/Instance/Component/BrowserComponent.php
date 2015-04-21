@@ -123,12 +123,12 @@ class BrowserComponent extends Manager implements TableSupport
                             new PropertyConditionVariable(
                                 RelationInstance :: class_name(),
                                 RelationInstance :: PROPERTY_SOURCE_TYPE),
-                            new StaticConditionVariable($sourceEntity->class_name())),
+                            new StaticConditionVariable($sourceEntity->getDataClassName())),
                         new EqualityCondition(
                             new PropertyConditionVariable(
                                 RelationInstance :: class_name(),
                                 RelationInstance :: PROPERTY_SOURCE_ID),
-                            new StaticConditionVariable($sourceEntity->get_id()))));
+                            new StaticConditionVariable($sourceEntity->getDataClassIdentifier()))));
             }
 
             $conditions[] = new OrCondition($sourceConditions);
@@ -148,12 +148,12 @@ class BrowserComponent extends Manager implements TableSupport
                             new PropertyConditionVariable(
                                 RelationInstance :: class_name(),
                                 RelationInstance :: PROPERTY_TARGET_TYPE),
-                            new StaticConditionVariable($targetEntity->class_name())),
+                            new StaticConditionVariable($targetEntity->getDataClassName())),
                         new EqualityCondition(
                             new PropertyConditionVariable(
                                 RelationInstance :: class_name(),
                                 RelationInstance :: PROPERTY_TARGET_ID),
-                            new StaticConditionVariable($targetEntity->get_id()))));
+                            new StaticConditionVariable($targetEntity->getDataClassIdentifier()))));
             }
 
             $conditions[] = new OrCondition($targetConditions);

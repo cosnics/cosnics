@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Table\Select;
 
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
  * Table column model for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SelectTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -26,16 +26,16 @@ class SelectTableColumnModel extends DataClassTableColumnModel implements TableC
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_TYPE, 
+                self :: COLUMN_TYPE,
                 Theme :: getInstance()->getImage(
-                    'Action/Category', 
-                    'png', 
-                    Translation :: get('Type', null, $this->get_component()->package()), 
-                    null, 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    false, 
+                    'Action/Category',
+                    'png',
+                    Translation :: get('Type', null, $this->get_component()->package()),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
                     'Chamilo\Configuration')));
-        
+
         $this->add_column(new DataClassPropertyTableColumn(Vocabulary :: class_name(), Vocabulary :: PROPERTY_VALUE));
     }
 }

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Metadata\Service;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Entity\EntityFactory;
 use Chamilo\Core\Metadata\Entity\EntityInterface;
@@ -20,7 +19,7 @@ class InstanceFormService
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var \Chamilo\Core\Metadata\Entity\EntityInterface
      */
     private $entity;
 

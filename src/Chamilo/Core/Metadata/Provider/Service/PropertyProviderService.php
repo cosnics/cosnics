@@ -2,17 +2,17 @@
 namespace Chamilo\Core\Metadata\Provider\Service;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Metadata\Provider\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\Link;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Core\Metadata\Provider\Storage\DataClass\Registration;
+use Chamilo\Core\Metadata\Storage\DataClass\Registration;
 
 /**
  *
@@ -91,7 +91,7 @@ class PropertyProviderService
         $providerLink = $this->getProviderLink($element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
-        
+
         return $provider->renderProperty($providerRegistration->get_property_name(), $this->getEntity());
     }
 
@@ -103,16 +103,16 @@ class PropertyProviderService
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ENTITY_TYPE), 
+            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->getEntity()->class_name()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID), 
+            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($element->get_id()));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         $providerLink = DataManager :: retrieve(Link :: class_name(), new DataClassRetrieveParameters($condition));
-        
+
         if ($providerLink instanceof Link)
         {
             return $providerLink;

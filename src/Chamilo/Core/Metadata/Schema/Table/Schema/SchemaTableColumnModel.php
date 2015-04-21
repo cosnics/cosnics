@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Table\Schema;
 
-use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
  * Table column model for the schema
- * 
+ *
  * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

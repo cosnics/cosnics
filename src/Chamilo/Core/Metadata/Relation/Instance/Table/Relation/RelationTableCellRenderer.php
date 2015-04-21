@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Entity\EntityFactory;
 
 /**
  *
@@ -20,10 +21,6 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class RelationTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
-
-    // $this->add_column(new StaticTableColumn(self :: PROPERTY_SOURCE));
-    // $this->add_column(new StaticTableColumn(self :: PROPERTY_RELATION));
-    // $this->add_column(new StaticTableColumn(self :: PROPERTY_TARGET));
 
     /**
      *
@@ -50,20 +47,12 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
         return parent :: render_cell($column, $relationInstance);
     }
 
-    public function renderEntityByTypeAndIdentifier($entityType, $entityIdentifier)
+    public function renderEntityByTypeAndIdentifier($entityType, $entityIdentifier = 0)
     {
-        if ($entityIdentifier == 0)
-        {
-            return $entityType;
-        }
-        else
-        {
-            $entity = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-                $entityType,
-                $entityIdentifier);
+        $entityFactory = EntityFactory :: getInstance();
+        $entity = $entityFactory->getEntity($entityType, $entityIdentifier);
 
-            return (string) $entity;
-        }
+        return $entity->getName();
     }
 
     /**

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Table\Vocabulary;
 
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Table data provider for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class VocabularyTableDataProvider extends DataClassTableDataProvider
@@ -16,7 +16,7 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     * 
+     *
      * @param \libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -28,13 +28,13 @@ class VocabularyTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
+
         return DataManager :: retrieves(Vocabulary :: class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     * 
+     *
      * @param \libraries\storage\Condition $condition
      *
      * @return int

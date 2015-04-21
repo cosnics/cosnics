@@ -1,20 +1,20 @@
 <?php
-namespace Chamilo\Core\Metadata\Element\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
-use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
-use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Provider\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\Link;
 
 /**
  * This class describes an element in a metadata schema

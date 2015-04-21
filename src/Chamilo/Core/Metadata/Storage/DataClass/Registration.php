@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\Metadata\Provider\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Provider\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\Link;
 
 /**
  * This class describes a metadata vocabulary

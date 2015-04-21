@@ -3,8 +3,8 @@ namespace Chamilo\Core\Metadata\Package;
 
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 
 /**
  *
