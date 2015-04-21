@@ -7,6 +7,12 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class DeleterComponent extends Manager
 {
@@ -16,7 +22,6 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        
         $selected_steps = Request :: get(self :: PARAM_STEP);
         if (! is_array($selected_steps))
         {
@@ -62,8 +67,35 @@ class DeleterComponent extends Manager
             
             $current_parents_content_object_ids = $available_node->get_parents_content_object_ids(false, true);
             
-            $success = $complex_content_object_item->delete();
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID), 
+                new StaticConditionVariable($this->get_root_content_object()->get_id()));
+            $configurations = DataManager :: retrieves(
+                Configuration :: class_name(), 
+                new DataClassRetrievesParameters($condition));
+            while ($configuration = $configurations->next_result())
+            {
+                
+                if ($configuration->getComplexQuestionId() == $complex_content_object_item_id)
+                {
+                    $configuration->delete();
+                }
+                else
+                {
+                    $toVisibleQuestionIds = $configuration->getToVisibleQuestionIds();
+                    $newToVisibleQuestionIds = array_diff($toVisibleQuestionIds, array($complex_content_object_item_id));
+                    if (count($newToVisibleQuestionIds) == 0)
+                    {
+                        $configuration->delete();
+                    }else{
+                        $configuration->setToVisibleQuestionIds($newToVisibleQuestionIds);
+                        $configuration->update();
+                    }
+                }
+            }
             
+            $success = $complex_content_object_item->delete();
+                       
             if ($success)
             {
                 Event :: trigger(

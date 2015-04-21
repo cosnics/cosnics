@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -11,12 +9,11 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
- * Component that allows the user to add content to the portfolio
+ * Component that allows the user to add content to the page
  *
- * @package repository\content_object\portfolio\display
+ * @package repository\content_object\page\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
@@ -33,20 +30,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
             throw new NotAllowedException();
         }
 
-        $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(Page :: context(), 2));
-
-        $selected_template_id = TypeSelector :: get_selection();
-        
-        if ($selected_template_id == $template->get_id())
-        {
-            $variable = 'AddFolder';
-        }
-        else
-        {
-            $variable = 'CreatorComponent';
-        }
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
+        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
@@ -168,7 +152,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     }
 
     /**
-     * Determine which content objects can't be added to this portfolio
+     * Determine which content objects can't be added to this page
      *
      * @return int[]
      */
