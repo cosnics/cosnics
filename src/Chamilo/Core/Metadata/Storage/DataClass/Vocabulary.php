@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 
 /**
  * This class describes a metadata vocabulary
@@ -21,7 +22,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Vocabulary extends DataClass
+class Vocabulary extends DataClass implements EntityTranslationInterface
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 

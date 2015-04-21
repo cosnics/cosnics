@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 
 /**
  *
@@ -21,9 +21,9 @@ class EntityTranslationFormService
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @var \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface
      */
-    private $entity;
+    private $entityTranslationImplementation;
 
     /**
      *
@@ -33,29 +33,29 @@ class EntityTranslationFormService
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface $entityTranslationImplementation
      */
-    public function __construct(DataClass $entity)
+    public function __construct(EntityTranslationInterface $entityTranslationImplementation)
     {
-        $this->entity = $entity;
+        $this->entityTranslationImplementation = $entityTranslationImplementation;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface
      */
-    public function getEntity()
+    public function getEntityTranslationImplementation()
     {
-        return $this->entity;
+        return $this->entityTranslationImplementation;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface $entity
      */
-    public function setEntity($entity)
+    public function setEntityTranslationImplementation(EntityTranslationInterface $entityTranslationImplementation)
     {
-        $this->entity = $entity;
+        $this->entityTranslationImplementation = $entityTranslationImplementation;
     }
 
     /**
@@ -82,26 +82,26 @@ class EntityTranslationFormService
         {
             throw new \Exception(Translation :: get('NoFormValidatorSet'));
         }
-        
+
         $this->getFormValidator()->addElement('category', Translation :: get('Translations'));
-        
+
         $languages = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(Language :: class_name());
         $platformLanguage = Configuration :: get('Chamilo\Core\Admin', 'platform_language');
-        
+
         while ($language = $languages->next_result())
         {
             $fieldName = EntityTranslationService :: PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
             $this->getFormValidator()->addElement('text', $fieldName, $language->get_original_name());
-            
+
             if ($language->get_isocode() == $platformLanguage)
             {
                 $this->getFormValidator()->addRule(
-                    $fieldName, 
-                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+                    $fieldName,
+                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
                     'required');
             }
         }
-        
+
         $this->getFormValidator()->addElement('category');
     }
 
@@ -111,14 +111,14 @@ class EntityTranslationFormService
         {
             throw new \Exception(Translation :: get('NoFormValidatorSet'));
         }
-        
+
         $defaults = array();
-        
-        foreach ($this->getEntity()->getTranslations() as $isocode => $translation)
+
+        foreach ($this->getEntityTranslationImplementation()->getTranslations() as $isocode => $translation)
         {
             $defaults[EntityTranslationService :: PROPERTY_TRANSLATION][$isocode] = $translation->get_value();
         }
-        
+
         $this->getFormValidator()->setDefaults($defaults);
     }
 }

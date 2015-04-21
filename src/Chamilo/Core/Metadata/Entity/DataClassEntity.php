@@ -13,6 +13,9 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 abstract class DataClassEntity implements EntityInterface
 {
+    // Identifier types
+    const IDENTIFIER_TYPE_INSTANCE = 0;
+    const IDENTIFIER_ALL_INSTANCES = null;
 
     /**
      *

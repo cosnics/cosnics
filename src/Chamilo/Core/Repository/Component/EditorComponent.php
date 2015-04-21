@@ -20,6 +20,7 @@ use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -103,12 +104,14 @@ class EditorComponent extends Manager implements DelegateComponent
                 if ($success)
                 {
                     $values = $form->exportValues();
+
+                    $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($object);
                     $entityService = new EntityService();
                     $entityService->updateEntitySchemaValues(
                         $this->get_user(),
                         new RelationService(),
                         new ElementService(),
-                        $object,
+                        $entity,
                         $values[EntityService :: PROPERTY_METADATA_SCHEMA]);
 
                     Event :: trigger(

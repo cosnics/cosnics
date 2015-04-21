@@ -3,7 +3,6 @@ namespace Chamilo\Core\Metadata\Vocabulary\Service;
 
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -17,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
 
 /**
  *
@@ -31,11 +31,11 @@ class VocabularyService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getFallbackVocabulariesForUserEntitySchemaInstanceElement(User $user, DataClass $entity,
+    public function getFallbackVocabulariesForUserEntitySchemaInstanceElement(User $user, DataClassEntity $entity,
         SchemaInstance $schemaInstance, Element $element)
     {
         if (! $element->usesVocabulary())
@@ -58,7 +58,6 @@ class VocabularyService
 
         $defaultVocabularies = $this->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
             $user,
-            $entity,
             $schemaInstance,
             $element);
 
@@ -76,11 +75,11 @@ class VocabularyService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getFallbackValueForUserEntitySchemaInstanceElement(User $user, DataClass $entity,
+    public function getFallbackValueForUserEntitySchemaInstanceElement(User $user, DataClassEntity $entity,
         SchemaInstance $schemaInstance, Element $element)
     {
         if ($element->usesVocabulary())
@@ -94,11 +93,11 @@ class VocabularyService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getProvidedVocabulariesForUserEntitySchemaInstanceElement(User $user, DataClass $entity,
+    public function getProvidedVocabulariesForUserEntitySchemaInstanceElement(User $user, DataClassEntity $entity,
         SchemaInstance $schemaInstance, Element $element)
     {
         if (! $element->usesVocabulary())
@@ -149,11 +148,11 @@ class VocabularyService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getProvidedValueForUserEntitySchemaInstanceElement(User $user, DataClass $entity,
+    public function getProvidedValueForUserEntitySchemaInstanceElement(User $user, DataClassEntity $entity,
         SchemaInstance $schemaInstance, Element $element)
     {
         if ($element->usesVocabulary())
@@ -177,12 +176,11 @@ class VocabularyService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getDefaultVocabulariesForUserEntitySchemaInstanceElement(User $user, DataClass $entity,
-        SchemaInstance $schemaInstance, Element $element)
+    public function getDefaultVocabulariesForUserEntitySchemaInstanceElement(User $user, SchemaInstance $schemaInstance,
+        Element $element)
     {
         if (! $element->usesVocabulary())
         {

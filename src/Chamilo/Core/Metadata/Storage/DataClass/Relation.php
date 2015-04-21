@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 
 /**
  * This class describes a metadata schema
@@ -20,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Relation extends DataClass
+class Relation extends DataClass implements EntityTranslationInterface
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 
