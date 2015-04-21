@@ -60,7 +60,7 @@ class DataClassEntityFactory
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface
      */
-    public function getEntity($dataClassName, $dataClassIdentifier = 0, DataClass $dataClass = null)
+    public function getEntity($dataClassName, $dataClassIdentifier = null, DataClass $dataClass = null)
     {
         $entityClassName = $this->determineEntityClassName($dataClassName);
         return new $entityClassName($dataClassName, $dataClassIdentifier, $dataClass);
@@ -94,7 +94,7 @@ class DataClassEntityFactory
      */
     public function getEntityFromDataClassName($dataClassName)
     {
-        return $this->getEntity($dataClassName);
+        return $this->getEntity($dataClassName, DataClassEntity :: IDENTIFIER_TYPE_INSTANCE);
     }
 
     /**

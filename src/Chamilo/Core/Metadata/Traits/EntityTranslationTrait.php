@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Traits;
 
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  *
@@ -27,7 +28,8 @@ trait EntityTranslationTrait
     {
         if (! isset($this->translations))
         {
-            $entityTranslationService = new EntityTranslationService($this);
+            $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($this);
+            $entityTranslationService = new EntityTranslationService($entity);
             $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode();
         }
 

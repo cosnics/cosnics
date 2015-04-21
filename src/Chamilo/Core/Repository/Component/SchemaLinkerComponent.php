@@ -37,6 +37,10 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         return $component->run();
     }
 
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
+     */
     public function getTargetEntities()
     {
         $registrations = \Chamilo\Configuration\Configuration :: get_instance()->get_registrations_by_type(
@@ -56,6 +60,11 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         return $entities;
     }
 
+    /**
+     *
+     * @throws \Exception
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
+     */
     public function getRelation()
     {
         $relationService = new RelationService();

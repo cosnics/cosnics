@@ -6,7 +6,6 @@ use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -18,6 +17,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
 
 /**
  *
@@ -57,11 +57,11 @@ class EntityFormService
     /**
      *
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      * @param \Chamilo\Core\User\Storaga\DataClass\User $user
      */
-    public function __construct(SchemaInstance $schemaInstance, DataClass $entity, FormValidator $formValidator,
+    public function __construct(SchemaInstance $schemaInstance, DataClassEntity $entity, FormValidator $formValidator,
         User $user)
     {
         $this->schemaInstance = $schemaInstance;
@@ -90,7 +90,7 @@ class EntityFormService
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
      */
     public function getEntity()
     {
@@ -99,9 +99,9 @@ class EntityFormService
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      */
-    public function setEntity($entity)
+    public function setEntity(DataClassEntity $entity)
     {
         $this->entity = $entity;
     }
@@ -345,7 +345,6 @@ class EntityFormService
                     {
                         $elementInstanceVocabularies = $vocabularyService->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
                             $this->getUser(),
-                            $this->getEntity(),
                             $this->getSchemaInstance(),
                             $element);
                     }

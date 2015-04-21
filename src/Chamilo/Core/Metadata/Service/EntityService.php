@@ -22,6 +22,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
 
 /**
  *
@@ -40,10 +41,10 @@ class EntityService
     /**
      *
      * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @return Schema[]
      */
-    public function getAvailableSchemasForEntityType(RelationService $relationService, $entity)
+    public function getAvailableSchemasForEntityType(RelationService $relationService, DataClassEntity $entity)
     {
         $schemaIds = $this->getAvailableSchemaIdsForEntityType($relationService, $entity);
 
@@ -57,10 +58,10 @@ class EntityService
      *
      * @param EntityService $entityService
      * @param RelationService $relationService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @return integer[]
      */
-    public function getAvailableSchemaIdsForEntityType(RelationService $relationService, $entity)
+    public function getAvailableSchemaIdsForEntityType(RelationService $relationService, DataClassEntity $entity)
     {
         return $this->getSourceRelationIdsForEntity(
             Schema :: class_name(),
@@ -89,7 +90,15 @@ class EntityService
             new DataClassRetrievesParameters(new AndCondition($conditions)));
     }
 
-    public function getSchemaInstancesForSchemaAndEntity(Schema $schema, RelationService $relationService, $entity)
+    /**
+     *
+     * @param Schema $schema
+     * @param RelationService $relationService
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @return \libraries\storage\ResultSet
+     */
+    public function getSchemaInstancesForSchemaAndEntity(Schema $schema, RelationService $relationService,
+        DataClassEntity $entity)
     {
         $conditions = $this->getEntityCondition($entity);
         $conditions[] = new ComparisonCondition(
@@ -104,10 +113,10 @@ class EntityService
 
     /**
      *
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition[]
      */
-    private function getEntityCondition($entity)
+    private function getEntityCondition(DataClassEntity $entity)
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
@@ -126,10 +135,10 @@ class EntityService
      *
      * @param string $sourceType
      * @param \Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation $relation
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $targetEntity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $targetEntity
      * @return integer[]
      */
-    public function getSourceRelationIdsForEntity($sourceType, Relation $relation, $targetEntity)
+    public function getSourceRelationIdsForEntity($sourceType, Relation $relation, DataClassEntity $targetEntity)
     {
         $conditions = array();
         $conditions[] = new ComparisonCondition(
@@ -179,16 +188,15 @@ class EntityService
      * @param User $currentUser
      * @param RelationService $relationService
      * @param ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedSchemaValues
      * @return boolean
      */
     public function updateEntitySchemaValues(User $currentUser, RelationService $relationService,
-        ElementService $elementService, $entity, $submittedSchemaValues)
+        ElementService $elementService, DataClassEntity $entity, $submittedSchemaValues)
     {
-        $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType(
-            $relationService,
-            $entity->getDataClassName());
+        $entityType = DataClassEntityFactory :: getInstance()->getEntity($entity->getDataClassName());
+        $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType($relationService, $entityType);
 
         $submittedSchemaIds = array_keys($submittedSchemaValues);
 
@@ -218,12 +226,12 @@ class EntityService
      * @param Schema $schema
      * @param RelationService $relationService
      * @param ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedSchemaValues
      * @return boolean
      */
     private function processEntitySchema(User $currentUser, Schema $schema, RelationService $relationService,
-        ElementService $elementService, $entity, $submittedSchemaValues)
+        ElementService $elementService, DataClassEntity $entity, $submittedSchemaValues)
     {
         $existingSchemaInstances = $this->getSchemaInstancesForSchemaAndEntity($schema, $relationService, $entity)->as_array();
         $existingSchemaInstanceIds = array();
@@ -258,12 +266,12 @@ class EntityService
      * @param User $currentUser
      * @param SchemaInstance $schemaInstance
      * @param ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedSchemaInstanceValues
      * @return boolean
      */
     private function processEntitySchemaInstance(User $currentUser, SchemaInstance $schemaInstance,
-        ElementService $elementService, $entity, $submittedSchemaInstanceValues)
+        ElementService $elementService, DataClassEntity $entity, $submittedSchemaInstanceValues)
     {
         $elements = $elementService->getElementsForSchemaInstance($schemaInstance);
 
@@ -290,12 +298,12 @@ class EntityService
      * @param ElementService $elementService
      * @param SchemaInstance $schemaInstance
      * @param Element $element
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedElementValues
      * @return boolean
      */
     private function processEntityElement(User $currentUser, ElementService $elementService,
-        SchemaInstance $schemaInstance, Element $element, $entity, $submittedElementValues)
+        SchemaInstance $schemaInstance, Element $element, DataClassEntity $entity, $submittedElementValues)
     {
         $propertyProviderService = new PropertyProviderService($entity, $schemaInstance);
 
@@ -313,7 +321,6 @@ class EntityService
                     $elementService,
                     $schemaInstance,
                     $element,
-                    $entity,
                     $submittedElementValues);
             }
             else
@@ -323,7 +330,6 @@ class EntityService
                     $elementService,
                     $schemaInstance,
                     $element,
-                    $entity,
                     $submittedElementValues);
             }
         }
@@ -335,12 +341,11 @@ class EntityService
      * @param ElementService $elementService
      * @param SchemaInstance $schemaInstance
      * @param Element $element
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
      * @param string[] $submittedElementValue
      * @return boolean
      */
     private function processEntityFreeElement(User $currentUser, ElementService $elementService,
-        SchemaInstance $schemaInstance, Element $element, $entity, $submittedElementValue)
+        SchemaInstance $schemaInstance, Element $element, $submittedElementValue)
     {
         $existingElementInstance = $elementService->getElementInstanceForSchemaInstanceAndElement(
             $schemaInstance,
@@ -388,12 +393,11 @@ class EntityService
      * @param ElementService $elementService
      * @param SchemaInstance $schemaInstance
      * @param Element $element
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface $entity
      * @param string[] $submittedElementValues
      * @return boolean
      */
     private function processEntityVocabularyElement(User $currentUser, ElementService $elementService,
-        SchemaInstance $schemaInstance, Element $element, $entity, $submittedElementValues)
+        SchemaInstance $schemaInstance, Element $element, $submittedElementValues)
     {
         $existingElementInstances = $elementService->getElementInstancesForSchemaInstanceAndElement(
             $schemaInstance,
