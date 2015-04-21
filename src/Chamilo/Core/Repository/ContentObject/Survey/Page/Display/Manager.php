@@ -2,15 +2,16 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display;
 
 use Chamilo\Libraries\Platform\Session\Request;
+
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const ACTION_ACTIVITY = 'Activity';
     const ACTION_MOVE = 'Mover';
     const ACTION_SORT = 'Sorter';
-    const ACTION_CONFIGURE = 'Configurer';
-    const ACTION_CONFIGURE_QUESTION = 'ConfigureQuestion';
+    const ACTION_MANAGER = 'Manager';
+    const ACTION_CREATE_CONFIGURATION = 'ConfigurationCreator';
     const ACTION_QUESTION_MANAGER = 'QuestionManager';
-    const ACTION_DELETE_CONFIG = 'ConfigDeleter';
+    const ACTION_DELETE_CONFIGURATION = 'ConfigurationDeleter';
     const ACTION_UPDATE_CONFIG = 'ConfigUpdater';
     const ACTION_CHANGE_QUESTION_VISIBILITY = 'VisibilityChanger';
     
@@ -20,7 +21,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
     const PARAM_SORT = 'sort';
     const PARAM_AJAX_CONTEXT = 'ajax_context';
-    const PARAM_CONFIG_ID = 'config_id';
+    const PARAM_CONFIGURATION_ID = 'config_id';
     const PARAM_COMPLEX_QUESTION_ITEM_ID = 'complex_question_item_id';
    
     
