@@ -154,7 +154,7 @@ class RelationInstance extends DataClass
 
     /**
      *
-     * @return \Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
      */
     public function getRelation()
     {

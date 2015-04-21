@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Service;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Entity\EntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Entity\EntityInterface;
 
 /**
@@ -78,7 +78,7 @@ class InstanceFormService
 
     public function addElements(EntityService $entityService, RelationService $relationService)
     {
-        $entityFactory = EntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory :: getInstance();
         $entity = $entityFactory->getEntity($this->getEntity()->getDataClassName());
         $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $entity);
 

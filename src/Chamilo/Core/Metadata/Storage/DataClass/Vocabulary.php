@@ -189,4 +189,13 @@ class Vocabulary extends DataClass
 
         return $dependencies;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTranslationFallback()
+    {
+        return $this->get_value();
+    }
 }

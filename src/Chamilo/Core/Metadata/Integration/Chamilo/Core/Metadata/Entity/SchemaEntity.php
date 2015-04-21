@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Integration\Chamilo\Core\Metadata\Entity;
 
-use Chamilo\Core\Metadata\Entity\EntityInterface;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
 
 /**
  *
@@ -12,64 +12,33 @@ use Chamilo\Libraries\Format\Theme;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SchemaEntity implements EntityInterface
+class SchemaEntity extends DataClassEntity
 {
 
     /**
      *
-     * @var string
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getType()
      */
-    private $dataClassName;
-
-    /**
-     *
-     * @var integer
-     */
-    private $dataClassIdentifier;
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
-     */
-    public function __construct($dataClassName, $dataClassIdentifier = 0)
-    {
-        $this->dataClassName = $dataClassName;
-        $this->dataClassIdentifier = $dataClassIdentifier;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Metadata\Entity\EntityInterface::getDataClassName()
-     */
-    public function getDataClassName()
-    {
-        return $this->dataClassName;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Metadata\Entity\EntityInterface::getDataClassIdentifier()
-     */
-    public function getDataClassIdentifier()
-    {
-        return $this->dataClassIdentifier;
-    }
-
     public function getType()
     {
-        return Translation :: getInstance()->getTranslation(
-            'TypeName',
-            null,
-            'Chamilo\Core\Repository\ContentObject\File');
+        return Translation :: get('Schema', null, 'Chamilo\Core\Metadata');
     }
 
-    public function getIcon()
+    /**
+     *
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getIcon()
+     */
+    public function getIcon($size = Theme::ICON_MINI)
     {
-        return Theme :: getInstance()->getImage('Logo', 'png');
+        return Theme :: getInstance()->getImage('Logo/' . $size, 'png', $this->getType());
     }
 
-    public function getName()
+    /**
+     *
+     * @see \Chamilo\Core\Metadata\Entity\DataClassEntity::getDisplayName()
+     */
+    public function getDisplayName()
     {
+        return $this->getDataClass()->getTranslationByIsocode(Translation :: getInstance()->getLanguageIsocode());
     }
 }

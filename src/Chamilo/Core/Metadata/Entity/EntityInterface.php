@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Entity;
 
 /**
  *
- * @package Chamilo\Core\Metadata\Interfaces
+ * @package Chamilo\Core\Metadata\Entity
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -13,26 +13,19 @@ interface EntityInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
+     * @return string
      */
-    public function __construct($dataClassName, $dataClassIdentifier = 0);
+    public function getType();
 
     /**
      *
      * @return string
      */
-    public function getDataClassName();
+    public function getIcon();
 
     /**
      *
-     * @return integer
+     * @return string
      */
-    public function getDataClassIdentifier();
-
-    public function getType();
-
-    public function getIcon();
-
     public function getName();
 }

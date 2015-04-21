@@ -21,7 +21,7 @@ use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
-use Chamilo\Core\Metadata\Entity\EntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  *
@@ -76,7 +76,7 @@ class EntityService
      */
     public function getSchemaInstancesForEntity(RelationService $relationService, $entity)
     {
-        $entityType = EntityFactory :: getInstance()->getEntity($entity->getDataClassName());
+        $entityType = DataClassEntityFactory :: getInstance()->getEntity($entity->getDataClassName());
         $schemaIds = $this->getAvailableSchemaIdsForEntityType($relationService, $entityType);
 
         $conditions = $this->getEntityCondition($entity);

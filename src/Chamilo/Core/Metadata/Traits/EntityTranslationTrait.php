@@ -19,6 +19,10 @@ trait EntityTranslationTrait
      */
     private $translations;
 
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation[]
+     */
     public function getTranslations()
     {
         if (! isset($this->translations))
@@ -26,7 +30,33 @@ trait EntityTranslationTrait
             $entityTranslationService = new EntityTranslationService($this);
             $this->translations = $entityTranslationService->getEntityTranslationsIndexedByIsocode();
         }
-        
+
         return $this->translations;
     }
+
+    /**
+     *
+     * @param string $isocode
+     * @return string
+     */
+    public function getTranslationByIsocode($isocode)
+    {
+        $translations = $this->getTranslations();
+        $bestMatchIsoCode = \Locale :: lookup(array_keys($translations), $isocode, true);
+
+        if ($bestMatchIsoCode)
+        {
+            return $translations[$bestMatchIsoCode]->get_value();
+        }
+        else
+        {
+            return $this->getTranslationFallback();
+        }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function getTranslationFallback();
 }

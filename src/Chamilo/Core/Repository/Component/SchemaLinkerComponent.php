@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Entity\EntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  *
@@ -43,7 +43,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
             'Chamilo\Core\Repository\ContentObject');
 
         $entities = array();
-        $entityFactory = EntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory :: getInstance();
 
         foreach ($registrations as $registration)
         {

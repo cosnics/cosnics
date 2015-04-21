@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Entity\EntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  *
@@ -25,7 +25,7 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
     /**
      *
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
-     * @param \Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance $relationInstance
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\RelationInstance $relationInstance
      * @return string
      */
     public function render_cell($column, $relationInstance)
@@ -41,7 +41,8 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
                     $relationInstance->get_target_type(),
                     $relationInstance->get_target_id());
             case RelationTableColumnModel :: PROPERTY_RELATION :
-                return $relationInstance->getRelation()->get_name();
+                return $relationInstance->getRelation()->getTranslationByIsocode(
+                    Translation :: getInstance()->getLanguageIsocode());
         }
 
         return parent :: render_cell($column, $relationInstance);
@@ -49,7 +50,7 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
     public function renderEntityByTypeAndIdentifier($entityType, $entityIdentifier = 0)
     {
-        $entityFactory = EntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory :: getInstance();
         $entity = $entityFactory->getEntity($entityType, $entityIdentifier);
 
         return $entity->getName();

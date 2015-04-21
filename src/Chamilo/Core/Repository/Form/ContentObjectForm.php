@@ -31,7 +31,7 @@ use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Core\Metadata\Entity\EntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -167,7 +167,7 @@ abstract class ContentObjectForm extends FormValidator
         $relationService = new RelationService();
         $entityService = new EntityService();
 
-        $entityFactory = EntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory :: getInstance();
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
@@ -296,7 +296,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $relationService = new RelationService();
         $entityService = new EntityService();
-        $entity = EntityFactory :: getInstance()->getEntity(
+        $entity = DataClassEntityFactory :: getInstance()->getEntity(
             $this->get_content_object()->class_name(),
             $this->get_content_object()->get_id());
 
