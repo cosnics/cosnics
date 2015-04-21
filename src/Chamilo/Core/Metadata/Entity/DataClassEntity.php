@@ -124,7 +124,8 @@ abstract class DataClassEntity implements EntityInterface
      */
     public function isDataClassIdentified()
     {
-        return $this->getDataClassIdentifier() != 0;
+        return $this->getDataClassIdentifier() != self :: IDENTIFIER_TYPE_INSTANCE &&
+             $this->getDataClassIdentifier() != self :: IDENTIFIER_ALL_INSTANCES;
     }
 
     /**
