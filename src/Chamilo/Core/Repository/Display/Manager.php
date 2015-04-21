@@ -24,6 +24,7 @@ abstract class Manager extends Application
     const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
     const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
     const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
+    const ACTION_MERGE = 'Merger';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_VIEW_COMPLEX_CONTENT_OBJECT = 'Viewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;

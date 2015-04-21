@@ -53,11 +53,11 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID), 
             new StaticConditionVariable($this->get_id()));
-        $complex_content_objects = DataManager :: retrieves(
+        $configurations = DataManager :: retrieves(
             Configuration :: class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
         
-        return $complex_content_objects;
+        return $configurations;
     }
 
     function get_allowed_types()
