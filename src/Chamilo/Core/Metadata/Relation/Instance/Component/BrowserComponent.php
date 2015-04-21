@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Metadata\Relation\Instance\Table\Relation\RelationTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 
 /**
  *

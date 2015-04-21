@@ -6,13 +6,13 @@ use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\Link;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Core\Metadata\Storage\DataClass\Registration;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 
 /**
  *
@@ -103,17 +103,19 @@ class PropertyProviderService
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($this->getEntity()->class_name()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Link :: class_name(), Link :: PROPERTY_ELEMENT_ID),
+            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($element->get_id()));
 
         $condition = new AndCondition($conditions);
 
-        $providerLink = DataManager :: retrieve(Link :: class_name(), new DataClassRetrieveParameters($condition));
+        $providerLink = DataManager :: retrieve(
+            ProviderLink :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
-        if ($providerLink instanceof Link)
+        if ($providerLink instanceof ProviderLink)
         {
             return $providerLink;
         }
@@ -128,7 +130,7 @@ class PropertyProviderService
      * @param Registration $registration
      * @return \Chamilo\Core\Metadata\Provider\PropertyProviderInterface
      */
-    public function getPropertyProviderFromRegistration(Registration $registration)
+    public function getPropertyProviderFromRegistration(ProviderRegistration $registration)
     {
         $className = $registration->get_provider_class();
         return new $className();

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Action;
 
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Storage\DataClass\Registration;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 
 /**
  * Extension of the generic installer for metadata integrations
@@ -55,7 +55,7 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
             foreach ($entityProperties as $entityProperty)
             {
-                $propertyRegistration = new Registration();
+                $propertyRegistration = new ProviderRegistration();
                 $propertyRegistration->set_entity_type($entityType);
                 $propertyRegistration->set_provider_class($propertyProviderType);
                 $propertyRegistration->set_property_name($entityProperty);
