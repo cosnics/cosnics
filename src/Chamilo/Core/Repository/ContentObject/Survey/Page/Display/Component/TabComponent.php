@@ -38,7 +38,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         if (! $page)
         {
-            return $this->display_error_page(Translation :: get('NoObjectSelected'));
+            return $this->display_error_page(Translation :: getInstance()->getTranslation('NoObjectSelected'));
         }
         
         $this->page_menu = new Menu($this);
@@ -64,7 +64,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $view_title = Translation :: get('ViewerComponent');
+            $view_title = Translation :: getInstance()->getTranslation('ViewerComponent');
             $view_image = Theme :: getInstance()->getImagePath(
                 Manager :: package(), 
                 'Tab/' . self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT);
@@ -89,14 +89,14 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             if ($this->get_current_node()->is_root())
             {
-                $edit_title = Translation :: get('EditPage');
+                $edit_title = Translation :: getInstance()->getTranslation('EditPage');
                 $edit_image = Theme :: getInstance()->getImagePath(
                     Manager :: package(), 
                     'Tab/' . self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM);
             }
             else
             {
-                $edit_title = Translation :: get('EditQuestion');
+                $edit_title = Translation :: getInstance()->getTranslation('EditQuestion');
                 $edit_image = Theme :: getInstance()->getImagePath(
                     Manager :: package(), 
                     'Tab/' . self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM);
@@ -120,7 +120,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $this->tabs_renderer->add_tab(
             new DynamicVisualTab(
                 self :: ACTION_ACTIVITY, 
-                Translation :: get('ActivityComponent'), 
+                Translation :: getInstance()->getTranslation('ActivityComponent'), 
                 Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_ACTIVITY), 
                 $this->get_url(
                     array(
@@ -144,7 +144,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $this->tabs_renderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                    Translation :: get('DeleteQuestion'), 
+                    Translation :: getInstance()->getTranslation('DeleteQuestion'), 
                     Theme :: getInstance()->getImagePath(
                         Manager :: package(), 
                         'Tab/' . self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), 
@@ -166,14 +166,14 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
-                        self :: ACTION_CONFIGURE, 
-                        Translation :: get('ConfigurerComponent'), 
-                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_CONFIGURE), 
+                        self :: ACTION_MANAGER, 
+                        Translation :: getInstance()->getTranslation('ManagerComponent'), 
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MANAGER), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_CONFIGURE, 
+                                self :: PARAM_ACTION => self :: ACTION_MANAGER, 
                                 self :: PARAM_STEP => $this->get_current_step())), 
-                        $this->get_action() == self :: ACTION_CONFIGURE, 
+                        $this->get_action() == self :: ACTION_MANAGER, 
                         false, 
                         DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
@@ -184,18 +184,37 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             if ($this->get_current_node()->get_content_object() instanceof Page)
             {
+               
+                $this->tabs_renderer->add_tab(
+                    new DynamicVisualTab(
+                        self :: ACTION_MERGE,
+                        Translation :: getInstance()->getTranslation('MergerComponent'),
+                        Theme :: getInstance()->getImagePath(
+                            Manager :: package(),
+                            'Tab/' . self :: ACTION_MERGE),
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_MERGE,
+                                self :: PARAM_STEP => $this->get_current_step(),
+                                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER
+                            )),
+                        false,
+                        false,
+                        DynamicVisualTab :: POSITION_RIGHT,
+                        DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                
                 $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
                     ClassnameUtilities :: getInstance()->getNamespaceParent(Page :: context(), 2));
                 
                 $selected_template_id = TypeSelector :: get_selection();
                 
                 $is_selected = ($this->get_action() == self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM &&
-                     $selected_template_id != $template->get_id());
+                    $selected_template_id != $template->get_id());
                 
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM, 
-                        Translation :: get('CreatorComponent'), 
+                        Translation :: getInstance()->getTranslation('CreatorComponent'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
                             'Tab/' . self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM), 
@@ -207,6 +226,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         false, 
                         DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                
+               
             }
         }
         
@@ -219,7 +240,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_SORT, 
-                        Translation :: get('MoveDown'), 
+                        Translation :: getInstance()->getTranslation('MoveDown'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
                             'Tab/' . self :: ACTION_SORT . self :: SORT_DOWN), 
@@ -238,7 +259,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_SORT, 
-                        Translation :: get('MoveDownNotAvailable'), 
+                        Translation :: getInstance()->getTranslation('MoveDownNotAvailable'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
                             'Tab/' . self :: ACTION_SORT . self :: SORT_DOWN . 'Na'), 
@@ -254,7 +275,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_SORT, 
-                        Translation :: get('MoveUp'), 
+                        Translation :: getInstance()->getTranslation('MoveUp'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
                             'Tab/' . self :: ACTION_SORT . self :: SORT_UP), 
@@ -273,7 +294,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_SORT, 
-                        Translation :: get('MoveUpNotAvailable'), 
+                        Translation :: getInstance()->getTranslation('MoveUpNotAvailable'), 
                         Theme :: getInstance()->getImagePath(
                             Manager :: package(), 
                             'Tab/' . self :: ACTION_SORT . self :: SORT_UP . 'Na'), 
@@ -289,8 +310,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
                         self :: ACTION_QUESTION_MANAGER, 
-                        Translation :: get('QuestionManagerComponent'), 
-                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_CONFIGURE), 
+                        Translation :: getInstance()->getTranslation('QuestionManagerComponent'), 
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MANAGER), 
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_QUESTION_MANAGER, 
@@ -302,14 +323,14 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
-                        self :: ACTION_CONFIGURE_QUESTION, 
-                        Translation :: get('ConfigurerQuestionComponent'), 
-                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_CONFIGURE), 
+                        self :: ACTION_CREATE_CONFIGURATION, 
+                        Translation :: getInstance()->getTranslation('ConfigurationCreatorComponent'), 
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MANAGER), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_CONFIGURE_QUESTION, 
+                                self :: PARAM_ACTION => self :: ACTION_CREATE_CONFIGURATION, 
                                 self :: PARAM_STEP => $this->get_current_step())), 
-                        $this->get_action() == self :: ACTION_CONFIGURE, 
+                        $this->get_action() == self :: ACTION_CREATE_CONFIGURATION, 
                         false, 
                         DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
@@ -317,7 +338,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $this->tabs_renderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_CHANGE_QUESTION_VISIBILITY, 
-                    Translation :: get('ToggleVissibility'), 
+                    Translation :: getInstance()->getTranslation('ToggleVissibility'), 
                     Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MOVE), 
                     $this->get_url(
                         array(
