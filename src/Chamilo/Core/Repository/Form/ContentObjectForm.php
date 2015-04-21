@@ -28,7 +28,7 @@ use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Core\Metadata\Service\EntityFormService;
-use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Entity\EntityFactory;

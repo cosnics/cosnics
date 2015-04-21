@@ -5,11 +5,9 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation;
-use Chamilo\Core\Metadata\EntityType;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Entity\EntityFactory;
-use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 
 /**
  *
@@ -49,8 +47,10 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
 
         foreach ($registrations as $registration)
         {
-            $entities[] = $entityFactory->getEntity(
-                $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name());
+            if ($registration->get_name() == 'File')
+
+                $entities[] = $entityFactory->getEntity(
+                    $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name());
         }
 
         return $entities;

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Metadata\Provider\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -20,7 +20,7 @@ class Link extends DataClass
      * @var \Chamilo\Core\Metadata\Provider\Storage\DataClass\Registration
      */
     private $providerRegistration;
-    
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -35,10 +35,10 @@ class Link extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -48,7 +48,7 @@ class Link extends DataClass
         $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
         $extended_property_names[] = self :: PROPERTY_ELEMENT_ID;
         $extended_property_names[] = self :: PROPERTY_PROVIDER_REGISTRATION_ID;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -57,7 +57,7 @@ class Link extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      *
      * @return string
@@ -117,10 +117,10 @@ class Link extends DataClass
         if (! isset($this->providerRegistration))
         {
             $this->providerRegistration = DataManager :: retrieve_by_id(
-                Registration :: class_name(), 
+                Registration :: class_name(),
                 $this->get_provider_registration_id());
         }
-        
+
         return $this->providerRegistration;
     }
 }

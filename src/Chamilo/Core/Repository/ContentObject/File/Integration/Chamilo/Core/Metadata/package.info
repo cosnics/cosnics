@@ -3,8 +3,8 @@
 	<package>
 		<name>Metadata</name>
 		<code>Metadata</code>
-		<context>Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata</context>
-		<type>Chamilo\Core\Repository\Integration</type>
+		<context>Chamilo\Core\Repository\ContentObject\File\Integration\Chamilo\Core\Metadata</context>
+		<type>Chamilo\Core\Repository\ContentObject\File\Integration</type>
 		<category />
 		<authors />
 		<version>5.0.0</version>
@@ -12,7 +12,7 @@
 		<pre-depends>
 			<dependencies operator="1">
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository</id>
+					<id>Chamilo\Core\Repository\ContentObject\File</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">

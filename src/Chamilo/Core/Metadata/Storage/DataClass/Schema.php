@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\Metadata\Schema\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
-use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
-use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;

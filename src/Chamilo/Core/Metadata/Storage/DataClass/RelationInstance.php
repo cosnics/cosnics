@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Relation\Storage\DataClass\Relation;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 
 /**
  *

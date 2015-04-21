@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Core\Metadata\Element\Instance\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 
 /**
  *
@@ -31,10 +31,10 @@ class ElementInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -46,7 +46,7 @@ class ElementInstance extends DataClass
         $extendedPropertyNames[] = self :: PROPERTY_VOCABULARY_ID;
         $extendedPropertyNames[] = self :: PROPERTY_USER_ID;
         $extendedPropertyNames[] = self :: PROPERTY_CREATION_DATE;
-        
+
         return parent :: get_default_property_names($extendedPropertyNames);
     }
 
@@ -55,7 +55,7 @@ class ElementInstance extends DataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      *
      * @return integer

@@ -5,15 +5,15 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance;
-use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
@@ -46,16 +46,16 @@ class ElementService
     public function getElementsForSchema(Schema $schema)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($schema->get_id()));
-        
+
         return DataManager :: retrieves(
-            Element :: class_name(), 
+            Element :: class_name(),
             new DataClassRetrievesParameters(
-                $condition, 
-                null, 
-                null, 
+                $condition,
+                null,
+                null,
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_DISPLAY_ORDER)))));
@@ -70,7 +70,7 @@ class ElementService
     public function getElementInstancesForSchemaInstanceAndElement(SchemaInstance $schemaInstance, Element $element)
     {
         return DataManager :: retrieves(
-            ElementInstance :: class_name(), 
+            ElementInstance :: class_name(),
             new DataClassRetrievesParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)));
     }
@@ -84,7 +84,7 @@ class ElementService
     public function getElementInstanceForSchemaInstanceAndElement(SchemaInstance $schemaInstance, Element $element)
     {
         return DataManager :: retrieve(
-            ElementInstance :: class_name(), 
+            ElementInstance :: class_name(),
             new DataClassRetrieveParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)));
     }
@@ -95,27 +95,27 @@ class ElementService
      * @param Element $element
      * @return \libraries\storage\ResultSet
      */
-    public function getElementInstanceVocabulariesForSchemaInstanceAndElement(SchemaInstance $schemaInstance, 
+    public function getElementInstanceVocabulariesForSchemaInstanceAndElement(SchemaInstance $schemaInstance,
         Element $element)
     {
         $join = new Joins();
         $join->add(
             new Join(
-                ElementInstance :: class_name(), 
+                ElementInstance :: class_name(),
                 new ComparisonCondition(
                     new PropertyConditionVariable(
-                        ElementInstance :: class_name(), 
-                        ElementInstance :: PROPERTY_VOCABULARY_ID), 
-                    ComparisonCondition :: EQUAL, 
+                        ElementInstance :: class_name(),
+                        ElementInstance :: PROPERTY_VOCABULARY_ID),
+                    ComparisonCondition :: EQUAL,
                     new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ID))));
-        
+
         return DataManager :: retrieves(
-            Vocabulary :: class_name(), 
+            Vocabulary :: class_name(),
             new DataClassRetrievesParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), 
-                null, 
-                null, 
-                array(), 
+                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element),
+                null,
+                null,
+                array(),
                 $join));
     }
 
@@ -125,25 +125,25 @@ class ElementService
      * @param Element $element
      * @return \libraries\storage\DataClass
      */
-    public function getElementInstanceVocabularyForSchemaInstanceAndElement(SchemaInstance $schemaInstance, 
+    public function getElementInstanceVocabularyForSchemaInstanceAndElement(SchemaInstance $schemaInstance,
         Element $element)
     {
         $join = new Joins();
         $join->add(
             new Join(
-                ElementInstance :: class_name(), 
+                ElementInstance :: class_name(),
                 new ComparisonCondition(
                     new PropertyConditionVariable(
-                        ElementInstance :: class_name(), 
-                        ElementInstance :: PROPERTY_VOCABULARY_ID), 
-                    ComparisonCondition :: EQUAL, 
+                        ElementInstance :: class_name(),
+                        ElementInstance :: PROPERTY_VOCABULARY_ID),
+                    ComparisonCondition :: EQUAL,
                     new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ID))));
-        
+
         return DataManager :: retrieve(
-            Vocabulary :: class_name(), 
+            Vocabulary :: class_name(),
             new DataClassRetrieveParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), 
-                array(), 
+                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element),
+                array(),
                 $join));
     }
 
@@ -153,22 +153,22 @@ class ElementService
      * @param Element $element
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    private function getElementInstanceConditionForSchemaInstanceAndElement(SchemaInstance $schemaInstance, 
+    private function getElementInstanceConditionForSchemaInstanceAndElement(SchemaInstance $schemaInstance,
         Element $element)
     {
         $conditions = array();
-        
+
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
-                ElementInstance :: class_name(), 
-                ElementInstance :: PROPERTY_SCHEMA_INSTANCE_ID), 
-            ComparisonCondition :: EQUAL, 
+                ElementInstance :: class_name(),
+                ElementInstance :: PROPERTY_SCHEMA_INSTANCE_ID),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($schemaInstance->get_id()));
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(ElementInstance :: class_name(), ElementInstance :: PROPERTY_ELEMENT_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(ElementInstance :: class_name(), ElementInstance :: PROPERTY_ELEMENT_ID),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($element->get_id()));
-        
+
         return new AndCondition($conditions);
     }
 
@@ -180,19 +180,19 @@ class ElementService
     public function getElementBySchemaIdAndName($schemaId, $elementName)
     {
         $conditions = array();
-        
+
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_SCHEMA_ID),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($schemaId));
-        
+
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_NAME), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_NAME),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($elementName));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return DataManager :: retrieve(Element :: class_name(), $condition);
     }
 }

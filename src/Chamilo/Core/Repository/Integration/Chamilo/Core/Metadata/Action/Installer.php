@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action;
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
-use Chamilo\Core\Metadata\Schema\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 
 /**

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Component;
 
 use Chamilo\Core\Metadata\Vocabulary\Manager;
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -36,25 +36,25 @@ class UserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-        
+
         if (! $this->getSelectedElementId())
         {
             throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function as_html()
     {
         $table = new UserTable($this);
-        
+
         $html = array();
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $table->as_html();
@@ -63,7 +63,7 @@ class UserComponent extends Manager implements TableSupport
 
     /**
      * Builds the action bar
-     * 
+     *
      * @return ActionBarRenderer
      */
     protected function get_action_bar()
@@ -75,13 +75,13 @@ class UserComponent extends Manager implements TableSupport
                 $this->get_url(
                     array(\Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId())));
         }
-        
+
         return $this->action_bar;
     }
 
     /**
      * Returns the condition
-     * 
+     *
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition
@@ -89,24 +89,24 @@ class UserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-        
+
         $searchCondition = $this->get_action_bar()->get_conditions(
             array(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)));
-        
+
         if ($searchCondition)
         {
             $conditions[] = $searchCondition;
         }
-        
+
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID), 
-            ComparisonCondition :: EQUAL, 
+            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID),
+            ComparisonCondition :: EQUAL,
             new StaticConditionVariable($this->getSelectedElementId()));
-        
+
         return new AndCondition($conditions);
     }
 }

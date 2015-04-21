@@ -1,44 +1,35 @@
 <?php
-namespace Chamilo\Core\Metadata\Vocabulary\Storage\DataClass;
+namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Element\Instance\Storage\DataClass\ElementInstance;
 
 /**
- * This class describes a metadata vocabulary
+ * This class describes a metadata schema
  *
- * @package Chamilo\Core\Metadata\Vocabulary\Storage\DataClass
+ * @package Chamilo\Core\Metadata\Relation\Storage\DataClass
  * @author Jens Vanderheyden
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Vocabulary extends DataClass
+class Relation extends DataClass
 {
     use \Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $isDefault;
     /**
      * **************************************************************************************************************
      * Properties *
      * **************************************************************************************************************
      */
-    const PROPERTY_ELEMENT_ID = 'element_id';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_DEFAULT_VALUE = 'default_value';
-    const PROPERTY_VALUE = 'value';
+    const PROPERTY_NAME = 'name';
 
     /**
      * **************************************************************************************************************
@@ -55,10 +46,7 @@ class Vocabulary extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ELEMENT_ID;
-        $extended_property_names[] = self :: PROPERTY_USER_ID;
-        $extended_property_names[] = self :: PROPERTY_DEFAULT_VALUE;
-        $extended_property_names[] = self :: PROPERTY_VALUE;
+        $extended_property_names[] = self :: PROPERTY_NAME;
 
         return parent :: get_default_property_names($extended_property_names);
     }
@@ -70,95 +58,23 @@ class Vocabulary extends DataClass
      */
 
     /**
-     *
-     * @return integer
-     */
-    public function get_element_id()
-    {
-        return $this->get_default_property(self :: PROPERTY_ELEMENT_ID);
-    }
-
-    /**
-     *
-     * @param integer
-     */
-    public function set_element_id($element_id)
-    {
-        $this->set_default_property(self :: PROPERTY_ELEMENT_ID, $element_id);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_user_id()
-    {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @param integer
-     */
-    public function set_user_id($user_id)
-    {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
-    }
-
-    public function isForEveryone()
-    {
-        return $this->get_user_id() == 0;
-    }
-
-    public function getUser()
-    {
-        if ($this->isForEveryone())
-        {
-            return null;
-        }
-
-        return DataManager :: retrieve_by_id(User :: class_name(), $this->get_user_id());
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_default_value()
-    {
-        return $this->get_default_property(self :: PROPERTY_DEFAULT_VALUE);
-    }
-
-    /**
-     *
-     * @param integer
-     */
-    public function set_default_value($default_value)
-    {
-        $this->set_default_property(self :: PROPERTY_DEFAULT_VALUE, $default_value);
-    }
-
-    public function isDefault()
-    {
-        return (bool) $this->get_default_value();
-    }
-
-    /**
+     * Returns the name
      *
      * @return string
      */
-    public function get_value()
+    public function get_name()
     {
-        return $this->get_default_property(self :: PROPERTY_VALUE);
+        return $this->get_default_property(self :: PROPERTY_NAME);
     }
 
     /**
+     * Sets the name
      *
-     * @param string
+     * @param string $name
      */
-    public function set_value($value)
+    public function set_name($name)
     {
-        $this->set_default_property(self :: PROPERTY_VALUE, $value);
+        $this->set_default_property(self :: PROPERTY_NAME, $name);
     }
 
     /**
@@ -183,9 +99,33 @@ class Vocabulary extends DataClass
                         EntityTranslation :: PROPERTY_ENTITY_ID),
                     new StaticConditionVariable($this->get_id()))));
 
-        $dependencies[ElementInstance :: class_name()] = new EqualityCondition(
-            new PropertyConditionVariable(ElementInstance :: class_name(), ElementInstance :: PROPERTY_VOCABULARY_ID),
-            new StaticConditionVariable($this->get_id()));
+        $sourceConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_SOURCE_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $targetConditions = new AndCondition(
+            array(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_TYPE),
+                    new StaticConditionVariable(static :: class_name())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RelationInstance :: class_name(),
+                        RelationInstance :: PROPERTY_TARGET_ID),
+                    new StaticConditionVariable($this->get_id()))));
+
+        $dependencies[RelationInstance :: class_name()] = new OrCondition(array($sourceConditions, $targetConditions));
 
         return $dependencies;
     }
