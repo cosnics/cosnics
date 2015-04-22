@@ -98,7 +98,7 @@ EOT;
     $propertyProviderNamespace = $contentObjectIntegrationNamespace . '\PropertyProvider';
     $propertyProviderPath = $pathUtilities->namespaceToFullPath($propertyProviderNamespace);
     Filesystem :: create_dir($propertyProviderPath);
-    $propertyProvideFilePath = $propertyProviderPath . 'Installer.php';
+    $propertyProvideFilePath = $propertyProviderPath . 'ContentObjectPropertyProvider.php';
     
     $propertyProvideFileContent = <<<EOT
 <?php
