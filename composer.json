@@ -4,6 +4,7 @@
   "require" : {
     "symfony/http-foundation" : "2.3.*",
     "doctrine/dbal" : "2.4.*",
+    "doctrine/cache" : "1.4.*",
     "pear-pear.php.net/HTML_Common" : "*",
     "pear-pear.php.net/HTML_Menu" : "*",
     "pear-pear.php.net/HTML_Table" : "*",

@@ -251,7 +251,7 @@ class PlatformInstaller
 
         while (($package = $this->get_next_package()) != null)
         {
-            $html[] = $this->observers->before_package_install($package);
+
             $values = $this->installer_config->as_values_array();
             $installer = \Chamilo\Configuration\Package\Action\Installer :: factory($package, $values);
 
@@ -259,11 +259,14 @@ class PlatformInstaller
 
             if ($success !== true)
             {
-                throw new InstallFailedException($package, $installer->retrieve_message());
+                throw new InstallFailedException($package, implode(PHP_EOL, $html), $installer->retrieve_message());
             }
-
-            $step_result = new StepResult($success, $installer->get_message(), $package);
-            $html[] = $this->observers->after_package_install($step_result);
+            else
+            {
+                $html[] = $this->observers->before_package_install($package);
+                $step_result = new StepResult($success, $installer->get_message(), $package);
+                $html[] = $this->observers->after_package_install($step_result);
+            }
         }
 
         $html[] = $this->observers->after_packages_install();

@@ -259,7 +259,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $language = LocalSetting :: get('platform_language');
         }
 
-        Translation :: getInstance()->setLanguage($language);
+        Translation :: getInstance()->setLanguageIsocode($language);
     }
 
     private $is_teacher;
