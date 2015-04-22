@@ -5,6 +5,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  *
@@ -25,12 +26,16 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
         $relation = new \Chamilo\Core\Metadata\Storage\DataClass\Relation();
         $relation->set_name('isAvailableFor');
+
         if ($relation->create())
         {
             $entityTranslations = array();
-            $entityTranslations[Translation :: getInstance()->getLanguageIsocode()] = Translation :: get('IsAvailableFor');
+            $entityTranslations[Translation :: getInstance()->getLanguageIsocode()] = Translation :: get(
+                'IsAvailableFor');
 
-            $entityTranslationService = new EntityTranslationService($relation);
+            $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($relation);
+
+            $entityTranslationService = new EntityTranslationService($entity);
             if (! $entityTranslationService->createEntityTranslations($entityTranslations))
             {
                 return false;
