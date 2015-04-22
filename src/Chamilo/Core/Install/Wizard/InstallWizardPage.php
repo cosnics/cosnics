@@ -46,7 +46,7 @@ abstract class InstallWizardPage extends FormValidatorPage
 
     public function set_lang($lang)
     {
-        Translation :: getInstance()->setLanguage($lang);
+        Translation :: getInstance()->setLanguageIsocode($lang);
     }
 
     public function get_breadcrumb()

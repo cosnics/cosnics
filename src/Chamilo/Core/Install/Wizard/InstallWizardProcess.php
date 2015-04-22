@@ -58,26 +58,27 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $this->installer = $this->build_installer($page);
         $this->installer->add_observer($this);
 
+        $html = array();
+        $html[] = $this->render_header($page);
+
         try
         {
-            $html = array();
-
-            $html[] = $this->render_header($page);
             $html[] = $this->installer->perform_install();
             // $page->controller->container(true);
-
-            $html[] = $this->parent->render_footer();
-
-            return implode(PHP_EOL, $html);
         }
         catch (InstallFailedException $exception)
         {
-            return $this->process_result(
-                Translation :: get('PlatformInstallFailed') . ' - ' . $exception->get_package(),
+            $html[] = $exception->getPreviousResults();
+            $html[] = $this->process_result(
+                Translation :: get('PlatformInstallFailed') . ' - ' . $exception->getPackage(),
                 false,
                 $exception->getMessage(),
                 Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Failed'));
         }
+
+        $html[] = $this->parent->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     private function build_installer($page)

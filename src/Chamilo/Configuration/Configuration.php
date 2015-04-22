@@ -431,8 +431,11 @@ class Configuration
     {
         DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
 
-        Filesystem :: remove(Path :: getInstance()->getCachePath(__NAMESPACE__) . 'configuration.registrations');
-        Filesystem :: remove(Path :: getInstance()->getCachePath(__NAMESPACE__) . 'configuration.settings');
+        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
+        $cacheFactory->getCache()->truncate();
+
+        $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__, 'configuration.settings');
+        $cacheFactory->getCache()->truncate();
 
         self :: get_instance()->load_from_storage();
     }
