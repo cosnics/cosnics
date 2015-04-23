@@ -30,12 +30,11 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
     {
         
         $properties = array();
-        
+        $this->step_count ++;
         
         if ($complex_content_object_item instanceof SurveyDisplayItem)
         {
-            $this->step_count ++;
-            
+
             if (! ($complex_content_object_item instanceof ComplexDescription ||
                  $complex_content_object_item instanceof ComplexPage ||
                  $complex_content_object_item instanceof ComplexSurvey))
@@ -60,11 +59,11 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
             }
             else
             {
-                if (! $complex_content_object_item instanceof ComplexDescription)
+                if (! ($complex_content_object_item instanceof ComplexDescription || $complex_content_object_item instanceof ComplexSurvey))
                 {
                     $properties[ComplexContentObjectPathNode :: PROPERTY_NODE_IN_MENU] = true;
                     
-                    $this->previous_page_step = $this->step_count - $this->question_step_count;
+                    $this->previous_page_step = $this->step_count - $this->question_step_count-1;
                     $this->question_step_count = 0;
                     $properties[ComplexContentObjectPathNode :: PROPERTY_PREVIOUS_PAGE_STEP] = $this->previous_page_step;
                     $this->get_node($this->previous_page_step)->set_next_page_step($this->step_count + 1);
@@ -80,8 +79,21 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\ContentObject\Su
                     $properties[ComplexContentObjectPathNode :: PROPERTY_IS_QUESTION] = false;
                 }
             }
+        
         }
-               
+        
         return $properties;
     }
+    
+    public function reset()
+    {
+        $this->question_nr = 0;
+        $this->invisible_question_nr = 0;
+        $this->question_step_count = 0;
+        $this->step_count = 0;
+        $this->previous_page_step = 0;
+        $this->page_step_count = 0;
+        parent :: reset();
+    }
+    
 }

@@ -14,6 +14,9 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Menu;
+use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
+use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -43,7 +46,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         $this->menu = new Menu($this);
         
-     $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
+        $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
+        
         foreach ($this->get_root_content_object()->get_complex_content_object_path()->get_parents_by_id(
             $this->get_current_step(), 
             true, 
@@ -55,7 +59,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
         
-        $this->tabs_renderer = new DynamicVisualTabsRenderer('page');
+        $this->tabs_renderer = new DynamicVisualTabsRenderer('survey');
         
         if ($this->get_current_node()->is_root())
         {
@@ -87,20 +91,23 @@ abstract class TabComponent extends Manager implements DelegateComponent
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
              $this->get_current_node()->get_content_object()->has_right(RepositoryRights :: COLLABORATE_RIGHT))
         {
-            if ($this->get_current_node()->is_root())
+                      
+            if ($this->get_complex_content_object_item() instanceof ComplexSurvey || $this->get_current_node()->is_root())
+            {
+                $edit_title = Translation :: getInstance()->getTranslation('EditSurvey');
+            }
+            elseif ($this->get_complex_content_object_item() instanceof ComplexPage)
             {
                 $edit_title = Translation :: getInstance()->getTranslation('EditPage');
-                $edit_image = Theme :: getInstance()->getImagePath(
-                    Manager :: package(), 
-                    'Tab/' . self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM);
             }
             else
             {
                 $edit_title = Translation :: getInstance()->getTranslation('EditQuestion');
-                $edit_image = Theme :: getInstance()->getImagePath(
-                    Manager :: package(), 
-                    'Tab/' . self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM);
             }
+            
+            $edit_image = Theme :: getInstance()->getImagePath(
+                Manager :: package(), 
+                'Tab/' . self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM);
             
             $this->tabs_renderer->add_tab(
                 new DynamicVisualTab(
@@ -160,7 +167,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
-            if ($this->get_current_content_object() instanceof Page &&
+            if (($this->get_current_content_object() instanceof Page || $this->get_current_content_object() instanceof Survey) &&
                  count($this->get_current_node()->get_children()) > 1)
             {
                 
@@ -182,25 +189,22 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
-            if ($this->get_current_node()->get_content_object() instanceof Page)
+            if ($this->get_current_node()->get_content_object() instanceof Page ||$this->get_current_node()->get_content_object() instanceof Survey)
             {
-               
+                
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
-                        self :: ACTION_MERGE,
-                        Translation :: getInstance()->getTranslation('MergerComponent'),
-                        Theme :: getInstance()->getImagePath(
-                            Manager :: package(),
-                            'Tab/' . self :: ACTION_MERGE),
+                        self :: ACTION_MERGE, 
+                        Translation :: getInstance()->getTranslation('MergerComponent'), 
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MERGE), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_MERGE,
-                                self :: PARAM_STEP => $this->get_current_step(),
-                                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER
-                            )),
-                        false,
-                        false,
-                        DynamicVisualTab :: POSITION_RIGHT,
+                                self :: PARAM_ACTION => self :: ACTION_MERGE, 
+                                self :: PARAM_STEP => $this->get_current_step(), 
+                                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)), 
+                        false, 
+                        false, 
+                        DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
                 
                 $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
@@ -209,7 +213,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $selected_template_id = TypeSelector :: get_selection();
                 
                 $is_selected = ($this->get_action() == self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM &&
-                    $selected_template_id != $template->get_id());
+                     $selected_template_id != $template->get_id());
                 
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
@@ -226,8 +230,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         false, 
                         DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-                
-               
             }
         }
         
@@ -305,7 +307,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
             }
             
-            if ($this->get_current_complex_content_object_item()->is_visible())
+            if ((!($this->get_current_complex_content_object_item() instanceof ComplexSurvey || $this->get_current_complex_content_object_item() instanceof ComplexPage)) && $this->get_current_complex_content_object_item()->is_visible())
             {
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
@@ -349,7 +351,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
                     DynamicVisualTab :: POSITION_RIGHT, 
                     DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
         }
-       
         
         return $this->build();
     }
