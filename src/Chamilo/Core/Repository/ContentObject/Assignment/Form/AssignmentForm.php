@@ -158,7 +158,7 @@ class AssignmentForm extends ContentObjectForm
         // Allowed content types for submissions
         $types = $this->get_allowed_content_object_types();
         $advanced_select = $this->createElement(
-            'multiselect',
+            'advmultiselect',
             Assignment :: PROPERTY_ALLOWED_TYPES,
             Translation :: get('AllowedContentTypes'),
             $types,
