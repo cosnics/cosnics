@@ -12,9 +12,10 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject implements ComplexContentObjectSupport, 
-    ComplexContentObjectDisclosure
+    ComplexContentObjectDisclosure, Versionable
 {
     const PROPERTY_FINISH_TEXT = 'finish_text';
     const PROPERTY_MENU = 'menu';
