@@ -233,11 +233,12 @@ class CourseListRenderer
             if ($active && $visible &&
                  DataManager :: tool_has_new_publications($tool->get_name(), $this->get_user(), $course))
             {
+
                 $html[] = '<a href="' . htmlspecialchars($this->get_tool_url($tool->get_name(), $course)) . '"' . $target .
                  '><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())),
-                    'Logo/' . Theme :: ICON_MINI . 'New') . '" alt="' .
+                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
+                        'Logo/' . Theme :: ICON_MINI . 'New')) . '" alt="' .
                  htmlspecialchars(Translation :: get('New', null, Utilities :: COMMON_LIBRARIES)) . '"/></a>';
         }
     }

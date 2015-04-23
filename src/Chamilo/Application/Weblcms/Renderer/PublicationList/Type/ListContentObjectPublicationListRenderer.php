@@ -190,7 +190,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             if ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $last_visit_date)
             {
-                $icon_suffix = '_new';
+                $icon_suffix = 'New';
             }
             // else
             // {
