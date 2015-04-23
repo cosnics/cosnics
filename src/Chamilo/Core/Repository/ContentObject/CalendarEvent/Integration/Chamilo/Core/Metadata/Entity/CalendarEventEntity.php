@@ -11,6 +11,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity\ContentObje
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarEvent.Entity extends ContentObjectEntity
+class CalendarEventEntity extends ContentObjectEntity
 {
 }
