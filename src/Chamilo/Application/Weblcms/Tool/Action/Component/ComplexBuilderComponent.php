@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -52,8 +51,7 @@ class ComplexBuilderComponent extends Manager
             $this->content_object = $publication->get_content_object();
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $pid);
 
-            $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->content_object->get_type()) .
-                 '\builder';
+            $context = $this->content_object->package() . '\Builder';
 
             $application_factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
             return $application_factory->run();

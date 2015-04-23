@@ -201,8 +201,8 @@ class Manager implements PublicationInterface
             return false;
         }
 
-        $possible_publication_class = __NAMESPACE__ . '\tool\implementation\\' . $location->get_tool_id() .
-             '\Publication';
+        $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $location->get_tool_id() .
+             '\Storage\DataClass\Publication';
         if (class_exists($possible_publication_class))
         {
             $publication_extension = new $possible_publication_class();

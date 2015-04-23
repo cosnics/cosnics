@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\DataClass;
+namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;

@@ -59,7 +59,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 $icon_suffix = '';
                 if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
                 {
-                    $icon_suffix = '_na';
+                    $icon_suffix = 'Na';
                     $title .= ' ' . Translation :: get('NotAvailable') . ')';
                 }
                 else
@@ -67,7 +67,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     $last_visit_date = $this->get_component()->get_tool_browser()->get_last_visit_date();
                     if ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $last_visit_date)
                     {
-                        $icon_suffix = '_new';
+                        $icon_suffix = 'New';
                         $title .= ' (' . Translation :: get('New') . ')';
                     }
                     // else
@@ -133,8 +133,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' .
-                         Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
