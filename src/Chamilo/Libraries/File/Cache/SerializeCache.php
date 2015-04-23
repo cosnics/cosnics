@@ -59,10 +59,16 @@ class SerializeCache extends Cache
      */
     public function truncate()
     {
-        if ($this->verifyCache())
+        try
         {
-            $this->cacheValue = null;
-            Filesystem :: remove($this->getCachePath());
+            if ($this->verifyCache())
+            {
+                $this->cacheValue = null;
+                Filesystem :: remove($this->getCachePath());
+            }
+        }
+        catch (CacheUnavailableException $exception)
+        {
         }
     }
 
