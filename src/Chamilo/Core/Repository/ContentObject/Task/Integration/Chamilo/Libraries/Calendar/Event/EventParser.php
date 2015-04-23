@@ -20,7 +20,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
         $to_date = $this->get_end_date();
         $object = $this->get_content_object();
         
-        if ($object->repeats())
+        if ($object->has_frequency())
         {
             $repeats = $object->get_repeats($from_date, $to_date);
             
@@ -50,7 +50,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
         {
             $event = $this->get_event_instance();
             $event->set_start_date($object->get_start_date());
-            $event->set_end_date($object->get_end_date());
+            $event->set_end_date($object->get_due_date());
             $event->set_title($object->get_title());
             $event->set_content($object->get_description());
             $event->set_source(Translation :: get('TypeName', null, $object->context()));

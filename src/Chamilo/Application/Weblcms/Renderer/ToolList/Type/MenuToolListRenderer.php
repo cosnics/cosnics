@@ -180,7 +180,7 @@ class MenuToolListRenderer extends ToolListRenderer
         $new = '';
         if ($parent->tool_has_new_publications($tool->get_name()))
         {
-            $new = '_new';
+            $new = 'New';
         }
 
         $tool_image = Theme :: ICON_MINI . $new;

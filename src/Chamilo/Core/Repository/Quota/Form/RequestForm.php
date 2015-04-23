@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Quota\Form;
 
 use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Core\Repository\Quota\DataClass\Request;
+use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;

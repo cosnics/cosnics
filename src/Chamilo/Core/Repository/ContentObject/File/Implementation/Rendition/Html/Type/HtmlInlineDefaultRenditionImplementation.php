@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Ht
 
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlInlineDefaultRenditionImplementation extends HtmlInlineRenditionImplementation
@@ -14,8 +13,7 @@ class HtmlInlineDefaultRenditionImplementation extends HtmlInlineRenditionImplem
         $object = $this->get_content_object();
         $name = $object->get_filename();
         
-        $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id());
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id());
         
         $text = '<div><a href="' . Utilities :: htmlentities($url) . '">' . Utilities :: htmlentities($name) . '</a> (' . Filesystem :: format_file_size(
             $object->get_filesize()) . ')</div>';

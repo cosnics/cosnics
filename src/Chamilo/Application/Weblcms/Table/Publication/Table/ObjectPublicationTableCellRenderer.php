@@ -59,7 +59,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 $icon_suffix = '';
                 if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
                 {
-                    $icon_suffix = '_na';
+                    $icon_suffix = 'Na';
                     $title .= ' ' . Translation :: get('NotAvailable') . ')';
                 }
                 else
@@ -67,7 +67,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     $last_visit_date = $this->get_component()->get_tool_browser()->get_last_visit_date();
                     if ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $last_visit_date)
                     {
-                        $icon_suffix = '_new';
+                        $icon_suffix = 'New';
                         $title .= ' (' . Translation :: get('New') . ')';
                     }
                     // else
@@ -88,9 +88,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     // }
                     // }
                 }
-
-                return '<img title="' . $title . '" src="' . $content_object->get_icon_path(Theme :: ICON_MINI) .
-                     $icon_suffix . '" />';
+                return '<img title="' . $title . '" src="' .
+                     $content_object->get_icon_path(Theme :: ICON_MINI . $icon_suffix) . '" />';
 
                 break;
             case ContentObject :: PROPERTY_TITLE :
