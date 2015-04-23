@@ -302,7 +302,7 @@ class Registration extends DataClass
             return $success;
         }
 
-        \Chamilo\Configuration\Configuration :: reset();
+        \Chamilo\Configuration\Configuration :: get_instance()->reset();
         return $success;
     }
 
