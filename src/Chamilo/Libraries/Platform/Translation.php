@@ -3,9 +3,7 @@ namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Cache\CacheFactory;
-use Chamilo\Libraries\File\Cache\Cache;
-use Chamilo\Libraries\File\Cache\CacheUnavailableException;
+use Doctrine\Common\Cache\PhpFileCache;
 use Chamilo\Configuration\Configuration;
 
 /**
@@ -116,12 +114,9 @@ class Translation
 
         if ($this->usesCaching)
         {
-            try
+            if ($this->getCache()->contains($this->languageIsocode))
             {
-                $this->strings[$this->languageIsocode] = $this->getCache($this->languageIsocode)->get();
-            }
-            catch (CacheUnavailableException $exception)
-            {
+                $this->strings[$this->languageIsocode] = $this->getCache()->fetch($this->languageIsocode);
             }
         }
     }
@@ -236,17 +231,16 @@ class Translation
     /**
      *
      * @param unknown $language
-     * @return \Chamilo\Libraries\File\Cache\Cache
+     * @return \Doctrine\Common\Cache\PhpFileCache
      */
-    public function getCache($language)
+    public function getCache()
     {
-        if (! isset($this->cache[$language]))
+        if (! isset($this->cache))
         {
-            $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__ . '\Translation', $language);
-            $this->cache[$language] = $cacheFactory->getCache();
+            $this->cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Translation'));
         }
 
-        return $this->cache[$language];
+        return $this->cache;
     }
 
     /**
@@ -392,7 +386,7 @@ class Translation
      */
     private function cache($language)
     {
-        $this->getCache($language)->set($this->strings[$language]);
+        $this->getCache()->save($language, $this->strings[$language]);
     }
 
     /**
@@ -401,13 +395,9 @@ class Translation
      */
     private function loadCache($language)
     {
-        try
+        if ($this->getCache()->contains($language))
         {
-            $cache = $this->getCache($language);
-            $this->strings[$language] = $cache->get();
-        }
-        catch (CacheUnavailableException $exception)
-        {
+            $this->strings[$language] = $this->getCache()->fetch($language);
         }
     }
 
