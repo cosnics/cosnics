@@ -21,7 +21,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
         
         $prepend = array();
-        $repeats = $object->repeats();
+        $repeats = $object->has_frequency();
         
         if ($repeats)
         {

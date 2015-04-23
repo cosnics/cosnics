@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
-use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
-
-class Feedback extends Feedback
+class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
 {
     const PROPERTY_PUBLICATION_ID = 'publication_id';
 

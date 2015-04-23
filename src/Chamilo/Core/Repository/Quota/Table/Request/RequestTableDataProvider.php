@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Table\Request;
 
-use Chamilo\Core\Repository\Quota\DataClass\Request;
-use Chamilo\Core\Repository\Quota\DataManager;
+use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
+use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;

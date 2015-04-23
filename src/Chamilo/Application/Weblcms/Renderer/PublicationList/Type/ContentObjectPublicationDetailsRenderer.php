@@ -51,11 +51,11 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
         $icon_suffix = '';
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
-            $icon_suffix = '_na';
+            $icon_suffix = 'Na';
         }
         elseif ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $last_visit_date)
         {
-            $icon_suffix = '_new';
+            $icon_suffix = 'New';
         }
 
         $content_object = $this->get_content_object_from_publication($publication);

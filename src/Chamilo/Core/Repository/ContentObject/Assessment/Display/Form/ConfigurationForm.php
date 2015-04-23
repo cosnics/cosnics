@@ -53,9 +53,9 @@ class ConfigurationForm extends FormValidator
 
     /**
      *
-     * @param ConfigurationForm $form
+     * @param FormValidator $form
      */
-    static public function build(ConfigurationForm $form)
+    static public function build(FormValidator $form)
     {
         // Hinting
         $form->addElement('category', Translation :: get('Hinting'));
@@ -163,10 +163,10 @@ class ConfigurationForm extends FormValidator
 
     /**
      *
-     * @param ConfigurationForm $form
+     * @param FormValidator $form
      * @param Configuration $configuration
      */
-    static public function defaults(ConfigurationForm $form, Configuration $configuration)
+    static public function defaults(FormValidator $form, Configuration $configuration)
     {
         $defaults[Configuration :: PROPERTY_ALLOW_HINTS] = $configuration->get_allow_hints();
         $defaults[Configuration :: PROPERTY_SHOW_SCORE] = $configuration->get_show_score();

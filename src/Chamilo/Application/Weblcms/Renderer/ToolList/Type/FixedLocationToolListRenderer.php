@@ -463,7 +463,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
                 {
-                    $new = '_new';
+                    $new = 'New';
                 }
                 $tool_image = Theme :: ICON_MEDIUM . $new;
                 $link_class = '';
@@ -472,7 +472,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
                 $visible_image = 'Action/Invisible';
-                $tool_image = Theme :: ICON_MEDIUM . '_na';
+                $tool_image = Theme :: ICON_MEDIUM . 'Na';
                 $link_class = ' class="invisible"';
             }
 

@@ -89,7 +89,7 @@ class ChangeSectionComponent extends Manager
                 $new = '';
                 if ($parent->tool_has_new_publications($tool->name))
                 {
-                    $new = '_new';
+                    $new = 'New';
                 }
                 $tool_image = 'tool_' . $tool->name . $new;
                 $link_class = '';
