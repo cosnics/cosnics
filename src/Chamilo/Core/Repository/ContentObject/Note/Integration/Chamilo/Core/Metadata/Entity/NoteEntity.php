@@ -11,6 +11,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity\ContentObje
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Note.Entity extends ContentObjectEntity
+class NoteEntity extends ContentObjectEntity
 {
 }
