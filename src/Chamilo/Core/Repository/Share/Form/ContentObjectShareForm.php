@@ -230,7 +230,7 @@ class ContentObjectShareForm extends FormValidator
         if (count($target_user_ids) > 0)
         {
             $granted_rights = RepositoryRights :: get_instance()->get_granted_rights_for_rights_entity_item(
-                Manager :: context(), 
+                \Chamilo\Core\Repository\Manager :: context(),
                 UserEntity :: ENTITY_TYPE, 
                 $target_user_ids[0], 
                 $location);
@@ -238,7 +238,7 @@ class ContentObjectShareForm extends FormValidator
         elseif (count($target_group_ids) > 0)
         {
             $granted_rights = RepositoryRights :: get_instance()->get_granted_rights_for_rights_entity_item(
-                Manager :: context(), 
+                \Chamilo\Core\Repository\Manager :: context(),
                 PlatformGroupEntity :: ENTITY_TYPE, 
                 $target_group_ids[0], 
                 $location);
