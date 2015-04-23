@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\external_calendar
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "External calendar"
+TypeCategory = "Content Objects"
+EventCount = "Number of events"
+Properties = "Properties"
+ICalURL = "URL"
+Title = "Title"
+Description = "Description"
+PathTypeRemote = "The URL of a remote iCAL / ICS calendar"
+PathTypeLocal = "Upload a an iCal / ICS calendar from your own PC"
+MaximumFileSizeUser = "You have <b>{USER}</b> left in your repository to upload documents. If this should prove to be insufficient, please click <a href="{URL}" target="_blank">here</a> to <a href="{URL}" target="_blank">upgrade</a> your repository quota. The maximal filesize allowed by the platform is currently <b>{SERVER}</b>."
+MaximumFileSizeUserNoUpgrade = "You have <b>{USER}</b> left in your repository to upload documents. The maximal filesize allowed by the platform is currently <b>{SERVER}</b>."
+MaximumFileSizeServer = "The maximal filesize allowed by the platform is currently <b>{FILESIZE}</b>."

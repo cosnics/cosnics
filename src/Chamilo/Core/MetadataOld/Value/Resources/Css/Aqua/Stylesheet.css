@@ -1,0 +1,45 @@
+#metadata_element_value {
+	width: 300px;
+}
+
+table.metadata_table {
+	width: 90%;
+	margin: 5px;
+}
+
+table.metadata_table td.element {
+	width: 125px;
+}
+
+table.metadata_table td.element button.add {
+	float: right;
+}
+
+table.metadata_table td.label {
+	text-align: right;
+	overflow: hidden;
+	font-weight: bold;
+	color: #565656;
+	padding-right: 15px;
+	width: 100px;
+}
+
+table.metadata_table td.label:empty {
+	width: 0px;
+	padding: 0px;
+}
+
+table.metadata_table td.element input[type=text],table.metadata_table td.element select
+	{
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	background-repeat: no-repeat;
+	background-position: 4px 50%;
+	width: 100%;
+}
+
+table.metadata_table td.element input[type=text]:hover,table.metadata_table td.element input[type=text]:focus,table.metadata_table td.element select:hover,table.metadata_table select:focus
+	{
+	background-color: #f7fbfd;
+	border-color: #4171B5;
+}
