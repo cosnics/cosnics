@@ -4,16 +4,13 @@ namespace Chamilo\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\Common\ClassLoader;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\Common\Cache\PhpFileCache;
-use Chamilo\Libraries\File\Cache\CacheFactory;
-use Chamilo\Libraries\File\Cache\Cache;
-use Chamilo\Libraries\File\Cache\CacheUnavailableException;
+use Doctrine\Common\Cache\FilesystemCache;
 
 /**
  * This class represents the current configuration
@@ -72,11 +69,11 @@ class Configuration
 
             if (self :: $instance->is_available() && self :: $instance->is_connectable())
             {
-                self :: $instance->load_from_storage();
+                self :: $instance->loadFromStorage();
             }
             else
             {
-                self :: $instance->load_default();
+                self :: $instance->loadDefault();
             }
         }
         return self :: $instance;
@@ -165,11 +162,11 @@ class Configuration
     {
         if ($this->is_available())
         {
-            $this->load_file();
+            $this->loadFile();
         }
         else
         {
-            $this->load_default();
+            $this->loadDefault();
         }
     }
 
@@ -182,7 +179,7 @@ class Configuration
     {
         if (! isset($this->isAvailable))
         {
-            $file = $this->get_configuration_path();
+            $file = $this->getConfigurationPath();
 
             if (is_file($file) && is_readable($file))
             {
@@ -242,7 +239,7 @@ class Configuration
      *
      * @return string
      */
-    private function get_configuration_path()
+    private function getConfigurationPath()
     {
         return \Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/configuration.ini';
     }
@@ -250,35 +247,33 @@ class Configuration
     /**
      * Load the default base configuration file
      */
-    private function load_file()
+    private function loadFile()
     {
-        $file = $this->get_configuration_path();
+        $file = $this->getConfigurationPath();
         $this->settings[__NAMESPACE__] = parse_ini_file($file, true);
     }
 
     /**
      * Load the persistently stored configuration elements
      */
-    private function load_from_storage()
+    private function loadFromStorage()
     {
-        $this->load_settings();
-        $this->load_registrations();
+        $this->loadSettings();
+        $this->loadRegistrations();
     }
 
     /**
      * Load settings from storage
      */
-    private function load_settings()
+    private function loadSettings()
     {
-        // $cache = new PhpFileCache($directory);
-        $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__, 'configuration.settings');
-        $cache = $cacheFactory->getCache();
+        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
 
-        try
+        if ($cache->contains('configuration.settings'))
         {
-            $this->settings = $cache->get();
+            $this->settings = $cache->fetch('configuration.settings');
         }
-        catch (CacheUnavailableException $exception)
+        else
         {
             $settings = DataManager :: retrieves(Setting :: class_name());
 
@@ -287,23 +282,22 @@ class Configuration
                 $this->settings[$setting->get_application()][$setting->get_variable()] = $setting->get_value();
             }
 
-            $cache->set($this->settings);
+            $cache->save('configuration.settings', $this->settings);
         }
     }
 
     /**
      * Load registrations from storage
      */
-    private function load_registrations()
+    private function loadRegistrations()
     {
-        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
-        $cache = $cacheFactory->getCache();
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
 
-        try
+        if ($cache->contains('configuration.registrations'))
         {
-            $this->registrations = $cache->get();
+            $this->registrations = $cache->fetch('configuration.registrations');
         }
-        catch (CacheUnavailableException $exception)
+        else
         {
             $registrations = DataManager :: retrieves(Registration :: class_name());
 
@@ -313,7 +307,7 @@ class Configuration
                 $this->registrations[self :: REGISTRATION_CONTEXT][$registration->get_context()] = $registration;
             }
 
-            $cache->set($this->registrations);
+            $cache->save('configuration.registrations', $this->registrations);
         }
     }
 
@@ -386,7 +380,7 @@ class Configuration
      * Load a default configuration which should enable the installer to function properly without a completely
      * configured environment
      */
-    private function load_default()
+    private function loadDefault()
     {
         $settings = array();
 
@@ -433,13 +427,13 @@ class Configuration
     {
         DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
 
-        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
-        $cacheFactory->getCache()->truncate();
+        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cache->delete('configuration.settings');
 
-        $cacheFactory = new CacheFactory(Cache :: TYPE_PHP, __NAMESPACE__, 'configuration.settings');
-        $cacheFactory->getCache()->truncate();
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cache->delete('configuration.registrations');
 
-        self :: get_instance()->load_from_storage();
+        self :: get_instance()->loadFromStorage();
     }
 
     /**

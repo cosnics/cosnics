@@ -4,9 +4,8 @@ namespace Chamilo\Core\Repository;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
-use Chamilo\Libraries\File\Cache\CacheUnavailableException;
-use Chamilo\Libraries\File\Cache\CacheFactory;
-use Chamilo\Libraries\File\Cache\Cache;
+use Doctrine\Common\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  * This class represents the current configuration
@@ -57,14 +56,13 @@ class Configuration
 
     private function initialize()
     {
-        $cacheFactory = new CacheFactory(Cache :: TYPE_SERIALIZE, __NAMESPACE__, 'configuration.registrations');
-        $cache = $cacheFactory->getCache();
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
 
-        try
+        if ($cache->contains('configuration.registrations'))
         {
-            $this->registrations = $cache->get();
+            $this->registrations = $cache->fetch('configuration.registrations');
         }
-        catch (CacheUnavailableException $exception)
+        else
         {
             $registrations = DataManager :: retrieves(TemplateRegistration :: class_name());
 
@@ -79,7 +77,7 @@ class Configuration
                 }
             }
 
-            $cache->set($this->registrations);
+            $cache->save('configuration.registrations', $this->registrations);
         }
     }
 
