@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\blog
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+BlogToolBrowserComponent = "Blogs durchsuchen"
+BlogToolViewerComponent = "Blog ansehen"
+BlogToolUpdaterComponent = "Blog bearbeiten"
+BlogToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
+BlogToolCategoryMoverComponent = "Blogs verschieben"
+Attachments = ""
+AuthorUnknown = ""
+BlogLayout = ""
+BlogLayoutNotExists = ""
+Properties = ""
