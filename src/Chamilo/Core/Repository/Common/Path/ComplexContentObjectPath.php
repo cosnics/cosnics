@@ -74,7 +74,7 @@ abstract class ComplexContentObjectPath
         ContentObject $content_object)
     {
         $properties = $this->get_properties($parent_id, $complex_content_object_item, $content_object);
-
+        
         $node_id = $this->get_next_id();
         $node = ComplexContentObjectPathNode :: factory(
             self :: context(), 
@@ -109,8 +109,6 @@ abstract class ComplexContentObjectPath
      */
     public function get_node($node_id)
     {
-        
-        
         if (! isset($this->nodes[$node_id]))
         {
             throw new Exception(Translation :: get('NodeDoesntExist'));
@@ -238,7 +236,7 @@ abstract class ComplexContentObjectPath
         $this->parents = array();
         
         DataClassCache :: truncate(ComplexContentObjectItem :: class_name());
-        
+      
         $this->initialize($root);
     }
 

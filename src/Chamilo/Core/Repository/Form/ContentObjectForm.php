@@ -164,40 +164,40 @@ abstract class ContentObjectForm extends FormValidator
                 Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
 
-        $relationService = new RelationService();
-        $entityService = new EntityService();
+//         $relationService = new RelationService();
+//         $entityService = new EntityService();
 
-        $entityFactory = DataClassEntityFactory :: getInstance();
-        $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
+//         $entityFactory = DataClassEntityFactory :: getInstance();
+//         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
-        $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
+//         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
 
-        if (count($availableSchemaIds) > 0)
-        {
-            $entity = $entityFactory->getEntity(
-                $this->get_content_object()->class_name(),
-                $this->get_content_object()->get_id());
-            $schemaInstances = $entityService->getSchemaInstancesForEntity(new RelationService(), $entity);
+//         if (count($availableSchemaIds) > 0)
+//         {
+//             $entity = $entityFactory->getEntity(
+//                 $this->get_content_object()->class_name(),
+//                 $this->get_content_object()->get_id());
+//             $schemaInstances = $entityService->getSchemaInstancesForEntity(new RelationService(), $entity);
 
-            while ($schemaInstance = $schemaInstances->next_result())
-            {
-                $schema = $schemaInstance->getSchema();
-                $tabs_generator->add_tab(
-                    new DynamicFormTab(
-                        'schema-' . $schemaInstance->get_id(),
-                        $schema->get_name(),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
-                        'build_metadata_form',
-                        array($schemaInstance)));
-            }
+//             while ($schemaInstance = $schemaInstances->next_result())
+//             {
+//                 $schema = $schemaInstance->getSchema();
+//                 $tabs_generator->add_tab(
+//                     new DynamicFormTab(
+//                         'schema-' . $schemaInstance->get_id(),
+//                         $schema->get_name(),
+//                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
+//                         'build_metadata_form',
+//                         array($schemaInstance)));
+//             }
 
-            $tabs_generator->add_tab(
-                new DynamicFormTab(
-                    'add-schema',
-                    Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
-                    'build_metadata_choice_form'));
-        }
+//             $tabs_generator->add_tab(
+//                 new DynamicFormTab(
+//                     'add-schema',
+//                     Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
+//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
+//                     'build_metadata_choice_form'));
+//         }
 
         $tabs_generator->render();
     }
