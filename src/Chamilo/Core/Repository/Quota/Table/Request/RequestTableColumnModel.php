@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Table\Request;
 
-use Chamilo\Core\Repository\Quota\DataClass\Request;
+use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
