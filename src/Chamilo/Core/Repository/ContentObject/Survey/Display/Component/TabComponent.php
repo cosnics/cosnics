@@ -16,6 +16,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
+use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -166,7 +167,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
-            if ($this->get_current_content_object() instanceof Page &&
+            if (($this->get_current_content_object() instanceof Page || $this->get_current_content_object() instanceof Survey) &&
                  count($this->get_current_node()->get_children()) > 1)
             {
                 
@@ -188,7 +189,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
-            if ($this->get_current_node()->get_content_object() instanceof Page)
+            if ($this->get_current_node()->get_content_object() instanceof Page ||$this->get_current_node()->get_content_object() instanceof Survey)
             {
                 
                 $this->tabs_renderer->add_tab(
@@ -306,7 +307,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
             }
             
-            if ($this->get_current_complex_content_object_item()->is_visible())
+            if ((!($this->get_current_complex_content_object_item() instanceof ComplexSurvey || $this->get_current_complex_content_object_item() instanceof ComplexPage)) && $this->get_current_complex_content_object_item()->is_visible())
             {
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(

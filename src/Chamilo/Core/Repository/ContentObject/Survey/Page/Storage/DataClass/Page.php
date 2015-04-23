@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  *
@@ -22,7 +23,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 /**
  * This class represents an survey
  */
-class Page extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
+class Page extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure, Versionable
 {
     const PROPERTY_CONFIGURATION = 'configuration';
     const CLASS_NAME = __CLASS__;

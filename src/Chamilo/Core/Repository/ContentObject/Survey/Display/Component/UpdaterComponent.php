@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 
 class UpdaterComponent extends TabComponent
 {
@@ -29,6 +30,17 @@ class UpdaterComponent extends TabComponent
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
 
+            $complex_content_object_item_form = ComplexContentObjectItemForm :: factory(
+                $content_object->context(),
+                $selected_complex_content_object_item,
+                $this->get_url());
+            
+            if ($complex_content_object_item_form instanceof \Chamilo\Core\Repository\Form\ComplexContentObjectItemForm)
+            {
+                $elements = $complex_content_object_item_form->get_elements();
+                $defaults = $complex_content_object_item_form->get_default_values();
+            }
+                       
             $form = ContentObjectForm :: factory(
                 ContentObjectForm :: TYPE_EDIT,
                 $content_object,
@@ -37,7 +49,9 @@ class UpdaterComponent extends TabComponent
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        self :: PARAM_STEP => $this->get_current_step())));
+                        self :: PARAM_STEP => $this->get_current_step())),
+                null, $elements);
+            $form->setDefaults($defaults);
 
             if ($form->validate())
             {
