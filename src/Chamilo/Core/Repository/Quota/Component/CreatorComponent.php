@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Quota\Component;
 
 use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Core\Repository\Quota\DataClass\Request;
+use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Form\RequestForm;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
