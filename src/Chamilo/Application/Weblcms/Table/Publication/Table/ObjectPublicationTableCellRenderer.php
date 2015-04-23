@@ -88,9 +88,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     // }
                     // }
                 }
-
-                return '<img title="' . $title . '" src="' . $content_object->get_icon_path(Theme :: ICON_MINI) .
-                     $icon_suffix . '" />';
+                return '<img title="' . $title . '" src="' .
+                     $content_object->get_icon_path(Theme :: ICON_MINI . $icon_suffix) . '" />';
 
                 break;
             case ContentObject :: PROPERTY_TITLE :
@@ -133,7 +132,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' .
+                         Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
