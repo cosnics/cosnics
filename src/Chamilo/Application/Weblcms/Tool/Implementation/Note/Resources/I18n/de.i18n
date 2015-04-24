@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\note
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hinweis"
+NoteToolBrowserComponent = "Hinweise durchsuchen"
+DeleteSelected = "Ausgewählten Hinweis löschen"
+NoteToolViewerComponent = "Hinweis ansehen"
+NoteToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
+NoteToolPublisherComponent = "Hinweis veröffentlichen"
+NoteToolUpdaterComponent = "Hinweis bearbeiten"

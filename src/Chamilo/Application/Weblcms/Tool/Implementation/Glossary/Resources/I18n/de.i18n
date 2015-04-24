@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\glossary
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Glossar"
+GlossaryToolBrowserComponent = "Glossare durchsuchen"
+GlossaryToolViewerComponent = "Glossar ansehen"
+GlossaryToolEvaluateComponent = "Auswerten"
+GlossaryToolIntroductionPublisherComponent = "Vorstelling veröffentlichen"
+GlossaryToolMoverComponent = "Glossar verschieben"
+GlossaryToolPublisherComponent = "Glossar veröffentlichen"
+GlossaryToolUpdaterComponent = "Glossar bearbeiten"
+CreateItem = ""
