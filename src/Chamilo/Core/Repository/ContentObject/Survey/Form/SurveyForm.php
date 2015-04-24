@@ -57,7 +57,7 @@ class SurveyForm extends ContentObjectForm
         $html_editor_options = array();
         $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
         
-        parent :: build_creation_form();
+        parent :: build_editing_form();
         
         $this->addElement('category', Translation :: get('Properties'));
         $checkbox = $this->createElement(

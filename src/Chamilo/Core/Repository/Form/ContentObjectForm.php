@@ -171,7 +171,7 @@ abstract class ContentObjectForm extends FormValidator
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
-
+        
         if (count($availableSchemaIds) > 0)
         {
             $entity = $entityFactory->getEntity(
@@ -324,6 +324,7 @@ abstract class ContentObjectForm extends FormValidator
     protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         $object = $this->content_object;
+        
         $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             User :: class_name(),
             (int) $this->get_owner_id());
@@ -334,6 +335,7 @@ abstract class ContentObjectForm extends FormValidator
         }
 
         $this->build_basic_form($htmleditor_options);
+
         if ($object instanceof Versionable && $this->allow_new_version)
         {
             if (! $object->is_external())
@@ -983,7 +985,7 @@ EOT;
         {
             $class = $base_class_name . 'Form';
         }
-
+        
         return new $class(
             $form_type,
             $content_object,
