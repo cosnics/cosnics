@@ -9,7 +9,7 @@ class ExternalObjectGalleryTable extends DataClassGalleryTable
     public static function factory($component)
     {
         $class = $component->get_external_repository_browser()->get_external_repository()->get_implementation() .
-             '\ExternalObjectGalleryTable';
+             '\Table\ExternalObjectGallery\ExternalObjectGalleryTable';
         return new $class($component);
     }
 }
