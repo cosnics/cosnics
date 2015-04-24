@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="block_configuration">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="block_id" type="integer" unsigned="1" notnull="1" />
+		<property name="variable" type="text" length="255" unsigned="1" notnull="1" />
+		<property name="value" type="text" length="255" unsigned="1" notnull="1" fixed="true" />
+	</properties>
+</object>
