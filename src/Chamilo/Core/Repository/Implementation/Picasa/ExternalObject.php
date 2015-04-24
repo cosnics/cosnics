@@ -22,10 +22,10 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_URLS, 
-                self :: PROPERTY_LICENSE, 
-                self :: PROPERTY_OWNER, 
-                self :: PROPERTY_TAGS, 
+                self :: PROPERTY_URLS,
+                self :: PROPERTY_LICENSE,
+                self :: PROPERTY_OWNER,
+                self :: PROPERTY_TAGS,
                 self :: PROPERTY_ALBUM_ID));
     }
 
@@ -43,14 +43,14 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         $available_sizes = $this->get_available_sizes();
         $html = array();
-        
+
         foreach ($available_sizes as $available_size)
         {
             $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation :: get(
                 (string) StringUtilities :: getInstance()->createString($available_size)->upperCamelize()) . ' (' .
                  $this->get_available_size_dimensions_string($available_size) . ')</a>';
         }
-        
+
         return implode('<br />' . "\n", $html);
     }
 
@@ -60,13 +60,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         {
             $size = self :: SIZE_MEDIUM;
         }
-        
+
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-        
+
         $urls = $this->get_urls();
         return array('width' => $urls[$size]['width'], 'height' => $urls[$size]['height']);
     }
@@ -74,7 +74,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_available_size_dimensions_string($size = self :: SIZE_MEDIUM)
     {
         $available_size_dimensions = $this->get_available_size_dimensions($size);
-        
+
         return $available_size_dimensions['width'] . ' x ' . $available_size_dimensions['height'];
     }
 
@@ -94,13 +94,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         {
             $size = self :: SIZE_MEDIUM;
         }
-        
+
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-        
+
         $urls = $this->get_urls();
         return $urls[$size]['source'];
     }
@@ -143,10 +143,10 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_license_icon()
     {
         return Theme :: getInstance()->getCommonImage(
-            'external_repository/picasa/licenses/license_' . $this->get_license_id(), 
-            'png', 
-            $this->get_license_name(), 
-            $this->get_license_url(), 
+            'Chamilo/Core/Repository/Implementation/Picasa/Licenses/License' . $this->get_license_id(),
+            'png',
+            $this->get_license_name(),
+            $this->get_license_url(),
             ToolbarItem :: DISPLAY_ICON);
     }
 

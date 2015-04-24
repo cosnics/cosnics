@@ -142,7 +142,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() . 'View',
                             null,
                             Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('View' . $renderer),
+                        Theme :: getInstance()->getCommonImagePath('View\\' . (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize()),
                         $this->get_url(array(\Chamilo\Core\Repository\External\Manager :: PARAM_RENDERER => $renderer)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
