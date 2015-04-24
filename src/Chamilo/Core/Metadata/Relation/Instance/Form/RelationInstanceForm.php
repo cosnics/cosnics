@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Relation\Instance\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Form for the element
@@ -60,8 +61,22 @@ class RelationInstanceForm extends FormValidator
      */
     protected function buildForm()
     {
-        $relationsSelect = $this->addElement('select', 'relation', 'SelectRelations');
+        $relationSelect = $this->addElement('select', 'relation', 'SelectRelations', $this->getRelationOptions());
+        $relationSelect->setMultiple(true);
 
         $this->addSaveResetButtons();
+    }
+
+    private function getRelationOptions()
+    {
+        $relationOptions = array();
+
+        foreach ($this->relations as $relation)
+        {
+            $relationOptions[$relation->get_id()] = $relation->getTranslationByIsocode(
+                Translation :: getInstance()->getLanguageIsocode());
+        }
+
+        return $relationOptions;
     }
 }
