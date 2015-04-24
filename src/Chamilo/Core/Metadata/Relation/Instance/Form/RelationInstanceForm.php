@@ -62,6 +62,7 @@ class RelationInstanceForm extends FormValidator
     protected function buildForm()
     {
         $relationSelect = $this->addElement('select', 'relation', 'SelectRelations', $this->getRelationOptions());
+        $relationSelect->setMultiple(true);
 
         $this->addSaveResetButtons();
     }
