@@ -43,7 +43,7 @@ abstract class Manager extends Application
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_TYPE),
-            new StaticConditionVariable('core\repository\implementation'));
+            new StaticConditionVariable('Chamilo\Core\Repository\Implementation'));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_STATUS),
             new StaticConditionVariable($status));
@@ -56,7 +56,7 @@ abstract class Manager extends Application
 
     public static function get_namespace($instance_type = null, $type = null)
     {
-        return 'core\repository\implementation\\' . $type;
+        return 'Chamilo\Core\Repository\Implementation\\' . $type;
     }
 
     public static function get_instance_identifier($type)
