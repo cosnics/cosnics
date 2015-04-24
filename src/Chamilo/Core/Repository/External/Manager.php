@@ -202,7 +202,7 @@ abstract class Manager extends Application implements NoContextComponent
                          'Title'));
             $link = $this->get_url($parameters);
 
-            $icon = 'place_tab_' . $external_repository_action;
+            $icon = 'Place/Tab/'. $external_repository_action;
             $icon_path = Theme :: getInstance()->getImagePath($this->get_external_repository()->get_type(), $icon);
             $icon_system_path = Theme :: getInstance()->getImagePath(
                 $this->get_external_repository()->get_type(),
