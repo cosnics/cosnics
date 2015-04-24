@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Wikipedia;
 
-use Chamilo\Core\Repository\Implementation\Wikipedia\DataConnector\RestClient;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
@@ -21,28 +20,28 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function __construct($external_repository_instance)
     {
         parent :: __construct($external_repository_instance);
-        
+
         $url = Setting :: get('url', $this->get_external_repository_instance_id());
-        $this->wikipedia = new RestClient($url);
-        $this->wikipedia->set_connexion_mode(RestClient :: MODE_PEAR);
-        
+
+        $this->wikipedia = new \GuzzleHttp\Client(['base_url' => $url]);
+
         $this->login();
     }
 
     public function login()
     {
-        $parameters = array();
-        $parameters['action'] = 'login';
-        
         $login = Setting :: get('login', $this->get_external_repository_instance_id());
         $password = Setting :: get('password', $this->get_external_repository_instance_id());
-        
-        $parameters['lgname'] = $login;
-        $parameters['lgpassword'] = $password;
-        $parameters['format'] = 'xml';
-        $parameters['redirects'] = true;
-        
-        $this->wikipedia->request(RestClient :: METHOD_POST, null, $parameters);
+
+        $request = $this->wikipedia->createRequest('POST', '');
+        $postBody = $request->getBody();
+        $postBody->setField('action', 'login');
+        $postBody->setField('lgname', $login);
+        $postBody->setField('lgpassword', $password);
+        $postBody->setField('format', 'xml');
+        $postBody->setField('redirects', true);
+
+        $response = $this->wikipedia->send($request);
     }
 
     /**
@@ -59,7 +58,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $condition = 'Looney Tunes';
         }
-        
+
         $parameters = array();
         $parameters['action'] = 'query';
         $parameters['generator'] = 'search';
@@ -72,11 +71,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['format'] = 'xml';
         $parameters['export'] = 'export';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikipedia->request(RestClient :: METHOD_GET, null, $parameters);
-        
+
+        $result = $this->wikipedia->get('', ['query' => $parameters]);
+        $results = $result->xml();
         $objects = array();
-        foreach ($result->get_response_content_xml()->query->pages->page as $page)
+
+        foreach ($results->query->pages->page as $page)
         {
             $objects[] = $this->get_article($page);
         }
@@ -89,7 +89,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_id((int) $page->attributes()->pageid);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $file_info = pathinfo(substr((string) $page->attributes()->title, 5));
-        
+
         $object->set_title((string) $page->attributes()->title);
         $object->set_description((string) $page->attributes()->title);
         $time = strtotime((int) $page->attributes()->touched);
@@ -98,7 +98,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_type('wikipedia');
         $object->set_urls((string) str_replace('&action=edit', '', $page->attributes()->editurl));
         $object->set_rights($this->determine_rights());
-        
+
         return $object;
     }
 
@@ -113,7 +113,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $condition = 'Looney Tunes';
         }
-        
+
         $parameters = array();
         $parameters['action'] = 'query';
         $parameters['generator'] = 'search';
@@ -123,9 +123,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['prop'] = 'info';
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikipedia->request(RestClient :: METHOD_GET, null, $parameters);
-        return $result->get_response_content_xml()->query->searchinfo->attributes()->totalhits;
+
+        $result = $this->wikipedia->get('', ['query' => $parameters]);
+
+        return $result->xml()->query->searchinfo->attributes()->totalhits;
     }
 
     /**
@@ -156,7 +157,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         return array();
     }
-    
+
     /*
      * (non-PHPdoc) @see
      * common/extensions/external_repository_manager/ManagerConnector#retrieve_external_repository_object()
@@ -171,9 +172,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['inprop'] = 'url';
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikipedia->request(RestClient :: METHOD_GET, null, $parameters);
-        return $this->get_article($result->get_response_content_xml()->query->pages->page);
+
+        $result = $this->wikipedia->get('', ['query' => $parameters]);
+
+        return $this->get_article($result->xml()->query->pages->page);
     }
 
     /**
@@ -204,7 +206,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $rights[ExternalObject :: RIGHT_EDIT] = false;
         $rights[ExternalObject :: RIGHT_DELETE] = false;
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
-        
+
         return $rights;
     }
 
