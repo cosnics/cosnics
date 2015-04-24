@@ -22,14 +22,14 @@ class Setting extends DataClass
 
     /**
      * A static array containing all settings of external repository instances
-     * 
+     *
      * @var array
      */
     private static $settings;
 
     /**
      * Get the default properties of all settings.
-     * 
+     *
      * @return array The property names.
      */
     /**
@@ -53,7 +53,7 @@ class Setting extends DataClass
 
     /**
      * Returns the variable of this setting object
-     * 
+     *
      * @return string the variable
      */
     public function get_variable()
@@ -63,7 +63,7 @@ class Setting extends DataClass
 
     /**
      * Returns the value of this setting object
-     * 
+     *
      * @return string the value
      */
     public function get_value()
@@ -82,7 +82,7 @@ class Setting extends DataClass
 
     /**
      * Sets the variable of this setting.
-     * 
+     *
      * @param $variable string the variable.
      */
     public function set_variable($variable)
@@ -92,7 +92,7 @@ class Setting extends DataClass
 
     /**
      * Sets the value of this setting.
-     * 
+     *
      * @param $value string the value.
      */
     public function set_value($value)
@@ -108,29 +108,29 @@ class Setting extends DataClass
     public static function initialize(Instance $external_instance)
     {
         $settings_file = Path :: getInstance()->namespaceToFullPath($external_instance->get_implementation()) .
-             '/php/settings/settings.xml';
-        
+             'Resources\Settings\Settings.xml';
+
         $doc = new DOMDocument();
-        
+
         $doc->load($settings_file);
         $object = $doc->getElementsByTagname('application')->item(0);
         $settings = $doc->getElementsByTagname('setting');
-        
+
         foreach ($settings as $index => $setting)
         {
             $external_setting = new self();
             $external_setting->set_external_id($external_instance->get_id());
             $external_setting->set_variable($setting->getAttribute('name'));
             $external_setting->set_value($setting->getAttribute('default'));
-            
+
             $user_setting = $setting->getAttribute('user_setting');
-            
+
             if (! $external_setting->create())
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -158,7 +158,7 @@ class Setting extends DataClass
         {
             self :: load($external_id);
         }
-        
+
         return (isset(self :: $settings[$external_id][$variable]) ? self :: $settings[$external_id][$variable] : null);
     }
 
@@ -168,7 +168,7 @@ class Setting extends DataClass
         {
             self :: load($external_id);
         }
-        
+
         return self :: $settings[$external_id];
     }
 
@@ -179,10 +179,10 @@ class Setting extends DataClass
     public static function load($external_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
         $settings = DataManager :: retrieves(self :: class_name(), $condition);
-        
+
         while ($setting = $settings->next_result())
         {
             self :: $settings[$external_id][$setting->get_variable()] = $setting->get_value();

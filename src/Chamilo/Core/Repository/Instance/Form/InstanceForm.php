@@ -148,9 +148,6 @@ class InstanceForm extends FormValidator
         $external_instance = $this->external_instance;
         $configuration = $this->configuration;
 
-        $namespace = 'core\repository\instance';
-        $manager_class = Manager :: get_manager_class($namespace);
-
         $categories = count($configuration['settings']);
 
         foreach ($configuration['settings'] as $category_name => $settings)
@@ -403,18 +400,6 @@ class InstanceForm extends FormValidator
             {
                 return false;
             }
-
-            $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
-
-            foreach ($registrations as $registration)
-            {
-                $class_name = $registration->get_context() . '\Manager';
-
-                if (! $class_name :: process_instance($external_instance))
-                {
-                    return false;
-                }
-            }
         }
 
         return true;
@@ -463,7 +448,7 @@ class InstanceForm extends FormValidator
     public function parse_settings()
     {
         $file = Path :: getInstance()->namespaceToFullPath($this->application->get_implementation()) .
-             '/php/settings/settings.xml';
+             'Resources\Settings\Settings.xml';
 
         $result = array();
 
