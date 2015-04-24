@@ -68,16 +68,6 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                        Manager :: PARAM_RELATION_INSTANCE_ID => $relationInstance->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
-        $toolbar->add_item(
-            new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                 $this->get_component()->get_url(

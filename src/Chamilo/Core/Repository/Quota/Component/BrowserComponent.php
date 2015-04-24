@@ -224,7 +224,8 @@ class BrowserComponent extends Manager implements TableSupport
         /**
          * Disabled right now since database quota are not enforced anywhere, this is just a visual reference $html[] =
          * Calculator :: get_bar($this->calculator->get_user_database_percentage(),
-         * $this->calculator->get_used_database_quota() . ' / ' . $this->calculator->get_maximum_database_quota());
+         * $this->calculator->get_used_database_quota() .
+         * ' / ' . $this->calculator->get_maximum_database_quota());
          */
 
         $properties = array();
