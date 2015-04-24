@@ -363,21 +363,26 @@ class Translation
     private function loadLanguageTranslations($languageIsocode, $context)
     {
         $path = $this->getPathUtilities()->getI18nPath($context) . $languageIsocode . '.i18n';
+
+        if (!is_readable($path))
+        {
+            return;
+        }
+
         $languageStrings = parse_ini_file($path);
 
         if (! $languageStrings)
         {
             return;
         }
-        else
-        {
-            $this->strings[$languageIsocode][$context] = $languageStrings;
 
-            if ($this->usesCaching)
-            {
-                $this->cache($languageIsocode);
-            }
+        $this->strings[$languageIsocode][$context] = $languageStrings;
+
+        if ($this->usesCaching)
+        {
+            $this->cache($languageIsocode);
         }
+
     }
 
     /**
