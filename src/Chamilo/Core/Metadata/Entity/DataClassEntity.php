@@ -13,9 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 abstract class DataClassEntity implements EntityInterface
 {
-    // Identifier types
     const IDENTIFIER_TYPE_INSTANCE = 0;
-    const IDENTIFIER_ALL_INSTANCES = null;
 
     /**
      *
@@ -41,7 +39,7 @@ abstract class DataClassEntity implements EntityInterface
      * @param integer $dataClassIdentifier
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      */
-    public function __construct($dataClassName, $dataClassIdentifier = 0, DataClass $dataClass = null)
+    public function __construct($dataClassName, $dataClassIdentifier = null, DataClass $dataClass = null)
     {
         $this->dataClassName = $dataClassName;
         $this->dataClassIdentifier = $dataClassIdentifier;
@@ -124,8 +122,17 @@ abstract class DataClassEntity implements EntityInterface
      */
     public function isDataClassIdentified()
     {
-        return $this->getDataClassIdentifier() != self :: IDENTIFIER_TYPE_INSTANCE &&
-             $this->getDataClassIdentifier() != self :: IDENTIFIER_ALL_INSTANCES;
+        return ! is_null($this->getDataClassIdentifier()) &&
+             $this->getDataClassIdentifier() != self :: IDENTIFIER_TYPE_INSTANCE;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isDataClassType()
+    {
+        return is_null($this->getDataClassIdentifier());
     }
 
     /**

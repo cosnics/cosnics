@@ -8,6 +8,8 @@ use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 
 /**
  *
@@ -33,6 +35,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         $component = $factory->getComponent();
         $component->setTargetEntities($this->getTargetEntities());
         $component->setRelations($this->getRelation());
+        $component->setSourceEntities($this->getSourceEntities());
 
         return $component->run();
     }
@@ -51,12 +54,22 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
 
         foreach ($registrations as $registration)
         {
-            if ($registration->get_name() == 'File')
-
-                $entities[] = $entityFactory->getEntity(
-                    $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name());
+            $entities[] = $entityFactory->getEntity(
+                $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name(),
+                DataClassEntity :: IDENTIFIER_TYPE_INSTANCE);
         }
 
+        return $entities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
+     */
+    public function getSourceEntities()
+    {
+        $entities = array();
+        $entities[] = DataClassEntityFactory :: getInstance()->getEntity(Schema :: class_name());
         return $entities;
     }
 
