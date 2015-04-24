@@ -9,14 +9,12 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Metadata\Relation\Instance\Table\Relation\RelationTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Core\Metadata\Service\EntityConditionService;
 
 /**
  *
@@ -91,6 +89,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
+        $entityConditionService = new EntityConditionService();
         $conditions = array();
 
         $relations = $this->getRelations();
@@ -113,50 +112,22 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($sourceEntities) > 0)
         {
-            $sourceConditions = array();
-
-            foreach ($sourceEntities as $sourceEntity)
-            {
-                $sourceConditions[] = new AndCondition(
-                    array(
-                        new EqualityCondition(
-                            new PropertyConditionVariable(
-                                RelationInstance :: class_name(),
-                                RelationInstance :: PROPERTY_SOURCE_TYPE),
-                            new StaticConditionVariable($sourceEntity->getDataClassName())),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(
-                                RelationInstance :: class_name(),
-                                RelationInstance :: PROPERTY_SOURCE_ID),
-                            new StaticConditionVariable($sourceEntity->getDataClassIdentifier()))));
-            }
-
-            $conditions[] = new OrCondition($sourceConditions);
+            $conditions[] = $entityConditionService->getConditionForEntities(
+                RelationInstance :: class_name(),
+                RelationInstance :: PROPERTY_SOURCE_TYPE,
+                RelationInstance :: PROPERTY_SOURCE_ID,
+                $sourceEntities);
         }
 
         $targetEntities = $this->getTargetEntities();
 
         if (count($targetEntities) > 0)
         {
-            $targetConditions = array();
-
-            foreach ($targetEntities as $targetEntity)
-            {
-                $targetConditions[] = new AndCondition(
-                    array(
-                        new EqualityCondition(
-                            new PropertyConditionVariable(
-                                RelationInstance :: class_name(),
-                                RelationInstance :: PROPERTY_TARGET_TYPE),
-                            new StaticConditionVariable($targetEntity->getDataClassName())),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(
-                                RelationInstance :: class_name(),
-                                RelationInstance :: PROPERTY_TARGET_ID),
-                            new StaticConditionVariable($targetEntity->getDataClassIdentifier()))));
-            }
-
-            $conditions[] = new OrCondition($targetConditions);
+            $conditions[] = $entityConditionService->getConditionForEntities(
+                RelationInstance :: class_name(),
+                RelationInstance :: PROPERTY_TARGET_TYPE,
+                RelationInstance :: PROPERTY_TARGET_ID,
+                $targetEntities);
         }
 
         return new AndCondition($conditions);
