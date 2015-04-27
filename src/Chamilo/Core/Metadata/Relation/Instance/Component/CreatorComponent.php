@@ -5,6 +5,9 @@ use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Relation\Instance\Form\RelationInstanceForm;
+use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -35,6 +38,20 @@ class CreatorComponent extends Manager
 
         if ($form->validate())
         {
+            $submittedValues = $form->exportValues();
+            $relationInstanceService = new RelationInstanceService();
+            $success = $relationInstanceService->createRelationInstancesFromSubmittedValues(
+                $this->get_user(),
+                $submittedValues);
+
+            $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
+
+            $message = Translation :: get(
+                $translation,
+                array('OBJECT' => Translation :: get('RelationInstance')),
+                Utilities :: COMMON_LIBRARIES);
+
+            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
         else
         {

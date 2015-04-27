@@ -56,7 +56,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         {
             $entities[] = $entityFactory->getEntity(
                 $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name(),
-                DataClassEntity :: IDENTIFIER_TYPE_INSTANCE);
+                DataClassEntity :: INSTANCE_IDENTIFIER);
         }
 
         return $entities;
