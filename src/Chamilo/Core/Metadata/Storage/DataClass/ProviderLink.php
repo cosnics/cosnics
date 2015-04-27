@@ -17,9 +17,15 @@ class ProviderLink extends DataClass
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Provider\Storage\DataClass\Registration
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration
      */
     private $providerRegistration;
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Element
+     */
+    private $element;
 
     /**
      * **************************************************************************************************************
@@ -87,6 +93,20 @@ class ProviderLink extends DataClass
 
     /**
      *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Element
+     */
+    public function getElement()
+    {
+        if (! isset($this->element))
+        {
+            $this->element = DataManager :: retrieve_by_id(Element :: class_name(), $this->get_element_id());
+        }
+
+        return $this->element;
+    }
+
+    /**
+     *
      * @param integer
      */
     public function set_element_id($elementId)
@@ -112,6 +132,10 @@ class ProviderLink extends DataClass
         $this->set_default_property(self :: PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
     }
 
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration
+     */
     public function getProviderRegistration()
     {
         if (! isset($this->providerRegistration))
