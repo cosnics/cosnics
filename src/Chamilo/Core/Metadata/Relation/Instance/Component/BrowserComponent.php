@@ -112,7 +112,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($sourceEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getConditionForEntities(
+            $conditions[] = $entityConditionService->getRelationInstanceConditionForEntities(
                 RelationInstance :: class_name(),
                 RelationInstance :: PROPERTY_SOURCE_TYPE,
                 RelationInstance :: PROPERTY_SOURCE_ID,
@@ -123,7 +123,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($targetEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getConditionForEntities(
+            $conditions[] = $entityConditionService->getRelationInstanceConditionForEntities(
                 RelationInstance :: class_name(),
                 RelationInstance :: PROPERTY_TARGET_TYPE,
                 RelationInstance :: PROPERTY_TARGET_ID,
