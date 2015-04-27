@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Metadata\Relation\Instance\Component;
+namespace Chamilo\Core\Metadata\Provider\Component;
 
-use Chamilo\Core\Metadata\Relation\Instance\Manager;
+use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -9,12 +9,14 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Metadata\Relation\Instance\Table\Relation\RelationTable;
+// use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+// use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\Metadata\Provider\Table\ProviderLink\ProviderLinkTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Service\EntityConditionService;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
+// use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+// use Chamilo\Core\Metadata\Service\EntityConditionService;
 
 /**
  *
@@ -55,7 +57,7 @@ class BrowserComponent extends Manager implements TableSupport
         $this->action_bar = $this->get_action_bar();
         $html[] = $this->action_bar->as_html();
 
-        $table = new RelationTable($this);
+        $table = new ProviderLinkTable($this);
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);
@@ -92,42 +94,14 @@ class BrowserComponent extends Manager implements TableSupport
         $entityConditionService = new EntityConditionService();
         $conditions = array();
 
-        $relations = $this->getRelations();
+        $entities = $this->getEntities();
 
-        if (count($relations) > 0)
-        {
-            $relationIdentifiers = array();
-
-            foreach ($relations as $relation)
-            {
-                $relationIdentifiers[] = $relation->get_id();
-            }
-
-            $conditions[] = new InCondition(
-                new PropertyConditionVariable(RelationInstance :: class_name(), RelationInstance :: PROPERTY_RELATION_ID),
-                $relationIdentifiers);
-        }
-
-        $sourceEntities = $this->getSourceEntities();
-
-        if (count($sourceEntities) > 0)
+        if (count($entities) > 0)
         {
             $conditions[] = $entityConditionService->getEntitiesCondition(
-                $sourceEntities,
-                RelationInstance :: class_name(),
-                RelationInstance :: PROPERTY_SOURCE_TYPE,
-                RelationInstance :: PROPERTY_SOURCE_ID);
-        }
-
-        $targetEntities = $this->getTargetEntities();
-
-        if (count($targetEntities) > 0)
-        {
-            $conditions[] = $entityConditionService->getEntitiesCondition(
-                $targetEntities,
-                RelationInstance :: class_name(),
-                RelationInstance :: PROPERTY_TARGET_TYPE,
-                RelationInstance :: PROPERTY_TARGET_ID);
+                $entities,
+                ProviderLink :: class_name(),
+                ProviderLink :: PROPERTY_ENTITY_TYPE);
         }
 
         return new AndCondition($conditions);

@@ -21,9 +21,7 @@ abstract class Manager extends Application
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
-    const ACTION_UPDATE = 'Updater';
     const ACTION_CREATE = 'Creator';
-    const ACTION_ELEMENT = 'Element';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
