@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-
 class DynamicFormTabsRenderer extends DynamicTabsRenderer
 {
 
@@ -44,17 +41,5 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
         }
 
         $this->form->addElement('html', $this->footer());
-    }
-
-    public function footer()
-    {
-        $html = array();
-        $html[] = '<script type="text/javascript">';
-        $html[] = ' var element = "' . $this->get_name() . '"';
-        $html[] = '</script>';
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'DynamicFormTabs.js');
-        $html[] = parent :: footer();
-        return implode(PHP_EOL, $html);
     }
 }

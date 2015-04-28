@@ -94,7 +94,7 @@ class DataClassEntityFactory
      */
     public function getEntityFromDataClassName($dataClassName)
     {
-        return $this->getEntity($dataClassName, DataClassEntity :: IDENTIFIER_TYPE_INSTANCE);
+        return $this->getEntity($dataClassName, DataClassEntity :: INSTANCE_IDENTIFIER);
     }
 
     /**
