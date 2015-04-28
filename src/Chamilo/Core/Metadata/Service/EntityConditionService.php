@@ -8,7 +8,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  *
