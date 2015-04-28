@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\note
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Note"
+NoteToolBrowserComponent = "Browse notes"
+DeleteSelected = "Delete selected note"
+NoteToolViewerComponent = "View note"
+NoteToolIntroductionPublisherComponent = "Publish introduction"
+NoteToolPublisherComponent = "Publish note"
+NoteToolUpdaterComponent = "Edit note"
