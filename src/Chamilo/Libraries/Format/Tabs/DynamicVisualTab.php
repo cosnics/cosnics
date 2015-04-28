@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
-
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -211,7 +210,7 @@ class DynamicVisualTab extends DynamicTab
     {
         if ($this->get_selected() == true)
         {
-            $classes = 'ui-state-default ui-corner-top ui-state-active ui-tabs-selected dynamic_visual_tab';
+            $classes = 'ui-state-default ui-corner-top ui-tabs-active ui-state-active dynamic_visual_tab';
         }
         else
         {
@@ -222,7 +221,7 @@ class DynamicVisualTab extends DynamicTab
         $html[] = '<li class="' . $classes . '" style="float: ' . $this->get_position() . ';">';
 
         $link = array();
-        $link[] = '<a';
+        $link[] = '<a class="ui-tabs-anchor"';
 
         if ($this->get_link() && $this->get_target() == self :: TARGET_WINDOW)
         {

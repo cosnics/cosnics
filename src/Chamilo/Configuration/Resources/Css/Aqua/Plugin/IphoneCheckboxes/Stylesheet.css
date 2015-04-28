@@ -43,9 +43,7 @@
 
 label.iPhoneCheckLabelOn {
 	color: white;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/on.png')
-		no-repeat;
+	background: url('On.png') no-repeat;
 	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
 	left: 0;
 	padding-top: 5px;
@@ -58,9 +56,7 @@ label.iPhoneCheckLabelOn span {
 
 label.iPhoneCheckLabelOff {
 	color: #8b8b8b;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/off.png')
-		no-repeat right 0;
+	background: url('Off.png') no-repeat right 0;
 	text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.6);
 	text-align: right;
 	right: 0;
@@ -79,9 +75,7 @@ label.iPhoneCheckLabelOff span {
 	top: 0;
 	left: 0;
 	width: 0;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SliderLeft.png')
-		no-repeat;
+	background: url('SliderLeft.png') no-repeat;
 	padding-left: 3px;
 }
 
@@ -89,16 +83,13 @@ label.iPhoneCheckLabelOff span {
 	height: 100%;
 	width: 100%;
 	padding-right: 3px;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SlideRight.png')
-		no-repeat right 0;
+	background: url('SlideRight.png') no-repeat right 0;
 }
 
 .iPhoneCheckHandleCenter {
 	height: 100%;
 	width: 100%;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/iphone-style-checkboxes/SliderCenter.png');
+	background: url('SliderCenter.png');
 }
 
 .iOSCheckContainer {
@@ -145,9 +136,7 @@ label.iPhoneCheckLabelOff span {
 
 label.iOSCheckLabelOn {
 	color: white;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/on.png')
-		no-repeat;
+	background: url('On.png') no-repeat;
 	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
 	left: 0;
 	padding-top: 5px;
@@ -159,9 +148,7 @@ label.iOSCheckLabelOn span {
 
 label.iOSCheckLabelOff {
 	color: #8b8b8b;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/off.png')
-		no-repeat right 0;
+	background: url('Off.png') no-repeat right 0;
 	text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.6);
 	text-align: right;
 	right: 0;
@@ -179,9 +166,7 @@ label.iOSCheckLabelOff span {
 	top: 0;
 	left: 0;
 	width: 0;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderLeft.png')
-		no-repeat;
+	background: url('SliderLeft.png') no-repeat;
 	padding-left: 3px;
 }
 
@@ -189,14 +174,11 @@ label.iOSCheckLabelOff span {
 	height: 100%;
 	width: 100%;
 	padding-right: 3px;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderRight.png')
-		no-repeat right 0;
+	background: url('SliderRight.png') no-repeat right 0;
 }
 
 .iOSCheckHandleCenter {
 	height: 100%;
 	width: 100%;
-	background:
-		url('../../../../../Images/Aqua/plugin/jquery/ios-style-checkboxes/SliderCenter.png');
+	background: url('SliderCenter.png');
 }
