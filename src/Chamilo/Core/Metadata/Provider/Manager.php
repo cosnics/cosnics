@@ -3,6 +3,7 @@ namespace Chamilo\Core\Metadata\Provider;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Metadata\Service\EntityConditionService;
 
 /**
  *
@@ -17,6 +18,7 @@ abstract class Manager extends Application
     // Parameters
     const PARAM_ACTION = 'provider_action';
     const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
+    const PARAM_ENTITY_TYPE = 'entity_type';
 
     // Actions
     const ACTION_BROWSE = 'Browser';
@@ -35,6 +37,12 @@ abstract class Manager extends Application
 
     /**
      *
+     * @var \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     */
+    private $expandedEntities;
+
+    /**
+     *
      * @return \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
      */
     public function getEntities()
@@ -49,6 +57,21 @@ abstract class Manager extends Application
     public function setEntities($entities)
     {
         $this->entities = $entities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Interfaces\EntityInterface[]
+     */
+    public function getExpandedEntities()
+    {
+        if (! isset($this->expandedEntities))
+        {
+            $entityConditionService = new EntityConditionService();
+            $this->expandedEntities = $entityConditionService->expandEntities($this->getEntities());
+        }
+
+        return $this->expandedEntities;
     }
 
     public function verifySetup()
