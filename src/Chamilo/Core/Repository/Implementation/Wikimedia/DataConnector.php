@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Wikimedia;
 
-use Chamilo\Core\Repository\Implementation\Wikimedia\DataConnector\RestClient;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
@@ -27,11 +26,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function __construct($external_repository_instance)
     {
         parent :: __construct($external_repository_instance);
-        
+
         $url = Setting :: get('url', $this->get_external_repository_instance_id());
-        $this->wikimedia = new RestClient($url);
-        $this->wikimedia->set_connexion_mode(RestClient :: MODE_PEAR);
-        
+        $this->wikimedia = new \GuzzleHttp\Client(['base_url' => $url]);
+
         $this->login();
     }
 
@@ -39,16 +37,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $parameters = array();
         $parameters['action'] = 'login';
-        
+
         $login = Setting :: get('login', $this->get_external_repository_instance_id());
         $password = Setting :: get('password', $this->get_external_repository_instance_id());
-        
+
+        $request = $this->wikimedia->createRequest('POST', '');
         $parameters['lgname'] = $login;
         $parameters['lgpassword'] = $password;
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $this->wikimedia->request(RestClient :: METHOD_POST, null, $parameters);
+
+        $response = $this->wikimedia->send($request);
     }
 
     /**
@@ -79,7 +78,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $condition = 'Looney Tunes';
         }
-        
+
         $parameters = array();
         $parameters['action'] = 'query';
         $parameters['generator'] = 'search';
@@ -94,16 +93,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['iiurlheight'] = 192;
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikimedia->request(RestClient :: METHOD_GET, null, $parameters);
-        
+
+        $result = $this->wikimedia->get('', ['query' => $parameters]);
+        $results = $result->xml();
         $objects = array();
-        
-        foreach ($result->get_response_content_xml()->query->pages->page as $page)
+
+        foreach ($result->query->pages->page as $page)
         {
             $objects[] = $this->get_image($page);
         }
-        
+
         return new ArrayResultSet($objects);
     }
 
@@ -112,63 +111,63 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object = new ExternalObject();
         $object->set_id((int) $page->attributes()->pageid);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
-        
+
         $file_info = pathinfo(substr((string) $page->attributes()->title, 5));
         $object->set_title($file_info['filename']);
         $object->set_description($file_info['filename']);
-        
+
         $time = strtotime((int) $page->imageinfo->ii->attributes()->timestamp);
         $object->set_created($time);
         $object->set_modified($time);
         $object->set_owner_id((string) $page->imageinfo->ii->attributes()->user);
-        
+
         $photo_urls = array();
-        
+
         $original_width = (int) $page->imageinfo->ii->attributes()->width;
         $original_height = (int) $page->imageinfo->ii->attributes()->height;
-        
+
         if ($original_width <= 192)
         {
             $photo_urls[ExternalObject :: SIZE_THUMBNAIL] = array(
-                'source' => (string) $page->imageinfo->ii->attributes()->url, 
-                'width' => $original_width, 
+                'source' => (string) $page->imageinfo->ii->attributes()->url,
+                'width' => $original_width,
                 'height' => $original_height);
         }
         else
         {
             $photo_urls[ExternalObject :: SIZE_THUMBNAIL] = array(
-                'source' => (string) $page->imageinfo->ii->attributes()->thumburl, 
-                'width' => (int) $page->imageinfo->ii->attributes()->thumbwidth, 
+                'source' => (string) $page->imageinfo->ii->attributes()->thumburl,
+                'width' => (int) $page->imageinfo->ii->attributes()->thumbwidth,
                 'height' => (int) $page->imageinfo->ii->attributes()->thumbheight);
         }
-        
+
         if ($original_width <= 500)
         {
             $photo_urls[ExternalObject :: SIZE_MEDIUM] = array(
-                'source' => (string) $page->imageinfo->ii->attributes()->url, 
-                'width' => $original_width, 
+                'source' => (string) $page->imageinfo->ii->attributes()->url,
+                'width' => $original_width,
                 'height' => $original_height);
         }
         else
         {
             $thumbnail = $this->get_additional_thumbnail_url($page->imageinfo->ii->attributes()->thumburl, 500);
             $thumbnail_dimensions = ImageManipulation :: rescale($original_width, $original_height, 500, 500);
-            
+
             $photo_urls[ExternalObject :: SIZE_MEDIUM] = array(
-                'source' => $thumbnail, 
-                'width' => $thumbnail_dimensions[0], 
+                'source' => $thumbnail,
+                'width' => $thumbnail_dimensions[0],
                 'height' => $thumbnail_dimensions[1]);
         }
-        
+
         $photo_urls[ExternalObject :: SIZE_ORIGINAL] = array(
-            'source' => (string) $page->imageinfo->ii->attributes()->url, 
-            'width' => $original_width, 
+            'source' => (string) $page->imageinfo->ii->attributes()->url,
+            'width' => $original_width,
             'height' => $original_height);
         $object->set_urls($photo_urls);
-        
+
         $object->set_type($file_info['extension']);
         $object->set_rights($this->determine_rights());
-        
+
         return $object;
     }
 
@@ -190,7 +189,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $condition = 'Looney Tunes';
         }
-        
+
         $parameters = array();
         $parameters['action'] = 'query';
         $parameters['generator'] = 'search';
@@ -201,9 +200,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['iiprop'] = 'timestamp';
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikimedia->request(RestClient :: METHOD_GET, null, $parameters);
-        return $result->get_response_content_xml()->query->searchinfo->attributes()->totalhits;
+
+        $result = $this->wikimedia->get('', ['query' => $parameters]);
+
+        return $result->xml()->query->searchinfo->attributes()->totalhits;
     }
 
     /**
@@ -225,7 +225,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         return null;
     }
-    
+
     /*
      * (non-PHPdoc) @see
      * common/extensions/external_repository_manager/ManagerConnector#retrieve_external_repository_object()
@@ -242,9 +242,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $parameters['iiurlheight'] = 192;
         $parameters['format'] = 'xml';
         $parameters['redirects'] = true;
-        
-        $result = $this->wikimedia->request(RestClient :: METHOD_GET, null, $parameters);
-        return $this->get_image($result->get_response_content_xml()->query->pages->page);
+
+        $result = $this->wikimedia->get('', ['query' => $parameters]);
+
+        return $this->get_article($result->xml()->query->pages->page);
     }
 
     /**
@@ -275,7 +276,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $rights[ExternalObject :: RIGHT_EDIT] = false;
         $rights[ExternalObject :: RIGHT_DELETE] = false;
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
-        
+
         return $rights;
     }
 

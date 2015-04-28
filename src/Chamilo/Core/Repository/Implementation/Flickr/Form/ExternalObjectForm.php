@@ -119,10 +119,9 @@ class ExternalObjectForm extends FormValidator
 
     public function upload_photo()
     {
-
         if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
         {
-          var_dump($this->application->get_external_repository_manager_connector());
+
             return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
                 $this->exportValues(),
                 $_FILES[self :: FILE]['tmp_name']);

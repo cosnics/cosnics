@@ -99,8 +99,7 @@ class CreatorComponent extends Manager
                         $category,
                         $category_name,
                         Theme :: getInstance()->getImagePath(
-                            ClassnameUtilities :: getInstance()->getNamespaceParent(
-                                ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context())),
+                            'Chamilo/Core/Repository/External',
                             'Category/' . $category),
                         implode(PHP_EOL, $types_html)));
             }

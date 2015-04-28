@@ -3,6 +3,6 @@ namespace Chamilo\Core\Repository\Implementation\Wikimedia\Table\ExternalObjectG
 
 use Chamilo\Core\Repository\External\Table\ExternalObjectGallery\DefaultExternalObjectGalleryTableDataProvider;
 
-class ExternalObjectGalleryObjectTableDataProvider extends DefaultExternalObjectGalleryTableDataProvider
+class ExternalObjectGalleryTableDataProvider extends DefaultExternalObjectGalleryTableDataProvider
 {
 }
