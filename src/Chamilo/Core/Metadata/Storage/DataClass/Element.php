@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * This class describes an element in a metadata schema
@@ -44,6 +45,12 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * @var boolean
      */
     private $namespace = false;
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     */
+    private $schema;
 
     /**
      * **************************************************************************************************************
@@ -97,6 +104,20 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function get_schema_id()
     {
         return $this->get_default_property(self :: PROPERTY_SCHEMA_ID);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     */
+    public function getSchema()
+    {
+        if (! isset($this->schema))
+        {
+            $this->schema = DataManager :: retrieve_by_id(Schema :: class_name(), $this->get_schema_id());
+        }
+
+        return $this->schema;
     }
 
     /**

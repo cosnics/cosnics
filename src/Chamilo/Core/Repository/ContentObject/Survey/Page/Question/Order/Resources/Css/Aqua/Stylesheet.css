@@ -39,14 +39,6 @@ th.info {
 	width: 240px;
 }
 
-.ui-state-highlight {
-	height: 1.5em;
-	line-height: 1.2em;
-}
-
-/* .ui-state-default {
-	width: 120px;
-}  */
 html>body #sortable1 li, #sortable2 li {
 	height: 1.5em;
 	line-height: 1.2em;

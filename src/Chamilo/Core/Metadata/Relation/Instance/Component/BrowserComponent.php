@@ -112,22 +112,22 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (count($sourceEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getConditionForEntities(
+            $conditions[] = $entityConditionService->getEntitiesCondition(
+                $sourceEntities,
                 RelationInstance :: class_name(),
                 RelationInstance :: PROPERTY_SOURCE_TYPE,
-                RelationInstance :: PROPERTY_SOURCE_ID,
-                $sourceEntities);
+                RelationInstance :: PROPERTY_SOURCE_ID);
         }
 
         $targetEntities = $this->getTargetEntities();
 
         if (count($targetEntities) > 0)
         {
-            $conditions[] = $entityConditionService->getConditionForEntities(
+            $conditions[] = $entityConditionService->getEntitiesCondition(
+                $targetEntities,
                 RelationInstance :: class_name(),
                 RelationInstance :: PROPERTY_TARGET_TYPE,
-                RelationInstance :: PROPERTY_TARGET_ID,
-                $targetEntities);
+                RelationInstance :: PROPERTY_TARGET_ID);
         }
 
         return new AndCondition($conditions);

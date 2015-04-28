@@ -13,7 +13,11 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 abstract class DataClassEntity implements EntityInterface
 {
-    const IDENTIFIER_TYPE_INSTANCE = 0;
+    const INSTANCE_IDENTIFIER = 0;
+
+    // Properties
+    const PROPERTY_TYPE = 'type';
+    const PROPERTY_IDENTIFIER = 'id';
 
     /**
      *
@@ -123,7 +127,7 @@ abstract class DataClassEntity implements EntityInterface
     public function isDataClassIdentified()
     {
         return ! is_null($this->getDataClassIdentifier()) &&
-             $this->getDataClassIdentifier() != self :: IDENTIFIER_TYPE_INSTANCE;
+             $this->getDataClassIdentifier() != self :: INSTANCE_IDENTIFIER;
     }
 
     /**
@@ -163,6 +167,14 @@ abstract class DataClassEntity implements EntityInterface
         {
             return $this->getType();
         }
+    }
+
+    public function getSerialization()
+    {
+        return serialize(
+            array(
+                self :: PROPERTY_TYPE => $this->getDataClassName(),
+                self :: PROPERTY_IDENTIFIER => $this->getDataClassIdentifier()));
     }
 
     /**

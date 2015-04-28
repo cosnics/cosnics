@@ -6,6 +6,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  *
@@ -20,19 +23,19 @@ class EntityConditionService
 
     /**
      *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
      * @param string $dataClass
      * @param string $typeProperty
      * @param string $identifierProperty
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    public function getConditionForEntities($dataClass, $typeProperty, $identifierProperty, $entities)
+    public function getEntitiesCondition($entities, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
 
         foreach ($entities as $entity)
         {
-            $entityConditions[] = $this->getConditionForEntity($dataClass, $typeProperty, $identifierProperty, $entity);
+            $entityConditions[] = $this->getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty);
         }
 
         return new OrCondition($entityConditions);
@@ -40,13 +43,13 @@ class EntityConditionService
 
     /**
      *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string $dataClass
      * @param string $typeProperty
      * @param string $identifierProperty
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    public function getConditionForEntity($dataClass, $typeProperty, $identifierProperty, $entity)
+    public function getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
 
@@ -54,7 +57,7 @@ class EntityConditionService
             new PropertyConditionVariable($dataClass :: class_name(), $typeProperty),
             new StaticConditionVariable($entity->getDataClassName()));
 
-        if (! $entity->isDataClassType())
+        if (! $entity->isDataClassType() && $identifierProperty)
         {
             $entityConditions[] = new EqualityCondition(
                 new PropertyConditionVariable($dataClass :: class_name(), $identifierProperty),
@@ -62,5 +65,50 @@ class EntityConditionService
         }
 
         return new AndCondition($entityConditions);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $entities
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
+     */
+    public function expandEntities($entities)
+    {
+        $expandedEntities = array();
+
+        foreach ($entities as $entity)
+        {
+
+            $expandedEntities = array_merge($expandedEntities, $this->expandEntity($entity));
+        }
+
+        return $expandedEntities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity[]
+     */
+    public function expandEntity($entity)
+    {
+        $expandedEntities = array();
+
+        if (! $entity->isDataClassType())
+        {
+            $expandedEntities[] = $entity;
+        }
+        else
+        {
+            $dataClassInstances = DataManager :: retrieves($entity->getDataClassName());
+
+            while ($dataClassInstance = $dataClassInstances->next_result())
+            {
+                $expandedEntities[] = DataClassEntityFactory :: getInstance()->getEntityFromDataClass(
+                    $dataClassInstance);
+            }
+        }
+
+        return $expandedEntities;
     }
 }
