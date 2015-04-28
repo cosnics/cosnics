@@ -1,9 +1,7 @@
-@import url('plugin/jquery/jquery.css');
+@import url('Plugin/Jquery/jquery-ui.min.css');
 
-@import url('plugin/jquery/iphone_checkboxes/style.css');
+@import url('Plugin/IphoneCheckboxes/Stylesheet.css');
 
-@import url('plugin/jquery/textarea_resizer/textarea_resizer.css');
+@import url('Plugin/TextareaResizer/Stylesheet.css');
 
-@import url('plugin/jquery/jplayer.blue.monday.css');
-
-@import url('../../../Plugin/projekktor/projekktor.style.css');
+@import url('Plugin/Jplayer/Stylesheet.css');
