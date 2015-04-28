@@ -23,7 +23,7 @@ general
 }
 
 .pptestcard {
-	background: url(noise.gif) center center repeat;
+	background: url(Noise.gif) center center repeat;
 	width: 100%;
 	height: 100%;
 	color: #fff;
@@ -72,15 +72,15 @@ display plugin
 	width: 84px;
 	display: block;
 	padding: 0px;
-	background: url(start.png) no-repeat left top transparent;
+	background: url(Start.png) no-repeat left top transparent;
 }
 
 .ppstart:hover {
-	background: url(start.png) no-repeat left bottom transparent;
+	background: url(Start.png) no-repeat left bottom transparent;
 }
 
 .ppstart:active {
-	background: url(start.png) no-repeat left -169px transparent;
+	background: url(Start.png) no-repeat left -169px transparent;
 }
 
 .ppbuffering {
@@ -92,7 +92,7 @@ display plugin
 	display: block;
 	z-index: 9010;
 	padding: 0px;
-	background: url(buffering.gif) no-repeat center center #000;
+	background: url(Buffering.gif) no-repeat center center #000;
 	height: 84px;
 	width: 84px;
 	-moz-border-radius: 15px;
@@ -132,7 +132,7 @@ controlbar plugin
 }
 
 .ppcontrols.active {
-	filter: alpha(opacity =                 100);
+	filter: alpha(opacity =100);
 	-moz-opacity: 1;
 	-khtml-opacity: 1;
 	opacity: 1;
@@ -145,15 +145,11 @@ controlbar plugin
 }
 
 .ppcontrols.inactive {
-	filter: alpha(opacity =                         
-		                                                         
-		                           0);
+	filter: alpha(opacity=0);
 	-moz-opacity: 0;
 	-khtml-opacity: 0;
 	opacity: 0;
-	filter: alpha(opacity =                         
-		                                                         
-		                           0);
+	filter: alpha(opacity=0);
 	-webkit-backface-visibility: hidden;
 	-webkit-transform: translate3d(0, 0, 0);
 	-webkit-transition: opacity 0.5s linear;
@@ -202,7 +198,7 @@ controlbar plugin
 
 /* PLAY / PAUSE - left */
 .ppplay, .pppause {
-	background-image: url(button/play_off.png);
+	background-image: url(Button/PlayOff.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -212,23 +208,23 @@ controlbar plugin
 }
 
 .ppplay:hover {
-	background-image: url(button/play_on.png);
+	background-image: url(Button/PlayOn.png);
 }
 
 .ppplay:active {
-	background-image: url(button/play_on.png);
+	background-image: url(Button/PlayOn.png);
 }
 
 .pppause {
-	background-image: url(button/pause_off.png);
+	background-image: url(Button/PauseOff.png);
 }
 
 .pppause:hover {
-	background-image: url(button/pause_on.png);
+	background-image: url(Button/PauseOn.png);
 }
 
 .pppause:active {
-	background-image: url(button/pause_on.png);
+	background-image: url(Button/PauseOn.png);
 }
 
 /* Enter / Exit Fullscreen - right */
@@ -239,7 +235,7 @@ controlbar plugin
 .ppfsenter, .ppfsexit {
 	width: 30px;
 	height: 27px;
-	background-image: url(button/full_screen_off.png);
+	background-image: url(Button/FullScreenOff.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -249,41 +245,41 @@ controlbar plugin
 }
 
 .ppfsenter:hover {
-	background-image: url(button/full_screen_on.png);
+	background-image: url(Button/FullScreenOn.png);
 }
 
 .ppfsenter:active {
-	background-image: url(button/full_screen_on.png);
+	background-image: url(Button/FullScreenOn.png);
 }
 
 .ppfsexit {
-	background-image: url(button/windowed_off.png);
+	background-image: url(Button/WindowedOff.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
 }
 
 .ppfsexit:hover {
-	background-image: url(button/windowed_on.png);
+	background-image: url(Button/WindowedOn.png);
 }
 
 .ppfsexit:active {
-	background-image: url(button/windowed_on.png);
+	background-image: url(Button/WindowedOn.png);
 }
 
 /* Unmute / Max volume - right */
 .ppvmax {
 	width: 30px;
 	height: 27px;
-	background: url(maccaco.png) no-repeat -842px top transparent;
+	background: url(Maccaco.png) no-repeat -842px top transparent;
 }
 
 .ppvmax:hover {
-	background: url(maccaco.png) no-repeat -842px -35px transparent;
+	background: url(Maccaco.png) no-repeat -842px -35px transparent;
 }
 
 .ppvmax:active {
-	background: url(maccaco.png) no-repeat -842px -36px transparent;
+	background: url(Maccaco.png) no-repeat -842px -36px transparent;
 }
 
 /* Mute / Min volume - right */
@@ -336,61 +332,61 @@ controlbar plugin
 
 /* special for single
 .pptimeleft {
-background: url(maccaco.png) no-repeat -91px top transparent;
+background: url(Maccaco.png) no-repeat -91px top transparent;
 }
 */
 
 /* lo / hi quality toggle */
 .pploquality, .pphiquality {
-	background: url(maccaco.png) no-repeat -60px -72px transparent;
+	background: url(Maccaco.png) no-repeat -60px -72px transparent;
 	width: 30px;
 	height: 27px;
 	cursor: pointer;
 }
 
 .pphiquality:hover {
-	background: url(maccaco.png) no-repeat -32px -106px transparent;
+	background: url(Maccaco.png) no-repeat -32px -106px transparent;
 }
 
 .pploquality {
-	background: url(maccaco.png) no-repeat -32px -72px transparent;
+	background: url(Maccaco.png) no-repeat -32px -72px transparent;
 }
 
 .pploquality:hover {
-	background: url(maccaco.png) no-repeat -32px -106px transparent;
+	background: url(Maccaco.png) no-repeat -32px -106px transparent;
 }
 
 .pphiquality:active, .pploquality:active {
-	background: url(maccaco.png) no-repeat -32px -105px transparent;
+	background: url(Maccaco.png) no-repeat -32px -105px transparent;
 }
 
 /* previous / next item */
 .ppnext, .ppprev {
 	display: block;
-	background: url(maccaco.png) no-repeat -59px top transparent;
+	background: url(Maccaco.png) no-repeat -59px top transparent;
 	width: 30px;
 	height: 27px;
 	cursor: pointer;
 }
 
 .ppnext:hover {
-	background: url(maccaco.png) no-repeat -59px -35px transparent;
+	background: url(Maccaco.png) no-repeat -59px -35px transparent;
 }
 
 .ppnext:active {
-	background: url(maccaco.png) no-repeat -59px -36px transparent;
+	background: url(Maccaco.png) no-repeat -59px -36px transparent;
 }
 
 .ppprev {
-	background: url(maccaco.png) no-repeat -32px top transparent;
+	background: url(Maccaco.png) no-repeat -32px top transparent;
 }
 
 .ppprev:hover {
-	background: url(maccaco.png) no-repeat -32px -35px transparent;
+	background: url(Maccaco.png) no-repeat -32px -35px transparent;
 }
 
 .ppprev:active {
-	background: url(maccaco.png) no-repeat -32px -36px transparent;
+	background: url(Maccaco.png) no-repeat -32px -36px transparent;
 }
 
 .pploop, .pploop .on, .pploop .off {
@@ -617,18 +613,18 @@ background: url(maccaco.png) no-repeat -91px top transparent;
 }
 
 .pptracksbtn.on, .pptracksbtn.off {
-	background: url(maccaco.png) no-repeat -120px -72px transparent;
+	background: url(Maccaco.png) no-repeat -120px -72px transparent;
 	width: 30px;
 	height: 27px;
 	cursor: pointer;
 }
 
 .pptracksbtn.on {
-	background: url(maccaco.png) no-repeat -92px -72px transparent;
+	background: url(Maccaco.png) no-repeat -92px -72px transparent;
 }
 
 .pptracksbtn:hover {
-	background: url(maccaco.png) no-repeat -118px -106px transparent;
+	background: url(Maccaco.png) no-repeat -118px -106px transparent;
 }
 
 .pptracks {
@@ -657,50 +653,50 @@ background: url(maccaco.png) no-repeat -91px top transparent;
 /* Toggle Quality - left */
 .ppqualitysmall, .ppqualitymedium, .ppqualitylarge, .ppqualityhd,
 	.ppqualityfullhd {
-	background: url(maccaco.png) no-repeat left top transparent;
+	background: url(Maccaco.png) no-repeat left top transparent;
 	width: 50px;
 	height: 27px;
 	cursor: pointer;
 }
 
 .ppqualitysmall {
-	background: url(maccaco.png) no-repeat -92px -32px transparent;
+	background: url(Maccaco.png) no-repeat -92px -32px transparent;
 }
 
 .ppqualitymedium {
-	background: url(maccaco.png) no-repeat -137px -32px transparent;
+	background: url(Maccaco.png) no-repeat -137px -32px transparent;
 }
 
 .ppqualitylarge {
-	background: url(maccaco.png) no-repeat -182px -32px transparent;
+	background: url(Maccaco.png) no-repeat -182px -32px transparent;
 }
 
 .ppqualityhd {
-	background: url(maccaco.png) no-repeat -230px -32px transparent;
+	background: url(Maccaco.png) no-repeat -230px -32px transparent;
 }
 
 .ppqualityfullhd {
-	background: url(maccaco.png) no-repeat -274px -32px transparent;
+	background: url(Maccaco.png) no-repeat -274px -32px transparent;
 }
 
 .ppqualitysmall.dimmed {
-	background: url(maccaco.png) no-repeat -92px 0px transparent;
+	background: url(Maccaco.png) no-repeat -92px 0px transparent;
 }
 
 .ppqualitymedium.dimmed {
-	background: url(maccaco.png) no-repeat -137px 0px transparent;
+	background: url(Maccaco.png) no-repeat -137px 0px transparent;
 }
 
 .ppqualitylarge.dimmed {
-	background: url(maccaco.png) no-repeat -182px 0px transparent;
+	background: url(Maccaco.png) no-repeat -182px 0px transparent;
 }
 
 .ppqualityhd.dimmed {
-	background: url(maccaco.png) no-repeat -230px 0px transparent;
+	background: url(Maccaco.png) no-repeat -230px 0px transparent;
 }
 
 .ppqualityfullhd.dimmed {
-	background: url(maccaco.png) no-repeat -274px 0px transparent;
+	background: url(Maccaco.png) no-repeat -274px 0px transparent;
 }
 
 #quality_options {
@@ -724,21 +720,21 @@ background: url(maccaco.png) no-repeat -91px top transparent;
 	width: 30px;
 	height: 27px;
 	cursor: pointer;
-	background-image: url(button/quality_off.png);
+	background-image: url(Button/QualityOff.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
 }
 
 .ppquality:hover {
-	background-image: url(button/quality_on.png);
+	background-image: url(Button/QualityOn.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
 }
 
 .ppquality:active {
-	background-image: url(button/quality_on.png);
+	background-image: url(Button/quality_on.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: transparent;
@@ -769,33 +765,33 @@ background: url(maccaco.png) no-repeat -91px top transparent;
 }
 
 .volumeMute {
-	background-image: url(button/volume_mute_off.png);
+	background-image: url(Button/VolumeMuteOff.png);
 }
 
 .volumeMute:hover, .volumeMute:active {
-	background-image: url(button/volume_mute_on.png);
+	background-image: url(Button/VolumeMuteOn.png);
 }
 
 .volumeLow {
-	background-image: url(button/volume_low_off.png);
+	background-image: url(Button/VolumeLowOff.png);
 }
 
 .volumeLow:hover, .volumeLow:active {
-	background-image: url(button/volume_low_on.png);
+	background-image: url(Button/VolumeLowOn.png);
 }
 
 .volumeNormal {
-	background-image: url(button/volume_normal_off.png);
+	background-image: url(Button/VolumeNormalOff.png);
 }
 
 .volumeNormal:hover, .volumeNormal:active {
-	background-image: url(button/volume_normal_on.png);
+	background-image: url(Button/VolumeNormalOn.png);
 }
 
 .volumeFull {
-	background-image: url(button/volume_full_off.png);
+	background-image: url(Button/VolumeFullOff.png);
 }
 
 .volumeFull:hover, .volumeFull:active {
-	background-image: url(button/volume_full_on.png);
+	background-image: url(Button/VolumeFullOn.png);
 }
