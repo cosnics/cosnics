@@ -18,14 +18,15 @@ class ConfigurationCreatorComponent extends TabComponent
         {
            
             $configuration_id = Request :: get(self :: PARAM_CONFIGURATION_ID);
-
+            $page = $this->get_current_node()->get_parent()->get_content_object();
+                      
             if ($configuration_id)
             {
-                $form = new ConfigureQuestionForm($this, $configuration_id);
+                $form = new ConfigureQuestionForm($this, $page, $configuration_id);
             }
             else
             {
-                $form = new ConfigureQuestionForm($this);
+                $form = new ConfigureQuestionForm($this, $page);
             }
             
             if ($form->validate())

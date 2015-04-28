@@ -162,7 +162,7 @@
 				parameters[$(this).attr('name').replace('param_', '')] = $(this).attr('value');
 			});
 		
-		return parameters;
+			return parameters;
 	}
 	
 	$(document).ready(function() {

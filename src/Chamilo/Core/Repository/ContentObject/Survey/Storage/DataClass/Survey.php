@@ -98,7 +98,7 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
         return (string) StringUtilities :: getInstance()->createString(self :: class_name())->underscored();
     }
 
-    function get_pages($complex_items = false)
+    function getPages($complex_items = false)
     {
         $order = array(
             new OrderBy(

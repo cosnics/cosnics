@@ -68,7 +68,7 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                 }
             }
         }
-        
+              
         if (count($question_answers) > 0)
         {
             $configs = $content_object->getConfiguration();

@@ -52,13 +52,13 @@ class ConfigureQuestionForm extends FormValidator
 
     private $complex_content_object_path_node;
 
-    function __construct($parent, $config_id)
+    function __construct($parent, $page, $config_id)
     {
         parent :: __construct(self :: FORM_NAME, self :: FORM_METHOD_POST, $parent->get_url());
         
         $this->parent = $parent;
                
-        $this->page = $this->parent->get_root_content_object();
+        $this->page = $page; 
         
         $this->complex_content_object_path_node = $this->parent->get_current_node();
         
