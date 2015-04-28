@@ -1,0 +1,114 @@
+<?php
+namespace application\weblcms\integration\application\calendar;
+
+use application\calendar\CalendarInterface;
+use application\weblcms\ContentObjectPublication;
+use application\weblcms\ContentObjectPublicationListRenderer;
+use application\weblcms\course\Course;
+use application\weblcms\WeblcmsRights;
+use libraries\storage\AndCondition;
+use libraries\architecture\Application;
+use libraries\storage\EqualityCondition;
+use libraries\storage\InCondition;
+use libraries\storage\PropertyConditionVariable;
+use libraries\file\Redirect;
+use libraries\storage\StaticConditionVariable;
+use libraries\storage\SubselectCondition;
+use libraries\platform\Translation;
+use core\repository\ContentObject;
+use core\repository\content_object\calendar_event\CalendarEvent;
+use application\weblcms\integration\libraries\calendar\event\EventParser;
+use application\weblcms\integration\libraries\calendar\event\Event;
+
+class Manager implements CalendarInterface
+{
+
+    public function get_events(\libraries\calendar\renderer\Renderer $renderer, $from_date, $to_date)
+    {
+        $condition = $this->get_conditions($renderer->get_user());
+        $publications = \application\weblcms\DataManager :: retrieves(
+            ContentObjectPublication :: class_name(),
+            $condition);
+        $result = array();
+        while ($publication = $publications->next_result())
+        {
+            $course = \application\weblcms\DataManager :: retrieve_by_id(
+                Course :: class_name(),
+                $publication->get_course_id());
+            if (! WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                WeblcmsRights :: VIEW_RIGHT,
+                $publication->get_id(),
+                WeblcmsRights :: TYPE_PUBLICATION,
+                $publication->get_course_id()))
+            {
+                continue;
+            }
+            $parser = EventParser :: factory(
+                $publication->get_content_object(true),
+                $from_date,
+                $to_date,
+                Event :: class_name());
+            $parsed_events = $parser->get_events();
+            foreach ($parsed_events as &$parsed_event)
+            {
+                $parameters = array();
+                $parameters[Application :: PARAM_APPLICATION] = \application\weblcms\Manager :: context();
+                $parameters[Application :: PARAM_ACTION] = \application\weblcms\Manager :: ACTION_VIEW_COURSE;
+                $parameters[\application\weblcms\Manager :: PARAM_TOOL_ACTION] = \application\weblcms\tool\Manager :: ACTION_VIEW;
+                $parameters[\application\weblcms\tool\Manager :: PARAM_BROWSER_TYPE] = ContentObjectPublicationListRenderer :: TYPE_CALENDAR;
+                $parameters[\application\weblcms\Manager :: PARAM_COURSE] = $publication->get_course_id();
+                $parameters[\application\weblcms\Manager :: PARAM_TOOL] = $publication->get_tool();
+                $parameters[\application\weblcms\Manager :: PARAM_PUBLICATION] = $publication->get_id();
+                $link = Redirect :: get_link($parameters);
+                $parsed_event->set_url($link);
+                $parsed_event->set_source(
+                    Translation :: get('Course', null, \application\weblcms\Manager :: context()) . ' - ' .
+                         $course->get_title());
+                $parsed_event->set_id($publication->get_id());
+                $parsed_event->set_context(\application\weblcms\Manager :: context());
+                $parsed_event->set_course_id($publication->get_course_id());
+                $result[] = $parsed_event;
+            }
+        }
+        return $result;
+    }
+
+    public function get_conditions($user)
+    {
+        $user_courses = \application\weblcms\course\DataManager :: retrieve_all_courses_from_user($user);
+        $course_ids = array();
+        while ($course = $user_courses->next_result())
+        {
+            $course_ids[] = $course->get_id();
+        }
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_TOOL),
+            new StaticConditionVariable('calendar'));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_HIDDEN),
+            new StaticConditionVariable(0));
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID),
+            $course_ids);
+        $subselect_condition = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
+            new StaticConditionVariable(CalendarEvent :: class_name()));
+        $conditions[] = new SubselectCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+            ContentObject :: get_table_name(),
+            $subselect_condition,
+            null,
+            \core\repository\DataManager :: get_instance());
+        return new AndCondition($conditions);
+    }
+}
