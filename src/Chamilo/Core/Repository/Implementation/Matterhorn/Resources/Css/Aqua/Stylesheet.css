@@ -1,4 +1,4 @@
-@CHARSET "ISO-8859-1";
+@import url('plugin/jquery/jquery.css');
 
 ul.tree-menu li div a.matterhorn {
 	background-image: url(../../Images/Aqua/Logo/16.png);
