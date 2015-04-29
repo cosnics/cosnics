@@ -145,6 +145,8 @@ class RightsComponent extends TabComponent
                 continue;
             }
 
+            var_dump($succes);
+
             if ($values[RightsForm :: PROPERTY_INHERIT] == RightsForm :: INHERIT_TRUE)
             {
                 if (! $location->inherits())

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\Common\ClassLoader;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\Common\Cache\PhpFileCache;
+use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Doctrine\Common\Cache\FilesystemCache;
 
 /**
