@@ -22,7 +22,7 @@ use Chamilo\Core\Metadata\Provider\Form\ProviderLinkForm;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CreatorComponent extends Manager
+class ConfigurerComponent extends Manager
 {
 
     public function run()
