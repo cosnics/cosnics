@@ -71,6 +71,7 @@ class ProviderLinkForm extends FormValidator
             $this->entity,
             $this);
         $providerFormService->addElements();
+        $providerFormService->setDefaults();
 
         $this->addSaveResetButtons();
     }

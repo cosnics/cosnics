@@ -203,9 +203,6 @@ class TypeSelector
                 $type = $template_registration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
                     $template_registration->get_content_object_type());
 
-                var_dump($type);
-                var_dump($helper_types);
-
                 if (ContentObject :: is_available($type))
                 {
                     if (in_array($type, $helper_types))
