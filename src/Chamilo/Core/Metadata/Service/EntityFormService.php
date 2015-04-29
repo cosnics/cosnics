@@ -155,7 +155,7 @@ class EntityFormService
         {
             try
             {
-                $providerLink = $propertyProviderService->getProviderLink($element);
+                $providerLink = $propertyProviderService->getProviderLinkForElement($element);
                 $vocabularyService = new VocabularyService();
 
                 $providedIcon = Theme :: getInstance()->getImage(
@@ -324,7 +324,7 @@ class EntityFormService
         {
             try
             {
-                $providerLink = $propertyProviderService->getProviderLink($element);
+                $providerLink = $propertyProviderService->getProviderLinkForElement($element);
                 continue;
             }
             catch (NoProviderAvailableException $exception)

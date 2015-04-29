@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 
 /**
  *
@@ -57,7 +58,29 @@ class ProviderFormService
      */
     private $formValidator;
 
+    /**
+     *
+     * @var string[]
+     */
     private $elementOptions;
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     */
+    private $availableSchemas;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $elementNames;
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Element[]
+     */
+    private $schemaElements;
 
     /**
      *
@@ -167,15 +190,28 @@ class ProviderFormService
         $this->formValidator = $formValidator;
     }
 
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     */
+    private function getAvailableSchemas()
+    {
+        if (! isset($this->availableSchemas))
+        {
+            $this->availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType(
+                $this->getRelationService(),
+                $this->getEntity())->as_array();
+        }
+
+        return $this->availableSchemas;
+    }
+
     public function addElements()
     {
-        $availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType(
-            $this->getRelationService(),
-            $this->getEntity());
-
+        $availableSchemas = $this->getAvailableSchemas();
         $tabs_generator = new DynamicFormTabsRenderer('ProviderLinks', $this->getFormValidator());
 
-        while ($availableSchema = $availableSchemas->next_result())
+        foreach ($availableSchemas as $availableSchema)
         {
             $tabs_generator->add_tab(
                 new DynamicFormTab(
@@ -193,24 +229,47 @@ class ProviderFormService
      *
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      */
-    public function addElementsForSchema(Schema $schema)
+    private function addElementsForSchema(Schema $schema)
     {
-        $elements = $this->getElementService()->getElementsForSchema($schema);
+        $elements = $this->getElementsForSchema($schema);
 
-        while ($element = $elements->next_result())
+        foreach ($elements as $element)
         {
-            $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' . $schema->get_id() . '][' .
-                 $element->get_id() . ']';
-
             $this->getFormValidator()->addElement(
                 'select',
-                $elementName,
+                $this->getElementName($schema, $element),
                 $element->get_display_name(),
                 $this->getElementOptions());
         }
     }
 
-    public function getElementOptions()
+    private function getElementsForSchema($schema)
+    {
+        if (! isset($this->schemaElements[$schema->get_id()]))
+        {
+            $this->schemaElements[$schema->get_id()] = $this->getElementService()->getElementsForSchema($schema)->as_array();
+        }
+
+        return $this->schemaElements[$schema->get_id()];
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
+     */
+    private function getElementName(Schema $schema, Element $element)
+    {
+        if (! isset($this->elementNames[$schema->get_id()][$element->get_id()]))
+        {
+            $this->elementNames[$schema->get_id()][$element->get_id()] = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+                 $schema->get_id() . '][' . $element->get_id() . ']';
+        }
+
+        return $this->elementNames[$schema->get_id()][$element->get_id()];
+    }
+
+    private function getElementOptions()
     {
         if (! isset($this->elementOptions))
         {
@@ -239,80 +298,44 @@ class ProviderFormService
 
     public function setDefaults()
     {
-        // $defaults = array();
+        $defaults = array();
+        $availableSchemas = $this->getAvailableSchemas();
 
-        // $elementService = new ElementService();
-        // $elements = $elementService->getElementsForSchemaInstance($this->getSchemaInstance());
+        foreach ($availableSchemas as $availableSchema)
+        {
+            $defaults = array_merge($defaults, $this->getDefaultsForSchema($availableSchema));
+        }
 
-        // $vocabularyService = new VocabularyService();
-        // $propertyProviderService = new PropertyProviderService($this->getEntity(), $this->getSchemaInstance());
+        $this->getFormValidator()->setDefaults($defaults);
+    }
 
-        // while ($element = $elements->next_result())
-        // {
-        // try
-        // {
-        // $providerLink = $propertyProviderService->getProviderLink($element);
-        // continue;
-        // }
-        // catch (NoProviderAvailableException $exception)
-        // {
-        // if ($element->usesVocabulary())
-        // {
-        // $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
-        // $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
-        // $element->get_id() . '][' . EntityService :: PROPERTY_METADATA_SCHEMA_EXISTING . ']';
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     */
+    private function getDefaultsForSchema(Schema $schema)
+    {
+        $defaults = array();
+        $elements = $this->getElementsForSchema($schema);
 
-        // $options = array();
+        foreach ($elements as $element)
+        {
+            $providerLink = $this->getElementProviderLink($element);
 
-        // $elementInstanceVocabularies = $elementService->getElementInstanceVocabulariesForSchemaInstanceAndElement(
-        // $this->getSchemaInstance(),
-        // $element)->as_array();
+            if ($providerLink)
+            {
+                $defaults[$this->getElementName($schema, $element)] = $providerLink->get_id();
+            }
+        }
 
-        // if (count($elementInstanceVocabularies) == 0)
-        // {
-        // $elementInstanceVocabularies = $vocabularyService->getDefaultVocabulariesForUserEntitySchemaInstanceElement(
-        // $this->getUser(),
-        // $this->getSchemaInstance(),
-        // $element);
-        // }
+        return $defaults;
+    }
 
-        // if (count($elementInstanceVocabularies) > 0)
-        // {
-        // foreach ($elementInstanceVocabularies as $elementInstanceVocabulary)
-        // {
-        // $item = new \stdClass();
-        // $item->id = $elementInstanceVocabulary->get_id();
-        // $item->value = $elementInstanceVocabulary->get_value();
-
-        // $options[] = $item;
-        // }
-        // }
-
-        // $elementValue = json_encode($options);
-        // }
-        // else
-        // {
-        // $elementName = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
-        // $this->getSchemaInstance()->get_schema_id() . '][' . $this->getSchemaInstance()->get_id() . '][' .
-        // $element->get_id() . ']';
-        // $elementInstanceVocabulary = $elementService->getElementInstanceVocabularyForSchemaInstanceAndElement(
-        // $this->getSchemaInstance(),
-        // $element);
-
-        // if ($elementInstanceVocabulary instanceof Vocabulary && $elementInstanceVocabulary->get_value())
-        // {
-        // $elementValue = $elementInstanceVocabulary->get_value();
-        // }
-        // else
-        // {
-        // $elementValue = '';
-        // }
-        // }
-
-        // $defaults[$elementName] = $elementValue;
-        // }
-        // }
-
-        // $this->formValidator->setDefaults($defaults);
+    /**
+     *
+     * @param Element $element
+     */
+    private function getElementProviderLink(Element $element)
+    {
     }
 }
