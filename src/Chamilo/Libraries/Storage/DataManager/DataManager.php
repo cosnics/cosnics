@@ -241,7 +241,7 @@ class DataManager
      *
      * @param $class string
      * @param $parameters \libraries\storage\DataClassRetrievesParameters
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieves($class, $parameters = null)
     {

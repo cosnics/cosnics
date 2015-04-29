@@ -64,7 +64,7 @@ class PropertyProviderService
      */
     public function getPropertyValues(Element $element)
     {
-        $providerLink = $this->getProviderLink($element);
+        $providerLink = $this->getProviderLinkForElement($element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
 
@@ -75,7 +75,7 @@ class PropertyProviderService
      *
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getProviderLink(Element $element)
+    public function getProviderLinkForElement(Element $element)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -112,6 +112,10 @@ class PropertyProviderService
         return new $className();
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
     public function getProviderRegistrationsForEntity()
     {
         $condition = new EqualityCondition(
@@ -122,5 +126,19 @@ class PropertyProviderService
 
         $parameters = new DataClassRetrievesParameters($condition);
         return DataManager :: retrieves(ProviderRegistration :: class_name(), $parameters);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function getProviderLinksForEntity()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($this->getEntity()->getDataClassName()));
+
+        $parameters = new DataClassRetrievesParameters($condition);
+        return DataManager :: retrieves(ProviderLink :: class_name(), $parameters);
     }
 }
