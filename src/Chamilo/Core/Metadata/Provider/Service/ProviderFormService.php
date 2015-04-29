@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  *
@@ -229,7 +230,7 @@ class ProviderFormService
      *
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      */
-    private function addElementsForSchema(Schema $schema)
+    public function addElementsForSchema(Schema $schema)
     {
         $elements = $this->getElementsForSchema($schema);
 
@@ -313,7 +314,7 @@ class ProviderFormService
      *
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      */
-    private function getDefaultsForSchema(Schema $schema)
+    public function getDefaultsForSchema(Schema $schema)
     {
         $defaults = array();
         $elements = $this->getElementsForSchema($schema);
@@ -322,9 +323,9 @@ class ProviderFormService
         {
             $providerLink = $this->getElementProviderLink($element);
 
-            if ($providerLink)
+            if ($providerLink instanceof ProviderLink)
             {
-                $defaults[$this->getElementName($schema, $element)] = $providerLink->get_id();
+                $defaults[$this->getElementName($schema, $element)] = $providerLink->get_provider_registration_id();
             }
         }
 
@@ -334,8 +335,31 @@ class ProviderFormService
     /**
      *
      * @param Element $element
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink
      */
     private function getElementProviderLink(Element $element)
     {
+        $entityProviderLinks = $this->getEntityProviderLinks();
+        return $entityProviderLinks[$element->get_id()];
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink[]
+     */
+    private function getEntityProviderLinks()
+    {
+        if (! isset($this->entityProviderLinks))
+        {
+            $propertyProviderService = new PropertyProviderService($this->getEntity());
+            $entityProviderLinks = $propertyProviderService->getProviderLinksForEntity();
+
+            while ($entityProviderLink = $entityProviderLinks->next_result())
+            {
+                $this->entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
+            }
+        }
+
+        return $this->entityProviderLinks;
     }
 }

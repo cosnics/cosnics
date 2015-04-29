@@ -27,12 +27,16 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
 
     public function extra()
     {
+        if (! parent :: extra())
+        {
+            return false;
+        }
+
         $category_implementation = new RepositoryImplementationCategoryItem();
         $category_implementation->set_display($this->getItemDisplay());
 
         if (! $category_implementation->create())
         {
-            var_dump('cat');
             return false;
         }
         else
@@ -43,7 +47,6 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
             $item_title->set_item_id($category_implementation->get_id());
             if (! $item_title->create())
             {
-                var_dump('cat');
                 return false;
             }
         }
