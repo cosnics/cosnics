@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block name="weblcms_bookmark_display">
+	<settings>
+		<category name="display">
+			<setting name="show_when_empty" field="radio" default="1">
+				<options type="static">
+					<option name="true" value="1" />
+					<option name="false" value="0" />
+				</options>
+			</setting>
+		</category>
+	</settings>
+</block>
