@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Service;
 
-use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -13,6 +12,7 @@ use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -32,16 +32,10 @@ class PropertyProviderService
 
     /**
      *
-     * @var \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance
-     */
-    private $schemaInstance;
-
-    /**
-     *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
      */
-    public function __construct(DataClassEntity $entity, SchemaInstance $schemaInstance)
+    public function __construct(DataClassEntity $entity)
     {
         $this->entity = $entity;
     }
@@ -62,24 +56,6 @@ class PropertyProviderService
     public function setEntity($entity)
     {
         $this->entity = $entity;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance
-     */
-    public function getSchemaInstance()
-    {
-        return $this->schemaInstance;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Schema\Instance\Storage\DataClass\SchemaInstance $schemaInstance
-     */
-    public function setSchemaInstance($schemaInstance)
-    {
-        $this->schemaInstance = $schemaInstance;
     }
 
     /**
@@ -134,5 +110,17 @@ class PropertyProviderService
     {
         $className = $registration->get_provider_class();
         return new $className();
+    }
+
+    public function getProviderRegistrationsForEntity()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ProviderRegistration :: class_name(),
+                ProviderRegistration :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($this->getEntity()->getDataClassName()));
+
+        $parameters = new DataClassRetrievesParameters($condition);
+        return DataManager :: retrieves(ProviderRegistration :: class_name(), $parameters);
     }
 }
