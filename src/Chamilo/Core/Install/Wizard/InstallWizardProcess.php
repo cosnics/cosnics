@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Install\Wizard;
 
-use Chamilo\Core\Install\Exception\InstallFailedException;
 use Chamilo\Core\Install\Factory;
 use Chamilo\Core\Install\Observer\InstallerObserver;
 use Chamilo\Core\Install\StepResult;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Exception;
 use HTML_QuickForm_Action;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * $Id: install_wizard_process.class.php 225 2009-11-13 14:43:20Z vanpouckesven $
@@ -39,6 +39,8 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
     private $optional;
 
+    private $installer;
+
     /**
      * Constructor
      *
@@ -58,27 +60,33 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $this->installer = $this->build_installer($page);
         $this->installer->add_observer($this);
 
-        $html = array();
-        $html[] = $this->render_header($page);
+        $wizardProcess = $this;
 
-        try
-        {
-            $html[] = $this->installer->perform_install();
-            // $page->controller->container(true);
-        }
-        catch (InstallFailedException $exception)
-        {
-            $html[] = $exception->getPreviousResults();
-            $html[] = $this->process_result(
-                Translation :: get('PlatformInstallFailed') . ' - ' . $exception->getPackage(),
-                false,
-                $exception->getMessage(),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Failed'));
-        }
+        $response = new StreamedResponse();
+        $response->setCallback(
+            function () use($wizardProcess, $page) {
+                echo $wizardProcess->render_header($page);
+                flush();
 
-        $html[] = $this->parent->render_footer();
+                $wizardProcess->getInstaller()->perform_install();
+                flush();
 
-        return implode(PHP_EOL, $html);
+                echo $wizardProcess->getParent()->render_footer();
+                flush();
+            });
+
+        $response->send();
+        $page->controller->container(true);
+    }
+
+    public function getInstaller()
+    {
+        return $this->installer;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     private function build_installer($page)

@@ -52,7 +52,7 @@ class Connection
      */
     public static function connection_from_config()
     {
-        $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName :: get_from_config('mdb2');
+        $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName :: get_from_config('Mdb2');
 
         // The following line is for software under development, to be disabled, see below:
         $connection = MDB2 :: connect($data_source_name->get_connection_string(), array('debug' => 3));

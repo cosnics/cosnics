@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Doctrine\Common\Cache\PhpFileCache;
+use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Chamilo\Configuration\Configuration;
 
 /**
@@ -230,8 +230,7 @@ class Translation
 
     /**
      *
-     * @param unknown $language
-     * @return \Doctrine\Common\Cache\PhpFileCache
+     * @return \Chamilo\Libraries\File\Cache\PhpFileCache
      */
     public function getCache()
     {
@@ -364,7 +363,7 @@ class Translation
     {
         $path = $this->getPathUtilities()->getI18nPath($context) . $languageIsocode . '.i18n';
 
-        if (!is_readable($path))
+        if (! is_readable($path))
         {
             return;
         }
@@ -382,7 +381,6 @@ class Translation
         {
             $this->cache($languageIsocode);
         }
-
     }
 
     /**

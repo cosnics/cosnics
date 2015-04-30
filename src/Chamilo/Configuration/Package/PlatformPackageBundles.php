@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Configuration\Package\Finder\PackageBundles;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
 
 /**
  *
@@ -140,18 +140,19 @@ class PlatformPackageBundles
      */
     public function initialize()
     {
-        $path = Path :: getInstance()->getCachePath(__NAMESPACE__) . 'package.list.' . $this->mode . '.cache';
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheId = 'package.list.' . $this->mode;
 
-        if (! file_exists($path))
+        if ($cache->contains($cacheId))
+        {
+            $this->package_list = $cache->fetch($cacheId);
+        }
+        else
         {
             $packageListBuilder = new PackageBundles(PackageList :: ROOT, $this->mode);
             $this->package_list = $packageListBuilder->getPackageList();
 
-            Filesystem :: write_to_file($path, serialize($this->package_list));
-        }
-        else
-        {
-            $this->package_list = unserialize(file_get_contents($path));
+            $cache->save($cacheId, $this->package_list);
         }
 
         return $this->package_list;
@@ -164,12 +165,10 @@ class PlatformPackageBundles
 
     public function reset_mode($mode = self :: MODE_ALL)
     {
-        $path = Path :: getInstance()->getCachePath(__NAMESPACE__) . '\package.list.' . $mode . '.cache';
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheId = 'package.list.' . $mode;
 
-        if (file_exists($path))
-        {
-            Filesystem :: remove($path);
-        }
+        $cache->delete($cacheId);
     }
 
     public function reset_all()

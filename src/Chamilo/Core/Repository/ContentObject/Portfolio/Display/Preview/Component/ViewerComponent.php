@@ -158,8 +158,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     public function get_portfolio_notification()
     {
-        $feedback = new DummyNotification();
-        $feedback->set_content_object_id($this->get_root_content_object()->get_id());
-        return $feedback;
+        $notification = new DummyNotification();
+        $notification->set_content_object_id($this->get_root_content_object()->get_id());
+        return $notification;
     }
 }

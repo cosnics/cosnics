@@ -6,11 +6,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
 
 /**
  * A collection of TypeSelectorCategory instances in a TypeSelector
@@ -175,78 +175,75 @@ class TypeSelector
      * @param int $user_id
      * @return \core\repository\TypeSelector
      */
-    public static function populate($content_object_types, $user_id = null)
+    public static function populate($contentObjectTypes, $userId = null)
     {
-        $id = md5(serialize(array($content_object_types, $user_id)));
-        $storage = Path :: getInstance()->getCachePath(__NAMESPACE__) . 'type_selector.' . $id;
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheId = 'type_selector.' . md5(serialize(array($contentObjectTypes, $userId)));
 
-        if (! file_exists($storage))
+        if ($cache->contains($cacheId))
         {
-            $type_selector = new TypeSelector();
-            $helper_types = DataManager :: get_active_helper_types();
+            $typeSelector = $cache->fetch($cacheId);
+        }
+        else
+        {
+            $typeSelector = new TypeSelector();
+            $helperTypes = DataManager :: get_active_helper_types();
 
             $contexts = array();
 
-            foreach ($content_object_types as $content_object_type)
+            foreach ($contentObjectTypes as $contentObjectType)
             {
                 $classnameUtilities = ClassnameUtilities :: getInstance();
-                $namespace = $classnameUtilities->getNamespaceFromClassname($content_object_type);
+                $namespace = $classnameUtilities->getNamespaceFromClassname($contentObjectType);
                 $contexts[] = $classnameUtilities->getNamespaceParent($namespace, 2);
             }
 
-            $template_registrations = \Chamilo\Core\Repository\Configuration :: registrations_by_types(
+            $templateRegistrations = \Chamilo\Core\Repository\Configuration :: registrations_by_types(
                 $contexts,
-                $user_id);
+                $userId);
 
-            foreach ($template_registrations as $template_registration)
+            foreach ($templateRegistrations as $templateRegistration)
             {
-                $type = $template_registration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-                    $template_registration->get_content_object_type());
-
-                var_dump($type);
-                var_dump($helper_types);
+                $type = $templateRegistration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
+                    $templateRegistration->get_content_object_type());
 
                 if (ContentObject :: is_available($type))
                 {
-                    if (in_array($type, $helper_types))
+                    if (in_array($type, $helperTypes))
                     {
                         continue;
                     }
 
                     $registration = \Chamilo\Configuration\Configuration :: registration(
-                        $template_registration->get_content_object_type());
+                        $templateRegistration->get_content_object_type());
 
-                    $category_type = $registration->get_category();
+                    $categoryType = $registration->get_category();
 
-                    if (! $type_selector->category_type_exists($category_type))
+                    if (! $typeSelector->category_type_exists($categoryType))
                     {
-                        $type_selector_category = new TypeSelectorCategory(
-                            $category_type,
+                        $typeSelectorCategory = new TypeSelectorCategory(
+                            $categoryType,
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($category_type)->upperCamelize()));
+                                (string) StringUtilities :: getInstance()->createString($categoryType)->upperCamelize()));
 
-                        $type_selector->add_category($type_selector_category);
+                        $typeSelector->add_category($typeSelectorCategory);
                     }
 
-                    $type_selector_category = $type_selector->get_category_by_type($category_type);
+                    $typeSelectorCategory = $typeSelector->get_category_by_type($categoryType);
 
-                    $content_object_name = $template_registration->get_template()->translate('TypeName');
+                    $contentObjectName = $templateRegistration->get_template()->translate('TypeName');
 
-                    $type_selector_category->add_option(
-                        new ContentObjectTypeSelectorOption($content_object_name, (int) $template_registration->get_id()));
+                    $typeSelectorCategory->add_option(
+                        new ContentObjectTypeSelectorOption($contentObjectName, (int) $templateRegistration->get_id()));
                 }
             }
 
-            $type_selector->sort();
+            $typeSelector->sort();
 
-            Filesystem :: write_to_file($storage, serialize($type_selector));
+            $cache->save($cacheId, $typeSelector);
+        }
 
-            return $type_selector;
-        }
-        else
-        {
-            return unserialize(file_get_contents($storage));
-        }
+        return $typeSelector;
     }
 
     /**

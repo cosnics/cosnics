@@ -27,6 +27,11 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
 
     public function extra()
     {
+        if (! parent :: extra())
+        {
+            return false;
+        }
+
         $category_implementation = new RepositoryImplementationCategoryItem();
         $category_implementation->set_display($this->getItemDisplay());
 

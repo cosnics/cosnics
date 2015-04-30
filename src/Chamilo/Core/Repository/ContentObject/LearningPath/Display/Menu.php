@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use HTML_Menu;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -62,7 +63,9 @@ class Menu extends HTML_Menu
         $learning_path_item = array();
         $learning_path_item['title'] = $this->get_title($this->path->get_root());
 
-        $objectType = $this->path->get_root()->get_content_object()->get_type_name();
+        $objectType = (string) StringUtilities :: getInstance()->createString(
+            ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
+                $this->path->get_root()->get_content_object()->package()))->underscored();
 
         $learning_path_item['class'] = 'type_' . $objectType;
         $learning_path_item['url'] = $this->get_url($this->path->get_root()->get_id());
@@ -112,7 +115,9 @@ class Menu extends HTML_Menu
 
             if ($this->context->get_parent()->is_allowed_to_view_content_object($child))
             {
-                $objectType = $this->path->get_root()->get_content_object()->get_type_name();
+                $objectType = (string) StringUtilities :: getInstance()->createString(
+                    ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
+                        $child->get_content_object()->package()))->underscored();
 
                 $menu_item['url'] = $this->get_url($child->get_id());
                 $menu_item['class'] = 'type_' . $objectType;

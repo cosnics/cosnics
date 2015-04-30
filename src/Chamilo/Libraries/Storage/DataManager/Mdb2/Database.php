@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use MDB2;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -1353,5 +1354,15 @@ class Database
     public static function package()
     {
         return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context(), 3);
+    }
+
+    /**
+     *
+     * @param Condition $condition
+     * @return string
+     */
+    public function translateCondition(Condition $condition = null)
+    {
+        return ConditionTranslator :: render($condition);
     }
 }
