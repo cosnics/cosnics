@@ -3,12 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Generator;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Storage\DataClass\AbstractNotification;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Manager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
 
 /**
  *

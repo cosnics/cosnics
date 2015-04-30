@@ -19,7 +19,6 @@ class FeedbackComponent extends TabComponent implements FeedbackSupport
      */
     public function build()
     {
-
         if (! $this->get_parent()->is_allowed_to_view_feedback($this->get_current_node()) &&
              ! $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
         {
