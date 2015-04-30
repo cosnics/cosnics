@@ -760,4 +760,14 @@ class DataManager
     {
         return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
     }
+
+    /**
+     *
+     * @param Condition $condition
+     * @return string
+     */
+    public static function translateCondition(Condition $condition = null)
+    {
+        return self :: get_instance()->translateCondition($condition);
+    }
 }

@@ -1354,4 +1354,14 @@ class Database
     {
         return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context(), 3);
     }
+
+    /**
+     *
+     * @param Condition $condition
+     * @return string
+     */
+    public function translateCondition(Condition $condition = null)
+    {
+        return ConditionTranslator :: render($condition);
+    }
 }
