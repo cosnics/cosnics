@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="provider_link">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="entity_type" type="text" length="255" notnull="1" />
+		<property name="element_id" unsigned="1" type="integer" notnull="1" />
+		<property name="provider_registration_id" unsigned="1" type="integer" notnull="1" />
+	</properties>
+	<index name="entity_type">
+		<indexproperty name="entity_type" />
+	</index>
+	<index name="element_id">
+		<indexproperty name="element_id" />
+	</index>
+	<index name="provider_registration_id">
+		<indexproperty name="provider_registration_id" />
+	</index>
+</object>

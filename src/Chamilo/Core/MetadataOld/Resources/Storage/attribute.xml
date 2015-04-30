@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="attribute">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="schema_id" type="integer" unsigned="1" notnull="1" />
+		<property name="name" type="text" length="255" notnull="1" />
+		<property name="display_name" type="text" length="255" notnull="1" />
+		<property name="fixed" length="1" type="integer" notnull="1" />
+	</properties>
+	<index name="schema_id">
+		<indexproperty name="schema_id" />
+	</index>
+	<index name="unique_attribute_name" type="unique">
+		<indexproperty name="schema_id" />
+		<indexproperty name="name" />
+	</index>
+</object>
