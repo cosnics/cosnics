@@ -37,6 +37,7 @@ class OverviewPage extends InstallWizardPage
         $this->addElement('category', Translation :: get('GeneralProperties'));
         $this->addElement('static', 'platform_language', Translation :: get('MainLang'));
         $this->addElement('static', 'platform_url', Translation :: get('ChamiloURL'));
+        $this->addElement('static', 'server_type', Translation :: get('ServerType'));
         $this->addElement('category');
 
         $this->addElement('category', Translation :: get('Administrator'));
@@ -115,6 +116,7 @@ class OverviewPage extends InstallWizardPage
         $defaults['platform_name'] = $this->controller->exportValue('page_settings', 'platform_name');
         $defaults['organization_name'] = $this->controller->exportValue('page_settings', 'organization_name');
         $defaults['organization_url'] = $this->controller->exportValue('page_settings', 'organization_url');
+        $defaults['server_type'] = $this->controller->exportValue('page_settings', 'server_type');
         $defaults['self_reg'] = Translation :: get(
             ($this->controller->exportValue('page_settings', 'self_reg') == 1 ? 'Yes' : 'No'));
         $defaults['hashing_algorithm'] = $this->controller->exportValue('page_settings', 'hashing_algorithm');

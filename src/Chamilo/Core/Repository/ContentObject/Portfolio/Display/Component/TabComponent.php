@@ -134,7 +134,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
             if ($isAllowedToViewFeedback)
             {
                 $feedbackCount = $this->get_parent()->count_portfolio_feedbacks($this->get_current_node());
-                $hasNotification = $this->retrieve_notification() instanceof AbstractNotification;
+                $portfolioNotification = $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
+                $hasNotification = $portfolioNotification instanceof AbstractNotification;
             }
             else
             {

@@ -9,6 +9,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Exception;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PlatformInstaller
 {
@@ -133,15 +134,31 @@ class PlatformInstaller
     {
         $this->initialize_install();
 
-        $html = array();
+        echo $this->observers->before_install();
+        flush();
 
-        $html[] = $this->observers->before_install();
-        $html[] = $this->perform_preprod();
-        $html[] = $this->install_packages();
-        $html[] = $this->perform_config();
-        $html[] = $this->observers->after_install();
+        echo $this->perform_preprod();
+        flush();
 
-        return implode(PHP_EOL, $html);
+        try
+        {
+            $this->install_packages();
+        }
+        catch (InstallFailedException $exception)
+        {
+            $step_result = new StepResult(false, $exception->getMessage(), $exception->getPackage());
+
+            echo $this->observers->before_package_install($exception->getPackage());
+            echo $this->observers->after_package_install($step_result);
+
+            return;
+        }
+
+        echo $this->perform_config();
+        flush();
+
+        echo $this->observers->after_install();
+        flush();
     }
 
     private function initialize_install()
@@ -247,7 +264,8 @@ class PlatformInstaller
 
         $html = array();
 
-        $html[] = $this->observers->before_packages_install();
+        echo $this->observers->before_packages_install();
+        flush();
 
         while (($package = $this->get_next_package()) != null)
         {
@@ -263,15 +281,23 @@ class PlatformInstaller
             }
             else
             {
-                $html[] = $this->observers->before_package_install($package);
-                $step_result = new StepResult($success, $installer->get_message(), $package);
-                $html[] = $this->observers->after_package_install($step_result);
+                $isIntegrationPackage = StringUtilities :: getInstance()->createString($package)->contains(
+                    '\Integration\\',
+                    true);
+
+                if (! $isIntegrationPackage)
+                {
+                    echo $this->observers->before_package_install($package);
+                    $step_result = new StepResult($success, $installer->get_message(), $package);
+                    echo $this->observers->after_package_install($step_result);
+
+                    flush();
+                }
             }
         }
 
-        $html[] = $this->observers->after_packages_install();
-
-        return implode(PHP_EOL, $html);
+        echo $this->observers->after_packages_install();
+        flush();
     }
 
     private function create_folders()

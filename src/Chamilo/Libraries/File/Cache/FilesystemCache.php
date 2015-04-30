@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\File\Cache;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
+class FilesystemCache extends \Doctrine\Common\Cache\FilesystemCache
 {
 
     /**

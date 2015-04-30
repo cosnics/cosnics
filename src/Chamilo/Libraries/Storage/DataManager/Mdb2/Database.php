@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use MDB2;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,

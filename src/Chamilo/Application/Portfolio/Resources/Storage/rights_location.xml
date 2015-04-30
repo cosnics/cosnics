@@ -6,8 +6,8 @@
 		<property name="node_id" type="text" length="32" notnull="1" default="" />
 		<property name="inherit" type="integer" length="1" notnull="1" unsigned="1" default="1" />
 	</properties>
-	<index name="parent_id">
-		<indexproperty name="parent_id" />
+	<index name="publication_id">
+		<indexproperty name="publication_id" />
 	</index>
 	<index name="node_id">
 		<indexproperty name="node_id" />
