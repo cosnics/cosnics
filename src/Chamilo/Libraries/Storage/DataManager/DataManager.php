@@ -241,7 +241,7 @@ class DataManager
      *
      * @param $class string
      * @param $parameters \libraries\storage\DataClassRetrievesParameters
-     * @return \libraries\storage\ResultSet
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieves($class, $parameters = null)
     {
@@ -759,5 +759,15 @@ class DataManager
     public static function package()
     {
         return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+    }
+
+    /**
+     *
+     * @param Condition $condition
+     * @return string
+     */
+    public static function translateCondition(Condition $condition = null)
+    {
+        return self :: get_instance()->translateCondition($condition);
     }
 }

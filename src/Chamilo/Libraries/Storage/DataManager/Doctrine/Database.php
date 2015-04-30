@@ -38,7 +38,7 @@ use Exception;
  */
 class Database
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Constants
     const STORAGE_TYPE = 'Doctrine';
@@ -87,7 +87,6 @@ class Database
     {
         return $this->connection;
     }
-
 
     /**
      * Debug function Uncomment the lines if you want to debug
@@ -880,7 +879,9 @@ class Database
                     {
                         $join_class = $join->get_data_class();
 
-                        $data_manager = ClassnameUtilities :: getInstance()->getNamespaceParent($join_class :: context(), 1).'\DataManager';
+                        $data_manager = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                            $join_class :: context(),
+                            1) . '\DataManager';
 
                         $alias = $data_manager :: get_instance()->get_alias($join_class :: get_table_name());
 
@@ -1403,8 +1404,7 @@ class Database
         // an intermediate function that throws an exception if the function returns #f.
         // This mediates between Chamilo's convention of returning #f to signal failure
         // versus Doctrine's use of Exceptions.
-        $throw_on_false = function ($connection) use($function)
-        {
+        $throw_on_false = function ($connection) use($function) {
             $result = call_user_func($function, $connection);
             if (! $result)
             {
@@ -1586,6 +1586,16 @@ class Database
         }
 
         return $query_builder;
+    }
+
+    /**
+     *
+     * @param Condition $condition
+     * @return string
+     */
+    public function translateCondition(Condition $condition = null)
+    {
+        return ConditionTranslator :: render($condition);
     }
 
     /**

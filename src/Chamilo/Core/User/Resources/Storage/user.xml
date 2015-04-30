@@ -6,7 +6,7 @@
 		<property name="firstname" type="text" length="60" />
 		<property name="username" type="text" length="60" notnull="1" default="" />
 		<property name="password" type="text" length="150" notnull="1" default="" />
-		<property name="auth_source" type="text" length="50" default="platform" />
+		<property name="auth_source" type="text" length="50" default="Platform" />
 		<property name="external_uid" type="text" length="50" />
 		<property name="email" type="text" length="100" />
 		<property name="status" type="integer" length="1" notnull="1" default="5" />

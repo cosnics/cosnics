@@ -34,7 +34,7 @@ class Connection
     {
         if (is_null($connection))
         {
-            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName :: get_from_config('doctrine');
+            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName :: get_from_config('Doctrine');
             $configuration = new \Doctrine\DBAL\Configuration();
             $connection_parameters = array(
                 'dbname' => $data_source_name->get_database(),

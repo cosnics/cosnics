@@ -8,8 +8,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Storage\DataClass\A
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,6 +15,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * Render a list of feedback
@@ -24,7 +23,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @package repository\content_object\portfolio\feedback
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
@@ -90,36 +89,6 @@ class BrowserComponent extends Manager
         {
             $html = array();
 
-            if ($this->get_parent()->is_allowed_to_view_feedback())
-            {
-                $notification = $this->get_parent()->retrieve_notification();
-
-                $toolbar = new Toolbar();
-
-                if ($notification instanceof AbstractNotification)
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('StopReceivingNotifications'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/Unsubscribe'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBER))));
-                }
-                else
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('ReceiveNotifications'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/Subscribe'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBER))));
-                }
-
-                $html[] = $toolbar->as_html();
-            }
-
             $feedbacks = $this->get_parent()->retrieve_feedbacks();
 
             if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
@@ -149,13 +118,13 @@ class BrowserComponent extends Manager
                 $html[] = '</div>';
 
                 $html[] = '<div class="photo">';
-                
+
                 $profilePhotoUrl = new Redirect(
                     array(
                         Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                         Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                         \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
-                
+
                 $html[] = '<img style="width: 32px;" src="' . $profilePhotoUrl->getUrl() . '" />';
                 $html[] = '</div>';
 

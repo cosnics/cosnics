@@ -140,7 +140,7 @@ class DynamicTabsRenderer
         $html[] = '	$("#' . $this->get_name() . '_tabs ul.tabs-header").css(\'display\', \'block\');';
         $html[] = '	$("#' . $this->get_name() . '_tabs h2").hide();';
         $html[] = '	$("#' . $this->get_name() . '_tabs").tabs();';
-        $html[] = '	var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow: false} );';
+//         $html[] = '	var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow: false} );';
 
         $selected_tab = $this->get_selected_tab();
         if (isset($selected_tab))

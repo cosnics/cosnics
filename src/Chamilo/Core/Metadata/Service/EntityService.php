@@ -309,7 +309,7 @@ class EntityService
 
         try
         {
-            $providerLink = $propertyProviderService->getProviderLink($element);
+            $providerLink = $propertyProviderService->getProviderLinkForElement($element);
             return true;
         }
         catch (NoProviderAvailableException $exception)
