@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -27,8 +26,7 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
     public static function factory(ContentObjectImportController $controller, $content_object_type, 
         $content_object_import_parameters)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object_type);
-        $class = $namespace . '\Implementation\Import\\' .
+        $class = $content_object_type :: package() . '\Implementation\Import\\' .
              (string) StringUtilities :: getInstance()->createString($controller :: FORMAT)->upperCamelize() .
              'ImportImplementation';
         

@@ -70,6 +70,7 @@ class CpoImportImplementation extends ImportImplementation
     function post_import($content_object)
     {
         $dom_xpath = $this->get_controller()->get_dom_xpath();
+
         $content_object_node = $this->get_content_object_import_parameters()->get_content_object_node();
         
         $export_node = $dom_xpath->query(CpoExportImplementation :: SURVEY_MATRIX_QUESTION_EXPORT, $content_object_node)->item(
@@ -118,6 +119,7 @@ class CpoImportImplementation extends ImportImplementation
                     null);
             }
         }
+      
         
         $match_node_list = $dom_xpath->query(CpoExportImplementation :: MATCHES_NODE, $export_node)->item(0);
         
