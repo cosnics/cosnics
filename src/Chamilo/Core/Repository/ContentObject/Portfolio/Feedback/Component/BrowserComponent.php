@@ -90,36 +90,6 @@ class BrowserComponent extends Manager
         {
             $html = array();
 
-            if ($this->get_parent()->is_allowed_to_view_feedback())
-            {
-                $notification = $this->get_parent()->retrieve_notification();
-
-                $toolbar = new Toolbar();
-
-                if ($notification instanceof AbstractNotification)
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('StopReceivingNotifications'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/Unsubscribe'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBER))));
-                }
-                else
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('ReceiveNotifications'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback',
-                                'Action/Subscribe'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBER))));
-                }
-
-                $html[] = $toolbar->as_html();
-            }
-
             $feedbacks = $this->get_parent()->retrieve_feedbacks();
 
             if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
@@ -149,13 +119,13 @@ class BrowserComponent extends Manager
                 $html[] = '</div>';
 
                 $html[] = '<div class="photo">';
-                
+
                 $profilePhotoUrl = new Redirect(
                     array(
                         Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                         Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                         \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
-                
+
                 $html[] = '<img style="width: 32px;" src="' . $profilePhotoUrl->getUrl() . '" />';
                 $html[] = '</div>';
 

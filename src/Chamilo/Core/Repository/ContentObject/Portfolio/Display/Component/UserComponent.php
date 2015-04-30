@@ -12,7 +12,11 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
  * Component that allows a user to emulate the rights another user has on his or her portfolio
@@ -88,9 +92,9 @@ class UserComponent extends TabComponent implements TableSupport
         $html = array();
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $table->as_html();
-        
+
         $axtionBar = implode(PHP_EOL, $html);
-        
+
         $html = array();
 
         $html[] = $this->render_header();
@@ -119,7 +123,22 @@ class UserComponent extends TabComponent implements TableSupport
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_OFFICIAL_CODE);
 
-        return $this->get_action_bar()->get_conditions($properties);
+        $searchConditions = $this->get_action_bar()->get_conditions($properties);
+
+        $conditions = array();
+
+        if ($searchConditions instanceof Condition)
+        {
+            $conditions[] = $searchConditions;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_PLATFORMADMIN),
+            new StaticConditionVariable(0));
+
+        return new AndCondition($conditions);
     }
 
     /**
