@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Common\Export;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -22,12 +21,11 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
     public static function factory(ContentObjectExportController $controller, ContentObject $content_object, $format, 
         $type)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
         $class = $content_object->package() . '\Implementation\Export\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() .
              (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ExportImplementation';
-        
+       
         if (! class_exists($class, true))
         {
             $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($format)->upperCamelize() .
