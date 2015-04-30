@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
-use Doctrine\Common\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\File\Path;
 
 /**
