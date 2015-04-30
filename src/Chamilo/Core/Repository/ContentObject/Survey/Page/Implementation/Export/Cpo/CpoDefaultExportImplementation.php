@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\Expor
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\Export\CpoExportImplementation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
 
 /**
  *
@@ -26,25 +27,21 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         
         $configurations_node = $content_object_node->appendChild(
             $dom_document->createElement(CpoExportImplementation :: CONFIGURATIONS_NODE));
-        $configurations = $this->get_content_object()->getConfigurations();
+        $configurations = $this->get_content_object()->getConfiguration();
                 
         // options
-        while ($configuration = $configurations->next_result())
+        foreach ($configurations as $configuration)
         {
-      
             $configuration_node = $configurations_node->appendChild(
                 $dom_document->createElement(CpoExportImplementation :: CONFIGURATION_NODE));
             
-            $value = $configuration_node->appendChild($dom_document->createAttribute('id'));
+            $value = $configuration_node->appendChild($dom_document->createAttribute(Configuration::PROPERTY_ID));
             $value->appendChild($dom_document->createTextNode($configuration->get_id()));
             
-            $display_order = $configuration_node->appendChild($dom_document->createAttribute('display_order'));
-            $display_order->appendChild($dom_document->createTextNode($configuration->get_display_order()));
-            
-            $value = $configuration_node->appendChild($dom_document->createAttribute('value'));
-            $value->appendChild($dom_document->createTextNode($configuration->get_value()));
+            foreach (Configuration :: get_default_property_names() as $property){
+                $value = $configuration_node->appendChild($dom_document->createAttribute($property));
+                $value->appendChild($dom_document->createTextNode($configuration->get_default_property($property)));
+            }
         }
-     
-       
     }
 }
