@@ -71,22 +71,24 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_content_object($id, $type = null)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new DataClassRetrieveParameters($condition);
+        return self :: retrieve_by_id(ContentObject :: class_name(), $id);
 
-        if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-        {
-            throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
-        }
+//         $condition = new EqualityCondition(
+//             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+//             new StaticConditionVariable($id));
+//         $parameters = new DataClassRetrieveParameters($condition);
 
-        if (is_null($type))
-        {
-            $type = self :: determine_content_object_type($id);
-        }
+//         if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
+//         {
+//             throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
+//         }
 
-        return self :: fetch_content_object($parameters, $type);
+//         if (is_null($type))
+//         {
+//             $type = self :: determine_content_object_type($id);
+//         }
+
+//         return self :: fetch_content_object($parameters, $type);
     }
 
     public static function retrieve_complex_content_object_item($id, $type = null)
@@ -114,38 +116,38 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static function fetch_content_object($parameters, $type)
     {
-        $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-            ContentObject :: get_active_status_types());
+//         $condition = new InCondition(
+//             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
+//             ContentObject :: get_active_status_types());
 
-        if ($parameters->get_condition() instanceof Condition)
-        {
-            $condition = new AndCondition($parameters->get_condition(), $condition);
-        }
-        else
-        {
-            $parameters->set_condition($condition);
-        }
+//         if ($parameters->get_condition() instanceof Condition)
+//         {
+//             $condition = new AndCondition($parameters->get_condition(), $condition);
+//         }
+//         else
+//         {
+//             $parameters->set_condition($condition);
+//         }
 
-        if ($type :: is_extended())
-        {
-            $join = new Join(
-                ContentObject :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-            if ($parameters->get_joins() instanceof Joins)
-            {
-                $joins = $parameters->get_joins();
-                $joins->add($join);
-                $parameters->set_joins($joins);
-            }
-            else
-            {
-                $joins = new Joins(array($join));
-                $parameters->set_joins($joins);
-            }
-        }
+//         if ($type :: is_extended())
+//         {
+//             $join = new Join(
+//                 ContentObject :: class_name(),
+//                 new EqualityCondition(
+//                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+//                     new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
+//             if ($parameters->get_joins() instanceof Joins)
+//             {
+//                 $joins = $parameters->get_joins();
+//                 $joins->add($join);
+//                 $parameters->set_joins($joins);
+//             }
+//             else
+//             {
+//                 $joins = new Joins(array($join));
+//                 $parameters->set_joins($joins);
+//             }
+//         }
 
         return self :: retrieve($type, $parameters);
     }
@@ -286,7 +288,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
                     SORT_DESC,
                     self :: get_alias(ContentObject :: get_table_name()))));
-        return self :: fetch_content_object($parameters, $object :: class_name());
+        return self :: retrieve($object :: class_name(), $parameters);
     }
 
     public static function prepare_parameters($action, $type, $parameters = null)

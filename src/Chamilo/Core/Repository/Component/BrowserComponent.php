@@ -27,6 +27,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 
 /**
  * $Id: browser.class.php 204 2009-11-13 12:51:30Z kariboe $
