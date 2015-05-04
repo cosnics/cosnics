@@ -37,45 +37,20 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             $redirect->getUrl());
 
-        // $redirect = new Redirect(
-        // array(
-        // Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-        // \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager ::
-        // ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT));
-        // $links[] = new DynamicAction(
-        // Translation :: get(
-        // 'ContentObjectRelMetadataElementName',
-        // null,
-        // 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-        // Translation :: get(
-        // 'ContentObjectRelMetadataElementDescription',
-        // null,
-        // 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-        // Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-        // $redirect->getUrl());
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_LINK_PROVIDERS));
+        $links[] = new DynamicAction(
+            Translation :: get('LinkProviders'),
+            Translation :: get('LinkProvidersDescription'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            $redirect->getUrl());
 
-        // $redirect = new Redirect(
-        // array(
-        // Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-        // \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager ::
-        // ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA));
-        // $links[] = new DynamicAction(
-        // Translation :: get(
-        // 'ContentObjectPropertyRelMetadataElementName',
-        // null,
-        // 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-        // Translation :: get(
-        // 'ContentObjectPropertyRelMetadataElementDescription',
-        // null,
-        // 'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type'),
-        // Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
-        // $redirect->getUrl());
-
-        // $redirect = new Redirect(
-        // array(
-        // Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-        // \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager ::
-        // ACTION_BROWSE_CONTENT_OBJECTS));
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS));
 
         $info->set_search($redirect->getUrl());
         $info->set_links($links);
