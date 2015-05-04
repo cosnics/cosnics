@@ -1,0 +1,29 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\personal_calendar
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Mijn agenda"
+Jump = "Spring"
+ComponentFailedToLoad = "Fout bij het laden"
+File = "Bestand"
+Stacktrace = "Cumulatief Volgen"
+PersonalCalendarEventParser = "Parser"
+PersonalCalendarManagerBrowserComponent = "Doorblader persoonlijke kalender"
+PersonalCalendarManagerViewerComponent = "Bekijk persoonlijke kalender"
+PersonalCalendarManagerIcalImporterComponent = "Importeer iCal kalender"
+PersonalCalenderPublication = "Kalender publicatie"
+ImportIcal = "Importeer iCal"
+PersonalCalendarPublication = "Publicatie"
+PersonalCalendarPublications = "Publicaties"
+PersonalCalendar = "Persoonlijke kalender"
+IcalImported = "Kalenderitem werd succesvol geïmporteerd"
+OnlyIcsAllowed = "Enkel ICS-bestanden zijn toegestaan"
+ExportIcal = "Exporteer kalenderitem"
+MyAgenda = "Mijn kalender"
+PersonalCalendarManagerPublisherComponent = "Publiceer"
+Day = "Dagkalender"
+Month = "Maandkalender"
+AppointmentsAsSubscriber = "Afspraken in cursusruimte "
+Edit = "Bewerk {TITLE}"
+PersonalCalendarManagerIcalImporterComponent = "Importeer iCal"
