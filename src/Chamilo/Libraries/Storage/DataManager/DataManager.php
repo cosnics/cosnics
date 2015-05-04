@@ -32,6 +32,8 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Exception;
 
 /**
@@ -129,7 +131,7 @@ class DataManager
      * Retrieve an instance of a DataClass object from the storage layer by a set of parameters
      *
      * @param $class string
-     * @param $parameters \libraries\storage\DataClassRetrieveParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
     public static function retrieve($class, $parameters = null)
@@ -139,25 +141,77 @@ class DataManager
             $parameters = DataClassRetrieveParameters :: generate($parameters);
         }
 
-        $composite_class = CompositeDataClass :: class_name();
-
-        if (is_subclass_of($class, $composite_class) && get_parent_class($class) !== $composite_class)
+        if (is_subclass_of($class, CompositeDataClass :: class_name()))
         {
-            $base_class = $class :: parent_class_name();
+            return self :: retrieveCompositeDataClass($class, $parameters);
         }
         else
         {
-            $base_class = $class;
+            return self :: retrieveDataClass($class, $parameters);
+        }
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     * @return Ambiguous
+     */
+    private static function retrieveCompositeDataClass($className, $parameters)
+    {
+        $compositeDataClassName = CompositeDataClass :: class_name();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            $parentClassName = $className :: parent_class_name();
+        }
+        else
+        {
+            $parentClassName = $className;
+
+            $className = self :: determineCompositeDataClassType($className, $parameters);
         }
 
-        if (! DataClassCache :: exists($base_class, $parameters))
+        if ($className :: is_extended())
+        {
+            $join = new Join(
+                $parentClassName,
+                new EqualityCondition(
+                    new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
+                    new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
+            if ($parameters->get_joins() instanceof Joins)
+            {
+                $joins = $parameters->get_joins();
+                $joins->add($join);
+                $parameters->set_joins($joins);
+            }
+            else
+            {
+                $joins = new Joins(array($join));
+                $parameters->set_joins($joins);
+            }
+        }
+
+        return self :: retrieveClass($parentClassName, $className, CompositeDataClass :: class_name(), $parameters);
+    }
+
+    private static function retrieveDataClass($class, $parameters)
+    {
+        return self :: retrieveClass($class, $class, DataClass :: class_name(), $parameters);
+    }
+
+    private static function retrieveClass($cacheClass, $objectClass, $factoryClass, $parameters)
+    {
+        if (! DataClassCache :: exists($cacheClass, $parameters))
         {
             try
             {
-                $base = (is_subclass_of($class, $composite_class) ? $composite_class : DataClass :: class_name());
-                $record = self :: process_record(self :: get_instance()->retrieve($class, $parameters));
+                $record = self :: process_record(self :: get_instance()->retrieve($objectClass, $parameters));
 
-                DataClassResultCache :: add($base :: factory($class, $record), $parameters);
+                DataClassResultCache :: add($factoryClass :: factory($objectClass, $record), $parameters);
             }
             catch (DataClassNoResultException $exception)
             {
@@ -165,7 +219,34 @@ class DataManager
             }
         }
 
-        return DataClassCache :: get($base_class, $parameters);
+        return DataClassCache :: get($cacheClass, $parameters);
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     * @return Ambiguous|boolean
+     */
+    private static function determineCompositeDataClassType($className, $parameters)
+    {
+        $parameters = new RecordRetrieveParameters(
+            new DataClassProperties(
+                array(new PropertyConditionVariable($className, CompositeDataClass :: PROPERTY_TYPE))),
+            $parameters->get_condition(),
+            $parameters->get_order_by(),
+            $parameters->get_joins());
+
+        $type = self :: record($className, $parameters);
+
+        if (isset($type[CompositeDataClass :: PROPERTY_TYPE]))
+        {
+            return $type[CompositeDataClass :: PROPERTY_TYPE];
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static function record($class, $parameters = null)
@@ -228,11 +309,25 @@ class DataManager
         // throw new \InvalidArgumentException(
         // Translation :: get('NoValidIdentifier', array('CLASS' => $class, 'ID' => $id)));
         // }
+        $compositeDataClassName = CompositeDataClass :: class_name();
+
+        $isCompositeDataClass = is_subclass_of($class, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($class) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            $conditionClass = $class :: parent_class_name();
+        }
+        else
+        {
+            $conditionClass = $class;
+        }
+
         return self :: retrieve(
             $class,
             new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable($class :: class_name(), $class :: PROPERTY_ID),
+                    new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
                     new StaticConditionVariable($id))));
     }
 

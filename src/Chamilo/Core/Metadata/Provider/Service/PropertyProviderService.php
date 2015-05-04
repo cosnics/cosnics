@@ -17,7 +17,6 @@ use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
-use Chamilo\Core\Metadata\Storage\DataClass\Chamilo\Core\Metadata\Storage\DataClass;
 
 /**
  *
