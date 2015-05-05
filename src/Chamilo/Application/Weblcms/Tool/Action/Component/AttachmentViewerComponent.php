@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: attachment_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -91,7 +92,9 @@ class AttachmentViewerComponent extends Manager
                     $this->get_url(array('object' => $object_id)),
                     Translation :: get('ViewAttachment', null, \Chamilo\Core\Repository\Manager :: context())));
 
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $object_id);
 
             $html = array();
 
