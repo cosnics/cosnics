@@ -52,7 +52,7 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
 
         $this->root_content_object = $publication->get_content_object();
 
-        $context = Forum :: context() . '\display';
+        $context = Forum :: package() . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

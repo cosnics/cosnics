@@ -16,7 +16,7 @@ class PortfolioConnector implements WeblcmsUserToolConnector
 
     public function is_active()
     {
-        return Application :: is_active('application\portfolio');
+        return Application :: is_active('Chamilo\Application\Portfolio');
     }
 
     public function get_toolbar_items($user_id)
@@ -33,7 +33,7 @@ class PortfolioConnector implements WeblcmsUserToolConnector
         // $toolbar_item = new ToolbarItem(
         // Translation :: get('Portfolio'),
         // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio'),
-    // 'Logo/22'),
+        // 'Logo/22'),
         // $portfolio_url,
         // ToolbarItem :: DISPLAY_ICON);
         // }
@@ -42,7 +42,7 @@ class PortfolioConnector implements WeblcmsUserToolConnector
         // $toolbar_item = new ToolbarItem(
         // Translation :: get('NoPortfolio'),
         // Theme :: getInstance()->getImagePath(ContentObject :: get_content_object_type_namespace('portfolio'),
-    // 'Logo/22_na'),
+        // 'Logo/22_na'),
         // null,
         // ToolbarItem :: DISPLAY_ICON);
         // }

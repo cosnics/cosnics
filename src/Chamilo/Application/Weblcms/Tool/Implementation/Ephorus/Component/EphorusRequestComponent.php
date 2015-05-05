@@ -66,8 +66,8 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      */
     public function initialize_dependencies(DependencyContainer $dependency_container)
     {
-        $dependency_container->add(self :: DEPENDENCY_DATA_MANAGER_CLASS, 'core\repository\DataManager');
-        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'libraries\platform\Request');
+        $dependency_container->add(self :: DEPENDENCY_DATA_MANAGER_CLASS, 'Chamilo\Core\Repository\Storage\DataManager');
+        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'Chamilo\Libraries\Platform\Session\Request');
     }
 
     public function get_base_request()

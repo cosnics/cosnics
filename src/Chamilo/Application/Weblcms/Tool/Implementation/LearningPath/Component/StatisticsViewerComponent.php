@@ -116,8 +116,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
 
                 $this->root_content_object = $object;
 
-                $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($object->get_type()) .
-                     '\display';
+                $context = ClassnameUtilities :: getInstance()->getNamespaceParent($object->get_type(), 3) . '\Display';
                 $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
                 return $factory->run();
             }

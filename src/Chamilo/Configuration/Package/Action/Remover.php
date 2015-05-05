@@ -42,14 +42,16 @@ abstract class Remover extends Action
         {
             $this->add_message(
                 self :: TYPE_NORMAL,
-                '<span class="subtitle">' . Translation :: get('Various', null, 'core\install') . '</span>');
+                '<span class="subtitle">' . Translation :: get('Various', null, 'Chamilo\Core\Install') . '</span>');
             if (! $this->extra())
             {
-                return $this->failed(Translation :: get('VariousFailed', null, 'core\install'));
+                return $this->failed(Translation :: get('VariousFailed', null, 'Chamilo\Core\Install'));
             }
             else
             {
-                $this->add_message(self :: TYPE_NORMAL, Translation :: get('VariousFinished', null, 'core\install'));
+                $this->add_message(
+                    self :: TYPE_NORMAL,
+                    Translation :: get('VariousFinished', null, 'Chamilo\Core\Install'));
             }
             $this->add_message(self :: TYPE_NORMAL, '');
         }
@@ -142,7 +144,7 @@ abstract class Remover extends Action
 
         $this->add_message(
             self :: TYPE_NORMAL,
-            Translation :: getInstance()->getTranslation('StorageUnitRemoval', null, 'core\install') . ': <em>' .
+            Translation :: getInstance()->getTranslation('StorageUnitRemoval', null, 'Chamilo\Core\Install') . ': <em>' .
                  $storage_unit_name . '</em>');
 
         $data_manager = static :: context() . '\DataManager';
@@ -150,8 +152,8 @@ abstract class Remover extends Action
         if (! $data_manager :: drop_storage_unit($storage_unit_name))
         {
             return $this->failed(
-                Translation :: getInstance()->getTranslation('StorageUnitRemovalFailed', null, 'core\install') . ': <em>' .
-                     $storage_unit_name . '</em>');
+                Translation :: getInstance()->getTranslation('StorageUnitRemovalFailed', null, 'Chamilo\Core\Install') .
+                     ': <em>' . $storage_unit_name . '</em>');
         }
         else
         {
@@ -195,12 +197,14 @@ abstract class Remover extends Action
 
                 if (! $setting instanceof Setting || ! $setting->delete())
                 {
-                    $message = Translation :: get('PackageDeconfigurationFailed', null, 'core\install');
+                    $message = Translation :: get('PackageDeconfigurationFailed', null, 'Chamilo\Core\Install');
                     return $this->failed($message);
                 }
             }
 
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('PackageSettingsRemoved', null, 'core\install'));
+            $this->add_message(
+                self :: TYPE_NORMAL,
+                Translation :: get('PackageSettingsRemoved', null, 'Chamilo\Core\Install'));
         }
 
         return true;
@@ -212,7 +216,7 @@ abstract class Remover extends Action
 
         if (! $registration->delete())
         {
-            return $this->failed(Translation :: get('PackageDeregistrationFailed', null, 'core\install'));
+            return $this->failed(Translation :: get('PackageDeregistrationFailed', null, 'Chamilo\Core\Install'));
         }
         else
         {

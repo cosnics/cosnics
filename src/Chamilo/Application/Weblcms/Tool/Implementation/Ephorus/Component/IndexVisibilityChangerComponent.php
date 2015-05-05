@@ -66,8 +66,8 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     {
         $dependency_container->add(
             self :: DEPENDENCY_DATA_MANAGER_CLASS,
-            'application\weblcms\tool\ephorus\DataManager');
-        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'libraries\platform\Request');
+            'Chamilo\Application\Weblcms\Tool\Ephorus\Storage\DataManager');
+        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'Chamilo\Libraries\Platform\Sessions\Request');
     }
 
     /**

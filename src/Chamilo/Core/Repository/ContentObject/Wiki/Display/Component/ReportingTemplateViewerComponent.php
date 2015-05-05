@@ -25,7 +25,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
                 $template = $this->get_parent()->get_wiki_statistics_reporting_template_name();
                 break;
             case self :: ACTION_ACCESS_DETAILS :
-                $template = 'application\weblcms\integration\core\reporting\PublicationDetailTemplate';
+                $template = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate';
                 break;
         }
 

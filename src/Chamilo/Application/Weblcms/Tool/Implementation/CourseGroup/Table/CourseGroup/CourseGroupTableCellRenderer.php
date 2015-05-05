@@ -87,7 +87,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             {
                 $confirm_messages[] = Translation :: get('DeleteConfirmForum');
             }
-            $confirm_message = implode('\\n\\n', $confirm_messages);
+            $confirm_message = implode("\n\n", $confirm_messages);
 
             $toolbar->add_item(
                 new ToolbarItem(

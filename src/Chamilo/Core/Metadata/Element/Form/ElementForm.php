@@ -61,7 +61,7 @@ class ElementForm extends FormValidator
         $this->addElement(
             'text',
             Element :: PROPERTY_DISPLAY_NAME,
-            Translation :: get('DisplayName', null, 'core\metadata'));
+            Translation :: get('DisplayName', null, 'Chamilo\Core\Metadata'));
         $this->addRule(
             Element :: PROPERTY_DISPLAY_NAME,
             Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),

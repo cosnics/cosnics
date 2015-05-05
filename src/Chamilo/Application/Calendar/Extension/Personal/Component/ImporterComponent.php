@@ -70,8 +70,8 @@ class ImporterComponent extends Manager
             'file',
             'file',
             sprintf(
-                Translation :: get('FileName', null, 'core\repository\content_object\document'),
-                ini_get('upload_max_filesize', null, 'core\repository\content_object\document')));
+                Translation :: get('FileName', null, 'Chamilo\Core\Repository\ContentObject\File'),
+                ini_get('upload_max_filesize', null, 'Chamilo\Core\Repository\ContentObject\File')));
 
         $allowed_upload_types = array('ics');
         $form->addRule(

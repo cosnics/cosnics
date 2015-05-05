@@ -35,11 +35,10 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
 
         $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
         $valid_types = array(
-            'core\repository\content_object\document\Document',
-            'core\repository\content_object\file\File',
-            'core\repository\content_object\webpage\Webpage',
-            'core\repository\content_object\page\Page',
-            'core\repository\content_object\external_calendar\ExternalCalendar');
+            'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File',
+            'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage',
+            'Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page',
+            'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar');
 
         if (! $object || ! in_array($object->get_type(), $valid_types))
         {

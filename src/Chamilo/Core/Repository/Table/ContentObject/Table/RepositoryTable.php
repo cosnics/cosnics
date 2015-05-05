@@ -31,8 +31,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
         {
             $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($template_id);
             $this->type = $template_registration->get_content_object_type() . '\Storage\DataClass\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-                $template_registration->get_content_object_type()
-                );
+                $template_registration->get_content_object_type());
         }
     }
 
@@ -74,7 +73,10 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 array(Manager :: PARAM_ACTION => Manager :: ACTION_BATCH_EDIT_CONTENT_OBJECT_METADATA),
-                Translation :: get('MetadataBatchEditorComponent', null, 'core\repository\integration\core\metadata'),
+                Translation :: get(
+                    'MetadataBatchEditorComponent',
+                    null,
+                    'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata'),
                 false));
 
         if ($this->get_component()->get_user()->is_platform_admin())

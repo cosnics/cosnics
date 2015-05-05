@@ -192,8 +192,8 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         {
             if (! $this->install_static_tool_setting_relations_for_object(
                 $course_type,
-                '\application\weblcms\course_type\CourseTypeRelCourseSetting',
-                '\application\weblcms\course_type\CourseTypeRelCourseSettingValue',
+                '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting',
+                '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSettingValue',
                 'set_course_type_id',
                 'set_course_type_rel_course_setting'))
             {
@@ -225,8 +225,8 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         {
             if (! $this->install_static_tool_setting_relations_for_object(
                 $course,
-                '\application\weblcms\course\CourseRelCourseSetting',
-                '\application\weblcms\course\CourseRelCourseSettingValue',
+                '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting',
+                '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue',
                 'set_course_id',
                 'set_course_rel_course_setting'))
             {

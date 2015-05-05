@@ -62,6 +62,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = parent :: render_header($visible_tools, $show_introduction_text);
         $html[] = $this->add_general_info();
 
-        return\implode(PHP_EOL, $html);
+        return implode(PHP_EOL, $html);
     }
 }
