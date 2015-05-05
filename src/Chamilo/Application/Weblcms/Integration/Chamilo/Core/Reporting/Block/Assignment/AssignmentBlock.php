@@ -120,7 +120,8 @@ class AssignmentBlock extends CourseBlock
             $redirect = new Redirect($params);
             $url_title = $redirect->getUrl();
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $pub[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $reporting_data->add_category($count);

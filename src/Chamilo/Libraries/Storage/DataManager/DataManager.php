@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
 use Chamilo\Libraries\Storage\Cache\DataClassCountGroupedCache;
@@ -309,19 +310,7 @@ class DataManager
         // throw new \InvalidArgumentException(
         // Translation :: get('NoValidIdentifier', array('CLASS' => $class, 'ID' => $id)));
         // }
-        $compositeDataClassName = CompositeDataClass :: class_name();
-
-        $isCompositeDataClass = is_subclass_of($class, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($class) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            $conditionClass = $class :: parent_class_name();
-        }
-        else
-        {
-            $conditionClass = $class;
-        }
+        $conditionClass = self :: determineCompositeDataClassConditionClassName($class);
 
         return self :: retrieve(
             $class,
@@ -329,6 +318,75 @@ class DataManager
                 new EqualityCondition(
                     new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
                     new StaticConditionVariable($id))));
+    }
+
+    /**
+     *
+     * @param string $className
+     * @return boolean
+     */
+    private static function isCompositeDataClass($className)
+    {
+        return is_subclass_of($className, CompositeDataClass :: class_name());
+    }
+
+    /**
+     *
+     * @param string $className
+     * @return boolean
+     */
+    private static function isExtensionClass($className)
+    {
+        return self :: isCompositeDataClass($className) &&
+             get_parent_class($className) !== CompositeDataClass :: class_name();
+    }
+
+    /**
+     *
+     * @param string $className
+     * @return string
+     */
+    private static function determineCompositeDataClassConditionClassName($className)
+    {
+        if (self :: isExtensionClass($className))
+        {
+            return $className :: parent_class_name();
+        }
+        else
+        {
+            return $className;
+        }
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param integer $identifier
+     * @throws ObjectNotExistException
+     * @return string
+     */
+    public static function determineDataClassType($className, $identifier)
+    {
+        $conditionClass = self :: determineCompositeDataClassConditionClassName($className);
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
+            new StaticConditionVariable($identifier));
+        $parameters = new RecordRetrieveParameters(
+            new DataClassProperties(
+                array(new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_TYPE))),
+            $condition);
+
+        $type = self :: record($conditionClass, $parameters);
+
+        if (isset($type[$conditionClass :: PROPERTY_TYPE]))
+        {
+            return $type[$conditionClass :: PROPERTY_TYPE];
+        }
+        else
+        {
+            throw new ObjectNotExistException($identifier);
+        }
     }
 
     /**

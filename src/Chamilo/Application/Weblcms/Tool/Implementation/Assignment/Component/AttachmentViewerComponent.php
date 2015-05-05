@@ -9,6 +9,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This component allows a user to view an attachment.
@@ -98,7 +99,8 @@ class AttachmentViewerComponent extends SubmissionsManager
 
         while ($feedback = $feedbacks->next_result())
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $feedback->get_content_object_id());
             if ($content_object->is_attached_to_or_included_in($this->get_object_id()))
             {
@@ -134,8 +136,10 @@ class AttachmentViewerComponent extends SubmissionsManager
         {
             foreach ($automatic_feedback_co_ids_array as $automatic_feedback_co_id)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $automatic_feedback_co_id);
+
                 if ($content_object->is_attached_to_or_included_in($this->get_object_id()))
                 {
                     return true;

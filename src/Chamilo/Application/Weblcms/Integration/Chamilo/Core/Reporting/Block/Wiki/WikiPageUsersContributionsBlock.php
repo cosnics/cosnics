@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class WikiPageUsersContributionsBlock extends ToolBlock
 {
@@ -21,7 +22,8 @@ class WikiPageUsersContributionsBlock extends ToolBlock
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
             Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
 
-        $wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
         $versions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_versions($wiki_page);
 

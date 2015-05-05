@@ -870,7 +870,10 @@ class ContentObjectPublicationForm extends FormValidator
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self :: TYPE_FILE)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $id);
+
                 if ($object->is_image())
                 {
                     $mail_embedded_object = new MailEmbeddedObject(

@@ -56,7 +56,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_DISPLAY_ORDER_INDEX = 'display_order';
     const PROPERTY_EMAIL_SENT = 'email_sent';
     const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
-    const TYPE_FILE = 'file'; // added tos upport mailing within content object
+    const TYPE_FILE = 'file';
+ // added tos upport mailing within content object
     private $target_course_groups;
 
     private $target_users;
@@ -241,7 +242,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
             else
             {
                 // todo: refactoring
-                $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $this->get_content_object_id());
             }
         }
@@ -661,7 +663,9 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self :: TYPE_FILE)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $id);
                 if ($object->is_image())
                 {
                     $mail_embedded_object = new MailEmbeddedObject(

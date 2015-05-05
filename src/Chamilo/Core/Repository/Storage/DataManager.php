@@ -21,14 +21,14 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+// use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+// use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -73,170 +73,165 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         return self :: retrieve_by_id(ContentObject :: class_name(), $id);
 
-//         $condition = new EqualityCondition(
-//             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-//             new StaticConditionVariable($id));
-//         $parameters = new DataClassRetrieveParameters($condition);
+        // $condition = new EqualityCondition(
+        // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+        // new StaticConditionVariable($id));
+        // $parameters = new DataClassRetrieveParameters($condition);
 
-//         if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-//         {
-//             throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
-//         }
+        // if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
+        // {
+        // throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
+        // }
 
-//         if (is_null($type))
-//         {
-//             $type = self :: determine_content_object_type($id);
-//         }
+        // if (is_null($type))
+        // {
+        // $type = self :: determine_content_object_type($id);
+        // }
 
-//         return self :: fetch_content_object($parameters, $type);
+        // return self :: fetch_content_object($parameters, $type);
     }
 
     public static function retrieve_complex_content_object_item($id, $type = null)
     {
-        if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-        {
-            throw new DataClassNoResultException(
-                ContentObject :: class_name(),
-                DataClassRetrieveParameters :: generate((int) $id));
-        }
+        return self :: retrieve_by_id(ComplexContentObjectItem :: class_name(), $id);
 
-        if (is_null($type))
-        {
-            $type = self :: determine_complex_content_object_item_type($id);
-        }
+        // if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
+        // {
+        // throw new DataClassNoResultException(
+        // ContentObject :: class_name(),
+        // DataClassRetrieveParameters :: generate((int) $id));
+        // }
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ID),
-            new StaticConditionVariable($id));
+        // if (is_null($type))
+        // {
+        // $type = self :: determine_complex_content_object_item_type($id);
+        // }
 
-        return self :: fetch_complex_content_object_item($condition, $type);
+        // $condition = new EqualityCondition(
+        // new PropertyConditionVariable(
+        // ComplexContentObjectItem :: class_name(),
+        // ComplexContentObjectItem :: PROPERTY_ID),
+        // new StaticConditionVariable($id));
+
+        // return self :: fetch_complex_content_object_item($condition, $type);
     }
 
-    private static function fetch_content_object($parameters, $type)
-    {
-//         $condition = new InCondition(
-//             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-//             ContentObject :: get_active_status_types());
+    // private static function fetch_content_object($parameters, $type)
+    // {
+    // $condition = new InCondition(
+    // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
+    // ContentObject :: get_active_status_types());
 
-//         if ($parameters->get_condition() instanceof Condition)
-//         {
-//             $condition = new AndCondition($parameters->get_condition(), $condition);
-//         }
-//         else
-//         {
-//             $parameters->set_condition($condition);
-//         }
+    // if ($parameters->get_condition() instanceof Condition)
+    // {
+    // $condition = new AndCondition($parameters->get_condition(), $condition);
+    // }
+    // else
+    // {
+    // $parameters->set_condition($condition);
+    // }
 
-//         if ($type :: is_extended())
-//         {
-//             $join = new Join(
-//                 ContentObject :: class_name(),
-//                 new EqualityCondition(
-//                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-//                     new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-//             if ($parameters->get_joins() instanceof Joins)
-//             {
-//                 $joins = $parameters->get_joins();
-//                 $joins->add($join);
-//                 $parameters->set_joins($joins);
-//             }
-//             else
-//             {
-//                 $joins = new Joins(array($join));
-//                 $parameters->set_joins($joins);
-//             }
-//         }
+    // if ($type :: is_extended())
+    // {
+    // $join = new Join(
+    // ContentObject :: class_name(),
+    // new EqualityCondition(
+    // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+    // new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
+    // if ($parameters->get_joins() instanceof Joins)
+    // {
+    // $joins = $parameters->get_joins();
+    // $joins->add($join);
+    // $parameters->set_joins($joins);
+    // }
+    // else
+    // {
+    // $joins = new Joins(array($join));
+    // $parameters->set_joins($joins);
+    // }
+    // }
+    // return self :: retrieve($type, $parameters);
+    // }
 
-        return self :: retrieve($type, $parameters);
-    }
+    // private static function fetch_complex_content_object_item($condition, $type)
+    // {
+    // if ($type :: is_extended())
+    // {
+    // $join = new Join(
+    // ComplexContentObjectItem :: class_name(),
+    // new EqualityCondition(
+    // new PropertyConditionVariable(
+    // ComplexContentObjectItem :: class_name(),
+    // ComplexContentObjectItem :: PROPERTY_ID),
+    // new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
+    // $joins = new Joins(array($join));
+    // }
+    // else
+    // {
+    // $joins = null;
+    // }
+    // $parameters = new DataClassRetrieveParameters($condition, array(), $joins);
 
-    private static function fetch_complex_content_object_item($condition, $type)
-    {
-        if ($type :: is_extended())
-        {
-            $join = new Join(
-                ComplexContentObjectItem :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-            $joins = new Joins(array($join));
-        }
-        else
-        {
-            $joins = null;
-        }
-        $parameters = new DataClassRetrieveParameters($condition, array(), $joins);
+    // return self :: retrieve($type, $parameters);
+    // }
 
-        return self :: retrieve($type, $parameters);
-    }
+    // /**
+    // * Get the type of the content object matching the given id.
+    // *
+    // * @param int $id The id of the content object.
+    // * @return string The type string.
+    // */
+    // public static function determine_content_object_type($id)
+    // {
+    // $condition = new EqualityCondition(
+    // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+    // new StaticConditionVariable($id));
+    // $parameters = new RecordRetrieveParameters(
+    // new DataClassProperties(
+    // array(new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE))),
+    // $condition);
+    // $type = self :: record(ContentObject :: class_name(), $parameters);
+    // if (isset($type[ContentObject :: PROPERTY_TYPE]))
+    // {
+    // return $type[ContentObject :: PROPERTY_TYPE];
+    // }
+    // else
+    // {
+    // throw new ObjectNotExistException($id);
+    // }
+    // }
 
-    /**
-     * Get the type of the content object matching the given id.
-     *
-     * @param int $id The id of the content object.
-     * @return string The type string.
-     */
-    public static function determine_content_object_type($id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE))),
-            $condition);
-        $type = self :: record(ContentObject :: class_name(), $parameters);
-        if (isset($type[ContentObject :: PROPERTY_TYPE]))
-        {
-            return $type[ContentObject :: PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException($id);
-        }
-    }
+    // /**
+    // * Get the type of the complex content object item matching the given id.
+    // *
+    // * @param int $id The id of the content object.
+    // * @return string The type string.
+    // */
+    // public static function determine_complex_content_object_item_type($id)
+    // {
+    // $condition = new EqualityCondition(
+    // new PropertyConditionVariable(
+    // ComplexContentObjectItem :: class_name(),
+    // ComplexContentObjectItem :: PROPERTY_ID),
+    // new StaticConditionVariable($id));
+    // $parameters = new RecordRetrieveParameters(
+    // new DataClassProperties(
+    // array(
+    // new PropertyConditionVariable(
+    // ComplexContentObjectItem :: class_name(),
+    // ComplexContentObjectItem :: PROPERTY_TYPE))),
+    // $condition);
+    // $type = self :: record(ComplexContentObjectItem :: class_name(), $parameters);
 
-    /**
-     * Get the type of the complex content object item matching the given id.
-     *
-     * @param int $id The id of the content object.
-     * @return string The type string.
-     */
-    public static function determine_complex_content_object_item_type($id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_TYPE))),
-            $condition);
-        $type = self :: record(ComplexContentObjectItem :: class_name(), $parameters);
-
-        if (isset($type[ComplexContentObjectItem :: PROPERTY_TYPE]))
-        {
-            return $type[ComplexContentObjectItem :: PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException(ComplexContentObjectItem :: class_name(), $id);
-        }
-    }
-
-    public static function is_extended_type($type)
-    {
-        return $type :: is_extended();
-    }
-
+    // if (isset($type[ComplexContentObjectItem :: PROPERTY_TYPE]))
+    // {
+    // return $type[ComplexContentObjectItem :: PROPERTY_TYPE];
+    // }
+    // else
+    // {
+    // throw new ObjectNotExistException(ComplexContentObjectItem :: class_name(), $id);
+    // }
+    // }
     public static function count_content_objects($type, $parameters = null)
     {
         return self :: count($type, self :: prepare_parameters(self :: ACTION_COUNT, $type, $parameters));

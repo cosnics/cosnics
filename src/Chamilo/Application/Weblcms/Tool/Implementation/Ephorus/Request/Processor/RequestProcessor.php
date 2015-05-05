@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Proces
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * handles request processing (calls to ephorus webservices)
@@ -242,7 +243,8 @@ class RequestProcessor
      */
     private function get_hand_in_request_parameters(Request $request)
     {
-        $document = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $document = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $request->get_content_object_id());
 
         if (! $document)
