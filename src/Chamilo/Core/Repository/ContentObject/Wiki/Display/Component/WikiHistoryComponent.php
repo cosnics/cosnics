@@ -37,9 +37,9 @@ class WikiHistoryComponent extends Manager
 
         if ($this->complex_wiki_page_id)
         {
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
-                $this->complex_wiki_page_id,
-                ComplexContentObjectItem :: class_name());
+            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
+                $this->complex_wiki_page_id);
             $compare_object_ids = Request :: post(VersionTable :: DEFAULT_NAME . VersionTable :: CHECKBOX_NAME_SUFFIX);
 
             $html = array();

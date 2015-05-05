@@ -558,7 +558,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     public function get_assessment_configuration()
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $this->get_ccoi_id());
 
         return $complex_content_object_item->get_ref_object()->get_configuration();

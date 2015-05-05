@@ -19,7 +19,8 @@ class WikiPageUsersContributionsBlock extends ToolBlock
                 Translation :: get('Username'),
                 Translation :: get('NumberOfContributions')));
 
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
 
         $wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(

@@ -77,7 +77,8 @@ class ReportingViewerComponent extends Manager
 
         if (Request :: get('cid') != null)
         {
-            $cloi = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $cloi = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 Request :: get('cid'));
             $wp = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),

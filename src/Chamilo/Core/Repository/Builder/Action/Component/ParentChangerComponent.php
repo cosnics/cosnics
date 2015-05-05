@@ -59,7 +59,8 @@ class ParentChangerComponent extends Manager
                 }
                 else
                 {
-                    $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+                    $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        ComplexContentObjectItem :: class_name(),
                         $selected_parent);
                     $parent = $parent->get_ref();
                 }
