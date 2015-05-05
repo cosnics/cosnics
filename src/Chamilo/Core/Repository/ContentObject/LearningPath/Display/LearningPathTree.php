@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: learning_path_tree.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -73,7 +74,9 @@ class LearningPathTree extends HTML_Menu
     {
         $this->current_step = $current_step;
         $this->lp_id = $lp_id;
-        $this->lp = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($lp_id);
+        $this->lp = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $lp_id);
         $this->urlFmt = $url_format;
         $this->lpi_tracker_data = $lpi_tracker_data;
         $this->translator = new RuleConditionTranslator();
@@ -162,12 +165,16 @@ class LearningPathTree extends HTML_Menu
 
         while (($object = $objects->next_result()))
         {
-            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object->get_ref());
+            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $object->get_ref());
             $lpi_tracker_data = $this->lpi_tracker_data[$object->get_id()];
 
             if ($lo->get_type() == LearningPathItem :: class_name())
             {
-                $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($lo->get_reference());
+                $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $lo->get_reference());
             }
 
             $menu_item = array();

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Vie
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: question_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -182,12 +183,13 @@ abstract class QuestionDisplay
 
     public static function factory($formvalidator, $complex_content_object_question, $question_nr)
     {
-        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_question->get_ref());
         $type = $question->get_type();
-        
-        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) .
-             '\Display';
+
+        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
+             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) . '\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);
         return $question_display;
     }

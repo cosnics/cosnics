@@ -55,7 +55,8 @@ class WikiHistoryComponent extends Manager
                 $compare_object_id = $compare_object_ids[0];
                 $compare_version_id = $compare_object_ids[1];
 
-                $compare_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $compare_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $compare_object_id);
 
                 $html[] = $compare_object->get_difference($compare_version_id);

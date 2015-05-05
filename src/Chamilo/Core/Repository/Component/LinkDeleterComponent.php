@@ -103,7 +103,7 @@ class LinkDeleterComponent extends Manager
         foreach ($link_ids as $link_id)
         {
             $item = DataManager :: retrieve_complex_content_object_item($link_id);
-            $object = DataManager :: retrieve_content_object($item->get_ref());
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $item->get_ref());
 
             if (! $item->delete())
             {
@@ -137,7 +137,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager :: retrieve_content_object($object_id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
             if (! $object->detach_content_object($link_id, ContentObject :: ATTACHMENT_NORMAL))
                 $failures ++;
         }
@@ -159,7 +159,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager :: retrieve_content_object($link_id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $link_id);
             if (! $object->detach_content_object($object_id, ContentObject :: ATTACHMENT_NORMAL))
                 $failures ++;
         }

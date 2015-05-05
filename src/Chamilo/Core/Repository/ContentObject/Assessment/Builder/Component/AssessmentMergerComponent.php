@@ -58,9 +58,9 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
         }
         else
         {
-            $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects(),
-                Assessment :: class_name());
+            $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Assessment :: class_name(),
+                \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
             $display = ContentObjectRenditionImplementation :: launch(
                 $selected_assessment,
                 ContentObjectRendition :: FORMAT_HTML,
@@ -138,9 +138,9 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
 
     public function get_table_condition($table_class_name)
     {
-        $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-            \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects(),
-            Assessment :: class_name());
+        $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            Assessment :: class_name(),
+            \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
         return $this->get_condition($selected_assessment);
     }
 }

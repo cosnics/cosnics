@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: mover.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -41,7 +42,7 @@ class MoverComponent extends Manager
                 $ids = array($ids);
             }
 
-            $object = $this->retrieve_content_object($ids[0]);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $ids[0]);
             $parent = $object->get_parent_id();
 
             $this->tree = array();
@@ -62,12 +63,12 @@ class MoverComponent extends Manager
                 $failures = 0;
                 foreach ($ids as $id)
                 {
-                    $object = $this->retrieve_content_object($id);
+                    $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
                     $versions = DataManager :: get_version_ids($object);
 
                     foreach ($versions as $version)
                     {
-                        $object = $this->retrieve_content_object($version);
+                        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version);
                         // TODO: Roles & Rights.
                         if ($object->get_owner_id() != $this->get_user_id())
                         {

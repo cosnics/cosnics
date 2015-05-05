@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: hotspot_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -276,7 +277,9 @@ class HotspotQuestionForm extends ContentObjectForm
         if ($object->get_image())
         {
             $image_id = $object->get_image();
-            $image_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($image_id);
+            $image_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $image_id);
 
             $dimensions = getimagesize($image_object->get_full_path());
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' . $dimensions[0] .

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: deleter.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -31,11 +32,13 @@ class ViewerComponent extends Manager
         {
             $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
                 $id);
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $complex_content_object_item->get_ref());
             if (\Chamilo\Core\Repository\Storage\DataManager :: is_helper_type($content_object->get_type()))
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $content_object->get_additional_property('reference_id'));
             }
 

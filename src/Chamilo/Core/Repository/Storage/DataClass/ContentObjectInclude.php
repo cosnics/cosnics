@@ -14,7 +14,7 @@ class ContentObjectInclude extends DataClass
 
     /**
      * Get the default properties of all content object attachments.
-     * 
+     *
      * @param array $extended_property_names
      *
      * @return array The property names.
@@ -49,7 +49,9 @@ class ContentObjectInclude extends DataClass
     {
         if (! isset($this->include_object))
         {
-            $this->include_object = DataManager :: retrieve_content_object($this->get_include_id());
+            $this->include_object = DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $this->get_include_id());
         }
         return $this->include_object;
     }
