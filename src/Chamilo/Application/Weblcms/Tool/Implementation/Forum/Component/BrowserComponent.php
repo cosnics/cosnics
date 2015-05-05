@@ -659,7 +659,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
             // added tool dependent publish button
-            $tool_dependent_publish = PlatformSetting :: get('tool_dependent_publish_button', \Chamilo\Application\Weblcms\Manager :: context());
+            $tool_dependent_publish = PlatformSetting :: get(
+                'tool_dependent_publish_button',
+                \Chamilo\Application\Weblcms\Manager :: context());
 
             if ($tool_dependent_publish == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_INDEPENDENT)
             {

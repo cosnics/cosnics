@@ -204,12 +204,12 @@ class ToolBrowserComponent extends Manager implements DelegateComponent
                 ContentObjectPublication :: class_name(),
                 $id);
 
-            $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+            $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool() .
                  '\Storage\DataClass\Publication';
 
             if (class_exists($possible_publication_class))
             {
-                $datamanager_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+                $datamanager_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool() .
                      '\Storage\DataManager';
 
                 $publication_extension = $datamanager_class :: retrieve(

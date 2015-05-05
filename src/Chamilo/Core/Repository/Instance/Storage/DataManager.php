@@ -83,7 +83,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         foreach ($types as $type)
         {
-            $namespaces[] = \Chamilo\Core\Repository\Manager :: context() . '\implementation\\' .
+            $namespaces[] = \Chamilo\Core\Repository\Manager :: context() . '\Implementation\\' .
                  ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($type);
         }
 

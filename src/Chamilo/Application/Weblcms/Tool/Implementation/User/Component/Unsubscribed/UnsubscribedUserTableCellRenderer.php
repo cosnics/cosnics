@@ -33,7 +33,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
      *
      * @param type $column
      * @param type $user_with_subscription_status User from the advanced join query in weblcms database class that
-     *            includes his subscription status.
+     *        includes his subscription status.
      * @return type
      */
     public function render_cell($column, $user_with_subscription_status)
