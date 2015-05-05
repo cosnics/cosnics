@@ -69,28 +69,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static $user_has_categories;
 
-    public static function retrieve_content_object($id, $type = null)
-    {
-        return self :: retrieve_by_id(ContentObject :: class_name(), $id);
-
-        // $condition = new EqualityCondition(
-        // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-        // new StaticConditionVariable($id));
-        // $parameters = new DataClassRetrieveParameters($condition);
-
-        // if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-        // {
-        // throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
-        // }
-
-        // if (is_null($type))
-        // {
-        // $type = self :: determine_content_object_type($id);
-        // }
-
-        // return self :: fetch_content_object($parameters, $type);
-    }
-
     public static function retrieve_complex_content_object_item($id, $type = null)
     {
         return self :: retrieve_by_id(ComplexContentObjectItem :: class_name(), $id);
@@ -1110,7 +1088,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ComplexContentObjectItem :: class_name(),
                 ComplexContentObjectItem :: PROPERTY_PARENT),
             new StaticConditionVariable($clo->get_id()));
+
         $items = self :: retrieve_complex_content_object_items(ComplexContentObjectItem :: class_name(), $condition);
+
         while ($item = $items->next_result())
         {
             $nitem = new ComplexContentObjectItem();
@@ -1119,7 +1099,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $nitem->set_parent($clo->get_id());
             $nitem->set_ref($item->get_ref());
             $nitem->create();
-            $lo = self :: retrieve_content_object($item->get_ref());
+
+            $lo = self :: retrieve_by_id(ContentObject :: class_name(), $item->get_ref());
+
             if ($lo instanceof ComplexContentObjectSupport)
             {
                 $lo->create_all();

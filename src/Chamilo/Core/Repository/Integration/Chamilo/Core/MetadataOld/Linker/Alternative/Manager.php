@@ -114,7 +114,8 @@ abstract class Manager extends Application
      */
     public function get_selected_content_object()
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $this->get_selected_content_object_id());
 
         if (! $content_object)

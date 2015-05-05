@@ -3,15 +3,16 @@ namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: content_object_publication_attributes.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 /**
  * Instances of this class group generic information about a publication of an object within an application.
- * 
+ *
  * @author Bart Mollet
  * @author Tim De Pauw
  * @author Hans De Bisschop
@@ -36,7 +37,7 @@ class Attributes extends DataClass
         $extended_property_names[] = self :: PROPERTY_CONTENT_OBJECT_ID;
         $extended_property_names[] = self :: PROPERTY_PUBLISHER_ID;
         $extended_property_names[] = self :: PROPERTY_URL;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -112,7 +113,9 @@ class Attributes extends DataClass
 
     public function get_content_object()
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($this->get_content_object_id());
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $this->get_content_object_id());
     }
 
     public function update()
@@ -128,7 +131,7 @@ class Attributes extends DataClass
     /**
      * * BACKWARDS COMPATIBILITY WRAPPER METHODS **
      */
-    
+
     /**
      *
      * @deprecated

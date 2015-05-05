@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
@@ -71,7 +72,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public static function is_wiki_locked($wiki_id)
     {
-        $wiki = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($wiki_id);
+        $wiki = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(ContentObject :: class_name(), $wiki_id);
         return $wiki->get_locked() == 1;
     }
 
@@ -214,7 +215,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
             $complex_id);
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
     }
 

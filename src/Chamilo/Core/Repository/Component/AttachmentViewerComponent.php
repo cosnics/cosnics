@@ -9,6 +9,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: attachment_viewer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -27,7 +28,9 @@ class AttachmentViewerComponent extends Manager
 
         if ($object_id && $attachment_id)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $object_id);
             $repo_rights = RepositoryRights :: get_instance();
 
             if ($object->get_owner_id() != $this->get_user_id() && ! $repo_rights->is_allowed_in_user_subtree(
@@ -39,7 +42,9 @@ class AttachmentViewerComponent extends Manager
                 throw new NotAllowedException();
             }
 
-            $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($attachment_id);
+            $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $attachment_id);
 
             $html = array();
 

@@ -18,6 +18,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -34,12 +35,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function run()
     {
         $className = $this->get_root_content_object()->package() . '\Display';
-        
-        $factory = new ApplicationFactory(
-            $this->getRequest(),
-            $className,
-            $this->get_user(),
-            $this);
+
+        $factory = new ApplicationFactory($this->getRequest(), $className, $this->get_user(), $this);
         return $factory->run();
     }
 
@@ -126,7 +123,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         {
             $item_attempt->set_score($total_score);
             $item_attempt->set_total_time($item_attempt->get_total_time() + (time() - $item_attempt->get_start_time()));
-            $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $current_node->get_complex_content_object_item()->get_ref());
             $mastery_score = $learning_path_item->get_mastery_score();
 
@@ -196,7 +194,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function get_assessment_configuration()
     {
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
-        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
 
         return $learning_path_item->get_configuration();
@@ -212,7 +211,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      * @see \core\repository\content_object\learning_path\display\LearningPathDisplaySupport::retrieve_learning_path_tracker()
      */
     function retrieve_learning_path_tracker()
-    {        
+    {
         $attempt = PreviewStorage :: get_instance()->retrieve_learning_path_attempt(
             $this->get_parent()->get_root_content_object()->get_id());
 

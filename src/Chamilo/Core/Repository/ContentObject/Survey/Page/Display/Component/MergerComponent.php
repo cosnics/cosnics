@@ -11,10 +11,11 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Component that allows the user to add content to the page
- * 
+ *
  * @package repository\content_object\page\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -30,20 +31,20 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
         {
             throw new NotAllowedException();
         }
-        
+
         $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
             ClassnameUtilities :: getInstance()->getNamespaceParent(Page :: context(), 2));
-        
+
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
-        
+
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $exclude = array($this->get_current_content_object()->get_id());
-            
+
             $factory = new ApplicationFactory(
-                $this->getRequest(), 
-                \Chamilo\Core\Repository\Viewer\Manager :: context(), 
-                $this->get_user(), 
+                $this->getRequest(),
+                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                $this->get_user(),
                 $this);
             $component = $factory->getComponent();
             $component->set_excluded_objects($exclude);
@@ -57,9 +58,9 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
             {
                 $object_ids = array($object_ids);
             }
-            
+
             $failures = 0;
-            
+
             foreach ($object_ids as $object_id)
             {
                 if ($this->get_current_node()->forms_cycle_with($object_id))
@@ -67,20 +68,22 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
                     $failures ++;
                     continue;
                 }
-                
-                $page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+
+                $page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $object_id);
                 $complex_content_object_items = $page->get_questions(true);
-                
+
                 $excluded_items = $this->detemine_excluded_content_object_ids();
-                
+
                 foreach ($complex_content_object_items as $ccoi)
                 {
-                    
+
                     if (count(array_diff(array($ccoi->get_ref()), $excluded_items)) == 1)
                     {
-                        
+
                         $object = $ccoi->get_ref_object();
-                        
+
                         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: factory(
                             $object->class_name());
                         $complex_content_object_item->set_ref($object->get_id());
@@ -89,7 +92,7 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
                         $complex_content_object_item->set_display_order(
                             \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order($parent_id));
                         $complex_content_object_item->set_user_id($this->get_user_id());
-                        
+
                         if (! $complex_content_object_item->create())
                         {
                             $failures ++;
@@ -97,20 +100,20 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
                         else
                         {
                             Event :: trigger(
-                                'activity', 
-                                \Chamilo\Core\Repository\Manager :: context(), 
+                                'activity',
+                                \Chamilo\Core\Repository\Manager :: context(),
                                 array(
-                                    Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM, 
-                                    Activity :: PROPERTY_USER_ID => $this->get_user_id(), 
-                                    Activity :: PROPERTY_DATE => time(), 
-                                    Activity :: PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()->get_id(), 
+                                    Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM,
+                                    Activity :: PROPERTY_USER_ID => $this->get_user_id(),
+                                    Activity :: PROPERTY_DATE => time(),
+                                    Activity :: PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()->get_id(),
                                     Activity :: PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
                                          ' > ' . $object->get_title()));
                         }
                     }
                 }
             }
-            
+
             if ($failures)
             {
                 if (count($object_ids) == 1)
@@ -133,15 +136,15 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
                     $message = 'ObjectsAdded';
                 }
             }
-            
+
             $this->redirect(
                 Translation :: get(
-                    $message, 
-                    array('OBJECT' => Translation :: get('Item'), 'OBJECTS' => Translation :: get('Items')), 
-                    Utilities :: COMMON_LIBRARIES), 
-                ($failures ? true : false), 
+                    $message,
+                    array('OBJECT' => Translation :: get('Item'), 'OBJECTS' => Translation :: get('Items')),
+                    Utilities :: COMMON_LIBRARIES),
+                ($failures ? true : false),
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
+                    self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                     self :: PARAM_STEP => $this->get_current_step()));
         }
     }
@@ -149,19 +152,19 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
     private function detemine_excluded_content_object_ids()
     {
         $excluded_items = array();
-        
+
         $current_node = $this->get_current_node();
-        
+
         foreach ($current_node->get_children() as $child_node)
         {
             $excluded_items[] = $child_node->get_content_object()->get_id();
         }
-        
+
         foreach ($current_node->get_parents(true) as $parent_node)
         {
             $excluded_items[] = $parent_node->get_content_object()->get_id();
         }
-        
+
         return $excluded_items;
     }
 

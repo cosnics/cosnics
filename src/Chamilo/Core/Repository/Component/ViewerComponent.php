@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
             $this->tabs = new DynamicTabsRenderer($renderer_name);
 
-            $object = DataManager :: retrieve_content_object($id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
 
             if (! $object)
             {

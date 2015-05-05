@@ -30,7 +30,6 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function build()
     {
-
         if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -82,7 +81,9 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                     continue;
                 }
 
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $object_id);
 
                 if (! $object instanceof Portfolio)
                 {
@@ -232,5 +233,4 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     {
         return $this->get_root_content_object()->get_allowed_types();
     }
-   
 }

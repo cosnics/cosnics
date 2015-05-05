@@ -55,7 +55,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_complex_content_object_item()->get_ref());
         }
 
@@ -156,7 +157,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 ComplexContentObjectItem :: get_table_name()));
         while ($child = $children->next_result())
         {
-            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($child->get_ref());
+            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $child->get_ref());
             $child->set_ref($lo);
             if ($lo->get_type() != ForumTopic :: class_name())
             {
@@ -187,7 +190,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $parameters);
         while ($child = $children->next_result())
         {
-            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($child->get_ref());
+            $lo = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $child->get_ref());
             $child->set_ref($lo);
             if ($lo->get_type() == ForumTopic :: class_name())
             {
