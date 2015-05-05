@@ -572,8 +572,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
     public function get_export_types()
     {
-        $types = ContentObjectExportImplementation :: get_types_for_object(
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object));
+        $types = ContentObjectExportImplementation :: get_types_for_object($this->object->package());
 
         $html = array();
         foreach ($types as $type)
