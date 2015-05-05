@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {
@@ -29,12 +30,12 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         else
         {
             $type_selection = TypeSelector :: get_selection();
-                     
+
             if ($type_selection)
             {
                 $type_selector = TypeSelector :: populate($this->get_types(), $this->get_user_id());
                 $all_types = $type_selector->get_unique_content_object_template_ids();
-                
+
                 if (! in_array($type_selection, $all_types))
                 {
                     throw new NoObjectSelectedException(
@@ -139,7 +140,9 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_editing_form($content_object_id)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($content_object_id);
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $content_object_id);
 
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(

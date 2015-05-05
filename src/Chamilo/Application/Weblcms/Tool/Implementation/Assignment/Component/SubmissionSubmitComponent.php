@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -331,7 +332,9 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
      */
     public function create_tracker($submitter_id, $repo_object, $submitter_type = null)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($repo_object);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $repo_object);
 
         // Create a folder assignment in the root folder
         $assignement_category_id = \Chamilo\Core\Repository\Storage\DataManager :: get_repository_category_by_name_or_create_new(
@@ -367,7 +370,8 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             foreach ($content_object_ids as $content_object_id)
             {
                 $submitter_name = $this->get_submitter_name($submitter_type, $submitter_id);
-                $new_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $new_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $content_object_id);
                 $new_object->set_title($submitter_name . ' - ' . $new_object->get_title());
                 if (self :: is_downloadable($new_object))

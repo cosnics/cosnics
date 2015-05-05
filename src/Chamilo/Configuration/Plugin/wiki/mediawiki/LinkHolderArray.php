@@ -67,7 +67,8 @@ class MediawikiLinkHolderArray
     }
 
     /**
-     * Clear all stored link holders. Make sure you don't have any text left using these link holders, before you call
+     * Clear all stored link holders.
+     * Make sure you don't have any text left using these link holders, before you call
      * this
      */
     function clear()
@@ -78,7 +79,8 @@ class MediawikiLinkHolderArray
     }
 
     /**
-     * Make a link placeholder. The text returned can be later resolved to a real link with replaceLinkHolders(). This
+     * Make a link placeholder.
+     * The text returned can be later resolved to a real link with replaceLinkHolders(). This
      * is done for two reasons: firstly to avoid further parsing of interwiki links, and secondly to allow all existence
      * checks and article length checks (for stub links) to be bundled into a single query.
      */
@@ -219,7 +221,8 @@ class MediawikiLinkHolderArray
 
         // $complex_wiki_page_id = Request :: get(\core\repository\display\action\Manager ::
         // PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        // $complex_wiki_page = RepositoryDataManager ::retrieve_complex_content_object_item($complex_wiki_page_id);
+        // $complex_wiki_page = RepositoryDataManager ::retrieve_by_id(ComplexContentObjectItem ::
+        // class_name(),$complex_wiki_page_id);
 
         $wiki = $this->parent->get_mediawiki_parser_context()->get_wiki();
         // $wiki = $complex_wiki_page->get_parent_object();

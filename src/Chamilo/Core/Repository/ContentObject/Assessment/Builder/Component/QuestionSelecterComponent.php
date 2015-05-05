@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: question_selecter.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -70,7 +71,10 @@ class QuestionSelecterComponent extends Manager
 
         foreach ($question_ids as $question_id)
         {
-            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($question_id);
+            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $question_id);
+
             $cloi = ComplexContentObjectItem :: factory($question->package());
             $cloi->set_ref($question_id);
             $cloi->set_parent($parent);

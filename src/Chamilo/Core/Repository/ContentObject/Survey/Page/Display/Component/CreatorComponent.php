@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Component that allows the user to add content to the page
@@ -24,7 +25,6 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function build()
     {
-
         if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -35,7 +35,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
-           
+
             $factory = new ApplicationFactory(
                 $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
@@ -43,7 +43,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                 $this);
             $component = $factory->getComponent();
             $component->set_excluded_objects($exclude);
-            
+
             return $component->run();
         }
         else
@@ -64,8 +64,10 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                     continue;
                 }
 
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
-                
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $object_id);
+
                 $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: factory(
                     $object->class_name());
                 $complex_content_object_item->set_ref($object->get_id());
@@ -74,7 +76,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                 $complex_content_object_item->set_display_order(
                     \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order($parent_id));
                 $complex_content_object_item->set_user_id($this->get_user_id());
-               
+
                 if (! $complex_content_object_item->create())
                 {
                     $failures ++;
@@ -91,9 +93,9 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                             Activity :: PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()->get_id(),
                             Activity :: PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
                                  ' > ' . $object->get_title()));
-                 }
+                }
             }
-                   
+
             if (count($object_ids) > 0 && ! $failures)
             {
                 $current_parents_content_object_ids = $this->get_current_node()->get_parents_content_object_ids(
@@ -192,5 +194,4 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     {
         return $this->get_root_content_object()->get_allowed_types();
     }
-   
 }

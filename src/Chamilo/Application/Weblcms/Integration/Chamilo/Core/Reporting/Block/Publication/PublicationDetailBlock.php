@@ -9,6 +9,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class PublicationDetailBlock extends ToolBlock
 {
@@ -28,7 +29,9 @@ class PublicationDetailBlock extends ToolBlock
 
         if (empty($content_object_publication))
         {
-            $content_object_publication = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($pid);
+            $content_object_publication = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $pid);
             $title = $content_object_publication->get_title();
             $id = $content_object_publication->get_id();
             $descr = $content_object_publication->get_description();

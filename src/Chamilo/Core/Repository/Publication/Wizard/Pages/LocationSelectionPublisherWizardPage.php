@@ -68,7 +68,9 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
         // Check whether the selected objects exist and perform the necessary rights checks
         foreach ($ids as $id)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($id);
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $id);
 
             // fail if no object exists
             if (! $content_object instanceof ContentObject)

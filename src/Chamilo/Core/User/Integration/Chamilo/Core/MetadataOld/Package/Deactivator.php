@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Package;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Package;
 
 class Deactivator extends \Chamilo\Configuration\Package\Action\Deactivator
 {

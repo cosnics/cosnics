@@ -10,6 +10,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: reverter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -41,7 +43,7 @@ class ReverterComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = $this->retrieve_content_object($object_id);
+                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
                 if (! ($object->get_owner_id() == $this->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
                     RepositoryRights :: COLLABORATE_RIGHT,
                     $object->get_id(),

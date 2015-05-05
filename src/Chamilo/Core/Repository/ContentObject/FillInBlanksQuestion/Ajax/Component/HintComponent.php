@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Ajax\Compon
 
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  *
@@ -21,7 +22,7 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\FillInBlanksQ
      * @var ComplexContentObjectItem
      */
     private $complex_content_object_item;
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -29,7 +30,7 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\FillInBlanksQ
     {
         return array(self :: PARAM_HINT_IDENTIFIER, self :: PARAM_HINT_TYPE);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -37,10 +38,11 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\FillInBlanksQ
     {
         $identifiers = explode('_', $this->getPostDataValue(self :: PARAM_HINT_IDENTIFIER));
         $type = $this->getPostDataValue(self :: PARAM_HINT_TYPE);
-        
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $identifiers[0]);
-        
+
         switch ($type)
         {
             case FillInBlanksQuestion :: HINT_CHARACTER :
@@ -50,7 +52,7 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\FillInBlanksQ
                 $answer = $complex_content_object_item->get_ref_object()->get_hint_for_question($type, $identifiers[1]);
                 break;
         }
-        
+
         $result = new JsonAjaxResult(200);
         $result->set_property('hint', $answer);
         $result->display();

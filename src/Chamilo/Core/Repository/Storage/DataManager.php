@@ -21,14 +21,12 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -68,172 +66,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     private static $registered_types;
 
     private static $user_has_categories;
-
-    public static function retrieve_content_object($id, $type = null)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new DataClassRetrieveParameters($condition);
-
-        if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-        {
-            throw new DataClassNoResultException(ContentObject :: class_name(), $parameters);
-        }
-
-        if (is_null($type))
-        {
-            $type = self :: determine_content_object_type($id);
-        }
-
-        return self :: fetch_content_object($parameters, $type);
-    }
-
-    public static function retrieve_complex_content_object_item($id, $type = null)
-    {
-        if (! isset($id) || strlen($id) == 0 || $id == DataClass :: NO_UID)
-        {
-            throw new DataClassNoResultException(
-                ContentObject :: class_name(),
-                DataClassRetrieveParameters :: generate((int) $id));
-        }
-
-        if (is_null($type))
-        {
-            $type = self :: determine_complex_content_object_item_type($id);
-        }
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-
-        return self :: fetch_complex_content_object_item($condition, $type);
-    }
-
-    private static function fetch_content_object($parameters, $type)
-    {
-        $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-            ContentObject :: get_active_status_types());
-
-        if ($parameters->get_condition() instanceof Condition)
-        {
-            $condition = new AndCondition($parameters->get_condition(), $condition);
-        }
-        else
-        {
-            $parameters->set_condition($condition);
-        }
-
-        if ($type :: is_extended())
-        {
-            $join = new Join(
-                ContentObject :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-            if ($parameters->get_joins() instanceof Joins)
-            {
-                $joins = $parameters->get_joins();
-                $joins->add($join);
-                $parameters->set_joins($joins);
-            }
-            else
-            {
-                $joins = new Joins(array($join));
-                $parameters->set_joins($joins);
-            }
-        }
-
-        return self :: retrieve($type, $parameters);
-    }
-
-    private static function fetch_complex_content_object_item($condition, $type)
-    {
-        if ($type :: is_extended())
-        {
-            $join = new Join(
-                ComplexContentObjectItem :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-            $joins = new Joins(array($join));
-        }
-        else
-        {
-            $joins = null;
-        }
-        $parameters = new DataClassRetrieveParameters($condition, array(), $joins);
-
-        return self :: retrieve($type, $parameters);
-    }
-
-    /**
-     * Get the type of the content object matching the given id.
-     *
-     * @param int $id The id of the content object.
-     * @return string The type string.
-     */
-    public static function determine_content_object_type($id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE))),
-            $condition);
-        $type = self :: record(ContentObject :: class_name(), $parameters);
-        if (isset($type[ContentObject :: PROPERTY_TYPE]))
-        {
-            return $type[ContentObject :: PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException($id);
-        }
-    }
-
-    /**
-     * Get the type of the complex content object item matching the given id.
-     *
-     * @param int $id The id of the content object.
-     * @return string The type string.
-     */
-    public static function determine_complex_content_object_item_type($id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ID),
-            new StaticConditionVariable($id));
-        $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_TYPE))),
-            $condition);
-        $type = self :: record(ComplexContentObjectItem :: class_name(), $parameters);
-
-        if (isset($type[ComplexContentObjectItem :: PROPERTY_TYPE]))
-        {
-            return $type[ComplexContentObjectItem :: PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException(ComplexContentObjectItem :: class_name(), $id);
-        }
-    }
-
-    public static function is_extended_type($type)
-    {
-        return $type :: is_extended();
-    }
 
     public static function count_content_objects($type, $parameters = null)
     {
@@ -286,7 +118,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
                     SORT_DESC,
                     self :: get_alias(ContentObject :: get_table_name()))));
-        return self :: fetch_content_object($parameters, $object :: class_name());
+        return self :: retrieve($object :: class_name(), $parameters);
     }
 
     public static function prepare_parameters($action, $type, $parameters = null)
@@ -1113,7 +945,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ComplexContentObjectItem :: class_name(),
                 ComplexContentObjectItem :: PROPERTY_PARENT),
             new StaticConditionVariable($clo->get_id()));
+
         $items = self :: retrieve_complex_content_object_items(ComplexContentObjectItem :: class_name(), $condition);
+
         while ($item = $items->next_result())
         {
             $nitem = new ComplexContentObjectItem();
@@ -1122,7 +956,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $nitem->set_parent($clo->get_id());
             $nitem->set_ref($item->get_ref());
             $nitem->create();
-            $lo = self :: retrieve_content_object($item->get_ref());
+
+            $lo = self :: retrieve_by_id(ContentObject :: class_name(), $item->get_ref());
+
             if ($lo instanceof ComplexContentObjectSupport)
             {
                 $lo->create_all();

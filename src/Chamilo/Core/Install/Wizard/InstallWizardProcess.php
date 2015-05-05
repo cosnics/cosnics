@@ -62,6 +62,8 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
 
         $wizardProcess = $this;
 
+        session_write_close();
+
         $response = new StreamedResponse();
         $response->setCallback(
             function () use($wizardProcess, $page) {

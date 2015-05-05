@@ -6,10 +6,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: wiki_item_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.wiki.component
  */
 /*
@@ -22,21 +23,23 @@ class VersionDeleterComponent extends Manager
     public function run()
     {
         $complex_wiki_page_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        
+
         if ($complex_wiki_page_id)
         {
             $object_id = Request :: get(self :: PARAM_WIKI_VERSION_ID);
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
-                $complex_wiki_page_id, 
-                ComplexContentObjectItem :: class_name());
+            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
+                $complex_wiki_page_id);
             $wiki_page = $complex_wiki_page->get_ref_object();
-            
+
             if ($object_id)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
-                
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $object_id);
+
                 $delete_allowed = \Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed(
-                    $object, 
+                    $object,
                     'version');
                 if ($delete_allowed)
                 {
@@ -44,24 +47,24 @@ class VersionDeleterComponent extends Manager
                     {
                         $this->redirect(
                             Translation :: get(
-                                'ObjectDeleted', 
-                                array('OBJECT' => Translation :: get('WikiPageVersion')), 
-                                Utilities :: COMMON_LIBRARIES), 
-                            false, 
+                                'ObjectDeleted',
+                                array('OBJECT' => Translation :: get('WikiPageVersion')),
+                                Utilities :: COMMON_LIBRARIES),
+                            false,
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_HISTORY, 
+                                self :: PARAM_ACTION => self :: ACTION_HISTORY,
                                 self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
                     }
                     else
                     {
                         $this->redirect(
                             Translation :: get(
-                                'ObjectNotDeleted', 
-                                array('OBJECT' => Translation :: get('WikiPageVersion')), 
-                                Utilities :: COMMON_LIBRARIES), 
-                            true, 
+                                'ObjectNotDeleted',
+                                array('OBJECT' => Translation :: get('WikiPageVersion')),
+                                Utilities :: COMMON_LIBRARIES),
+                            true,
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_HISTORY, 
+                                self :: PARAM_ACTION => self :: ACTION_HISTORY,
                                 self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
                     }
                 }
@@ -69,12 +72,12 @@ class VersionDeleterComponent extends Manager
                 {
                     $this->redirect(
                         Translation :: get(
-                            'ObjectNotDeleted', 
-                            array('OBJECT' => Translation :: get('WikiPageVersion')), 
-                            Utilities :: COMMON_LIBRARIES), 
-                        true, 
+                            'ObjectNotDeleted',
+                            array('OBJECT' => Translation :: get('WikiPageVersion')),
+                            Utilities :: COMMON_LIBRARIES),
+                        true,
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_HISTORY, 
+                            self :: PARAM_ACTION => self :: ACTION_HISTORY,
                             self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
                 }
             }
@@ -82,12 +85,12 @@ class VersionDeleterComponent extends Manager
             {
                 $this->redirect(
                     Translation :: get(
-                        'ObjectNotDeleted', 
-                        array('OBJECT' => Translation :: get('WikiPageVersion')), 
-                        Utilities :: COMMON_LIBRARIES), 
-                    true, 
+                        'ObjectNotDeleted',
+                        array('OBJECT' => Translation :: get('WikiPageVersion')),
+                        Utilities :: COMMON_LIBRARIES),
+                    true,
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_HISTORY, 
+                        self :: PARAM_ACTION => self :: ACTION_HISTORY,
                         self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id));
             }
         }

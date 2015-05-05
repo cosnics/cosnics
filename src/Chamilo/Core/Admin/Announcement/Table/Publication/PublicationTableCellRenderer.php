@@ -22,7 +22,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
     public function render_cell($column, $publication)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
 
         switch ($column->get_name())
@@ -69,7 +70,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                 if ($publication[Publication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' .
+                         Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;

@@ -23,14 +23,19 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
         if ($type == LinkTable :: TYPE_PARENTS)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($data_class->get_parent());
+            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $data_class->get_parent());
         }
         elseif ($type == LinkTable :: TYPE_CHILDREN)
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($data_class->get_ref());
+            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $data_class->get_ref());
             if (in_array($object->get_type(), DataManager :: get_active_helper_types()))
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $object->get_reference());
             }
         }
@@ -54,7 +59,8 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
                         Manager :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
-                return '<a href="' . $url . '">' . StringUtilities :: getInstance()->truncate($object->get_title(), 50) . '</a>';
+                return '<a href="' . $url . '">' . StringUtilities :: getInstance()->truncate($object->get_title(), 50) .
+                     '</a>';
             case ContentObject :: PROPERTY_TYPE :
                 return $object->get_icon_image();
         }

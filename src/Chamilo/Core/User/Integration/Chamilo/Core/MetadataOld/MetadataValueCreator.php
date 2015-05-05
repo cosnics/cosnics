@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Metadata;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld;
 
-use Chamilo\Core\Metadata\Value\Storage\DataClass\AttributeValue;
-use Chamilo\Core\Metadata\Value\Storage\DataClass\ElementValue;
-use Chamilo\Core\Metadata\Value\ValueCreator;
-use Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataAttributeValue;
-use Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataElementValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\AttributeValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\ElementValue;
+use Chamilo\Core\MetadataOld\Value\ValueCreator;
+use Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataAttributeValue;
+use Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataElementValue;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**

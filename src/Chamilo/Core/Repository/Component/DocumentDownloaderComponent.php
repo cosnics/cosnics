@@ -33,7 +33,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
                     Utilities :: COMMON_LIBRARIES));
         }
 
-        $object = DataManager :: retrieve_content_object($object_id);
+        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
         $valid_types = array(
             'core\repository\content_object\document\Document',
             'core\repository\content_object\file\File',

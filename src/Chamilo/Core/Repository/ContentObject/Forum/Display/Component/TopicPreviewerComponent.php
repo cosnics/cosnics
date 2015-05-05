@@ -81,9 +81,9 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $topic = $this->get_complex_content_object_item();
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-            $topic->get_ref(),
-            ForumTopic :: class_name());
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ForumTopic :: class_name(),
+            $topic->get_ref());
         $this->topic = $content_object;
         $this->is_locked = $content_object->is_locked();
 

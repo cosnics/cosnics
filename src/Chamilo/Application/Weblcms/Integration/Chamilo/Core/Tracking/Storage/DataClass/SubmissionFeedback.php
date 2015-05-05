@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+
 class SubmissionFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
     const CLASS_NAME = __CLASS__;
@@ -23,10 +25,10 @@ class SubmissionFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Simple
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_SUBMISSION_ID, 
-                self :: PROPERTY_CREATED, 
-                self :: PROPERTY_MODIFIED, 
-                self :: PROPERTY_USER_ID, 
+                self :: PROPERTY_SUBMISSION_ID,
+                self :: PROPERTY_CREATED,
+                self :: PROPERTY_MODIFIED,
+                self :: PROPERTY_USER_ID,
                 self :: PROPERTY_CONTENT_OBJECT_ID));
     }
 
@@ -84,7 +86,8 @@ class SubmissionFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Simple
     {
         try
         {
-            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_content_object_id());
         }
         catch (\Exception $ex)

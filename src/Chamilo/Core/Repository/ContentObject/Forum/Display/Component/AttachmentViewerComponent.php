@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Attachment Viewer used for the Forum Posts.
@@ -59,7 +60,9 @@ class AttachmentViewerComponent extends Manager
         /*
          * Render the attachment
          */
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($attachment_id);
+        $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $attachment_id);
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add(
             new Breadcrumb(

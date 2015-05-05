@@ -311,9 +311,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $first = $counter == 0 ? true : false;
                     $last = $counter == ($size - 1) ? true : false;
 
-                    $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                        $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                        Forum :: class_name());
+                    $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        Forum :: class_name(),
+                        $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                     if ($forum->get_locked() && ! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
                     {
@@ -562,9 +562,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
                     ToolbarItem :: DISPLAY_ICON));
 
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                Forum :: class_name());
+            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Forum :: class_name(),
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             if ($forum->get_locked())
             {
@@ -592,9 +592,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                Forum :: class_name());
+            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Forum :: class_name(),
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
         }
 
         if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT))

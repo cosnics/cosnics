@@ -19,10 +19,11 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This component allows the download of submissions.
- * 
+ *
  * @author Bert De Clercq (Hogeschool Gent)
  * @author Anthony Hurst (Hogeschool Gent)
  */
@@ -34,12 +35,12 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
     public function run()
     {
         $this->define_class_variables();
-        
+
         if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
         {
             throw new NotAllowedException();
         }
-        
+
         $target_ids = Request :: get(self :: PARAM_TARGET_ID);
         $table_name = Request :: post('table_name');
         if ($table_name)
@@ -76,54 +77,56 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
 
     /**
      * Directly downloads a single submission with the given submission id.
-     * 
+     *
      * @param $submission_id int
      */
     private function download_submission($submission_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID),
             new StaticConditionVariable($submission_id));
-        
+
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME, 
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $submission_tracker = $submission_trackers[0];
-        
+
         $submission_tracker->get_content_object()->send_as_download();
     }
 
     /**
      * Directly downloads an attachment with the given attachment id.
-     * 
+     *
      * @param $attachment_id int
      */
     private function download_attachment($attachment_id)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($attachment_id);
-        
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $attachment_id);
+
         $content_object->send_as_download();
     }
 
     /**
      * Downloads the submissions with the given ids as a zip file.
-     * 
+     *
      * @param $submission_ids array
      */
     private function download_submissions_by_ids($submission_ids)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID),
             $submission_ids);
-        
+
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME, 
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $this->download_zipped_submissions($submission_trackers);
     }
@@ -132,7 +135,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
      * Downloads all the zippable submissions from the users with the given target ids.
      * When submitter type is used,
      * only give one target id and it will download only the submissions from that specific user.
-     * 
+     *
      * @param $target_ids mixed
      * @param $submitter_type int
      */
@@ -149,25 +152,25 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
             {
                 case SubmittersBrowserComponent :: TYPE_COURSE_GROUP :
                     $this->download_submissions_for_submitters(
-                        $target_ids, 
+                        $target_ids,
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP);
                     break;
                 case SubmittersBrowserComponent :: TYPE_GROUP :
                     $this->download_submissions_for_submitters(
-                        $target_ids, 
+                        $target_ids,
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP);
                     break;
                 default :
                     if ($this->publication->get_content_object()->get_allow_group_submissions())
                     {
                         $this->download_submissions_for_submitters(
-                            $target_ids, 
+                            $target_ids,
                             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP);
                     }
                     else
                     {
                         $this->download_submissions_for_submitters(
-                            $target_ids, 
+                            $target_ids,
                             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER);
                     }
                     break;
@@ -178,7 +181,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
     /**
      * Downloads all the zippable submissions that belong the the submitters with the given submitters ids, and are of
      * the given submitter type.
-     * 
+     *
      * @param $submitter_ids array
      * @param $submitter_type int
      */
@@ -187,43 +190,43 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID),
             $submitter_ids);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE),
             new StaticConditionVariable($submitter_type));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(), 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_publication_id()));
         $condition = new AndCondition($conditions);
-        
+
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME, 
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $this->download_zipped_submissions($submission_trackers);
     }
 
     /**
      * Downloads all zippable submissions from a publication as a zip file.
-     * 
+     *
      * @param $publication_id int
      */
     private function download_submissions_by_publication($publication_id)
     {
         $submission_trackers = $this->get_submission_trackers_by_publication($publication_id);
-        
+
         $this->download_zipped_submissions($submission_trackers);
     }
 
     /**
      * Checks whether the submissions are zippable and then downloads them as a zip file.
-     * 
+     *
      * @param $submission_trackers array
      */
     private function download_zipped_submissions($submission_trackers)
@@ -236,36 +239,36 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
                 $content_object_ids[] = $submission_tracker->get_content_object_id();
             }
         }
-        
+
         if (count($content_object_ids) == 0)
         {
             if ($this->get_target_id())
             {
-                
+
                 $this->redirect(
-                    Translation :: get('DownloadNotPossible'), 
-                    true, 
+                    Translation :: get('DownloadNotPossible'),
+                    true,
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMISSIONS, 
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->publication->get_id(), 
-                        self :: PARAM_TARGET_ID => $this->get_target_id(), 
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMISSIONS,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->publication->get_id(),
+                        self :: PARAM_TARGET_ID => $this->get_target_id(),
                         self :: PARAM_SUBMITTER_TYPE => $this->get_submitter_type()));
             }
             else
             {
                 $this->redirect(
-                    Translation :: get('DownloadNotPossible'), 
-                    true, 
+                    Translation :: get('DownloadNotPossible'),
+                    true,
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMITTERS, 
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMITTERS,
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->publication->get_id()));
             }
         }
         $parameters = new ExportParameters(
-            $this->get_user_id(), 
-            ContentObjectExport :: FORMAT_ZIP, 
-            $content_object_ids, 
-            array(), 
+            $this->get_user_id(),
+            ContentObjectExport :: FORMAT_ZIP,
+            $content_object_ids,
+            array(),
             ZipContentObjectExport :: TYPE_FLAT);
         $exporter = ContentObjectExportController :: factory($parameters);
         $exporter->download();
@@ -275,7 +278,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
      * Returns true if the given content object is zippable, and false otherwise.
      * Only content objects of the type
      * document are considered zippable for the moment.
-     * 
+     *
      * @param $content_object ContentObject
      * @return boolean True if the content object is zippable
      */
@@ -285,7 +288,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
         {
             return true;
         }
-        
+
         return false;
     }
 
@@ -295,7 +298,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
     public function define_class_variables()
     {
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             $this->get_publication_id());
     }
 }
