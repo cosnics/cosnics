@@ -141,7 +141,8 @@ class ImporterComponent extends Manager implements DelegateComponent
                 }
 
             /**
-             * TODO: Do something with the result here 1. If the import produces no errors AND only 1 object was
+             * TODO: Do something with the result here 1.
+             * If the import produces no errors AND only 1 object was
              * returned: select it 2. If the import produces no errors AND results in multiple objects: show selection
              * table ALWAYS filter on allowed types (since CPO can result in multiple objects of multiple types)
              */
@@ -203,7 +204,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         foreach ($this->get_types() as $type)
         {
             $object_import_types = ContentObjectImportImplementation :: get_types_for_object(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type));
+                ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3));
 
             foreach ($object_import_types as $object_import_type)
             {
