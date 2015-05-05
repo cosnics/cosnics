@@ -24,26 +24,26 @@ class ComplexForumTopicForm extends ComplexContentObjectItemForm
     public function get_elements()
     {
         $elements = array();
-        
+
         $elements[] = $this->createElement(
-            'radio', 
-            ComplexForumTopic :: PROPERTY_FORUM_TYPE, 
-            Translation :: get('Nothing', null, Utilities :: COMMON_LIBRARIES), 
-            '', 
+            'radio',
+            ComplexForumTopic :: PROPERTY_FORUM_TYPE,
+            Translation :: get('Nothing', null, Utilities :: COMMON_LIBRARIES),
+            '',
             0);
         $elements[] = $this->createElement(
-            'radio', 
-            ComplexForumTopic :: PROPERTY_FORUM_TYPE, 
-            Translation :: get('Sticky', null, 'core\repository\content_object\forum'), 
-            '', 
+            'radio',
+            ComplexForumTopic :: PROPERTY_FORUM_TYPE,
+            Translation :: get('Sticky', null, 'Chamilo\Core\Repository\ContentObject\Forum'),
+            '',
             1);
         $elements[] = $this->createElement(
-            'radio', 
-            ComplexForumTopic :: PROPERTY_FORUM_TYPE, 
-            Translation :: get('Important', null, 'core\repository\content_object\forum'), 
-            '', 
+            'radio',
+            ComplexForumTopic :: PROPERTY_FORUM_TYPE,
+            Translation :: get('Important', null, 'Chamilo\Core\Repository\ContentObject\Forum'),
+            '',
             2);
-        
+
         return $elements;
     }
 
@@ -54,12 +54,12 @@ class ComplexForumTopicForm extends ComplexContentObjectItemForm
     public function get_default_values($defaults = array ())
     {
         $cloi = $this->get_complex_content_object_item();
-        
+
         if (isset($cloi))
         {
             $defaults[ComplexForumTopic :: PROPERTY_FORUM_TYPE] = $cloi->get_forum_type() ? $cloi->get_forum_type() : 0;
         }
-        
+
         return $defaults;
     }
 

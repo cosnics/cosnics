@@ -442,7 +442,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         }
                         else
                         {
-                            $text[] = Translation :: get('PlatformLanguage', null, 'core\admin');
+                            $text[] = Translation :: get('PlatformLanguage', null, 'Chamilo\Core\Admin');
                         }
                     }
 

@@ -51,7 +51,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
                     Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
                     \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER));
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName', null, 'core\admin')));
+                new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName', null, 'Chamilo\Core\Admin')));
 
             $redirect = new Redirect(
                 array(

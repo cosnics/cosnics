@@ -247,7 +247,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 '_blank');
         }
 
-        if ($content_object->get_type() == 'core\repository\content_object\file\File')
+        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES),

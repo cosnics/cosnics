@@ -50,8 +50,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Blog
         }
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->publication->get_content_object()->get_type()) . '\display';
+        $context = $this->publication->get_content_object()->package() . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

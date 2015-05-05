@@ -89,10 +89,10 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
                                      AssessmentAttempt :: STATUS_COMPLETED ? Translation :: get(
                                         'Completed',
                                         null,
-                                        'application\weblcms\integration\core\tracking') : Translation :: get(
+                                        'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking') : Translation :: get(
                                         'NotCompleted',
                                         null,
-                                        'application\weblcms\integration\core\tracking');
+                                        'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking');
                         }
                     }
             }

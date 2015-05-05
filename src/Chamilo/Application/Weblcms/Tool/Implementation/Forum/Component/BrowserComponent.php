@@ -391,7 +391,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         {
                             $content = DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) .
                                  '<br />' . $name . ' <a href="' . $link . '"><img title="' .
-                                 Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
+                                 Translation :: get('ViewLastPost', null, 'Chamilo\Core\Repository\ContentObject\Forum') .
                                  '" src="' . Theme :: getInstance()->getImagePath(
                                     'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
                                     'Forum/IconTopicLatest') . '" /></a>';
@@ -417,8 +417,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                                     $last_post->get_creation_date());
 
                                 $content .= '<br />' . $name . ' <a href="' . $link . '"><img title="' .
-                                     Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
-                                     '" src="' . Theme :: getInstance()->getImagePath(
+                                     Translation :: get(
+                                        'ViewLastPost',
+                                        null,
+                                        'Chamilo\Core\Repository\ContentObject\Forum') . '" src="' . Theme :: getInstance()->getImagePath(
                                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
                                         'Forum/IconTopicLatest.gif') . '" /></a>';
 
@@ -657,7 +659,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
             // added tool dependent publish button
-            $tool_dependent_publish = PlatformSetting :: get('tool_dependent_publish_button', 'application\weblcms');
+            $tool_dependent_publish = PlatformSetting :: get('tool_dependent_publish_button', \Chamilo\Application\Weblcms\Manager :: context());
 
             if ($tool_dependent_publish == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_INDEPENDENT)
             {

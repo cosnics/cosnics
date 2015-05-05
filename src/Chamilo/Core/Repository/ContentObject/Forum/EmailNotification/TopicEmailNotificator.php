@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * the email notificator of a post extends abstract email notificator
- * 
+ *
  * @author Mattias De Pauw
  */
 class TopicEmailNotificator extends EmailNotificator
@@ -26,7 +26,7 @@ class TopicEmailNotificator extends EmailNotificator
 
     /**
      * sets the forum
-     * 
+     *
      * @param Forum $forum
      */
     public function set_forum($forum)
@@ -36,7 +36,7 @@ class TopicEmailNotificator extends EmailNotificator
 
     /**
      * if the topic is edited then is_topic_edited op true
-     * 
+     *
      * @param Boolean $edited
      */
     public function set_is_topic_edited($edited)
@@ -46,7 +46,7 @@ class TopicEmailNotificator extends EmailNotificator
 
     /**
      * if the topic is edited then sets the previous title
-     * 
+     *
      * @param String $title
      */
     public function set_previous_title($title)
@@ -63,8 +63,8 @@ class TopicEmailNotificator extends EmailNotificator
         $message = "";
         foreach ($this->users as $user)
         {
-            $site_name = PlatformSetting :: get('site_name', 'core\admin');
-            
+            $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
+
             if ($this->is_topic_edited)
             {
                 $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->previous_title;
@@ -80,15 +80,15 @@ class TopicEmailNotificator extends EmailNotificator
             $message = str_replace('[/quote]', '</div>', $message);
             $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
                  $this->action_user->get_lastname();
-            
-            $admin_email = PlatformSetting :: get('administrator_email', 'core\admin');
-            $admin_name = PlatformSetting :: get('admin_surname', 'core\admin') . ' ' .
-                 PlatformSetting :: get('admin_firstname', 'core\admin');
-            
+
+            $admin_email = PlatformSetting :: get('administrator_email', 'Chamilo\Core\Admin');
+            $admin_name = PlatformSetting :: get('admin_surname', 'Chamilo\Core\Admin') . ' ' .
+                 PlatformSetting :: get('admin_firstname', 'Chamilo\Core\Admin');
+
             $mail = Mail :: factory(
-                $subject, 
-                $message, 
-                $user->get_email(), 
+                $subject,
+                $message,
+                $user->get_email(),
                 array(Mail :: NAME => $admin_name, Mail :: EMAIL => $admin_email));
             $mail->send();
         }

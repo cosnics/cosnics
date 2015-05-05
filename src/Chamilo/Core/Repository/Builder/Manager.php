@@ -208,7 +208,8 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_complex_content_object_table_html()
     {
         $name_space = $this->get_root_content_object()->context();
-        $class = $name_space . '\\builder\\ComplexTable';
+
+        $class = $name_space . '\Builder\Component\Browser\ComplexTable';
 
         if (class_exists($class))
         {

@@ -58,14 +58,13 @@ class BrowserComponent extends Manager implements TableSupport
         $this->action_bar = $this->get_action_bar();
 
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->action_bar->as_html();
         $html[] = $this->get_tabs_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
-       
     }
 
     function get_tabs_html()
@@ -93,7 +92,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $table->as_html()));
         }
 
-        $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'application\survey');
+        $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'Chamilo\Application\Survey');
 
         if ($cron_enabled)
         {

@@ -97,7 +97,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
+                Translation :: get('ManageControlledVocabulary', null, 'Chamilo\Core\MetadataOld'),
                 Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Element', 'Action/ControlledVocabulary'),
                 $this->get_component()->get_url(
                     array(

@@ -201,8 +201,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
             self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID,
             Request :: get(self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID));
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->assessment->get_type()) .
-             '\display';
+        $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->assessment->get_type(), 3) . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

@@ -142,6 +142,6 @@ class ForumPostEditorComponent extends ForumPostFormAction
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)),
-                Translation :: get('EditPost', null, 'core\repository\content_object\forum_topic')));
+                Translation :: get('EditPost', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')));
     }
 }

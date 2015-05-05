@@ -432,7 +432,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_FORUM_POST;
         $action_bar->add_common_action(
             new ToolbarItem(
-                Translation :: get('ReplyOnTopic', null, 'core\repository\content_object\forum_topic'),
+                Translation :: get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
                 Theme :: getInstance()->getCommonImagePath('Action/Reply'),
                 $this->get_url($parameters),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));

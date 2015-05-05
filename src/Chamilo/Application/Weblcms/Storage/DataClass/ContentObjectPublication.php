@@ -57,7 +57,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_EMAIL_SENT = 'email_sent';
     const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
     const TYPE_FILE = 'file';
- // added tos upport mailing within content object
+    // added tos upport mailing within content object
     private $target_course_groups;
 
     private $target_users;
@@ -622,7 +622,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
-             Translation :: get('TypeName', null, 'application\\weblcms\\tool\\' . $tool);
+             Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\\' . $tool);
 
         // get targets
         $target_email = array();

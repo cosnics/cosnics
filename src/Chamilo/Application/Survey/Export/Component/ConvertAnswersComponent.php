@@ -38,7 +38,7 @@ class ConvertAnswersComponent extends Manager
             foreach ($ids as $id)
             {
 
-                $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'application\survey');
+                $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'Chamilo\Application\Survey');
 
                 $publication_id = $id;
 

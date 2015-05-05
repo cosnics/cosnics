@@ -53,7 +53,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
         // launch
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->get_root_content_object()->get_type()) . '\display';
+            $this->get_root_content_object()->package()) . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

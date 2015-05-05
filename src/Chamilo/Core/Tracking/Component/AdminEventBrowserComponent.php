@@ -44,7 +44,7 @@ class AdminEventBrowserComponent extends Manager implements TableSupport
         $html[] = $this->render_header();
         $html[] = $this->action_bar->as_html();
 
-        $isactive = (PlatformSetting :: get('enable_tracking', 'core\tracking') == 1);
+        $isactive = (PlatformSetting :: get('enable_tracking', 'Chamilo\Core\Tracking') == 1);
 
         if ($isactive)
         {
