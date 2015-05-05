@@ -360,7 +360,7 @@ class BrowserComponent extends Manager
                                 'TYPE' => Translation :: get(
                                     'TypeNameSingle',
                                     null,
-                                    'Chamilo\Application\Weblcms\Tool\\' . $tool)),
+                                    'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool)),
                             Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                         $this->get_url(

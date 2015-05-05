@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Blog\Manager;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;

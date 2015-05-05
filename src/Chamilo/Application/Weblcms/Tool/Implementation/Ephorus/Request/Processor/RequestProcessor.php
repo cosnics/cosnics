@@ -79,7 +79,7 @@ class RequestProcessor
     {
         $index_document_service_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'index_document_service_wsdl',
-            'Chamilo\Application\Weblcms\Tool\Ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if (! $index_document_service_wsdl)
         {
@@ -98,7 +98,7 @@ class RequestProcessor
 
         $show_debug = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'debugging_enabled',
-            'Chamilo\Application\Weblcms\Tool\Ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if ($show_debug)
         {
@@ -177,7 +177,7 @@ class RequestProcessor
     {
         $hand_in_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'handin_service_wsdl',
-            'Chamilo\Application\Weblcms\Tool\Ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if (! $hand_in_wsdl)
         {
@@ -192,7 +192,7 @@ class RequestProcessor
 
         $show_debug = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'debugging_enabled',
-            'Chamilo\Application\Weblcms\Tool\Ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if ($show_debug)
         {
@@ -269,7 +269,7 @@ class RequestProcessor
 
         $hand_in_code = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'hand_in_code',
-            'Chamilo\Application\Weblcms\Tool\Ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
         if (! $hand_in_code)
         {
             /**

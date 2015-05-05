@@ -746,11 +746,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $location = $course->get_title() . ' (' . $course->get_visual_code() . ') > ' . Translation :: get(
             'TypeName',
             null,
-            'Chamilo\Application\Weblcms\Tool\\' . $record[ContentObjectPublication :: PROPERTY_TOOL]);
+            'Chamilo\Application\Weblcms\Tool\Implementation\\' . $record[ContentObjectPublication :: PROPERTY_TOOL]);
 
         $attributes->set_location($location);
 
-        $url = 'index.php?application=weblcms&amp;go=' . Manager :: ACTION_VIEW_COURSE . '&course=' .
+        $url = 'index.php?application=Chamilo\Application\Weblcms&amp;go=' . Manager :: ACTION_VIEW_COURSE . '&course=' .
              $record[ContentObjectPublication :: PROPERTY_COURSE_ID] . '&amp;tool=' .
              $record[ContentObjectPublication :: PROPERTY_TOOL] . '&amp;tool_action=' .
              \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW . '&amp;' .

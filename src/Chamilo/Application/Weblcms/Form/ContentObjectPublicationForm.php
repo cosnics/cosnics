@@ -827,7 +827,7 @@ class ContentObjectPublicationForm extends FormValidator
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
-             ' - ' . Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\\' . $tool);
+             ' - ' . Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
         $target_email = array();
