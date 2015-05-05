@@ -124,7 +124,8 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $complex_content_object_item_id);
 
         if (is_null($complex_content_object_item))

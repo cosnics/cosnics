@@ -30,7 +30,8 @@ class ViewerComponent extends Manager
 
         if ($id)
         {
-            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 $id);
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),

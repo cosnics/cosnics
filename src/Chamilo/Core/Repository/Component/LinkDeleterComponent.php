@@ -102,7 +102,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $item = DataManager :: retrieve_complex_content_object_item($link_id);
+            $item = DataManager :: retrieve_by_id(ComplexContentObjectItem :: class_name(), $link_id);
             $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $item->get_ref());
 
             if (! $item->delete())

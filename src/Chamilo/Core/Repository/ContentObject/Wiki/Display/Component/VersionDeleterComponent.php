@@ -27,9 +27,9 @@ class VersionDeleterComponent extends Manager
         if ($complex_wiki_page_id)
         {
             $object_id = Request :: get(self :: PARAM_WIKI_VERSION_ID);
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
-                $complex_wiki_page_id,
-                ComplexContentObjectItem :: class_name());
+            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
+                $complex_wiki_page_id);
             $wiki_page = $complex_wiki_page->get_ref_object();
 
             if ($object_id)

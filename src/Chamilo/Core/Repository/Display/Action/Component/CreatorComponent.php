@@ -55,7 +55,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
                 if ($complex_content_object_item_id)
                 {
-                    $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+                    $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        ComplexContentObjectItem :: class_name(),
                         $complex_content_object_item_id);
                     $cloi->set_parent($complex_content_object_item->get_ref());
                 }

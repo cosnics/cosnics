@@ -34,7 +34,8 @@ class MoverComponent extends Manager
 
         if (isset($id))
         {
-            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 $id);
             $parent = $complex_content_object_item->get_parent();
             $max = \Chamilo\Core\Repository\Storage\DataManager :: count_complex_content_object_items(
