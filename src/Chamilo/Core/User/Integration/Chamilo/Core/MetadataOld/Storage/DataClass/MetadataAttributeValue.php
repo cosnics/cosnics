@@ -1,17 +1,17 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Value\Storage\DataClass\AttributeValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\AttributeValue;
 
 /**
- * Class to store the attribute values for the given group
+ * Class to store the attribute values for the given user
  * 
- * @package group\integration\core\metadata
+ * @package user\integration\core\metadata
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MetadataAttributeValue extends AttributeValue
 {
-    const PROPERTY_GROUP_ID = 'group_id';
+    const PROPERTY_USER_ID = 'user_id';
 
     /**
      * ***************************************************************************************************************
@@ -28,7 +28,7 @@ class MetadataAttributeValue extends AttributeValue
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_GROUP_ID;
+        $extended_property_names[] = self :: PROPERTY_USER_ID;
         
         return parent :: get_default_property_names($extended_property_names);
     }
@@ -40,22 +40,22 @@ class MetadataAttributeValue extends AttributeValue
      */
     
     /**
-     * Returns the group_id
+     * Returns the user_id
      * 
      * @return int
      */
-    public function get_group_id()
+    public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        return $this->get_default_property(self :: PROPERTY_USER_ID);
     }
 
     /**
-     * Sets the group_id
+     * Sets the user_id
      * 
-     * @param int $group_id
+     * @param int $user_id
      */
-    public function set_group_id($group_id)
+    public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_GROUP_ID, $group_id);
+        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
     }
 }

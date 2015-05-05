@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataClass;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Value\Storage\DataClass\ElementValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\ElementValue;
 
 /**
  * Class to store the element values for the given user

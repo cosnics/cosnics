@@ -6,6 +6,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class WikiPageUsersContributionsBlock extends ToolBlock
 {
