@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Package;
+namespace Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Package;
 
 use Chamilo\Core\Group\Storage\DataManager;
 

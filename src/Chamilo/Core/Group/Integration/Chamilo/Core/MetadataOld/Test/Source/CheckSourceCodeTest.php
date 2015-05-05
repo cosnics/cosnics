@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Test\Source;
+namespace Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Test\Source;
 
 use Chamilo\Libraries\Architecture\Test\TestApplication;
 

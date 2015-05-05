@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class DeleterComponent extends Manager
 {

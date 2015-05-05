@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Package;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Package;
 
 /**
  * Installer for this package

@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class DeleterComponent extends Manager
 {

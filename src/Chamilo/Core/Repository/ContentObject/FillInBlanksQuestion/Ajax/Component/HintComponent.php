@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Ajax\Compon
 
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  *

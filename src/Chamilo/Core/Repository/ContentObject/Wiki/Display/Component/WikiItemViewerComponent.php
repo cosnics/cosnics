@@ -14,6 +14,7 @@ use MediawikiParserContext;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * $Id: wiki_item_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $

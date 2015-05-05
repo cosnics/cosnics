@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass;
+namespace Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataClass;
 
-use Chamilo\Core\Metadata\Value\Storage\DataClass\ElementValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\ElementValue;
 
 /**
  * Class to store the element values for the given group
