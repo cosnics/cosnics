@@ -11,6 +11,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: complex_builder.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -50,7 +52,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
         $content_object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         try
         {
-            $this->content_object = $this->retrieve_content_object($content_object_id);
+            $this->content_object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $content_object_id);
 
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb(

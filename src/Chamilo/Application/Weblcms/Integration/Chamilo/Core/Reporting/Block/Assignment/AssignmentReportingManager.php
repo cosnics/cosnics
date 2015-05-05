@@ -17,6 +17,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This manager creates a new level between the reporting responsible for the Assignment Tool and the Weblcms reporting
@@ -359,7 +360,8 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function generate_submission_title_link($submission_tracker)
     {
-        $submission_title = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $submission_title = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $submission_tracker->get_content_object_id())->get_title();
 
         $params = array();

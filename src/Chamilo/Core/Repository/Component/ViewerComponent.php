@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
             $this->tabs = new DynamicTabsRenderer($renderer_name);
 
-            $object = DataManager :: retrieve_content_object($id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
 
             if (! $object)
             {
@@ -572,8 +572,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
     public function get_export_types()
     {
-        $types = ContentObjectExportImplementation :: get_types_for_object(
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object));
+        $types = ContentObjectExportImplementation :: get_types_for_object($this->object->package());
 
         $html = array();
         foreach ($types as $type)

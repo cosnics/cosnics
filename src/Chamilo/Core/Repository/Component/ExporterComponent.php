@@ -101,14 +101,12 @@ class ExporterComponent extends Manager
                     }
                     else
                     {
-                        $table_row[] = Theme :: getInstance()->getImage(
+                        $table_row[] = Theme :: getInstance()->getCommonImage(
                             'Action/ExportNa',
                             'png',
                             Translation :: get('ExportNotAvailable'),
                             null,
-                            ToolbarItem :: DISPLAY_ICON,
-                            false,
-                            Utilities :: COMMON_LIBRARIES);
+                            ToolbarItem :: DISPLAY_ICON);
                     }
                 }
                 $table_data[] = $table_row;
@@ -169,9 +167,11 @@ class ExporterComponent extends Manager
         $this->is_exportable = array();
 
         $table_data = array();
+
         foreach ($types as $type)
         {
-            $type_namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type);
+            $type_namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
+
             $table_row = array();
             $table_row[] = Theme :: getInstance()->getImage(
                 'Logo/16',
@@ -203,7 +203,7 @@ class ExporterComponent extends Manager
                 {
                     $this->set_export_types_cache($export_type, $ids);
                     $this->is_exportable[$export_type] = true;
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/Confirm_mini') .
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/ConfirmMini') .
                          '"/>';
                 }
                 else
@@ -211,8 +211,10 @@ class ExporterComponent extends Manager
                     $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/ErrorMini') . '"/>';
                 }
             }
+
             $table_data[] = $table_row;
         }
+
         return $table_data;
     }
 

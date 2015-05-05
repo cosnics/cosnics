@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class ToolPublicationsBlock extends ToolBlock
 {
@@ -84,7 +85,8 @@ class ToolPublicationsBlock extends ToolBlock
             $redirect = new Redirect($params);
             $url = $redirect->getUrl();
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $content_object_publication->get_content_object_id());
 
             $des = $content_object->get_description();

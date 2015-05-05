@@ -35,9 +35,9 @@ class Session
             session_name($session_key);
             session_start();
         }
-        else {
+        else
+        {
             session_start();
-            session_write_close();
         }
     }
 

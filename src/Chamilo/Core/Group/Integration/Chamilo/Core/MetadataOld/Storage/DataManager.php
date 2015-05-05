@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage;
+namespace Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataAttributeValue;
-use Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataElementValue;
+use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataAttributeValue;
+use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataElementValue;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;

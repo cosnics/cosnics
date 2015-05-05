@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationF
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -26,7 +27,8 @@ class ConfigurerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $selected_complex_content_object_item = $this->get_application()->get_current_node()->get_complex_content_object_item();
-        $this->learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $this->learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $selected_complex_content_object_item->get_ref());
 
         $form = new ConfigurationForm($this->learning_path_item->get_configuration(), $this->get_url());

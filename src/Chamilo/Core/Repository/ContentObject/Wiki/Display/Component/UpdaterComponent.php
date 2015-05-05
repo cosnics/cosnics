@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class UpdaterComponent extends Manager implements DelegateComponent
 {
@@ -25,7 +26,8 @@ class UpdaterComponent extends Manager implements DelegateComponent
     public function render_header()
     {
         $complex_wiki_page_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $complex_wiki_page_id);
         $wiki_page = $complex_wiki_page->get_ref_object();
 

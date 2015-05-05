@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Default repository manager component which allows the user to delete a user entity share
@@ -42,7 +43,9 @@ class SharedContentObjectsDeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($id);
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $id);
                 // retrieve location_id
                 $location_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
                     RepositoryRights :: TYPE_USER_CONTENT_OBJECT,

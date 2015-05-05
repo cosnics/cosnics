@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -26,7 +27,8 @@ class UpdaterComponent extends Manager
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
         {
             $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $selected_complex_content_object_item->get_ref());
             $form = \Chamilo\Core\Repository\Form\ContentObjectForm :: factory(
                 \Chamilo\Core\Repository\Form\ContentObjectForm :: TYPE_EDIT,

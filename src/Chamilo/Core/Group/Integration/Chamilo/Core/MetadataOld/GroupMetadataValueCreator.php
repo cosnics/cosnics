@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Core\Group\Integration\Chamilo\Core\Metadata;
+namespace Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataAttributeValue;
-use Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataClass\MetadataElementValue;
+use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataAttributeValue;
+use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataClass\MetadataElementValue;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Metadata\Value\Storage\DataClass\AttributeValue;
-use Chamilo\Core\Metadata\Value\Storage\DataClass\ElementValue;
-use Chamilo\Core\Metadata\Value\ValueCreator;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\AttributeValue;
+use Chamilo\Core\MetadataOld\Value\Storage\DataClass\ElementValue;
+use Chamilo\Core\MetadataOld\Value\ValueCreator;
 
 /**
  * Implementation of the ValueCreator interface to store metadata values for groups

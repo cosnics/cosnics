@@ -31,7 +31,7 @@ class MoverComponent extends Manager
 
         if (isset($direction) && isset($item))
         {
-            $move_item = DataManager :: retrieve_item((int) $item);
+            $move_item = DataManager :: retrieve_by_id(Item :: class_name(), (int) $item);
 
             $max = DataManager :: count(
                 Item :: class_name(),

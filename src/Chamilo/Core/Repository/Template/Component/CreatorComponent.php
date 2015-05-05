@@ -34,7 +34,8 @@ class CreatorComponent extends Manager
 
         foreach ($selected_content_object_ids as $selected_content_object_id)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $selected_content_object_id);
             $source_user_id = $content_object->get_owner_id();
 

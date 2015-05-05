@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * $Id: mover.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -34,7 +35,8 @@ class MoverComponent extends Manager
 
         if (isset($id))
         {
-            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 $id);
             $parent = $complex_content_object_item->get_parent();
             $max = \Chamilo\Core\Repository\Storage\DataManager :: count_complex_content_object_items(

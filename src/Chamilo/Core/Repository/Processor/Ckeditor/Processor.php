@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class Processor extends HtmlEditorProcessor
 {
@@ -12,7 +13,9 @@ class Processor extends HtmlEditorProcessor
     public function run()
     {
         $selected_object = $this->get_selected_content_objects();
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($selected_object);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $selected_object);
 
         $editor = Request :: get('CKEditor');
 

@@ -152,7 +152,6 @@ abstract class Manager extends Application
     // Tabs
     const TABS_FILTER = 'advanced_filter';
     const TABS_CONTENT_OBJECT = 'content_object';
-
     const TAB_CATEGORY = 'Category';
     const TAB_OBJECT_TYPE = 'ObjectType';
     const TAB_SEARCH = 'Search';
@@ -160,9 +159,8 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
-
-
     const SECTION_IMPLEMENTATION = 'Implementation';
+
     /**
      * Property of this repository manager.
      */
@@ -411,18 +409,6 @@ abstract class Manager extends Application
          * $dm->retrieve_root_category($this->get_user_id()); return $cat->get_id(); }
          */
         return 0;
-    }
-
-    /**
-     * Retrieves a object.
-     *
-     * @param $id int The id of the object.
-     * @param $type string The type of the object. Default is null. If you know the type of the requested object, you
-     *        should give it as a parameter as this will make object retrieval faster.
-     */
-    public function retrieve_content_object($id, $type = null)
-    {
-        return DataManager :: retrieve_content_object($id, $type);
     }
 
     public function retrieve_content_object_versions_resultset($condition = null, $order_by = array (), $offset = 0,
@@ -871,7 +857,10 @@ abstract class Manager extends Application
 
     public static function get_document_downloader_url($document_id)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($document_id);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $document_id);
+
         if ($object)
         {
             $security_code = $object->calculate_security_code();

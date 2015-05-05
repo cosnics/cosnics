@@ -47,6 +47,10 @@
 	background-color: #fafcfc;
 }
 
+div.admin_tab {
+	padding: 10px !important;
+}
+
 /*********************************************
  * jQuery CSS: Tabs
  *********************************************/
