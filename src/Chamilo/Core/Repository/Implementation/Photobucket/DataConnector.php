@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use PBAPI;
 
-require_once 'OAuth/Request.php';
+// require_once 'OAuth/Request.php';
 require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'PBAPI/PBAPI.php';
 /**
  *
