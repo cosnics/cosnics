@@ -14,8 +14,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class WorkspaceItem extends Item
 {
-    const PROPERTY_IMPLEMENTATION = 'implementation';
-    const PROPERTY_INSTANCE_ID = 'instance_id';
+    const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_NAME = 'name';
     const CLASS_NAME = __CLASS__;
 
@@ -30,39 +29,29 @@ class WorkspaceItem extends Item
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
     }
 
-    public function get_implementation()
+    public function getWorkspaceId()
     {
-        return $this->get_additional_property(self :: PROPERTY_IMPLEMENTATION);
+        return $this->get_additional_property(self :: PROPERTY_WORKSPACE_ID);
     }
 
-    public function set_implementation($implementation)
+    public function setWorkspaceId($workspace_id)
     {
-        return $this->set_additional_property(self :: PROPERTY_IMPLEMENTATION, $implementation);
+        return $this->set_additional_property(self :: PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 
-    public function get_instance_id()
-    {
-        return $this->get_additional_property(self :: PROPERTY_INSTANCE_ID);
-    }
-
-    public function set_instance_id($instance_id)
-    {
-        return $this->set_additional_property(self :: PROPERTY_INSTANCE_ID, $instance_id);
-    }
-
-    public function get_name()
+    public function getName()
     {
         return $this->get_additional_property(self :: PROPERTY_NAME);
     }
 
-    public function set_name($name)
+    public function setName($name)
     {
         return $this->set_additional_property(self :: PROPERTY_NAME, $name);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_IMPLEMENTATION, self :: PROPERTY_INSTANCE_ID, self :: PROPERTY_NAME);
+        return array(self :: PROPERTY_WORKSPACE_ID, self :: PROPERTY_NAME);
     }
 
     /**
@@ -71,7 +60,7 @@ class WorkspaceItem extends Item
      */
     public function get_section()
     {
-        return \Chamilo\Core\Repository\Manager :: SECTION_IMPLEMENTATION;
+        return \Chamilo\Core\Repository\Manager :: SECTION_WORKSPACE;
     }
 
     /**

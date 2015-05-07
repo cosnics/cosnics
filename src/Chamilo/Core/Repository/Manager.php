@@ -34,6 +34,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 
 /**
  *
@@ -100,6 +102,7 @@ abstract class Manager extends Application
     const PARAM_CATEGORY_TYPE = 'category_type';
     const PARAM_TYPE = 'type';
     const PARAM_IDENTIFIER = 'identifier';
+    const PARAM_WORKSPACE_ID = 'workspace_id';
     const SHARED_VIEW_OTHERS_OBJECTS = 0;
     const SHARED_VIEW_OWN_OBJECTS = 1;
     const SHARED_VIEW_ALL_OBJECTS = 2;
@@ -159,7 +162,10 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
+
+    // Sections
     const SECTION_IMPLEMENTATION = 'Implementation';
+    const SECTION_WORKSPACE = 'Workspace';
 
     /**
      * Property of this repository manager.
@@ -187,6 +193,8 @@ abstract class Manager extends Application
         }
 
         $this->set_optional_parameters();
+
+        $this->getWorkspace();
     }
 
     public function set_optional_parameters()
@@ -1166,5 +1174,13 @@ abstract class Manager extends Application
     public function get_content_object_type_creation_url($template_registration_id)
     {
         return $this->get_url(array(TypeSelector :: PARAM_SELECTION => $template_registration_id));
+    }
+
+    public function getWorkspace()
+    {
+        $workspaceIdentifier = $this->getRequest()->query->get(self :: PARAM_WORKSPACE_ID);
+
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        return $workspaceService->determineWorkspaceForUserByIdentifier($this->get_user(), $workspaceIdentifier);
     }
 }

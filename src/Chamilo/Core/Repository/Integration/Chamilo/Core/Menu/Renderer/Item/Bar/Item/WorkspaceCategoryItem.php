@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 /**
  *
@@ -21,28 +21,28 @@ class WorkspaceCategoryItem extends CategoryItem
     {
         $html = array();
         $sub_html = array();
-//         $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_instances(
-//             Instance :: class_name());
-//         if ($instances->size())
-//         {
-//             $sub_html[] = '<ul>';
 
-//             while ($instance = $instances->next_result())
-//             {
+        $workspaces = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(Workspace :: class_name());
 
-//                 $instanceItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationItem();
-//                 $instanceItem->set_implementation($instance->get_implementation());
-//                 $instanceItem->set_instance_id($instance->get_id());
-//                 $instanceItem->set_name($instance->get_title());
-//                 $instanceItem->set_parent($this->get_item()->get_id());
-//                 $instanceItem->set_display();
+        if ($workspaces->size())
+        {
+            $sub_html[] = '<ul>';
 
-//                 $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $instanceItem);
-//             }
+            while ($workspace = $workspaces->next_result())
+            {
 
-//             $sub_html[] = '</ul>';
-//             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
-//         }
+                $workspaceItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem();
+                $workspaceItem->setWorkspaceId($workspace->getId());
+                $workspaceItem->setName($workspace->getName());
+                $workspaceItem->set_parent($this->get_item()->get_id());
+                $workspaceItem->set_display();
+
+                $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $workspaceItem);
+            }
+
+            $sub_html[] = '</ul>';
+            $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
+        }
         $html[] = '<ul>';
 
         $html[] = '<li>';
