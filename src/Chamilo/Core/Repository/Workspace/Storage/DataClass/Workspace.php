@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Workspace extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-
+    
     // Properties
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
@@ -39,9 +39,9 @@ class Workspace extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_NAME,
-                self :: PROPERTY_DESCRIPTION,
-                self :: PROPERTY_CREATOR_ID,
+                self :: PROPERTY_NAME, 
+                self :: PROPERTY_DESCRIPTION, 
+                self :: PROPERTY_CREATOR_ID, 
                 self :: PROPERTY_CREATION_DATE));
     }
 
@@ -83,7 +83,7 @@ class Workspace extends DataClass
 
     /**
      *
-     * @return int
+     * @return integer
      */
     public function getCreatorId()
     {
@@ -100,13 +100,13 @@ class Workspace extends DataClass
         {
             $this->creator = DataManager :: retrieve_by_id(User :: class_name(), $this->getCreatorId());
         }
-
+        
         return $this->creator;
     }
 
     /**
      *
-     * @param int $creatorId
+     * @param integer $creatorId
      */
     public function setCreatorId($creatorId)
     {
@@ -122,8 +122,8 @@ class Workspace extends DataClass
         return array(
             WorkspaceEntityRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation :: class_name(),
-                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                    WorkspaceEntityRelation :: class_name(), 
+                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID), 
                 new StaticConditionVariable($this->getId())));
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -52,12 +53,29 @@ class ContentObjectRelationService
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
     public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectInWorkspace(
-            $contentObject,
+            $contentObject, 
             $workspaceImplementation);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $right
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return boolean
+     */
+    public function hasRight(User $user, $right, ContentObject $contentObject)
+    {
+        return $this->getContentObjectRelationRepository()->findContentObjectForUserWithRight(
+            $user, 
+            $right, 
+            $contentObject);
     }
 }

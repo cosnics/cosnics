@@ -49,7 +49,7 @@ interface WorkspaceInterface
 
     /**
      *
-     * @param int $creatorId
+     * @param integer $creatorId
      */
     public function setCreatorId($creatorId);
 }
