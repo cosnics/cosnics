@@ -13,43 +13,13 @@ interface WorkspaceInterface
 
     /**
      *
-     * @return string
+     * @return integer
      */
-    public function getName();
+    public function getId();
 
     /**
      *
-     * @param string $name
-     */
-    public function setName($name);
-
-    /**
-     *
-     * @return string
-     */
-    public function getDescription();
-
-    /**
-     *
-     * @param string $description
-     */
-    public function setDescription($description);
-
-    /**
-     *
-     * @return int
+     * @return integer
      */
     public function getCreatorId();
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getCreator();
-
-    /**
-     *
-     * @param integer $creatorId
-     */
-    public function setCreatorId($creatorId);
 }
