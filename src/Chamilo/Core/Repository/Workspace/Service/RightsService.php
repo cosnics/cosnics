@@ -29,13 +29,21 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Service\EntityRelationService
+     */
+    private $entityRelationService;
+
+    /**
+     *
      * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      */
-    public function __construct(ContentObjectRelationService $contentObjectRelationService)
+    public function __construct(ContentObjectRelationService $contentObjectRelationService, 
+        EntityRelationService $entityRelationService)
     {
         $this->contentObjectRelationService = $contentObjectRelationService;
+        $this->entityRelationService = $entityRelationService;
     }
 
     /**
@@ -58,25 +66,52 @@ class RightsService
 
     /**
      *
+     * @return \Chamilo\Core\Repository\Workspace\Service\EntityRelationService
+     */
+    public function getEntityRelationService()
+    {
+        return $this->entityRelationService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Service\EntityRelationService $entityRelationService
+     */
+    public function setEntityRelationService($entityRelationService)
+    {
+        $this->entityRelationService = $entityRelationService;
+    }
+
+    /**
+     *
      * @param integer $right
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
-    public function hasRightForWorkspace($right, User $user, WorkspaceInterface $workspaceImplementation)
+    private function hasRightForWorkspace($right, User $user, WorkspaceInterface $workspaceImplementation)
     {
+        // Check if the user is a platform administrator
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+        
         if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
         {
             return true;
         }
-
-        // TODO: If user has right ==> Whiiiiiiiii !
-        // TODO: Else ==> Go to jail, do not pass go
+        
+        return $this->getEntityRelationService()->hasRight($user, $right, $workspaceImplementation);
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function isWorkspaceImplementationCreator(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -87,6 +122,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canViewContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -97,6 +134,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canAddContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -107,6 +146,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canEditContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -117,6 +158,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canDeleteContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -127,6 +170,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canUseContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -137,6 +182,8 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
      */
     public function canCopyContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
@@ -148,9 +195,10 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    public function canViewContentObject(User $user, ContentObject $contentObject,
+    public function canViewContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_VIEW, $contentObject, $workspaceImplementation);
@@ -161,9 +209,10 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    public function canEditContentObject(User $user, ContentObject $contentObject,
+    public function canEditContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_EDIT, $contentObject, $workspaceImplementation);
@@ -174,9 +223,10 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    public function canDeleteContentObject(User $user, ContentObject $contentObject,
+    public function canDeleteContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_DELETE, $contentObject, $workspaceImplementation);
@@ -187,9 +237,10 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    public function canUseContentObject(User $user, ContentObject $contentObject,
+    public function canUseContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_USE, $contentObject, $workspaceImplementation);
@@ -200,9 +251,10 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    public function canCopyContentObject(User $user, ContentObject $contentObject,
+    public function canCopyContentObject(User $user, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_COPY, $contentObject, $workspaceImplementation);
@@ -213,22 +265,33 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
      * @return boolean
      */
-    private function hasRightForContentObject(User $user, $right, ContentObject $contentObject,
+    private function hasRightForContentObject(User $user, $right, ContentObject $contentObject, 
         WorkspaceInterface $workspaceImplementation = null)
     {
+        // Check if the user is a platform administrator
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+        
+        // Check if the user is also the owner of the content object
         if ($this->isContentObjectOwner($user, $contentObject))
         {
             return true;
         }
-
+        
+        // Check if there is actually a workspaceImplementation
         if ($workspaceImplementation instanceof WorkspaceInterface)
         {
+            // Check if the content object is in the workspace
             if ($this->getContentObjectRelationService()->isContentObjectInWorkspace(
-                $contentObject,
+                $contentObject, 
                 $workspaceImplementation))
             {
+                // Check if the user has the requested right in the workspace
                 return $this->hasRightForWorkspace($right, $user, $workspaceImplementation);
             }
             else
@@ -236,9 +299,10 @@ class RightsService
                 return false;
             }
         }
-        // TODO: Else ==> Is the contentObject in a workspace the user has the requested right for
+        // Is the contentObject in a workspace the user has the requested right for
         else
         {
+            return $this->getContentObjectRelationService()->hasRight($user, $right, $contentObject);
         }
     }
 
@@ -246,6 +310,7 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
      * @return boolean
      */
     public function isContentObjectOwner(User $user, ContentObject $contentObject)
