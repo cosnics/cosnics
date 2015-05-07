@@ -31,15 +31,15 @@ class WorkspaceItem extends Bar
 
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => $this->get_item()->get_implementation(),
-                \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_item()->get_instance_id()));
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: package(),
+                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $this->get_item()->getWorkspaceId()));
 
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->get_item()->get_name();
+        $title = $this->get_item()->getName();
 
         if ($this->get_item()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath($this->get_item()->get_implementation(), 'Logo\16');
+            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo\16');
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
