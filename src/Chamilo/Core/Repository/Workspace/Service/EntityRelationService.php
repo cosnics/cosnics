@@ -57,9 +57,8 @@ class EntityRelationService
      *
      * @return boolean
      */
-    public function hasRight(User $user, $right, ContentObject $contentObject, 
-        WorkspaceInterface $workspaceImplementation)
+    public function hasRight(User $user, $right, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->getEntityRelationRepository()->findUserWithRight($user, $right, $contentObject);
+        return $this->getEntityRelationRepository()->findUserWithRight($user, $right, $workspaceImplementation);
     }
 }
