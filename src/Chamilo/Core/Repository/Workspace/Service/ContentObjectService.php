@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 
 /**
  *
@@ -53,19 +54,41 @@ class ContentObjectService
      * @param WorkspaceInterface $workspace
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace, $offset, $count, $orderProperty)
+    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace,
+        ConditionFilterRenderer $filterConditionRenderer, $offset, $count, $orderProperty)
     {
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
                 $workspace,
+                $filterConditionRenderer,
                 $offset,
                 $count,
                 $orderProperty);
         }
         else
         {
-            return $this->getContentObjectRepository()->findAllInWorkspace($workspace, $offset, $count, $orderProperty);
+            return $this->getContentObjectRepository()->findAllInWorkspace(
+                $workspace,
+                $filterConditionRenderer,
+                $offset,
+                $count,
+                $orderProperty);
+        }
+    }
+
+    public function countContentObjectsForWorkspace(WorkspaceInterface $workspace,
+        ConditionFilterRenderer $filterConditionRenderer)
+    {
+        if ($workspace instanceof PersonalWorkspace)
+        {
+            return $this->getContentObjectRepository()->countAllInPersonalWorkspace(
+                $workspace,
+                $filterConditionRenderer);
+        }
+        else
+        {
+            return $this->getContentObjectRepository()->countAllInWorkspace($workspace, $filterConditionRenderer);
         }
     }
 }
