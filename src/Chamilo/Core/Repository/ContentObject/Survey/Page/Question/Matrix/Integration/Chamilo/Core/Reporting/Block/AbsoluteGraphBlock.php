@@ -23,13 +23,13 @@ class AbsoluteGraphBlock extends ReportingBlock
         
         // get options and matches
         $opts = $question->get_options();
-        while ($option = $opts->next_result())
+        foreach ($opts as $option)
         {
             $options[$option->get_id()] = $option->get_value();
         }
         
         $matchs = $question->get_matches();
-        while ($match = $matchs->next_result())
+        foreach ($matchs as $match)
         {
             $matches[$match->get_id()] = $match->get_value();
         }

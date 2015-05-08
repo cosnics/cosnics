@@ -165,14 +165,14 @@ class MatrixForm extends ContentObjectForm
         {
             $options = $object->get_options();
 
-            while ($option = $options->next_result())
+            foreach ($options as $option)
             {
                 $defaults[MatrixOption :: PROPERTY_VALUE . '[' . ($option->get_display_order() - 1) . ']'] = $option->get_value();
             }
 
             $matches = $object->get_matches();
 
-            while ($match = $matches->next_result())
+            foreach ($matches as $match )
             {
                 $defaults[MatrixMatch :: PROPERTY_VALUE . '[' . ($match->get_display_order() - 1) . ']'] = $match->get_value();
             }
