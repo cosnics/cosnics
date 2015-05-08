@@ -196,6 +196,20 @@ $(function ()
 		processMatches();
 	}
 	
+	function saveOldQuestionValue(event, userInterface) {
+		oldQuestionValue = $('#question').val();
+	}
+
+	function synchronizeTitle(event, userInterface) {
+		var questionValue = $('#question').val();
+		var titleValue = $('#title').val();
+
+		if (!titleValue || titleValue == oldQuestionValue) {
+			$('#title').val(questionValue);
+			$("#title").trigger('change');
+		}
+	}
+	
 	$(document).ready( function() 
 	{
 		$(document).on('click', '.remove_option', removeOption);
@@ -203,6 +217,8 @@ $(function ()
 		
 		$(document).on('click', '.remove_match', removeMatch);
 		$(document).on('click', '#add_match', addMatch);
+		$(document).on('focusin', '#question', saveOldQuestionValue);
+		$(document).on('focusout', '#question', synchronizeTitle);
 		
     });
     

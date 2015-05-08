@@ -25,6 +25,7 @@ class ViewerComponent extends TabComponent
         if ($this->is_form_submitted())
         {
             $action = $this->get_action();
+            
             $this->save_answers();
             
             if ($action == self :: FORM_BACK)

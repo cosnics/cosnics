@@ -98,23 +98,6 @@ class MultipleChoice extends ContentObject implements Versionable
     public function get_number_of_options()
     {
         return count($this->get_options());
-        
-        // if (! $this->get_id())
-        // {
-        // return count($this->options);
-        // }
-        // else
-        // {
-        // $condition = new EqualityCondition(
-        // new PropertyConditionVariable(
-        // MultipleChoiceOption :: class_name(),
-        // MultipleChoiceOption :: PROPERTY_QUESTION_ID),
-        // new StaticConditionVariable($this->get_id()));
-        
-        // return DataManager :: count(
-        // MultipleChoiceOption :: class_name(),
-        // new DataClassCountParameters($condition));
-        // }
     }
 
     public function add_option(MultipleChoiceOption $option)

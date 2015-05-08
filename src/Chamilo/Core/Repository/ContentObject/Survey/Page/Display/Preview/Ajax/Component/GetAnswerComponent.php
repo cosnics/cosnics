@@ -8,11 +8,6 @@ use Chamilo\Libraries\Platform\Session\Session;
 
 class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Manager
 {
-    const TEMPORARY_STORAGE = 'survey_page_preview';
-    const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
-    const PARAM_ANSWER = 'answer';
-    const PARAM_PARAMETERS = 'parameters';
-    const PARAM_RESULT = 'result';
     
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

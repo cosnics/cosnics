@@ -2,7 +2,7 @@
 
 	$(document).ready(function() {
 
-		$("#timepicker").timepicker();
+		$("[id^=timepicker]").timepicker();
 	
 	});
 })(jQuery);

@@ -74,12 +74,12 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<tbody>';
 
         $html[] = '<tr class="row_even">';
-        $html[] = '<td><input type="radio" value="0" name="' . $complex_question_id . '"/></td>';
+        $html[] = '<td><input type="radio" value="0" name="' . $question_id . '"/></td>';
         $html[] = '<td>' . Translation :: get('Male') . '</td>';
         $html[] = '</tr>';
 
         $html[] = '<tr class="row_odd">';
-        $html[] = '<td><input type="radio" value="1" name="' . $complex_question_id . '"/></td>';
+        $html[] = '<td><input type="radio" value="1" name="' . $question_id . '"/></td>';
         $html[] = '<td>' . Translation :: get('Female') . '</td>';
         $html[] = '</tr>';
 
