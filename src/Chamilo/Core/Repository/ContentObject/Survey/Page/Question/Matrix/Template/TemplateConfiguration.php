@@ -14,6 +14,8 @@ class TemplateConfiguration extends \Chamilo\Core\Repository\Common\Template\Tem
     TemplateConfigurationParser
 {
 
+    const ACTION_SORT = 'sort';
+    
     /**
      *
      * @param DOMXPath $dom_xpath
@@ -25,7 +27,7 @@ class TemplateConfiguration extends \Chamilo\Core\Repository\Common\Template\Tem
         $template_configuration->set_configuration(
             Matrix :: PROPERTY_MATRIX_TYPE, 
             TemplateConfiguration :: ACTION_EDIT, 
-            (boolean) $dom_xpath->query('/template/properties/answer_type')->item(0)->getAttribute(
+            (boolean) $dom_xpath->query('/template/properties/matrix_type')->item(0)->getAttribute(
                 TemplateConfiguration :: ACTION_EDIT));
         $template_configuration->set_configuration(
             Matrix :: PROPERTY_QUESTION, 
