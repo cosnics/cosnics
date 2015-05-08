@@ -18,13 +18,26 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Filter\FilterRenderer;
 
 /**
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FormFilterRenderer extends ContextFilterRenderer
+class FormFilterRenderer extends FilterRenderer
 {
+
+    /**
+     *
+     * @var int
+     */
+    private $user_id;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $content_object_types;
 
     /**
      *
@@ -47,10 +60,48 @@ class FormFilterRenderer extends ContextFilterRenderer
      */
     public function __construct(FilterData $filter_data, $user_id, $content_object_types, $url)
     {
-        parent :: __construct($filter_data, $user_id, $content_object_types);
+        parent :: __construct($filter_data);
 
+        $this->user_id = $user_id;
+        $this->content_object_types = $content_object_types;
         $this->form_validator = new FormValidator('advanced_filter_form', 'post', $url);
         $this->renderer = clone $this->form_validator->defaultRenderer();
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_user_id()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     *
+     * @param int $user_id
+     */
+    public function set_user_id($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function get_content_object_types()
+    {
+        return $this->content_object_types;
+    }
+
+    /**
+     *
+     * @param string[] $content_object_types
+     */
+    public function set_content_object_types($content_object_types)
+    {
+        $this->content_object_types = $content_object_types;
     }
 
     /*

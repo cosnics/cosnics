@@ -82,21 +82,17 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CONTENT_OBJECT_ID,
-                                    $this->get_export_types_cache($export_type),
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CONTENT_OBJECT_ID,
+                                $this->get_export_types_cache($export_type),
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CATEGORY_ID,
-                                    $category_ids,
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CATEGORY_ID,
+                                $category_ids,
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                     }
                     else
@@ -225,7 +221,7 @@ class ExporterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 
     public function get_export_types_cache($type)

@@ -49,7 +49,9 @@ class DeleterComponent extends Manager
                 {
                     if ($delete_version)
                     {
-                        if ($this->content_object_deletion_allowed($object, 'version'))
+                        if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed(
+                            $object,
+                            'version'))
                         {
                             $versions = $object->get_content_object_versions(false);
                             $number_of_versions = sizeof($versions);
@@ -84,7 +86,7 @@ class DeleterComponent extends Manager
                     }
                     else
                     {
-                        if ($this->content_object_deletion_allowed($object))
+                        if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed($object))
                         {
                             if ($permanent)
                             {
@@ -217,10 +219,11 @@ class DeleterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(
-            self :: PARAM_CONTENT_OBJECT_ID,
-            self :: PARAM_DELETE_VERSION,
-            self :: PARAM_DELETE_PERMANENTLY,
-            self :: PARAM_DELETE_RECYCLED);
+        return parent :: get_additional_parameters(
+            array(
+                self :: PARAM_CONTENT_OBJECT_ID,
+                self :: PARAM_DELETE_VERSION,
+                self :: PARAM_DELETE_PERMANENTLY,
+                self :: PARAM_DELETE_RECYCLED));
     }
 }

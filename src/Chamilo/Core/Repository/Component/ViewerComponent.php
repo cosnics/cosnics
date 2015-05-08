@@ -221,7 +221,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
     private function get_action_bar($object)
     {
-        $user = $this->get_user_info($this->get_user_id());
         $is_owner = $object->get_owner_id() == $this->get_user_id();
 
         if ($this->is_allowed_to_modify())
@@ -274,7 +273,10 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                 if (! $in_recycle_bin)
                 {
-                    $delete_link_url = $this->get_content_object_unlinker_url($object);
+                    $delete_link_url = $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_UNLINK_CONTENT_OBJECTS,
+                            self :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
 
                     if (! DataManager :: content_object_deletion_allowed($object) &&
                          $object->get_state() != ContentObject :: STATE_RECYCLED && $is_owner)
@@ -316,7 +318,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $action_bar->add_common_action($force_delete_button);
                     }
 
-                    if (DataManager :: get_number_of_categories($user->get_id()) > 1 && $is_owner)
+                    if (DataManager :: get_number_of_categories($this->get_user()->get_id()) > 1 && $is_owner)
                     {
                         $move_url = $this->get_content_object_moving_url($object);
                         $action_bar->add_common_action(
@@ -403,7 +405,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             // TODO implement settings structure to allow templates: at the
             // moment quick fix to disallow non-admins
-            if ($user->is_platform_admin())
+            if ($this->get_user()->is_platform_admin())
             {
                 $action_bar->add_tool_action(
                     new ToolbarItem(
@@ -556,18 +558,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return $this->object;
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(
-        // RepositoryManager :: PARAM_ACTION => RepositoryManager ::
-        // ACTION_BROWSE_CONTENT_OBJECTS)), Translation ::
-        // get('RepositoryManagerBrowserComponent')));
-        $breadcrumbtrail->add_help('repository_viewer');
-    }
-
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 
     public function get_export_types()

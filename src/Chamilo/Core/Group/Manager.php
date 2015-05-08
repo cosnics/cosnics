@@ -191,16 +191,6 @@ abstract class Manager extends Application
         return DataManager :: retrieve(GroupRelUser :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
-    /**
-     * Sets the active URL in the navigation menu.
-     *
-     * @param string $url The active URL.
-     */
-    public function force_menu_url($url)
-    {
-        // $this->get_category_menu()->forceCurrentUrl($url);
-    }
-
     public function retrieve_group($id)
     {
         return DataManager :: retrieve_by_id(Group :: class_name(), $id);

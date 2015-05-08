@@ -50,7 +50,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
                 new ToolbarItem(
                     Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Details'),
-                    $this->get_component()->get_external_instance_viewing_url($object),
+                    $this->get_external_instance_viewing_url($object),
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
@@ -63,5 +63,20 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
                     ToolbarItem :: DISPLAY_ICON));
         }
         return $toolbar->as_html();
+    }
+
+    private function get_external_instance_viewing_url(SynchronizationData $external_instance_sync)
+    {
+        if (! $external_instance_sync || ! $external_instance_sync->get_external())
+        {
+            return;
+        }
+
+        $parameters = \Chamilo\Core\Repository\External\Manager :: get_object_viewing_parameters(
+            $external_instance_sync);
+        $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTEXT] = $external_instance_sync->get_external()->get_type();
+        $parameters[\Chamilo\Core\Repository\Manager :: PARAM_EXTERNAL_INSTANCE] = $external_instance_sync->get_external_id();
+
+        return $this->get_component()->get_url($parameters);
     }
 }

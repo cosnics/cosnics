@@ -286,7 +286,7 @@ class SharedContentObjectsBrowserComponent extends Manager implements TableSuppo
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_SHARED_VIEW, self :: PARAM_SHARED_CATEGORY_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_SHARED_VIEW, self :: PARAM_SHARED_CATEGORY_ID));
     }
 
     public function show_my_objects()

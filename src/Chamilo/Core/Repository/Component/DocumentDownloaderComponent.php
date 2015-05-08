@@ -73,6 +73,6 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }
