@@ -184,7 +184,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_condition()
     {
-        $query = $this->get_action_bar()->get_query();
+        $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
             new StaticConditionVariable(ContentObject :: STATE_NORMAL));
@@ -204,7 +204,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $filter_condition_renderer = ConditionFilterRenderer :: factory(FilterData :: get_instance());
-
         $filter_condition = $filter_condition_renderer->render();
 
         if ($filter_condition instanceof Condition)
