@@ -107,6 +107,6 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)),
-                Translation :: get('ReplyOnPost', null, 'core\repository\content_object\forum_topic')));
+                Translation :: get('ReplyOnPost', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')));
     }
 }

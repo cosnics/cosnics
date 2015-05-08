@@ -32,7 +32,7 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
                 Translation :: get(
                     (string) StringUtilities :: getInstance()->createString(Vocabulary :: PROPERTY_VALUE)->upperCamelize(),
                     null,
-                    'core\metadata')));
+                    'Chamilo\Core\Metadata')));
 
         $this->add_column(
             new StaticTableColumn(

@@ -78,7 +78,7 @@ abstract class EventParser
             $message[] = '<b>' . Translation :: get('Stacktrace') . ':</b>';
             $message[] = '<ul>';
             $message[] = '<li>' . Translation :: get('EventParser') . '</li>';
-            $message[] = '<li>' . Translation :: get($type, null, 'core\\repository\\content_object\\' . $type) . '</li>';
+            $message[] = '<li>' . Translation :: get('TypeName', null, $type) . '</li>';
             $message[] = '</ul>';
 
             throw new ClassNotExistException($class);

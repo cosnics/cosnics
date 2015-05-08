@@ -102,6 +102,6 @@ class ForumPostCreatorComponent extends ForumPostFormActionCreate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation :: get('ReplyOnTopic', null, 'core\repository\content_object\forum_topic')));
+                Translation :: get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')));
     }
 }

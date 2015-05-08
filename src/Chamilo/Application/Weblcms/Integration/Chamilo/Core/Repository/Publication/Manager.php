@@ -18,6 +18,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class Manager implements PublicationInterface
 {
+
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::is_content_object_editable()
      */

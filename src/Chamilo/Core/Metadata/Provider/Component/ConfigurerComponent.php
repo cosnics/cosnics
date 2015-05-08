@@ -13,6 +13,8 @@ use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Provider\Form\ProviderLinkForm;
+use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -135,20 +137,22 @@ class ConfigurerComponent extends Manager
         if ($form->validate())
         {
             $submittedValues = $form->exportValues();
-            var_dump($submittedValues);
-            // $relationInstanceService = new RelationInstanceService();
-            // $success = $relationInstanceService->createRelationInstancesFromSubmittedValues(
-            // $this->get_user(),
-            // $submittedValues);
 
-            // $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
+            $propertyProviderService = new PropertyProviderService($this->getSelectedEntity());
+            $success = $propertyProviderService->updateEntityProviderLinks(
+                $entityService,
+                $elementService,
+                $relationService,
+                $submittedValues[EntityService :: PROPERTY_METADATA_SCHEMA]);
 
-            // $message = Translation :: get(
-            // $translation,
-            // array('OBJECT' => Translation :: get('RelationInstance')),
-            // Utilities :: COMMON_LIBRARIES);
+            $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
-            // $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            $message = Translation :: get(
+                $translation,
+                array('OBJECT' => Translation :: get('ProviderLink')),
+                Utilities :: COMMON_LIBRARIES);
+
+            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
         else
         {
@@ -160,5 +164,14 @@ class ConfigurerComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
+     */
+    public function get_additional_parameters()
+    {
+        return array(self :: PARAM_ENTITY_TYPE);
     }
 }

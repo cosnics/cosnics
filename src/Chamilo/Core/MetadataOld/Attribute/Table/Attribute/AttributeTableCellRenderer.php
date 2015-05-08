@@ -73,7 +73,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ManageControlledVocabularyNA', null, 'core\metadata'),
+                    Translation :: get('ManageControlledVocabularyNA', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Metadata\Attribute',
                         'Action/ControlledVocabularyNa'),
@@ -82,7 +82,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MetadataDefaultValuesNA', null, 'core\metadata'),
+                    Translation :: get('MetadataDefaultValuesNA', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/DefaultNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
@@ -112,7 +112,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ManageControlledVocabulary', null, 'core\metadata'),
+                    Translation :: get('ManageControlledVocabulary', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Metadata\Attribute',
                         'Action/ControlledVocabulary'),
@@ -124,7 +124,7 @@ class AttributeTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('MetadataDefaultValues', null, 'core\metadata'),
+                    Translation :: get('MetadataDefaultValues', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Attribute', 'Action/Default'),
                     $this->get_component()->get_url(
                         array(

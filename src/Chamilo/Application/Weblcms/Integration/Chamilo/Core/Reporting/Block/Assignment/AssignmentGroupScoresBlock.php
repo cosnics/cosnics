@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -66,7 +67,8 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
             // fill publications with group assignments
             while ($publication = $publication_resultset->next_result())
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                 $method = 'get_allow_group_submissions';
@@ -82,7 +84,8 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
 
             foreach ($publications as $publication)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                 if (count($publications) > 5)
@@ -107,7 +110,8 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
 
                 foreach ($publications as $publication)
                 {
-                    $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                    $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        ContentObject :: class_name(),
                         $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                     if (count($publications) > 5)

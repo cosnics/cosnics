@@ -26,9 +26,12 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- * This component renders the assessment attempts from the learning path. Depending on the parameters in the URL, it
+ * This component renders the assessment attempts from the learning path.
+ * Depending on the parameters in the URL, it
  * will show an overview of all the assessment attempts or a detail from one attempt.
  *
  * @author Bert De Clercq (Hogeschool Gent)
@@ -131,7 +134,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders an overview of the assessment attempt in the learning path. On top there's a description of the
+     * Renders an overview of the assessment attempt in the learning path.
+     * On top there's a description of the
      * assessment with some info about the attempts such as the average score of all the attempts.
      */
     public function view_assessment_results()
@@ -184,7 +188,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders a detailed overview of a single assessment attempt. A course admin can change scores and add feedback.
+     * Renders a detailed overview of a single assessment attempt.
+     * A course admin can change scores and add feedback.
      */
     public function view_single_result()
     {
@@ -196,8 +201,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
             self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID,
             Request :: get(self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID));
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->assessment->get_type()) .
-             '\display';
+        $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->assessment->get_type(), 3) . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }
@@ -281,7 +285,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns an action bar if the user has edit rights. The action bar includes a button to download the assessment
+     * Returns an action bar if the user has edit rights.
+     * The action bar includes a button to download the assessment
      * attempts documents and a button to delete the assessment attempts.
      *
      * @return ActionBarRenderer
@@ -469,7 +474,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $this->assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $this->assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             Request :: get(self :: PARAM_ASSESSMENT_ID));
 
         $breadcrumbtrail->add(
@@ -552,7 +558,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     public function get_assessment_configuration()
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $this->get_ccoi_id());
 
         return $complex_content_object_item->get_ref_object()->get_configuration();

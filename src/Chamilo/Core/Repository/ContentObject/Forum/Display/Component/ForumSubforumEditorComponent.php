@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: forum_subforum_editor.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -34,7 +35,8 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                     self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id()));
 
-            $forum_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $forum_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $selected_complex_content_object_item->get_ref());
 
             BreadcrumbTrail :: get_instance()->add(

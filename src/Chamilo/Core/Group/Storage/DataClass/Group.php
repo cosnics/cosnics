@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: group.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package group.lib
  */
 
@@ -38,53 +38,53 @@ class Group extends NestedSet
 
     /**
      * Array used to cache users in this group, depending on request (include subgroups, recursive subgroups)
-     * 
+     *
      * @var array
      */
     private $users;
 
     /**
      * Array used to cache user counts in this group, depending on request (include subgroups, recursive subgroups)
-     * 
+     *
      * @var array
      */
     private $user_count;
 
     /**
      * Array used to cache subgroups, depending on request (recursive or not)
-     * 
+     *
      * @var array
      */
     private $subgroups;
 
     /**
      * Array used to cache subgroup counts, depending on request (recursive or not)
-     * 
+     *
      * @var array
      */
     private $subgroup_count;
 
     /**
      * Cache of the siblings of a group, depending on request (recursive or not)
-     * 
+     *
      * @var array
      */
     private $siblings;
 
     /**
      * Get the default properties of all groups.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_SORT, 
-                self :: PROPERTY_CODE, 
-                self :: PROPERTY_DISK_QUOTA, 
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_DESCRIPTION,
+                self :: PROPERTY_SORT,
+                self :: PROPERTY_CODE,
+                self :: PROPERTY_DISK_QUOTA,
                 self :: PROPERTY_DATABASE_QUOTA));
     }
 
@@ -98,7 +98,7 @@ class Group extends NestedSet
 
     /**
      * Returns the name of this group.
-     * 
+     *
      * @return String The name
      */
     public function get_name()
@@ -110,18 +110,18 @@ class Group extends NestedSet
     {
         $parents = $this->get_parents($include_self);
         $names = array();
-        
+
         while ($node = $parents->next_result())
         {
             $names[] = $node->get_name();
         }
-        
+
         return implode(' <span class="visible">></span> ', array_reverse($names));
     }
 
     /**
      * Returns the description of this group.
-     * 
+     *
      * @return String The description
      */
     public function get_description()
@@ -141,7 +141,7 @@ class Group extends NestedSet
 
     /**
      * Returns the disk quota for users in this group.
-     * 
+     *
      * @return Int the disk quota
      */
     public function get_disk_quota()
@@ -151,7 +151,7 @@ class Group extends NestedSet
 
     /**
      * Returns the database quota for users in this group.
-     * 
+     *
      * @return Int the database quota
      */
     public function get_database_quota()
@@ -161,7 +161,7 @@ class Group extends NestedSet
 
     /**
      * Sets the name of this group.
-     * 
+     *
      * @param String $name the name.
      */
     public function set_name($name)
@@ -214,7 +214,7 @@ class Group extends NestedSet
 
     /**
      * Get all of the group's parents
-     * 
+     *
      * @deprecated should use get_ancestors() instead
      */
     public function get_parents($include_self = true)
@@ -262,7 +262,7 @@ class Group extends NestedSet
 
     /**
      * Instructs the DataManager to delete this group.
-     * 
+     *
      * @param in_batch - delete groups in batch and fix nested values later
      * @return boolean True if success, false otherwise.
      * @deprecated should use $this->delete() of self :: deletes( $array ) instead
@@ -281,7 +281,7 @@ class Group extends NestedSet
     {
         // First, truncate the group so that users are removed.
         $success = $this->truncate();
-        
+
         // Second, delete the associated meta-data (element values).
         //
         // Since these may have dependent attribute values, we must use
@@ -290,13 +290,13 @@ class Group extends NestedSet
         // Once again, cascading deletes could be a solution.
         if ($success)
         {
-            if (! \Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_group(
+            if (! \Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: truncate_metadata_values_for_group(
                 $this->get_id()))
             {
                 return false;
             }
         }
-        
+
         return $success;
     }
 
@@ -306,16 +306,16 @@ class Group extends NestedSet
     public function truncate()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         return DataManager :: deletes(GroupRelUser :: CLASS_NAME, $condition);
     }
 
     public function create($previous_id = 0)
     {
         $parent_id = $this->get_parent_id();
-        
+
         if ($previous_id)
         {
             return parent :: create(parent :: AS_NEXT_SIBLING_OF, $previous_id);
@@ -333,15 +333,15 @@ class Group extends NestedSet
             $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
             $group_rel_users = DataManager :: retrieves(GroupRelUser :: class_name(), $condition);
             $users = array();
-            
+
             while ($group_rel_user = $group_rel_users->next_result())
             {
                 $users[$group_rel_user->get_user_id()] = $group_rel_user->get_user_id();
             }
-            
+
             $this->users[(int) $include_subgroups][(int) $recursive_subgroups] = $users;
         }
-        
+
         return $this->users[(int) $include_subgroups][(int) $recursive_subgroups];
     }
 
@@ -349,19 +349,19 @@ class Group extends NestedSet
     {
         $groups = array();
         $groups[] = $this->get_id();
-        
+
         if ($include_subgroups)
         {
             $subgroups = $this->get_subgroups($recursive_subgroups);
-            
+
             foreach ($subgroups as $subgroup)
             {
                 $groups[] = $subgroup->get_id();
             }
         }
-        
+
         return new InCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID), 
+            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID),
             $groups);
     }
 
@@ -372,58 +372,58 @@ class Group extends NestedSet
             if (! $include_subgroups)
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID), 
+                    new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID),
                     new StaticConditionVariable($this->get_id()));
                 $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID);
             }
             elseif ($include_subgroups && $recursive_subgroups)
             {
                 $join = new Join(
-                    Group :: class_name(), 
+                    Group :: class_name(),
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                         new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID)));
                 $joins = new Joins(array($join));
-                
+
                 $conditions = array();
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE), 
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL, 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
+                    InequalityCondition :: GREATER_THAN_OR_EQUAL,
                     new StaticConditionVariable($this->get_left_value()));
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE), 
-                    InequalityCondition :: LESS_THAN_OR_EQUAL, 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
+                    InequalityCondition :: LESS_THAN_OR_EQUAL,
                     new StaticConditionVariable($this->get_right_value()));
                 $condition = new AndCondition($conditions);
-                
+
                 $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID, $joins);
             }
             else
             {
                 $join = new Join(
-                    Group :: class_name(), 
+                    Group :: class_name(),
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                         new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID)));
                 $joins = new Joins(array($join));
-                
+
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID), 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id()));
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                     new StaticConditionVariable($this->get_id()));
                 $condition = new OrCondition($conditions);
-                
+
                 $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID, $joins);
             }
-            
+
             $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager :: count_distinct(
-                GroupRelUser :: class_name(), 
+                GroupRelUser :: class_name(),
                 $parameters);
         }
-        
+
         return $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups];
     }
 
@@ -435,34 +435,34 @@ class Group extends NestedSet
             {
                 $children_conditions = array();
                 $children_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE), 
-                    InequalityCondition :: GREATER_THAN, 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
+                    InequalityCondition :: GREATER_THAN,
                     new StaticConditionVariable($this->get_left_value()));
                 $children_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE), 
-                    InequalityCondition :: LESS_THAN, 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
+                    InequalityCondition :: LESS_THAN,
                     new StaticConditionVariable($this->get_right_value()));
                 $children_condition = new AndCondition($children_conditions);
             }
             else
             {
                 $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID), 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id()));
             }
-            
+
             $groups = DataManager :: retrieves(Group :: class_name(), $children_condition);
-            
+
             $subgroups = array();
-            
+
             while ($group = $groups->next_result())
             {
                 $subgroups[$group->get_id()] = $group;
             }
-            
+
             $this->subgroups[(int) $recursive] = $subgroups;
         }
-        
+
         return $this->subgroups[(int) $recursive];
     }
 
@@ -477,14 +477,14 @@ class Group extends NestedSet
             else
             {
                 $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID), 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id()));
                 $this->subgroup_count[(int) $recursive] = DataManager :: count(
-                    Group :: class_name(), 
+                    Group :: class_name(),
                     $children_condition);
             }
         }
-        
+
         return $this->subgroup_count[(int) $recursive];
     }
 }

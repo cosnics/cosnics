@@ -31,7 +31,7 @@ abstract class Manager extends Application
 
     public function get_allowed_content_object_types()
     {
-        $types = $this->get_content_object_types(true, false);
+        $types = $this->get_content_object_types(true);
 
         foreach ($types as $index => $type)
         {

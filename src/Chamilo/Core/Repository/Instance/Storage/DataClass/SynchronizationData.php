@@ -19,7 +19,7 @@ use Exception;
 class SynchronizationData extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_CREATED = 'created';
     const PROPERTY_MODIFIED = 'modified';
@@ -30,14 +30,14 @@ class SynchronizationData extends DataClass
     const PROPERTY_EXTERNAL_OBJECT_TIMESTAMP = 'external_object_timestamp';
     const PROPERTY_EXTERNAL_USER_ID = 'external_user_id';
     const PROPERTY_STATE = 'state';
-    
+
     // Synchronization statuses
     const SYNC_STATUS_ERROR = 0;
     const SYNC_STATUS_EXTERNAL = 1;
     const SYNC_STATUS_INTERNAL = 2;
     const SYNC_STATUS_IDENTICAL = 3;
     const SYNC_STATUS_CONFLICT = 4;
-    
+
     // Synchrnization link statuses
     const STATE_ACTIVE = 1;
     const STATE_INACTIVE = 0;
@@ -251,7 +251,7 @@ class SynchronizationData extends DataClass
         $extended_property_names[] = self :: PROPERTY_EXTERNAL_OBJECT_TIMESTAMP;
         $extended_property_names[] = self :: PROPERTY_EXTERNAL_USER_ID;
         $extended_property_names[] = self :: PROPERTY_STATE;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -277,7 +277,7 @@ class SynchronizationData extends DataClass
         {
             throw new Exception('ExternalSync object could not be saved as its identity is not set');
         }
-        
+
         $this->set_modification_date(time());
         return parent :: update();
     }
@@ -290,7 +290,8 @@ class SynchronizationData extends DataClass
     {
         if (! isset($this->content_object))
         {
-            $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_content_object_id());
         }
         return $this->content_object;
@@ -308,7 +309,7 @@ class SynchronizationData extends DataClass
             {
                 throw new \Exception(Translation :: get('NoExternalnstanceFound'));
             }
-            
+
             $this->external_object = \Chamilo\Core\Repository\External\DataConnector :: get_instance(
                 $this->get_external())->retrieve_external_object($this);
         }
@@ -340,7 +341,7 @@ class SynchronizationData extends DataClass
             {
                 $external_object_date = $this->get_external_object()->get_created();
             }
-            
+
             if ($content_object_date > $this->get_content_object_timestamp())
             {
                 if ($external_object_date > $this->get_external_object_timestamp())
@@ -376,7 +377,7 @@ class SynchronizationData extends DataClass
                 $this->synchronization_status = self :: SYNC_STATUS_ERROR;
             }
         }
-        
+
         return $this->synchronization_status;
     }
 
@@ -384,7 +385,7 @@ class SynchronizationData extends DataClass
      * *********************************************************************** Fat model methods
      * ***********************************************************************
      */
-    
+
     /**
      *
      * @param $content_object_id int
@@ -393,7 +394,7 @@ class SynchronizationData extends DataClass
     public static function get_by_content_object_id($content_object_id)
     {
         $conditions = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object_id));
         return DataManager :: retrieve_synchronization_data($conditions);
     }
@@ -408,10 +409,10 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
         return DataManager :: retrieve_synchronization_data($condition);
@@ -427,13 +428,13 @@ class SynchronizationData extends DataClass
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_OBJECT_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_OBJECT_ID),
             new StaticConditionVariable($external_object_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
         $condition = new AndCondition($conditions);
-        
+
         return DataManager :: retrieve_synchronization_data($conditions);
     }
 

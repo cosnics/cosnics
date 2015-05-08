@@ -8,6 +8,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * $Id: reporting_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -76,9 +78,12 @@ class ReportingViewerComponent extends Manager
 
         if (Request :: get('cid') != null)
         {
-            $cloi = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $cloi = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 Request :: get('cid'));
-            $wp = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($cloi->get_ref());
+            $wp = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $cloi->get_ref());
 
             $url = $this->get_url(
                 array(

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * The DataManager for this package
- * 
+ *
  * @package repository\integration\core\metadata\linker\property
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -21,33 +21,33 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Returns the implementation packages for this package
-     * 
+     *
      * @return string[]
      */
     public static function get_implementation_packages()
     {
-        $pattern = 'core\repository\content_object*\\\metadata_property_linker';
-        
+        $pattern = 'Chamilo\Core\Repository\ContentObject*\\\MetadataPropertyLinker';
+
         $condition = new PatternMatchCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT), 
+            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
             $pattern);
-        
+
         $packages = array();
-        
+
         $package_registrations = \Chamilo\Configuration\Storage\DataManager :: retrieves(
-            Registration :: class_name(), 
+            Registration :: class_name(),
             $condition);
         while ($package_registration = $package_registrations->next_result())
         {
             $packages[] = $package_registration->get_context();
         }
-        
+
         return $packages;
     }
 
     /**
      * Retrieves the property provider from the given package and checks if it's a valid class
-     * 
+     *
      * @param string $implementation_package
      *
      * @throws \InvalidArgumentException
@@ -60,20 +60,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (class_exists($property_provider_class))
         {
             $property_provider = new $property_provider_class();
-            
+
             if ($property_provider instanceof PropertyProviderInterface)
             {
                 return $property_provider;
             }
         }
-        
+
         throw new \InvalidArgumentException(
             'The given implementation package ' . $implementation_package . ' does not have a valid property provider');
     }
 
     /**
      * Retrieves the ContentObjectPropertyRelMetadataElements from the given content object type
-     * 
+     *
      * @param string $content_object_type
      *
      * @return \libraries\storage\ResultSet
@@ -82,13 +82,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $content_object_type = null)
     {
         $condition_value = $content_object_type ? new StaticConditionVariable($content_object_type) : null;
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPropertyRelMetadataElement :: class_name(), 
-                ContentObjectPropertyRelMetadataElement :: PROPERTY_CONTENT_OBJECT_TYPE), 
+                ContentObjectPropertyRelMetadataElement :: class_name(),
+                ContentObjectPropertyRelMetadataElement :: PROPERTY_CONTENT_OBJECT_TYPE),
             $condition_value);
-        
+
         return self :: retrieves(ContentObjectPropertyRelMetadataElement :: class_name(), $condition);
     }
 }

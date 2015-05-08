@@ -120,7 +120,8 @@ class AttemptResultViewerComponent extends Manager
 
         Request :: set_get(\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION, self :: ACTION_VIEW_RESULTS);
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($assessment->get_type()) . '\display';
+        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($assessment->get_type(), 3) .
+             '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

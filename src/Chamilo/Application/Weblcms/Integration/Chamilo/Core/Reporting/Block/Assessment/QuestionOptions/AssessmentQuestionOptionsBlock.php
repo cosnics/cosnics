@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Abstract class to show the options of an assessment question
@@ -73,10 +74,12 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     {
         $question_complex_content_object_item_id = Request :: get(
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_QUESTION);
-        $question_complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $question_complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $question_complex_content_object_item_id);
 
-        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $question_complex_content_object_item->get_ref());
 
         $type = (string) StringUtilities :: getInstance()->createString($question->get_type_name())->upperCamelize();

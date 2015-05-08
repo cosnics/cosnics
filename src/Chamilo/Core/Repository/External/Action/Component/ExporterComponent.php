@@ -21,7 +21,9 @@ class ExporterComponent extends Manager implements TableSupport
             \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID);
         if (isset($external_repository_id))
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($external_repository_id);
+            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $external_repository_id);
             $success = $this->export_external_repository_object($object);
         }
         else

@@ -100,7 +100,11 @@ class SendMailComponent extends Manager
                 $this->started = array();
                 $this->finished = array();
 
-                $condition = new EqualityCondition(new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), new StaticConditionVariable($this->publication_id));
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        Participant :: class_name(),
+                        Participant :: PROPERTY_SURVEY_PUBLICATION_ID),
+                    new StaticConditionVariable($this->publication_id));
                 $parameters = new DataClassRetrievesParameters($condition);
                 $participants = DataManager :: retrieves(Participant :: class_name(), $parameters);
 
@@ -185,14 +189,14 @@ class SendMailComponent extends Manager
         }
         else
         {
-            
+
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = $this->get_survey_html($survey_publication);
-            $html[] =$form->toHtml();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -371,7 +375,7 @@ class SendMailComponent extends Manager
                     $this->send_mail($user_id, $to_email, $email);
                 }
 
-                $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'application\survey');
+                $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'Chamilo\Application\Survey');
                 if ($this->mail_send == false)
                 {
                     if (! $cron_enabled)
@@ -421,7 +425,7 @@ class SendMailComponent extends Manager
         $user_mail->set_mail_id($email->get_id());
         $user_mail->set_publication_id($this->publication_id);
 
-        $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'application\survey');
+        $cron_enabled = PlatformSetting :: get('enable_mail_cron_job', 'Chamilo\Application\Survey');
 
         if (! $cron_enabled)
         {
@@ -469,29 +473,30 @@ class SendMailComponent extends Manager
         }
     }
 
-//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-//     {
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
-//                 Translation :: get('BrowserComponent')));
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS,
-//                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-//                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
-//                 Translation :: get('ParticipantBrowserComponent')));
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         self :: PARAM_ACTION => self :: ACTION_BROWSE,
-//                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
-//                 Translation :: get('BrowserComponent')));
-//     }
+    // function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    // {
+    // $breadcrumbtrail->add(
+    // new Breadcrumb(
+    // $this->get_url(
+    // array(
+    // \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)),
+    // Translation :: get('BrowserComponent')));
+    // $breadcrumbtrail->add(
+    // new Breadcrumb(
+    // $this->get_url(
+    // array(
+    // \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager ::
+// ACTION_BROWSE_PARTICIPANTS,
+    // \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
+    // \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))),
+    // Translation :: get('ParticipantBrowserComponent')));
+    // $breadcrumbtrail->add(
+    // new Breadcrumb(
+    // $this->get_url(
+    // array(
+    // self :: PARAM_ACTION => self :: ACTION_BROWSE,
+    // self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))),
+    // Translation :: get('BrowserComponent')));
+    // }
 }
 ?>

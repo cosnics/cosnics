@@ -98,7 +98,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $breadcrumbtrail->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation :: get('TypeName', null, 'application\weblcms\tool\\' . $tool)));
+                    Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool)));
         }
 
         Event :: trigger(

@@ -257,7 +257,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_difference($id)
     {
-        $version = DataManager :: retrieve_content_object($id);
+        $version = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
         return ContentObjectDifference :: factory($this, $version);
     }
 
@@ -1313,7 +1313,7 @@ class ContentObject extends CompositeDataClass
         $aid = $this->get_parent_id();
         while ($aid > 0)
         {
-            $ancestor = DataManager :: retrieve_content_object($aid);
+            $ancestor = DataManager :: retrieve_by_id(ContentObject :: class_name(), $aid);
             $ancestors[] = $ancestor;
             $aid = $ancestor->get_parent_id();
         }
@@ -1335,7 +1335,7 @@ class ContentObject extends CompositeDataClass
             {
                 return true;
             }
-            $ancestor = DataManager :: retrieve_content_object($aid);
+            $ancestor = DataManager :: retrieve_by_id(ContentObject :: class_name(), $aid);
             $aid = $ancestor->get_parent_id();
         }
         return false;
@@ -1354,7 +1354,8 @@ class ContentObject extends CompositeDataClass
     {
         /*
          * if ($target == $this->get_id()) { return false; } $target_object = RepositoryDataManager ::
-         * get_instance()->retrieve_content_object($target); if ($target_object->get_type() != 'category') { return
+         * get_instance()->retrieve_by_id(ContentObject :: class_name(), $target); if ($target_object->get_type() !=
+         * 'category') { return
          * false; } return !$target_object->has_ancestor($this->get_id());
          */
         return true;
@@ -1537,7 +1538,7 @@ class ContentObject extends CompositeDataClass
      */
     public static function get_by_id($content_object_id)
     {
-        return DataManager :: retrieve_content_object($content_object_id);
+        return DataManager :: retrieve_by_id(ContentObject :: class_name(), $content_object_id);
     }
 
     /**

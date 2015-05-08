@@ -21,6 +21,8 @@ use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: editor.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -41,7 +43,7 @@ class EditorComponent extends Manager implements DelegateComponent
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         if ($id)
         {
-            $object = $this->retrieve_content_object($id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
 
             if (! $object)
             {
@@ -184,6 +186,6 @@ class EditorComponent extends Manager implements DelegateComponent
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

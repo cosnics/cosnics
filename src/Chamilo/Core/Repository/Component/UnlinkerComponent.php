@@ -8,6 +8,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: publication_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -33,7 +35,8 @@ class UnlinkerComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = $this->retrieve_content_object($object_id);
+                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
+
                 // TODO: Roles & Rights.
                 if ($object->get_owner_id() == $this->get_user_id())
                 {
@@ -114,6 +117,6 @@ class UnlinkerComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

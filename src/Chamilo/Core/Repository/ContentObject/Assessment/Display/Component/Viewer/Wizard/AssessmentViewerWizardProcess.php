@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_QuickForm_Action;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: assessment_viewer_wizard_process.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -84,7 +85,8 @@ class AssessmentViewerWizardProcess extends HTML_QuickForm_Action
 
         while ($question_cloi = $questions_cloi->next_result())
         {
-            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $question_cloi->get_ref());
             $answers = $values[$question_cloi->get_id()];
             $question_cloi->set_ref($question);
@@ -130,7 +132,8 @@ class AssessmentViewerWizardProcess extends HTML_QuickForm_Action
 
         while ($question_cloi = $questions_cloi->next_result())
         {
-            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $question_cloi->get_ref());
             $answers = $values[$question_cloi->get_id()];
             $hints = $values['hint_question'][$question_cloi->get_id()];

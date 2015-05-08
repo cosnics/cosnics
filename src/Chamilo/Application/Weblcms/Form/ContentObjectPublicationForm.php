@@ -827,7 +827,7 @@ class ContentObjectPublicationForm extends FormValidator
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
-             ' - ' . Translation :: get('TypeName', null, 'application\\weblcms\\tool\\' . $tool);
+             ' - ' . Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
         $target_email = array();
@@ -870,7 +870,10 @@ class ContentObjectPublicationForm extends FormValidator
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self :: TYPE_FILE)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $id);
+
                 if ($object->is_image())
                 {
                     $mail_embedded_object = new MailEmbeddedObject(

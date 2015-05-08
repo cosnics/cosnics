@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+
 class AssignmentSubmission extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
     const CLASS_NAME = __CLASS__;
@@ -30,12 +32,12 @@ class AssignmentSubmission extends \Chamilo\Core\Tracking\Storage\DataClass\Simp
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_CONTENT_OBJECT_ID, 
-                self :: PROPERTY_SUBMITTER_ID, 
-                self :: PROPERTY_DATE_SUBMITTED, 
-                self :: PROPERTY_SUBMITTER_TYPE, 
-                self :: PROPERTY_USER_ID, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_CONTENT_OBJECT_ID,
+                self :: PROPERTY_SUBMITTER_ID,
+                self :: PROPERTY_DATE_SUBMITTED,
+                self :: PROPERTY_SUBMITTER_TYPE,
+                self :: PROPERTY_USER_ID,
                 self :: PROPERTY_IP_ADDRESS));
     }
 
@@ -113,7 +115,8 @@ class AssignmentSubmission extends \Chamilo\Core\Tracking\Storage\DataClass\Simp
     {
         try
         {
-            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_content_object_id());
         }
         catch (\Exception $ex)

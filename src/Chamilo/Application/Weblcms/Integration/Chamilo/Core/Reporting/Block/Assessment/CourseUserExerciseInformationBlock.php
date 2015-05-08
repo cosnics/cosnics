@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -134,7 +135,8 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $redirect = new Redirect($params);

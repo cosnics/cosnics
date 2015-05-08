@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -17,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Controller for the HTML Export of a Content Object.
- * 
+ *
  * @author Maarten Volckaert - Hogeschool Gent
  */
 class HtmlContentObjectExportController extends ContentObjectExportController
@@ -25,7 +24,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Temporary diretory in which the export file is located.
-     * 
+     *
      * @var string
      */
     private $temporary_directory;
@@ -38,38 +37,37 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Launches the renderation of the HTML file and returns it to the file variable.
-     * 
+     *
      * @param $content_object ContentObject
      */
     public function process($content_object)
     {
-        $export_types = ContentObjectExportImplementation :: get_types_for_object(
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object));
-        
+        $export_types = ContentObjectExportImplementation :: get_types_for_object($content_object->package());
+
         if (in_array(ContentObjectExport :: FORMAT_HTML, $export_types))
         {
             ContentObjectExportImplementation :: launch(
-                $this, 
-                $content_object, 
-                ContentObjectExport :: FORMAT_HTML, 
+                $this,
+                $content_object,
+                ContentObjectExport :: FORMAT_HTML,
                 $this->get_parameters()->get_type());
         }
     }
 
     /**
      * Main function of this class, retrieves the content object by condition and returns a HTML file.
-     * 
+     *
      * @return HTML file
      */
     public function run()
     {
         $content_object_ids = $this->get_parameters()->get_content_object_ids();
-        
+
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
-                $content_object_ids, 
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                $content_object_ids,
                 ContentObject :: get_table_name());
         }
         else
@@ -82,7 +80,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
         {
             $this->process($content_object);
         }
-        
+
         return $this->get_file_path();
     }
 
@@ -92,7 +90,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
     public function prepare_file_system()
     {
         $user_id = Session :: get_user_id();
-        
+
         $this->temporary_directory = Path :: getInstance()->getTemporaryPath() . $user_id . '/export_content_objects/';
         if (! is_dir($this->temporary_directory))
         {
@@ -102,7 +100,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Gets the full path to the file.
-     * 
+     *
      * @return string
      */
     public function get_file_path()
@@ -122,7 +120,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Gets the temporary directory path.
-     * 
+     *
      * @return string
      */
     public function get_temporary_directory()
@@ -132,7 +130,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Gets the filename of the exported object.
-     * 
+     *
      * @return string
      */
     public function get_filename()

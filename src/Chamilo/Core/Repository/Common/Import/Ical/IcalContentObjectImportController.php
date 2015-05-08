@@ -79,13 +79,13 @@ class IcalContentObjectImportController extends ContentObjectImportController
     public function process_component($component)
     {
         if ($component instanceof VEvent && in_array(
-            'core\repository\content_object\calendar_event\CalendarEvent',
+            'Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent',
             DataManager :: get_registered_types(true)))
         {
             $type = CalendarEvent :: class_name();
         }
         elseif ($component instanceof VTodo && in_array(
-            'core\repository\content_object\task\Task',
+            'Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task',
             DataManager :: get_registered_types(true)))
         {
             $type = Task :: class_name();

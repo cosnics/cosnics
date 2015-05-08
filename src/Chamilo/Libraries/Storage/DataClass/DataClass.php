@@ -414,8 +414,19 @@ abstract class DataClass
      * Returns the id of this object
      *
      * @return int The id.
+     * @deprecated Use getId() now
      */
     public function get_id()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * Returns the id of this object
+     *
+     * @return int The id.
+     */
+    public function getId()
     {
         return $this->get_default_property(self :: PROPERTY_ID);
     }
@@ -424,8 +435,19 @@ abstract class DataClass
      * Sets id of the object
      *
      * @param $id int
+     * @deprecated Use setId($id) now
      */
     public function set_id($id)
+    {
+        $this->setId($id);
+    }
+
+    /**
+     * Sets id of the object
+     *
+     * @param $id int
+     */
+    public function setId($id)
     {
         if (isset($id) && strlen($id) > 0)
         {
@@ -463,7 +485,7 @@ abstract class DataClass
      */
     public function is_identified()
     {
-        $id = $this->get_id();
+        $id = $this->getId();
         return isset($id) && strlen($id) > 0 && $id != self :: NO_UID;
     }
 
