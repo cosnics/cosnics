@@ -4,9 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Inte
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class Display extends QuestionDisplay
 {
@@ -98,11 +95,7 @@ class Display extends QuestionDisplay
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
-        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 1);
-        $formvalidator->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath($namespace, true) . 'MatrixQuestionDisplay.js'));
+
     }
 
     function add_border()

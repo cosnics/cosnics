@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Implementation\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Form\ChoiceForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Implementation\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Storage\DataClass\Choice;
 
 class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -65,7 +65,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<thead>';
         $html[] = '<tr>';
 
-        if ($content_object->get_question_type() == ChoiceForm :: TYPE_YES_NO)
+        if ($content_object->get_question_type() == Choice :: TYPE_YES_NO)
         {
             $html[] = '<th class="checkbox" ></th>';
             $html[] = '<th class="info" >' . Translation :: get('SelectYourChoice') . '</th>';
@@ -75,19 +75,19 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 
             $html[] = '<tr class="row_even">';
 
-            $html[] = '<td><input type="radio" value="0" name="' . $complex_question_id . '"/></td>';
+            $html[] = '<td><input type="radio" value="1" name="' . $question_id . '"/></td>';
             $html[] = '<td>' . Translation :: get('AnswerYes') . '</td>';
             $html[] = '</tr>';
 
             $html[] = '<tr class="row_odd">';
-            $html[] = '<td><input type="radio" value="1" name="' . $complex_question_id . '"/></td>';
+            $html[] = '<td><input type="radio" value="2" name="' . $question_id . '"/></td>';
             $html[] = '<td>' . Translation :: get('AnswerNo') . '</td>';
             $html[] = '</tr>';
 
             $html[] = '</tbody>';
         }
 
-        if ($content_object->get_question_type() == ChoiceForm :: TYPE_OTHER)
+        if ($content_object->get_question_type() == Choice :: TYPE_OTHER)
         {
             $html[] = '<th class="checkbox" ></th>';
             $html[] = '<th class="info" >' . Translation :: get('SelectYourChoice') . '</th>';
@@ -97,12 +97,12 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 
             $html[] = '<tr class="row_even">';
 
-            $html[] = '<td><input type="radio" value="0"  name="' . $complex_question_id . '"/></td>';
+            $html[] = '<td><input type="radio" value="1"  name="' . $question_id . '"/></td>';
             $html[] = '<td>' . $content_object->get_first_choice() . '</td>';
             $html[] = '</tr>';
 
             $html[] = '<tr class="row_odd">';
-            $html[] = '<td><input type="radio" value="1"  name="' . $complex_question_id . '"/></td>';
+            $html[] = '<td><input type="radio" value="2"  name="' . $question_id . '"/></td>';
             $html[] = '<td>' . $content_object->get_second_choice() . '</td>';
             $html[] = '</tr>';
 

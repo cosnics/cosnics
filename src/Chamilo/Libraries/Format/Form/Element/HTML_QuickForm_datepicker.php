@@ -93,13 +93,14 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function getElementJS()
     {
+       
         $js = '';
         // if(!defined('DATEPICKER_JAVASCRIPT_INCLUDED'))
         {
             // define('DATEPICKER_JAVASCRIPT_INCLUDED',1);
             $js = "\n";
             $js .= '<script src="';
-            $js .= Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries') . 'Format/Form/Element/';
+            $js .= Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries\Format\Form\Element', true);
             $js .= 'TblChange.js" type="text/javascript"></script>';
             $js .= "\n";
         }
@@ -108,7 +109,6 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $js .= 'var path = \'' . Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration', true) . '\';' . "\n";
         $js .= 'var max_year="' . (date('Y') + 10) . '";';
         $js .= '</script>';
-
         return $js;
     }
 

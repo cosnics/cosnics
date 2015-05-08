@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -46,26 +45,10 @@ class MultipleChoiceForm extends ContentObjectForm
         FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
         FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
 
-    /*
-     * (non-PHPdoc) @see \repository\ContentObjectForm::build_creation_form()
-     */
-    protected function build_creation_form($htmleditor_options = array())
-    {
-        $this->prepare_tabs();
-    }
-
-    /*
-     * (non-PHPdoc) @see \repository\ContentObjectForm::build_editing_form()
-     */
-    protected function build_editing_form($htmleditor_options = array())
-    {
-        $this->prepare_tabs();
-    }
-
     /**
      * Prepare all the different tabs
      */
-    function prepare_tabs()
+    function prepareTabs()
     {
         $this->addElement(
             'html',
@@ -74,9 +57,8 @@ class MultipleChoiceForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
                     true) . 'Form.js'));
 
-        $tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
 
-        $tabs_generator->add_tab(
+        $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_QUESTION,
                 Translation :: get(
@@ -86,7 +68,7 @@ class MultipleChoiceForm extends ContentObjectForm
                     'Tab/' . self :: TAB_QUESTION),
                 'build_question_form'));
 
-        $tabs_generator->add_tab(
+        $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_OPTION,
                 Translation :: get(
@@ -95,35 +77,11 @@ class MultipleChoiceForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
                     'Tab/' . self :: TAB_OPTION),
                 'build_option_form'));
-
-        $tabs_generator->add_tab(
-            new DynamicFormTab(
-                self :: TAB_GENERAL,
-                Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: TAB_GENERAL)->upperCamelize()),
-                Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
-                    'Tab/' . self :: TAB_GENERAL),
-                'build_general_form'));
-
-        $tabs_generator->render();
+        
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
     }
-
-    /**
-     * Initialize the general form based on the form type
-     */
-    function build_general_form()
-    {
-        if ($this->get_form_type() == self :: TYPE_CREATE)
-        {
-            parent :: build_creation_form(self :: $html_editor_options, true);
-        }
-        elseif ($this->get_form_type() == self :: TYPE_EDIT)
-        {
-            parent :: build_editing_form(self :: $html_editor_options, true);
-        }
-    }
-
+  
     /**
      * Add the question and instruction fields
      *

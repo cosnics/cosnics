@@ -6,14 +6,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 
 class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Manager
 {
-    const TEMPORARY_STORAGE = 'survey_page_preview';
-    const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
-    const PARAM_ANSWER = 'answer';
-    const PARAM_ANSWER_ID = 'answer_id';
-    const PARAM_ANSWER_VALUE = 'answer_value';
-    const PARAM_PARAMETERS = 'parameters';
-    const PARAM_RESULT = 'result';
-    
+      
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -49,6 +42,7 @@ class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\
         $answer_value = $answer[self :: PARAM_ANSWER_VALUE];
         $answers[$complex_question_id][$answer_id] = $answer_value;
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
+       
     }
 }
 ?>

@@ -92,11 +92,13 @@ $(function() {
 		destroyHtmlEditor('option_value[' + id + ']');
 		$('tr#option_' + id, tableBody).remove();
 
-		doAjaxPost(ajaxUri, {
-			"application" : "Chamilo\\Repository\\ContentObject\\Survey\\Page\\Question\\Matrix\\Ajax",
-			"go" : "remove_option",
-			"option_id" : id
-		});
+		doAjaxPost(
+				ajaxUri,
+				{
+					"application" : "Chamilo\\Repository\\ContentObject\\Survey\\Page\\Question\\Matrix\\Ajax",
+					"go" : "remove_option",
+					"option_id" : id
+				});
 
 		rows = $('tr', tableBody);
 		rows.each(function() {
@@ -155,11 +157,13 @@ $(function() {
 
 		$('tr#match_' + id, tableBody).remove();
 
-		doAjaxPost(ajaxUri, {
-			"application" : "Chamilo\\Repository\\ContentObject\\Survey\\Page\\Question\\Matrix\\Ajax",
-			"go" : "remove_match",
-			"match_id" : id
-		});
+		doAjaxPost(
+				ajaxUri,
+				{
+					"application" : "Chamilo\\Repository\\ContentObject\\Survey\\Page\\Question\\Matrix\\Ajax",
+					"go" : "remove_match",
+					"match_id" : id
+				});
 
 		rows = $('tr', tableBody);
 		rows.each(function() {
@@ -231,17 +235,28 @@ $(function() {
 		setMemory('mq_matrix_type', newType);
 	}
 
+	function saveOldQuestionValue(event, userInterface) {
+		oldQuestionValue = $('#question').val();
+	}
+
+	function synchronizeTitle(event, userInterface) {
+		var questionValue = $('#question').val();
+		var titleValue = $('#title').val();
+
+		if (!titleValue || titleValue == oldQuestionValue) {
+			$('#title').val(questionValue);
+			$("#title").trigger('change');
+		}
+	}
+
 	$(document).ready(function() {
 		$(document).on('click', '.remove_option', removeOption);
-
 		$(document).on('click', '#add_option', addOption);
-
 		$(document).on('click', '.remove_match', removeMatch);
-
 		$(document).on('click', '#add_match', addMatch);
-
 		$(document).on('click', '.change_matrix_type', changeMatrixType);
-
+		$(document).on('focusin', '#question', saveOldQuestionValue);
+		$(document).on('focusout', '#question', synchronizeTitle);
 	});
 
 });

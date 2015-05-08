@@ -70,8 +70,6 @@ $(function() {
 
 		var selected_id = order_limit.children('[selected="selected"]').val();
 
-		alert(selected_id);
-
 		order_limit.children().remove();
 		while (count <= number_of_options) {
 			var option;
@@ -89,7 +87,6 @@ $(function() {
 
 	function changeSelect(ev, ui){
 		
-		alert('test');
 		
 	}
 	

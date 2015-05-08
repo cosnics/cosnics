@@ -273,6 +273,10 @@ class ConfigureQuestionForm extends FormValidator
 
     private function create_answers($values)
     {
+        
+//         var_dump($values);
+//         exit;
+        
         $keys = array_keys($values);
         $answers = array();
         foreach ($keys as $key)

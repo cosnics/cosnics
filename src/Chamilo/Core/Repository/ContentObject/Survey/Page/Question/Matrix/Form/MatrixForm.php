@@ -18,6 +18,12 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Template\TemplateConfiguration;
+use Chamilo\Core\Repository\Exception\NoTemplateException;
+
 
 /**
  *
@@ -29,47 +35,124 @@ use Chamilo\Libraries\Utilities\Utilities;
 class MatrixForm extends ContentObjectForm
 {
 
-    function build_basic_form()
+    const TAB_GENERAL = 'general';
+    const TAB_QUESTION = 'question';
+    const TAB_OPTION = 'option';
+    const TAB_MATCH = 'match';
+    
+    private static $html_editor_options = array(
+        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
+        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+    
+    /**
+     * Prepare all the different tabs
+     */
+    function prepareTabs()
     {
-        $this->addElement('category', Translation :: get('Question'));
-        $this->add_textfield(
-            Matrix :: PROPERTY_QUESTION,
-            Translation :: get('Question'),
-            true,
-            array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
-        $this->add_html_editor(Matrix :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
-        $this->addElement('category');
-
-        $this->build_options_and_matches();
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
-                    true) . 'SurveyMatrixQuestion.js'));
+                    true) . 'Form.js'));
+    
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_QUESTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
+                    'Tab/' . self :: TAB_QUESTION),
+                'build_question_form'));
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_OPTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
+                    'Tab/' . self :: TAB_OPTION),
+                'build_option_form'));
+        
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_MATCH,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_MATCH)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
+                    'Tab/' . self :: TAB_MATCH),
+                'build_match_form'));
+    
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
     }
-
-    protected function build_creation_form()
-    {
-        $this->build_basic_form();
-
-        parent :: build_creation_form();
-    }
-
-    protected function build_editing_form()
-    {
-        $this->build_basic_form();
-
-        parent :: build_editing_form();
-    }
-
+    
     /**
-     * Adds the options and matches to the form
+     * Add the question and instruction fields
+     *
+     * @throws NoTemplateException
      */
-    function build_options_and_matches()
+    function build_question_form()
+    {
+        $this->add_textfield(
+            Matrix :: PROPERTY_QUESTION,
+            Translation :: get('Question'),
+            true,
+            array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
+    
+        $this->add_html_editor(
+            Matrix :: PROPERTY_INSTRUCTION,
+            Translation :: get('Instruction'),
+            false,
+            self :: $html_editor_options);
+    
+        try
+        {
+            $configuration = $this->get_content_object_template_configuration();
+            
+            $allowed_to_edit_question = $configuration->get_configuration(
+                Matrix :: PROPERTY_QUESTION,
+                TemplateConfiguration :: ACTION_EDIT);
+    
+            if (! $allowed_to_edit_question)
+            {
+                $this->getElement(Matrix :: PROPERTY_QUESTION)->freeze();
+            }
+    
+            $allowed_to_edit_instruction = $configuration->get_configuration(
+                Matrix :: PROPERTY_INSTRUCTION,
+                TemplateConfiguration :: ACTION_EDIT);
+    
+            if (! $allowed_to_edit_instruction)
+            {
+                $this->getElement(Matrix :: PROPERTY_INSTRUCTION)->freeze();
+            }
+        }
+        catch (NoTemplateException $exception)
+        {
+            throw $exception;
+        }
+    }
+  
+    /**
+     * Adds the options to the form
+     */
+    function build_option_form()
     {
         $this->update_number_of_options_and_matches();
         $this->add_options();
+    }
+    
+    /**
+     * Adds the options to the form
+     */
+    function build_match_form()
+    {
+        $this->update_number_of_options_and_matches();
         $this->add_matches();
     }
 
@@ -364,8 +447,6 @@ class MatrixForm extends ContentObjectForm
     {
         $number_of_options = intval($_SESSION['mq_number_of_options']);
 
-        $this->addElement('category', Translation :: get('Options'));
-
         if ($_SESSION['mq_matrix_type'] == Matrix :: MATRIX_TYPE_RADIO)
         {
             $switch_label = Translation :: get('SwitchToMultipleMatches');
@@ -466,8 +547,6 @@ class MatrixForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
-
-        $this->addElement('category');
     }
 
     /**
@@ -476,7 +555,6 @@ class MatrixForm extends ContentObjectForm
     function add_matches()
     {
         $number_of_matches = intval($_SESSION['mq_number_of_matches']);
-        $this->addElement('category', Translation :: get('Matches'));
 
         $buttons = array();
         $buttons[] = $this->createElement(
@@ -579,7 +657,5 @@ class MatrixForm extends ContentObjectForm
         $renderer->setGroupElementTemplate(
             '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
             'question_buttons');
-
-        $this->addElement('category');
     }
 }

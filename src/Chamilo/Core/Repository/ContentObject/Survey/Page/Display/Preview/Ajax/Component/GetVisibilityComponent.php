@@ -12,12 +12,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Manager
 {
-    const TEMPORARY_STORAGE = 'survey_page_preview';
-    const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
-    const PARAM_PARAMETERS = 'parameters';
-    const PARAM_RESULT = 'result';
-    const PARAM_QUESTION_VISIBILITY = 'question_visibility';
-    
+   
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -68,7 +63,7 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                 }
             }
         }
-              
+        
         if (count($question_answers) > 0)
         {
             $configs = $content_object->getConfiguration();
@@ -78,9 +73,11 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                 foreach ($configs as $config)
                 {
                     $from_question_id = $config->getComplexQuestionId();
+                    
                     if ($complex_question_id == $from_question_id)
                     {
                         $answer_matches = $config->getAnswerMatches();
+                        
                         $visible = false;
                         if (count($answer_matches) == count($answers))
                         {
@@ -133,9 +130,8 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
     private function get_answer($complex_question_id)
     {
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        
         $answer = $answers[$complex_question_id];
-        
+         
         if ($answer)
         {
             return $answer;
