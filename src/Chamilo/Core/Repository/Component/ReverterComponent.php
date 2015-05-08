@@ -53,7 +53,7 @@ class ReverterComponent extends Manager
                     throw new NotAllowedException();
                 }
 
-                if ($this->content_object_revert_allowed($object))
+                if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_revert_allowed($object))
                 {
                     $object->version();
                 }
@@ -104,6 +104,6 @@ class ReverterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

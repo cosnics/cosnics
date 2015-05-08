@@ -214,6 +214,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
                     ContentObject :: get_active_status_types()));
         }
+
         return $parameters;
     }
 
@@ -1009,9 +1010,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
-            // self :: get_instance()->number_of_categories{$user_id} = self ::
-            // get_instance()->count_type_content_objects('category',
-            // $condition);
+
             self :: $number_of_categories[$user_id] = self :: count(RepositoryCategory :: class_name(), $condition);
         }
         return self :: $number_of_categories{$user_id};

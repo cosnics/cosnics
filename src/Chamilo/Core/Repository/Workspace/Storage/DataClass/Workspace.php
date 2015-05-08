@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -15,10 +16,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Workspace extends DataClass
+class Workspace extends DataClass implements WorkspaceInterface
 {
     const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
@@ -39,9 +40,9 @@ class Workspace extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_CREATOR_ID, 
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_DESCRIPTION,
+                self :: PROPERTY_CREATOR_ID,
                 self :: PROPERTY_CREATION_DATE));
     }
 
@@ -100,7 +101,7 @@ class Workspace extends DataClass
         {
             $this->creator = DataManager :: retrieve_by_id(User :: class_name(), $this->getCreatorId());
         }
-        
+
         return $this->creator;
     }
 
@@ -122,8 +123,8 @@ class Workspace extends DataClass
         return array(
             WorkspaceEntityRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation :: class_name(), 
-                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID), 
+                    WorkspaceEntityRelation :: class_name(),
+                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
                 new StaticConditionVariable($this->getId())));
     }
 }

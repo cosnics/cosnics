@@ -21,7 +21,7 @@ class MetadataBatchEditorComponent extends Manager implements ApplicationSupport
     {
         $factory = new ApplicationFactory(
             $this->getRequest(),
-            \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Manager :: context(),
+            \Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Manager :: context(),
             $this->get_user(),
             $this);
         return $factory->run();
@@ -41,7 +41,7 @@ class MetadataBatchEditorComponent extends Manager implements ApplicationSupport
             array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
             array(
                 self :: PARAM_CONTENT_OBJECT_ID,
-                \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Manager :: PARAM_ACTION));
+                \Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Manager :: PARAM_ACTION));
     }
 
     /**
@@ -51,6 +51,6 @@ class MetadataBatchEditorComponent extends Manager implements ApplicationSupport
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

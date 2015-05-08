@@ -89,9 +89,6 @@ abstract class Manager extends Application
         return DataManager :: retrieve_user_by_username($username);
     }
 
-    /*
-     * @see RepositoryDataManager::content_object_deletion_allowed()
-     */
     public function user_deletion_allowed($user)
     {
         return DataManager :: user_deletion_allowed($user);

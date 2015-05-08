@@ -122,13 +122,6 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $breadcrumbtrail->add_help('repository_doubles_viewer');
     }
 
-    public function get_additional_parameters()
-    {
-        return array();
-
-        // return array(RepositoryManager :: PARAM_CONTENT_OBJECT_ID);
-    }
-
     public function get_table_condition($table_class_name)
     {
         $conditions = array();

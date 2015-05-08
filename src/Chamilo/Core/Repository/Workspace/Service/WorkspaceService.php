@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 /**
  *
@@ -63,18 +62,18 @@ class WorkspaceService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $identifier
-     * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace
+     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
-    public function determineWorkspaceForUserByIdentifier(User $user, $identifier)
+    public function determineWorkspaceForUserByIdentifier(User $user, $identifier = null)
     {
-        if (is_numeric($identifier))
+        if (! is_null($identifier))
         {
-            $workspace = $this->getWorkspaceByIdentifier($identifier);
-
-            if (! $workspace instanceof Workspace)
+            if (! is_numeric($identifier))
             {
                 throw new \InvalidArgumentException();
             }
+
+            return $this->getWorkspaceByIdentifier($identifier);
         }
         else
         {
