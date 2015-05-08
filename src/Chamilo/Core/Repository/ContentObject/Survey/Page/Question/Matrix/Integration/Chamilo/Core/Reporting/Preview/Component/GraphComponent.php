@@ -39,8 +39,8 @@ class GraphComponent extends Manager implements TemplateSupport
         $answers = array();
 
         $question = $this->get_question();
-        $options = $question->get_options()->as_array();
-        $matches = $question->get_matches()->as_array();
+        $options = $question->get_options();
+        $matches = $question->get_matches();
 
         $answer_count = rand(0, 50);
 
