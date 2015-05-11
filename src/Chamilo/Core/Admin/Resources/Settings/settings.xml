@@ -235,7 +235,7 @@
 					<validation rule="numeric" message="MustBeNumeric" />
 				</validations>
 			</setting>
-			<setting name="version" field="text" default="2.0" locked="true" />
+			<setting name="version" field="text" default="5.0" locked="true" />
 			<setting name="enable_package_management" field="text" default="1" locked="true" />
 			<setting name="show_version_data" field="checkbox" default="0">
 				<options type="static">

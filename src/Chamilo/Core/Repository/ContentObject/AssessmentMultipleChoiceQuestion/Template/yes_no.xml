@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion">
 	<properties>
-		<name>yes_no</name>
+		<name>YesNo</name>
 		<answer_type>1</answer_type>
 		<options>
 			<option correct="1" score="1" feedback="YesFeedback">YesAnswer</option>

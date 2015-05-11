@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Home\Renderer\Factory;
 
 /**
  *
@@ -80,7 +81,8 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             User :: class_name(),
             (int) Session :: get_user_id());
 
-        $renderer = Renderer :: factory(Renderer :: TYPE_BASIC, $user);
+        $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
+        $renderer = $rendererFactory->getRenderer();
         $html = BlockRendition :: factory($renderer, $block)->as_html();
 
         $result = new JsonAjaxResult(200);
