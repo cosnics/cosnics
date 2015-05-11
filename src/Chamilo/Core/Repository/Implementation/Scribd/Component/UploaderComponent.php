@@ -14,7 +14,6 @@ class UploaderComponent extends Manager
     public function run()
     {
         $form = new ExternalObjectForm(ExternalObjectForm :: TYPE_CREATE, $this->get_url(), $this);
-
         if ($form->validate())
         {
             $id = $form->upload_document();
