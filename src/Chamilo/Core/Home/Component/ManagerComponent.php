@@ -20,7 +20,7 @@ class ManagerComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            \Chamilo\Libraries\Platform\Session\Session :: register(__NAMESPACE__ . '\general', '1');
+            \Chamilo\Libraries\Platform\Session\Session :: register('Chamilo\Core\Home\General', '1');
         }
 
         $redirect = new Redirect();

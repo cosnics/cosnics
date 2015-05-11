@@ -70,11 +70,11 @@ abstract class Renderer
 
     /**
      *
-     * @param Application $application
+     * @param CalendarRenderer $application
      * @param int $display_time
      * @param string $link_target
      */
-    public function __construct(Application $application, $display_time, $link_target = '')
+    public function __construct(CalendarRenderer $application, $display_time, $link_target = '')
     {
         if (! $application instanceof CalendarRenderer)
         {

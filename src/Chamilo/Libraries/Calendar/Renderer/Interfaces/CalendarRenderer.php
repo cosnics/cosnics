@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Interfaces;
 
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
+
 /**
  * An interface which forces the implementing Application to provide a given set of methods
  *
@@ -22,4 +23,6 @@ interface CalendarRenderer
      * @return Event[]
      */
     public function get_calendar_renderer_events(Renderer $renderer, $start_time, $end_time);
+
+    public function get_url($parameters = array(), $filter = array(), $encode_entities = false);
 }
