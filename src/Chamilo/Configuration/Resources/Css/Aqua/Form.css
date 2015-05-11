@@ -1140,3 +1140,11 @@ fieldset legend {
 	padding: 0px 5px 0px 5px;
 	margin-right: 10px;
 }
+
+div.ui-datepicker
+{
+	background-color: #F7FBFD;
+	border: 1px solid #d7e6ed !important;
+	padding: 10px;
+	margin: 2px;
+}
