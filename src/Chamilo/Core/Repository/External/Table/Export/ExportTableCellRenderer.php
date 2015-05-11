@@ -29,7 +29,8 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
             case ContentObject :: PROPERTY_TITLE :
                 return StringUtilities :: getInstance()->truncate($object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($object->get_description(), 50));
+                return Utilities :: htmlentities(
+                    StringUtilities :: getInstance()->truncate($object->get_description(), 50));
         }
         return parent :: render_cell($column, $object);
     }
@@ -44,7 +45,7 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 Theme :: getInstance()->getCommonImagePath('Action/Export'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_EXTERNAL_REPOSITORY_MANAGER_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY,
+                        Manager :: PARAM_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY,
                         Manager :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
 
