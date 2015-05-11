@@ -485,6 +485,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         if (! isset($this->selected_course_type))
         {
             $selected_course_type_id = $this->get_selected_course_type_parameter_value();
+            $course_types = $this->retrieve_course_types();
 
             $course_type = null;
 
@@ -492,12 +493,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             {
                 do
                 {
-                    $course_type = $this->course_types->next_result();
+                    $course_type = $course_types->next_result();
                 }
                 while (! is_null($course_type) && ! $this->get_parent()->show_empty_courses() &&
                      $this->count_courses_for_course_type($course_type[CourseType :: PROPERTY_ID]) == 0);
 
-                $this->course_types->reset();
+                $course_types->reset();
 
                 $selected_course_type_id = $course_type[CourseType :: PROPERTY_ID];
             }
