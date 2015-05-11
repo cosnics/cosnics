@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Description of weblcms_new_block
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  */
 class NewBlock extends Block
@@ -39,50 +39,50 @@ class NewBlock extends Block
     {
         // All user courses
         $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->get_user());
-        
-        $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, 'application\weblcms'));
-        
+
+        $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, 'Chamilo\Application\Weblcms'));
+
         if ($threshold !== 0 && Request :: get(self :: FORCE_OVERSIZED) != self :: DO_FORCE_OVERSIZED &&
              $user_courses->size() > $threshold)
         {
             $this->courses = array();
             return self :: OVERSIZED_WARNING;
         }
-        
+
         $this->courses = array();
-        
+
         $course_settings_controller = \Chamilo\Application\Weblcms\CourseSettingsController :: get_instance();
         $unique_publications = array();
         while ($course = $user_courses->next_result())
         {
             $this->courses[$course->get_id()] = $course;
-            
+
             if ($course_settings_controller->get_course_setting(
-                $course->get_id(), 
+                $course->get_id(),
                 \Chamilo\Application\Weblcms\CourseSettingsConnector :: VISIBILITY) == 1)
             {
                 $condition = $this->get_publication_conditions($course, $tool);
                 $course_module_id = WeblcmsDataManager :: retrieve_course_tool_by_name($tool)->get_id();
                 $location = \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
-                    \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: TYPE_COURSE_MODULE, 
-                    $course_module_id, 
+                    \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: TYPE_COURSE_MODULE,
+                    $course_module_id,
                     $course->get_id());
-                
+
                 $entities = array();
                 $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: get_instance(
                     $course->get_id());
                 $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: get_instance();
                 $entities[\Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: get_instance();
-                
+
                 $publications = WeblcmsDataManager :: retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                    $location, 
-                    $entities, 
-                    $condition, 
+                    $location,
+                    $entities,
+                    $condition,
                     new OrderBy(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(), 
+                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
                             \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX)));
-                
+
                 if ($publications == 0)
                 {
                     continue;
@@ -112,18 +112,18 @@ class NewBlock extends Block
                 break;
         }
         $last_visit_date = \Chamilo\Application\Weblcms\Storage\DataManager :: get_last_visit_date(
-            $course->get_id(), 
-            $this->get_user_id(), 
-            $tool, 
+            $course->get_id(),
+            $this->get_user_id(),
+            $tool,
             0);
-        
+
         $conditions = array();
         $conditions[] = WeblcmsDataManager :: get_publications_condition($course, $this->get_user(), $tool, $type);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(), 
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_PUBLICATION_DATE), 
-            InequalityCondition :: GREATER_THAN_OR_EQUAL, 
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_PUBLICATION_DATE),
+            InequalityCondition :: GREATER_THAN_OR_EQUAL,
             new StaticConditionVariable($last_visit_date));
         return new AndCondition($conditions);
     }

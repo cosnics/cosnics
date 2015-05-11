@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: portfolio_item.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.portfolio_item
  */
 class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupport
@@ -48,7 +48,8 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
     {
         if (! $this->reference_object instanceof Portfolio)
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_reference());
         }
         return $this->reference_object;

@@ -31,7 +31,9 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
 
         $question_id = Request :: get(
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_QUESTION);
-        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item($question_id);
+        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
+            $question_id);
 
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';

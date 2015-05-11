@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class Publication extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Publication properties
      */
@@ -29,7 +29,7 @@ class Publication extends DataClass
     public function create()
     {
         $succes = parent :: create();
-        
+
         $rights = Rights :: get_available_rights_for_publications();
         foreach ($rights as $right)
         {
@@ -50,21 +50,23 @@ class Publication extends DataClass
     public function delete()
     {
         $location = Rights :: get_instance()->get_publication_location($this->get_id());
-        
+
         if (! $location->delete())
         {
             return false;
         }
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID), 
+            new PropertyConditionVariable(Participant :: class_name(), Participant :: PROPERTY_SURVEY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_id()));
-        $participants = DataManager :: retrieves(Participant :: CLASS_NAME, new DataClassRetrievesParameters($condition)); 
+        $participants = DataManager :: retrieves(
+            Participant :: CLASS_NAME,
+            new DataClassRetrievesParameters($condition));
         while ($participant = $participants->next_result())
         {
             $participant->delete();
         }
-        
+
         $succes = parent :: delete();
         return $succes;
     }
@@ -73,11 +75,11 @@ class Publication extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_CONTENT_OBJECT_ID, 
-                self :: PROPERTY_FROM_DATE, 
-                self :: PROPERTY_TO_DATE, 
-                self :: PROPERTY_PUBLISHER, 
-                self :: PROPERTY_PUBLISHED, 
+                self :: PROPERTY_CONTENT_OBJECT_ID,
+                self :: PROPERTY_FROM_DATE,
+                self :: PROPERTY_TO_DATE,
+                self :: PROPERTY_PUBLISHER,
+                self :: PROPERTY_PUBLISHED,
                 self :: PROPERTY_TITLE));
     }
 
@@ -88,7 +90,7 @@ class Publication extends DataClass
 
     /**
      * Returns the content_object_id of this Publication.
-     * 
+     *
      * @return the content_object_id.
      */
     function get_content_object_id()
@@ -98,7 +100,7 @@ class Publication extends DataClass
 
     /**
      * Sets the content_object_id of this Publication.
-     * 
+     *
      * @param content_object_id
      */
     function set_content_object_id($content_object_id)
@@ -108,7 +110,7 @@ class Publication extends DataClass
 
     /**
      * Returns the title of this Publication.
-     * 
+     *
      * @return the title.
      */
     function get_title()
@@ -118,7 +120,7 @@ class Publication extends DataClass
 
     /**
      * Sets the title of this Publication.
-     * 
+     *
      * @param title
      */
     function set_title($title)
@@ -128,7 +130,7 @@ class Publication extends DataClass
 
     /**
      * Returns the from_date of this Publication.
-     * 
+     *
      * @return the from_date.
      */
     function get_from_date()
@@ -138,7 +140,7 @@ class Publication extends DataClass
 
     /**
      * Sets the from_date of this Publication.
-     * 
+     *
      * @param from_date
      */
     function set_from_date($from_date)
@@ -148,7 +150,7 @@ class Publication extends DataClass
 
     /**
      * Returns the to_date of this Publication.
-     * 
+     *
      * @return the to_date.
      */
     function get_to_date()
@@ -158,7 +160,7 @@ class Publication extends DataClass
 
     /**
      * Sets the to_date of this Publication.
-     * 
+     *
      * @param to_date
      */
     function set_to_date($to_date)
@@ -168,7 +170,7 @@ class Publication extends DataClass
 
     /**
      * Returns the publisher of this Publication.
-     * 
+     *
      * @return the publisher.
      */
     function get_publisher()
@@ -178,7 +180,7 @@ class Publication extends DataClass
 
     /**
      * Sets the publisher of this Publication.
-     * 
+     *
      * @param publisher
      */
     function set_publisher($publisher)
@@ -188,7 +190,7 @@ class Publication extends DataClass
 
     /**
      * Returns the published of this Publication.
-     * 
+     *
      * @return the published.
      */
     function get_published()
@@ -198,7 +200,7 @@ class Publication extends DataClass
 
     /**
      * Sets the published of this Publication.
-     * 
+     *
      * @param published
      */
     function set_published($published)
@@ -214,9 +216,9 @@ class Publication extends DataClass
         {
             return true;
         }
-        
+
         $time = time();
-        
+
         if ($time < $from_date || $time > $to_date)
         {
             return false;
@@ -231,9 +233,9 @@ class Publication extends DataClass
     {
         if (! $this->publication_cache)
         {
-            $this->publication_cache = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $this->get_content_object_id(), 
-                Survey :: class_name());
+            $this->publication_cache = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Survey :: class_name(),
+                $this->get_content_object_id());
         }
         return $this->publication_cache;
     }

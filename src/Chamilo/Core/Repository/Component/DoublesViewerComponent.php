@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * $Id: comparer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -45,7 +46,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
         if (isset($id))
         {
-            $this->content_object = $content_object = $this->retrieve_content_object($id);
+            $this->content_object = $content_object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
             $html[] = ContentObjectRenditionImplementation :: launch(
                 $content_object,
                 ContentObjectRendition :: FORMAT_HTML,
@@ -61,7 +62,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
         {
             $html[] = $this->get_full_table_html();
         }
-        
+
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -121,20 +122,14 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $breadcrumbtrail->add_help('repository_doubles_viewer');
     }
 
-    public function get_additional_parameters()
-    {
-        return array();
-
-        // return array(RepositoryManager :: PARAM_CONTENT_OBJECT_ID);
-    }
-
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-        if(isset ($this->content_object)){
+        if (isset($this->content_object))
+        {
             $conditions[true] = $this->get_detail_condition();
         }
-        
+
         $conditions[false] = $this->get_full_condition();
         return $conditions;
     }

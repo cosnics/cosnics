@@ -108,8 +108,8 @@ abstract class Authentication
     public static function get_external_authentication_types()
     {
         $types = array();
-        $types[] = 'security_token';
-        $types[] = 'cas';
+        $types[] = 'SecurityToken';
+        $types[] = 'Cas';
         return $types;
     }
 

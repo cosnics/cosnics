@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class ViewerComponent extends Manager
 {
@@ -21,7 +22,8 @@ class ViewerComponent extends Manager
     {
         if (Request :: get(self :: PARAM_ID))
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 Request :: get(self :: PARAM_ID));
             $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 

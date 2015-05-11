@@ -11,7 +11,8 @@ class ContentObjectUpgraderComponent extends UpgraderComponent implements NoAuth
 
     public function initialize()
     {
-        $content_object_registrations = DataManager :: get_registrations_by_type('core\repository\content_object');
+        $content_object_registrations = DataManager :: get_registrations_by_type(
+            'Chamilo\Core\Repository\ContentObject');
 
         foreach ($content_object_registrations as $content_object_registration)
         {

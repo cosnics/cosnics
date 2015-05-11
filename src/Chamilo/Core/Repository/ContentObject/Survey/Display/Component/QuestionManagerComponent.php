@@ -22,8 +22,8 @@ class QuestionManagerComponent extends TabComponent implements TableSupport
 
     function build()
     {
-        $this->page_id = $this->get_root_content_object_id();
-        
+        $this->page_id = $this->get_current_node()->get_parent()->get_content_object()->get_id();
+               
         $html = array();
         
         $table = new ConfigurationTable($this);

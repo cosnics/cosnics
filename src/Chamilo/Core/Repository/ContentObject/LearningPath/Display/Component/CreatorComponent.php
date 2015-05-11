@@ -80,7 +80,9 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
                     continue;
                 }
 
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $object_id);
 
                 if (! $object instanceof LearningPath)
                 {
@@ -232,5 +234,4 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
     {
         return $this->get_root_content_object()->get_allowed_types();
     }
-  
 }

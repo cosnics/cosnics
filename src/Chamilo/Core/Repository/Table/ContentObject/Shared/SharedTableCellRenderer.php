@@ -201,7 +201,7 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
             new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Move'),
-                $this->get_component()->get_shared_content_object_moving_url($content_object),
+                $this->get_shared_content_object_moving_url($content_object),
                 ToolbarItem :: DISPLAY_ICON));
 
         // only user shares can be deleted
@@ -212,11 +212,39 @@ class SharedTableCellRenderer extends DataClassTableCellRenderer
                 new ToolbarItem(
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_component()->get_shared_content_object_deletion_url($content_object),
+                    $this->get_shared_content_object_deletion_url($content_object),
                     ToolbarItem :: DISPLAY_ICON));
         }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Gets the url to delete a share
+     *
+     * @param $content_object ContentObject The object.
+     * @return string The requested URL.
+     */
+    public function get_shared_content_object_deletion_url($content_object)
+    {
+        return $this->get_component()->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_DELETE_SHARED_CONTENT_OBJECTS,
+                \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
+    }
+
+    /**
+     * Gets the url to move a share to another share category.
+     *
+     * @param $content_object ContentObject The object.
+     * @return string The requested URL.
+     */
+    private function get_shared_content_object_moving_url($content_object)
+    {
+        return $this->get_component()->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_MOVE_SHARED_CONTENT_OBJECTS,
+                \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
     private function get_rights_links($content_object)

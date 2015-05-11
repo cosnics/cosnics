@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class LocationEntityRightGroup extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Request properties
      */
@@ -22,7 +22,7 @@ class LocationEntityRightGroup extends DataClass
 
     /**
      * The group of the LocationEntityRightGroup
-     * 
+     *
      * @var \core\group\Group
      */
     private $group;
@@ -35,7 +35,7 @@ class LocationEntityRightGroup extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @param $extended_property_names multitype:string
      * @return multitype:string The property names.
      */
@@ -43,13 +43,13 @@ class LocationEntityRightGroup extends DataClass
     {
         $extended_property_names[] = self :: PROPERTY_LOCATION_ENTITY_RIGHT_ID;
         $extended_property_names[] = self :: PROPERTY_GROUP_ID;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
     /**
      * Get the data class data manager
-     * 
+     *
      * @return DataManagerInterface
      */
     public function get_data_manager()
@@ -67,7 +67,7 @@ class LocationEntityRightGroup extends DataClass
         if (! isset($this->location_entity_right))
         {
             $this->location_entity_right = \Chamilo\Core\Rights\Storage\DataManager :: retrieve_rights_location_entity_right_by_id(
-                'application\cas_user\rights', 
+                'Chamilo\Application\CasUser\Rights',
                 $this->get_location_entity_right_id());
         }
         return $this->location_entity_right;
@@ -88,7 +88,7 @@ class LocationEntityRightGroup extends DataClass
         if (! isset($this->group))
         {
             $this->group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                Group :: class_name(), 
+                Group :: class_name(),
                 $this->get_group_id());
         }
         return $this->group;

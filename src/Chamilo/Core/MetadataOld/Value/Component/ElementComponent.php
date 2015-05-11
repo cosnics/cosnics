@@ -35,7 +35,7 @@ class ElementComponent extends Manager implements DelegateComponent
                     array(
                         \Chamilo\Core\MetadataOld\Manager :: PARAM_ACTION => \Chamilo\Core\MetadataOld\Manager :: ACTION_ELEMENT),
                     $this->get_additional_parameters()),
-                Translation :: get('BrowserComponent', null, 'core\metadata\element')));
+                Translation :: get('BrowserComponent', null, 'Chamilo\Core\MetadataOld\Element')));
     }
 
     /**

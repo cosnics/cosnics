@@ -19,8 +19,10 @@ class DateTime extends ContentObject implements Versionable
     const CLASS_NAME = __CLASS__;
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_INSTRUCTION = 'instruction';
-    const PROPERTY_DATE = 'date';
-    const PROPERTY_TIME = 'time';
+    const PROPERTY_QUESTION_TYPE = 'question_type';
+    
+    const TYPE_DATE = 1;
+    const TYPE_TIME = 2;
 
     static function get_type_name()
     {
@@ -53,24 +55,14 @@ class DateTime extends ContentObject implements Versionable
         return ($instruction != '<p>&#160;</p>' && count($instruction) > 0);
     }
 
-    public function get_date()
+    public function get_question_type()
     {
-        return $this->get_additional_property(self :: PROPERTY_DATE);
+        return $this->get_additional_property(self :: PROPERTY_QUESTION_TYPE);
     }
 
-    public function set_date($date)
+    public function set_question_type($question_type)
     {
-        return $this->set_additional_property(self :: PROPERTY_DATE, $date);
-    }
-
-    public function get_time()
-    {
-        return $this->get_additional_property(self :: PROPERTY_TIME);
-    }
-
-    public function set_time($time)
-    {
-        return $this->set_additional_property(self :: PROPERTY_TIME, $time);
+        return $this->set_additional_property(self :: PROPERTY_QUESTION_TYPE, $question_type);
     }
 
     static function get_additional_property_names()
@@ -78,8 +70,7 @@ class DateTime extends ContentObject implements Versionable
         return array(
             self :: PROPERTY_QUESTION, 
             self :: PROPERTY_INSTRUCTION, 
-            self :: PROPERTY_DATE, 
-            self :: PROPERTY_TIME);
+            self :: PROPERTY_QUESTION_TYPE);
     }
 }
 

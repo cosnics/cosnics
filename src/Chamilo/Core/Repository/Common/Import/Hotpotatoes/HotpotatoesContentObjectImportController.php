@@ -86,7 +86,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
     {
         $webpage_properties = WebpageProperties :: from_path($full_exercise_path);
 
-        $hotpotatoes = ContentObject :: factory('\core\repository\content_object\hotpotatoes\Hotpotatoes');
+        $hotpotatoes = ContentObject :: factory(
+            'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes');
         $hotpotatoes->set_owner_id($this->get_parameters()->get_user());
         $hotpotatoes->set_parent_id($this->get_parameters()->get_category());
 

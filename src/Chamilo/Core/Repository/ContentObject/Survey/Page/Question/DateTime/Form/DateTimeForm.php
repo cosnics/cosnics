@@ -4,6 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Fo
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Storage\DataClass\DateTime;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  * A form to create/update a survey_open_question
@@ -11,34 +17,52 @@ use Chamilo\Libraries\Platform\Translation;
 class DateTimeForm extends ContentObjectForm
 {
 
-    function build_basic_form()
+    const TAB_GENERAL = 'general';
+    const TAB_QUESTION = 'question';
+    
+    private static $html_editor_options = array(
+        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
+        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+    
+    /**
+     * Prepare all the different tabs
+     */
+    function prepareTabs()
     {
-        $this->addElement('category', Translation :: get('Question'));
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime',
+                    true) . 'Form.js'));
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_QUESTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime',
+                    'Tab/' . self :: TAB_QUESTION),
+                'build_question_form'));
+    
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
+    }
+    
+    function build_question_form()
+    {
         $this->add_textfield(
             DateTime :: PROPERTY_QUESTION, 
             Translation :: get('Question'), 
             true, 
-            array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
-        $this->add_html_editor(DateTime :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
+            array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
+        $this->add_html_editor(DateTime :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false, self :: $html_editor_options);
         
-        $this->addElement('category', Translation :: get('Types'));
-        $this->addElement('checkbox', DateTime :: PROPERTY_DATE, Translation :: get('DateQuestion'));
-        $this->addElement('checkbox', DateTime :: PROPERTY_TIME, Translation :: get('TimeQuestion'));
-        $this->addElement('category');
-        $this->addElement('category');
+        $this->addElement('radio', DateTime :: PROPERTY_QUESTION_TYPE , Translation :: get('DateQuestion'),null, DateTime ::TYPE_DATE);
+        $this->addElement('radio', DateTime :: PROPERTY_QUESTION_TYPE, Translation :: get('TimeQuestion'), null, DateTime :: TYPE_TIME);
     }
 
-    protected function build_creation_form()
-    {
-        $this->build_basic_form();
-        parent :: build_creation_form();
-    }
-
-    protected function build_editing_form()
-    {
-        $this->build_basic_form();
-        parent :: build_editing_form();
-    }
     
     // Inherited
     function create_content_object()
@@ -48,8 +72,7 @@ class DateTimeForm extends ContentObjectForm
         $object = new DateTime();
         $object->set_question($values[DateTime :: PROPERTY_QUESTION]);
         $object->set_instruction($values[DateTime :: PROPERTY_INSTRUCTION]);
-        $object->set_date($values[DateTime :: PROPERTY_DATE]);
-        $object->set_time($values[DateTime :: PROPERTY_TIME]);
+        $object->set_question_type($values[DateTime :: PROPERTY_QUESTION_TYPE]);
         
         $this->set_content_object($object);
         return parent :: create_content_object();
@@ -58,13 +81,11 @@ class DateTimeForm extends ContentObjectForm
     function update_content_object()
     {
         $values = $this->exportValues();
-        
+                  
         $object = $this->get_content_object();
         $object->set_question($values[DateTime :: PROPERTY_QUESTION]);
         $object->set_instruction($values[DateTime :: PROPERTY_INSTRUCTION]);
-        
-        $object->set_date($values[DateTime :: PROPERTY_DATE]);
-        $object->set_time($values[DateTime :: PROPERTY_TIME]);
+        $object->set_question_type($values[DateTime :: PROPERTY_QUESTION_TYPE]);
         
         return parent :: update_content_object();
     }
@@ -75,8 +96,7 @@ class DateTimeForm extends ContentObjectForm
         $defaults[DateTime :: PROPERTY_QUESTION] = $defaults[DateTime :: PROPERTY_QUESTION] ==
              null ? $object->get_question() : $defaults[DateTime :: PROPERTY_QUESTION];
         $defaults[DateTime :: PROPERTY_INSTRUCTION] = $object->get_instruction();
-        $defaults[DateTime :: PROPERTY_DATE] = $object->get_date();
-        $defaults[DateTime :: PROPERTY_TIME] = $object->get_time();
+        $defaults[DateTime :: PROPERTY_QUESTION_TYPE] = $object->get_question_type();
         
         parent :: setDefaults($defaults);
     }

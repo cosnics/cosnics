@@ -47,9 +47,9 @@ class NewAssignments extends NewBlock
             if ($publication[ContentObject :: PROPERTY_TYPE] != Assignment :: class_name())
                 continue;
 
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                Assignment :: class_name());
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Assignment :: class_name(),
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             if ($course_id != $current_course_id)
             {

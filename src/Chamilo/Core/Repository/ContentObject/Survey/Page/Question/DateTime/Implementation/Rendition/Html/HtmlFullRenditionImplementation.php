@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Implementation\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Storage\DataClass\DateTime;
 
 class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -66,8 +67,10 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $html[] = implode(PHP_EOL, $table_header);
-
-        if ($content_object->get_date() == 1)
+        
+        $namespace = $content_object->package();
+        
+        if ($content_object->get_question_type() == DateTime :: TYPE_DATE)
         {
             $html[] = '<th class="info" >' . Translation :: get('EnterDate') . '</th>';
             $html[] = '</tr>';
@@ -79,14 +82,14 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 
             $html[] = '<div id="datepicker"></div>';
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Date.js' .
+                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'Date.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';
             $html[] = '</tbody>';
         }
 
-        if ($content_object->get_time() == 1)
+        if ($content_object->get_question_type() == DateTime :: TYPE_TIME)
         {
             $html[] = '<th class="info" >' . Translation :: get('EnterTime') . '</th>';
             $html[] = '</tr>';
@@ -97,7 +100,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<td>';
             $html[] = '<div id="timepicker"></div>';
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime', true) . 'Time.js' .
+                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'Time.js' .
                  '"></script>';
             $html[] = '</td>';
             $html[] = '</tr>';
@@ -109,7 +112,6 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
-        // $html[] = $this->get_javascript($question_id);
         return implode(PHP_EOL, $html);
     }
 }

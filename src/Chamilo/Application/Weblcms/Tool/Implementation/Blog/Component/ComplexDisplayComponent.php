@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Blog\Manager;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -50,8 +49,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Blog
         }
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->publication->get_content_object()->get_type()) . '\display';
+        $context = $this->publication->get_content_object()->package() . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

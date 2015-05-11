@@ -157,8 +157,10 @@ class Path
      */
     public function getCachePath($namespace = null, $web = false)
     {
-        $namespace = ($namespace ? 'cache\\' . $namespace : 'cache');
-        return $this->cache[self :: CACHE][(string) $namespace][(string) $web] = $this->getStoragePath($namespace, $web);
+        $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
+        return $this->cache[self :: CACHE][(string) $completeNamespace][(string) $web] = $this->getStoragePath(
+            'cache',
+            $web) . ($web ? '/' : DIRECTORY_SEPARATOR) . md5($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
     /**

@@ -106,7 +106,7 @@ class SettingsArchiveWizardPage extends ArchiveWizardPage
 
         $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
             'last_time_archived',
-            'core\tracking');
+            'Chamilo\Core\Tracking');
 
         $defaults['start_date'] = $setting ? $setting->get_value() : date('d-F-Y');
         $defaults['end_date'] = date('d-F-Y');
@@ -147,7 +147,7 @@ class ValidateSettings extends HTML_QuickForm_Rule
         {
             $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
                 'last_time_archived',
-                'core\tracking');
+                'Chamilo\Core\Tracking');
 
             $setting_date = DatetimeUtilities :: time_from_datepicker_without_timepicker($setting->get_value());
             return $date >= $setting_date;

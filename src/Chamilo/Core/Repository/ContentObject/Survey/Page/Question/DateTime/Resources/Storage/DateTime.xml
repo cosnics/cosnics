@@ -4,8 +4,7 @@
 		<property name="id" type="integer" unsigned="1" notnull="1" />
 		<property name="question" type="text" notnull="1" />
 		<property name="instruction" type="text" />
-		<property name="date" type="integer" unsigned="1" />
-		<property name="time" type="integer" unsigned="1" />
+		<property name="question_type" type="integer" unsigned="1" />
 	</properties>
 	<index name="id" type="primary">
 		<indexproperty name="id" />

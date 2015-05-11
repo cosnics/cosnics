@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * The manager of this package.
@@ -35,7 +36,8 @@ abstract class Manager extends Application
 
         foreach ($content_object_ids as $content_object_id)
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $content_object_id);
 
             if (! $content_object)

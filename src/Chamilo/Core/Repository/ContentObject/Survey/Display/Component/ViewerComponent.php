@@ -25,6 +25,7 @@ class ViewerComponent extends TabComponent
         if ($this->is_form_submitted())
         {
             $action = $this->get_action();
+            
             $this->save_answers();
             
             if ($action == self :: FORM_BACK)
@@ -60,6 +61,7 @@ class ViewerComponent extends TabComponent
             
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
+            $html[] = $this->get_hidden_fields();
             $html[] = $this->render_footer();
             
             return implode(PHP_EOL, $html);

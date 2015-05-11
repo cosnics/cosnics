@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -28,7 +27,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
     public function __construct(ExportParameters $parameters)
     {
         parent :: __construct($parameters);
-        
+
         $this->prepare_file_system();
     }
 
@@ -38,8 +37,8 @@ class ZipContentObjectExportController extends ContentObjectExportController
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
-                $content_object_ids, 
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                $content_object_ids,
                 ContentObject :: get_table_name());
         }
         else
@@ -48,7 +47,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
         }
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
-        
+
         while ($content_object = $content_objects->next_result())
         {
             $this->process($content_object);
@@ -58,15 +57,14 @@ class ZipContentObjectExportController extends ContentObjectExportController
 
     public function process($content_object)
     {
-        $export_types = ContentObjectExportImplementation :: get_types_for_object(
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object));
-        
+        $export_types = ContentObjectExportImplementation :: get_types_for_object($content_object->package());
+
         if (in_array(ContentObjectExport :: FORMAT_ZIP, $export_types))
         {
             ContentObjectExportImplementation :: launch(
-                $this, 
-                $content_object, 
-                ContentObjectExport :: FORMAT_ZIP, 
+                $this,
+                $content_object,
+                ContentObjectExport :: FORMAT_ZIP,
                 $this->get_parameters()->get_type());
         }
     }
@@ -79,7 +77,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
     public function prepare_file_system()
     {
         $user_id = Session :: get_user_id();
-        
+
         $this->temporary_directory = Path :: getInstance()->getTemporaryPath() . $user_id . '/export_content_objects/';
         if (! is_dir($this->temporary_directory))
         {

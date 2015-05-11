@@ -82,33 +82,27 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CONTENT_OBJECT_ID,
-                                    $this->get_export_types_cache($export_type),
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CONTENT_OBJECT_ID,
+                                $this->get_export_types_cache($export_type),
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CATEGORY_ID,
-                                    $category_ids,
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CATEGORY_ID,
+                                $category_ids,
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                     }
                     else
                     {
-                        $table_row[] = Theme :: getInstance()->getImage(
+                        $table_row[] = Theme :: getInstance()->getCommonImage(
                             'Action/ExportNa',
                             'png',
                             Translation :: get('ExportNotAvailable'),
                             null,
-                            ToolbarItem :: DISPLAY_ICON,
-                            false,
-                            Utilities :: COMMON_LIBRARIES);
+                            ToolbarItem :: DISPLAY_ICON);
                     }
                 }
                 $table_data[] = $table_row;
@@ -169,9 +163,11 @@ class ExporterComponent extends Manager
         $this->is_exportable = array();
 
         $table_data = array();
+
         foreach ($types as $type)
         {
-            $type_namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type);
+            $type_namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
+
             $table_row = array();
             $table_row[] = Theme :: getInstance()->getImage(
                 'Logo/16',
@@ -203,7 +199,7 @@ class ExporterComponent extends Manager
                 {
                     $this->set_export_types_cache($export_type, $ids);
                     $this->is_exportable[$export_type] = true;
-                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/Confirm_mini') .
+                    $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/ConfirmMini') .
                          '"/>';
                 }
                 else
@@ -211,8 +207,10 @@ class ExporterComponent extends Manager
                     $table_row[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Status/ErrorMini') . '"/>';
                 }
             }
+
             $table_data[] = $table_row;
         }
+
         return $table_data;
     }
 
@@ -223,7 +221,7 @@ class ExporterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 
     public function get_export_types_cache($type)

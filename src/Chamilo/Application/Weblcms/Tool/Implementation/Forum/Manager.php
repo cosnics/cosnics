@@ -36,7 +36,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_subforum_parents($subforum_id)
     {
-        $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item($subforum_id);
+        $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
+            $subforum_id);
 
         while (! empty($parent))
         {

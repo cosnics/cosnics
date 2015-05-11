@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: creator.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -57,14 +58,13 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function run()
     {
-        
         $this->get_complex_content_object_breadcrumbs();
 
         $this->type_selection = TypeSelector :: get_selection();
-        
+
         $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
         $exclude[] = $this->get_root_content_object()->get_id();
-        
+
         if ($this->type_selection)
         {
             if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
@@ -98,7 +98,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
                 foreach ($objects as $content_object_id)
                 {
-                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determine_content_object_type(
+                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
+                        ContentObject :: class_name(),
                         $content_object_id);
                     if (method_exists($this->get_parent(), 'get_helper_object'))
                     {
@@ -110,7 +111,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                         }
                     }
                     // gets the type of the helper object
-                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determine_content_object_type(
+                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
+                        ContentObject :: class_name(),
                         $content_object_id);
 
                     $this->create_complex_content_object_item($type, $content_object_id);

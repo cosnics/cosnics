@@ -53,7 +53,6 @@ abstract class Manager extends Application
      */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $parent)
     {
-        
         parent :: __construct($request, $user, $parent);
 
         $action = Request :: get(self :: PARAM_ACTION);
@@ -110,7 +109,8 @@ abstract class Manager extends Application
      */
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $complex_content_object_item_id);
         if (is_null($complex_content_object_item))
         {

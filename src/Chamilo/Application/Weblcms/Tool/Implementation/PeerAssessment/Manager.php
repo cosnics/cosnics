@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This tool allows a user to publish peer assessments in a course.
@@ -462,7 +463,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 // TODO check this ???
                 // $this->indicators[] = $child;
-                $this->indicators[] = RepositoryDataManager :: retrieve_content_object($child->get_ref());
+                $this->indicators[] = RepositoryDataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $child->get_ref());
             }
         }
 

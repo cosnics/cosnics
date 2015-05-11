@@ -41,7 +41,7 @@ class DeleterComponent extends Manager
 
             foreach ($items as $id)
             {
-                $item = DataManager :: retrieve_item(intval($id));
+                $item = DataManager :: retrieve_by_id(Item :: class_name(), intval($id));
                 $parent_ids[$item->get_parent()] = $item->get_parent();
 
                 if (! $item->delete())

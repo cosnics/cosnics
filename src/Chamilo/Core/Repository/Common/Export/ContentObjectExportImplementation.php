@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Common\Export;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -13,21 +12,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class ContentObjectExportImplementation extends AbstractContentObjectExportImplementation
 {
 
-    public static function launch(ContentObjectExportController $controller, ContentObject $content_object, $format, 
+    public static function launch(ContentObjectExportController $controller, ContentObject $content_object, $format,
         $type)
     {
         return self :: factory($controller, $content_object, $format, $type)->render();
     }
 
-    public static function factory(ContentObjectExportController $controller, ContentObject $content_object, $format, 
+    public static function factory(ContentObjectExportController $controller, ContentObject $content_object, $format,
         $type)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
         $class = $content_object->package() . '\Implementation\Export\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() .
              (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ExportImplementation';
-        
+
         if (! class_exists($class, true))
         {
             $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($format)->upperCamelize() .
@@ -49,8 +47,8 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
 
     public static function get_types_for_object($content_object_namespace)
     {
-        $class = $content_object_namespace . '\\' . 'ExportImplementation';
-        
+        $class = $content_object_namespace . '\Implementation\ExportImplementation';
+
         if (! class_exists($class, true))
         {
             return self :: get_types();

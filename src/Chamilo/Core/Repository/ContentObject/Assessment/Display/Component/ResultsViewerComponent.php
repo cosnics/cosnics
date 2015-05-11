@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: result_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -57,7 +58,8 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         {
             $result = $results[$question_cloi->get_id()];
 
-            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $question_cloi->get_ref());
             $answers = unserialize($result['answer']);
             $feedback = $result['feedback'];

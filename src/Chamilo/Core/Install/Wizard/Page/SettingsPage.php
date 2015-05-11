@@ -36,6 +36,22 @@ class SettingsPage extends InstallWizardPage
             Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
         $this->addRule('platform_url', 'AddTrailingSlash', 'regex', '/^.*\/$/');
+
+        $serverTypes = array();
+        $serverTypes[] = $this->createElement(
+            'radio',
+            'server_type',
+            null,
+            Translation :: get('Production'),
+            'production');
+        $serverTypes[] = $this->createElement(
+            'radio',
+            'server_type',
+            null,
+            Translation :: get('Test', null, Utilities :: COMMON_LIBRARIES),
+            'test');
+        $this->addGroup($serverTypes, 'server_type', Translation :: get("ServerType"), '&nbsp;', false);
+
         $this->addElement('category');
 
         $this->addElement('category', Translation :: get('Administrator'));
@@ -87,20 +103,22 @@ class SettingsPage extends InstallWizardPage
         $this->addElement('category');
 
         $this->addElement('category', Translation :: get('Security'));
-        $self_reg[] = $this->createElement(
+
+        $selfRegistration = array();
+        $selfRegistration[] = $this->createElement(
             'radio',
             'self_reg',
             null,
             Translation :: get('ConfirmYes', null, Utilities :: COMMON_LIBRARIES),
             1);
-        $self_reg[] = $this->createElement('radio', 'self_reg', null, Translation :: get('AfterApproval'), 2);
-        $self_reg[] = $this->createElement(
+        $selfRegistration[] = $this->createElement('radio', 'self_reg', null, Translation :: get('AfterApproval'), 2);
+        $selfRegistration[] = $this->createElement(
             'radio',
             'self_reg',
             null,
             Translation :: get('ConfirmNo', null, Utilities :: COMMON_LIBRARIES),
             0);
-        $this->addGroup($self_reg, 'self_reg', Translation :: get("AllowSelfReg"), '&nbsp;', false);
+        $this->addGroup($selfRegistration, 'self_reg', Translation :: get("AllowSelfReg"), '&nbsp;', false);
 
         $this->addElement(
             'select',
@@ -146,6 +164,7 @@ class SettingsPage extends InstallWizardPage
         $defaults['self_reg'] = 0;
         $defaults['encrypt_password'] = 1;
         $defaults['hashing_algorithm'] = 'Sha1';
+        $defaults['server_type'] = 'production';
         $this->setDefaults($defaults);
     }
 

@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 
 /**
  *
@@ -27,7 +28,7 @@ class EditorComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->check_allowed();
-        $item = DataManager :: retrieve_item((int) Request :: get(Manager :: PARAM_ITEM));
+        $item = DataManager :: retrieve_by_id(Item :: class_name(), (int) Request :: get(Manager :: PARAM_ITEM));
 
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(

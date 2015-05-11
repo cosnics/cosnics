@@ -82,7 +82,7 @@ class SourceCodeTestGenerator
         $manager_class_name = $context . '\Manager';
 
         if (class_exists($manager_class_name) &&
-             is_subclass_of($manager_class_name, '\libraries\architecture\application\Application'))
+             is_subclass_of($manager_class_name, '\Chamilo\Libraries\Architecture\Application\Application'))
         {
             $content = '<?php
 namespace ' . $context . '\test;

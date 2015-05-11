@@ -83,6 +83,29 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $renderer->as_html();
     }
 
+    public function get_renderer()
+    {
+        $renderer = Request :: get(self :: PARAM_RENDERER);
+
+        if ($renderer && in_array($renderer, $this->get_available_renderers()))
+        {
+            return $renderer;
+        }
+        else
+        {
+            $renderers = $this->get_available_renderers();
+            return $renderers[0];
+        }
+    }
+
+    public function get_available_renderers()
+    {
+        return array(
+            ContentObjectRenderer :: TYPE_TABLE,
+            ContentObjectRenderer :: TYPE_GALLERY,
+            ContentObjectRenderer :: TYPE_SLIDESHOW);
+    }
+
     public function get_action_bar()
     {
         if (! isset($this->action_bar))
@@ -161,7 +184,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_condition()
     {
-        $query = $this->get_action_bar()->get_query();
+        $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
             new StaticConditionVariable(ContentObject :: STATE_NORMAL));
@@ -180,10 +203,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new StaticConditionVariable($type)));
         }
 
-        $filter_condition_renderer = ConditionFilterRenderer :: factory(
-            FilterData :: get_instance(),
-            $this->get_user_id(),
-            $this->get_allowed_content_object_types());
+        $filter_condition_renderer = ConditionFilterRenderer :: factory(FilterData :: get_instance());
         $filter_condition = $filter_condition_renderer->render();
 
         if ($filter_condition instanceof Condition)
@@ -202,6 +222,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repository_browser');
+    }
+
+    public function get_additional_parameters()
+    {
+        return parent :: get_additional_parameters(array(self :: PARAM_RENDERER));
     }
 
     /**

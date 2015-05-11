@@ -45,7 +45,7 @@ class RestorerComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = $this->retrieve_content_object($object_id);
+                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
                 // TODO: Roles & Rights.
                 if ($object->get_owner_id() == $this->get_user_id())
                 {
@@ -163,6 +163,6 @@ class RestorerComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID);
+        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

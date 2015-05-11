@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: updater.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -58,7 +59,8 @@ class ParentChangerComponent extends Manager
                 }
                 else
                 {
-                    $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+                    $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        ComplexContentObjectItem :: class_name(),
                         $selected_parent);
                     $parent = $parent->get_ref();
                 }
@@ -196,7 +198,9 @@ class ParentChangerComponent extends Manager
         while ($child = $children->next_result())
         {
             $ref_id = $child->get_ref();
-            $ref_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($ref_id);
+            $ref_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $ref_id);
 
             if (! $ref_object instanceof ComplexContentObjectSupport)
             {

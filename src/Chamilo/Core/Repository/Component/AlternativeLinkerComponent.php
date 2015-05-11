@@ -22,7 +22,7 @@ class AlternativeLinkerComponent extends Manager implements ApplicationSupport
     {
         $factory = new ApplicationFactory(
             $this->getRequest(),
-            \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Alternative\Manager :: context(),
+            \Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Linker\Alternative\Manager :: context(),
             $this->get_user(),
             $this);
         return $factory->run();

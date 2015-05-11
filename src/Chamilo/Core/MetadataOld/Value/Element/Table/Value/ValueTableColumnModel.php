@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table column model for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ValueTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -22,8 +22,8 @@ class ValueTableColumnModel extends DataClassTableColumnModel implements TableCo
     {
         $this->add_column(
             new DataClassPropertyTableColumn(
-                DefaultElementValue :: class_name(), 
-                DefaultElementValue :: PROPERTY_VALUE, 
-                Translation :: get('Value', null, 'core\metadata\value')));
+                DefaultElementValue :: class_name(),
+                DefaultElementValue :: PROPERTY_VALUE,
+                Translation :: get('Value', null, 'Chamilo\Core\MetadataOld\Value')));
     }
 }

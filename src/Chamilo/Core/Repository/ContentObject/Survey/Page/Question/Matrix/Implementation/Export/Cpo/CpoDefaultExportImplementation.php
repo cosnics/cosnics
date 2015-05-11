@@ -27,10 +27,11 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         $options_node = $content_object_node->appendChild(
             $dom_document->createElement(CpoExportImplementation :: OPTIONS_NODE));
         $options = $this->get_content_object()->get_options();
-        
+                
         // options
         while ($option = $options->next_result())
         {
+      
             $option_node = $options_node->appendChild(
                 $dom_document->createElement(CpoExportImplementation :: OPTION_NODE));
             
@@ -43,7 +44,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
             $value = $option_node->appendChild($dom_document->createAttribute('value'));
             $value->appendChild($dom_document->createTextNode($option->get_value()));
         }
-        
+     
         $matches_node = $content_object_node->appendChild(
             $dom_document->createElement(CpoExportImplementation :: MATCHES_NODE));
         $matches = $this->get_content_object()->get_matches();
@@ -51,6 +52,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         // matches
         while ($match = $matches->next_result())
         {
+                  
             $match_node = $matches_node->appendChild(
                 $dom_document->createElement(CpoExportImplementation :: MATCH_NODE));
             
@@ -63,5 +65,6 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
             $value = $match_node->appendChild($dom_document->createAttribute('value'));
             $value->appendChild($dom_document->createTextNode($match->get_value()));
         }
+      
     }
 }

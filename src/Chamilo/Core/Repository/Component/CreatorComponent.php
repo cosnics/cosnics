@@ -190,7 +190,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
     public function get_allowed_content_object_types()
     {
-        $types = $this->get_content_object_types(true, false);
+        $types = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types(true);
 
         foreach ($types as $index => $type)
         {

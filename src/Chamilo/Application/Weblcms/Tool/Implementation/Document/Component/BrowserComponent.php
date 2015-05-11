@@ -100,7 +100,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $classes = array();
 
-            if (ContentObject :: is_available('core\repository\content_object\file\File'))
+            if (ContentObject :: is_available('Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'))
             {
                 $classes[] = File :: class_name();
             }

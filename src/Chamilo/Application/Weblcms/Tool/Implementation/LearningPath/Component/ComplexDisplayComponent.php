@@ -34,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
@@ -79,7 +80,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         {
             $embedded_content_object_id = $this->get_embedded_content_object_id();
             $this->set_parameter(Embedder :: PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
-            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($embedded_content_object_id);
+            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $embedded_content_object_id);
         }
         else
         {
@@ -288,7 +291,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learning_path_item_attempt->get_total_time() + (time() - $learning_path_item_attempt->get_start_time()));
 
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
-        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
         $mastery_score = $learning_path_item->get_mastery_score();
 
@@ -331,7 +335,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function get_assessment_configuration()
     {
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
-        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
 
         return $learning_path_item->get_configuration();

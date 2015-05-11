@@ -257,8 +257,9 @@ class RightsForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio', true) .
-                     'RightsForm.js'));
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Portfolio\Display',
+                    true) . 'RightsForm.js'));
     }
 
     /**

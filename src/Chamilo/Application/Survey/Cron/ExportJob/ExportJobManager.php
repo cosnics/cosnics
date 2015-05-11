@@ -17,6 +17,7 @@ use Chamilo\Application\Survey\Cron\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -575,7 +576,8 @@ class ExportJobManager
     {
         if (! isset(ExportJobManager :: $questions_cache) || ! isset(ExportJobManager :: $questions_cache[$complex_id]))
         {
-            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 $complex_id);
             ExportJobManager :: $questions_cache[$complex_id] = $complex_question->get_ref_object();
         }

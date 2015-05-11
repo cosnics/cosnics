@@ -8,6 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class PreviewerComponent extends Manager
 {
@@ -34,7 +35,9 @@ class PreviewerComponent extends Manager
     public function get_root_content_object()
     {
         $content_object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($content_object_id);
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $content_object_id);
     }
 
     public function getPreview()

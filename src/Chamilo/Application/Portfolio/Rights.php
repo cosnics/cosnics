@@ -23,7 +23,7 @@ use Exception;
 
 /**
  * Portfolio rights
- * 
+ *
  * @package application\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -72,9 +72,9 @@ class Rights
     public static function get_available_rights()
     {
         return array(
-            Translation :: get('ViewRight') => self :: VIEW_RIGHT, 
-            Translation :: get('ViewFeedbackRight') => self :: VIEW_FEEDBACK_RIGHT, 
-            Translation :: get('GiveFeedbackRight') => self :: GIVE_FEEDBACK_RIGHT, 
+            Translation :: get('ViewRight') => self :: VIEW_RIGHT,
+            Translation :: get('ViewFeedbackRight') => self :: VIEW_FEEDBACK_RIGHT,
+            Translation :: get('GiveFeedbackRight') => self :: GIVE_FEEDBACK_RIGHT,
             Translation :: get('EditRight') => self :: EDIT_RIGHT);
     }
 
@@ -93,12 +93,12 @@ class Rights
              ! empty($publication_id))
         {
             $location_entity_right = DataManager :: retrieve_rights_location_entity_right(
-                $right, 
-                $entity_id, 
-                $entity_type, 
-                $location_id, 
+                $right,
+                $entity_id,
+                $entity_type,
+                $location_id,
                 $publication_id);
-            
+
             if ($location_entity_right)
             {
                 return $location_entity_right->delete();
@@ -107,10 +107,10 @@ class Rights
             {
                 DataClassCache :: truncate(RightsLocationEntityRight :: class_name());
                 return $this->create_rights_location_entity_right(
-                    $right, 
-                    $entity_id, 
-                    $entity_type, 
-                    $location_id, 
+                    $right,
+                    $entity_id,
+                    $entity_type,
+                    $location_id,
                     $publication_id);
             }
         }
@@ -122,7 +122,7 @@ class Rights
 
     /**
      * Helper function to create a rights location entity right
-     * 
+     *
      * @param String $context
      * @param int $right
      * @param int $entity_id
@@ -138,7 +138,7 @@ class Rights
         $location_entity_right->set_right_id($right);
         $location_entity_right->set_entity_id($entity_id);
         $location_entity_right->set_entity_type($entity_type);
-        
+
         return $location_entity_right->create();
     }
 
@@ -152,25 +152,25 @@ class Rights
     public function is_allowed($right, $location, $user_id)
     {
         $user_id = $user_id ? $user_id : Session :: get_user_id();
-        
+
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             (int) $user_id);
-        
+
         if ($user->is_platform_admin())
         {
             return true;
         }
-        
+
         if (! $location instanceof RightsLocation)
         {
             return false;
         }
-        
+
         $entities = array();
         $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
-        
+
         return $this->is_allowed_on_location($right, $user_id, $entities, $location);
     }
 
@@ -185,9 +185,9 @@ class Rights
     public function is_allowed_on_location($right, $user_id, $entities, $location)
     {
         $rights_array = $this->retrieve_granted_rights_array(
-            $location, 
+            $location,
             $this->get_entities_condition($user_id, $entities));
-        
+
         return in_array($right, $rights_array);
     }
 
@@ -209,50 +209,50 @@ class Rights
                 {
                     $entity_type_condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRight :: class_name(), 
-                            RightsLocationEntityRight :: PROPERTY_ENTITY_TYPE), 
+                            RightsLocationEntityRight :: class_name(),
+                            RightsLocationEntityRight :: PROPERTY_ENTITY_TYPE),
                         new StaticConditionVariable($entity->get_entity_type()));
-                    
+
                     foreach ($entity->retrieve_entity_item_ids_linked_to_user($user_id) as $entity_item_id)
                     {
                         $and_conditions = array();
                         $and_conditions[] = $entity_type_condition;
-                        
+
                         $and_conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                RightsLocationEntityRight :: class_name(), 
-                                RightsLocationEntityRight :: PROPERTY_ENTITY_ID), 
+                                RightsLocationEntityRight :: class_name(),
+                                RightsLocationEntityRight :: PROPERTY_ENTITY_ID),
                             new StaticConditionVariable($entity_item_id));
-                        
+
                         $or_conditions[] = new AndCondition($and_conditions);
                     }
                 }
-                
+
                 // add everyone 'entity'
-                
+
                 $and_conditions = array();
-                
+
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight :: class_name(), 
-                        RightsLocationEntityRight :: PROPERTY_ENTITY_TYPE), 
+                        RightsLocationEntityRight :: class_name(),
+                        RightsLocationEntityRight :: PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(0));
-                
+
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight :: class_name(), 
-                        RightsLocationEntityRight :: PROPERTY_ENTITY_ID), 
+                        RightsLocationEntityRight :: class_name(),
+                        RightsLocationEntityRight :: PROPERTY_ENTITY_ID),
                     new StaticConditionVariable(0));
-                
+
                 $or_conditions[] = new AndCondition($and_conditions);
-                
+
                 $condition = new OrCondition($or_conditions);
-                
+
                 if ($to_string)
                 {
                     $condition = ConditionTranslator :: render(DataManager :: get_type(), $condition);
                 }
-                
+
                 $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string] = $condition;
             }
             return $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string];
@@ -261,7 +261,7 @@ class Rights
 
     /**
      * Retrieves the granted rights for a location
-     * 
+     *
      * @param RightsLocation $location
      * @param \libraries\storage\Condition $entities_condition
      * @return int[]
@@ -269,54 +269,54 @@ class Rights
     public function retrieve_granted_rights_array($location, $entities_condition)
     {
         $hash = (is_object($entities_condition) ? spl_object_hash($entities_condition) : md5($entities_condition));
-        
+
         if (is_null($this->granted_rights_cache[$location->get_node_id()][$hash]))
         {
             $conditions = array();
             $conditions[] = $entities_condition;
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight :: class_name(), 
-                    RightsLocationEntityRight :: PROPERTY_LOCATION_ID), 
+                    RightsLocationEntityRight :: class_name(),
+                    RightsLocationEntityRight :: PROPERTY_LOCATION_ID),
                 new StaticConditionVariable($location->get_node_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    RightsLocationEntityRight :: class_name(), 
-                    RightsLocationEntityRight :: PROPERTY_PUBLICATION_ID), 
+                    RightsLocationEntityRight :: class_name(),
+                    RightsLocationEntityRight :: PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($location->get_publication_id()));
             $condition = new AndCondition($conditions);
-            
+
             $records = DataManager :: records(
-                RightsLocationEntityRight :: class_name(), 
+                RightsLocationEntityRight :: class_name(),
                 new RecordRetrievesParameters(
                     new DataClassProperties(
                         array(
                             new PropertyConditionVariable(
-                                RightsLocationEntityRight :: class_name(), 
-                                RightsLocationEntityRight :: PROPERTY_RIGHT_ID))), 
+                                RightsLocationEntityRight :: class_name(),
+                                RightsLocationEntityRight :: PROPERTY_RIGHT_ID))),
                     $condition));
-            
+
             $granted_rights = array();
-            
+
             while ($record = $records->next_result())
             {
                 $granted_rights[] = $record[RightsLocationEntityRight :: PROPERTY_RIGHT_ID];
             }
-            
+
             if ($location->inherits())
             {
-                
+
                 $parent_location = $this->get_location(
-                    $location->get_node()->get_parent(), 
+                    $location->get_node()->get_parent(),
                     $location->get_publication_id());
-                
+
                 if ($parent_location)
                 {
                     $parent_rights = $this->retrieve_granted_rights_array($parent_location, $entities_condition);
                     $granted_rights = array_merge($granted_rights, $parent_rights);
                 }
             }
-            
+
             $this->granted_rights_cache[$location->get_node_id()][$hash] = $granted_rights;
         }
         return $this->granted_rights_cache[$location->get_node_id()][$hash];
@@ -328,50 +328,50 @@ class Rights
      * @param int $publication_id
      * @return \application\portfolio\RightsLocation
      */
-    public function get_location(ComplexContentObjectPathNode $node, $publication_id)
+    public function get_location(ComplexContentObjectPathNode $node = null, $publication_id)
     {
         if (! $node)
         {
             return null;
         }
-        
+
         $node_id = $node->get_hash();
-        
+
         $location = new RightsLocation();
-        
+
         $location->set_node_id($node_id);
         $location->set_publication_id($publication_id);
-        
+
         // Check inherit
-        
+
         if ($node->is_root())
         {
             $location->set_inherit(0);
         }
-        
+
         else
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($location->get_publication_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_NODE_ID), 
+                new PropertyConditionVariable(RightsLocation :: class_name(), RightsLocation :: PROPERTY_NODE_ID),
                 new StaticConditionVariable($location->get_node_id()));
             $condition = new AndCondition($conditions);
-            
+
             try
             {
                 $record = DataManager :: record(
-                    RightsLocation :: class_name(), 
+                    RightsLocation :: class_name(),
                     new RecordRetrieveParameters(
                         new DataClassProperties(
                             array(
                                 new PropertyConditionVariable(
-                                    RightsLocation :: class_name(), 
-                                    RightsLocation :: PROPERTY_INHERIT))), 
+                                    RightsLocation :: class_name(),
+                                    RightsLocation :: PROPERTY_INHERIT))),
                         $condition));
-                
+
                 $location->set_inherit($record[RightsLocation :: PROPERTY_INHERIT]);
             }
             catch (\Exception $exception)
@@ -379,9 +379,9 @@ class Rights
                 $location->set_inherit(1);
             }
         }
-        
+
         $location->set_node($node);
-        
+
         if ($node->is_root())
         {
             $location->set_parent_id(null);
@@ -390,7 +390,7 @@ class Rights
         {
             $location->set_parent_id($node->get_parent()->get_hash());
         }
-        
+
         return $location;
     }
 }

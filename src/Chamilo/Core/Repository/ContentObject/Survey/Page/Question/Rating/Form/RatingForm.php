@@ -4,6 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Form
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\DataClass\Rating;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *
@@ -17,18 +23,47 @@ use Chamilo\Libraries\Platform\Translation;
 class RatingForm extends ContentObjectForm
 {
 
-    function build_basic_form()
+    const TAB_GENERAL = 'general';
+    const TAB_QUESTION = 'question';
+    
+    private static $html_editor_options = array(
+        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
+        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+    
+    /**
+     * Prepare all the different tabs
+    */
+    function prepareTabs()
     {
-        $this->addElement('category', Translation :: get('Question'));
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating',
+                    true) . 'Form.js'));
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_QUESTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating',
+                    'Tab/' . self :: TAB_QUESTION),
+                'build_question_form'));
+    
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
+    }
+    
+    function build_question_form()
+    {
         $this->add_textfield(
             Rating :: PROPERTY_QUESTION, 
             Translation :: get('Question'), 
             true, 
-            array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
-        $this->add_html_editor(Rating :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
-        $this->addElement('category');
-        
-        $this->addElement('category', Translation :: get('Properties'));
+            array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
+        $this->add_html_editor(Rating :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false, self ::$html_editor_options);
         
         $elem[] = $this->createElement(
             'radio', 
@@ -75,7 +110,6 @@ class RatingForm extends ContentObjectForm
 			}
 			/* ]]> */
 				</script>\n");
-        $this->addElement('category');
         
         $this->addGroupRule(
             'ratings', 
@@ -85,18 +119,6 @@ class RatingForm extends ContentObjectForm
                 Rating :: PROPERTY_HIGH => array(
                     array(Translation :: get('ValueShouldBeNumeric'), 'numeric'))));
         $this->setDefaults();
-    }
-
-    function build_creation_form()
-    {
-        $this->build_basic_form();
-        parent :: build_creation_form();
-    }
-
-    function build_editing_form()
-    {
-        $this->build_basic_form();
-        parent :: build_editing_form();
     }
 
     function create_content_object()

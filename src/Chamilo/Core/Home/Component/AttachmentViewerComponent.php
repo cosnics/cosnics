@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -37,7 +38,9 @@ class AttachmentViewerComponent extends Manager
         {
             throw new ParameterNotDefinedException(self :: PARAM_PARENT_ID);
         }
-        $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($parent_id);
+        $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $parent_id);
 
         if (is_null($parent))
         {
@@ -53,7 +56,9 @@ class AttachmentViewerComponent extends Manager
             $error_message = Translation :: get('NoAttachmentSelected');
         }
 
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $object_id);
 
         if (is_null($object))
         {
@@ -116,7 +121,9 @@ class AttachmentViewerComponent extends Manager
     public function get_content_object_display_attachment_url($attachment)
     {
         $object_id = Request :: get(self :: PARAM_OBJECT_ID);
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $object_id);
 
         if (! $this->is_view_attachment_allowed($object))
         {

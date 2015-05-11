@@ -168,7 +168,11 @@ abstract class ContentObjectRenderer implements TableSupport
             $actions[] = new ToolbarItem(
                 Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_repository_browser()->get_create_share_content_objects_url($content_object->get_id()),
+                $this->get_repository_browser()->get_url(
+                    array(
+                        \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_SHARE_CONTENT_OBJECTS,
+                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                        \Chamilo\Core\Repository\Share\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Share\Manager :: ACTION_ADD_ENTITIES)),
                 ToolbarItem :: DISPLAY_ICON);
         }
 
@@ -247,7 +251,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 '_blank');
         }
 
-        if ($content_object->get_type() == 'core\repository\content_object\file\File')
+        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES),

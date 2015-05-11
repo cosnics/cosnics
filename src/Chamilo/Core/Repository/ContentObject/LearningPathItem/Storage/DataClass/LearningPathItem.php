@@ -49,14 +49,14 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_REFERENCE, 
-            self :: PROPERTY_MAX_ATTEMPTS, 
-            self :: PROPERTY_MASTERY_SCORE, 
-            self :: PROPERTY_ALLOW_HINTS, 
-            self :: PROPERTY_SHOW_SCORE, 
-            self :: PROPERTY_SHOW_CORRECTION, 
-            self :: PROPERTY_SHOW_SOLUTION, 
-            self :: PROPERTY_SHOW_ANSWER_FEEDBACK, 
+            self :: PROPERTY_REFERENCE,
+            self :: PROPERTY_MAX_ATTEMPTS,
+            self :: PROPERTY_MASTERY_SCORE,
+            self :: PROPERTY_ALLOW_HINTS,
+            self :: PROPERTY_SHOW_SCORE,
+            self :: PROPERTY_SHOW_CORRECTION,
+            self :: PROPERTY_SHOW_SOLUTION,
+            self :: PROPERTY_SHOW_ANSWER_FEEDBACK,
             self :: PROPERTY_FEEDBACK_LOCATION);
     }
 
@@ -86,7 +86,8 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     {
         if (! $this->reference_object instanceof LearningPath)
         {
-            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $this->reference_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $this->get_reference());
         }
         return $this->reference_object;
@@ -243,11 +244,11 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     public function get_configuration()
     {
         return new Configuration(
-            $this->get_allow_hints(), 
-            $this->get_show_score(), 
-            $this->get_show_correction(), 
-            $this->get_show_solution(), 
-            $this->get_show_answer_feedback(), 
+            $this->get_allow_hints(),
+            $this->get_show_score(),
+            $this->get_show_correction(),
+            $this->get_show_solution(),
+            $this->get_show_answer_feedback(),
             $this->get_feedback_location());
     }
 }
