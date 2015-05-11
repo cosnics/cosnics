@@ -563,7 +563,7 @@ class SorterComponent extends Manager
         return $toolbar->as_html();
     }
 
-    public function get_course_type_user_category_actions($course_type_user_category = array(), $offset = 1, $count = 1)
+    public function get_course_type_user_category_actions($course_type_user_category, $offset = 1, $count = 1)
     {
         if (! $course_type_user_category)
         {

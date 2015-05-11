@@ -62,7 +62,7 @@ class CourseUserCategoryForm extends FormValidator
 
         $attributes = array();
         $attributes['search_url'] = Path :: getInstance()->getBasePath(true) .
-             'application/weblcms/course_type/php/xml_feeds/xml_course_type_feed.php';
+             'index.php?go=XmlCourseTypeFeed&application=Chamilo%5CApplication%5CWeblcms%5CCourseType%5CAjax';
         $locale = array();
         $locale['Display'] = Translation :: get('SelectRecipients');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
