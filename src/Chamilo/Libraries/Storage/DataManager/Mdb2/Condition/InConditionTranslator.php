@@ -1,0 +1,60 @@
+<?php
+namespace Chamilo\Libraries\Storage\DataManager\Mdb2\Condition;
+
+use Chamilo\Libraries\Storage\DataManager\Mdb2\Database;
+use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTranslator;
+
+/**
+ *
+ * @package Chamilo\Libraries\Storage\DataManager\Mdb2\Condition
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class InConditionTranslator extends ConditionTranslator
+{
+
+    public function translate()
+    {
+        $values = $this->get_condition()->get_values();
+
+        if (! is_array($values))
+        {
+            if (is_scalar($values))
+            {
+                $values = array($values);
+            }
+            elseif (is_null($values))
+            {
+                $values = array();
+            }
+            else
+            {
+                throw new \InvalidArgumentException(
+                    'An InCondition only accepts an array or a scalar as input for the values');
+            }
+        }
+
+        if (count($values) > 0)
+        {
+            $where_clause = array();
+
+            $where_clause[] = ConditionVariableTranslator :: render(
+                $this->get_condition()->get_name()) . ' IN (';
+
+            $placeholders = array();
+            foreach ($values as $value)
+            {
+                $placeholders[] = Database :: quote($value);
+            }
+
+            $where_clause[] = implode(',', $placeholders);
+            $where_clause[] = ')';
+            return implode('', $where_clause);
+        }
+        else
+        {
+            return 'true = false';
+        }
+    }
+}
