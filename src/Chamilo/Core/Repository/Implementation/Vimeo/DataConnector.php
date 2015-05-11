@@ -48,6 +48,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $this->get_external_repository_instance_id());
 
         $this->vimeo = new phpVimeo($this->consumer_key, $this->consumer_secret);
+
+
         $oauth_token = Setting :: get('oauth_token', $this->get_external_repository_instance_id());
         $oauth_token_secret = Setting :: get('oauth_token_secret', $this->get_external_repository_instance_id());
 

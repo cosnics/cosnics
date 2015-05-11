@@ -48,12 +48,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
                 'access_token',
                 $this->get_external_repository_instance_id());
-            $user_setting = new Setting();
-            $user_setting->set_setting_id($setting->get_id());
-            $user_setting->set_user_id(Session :: get_user_id());
             $token = $_SESSION['dropbox_api']['access_token'];
-            $user_setting->set_value($token);
-            if ($user_setting->create())
+            $setting->set_value($token);
+            if ($setting->create())
             {
                 Session :: unregister('dropbox_api');
                 $storage->set($encrypter->decrypt($token), 'access_token');
