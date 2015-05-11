@@ -490,7 +490,7 @@ abstract class Manager extends Application
         foreach ($types as $index => $type)
         {
             $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type));
+                ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3));
 
             if (! $registration || ! $registration->is_active())
             {

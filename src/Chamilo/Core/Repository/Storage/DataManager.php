@@ -74,7 +74,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function count_complex_content_object_items($type, $parameters = null)
     {
-        return self :: count($type, self :: prepare_complex_parameters(self :: ACTION_COUNT, $type, $parameters));
+        return self :: count($type, $parameters);
     }
 
     public static function retrieve_content_objects($type, $parameters = null)
@@ -84,9 +84,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_complex_content_object_items($type, $parameters = null)
     {
-        return self :: retrieves(
-            $type,
-            self :: prepare_complex_parameters(self :: ACTION_RETRIEVES, $type, $parameters));
+        return self :: retrieves($type, $parameters);
     }
 
     public static function retrieve_content_objects_by_user($user_id)
@@ -123,81 +121,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function prepare_parameters($action, $type, $parameters = null)
     {
-        if (! is_null($type) && $type :: is_extended())
-        {
-            $type_join = new Join(
-                ContentObject :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-
-            if (($parameters instanceof DataClassCountParameters && $action == self :: ACTION_COUNT) ||
-                 ($parameters instanceof DataClassRetrievesParameters && $action == self :: ACTION_RETRIEVES))
-            {
-                if ($parameters->get_joins() instanceof Joins)
-                {
-                    $already_exists = false;
-                    foreach ($parameters->get_joins()->get() as $join)
-                    {
-                        if ($join->hash() == $type_join->hash())
-                        {
-                            $already_exists = true;
-                        }
-                    }
-                    if (! $already_exists)
-                    {
-                        $parameters->get_joins()->add($type_join);
-                    }
-                }
-                else
-                {
-                    $parameters->set_joins(new Joins(array($type_join)));
-                }
-            }
-            else
-            {
-                if ($action == self :: ACTION_COUNT)
-                {
-                    $parameters = new DataClassCountParameters();
-                }
-                else
-                {
-                    $parameters = new DataClassRetrievesParameters();
-                }
-                $parameters->set_joins(new Joins(array($type_join)));
-            }
-        }
-        elseif ($type != ContentObject :: class_name())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-                new StaticConditionVariable($type));
-
-            if (($parameters instanceof DataClassCountParameters && $action == self :: ACTION_COUNT) ||
-                 ($parameters instanceof DataClassRetrievesParameters && $action == self :: ACTION_RETRIEVES))
-            {
-                if ($parameters->get_condition() instanceof Condition)
-                {
-                    $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
-                }
-                else
-                {
-                    $parameters->set_condition($condition);
-                }
-            }
-            else
-            {
-                if ($action == self :: ACTION_COUNT)
-                {
-                    $parameters = new DataClassCountParameters();
-                }
-                else
-                {
-                    $parameters = new DataClassRetrievesParameters();
-                }
-                $parameters->set_condition($condition);
-            }
-        }
         if ($parameters->get_condition() instanceof Condition)
         {
             $parameters->set_condition(
@@ -213,57 +136,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new InCondition(
                     new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
                     ContentObject :: get_active_status_types()));
-        }
-
-        return $parameters;
-    }
-
-    public static function prepare_complex_parameters($action, $type, $parameters = null)
-    {
-        if (! is_null($type) && $type :: is_extended())
-        {
-            $type_join = new Join(
-                ComplexContentObjectItem :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_ID),
-                    new PropertyConditionVariable($type, $type :: PROPERTY_ID)));
-            if (($parameters instanceof DataClassCountParameters && $action == self :: ACTION_COUNT) ||
-                 ($parameters instanceof DataClassRetrievesParameters && $action == self :: ACTION_RETRIEVES))
-            {
-                if ($parameters->get_joins() instanceof Joins)
-                {
-                    $already_exists = false;
-                    foreach ($parameters->get_joins()->get() as $join)
-                    {
-                        if ($join->hash() == $type_join->hash())
-                        {
-                            $already_exists = true;
-                        }
-                    }
-                    if (! $already_exists)
-                    {
-                        $parameters->get_joins()->add($type_join);
-                    }
-                }
-                else
-                {
-                    $parameters->set_joins(new Joins(array($type_join)));
-                }
-            }
-            else
-            {
-                if ($action == self :: ACTION_COUNT)
-                {
-                    $parameters = new DataClassCountParameters();
-                }
-                else
-                {
-                    $parameters = new DataClassRetrievesParameters();
-                }
-                $parameters->set_joins(new Joins(array($type_join)));
-            }
         }
 
         return $parameters;

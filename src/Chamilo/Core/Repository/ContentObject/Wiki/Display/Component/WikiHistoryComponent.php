@@ -15,13 +15,14 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
  * $Id: wiki_history.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.wiki.component
  */
-class WikiHistoryComponent extends Manager
+class WikiHistoryComponent extends Manager implements TableSupport
 {
 
     private $complex_wiki_page_id;
@@ -63,14 +64,11 @@ class WikiHistoryComponent extends Manager
             }
             else
             {
-                $wiki_page = $complex_wiki_page->get_ref_object();
+                $this->wiki_page = $complex_wiki_page->get_ref_object();
                 $version_parameters = $this->get_parameters();
                 $version_parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->complex_wiki_page_id;
 
-                $version_browser = new VersionTable(
-                    $this,
-                    $version_parameters,
-                    new EqualityCondition(ContentObject :: PROPERTY_OBJECT_NUMBER, $wiki_page->get_object_number()));
+                $version_browser = new VersionTable($this, $version_parameters);
                 $actions = new TableFormActions(__NAMESPACE__);
                 $actions->add_form_action(
                     new TableFormAction(
@@ -80,7 +78,7 @@ class WikiHistoryComponent extends Manager
                 $version_browser->set_form_actions($actions);
 
                 $html[] = '<div class="wiki-pane-content-title">' . Translation :: get('RevisionHistory') . ': ' .
-                     $wiki_page->get_title() . '</div>';
+                     $this->wiki_page->get_title() . '</div>';
                 $html[] = '<div class="wiki-pane-content-subtitle">' .
                      Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
                      $this->get_root_content_object()->get_title() . '</div>';
@@ -100,6 +98,11 @@ class WikiHistoryComponent extends Manager
         {
             $this->redirect(null, false, array(self :: PARAM_ACTION => self :: ACTION_VIEW_WIKI));
         }
+    }
+
+    public function get_table_condition($class_name)
+    {
+        return new EqualityCondition(ContentObject :: PROPERTY_OBJECT_NUMBER, $this->wiki_page->get_object_number());
     }
 
     public function count_content_object_versions_resultset($condition = null)
