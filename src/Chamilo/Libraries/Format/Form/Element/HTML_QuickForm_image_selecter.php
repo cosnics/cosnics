@@ -4,6 +4,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: element_finder.php 128 2009-11-09 13:13:20Z vanpouckesven $
@@ -197,7 +198,9 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
         if ($is_object_set)
         {
-            $image_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($object_id);
+            $image_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $object_id);
 
             $dimensions = getimagesize($image_object->get_full_path());
 
@@ -266,8 +269,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = '	{';
         $html[] = '		$("#' . $id . '").elementselecter({
         	name: "' . $this->getName() . '",
-        	search: "' .
-             $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
+        	search: "' . $this->search_url . '"' . $load_elements . $rescale_image . $default_query . ' });';
         $html[] = '	});';
         $html[] = '});';
 

@@ -101,7 +101,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function get_content_object_publication_attribute($id, $application, $user)
     {
-        $manager_class = $application . '\integration\\' . __NAMESPACE__ . '\Manager';
+        $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
         return $manager_class :: get_content_object_publication_attribute($id);
     }
 
@@ -129,7 +129,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function update_content_object_publication_id($publication_attributes)
     {
-        $manager_class = $publication_attributes->get_application() . '\integration\\' . __NAMESPACE__ . '\Manager';
+        $manager_class = $publication_attributes->get_application() .
+             '\Integration\Chamilo\Core\Repository\Publication\Manager';
         return $manager_class :: update_content_object_publication_id($publication_attributes);
     }
 
@@ -153,7 +154,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_content_object_publication($application, $publication_id)
     {
-        $manager_class = $application . '\integration\\' . __NAMESPACE__ . '\Manager';
+        $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
         return $manager_class :: delete_content_object_publication($publication_id);
     }
 

@@ -20,7 +20,7 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function run()
     {
         $object = Request :: post('content_object');
-        $object = DataManager :: retrieve_content_object($object);
+        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object);
 
         $full_path = $object->get_full_path();
         $dimensions = getimagesize($full_path);

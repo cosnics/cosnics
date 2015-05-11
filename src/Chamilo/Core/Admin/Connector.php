@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * Simple connector class to facilitate rendering settings forms by preprocessing data from the datamanagers to a simple
  * array format.
- * 
+ *
  * @author Hans De Bisschop
  * @package admin.settings $Id: settings_admin_connector.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  */
@@ -25,7 +25,7 @@ class Connector
     public static function get_themes()
     {
         $options = Theme :: getInstance()->getAvailableThemes();
-        
+
         return $options;
     }
 
@@ -33,38 +33,38 @@ class Connector
     {
         $content = file_get_contents(__DIR__ . '/timezones.txt');
         $content = explode("\n", $content);
-        
+
         $timezones = array();
-        
+
         foreach ($content as $timezone)
         {
             $timezone = trim($timezone);
             $timezones[$timezone] = $timezone;
         }
-        
+
         return $timezones;
     }
 
     public static function get_active_applications()
     {
         $registrations = DataManager :: get_registrations_by_type(Registration :: TYPE_APPLICATION);
-        
+
         $options = array();
-        $options['core\home'] = Translation :: get('Homepage', array(), 'home');
-        
+        $options['Chamilo\Core\Home'] = Translation :: get('Homepage', array(), 'Chamilo\Core\Home');
+
         foreach ($registrations as $registration)
         {
             if ($registration->is_active())
             {
                 $options[$registration->get_context()] = Translation :: get(
-                    'TypeName', 
-                    null, 
+                    'TypeName',
+                    null,
                     $registration->get_context());
             }
         }
-        
+
         asort($options);
-        
+
         return $options;
     }
 
@@ -73,12 +73,12 @@ class Connector
         $start = 0;
         $end = 24;
         $working_hours = array();
-        
+
         for ($i = $start; $i <= $end; $i ++)
         {
             $working_hours[$i] = $i;
         }
-        
+
         return $working_hours;
     }
 
@@ -87,12 +87,12 @@ class Connector
         return PlatformSetting :: get('allow_user_change_platform_language', \Chamilo\Core\User\Manager :: context()) ==
              1;
     }
-    
+
     // support for quick language change
     public static function is_allowed_quick_change_platform_language()
     {
         return self :: is_allowed_to_change_platform_language() && PlatformSetting :: get(
-            'allow_user_quick_change_platform_language', 
+            'allow_user_quick_change_platform_language',
             \Chamilo\Core\User\Manager :: context()) == 1;
     }
 

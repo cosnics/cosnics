@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
@@ -71,7 +72,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public static function is_wiki_locked($wiki_id)
     {
-        $wiki = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($wiki_id);
+        $wiki = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(ContentObject :: class_name(), $wiki_id);
         return $wiki->get_locked() == 1;
     }
 
@@ -129,7 +130,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 break;
             case self :: ACTION_PAGE_STATISTICS :
                 $complex_wiki_page_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-                $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+                $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                     ComplexContentObjectItem :: class_name(),
                     $complex_wiki_page_id);
                 $wiki_page = $complex_wiki_page->get_ref_object();
@@ -212,9 +213,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     private function get_content_object_from_complex_id($complex_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ComplexContentObjectItem :: class_name(),
             $complex_id);
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
     }
 

@@ -144,7 +144,8 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
         while ($publication = $publcations->next_result())
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 (int) $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $icon = $content_object->get_icon_image(

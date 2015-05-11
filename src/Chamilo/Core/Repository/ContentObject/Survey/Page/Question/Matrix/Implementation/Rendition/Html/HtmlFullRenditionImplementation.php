@@ -69,7 +69,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<th class="caption"></th>';
         $match_objects = array();
         
-        while ($match = $matches->next_result())
+        foreach ($matches as $match )
         {
             $match_objects[] = $match;
             $table_header[] = '<th class="center">' . strip_tags($match->get_value()) . '</th>';
@@ -80,7 +80,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '<tbody>';
         $html[] = implode(PHP_EOL, $table_header);
         $index = 0;
-        while ($option = $options->next_result())
+        foreach ($options as $option)
         {
             $html[] = '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">';
             $html[] = '<td>' . $option->get_value() . '</td>';

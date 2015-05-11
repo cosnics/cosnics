@@ -69,7 +69,7 @@ class PackageTypeImportMenu extends HTML_Menu
 
             if ($registration instanceof Registration && $registration->is_active())
             {
-                $manager_class = $package . '\integration\core\admin\Manager';
+                $manager_class = $package . '\Integration\Chamilo\Core\Admin\Manager';
 
                 if (class_exists($manager_class) && $manager_class instanceof ActionsSupportInterface)
                 {

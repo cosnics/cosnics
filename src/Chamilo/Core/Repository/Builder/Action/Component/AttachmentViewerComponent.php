@@ -12,6 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -35,17 +36,21 @@ class AttachmentViewerComponent extends Manager
         }
         $complex_content_object_item = $this->get_parent()->get_selected_complex_content_object_item();
         $reference_content_object_id = $complex_content_object_item->get_ref();
-        $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $reference_content_object_id);
 
         if (\Chamilo\Core\Repository\Storage\DataManager :: is_helper_type($reference_content_object->get_type()))
         {
             $reference_content_object_id = $reference_content_object->get_additional_property('reference_id');
-            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $reference_content_object_id);
         }
 
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($attachment_id);
+        $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $attachment_id);
 
         if (! $reference_content_object->is_attached_to_or_included_in($attachment_id))
         {

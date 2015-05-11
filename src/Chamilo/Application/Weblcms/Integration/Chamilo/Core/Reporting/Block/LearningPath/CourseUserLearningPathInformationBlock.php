@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -109,7 +110,8 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             }
 
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
-            $learning_path = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $learning_path = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $redirect = new Redirect($params);

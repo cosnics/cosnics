@@ -116,7 +116,8 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
      */
     private function get_publication_from_complex_content_object_item($clo_item)
     {
-        $publication = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($clo_item->get_ref());
-        return $publication;
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $clo_item->get_ref());
     }
 }

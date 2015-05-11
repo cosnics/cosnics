@@ -7,6 +7,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 
 class DeactivatorComponent extends Manager
 {
@@ -30,7 +31,7 @@ class DeactivatorComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $external_instance = DataManager :: retrieve_instance($id);
+                $external_instance = DataManager :: retrieve_by_id(Instance :: class_name(), $id);
                 $external_instance->deactivate();
 
                 if (! $external_instance->update())

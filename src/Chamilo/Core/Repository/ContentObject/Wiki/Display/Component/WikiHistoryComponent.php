@@ -37,9 +37,9 @@ class WikiHistoryComponent extends Manager
 
         if ($this->complex_wiki_page_id)
         {
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
-                $this->complex_wiki_page_id,
-                ComplexContentObjectItem :: class_name());
+            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
+                $this->complex_wiki_page_id);
             $compare_object_ids = Request :: post(VersionTable :: DEFAULT_NAME . VersionTable :: CHECKBOX_NAME_SUFFIX);
 
             $html = array();
@@ -55,7 +55,8 @@ class WikiHistoryComponent extends Manager
                 $compare_object_id = $compare_object_ids[0];
                 $compare_version_id = $compare_object_ids[1];
 
-                $compare_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $compare_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $compare_object_id);
 
                 $html[] = $compare_object->get_difference($compare_version_id);

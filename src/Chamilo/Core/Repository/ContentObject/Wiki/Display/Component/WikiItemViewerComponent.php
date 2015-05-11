@@ -13,6 +13,8 @@ use MediawikiParser;
 use MediawikiParserContext;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * $Id: wiki_item_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -37,7 +39,8 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
         if ($complex_wiki_page_id)
         {
             $version_object_id = Request :: get(self :: PARAM_WIKI_VERSION_ID);
-            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+            $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ComplexContentObjectItem :: class_name(),
                 $complex_wiki_page_id);
             $wiki_page = $complex_wiki_page->get_ref_object();
 
@@ -45,7 +48,8 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
 
             if ($version_object_id)
             {
-                $version_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $version_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $version_object_id);
                 if ($version_object && $version_object->get_object_number() == $wiki_page->get_object_number())
                 {

@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\Da
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -27,6 +26,10 @@ class Matrix extends ContentObject implements Versionable
     const MATRIX_TYPE_CHECKBOX = 2;
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_INSTRUCTION = 'instruction';
+    // Pseudo-property, constant can be used when handling the collection of options
+    const PROPERTY_OPTIONS = 'options';
+    // Pseudo-property, constant can be used when handling the collection of options
+    const PROPERTY_MATCHES = 'matches';
 
     private $options;
 
@@ -60,62 +63,57 @@ class Matrix extends ContentObject implements Versionable
 
     public function get_options()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
+        if (! $this->get_id())
+        {
+            return $this->matches;
+        }
+        else
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_QUESTION_ID), 
+                new StaticConditionVariable($this->get_id()));
+            
+            $order = new OrderBy(
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_DISPLAY_ORDER));
+            
+            $this->options = DataManager :: retrieves(
                 MatrixOption :: class_name(), 
-                MatrixOption :: PROPERTY_QUESTION_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
-        $order = new OrderBy(
-            new PropertyConditionVariable(
-                MatrixOption :: class_name(), 
-                MatrixOption :: PROPERTY_DISPLAY_ORDER));
-        
-        return DataManager :: retrieves(
-            MatrixOption :: class_name(), 
-            new DataClassRetrievesParameters($condition, null, null, array($order)));
+                new DataClassRetrievesParameters($condition, null, null, array($order)))->as_array();
+            return $this->options;
+        }
     }
 
     public function get_number_of_options()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatrixOption :: class_name(), 
-                MatrixOption :: PROPERTY_QUESTION_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
-        return DataManager :: count(
-            MatrixOption :: class_name(), 
-            new DataClassCountParameters($condition));
+        return count($this->get_options());
     }
 
     public function get_matches()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
+        if (! $this->get_id())
+        {
+            return $this->matches;
+        }
+        else
+        {
+            
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_QUESTION_ID), 
+                new StaticConditionVariable($this->get_id()));
+            
+            $order = new OrderBy(
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_DISPLAY_ORDER));
+            
+            $this->matches = DataManager :: retrieves(
                 MatrixMatch :: class_name(), 
-                MatrixMatch :: PROPERTY_QUESTION_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
-        $order = new OrderBy(
-            new PropertyConditionVariable(
-                MatrixMatch :: class_name(), 
-                MatrixMatch :: PROPERTY_DISPLAY_ORDER));
-        
-        return DataManager :: retrieves(
-            MatrixMatch :: class_name(), 
-            new DataClassRetrievesParameters($condition, null, null, array($order)));
+                new DataClassRetrievesParameters($condition, null, null, array($order)))->as_array();
+            return $this->matches;
+        }
     }
 
     public function get_number_of_matches()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatrixMatch :: class_name(), 
-                MatrixMatch :: PROPERTY_QUESTION_ID), 
-            new StaticConditionVariable($this->get_id()));
-        
-        return DataManager :: count(MatrixMatch :: class_name(), new DataClassCountParameters($condition));
+        return count($this->get_matches());
     }
 
     public function get_matrix_type()

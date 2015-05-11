@@ -39,7 +39,7 @@ class CpoImportImplementation extends ImportImplementation
         {
             
             $this->get_controller()->set_cache_id(
-                MatrixOption :: get_table_name(), 
+                MatrixOption :: class_name(), 
                 MatrixOption :: PROPERTY_ID, 
                 $option_node->getAttribute('id'), 
                 $option_node->getAttribute('display_order'));
@@ -54,7 +54,7 @@ class CpoImportImplementation extends ImportImplementation
         foreach ($dom_xpath->query(CpoExportImplementation :: MATCH_NODE, $match_node_list) as $match_node)
         {
             $this->get_controller()->set_cache_id(
-                MatrixMatch :: get_table_name(), 
+                MatrixMatch :: class_name(), 
                 MatrixMatch :: PROPERTY_ID, 
                 $match_node->getAttribute('id'), 
                 $match_node->getAttribute('display_order'));
@@ -70,6 +70,7 @@ class CpoImportImplementation extends ImportImplementation
     function post_import($content_object)
     {
         $dom_xpath = $this->get_controller()->get_dom_xpath();
+
         $content_object_node = $this->get_content_object_import_parameters()->get_content_object_node();
         
         $export_node = $dom_xpath->query(CpoExportImplementation :: SURVEY_MATRIX_QUESTION_EXPORT, $content_object_node)->item(
@@ -80,7 +81,7 @@ class CpoImportImplementation extends ImportImplementation
         foreach ($dom_xpath->query(CpoExportImplementation :: OPTION_NODE, $option_node_list) as $option_node)
         {
             $display_order = $this->get_controller()->get_cache_id(
-                MatrixOption :: get_table_name(), 
+                MatrixOption :: class_name(), 
                 MatrixOption :: PROPERTY_ID, 
                 $option_node->getAttribute('id'));
             
@@ -104,7 +105,7 @@ class CpoImportImplementation extends ImportImplementation
             if ($option instanceof MatrixOption)
             {
                 $this->get_controller()->set_cache_id(
-                    MatrixOption :: get_table_name(), 
+                    MatrixOption :: class_name(), 
                     MatrixOption :: PROPERTY_ID, 
                     $option_node->getAttribute('id'), 
                     $option->get_id());
@@ -112,19 +113,20 @@ class CpoImportImplementation extends ImportImplementation
             else
             {
                 $this->get_controller()->set_cache_id(
-                    MatrixOption :: get_table_name(), 
+                    MatrixOption :: class_name(), 
                     MatrixOption :: PROPERTY_ID, 
                     $option_node->getAttribute('id'), 
                     null);
             }
         }
+      
         
         $match_node_list = $dom_xpath->query(CpoExportImplementation :: MATCHES_NODE, $export_node)->item(0);
         
         foreach ($dom_xpath->query(CpoExportImplementation :: MATCH_NODE, $match_node_list) as $match_node)
         {
             $display_order = $this->get_controller()->get_cache_id(
-                MatrixMatch :: get_table_name(), 
+                MatrixMatch :: class_name(), 
                 MatrixMatch :: PROPERTY_ID, 
                 $match_node->getAttribute('id'));
             
@@ -133,7 +135,7 @@ class CpoImportImplementation extends ImportImplementation
                 new PropertyConditionVariable(
                     MatrixMatch :: class_name(), 
                     MatrixMatch :: PROPERTY_QUESTION_ID), 
-                new StaticConditionVariable($match_node->getAttribute('id')));
+                new StaticConditionVariable($content_object->get_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     MatrixMatch :: class_name(), 
@@ -148,7 +150,7 @@ class CpoImportImplementation extends ImportImplementation
             if ($match)
             {
                 $this->get_controller()->set_cache_id(
-                    MatrixMatch :: get_table_name(), 
+                    MatrixMatch :: class_name(), 
                     MatrixMatch :: PROPERTY_ID, 
                     $match_node->getAttribute('id'), 
                     $match->get_id());
@@ -156,7 +158,7 @@ class CpoImportImplementation extends ImportImplementation
             else
             {
                 $this->get_controller()->set_cache_id(
-                    MatrixMatch :: get_table_name(), 
+                    MatrixMatch :: class_name(), 
                     MatrixMatch :: PROPERTY_ID, 
                     $match_node->getAttribute('id'), 
                     null);

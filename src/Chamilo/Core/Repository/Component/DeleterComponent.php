@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * $Id: deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -42,13 +43,15 @@ class DeleterComponent extends Manager
             $recycled = Request :: get(self :: PARAM_DELETE_RECYCLED);
             foreach ($ids as $object_id)
             {
-                $object = $this->retrieve_content_object($object_id);
+                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
                 // only owner can remove the object
                 if ($object->get_owner_id() == $this->get_user_id())
                 {
                     if ($delete_version)
                     {
-                        if ($this->content_object_deletion_allowed($object, 'version'))
+                        if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed(
+                            $object,
+                            'version'))
                         {
                             $versions = $object->get_content_object_versions(false);
                             $number_of_versions = sizeof($versions);
@@ -83,7 +86,7 @@ class DeleterComponent extends Manager
                     }
                     else
                     {
-                        if ($this->content_object_deletion_allowed($object))
+                        if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_deletion_allowed($object))
                         {
                             if ($permanent)
                             {
@@ -216,10 +219,11 @@ class DeleterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(
-            self :: PARAM_CONTENT_OBJECT_ID,
-            self :: PARAM_DELETE_VERSION,
-            self :: PARAM_DELETE_PERMANENTLY,
-            self :: PARAM_DELETE_RECYCLED);
+        return parent :: get_additional_parameters(
+            array(
+                self :: PARAM_CONTENT_OBJECT_ID,
+                self :: PARAM_DELETE_VERSION,
+                self :: PARAM_DELETE_PERMANENTLY,
+                self :: PARAM_DELETE_RECYCLED));
     }
 }

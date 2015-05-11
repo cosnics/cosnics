@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * the email notificator of a post extends abstract email notificator
- * 
+ *
  * @author Mattias De Pauw
  */
 class SubforumEmailNotificator extends EmailNotificator
@@ -24,7 +24,7 @@ class SubforumEmailNotificator extends EmailNotificator
 
     /**
      * sets the forum
-     * 
+     *
      * @param Forum $forum
      */
     public function set_forum($forum)
@@ -44,24 +44,24 @@ class SubforumEmailNotificator extends EmailNotificator
     {
         foreach ($this->users as $user)
         {
-            $site_name = PlatformSetting :: get('site_name', 'core\admin');
-            
+            $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
+
             $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->forum->get_title();
-            
+
             $message = $this->action_body . ' ' . $this->forum->get_title() . '<br/>' . '-' . '<br/>';
             $message = $message . $this->subforum->get_title() . '<br/>' . $this->subforum->get_description();
             $message = str_replace('[/quote]', '</div>', $message);
             $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
                  $this->action_user->get_lastname();
-            
-            $admin_email = PlatformSetting :: get('administrator_email', 'core\admin');
-            $admin_name = PlatformSetting :: get('admin_surname', 'core\admin') . ' ' .
-                 PlatformSetting :: get('admin_firstname', 'core\admin');
-            
+
+            $admin_email = PlatformSetting :: get('administrator_email', 'Chamilo\Core\Admin');
+            $admin_name = PlatformSetting :: get('admin_surname', 'Chamilo\Core\Admin') . ' ' .
+                 PlatformSetting :: get('admin_firstname', 'Chamilo\Core\Admin');
+
             $mail = Mail :: factory(
-                $subject, 
-                $message, 
-                $user->get_email(), 
+                $subject,
+                $message,
+                $user->get_email(),
                 array(Mail :: NAME => $admin_name, Mail :: EMAIL => $admin_email));
             $mail->send();
         }

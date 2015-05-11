@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -69,7 +70,9 @@ class AttachmentViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($attachment_id);
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $attachment_id);
         if (! $object)
         {
             throw new ObjectNotExistException(Translation :: get('ContentObject'), $attachment_id);

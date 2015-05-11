@@ -22,15 +22,15 @@ class IncludeChamiloParser extends ContentObjectIncludeParser
             $field_name = 'values';
             
             $html_editor_parts = explode('[', $html_editor);
-            
+                     
             $value = $values;
             foreach ($html_editor_parts as $html_editor_part)
             {
                 $part = str_replace(']', '', $html_editor_part);
                 $value = $value[$part];
             }
-            
-            if (isset($value))
+                     
+            if (! empty($value))
             {
                 $dom_document = new DOMDocument();
                 $dom_document->loadHTML($value);

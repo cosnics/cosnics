@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  *
@@ -35,7 +36,8 @@ class DeleterComponent extends Manager
             $failures = 0;
             foreach ($complex_content_object_item_ids as $complex_content_object_item_id)
             {
-                $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_item(
+                $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ComplexContentObjectItem :: class_name(),
                     $complex_content_object_item_id);
                 if (! $complex_content_object_item->delete())
                 {

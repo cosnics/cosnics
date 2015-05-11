@@ -58,7 +58,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 if (! is_subclass_of(
                     $this->get_registration()->get_context() . '\Deactivator',
-                    'configuration\package\NotAllowed'))
+                    'Chamilo\Configuration\Package\NotAllowed'))
                 {
                     $action_bar->add_common_action(
                         new ToolbarItem(
@@ -74,7 +74,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 if (! is_subclass_of(
                     $this->get_registration()->get_context() . '\Activator',
-                    'configuration\package\NotAllowed'))
+                    'Chamilo\Configuration\Package\NotAllowed'))
                 {
                     $action_bar->add_common_action(
                         new ToolbarItem(

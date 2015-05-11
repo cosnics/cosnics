@@ -138,7 +138,7 @@ class ActivityChangerComponent extends Manager
     {
         $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
             'enable_tracking',
-            'core\tracking');
+            'Chamilo\Core\Tracking');
         $setting->set_value($setting->get_value() == 1 ? 0 : 1);
         $success = $setting->update();
 

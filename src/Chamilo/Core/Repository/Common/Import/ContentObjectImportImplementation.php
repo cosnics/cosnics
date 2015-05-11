@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -11,27 +10,26 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class ContentObjectImportImplementation extends AbstractContentObjectImportImplementation
 {
 
-    public static function launch(ContentObjectImportController $controller, $content_object_type, 
+    public static function launch(ContentObjectImportController $controller, $content_object_type,
         ContentObjectImportParameters $content_object_import_parameters)
     {
         return self :: factory($controller, $content_object_type, $content_object_import_parameters)->import();
     }
 
-    public static function post_process(ContentObjectImportController $controller, $content_object_type, 
+    public static function post_process(ContentObjectImportController $controller, $content_object_type,
         ContentObjectImportParameters $content_object_import_parameters, $content_object)
     {
         return self :: factory($controller, $content_object_type, $content_object_import_parameters)->post_import(
             $content_object);
     }
 
-    public static function factory(ContentObjectImportController $controller, $content_object_type, 
+    public static function factory(ContentObjectImportController $controller, $content_object_type,
         $content_object_import_parameters)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object_type);
-        $class = $namespace . '\Implementation\Import\\' .
+        $class = $content_object_type :: package() . '\Implementation\Import\\' .
              (string) StringUtilities :: getInstance()->createString($controller :: FORMAT)->upperCamelize() .
              'ImportImplementation';
-        
+
         if (! class_exists($class, true))
         {
             $class = __NAMESPACE__ . '\\' .
@@ -54,8 +52,8 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
 
     public static function get_types_for_object($content_object_namespace)
     {
-        $class = $content_object_namespace . '\\' . 'ImportImplementation';
-        
+        $class = $content_object_namespace . '\Implementation\ImportImplementation';
+
         if (! class_exists($class, true))
         {
             return self :: get_types();

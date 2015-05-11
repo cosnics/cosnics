@@ -48,7 +48,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         }
 
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->publication->get_content_object()->get_type()) . '\display';
+            $this->publication->get_content_object()->package()) . '\Display';
         $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
         return $factory->run();
     }

@@ -43,9 +43,9 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-            Assignment :: class_name());
+        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            Assignment :: class_name(),
+            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
         $calendar_event = ContentObject :: factory(CalendarEvent :: class_name());
 

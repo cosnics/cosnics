@@ -3,7 +3,7 @@
 	<properties>
 		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
 		<property name="owner_id" type="integer" unsigned="1" notnull="1" />
-		<property name="object_number" type="integer" unsigned="1" notnull="1" />
+		<property name="object_number" type="text" length="36" notnull="1" />
 		<property name="parent_id" type="integer" unsigned="1" notnull="1" default="0" />
 		<property name="template_registration_id" type="integer" unsigned="1" default="NULL" />
 		<property name="created" type="integer" unsigned="1" notnull="1" />

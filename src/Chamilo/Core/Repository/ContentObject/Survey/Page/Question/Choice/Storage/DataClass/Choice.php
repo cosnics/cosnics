@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Choice\Stor
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -22,6 +23,9 @@ class Choice extends ContentObject implements Versionable
     const PROPERTY_QUESTION_TYPE = 'question_type';
     const PROPERTY_FIRST_CHOICE = 'first_choice';
     const PROPERTY_SECOND_CHOICE = 'second_choice';
+    
+    const TYPE_YES_NO = 0;
+    const TYPE_OTHER = 1;
 
     static function get_type_name()
     {
@@ -96,6 +100,21 @@ class Choice extends ContentObject implements Versionable
         }
     }
 
+    public function getOptions()
+    {
+        $options = array();
+        
+        if($this->get_question_type() == self ::TYPE_YES_NO ){
+            $options[1] = Translation :: get('AnswerYes');
+            $options[2] = Translation :: get('AnswerNo');
+        }else{
+            $options[1] = $this->get_first_choice();
+            $options[2] = $this->get_second_choice();
+        }
+        
+        return $options;
+    }
+    
     static function get_additional_property_names()
     {
         return array(

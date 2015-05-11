@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * $Id: link_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -102,8 +103,8 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $item = DataManager :: retrieve_complex_content_object_item($link_id);
-            $object = DataManager :: retrieve_content_object($item->get_ref());
+            $item = DataManager :: retrieve_by_id(ComplexContentObjectItem :: class_name(), $link_id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $item->get_ref());
 
             if (! $item->delete())
             {
@@ -137,7 +138,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager :: retrieve_content_object($object_id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
             if (! $object->detach_content_object($link_id, ContentObject :: ATTACHMENT_NORMAL))
                 $failures ++;
         }
@@ -159,7 +160,7 @@ class LinkDeleterComponent extends Manager
 
         foreach ($link_ids as $link_id)
         {
-            $object = DataManager :: retrieve_content_object($link_id);
+            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $link_id);
             if (! $object->detach_content_object($object_id, ContentObject :: ATTACHMENT_NORMAL))
                 $failures ++;
         }
@@ -212,6 +213,7 @@ class LinkDeleterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_CONTENT_OBJECT_ID, self :: PARAM_LINK_TYPE, self :: PARAM_LINK_ID);
+        return parent :: get_additional_parameters(
+            array(self :: PARAM_CONTENT_OBJECT_ID, self :: PARAM_LINK_TYPE, self :: PARAM_LINK_ID));
     }
 }

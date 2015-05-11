@@ -6,6 +6,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: template_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -32,7 +34,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $object_id)
             {
-                $object = $this->retrieve_content_object($object_id);
+                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
 
                 $versions = $object->get_content_object_versions();
                 foreach ($versions as $version)

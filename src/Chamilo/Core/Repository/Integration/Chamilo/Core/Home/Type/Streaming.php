@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Block to display streaming media.
- * 
+ *
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
@@ -18,19 +18,19 @@ class Streaming extends Block
 
     /**
      * Returns the list of type names that this block can map to.
-     * 
+     *
      * @return array
      */
     public static function get_supported_types()
     {
         $result = array();
-        
-        $result[] = 'core\repository\content_object\matternhorn\Matterhorn';
-        $result[] = 'core\repository\content_object\slideshare\slideshare';
-        $result[] = 'core\repository\content_object\soundcloud\Soundcloud';
-        $result[] = 'core\repository\content_object\vimeo\Vimeo';
-        $result[] = 'core\repository\content_object\youtube\Youtube';
-        
+
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Slideshare\Storage\DataClass\Slideshare';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Soundcloud\Storage\DataClass\Soundcloud';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube';
+
         return $result;
     }
 
@@ -47,20 +47,20 @@ class Streaming extends Block
 
     /**
      * Returns the html to display when the block is configured.
-     * 
+     *
      * @return string
      */
     public function display_content()
     {
         $content_object = $this->get_object();
-        
+
         $rendition_implementation = ContentObjectRenditionImplementation :: factory(
-            $content_object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_DESCRIPTION, 
+            $content_object,
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_DESCRIPTION,
             $this);
         $rendition = ContentObjectRendition :: factory($rendition_implementation);
-        
+
         return $rendition->render();
     }
 }

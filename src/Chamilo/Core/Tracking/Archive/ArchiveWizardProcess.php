@@ -186,7 +186,7 @@ class ArchiveWizardProcess extends HTML_QuickForm_Action
         $time = time();
         $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
             'last_time_archived',
-            'core\tracking');
+            'Chamilo\Core\Tracking');
         $setting->set_value($time);
         $setting->update();
 

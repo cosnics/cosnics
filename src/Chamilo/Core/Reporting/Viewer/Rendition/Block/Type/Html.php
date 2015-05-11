@@ -17,22 +17,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Html extends BlockRendition
 {
-    const FORMAT = 'html';
-    const VIEW_TABLE = 'table';
-    const VIEW_PIE = 'pie_chart';
-    const VIEW_RING = 'ring_chart';
-    const VIEW_3D_PIE = 'three_dee_pie_chart';
-    const VIEW_BAR = 'bar_chart';
-    const VIEW_STACKED_BAR = 'stacked_bar_chart';
-    const VIEW_LINE = 'line_chart';
-    const VIEW_AREA = 'area_chart';
-    const VIEW_STACKED_AREA = 'stacked_area_chart';
-    const VIEW_POLAR = 'polar_chart';
-    const VIEW_RADAR = 'radar_chart';
-    const VIEW_CSV = 'csv';
-    const VIEW_XML = 'xml';
-    const VIEW_PDF = 'pdf';
-    const VIEW_XLSX = 'xlsx';
+    const FORMAT = 'Html';
+    const VIEW_TABLE = 'Table';
+    const VIEW_PIE = 'PieChart';
+    const VIEW_RING = 'RingChart';
+    const VIEW_3D_PIE = 'ThreeDeePieChart';
+    const VIEW_BAR = 'BarChart';
+    const VIEW_STACKED_BAR = 'StackedBarChart';
+    const VIEW_LINE = 'LineChart';
+    const VIEW_AREA = 'AreaChart';
+    const VIEW_STACKED_AREA = 'StackedAreaChart';
+    const VIEW_POLAR = 'PolarChart';
+    const VIEW_RADAR = 'RadarChart';
+    const VIEW_CSV = 'Csv';
+    const VIEW_XML = 'Xml';
+    const VIEW_PDF = 'Pdf';
+    const VIEW_XLSX = 'Xlsx';
 
     public function render()
     {
@@ -56,13 +56,12 @@ class Html extends BlockRendition
 
                 $is_current_view = $view == $this->get_context()->determine_current_block_view(
                     $this->get_block()->get_id()) ? true : false;
-
                 $tabs->add_tab(
-                    new DynamicVisualTab(
-                        $view,
+                   new DynamicVisualTab(
+                        $view,              
                         Translation :: get(
                             (string) StringUtilities :: getInstance()->createString(self :: FORMAT . '_' . $view)->upperCamelize()),
-                        Theme :: getInstance()->getImagePath(
+                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Core\Reporting\Viewer',
                             'Rendition/Block/' . self :: FORMAT . '/' . $view),
                         $this->get_context()->get_context()->get_url($view_parameters),

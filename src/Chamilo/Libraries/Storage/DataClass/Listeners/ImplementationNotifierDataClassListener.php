@@ -180,7 +180,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     {
         if (! isset($this->implementation_packages))
         {
-            $pattern = '*\\\integration\\' . $this->context;
+            $pattern = '*\\\Integration\\' . $this->context;
 
             $condition = new PatternMatchCondition(
                 new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),

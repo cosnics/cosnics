@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 
 class RepositoryMenu extends HTML_Menu
 {
@@ -45,30 +46,43 @@ class RepositoryMenu extends HTML_Menu
         $extra_items = array();
         $create = array();
         $create['title'] = Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES);
-        $create['url'] = $this->repository_manager->get_content_object_creation_url();
+        $create['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_CREATE_CONTENT_OBJECTS));
         $create['class'] = 'create';
-        
+
         $templates = array();
         $templates['title'] = Translation :: get('BrowseTemplates');
         $templates['url'] = $this->repository_manager->get_url(
             array(Manager :: PARAM_ACTION => Manager :: ACTION_TEMPLATE));
         $templates['class'] = 'template';
-        
+
         $import = array();
         $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
-        $import['url'] = $this->repository_manager->get_content_object_importing_url();
+        $import['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
         $import['class'] = 'import';
-        
+
         $quota = array();
         $quota['title'] = Translation :: get('Quota');
-        $quota['url'] = $this->repository_manager->get_quota_url();
+        $quota['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
+                \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
+                \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null,
+                DynamicTabsRenderer :: PARAM_SELECTED_TAB => null));
         $quota['class'] = 'quota';
-        
+
         $pub = array();
         $pub['title'] = Translation :: get('MyPublications');
-        $pub['url'] = $this->repository_manager->get_publication_url();
+        $pub['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_PUBLICATION),
+            array(\Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION),
+            false);
         $pub['class'] = 'publication';
-        
+
         $trash = array();
         $trash['title'] = Translation :: get('RecycleBin');
         $trash['url'] = $this->repository_manager->get_recycle_bin_url();
@@ -80,12 +94,14 @@ class RepositoryMenu extends HTML_Menu
         {
             $trash['class'] = 'trash';
         }
-        
+
         $doubles = array();
         $doubles['title'] = Translation :: get('ViewDoubles');
-        $doubles['url'] = $this->repository_manager->get_view_doubles_url();
+        $doubles['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_DOUBLES));
         $doubles['class'] = 'doubles';
-        
+
         $extra_items[] = $pub;
         $extra_items[] = $create;
         $extra_items[] = $import;
@@ -93,13 +109,13 @@ class RepositoryMenu extends HTML_Menu
         $extra_items[] = $quota;
         $extra_items[] = $doubles;
         $extra_items[] = $trash;
-        
+
         return $extra_items;
     }
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param int $category The id of the category
      * @return string The requested URL
      */
@@ -111,7 +127,7 @@ class RepositoryMenu extends HTML_Menu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -131,7 +147,7 @@ class RepositoryMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

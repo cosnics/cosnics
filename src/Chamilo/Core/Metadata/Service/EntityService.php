@@ -305,11 +305,11 @@ class EntityService
     private function processEntityElement(User $currentUser, ElementService $elementService,
         SchemaInstance $schemaInstance, Element $element, DataClassEntity $entity, $submittedElementValues)
     {
-        $propertyProviderService = new PropertyProviderService($entity, $schemaInstance);
+        $propertyProviderService = new PropertyProviderService($entity);
 
         try
         {
-            $providerLink = $propertyProviderService->getProviderLink($element);
+            $providerLink = $propertyProviderService->getProviderLinkForElement($element);
             return true;
         }
         catch (NoProviderAvailableException $exception)

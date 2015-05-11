@@ -587,8 +587,9 @@ abstract class Manager extends Application
      */
     public static function type_to_class($tool)
     {
-        return __NAMESPACE__ . '\tool\implementation\\' . $tool . '\\' .
-             (string) StringUtilities :: getInstance()->createString($tool)->upperCamelize() . 'Tool';
+        $toolName = (string) StringUtilities :: getInstance()->createString($tool)->upperCamelize();
+
+        return __NAMESPACE__ . '\Implementation\\' . $toolName . '\\' . $toolName . 'Tool';
     }
 
     /**
@@ -904,13 +905,13 @@ abstract class Manager extends Application
         $types = array();
 
         $directories = Filesystem :: get_directory_content(
-            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__ . '\implementation'),
+            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__ . '\Implementation'),
             Filesystem :: LIST_DIRECTORIES,
             false);
 
         foreach ($directories as $directory)
         {
-            $namespace = __NAMESPACE__ . '\implementation\\' . $directory;
+            $namespace = __NAMESPACE__ . '\Implementation\\' . $directory;
 
             if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
             {

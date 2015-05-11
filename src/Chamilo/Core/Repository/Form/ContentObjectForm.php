@@ -81,6 +81,12 @@ abstract class ContentObjectForm extends FormValidator
     private $extra;
 
     protected $form_type;
+    
+    
+    /**
+     * @var DynamicFormTabsRenderer
+     */
+    private $tabsGenerator;
 
     /**
      * Constructor.
@@ -104,7 +110,8 @@ abstract class ContentObjectForm extends FormValidator
         $this->allow_new_version = $allow_new_version;
 
         $this->prepareTabs();
-
+        $this->getTabsGenerator()->render();
+        
         if ($this->form_type != self :: TYPE_COMPARE)
         {
             $this->add_progress_bar(2);
@@ -153,17 +160,36 @@ abstract class ContentObjectForm extends FormValidator
         return (string) StringUtilities :: getInstance()->createString($this->get_content_object_type())->upperCamelize();
     }
 
+    /**
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
+     */
+    public function getTabsGenerator()
+    {
+        if(! isset ($this->tabsGenerator)){
+            $this->tabsGenerator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
+        }
+        return $this->tabsGenerator;
+    }
+    
+    
     public function prepareTabs()
     {
-        $tabs_generator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
-
-        $tabs_generator->add_tab(
+       $this->addDefaultTab();
+        $this->addMetadataTabs();
+    }
+    
+    public function addDefaultTab()
+    {
+        $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_CONTENT_OBJECT,
                 Translation :: get('TypeName', null, $this->get_content_object()->package()),
                 Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
-
+    }
+    
+    public function addMetadataTabs()
+    {
         $relationService = new RelationService();
         $entityService = new EntityService();
 
@@ -182,7 +208,7 @@ abstract class ContentObjectForm extends FormValidator
             while ($schemaInstance = $schemaInstances->next_result())
             {
                 $schema = $schemaInstance->getSchema();
-                $tabs_generator->add_tab(
+                $this->getTabsGenerator()->add_tab(
                     new DynamicFormTab(
                         'schema-' . $schemaInstance->get_id(),
                         $schema->get_name(),
@@ -191,7 +217,7 @@ abstract class ContentObjectForm extends FormValidator
                         array($schemaInstance)));
             }
 
-            $tabs_generator->add_tab(
+           $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema',
                     Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
@@ -199,7 +225,7 @@ abstract class ContentObjectForm extends FormValidator
                     'build_metadata_choice_form'));
         }
 
-        $tabs_generator->render();
+        
     }
 
     public function build_general_form()
@@ -780,9 +806,6 @@ EOT;
             return null;
         }
 
-        $tags = explode(',', $values[TagsFormBuilder :: PROPERTY_TAGS]);
-        DataManager :: set_tags_for_content_objects($tags, array($object->get_id()), Session :: get_user_id());
-
         $values = $this->exportValues();
 
         // Process includes
@@ -920,9 +943,6 @@ EOT;
         {
             return false;
         }
-
-        $tags = explode(',', $values[TagsFormBuilder :: PROPERTY_TAGS]);
-        DataManager :: set_tags_for_content_objects($tags, array($object->get_id()), Session :: get_user_id());
 
         // Process includes
         ContentObjectIncludeParser :: parse_includes($this);

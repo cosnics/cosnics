@@ -42,14 +42,14 @@ class TableComponent extends Manager implements TemplateSupport
         $answers = array();
         
         $question = $this->get_question();
-        $options = $question->get_options()->as_array();
+        $options = $question->getOptions();
         
         $answer_count = rand(0, 50);
         
         for ($i = 0; $i <= $answer_count; $i ++)
         {
             $random_match = rand(0, (count($options) - 1));
-            $answers[][] = $options[$random_match]->get_id();
+            $answers[][] = $random_match;
         }
         
         return $answers;

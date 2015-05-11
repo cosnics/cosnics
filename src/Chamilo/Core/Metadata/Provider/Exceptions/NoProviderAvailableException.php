@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Exceptions;
 
+use Chamilo\Libraries\Platform\Translation;
+
 /**
  *
  * @package Chamilo\Core\Metadata\Provider\Exceptions
@@ -10,4 +12,13 @@ namespace Chamilo\Core\Metadata\Provider\Exceptions;
  */
 class NoProviderAvailableException extends \Exception
 {
+
+    /**
+     *
+     * @see Exception::__construct()
+     */
+    public function __construct($code, $previous)
+    {
+        parent :: __construct(Translation :: get('NoProviderAvailable'), $code, $previous);
+    }
 }

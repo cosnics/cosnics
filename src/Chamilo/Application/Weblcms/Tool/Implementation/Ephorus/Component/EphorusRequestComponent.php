@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This class executes the ephorus submanager
@@ -65,8 +66,8 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      */
     public function initialize_dependencies(DependencyContainer $dependency_container)
     {
-        $dependency_container->add(self :: DEPENDENCY_DATA_MANAGER_CLASS, 'core\repository\DataManager');
-        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'libraries\platform\Request');
+        $dependency_container->add(self :: DEPENDENCY_DATA_MANAGER_CLASS, 'Chamilo\Core\Repository\Storage\DataManager');
+        $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'Chamilo\Libraries\Platform\Session\Request');
     }
 
     public function get_base_request()
@@ -107,7 +108,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         $requests = array();
         foreach ($ids as $id)
         {
-            $content_object = $data_manager_class :: retrieve_content_object($id);
+            $content_object = $data_manager_class :: retrieve_by_id(ContentObject :: class_name(), $id);
 
             if (! $content_object)
             {

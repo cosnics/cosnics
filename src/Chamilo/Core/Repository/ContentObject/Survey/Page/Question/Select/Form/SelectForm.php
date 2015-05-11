@@ -15,6 +15,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -24,39 +27,60 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class SelectForm extends ContentObjectForm
 {
-
-    function build_basic_form()
+    const TAB_GENERAL = 'general';
+    const TAB_QUESTION = 'question';
+    const TAB_OPTION = 'option';
+    
+    private static $html_editor_options = array(
+        FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
+        FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
+    
+    /**
+     * Prepare all the different tabs
+    */
+    function prepareTabs()
     {
-        $this->addElement('category', Translation :: get('Question'));
-        $this->add_textfield(
-            Select :: PROPERTY_QUESTION,
-            Translation :: get('Question'),
-            true,
-            array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
-        $this->add_html_editor(Select :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false);
-        $this->addElement('category');
-
-        $this->addElement('category', Translation :: get('Options'));
-        $this->add_options();
-        $this->addElement('category');
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
-                    true) . 'SurveySelectQuestion.js'));
+                    true) . 'Form.js'));
+    
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_QUESTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_QUESTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
+                    'Tab/' . self :: TAB_QUESTION),
+                'build_question_form'));
+    
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_OPTION,
+                Translation :: get(
+                    (string) StringUtilities :: getInstance()->createString(self :: TAB_OPTION)->upperCamelize()),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
+                    'Tab/' . self :: TAB_OPTION),
+                'build_option_form'));
+    
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
     }
-
-    protected function build_creation_form()
+    
+    function build_question_form()
     {
-        $this->build_basic_form();
-        parent :: build_creation_form();
-    }
+        $this->add_textfield(
+            Select :: PROPERTY_QUESTION,
+            Translation :: get('Question'),
+            true,
+            array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
+        $this->add_html_editor(Select :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false, self :: $html_editor_options);
 
-    protected function build_editing_form()
-    {
-        $this->build_basic_form();
-        parent :: build_editing_form();
     }
 
     function setDefaults($defaults = array ())
@@ -175,7 +199,7 @@ class SelectForm extends ContentObjectForm
     /**
      * Adds the form-fields to the form to provide the possible options for this multiple choice question
      */
-    function add_options()
+    function build_option_form()
     {
         $renderer = $this->defaultRenderer();
 

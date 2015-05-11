@@ -16,7 +16,7 @@
 		<variable value="TypeName">
 			<translation language="en">Multiple choice question
 			</translation>
-			<translation language="nl"></translation>
+			<translation language="nl">Meerkeuzevraag</translation>
 		</variable>
 	</translations>
 </template>

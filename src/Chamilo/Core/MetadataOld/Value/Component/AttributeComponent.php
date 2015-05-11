@@ -13,14 +13,14 @@ class AttributeComponent extends Manager implements DelegateComponent
     public function run()
     {
         \Chamilo\Libraries\Architecture\Application\Application :: launch(
-            \Chamilo\Core\MetadataOld\Value\Attribute\Manager :: context(), 
-            $this->get_user(), 
+            \Chamilo\Core\MetadataOld\Value\Attribute\Manager :: context(),
+            $this->get_user(),
             $this);
     }
 
     /**
      * Adds additional breadcrumbs
-     * 
+     *
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -30,14 +30,14 @@ class AttributeComponent extends Manager implements DelegateComponent
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Core\MetadataOld\Manager :: PARAM_ACTION => \Chamilo\Core\MetadataOld\Manager :: ACTION_ATTRIBUTE), 
-                    $this->get_additional_parameters()), 
-                Translation :: get('BrowserComponent', null, 'core\metadata\attribute')));
+                        \Chamilo\Core\MetadataOld\Manager :: PARAM_ACTION => \Chamilo\Core\MetadataOld\Manager :: ACTION_ATTRIBUTE),
+                    $this->get_additional_parameters()),
+                Translation :: get('BrowserComponent', null, 'Chamilo\Core\MetadataOld\Attribute')));
     }
 
     /**
      * Returns the additional parameters
-     * 
+     *
      * @return array
      */
     public function get_additional_parameters()

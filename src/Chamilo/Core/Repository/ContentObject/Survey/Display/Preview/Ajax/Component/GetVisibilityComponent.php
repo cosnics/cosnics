@@ -86,7 +86,8 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                     $from_question_id = $configuration->getComplexQuestionId();
                     if ($complex_question_id == $from_question_id)
                     {
-                        $answer_matches = $configuration->getComplexQuestionId();
+                        $answer_matches = $configuration->getAnswerMatches();
+                        
                         $visible = false;
                         if (count($answer_matches) == count($answers))
                         {
@@ -115,7 +116,7 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
                         
                         if ($visible)
                         {
-                            foreach ($configuration->getComplexQuestionId() as $id)
+                            foreach ($configuration->getToVisibleQuestionIds() as $id)
                             {
                                 $question_visibility[$id] = true;
                             }

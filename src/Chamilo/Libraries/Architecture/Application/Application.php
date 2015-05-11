@@ -165,15 +165,15 @@ abstract class Application
      */
     public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false)
     {
-        
-        if($message != null){
+        if ($message != null)
+        {
 
             $message_type = (! $error_message) ? NotificationMessage :: TYPE_NORMAL : NotificationMessage :: TYPE_ERROR;
-            
+
             $messages = Session :: retrieve(self :: PARAM_MESSAGES);
             $messages[self :: PARAM_MESSAGE_TYPE][] = $message_type;
             $messages[self :: PARAM_MESSAGE][] = $message;
-            
+
             Session :: register(self :: PARAM_MESSAGES, $messages);
         }
 
@@ -263,11 +263,11 @@ abstract class Application
 
         // Display messages
         $messages = Session :: retrieve(self :: PARAM_MESSAGES);
-        
+
         Session :: unregister(self :: PARAM_MESSAGES);
         if (is_array($messages))
         {
-           $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
+            $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
         }
 
         // DEPRECATED

@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -64,7 +65,8 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
             // fill publications with individual assignments
             while ($publication = $publication_resultset->next_result())
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                 $method = 'get_allow_group_submissions';
@@ -80,7 +82,8 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
 
             foreach ($publications as $publication)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                 if (count($publications) > 5)
@@ -110,7 +113,8 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
 
                 foreach ($publications as $publication)
                 {
-                    $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                    $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        ContentObject :: class_name(),
                         $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                     if (count($publications) > 5)

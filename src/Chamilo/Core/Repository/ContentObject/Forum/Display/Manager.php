@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -117,7 +118,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             if ($child->get_id() == $complex_content_item_id)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
                     $child->get_ref());
 
                 $wrappers[$child->get_id()] = $content_object;
@@ -135,7 +137,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             if ($wrap_child)
             {
-                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object($value);
+                $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $value);
 
                 $wrappers[$key] = $content_object;
 

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Controller to update a ContentObjectAlternative
@@ -96,7 +97,8 @@ class UpdaterComponent extends Manager
         $form->addElement('html', $this->display_content_object());
         $form->addElement('category');
 
-        $alternative_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $alternative_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $content_object_alternative->get_content_object_id());
 
         $form->addElement('category', Translation :: get('AlternativeContentObject'));

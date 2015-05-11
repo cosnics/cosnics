@@ -2,7 +2,7 @@
 
 	$(document).ready(function() {
 
-		$("#datepicker").datepicker({
+		$("[id^=datepicker]").datepicker({
 			changeMonth : true,
 			changeYear : true,
 			firstDay : 1

@@ -311,9 +311,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $first = $counter == 0 ? true : false;
                     $last = $counter == ($size - 1) ? true : false;
 
-                    $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                        $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                        Forum :: class_name());
+                    $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                        Forum :: class_name(),
+                        $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
                     if ($forum->get_locked() && ! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
                     {
@@ -391,7 +391,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         {
                             $content = DatetimeUtilities :: format_locale_date(null, $last_post->get_creation_date()) .
                                  '<br />' . $name . ' <a href="' . $link . '"><img title="' .
-                                 Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
+                                 Translation :: get('ViewLastPost', null, 'Chamilo\Core\Repository\ContentObject\Forum') .
                                  '" src="' . Theme :: getInstance()->getImagePath(
                                     'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
                                     'Forum/IconTopicLatest') . '" /></a>';
@@ -417,8 +417,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                                     $last_post->get_creation_date());
 
                                 $content .= '<br />' . $name . ' <a href="' . $link . '"><img title="' .
-                                     Translation :: get('ViewLastPost', null, 'core\repository\content_object\forum') .
-                                     '" src="' . Theme :: getInstance()->getImagePath(
+                                     Translation :: get(
+                                        'ViewLastPost',
+                                        null,
+                                        'Chamilo\Core\Repository\ContentObject\Forum') . '" src="' . Theme :: getInstance()->getImagePath(
                                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
                                         'Forum/IconTopicLatest.gif') . '" /></a>';
 
@@ -562,9 +564,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
                     ToolbarItem :: DISPLAY_ICON));
 
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                Forum :: class_name());
+            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Forum :: class_name(),
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             if ($forum->get_locked())
             {
@@ -592,9 +594,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID],
-                Forum :: class_name());
+            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                Forum :: class_name(),
+                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
         }
 
         if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT))
@@ -657,7 +659,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
             // added tool dependent publish button
-            $tool_dependent_publish = PlatformSetting :: get('tool_dependent_publish_button', 'application\weblcms');
+            $tool_dependent_publish = PlatformSetting :: get(
+                'tool_dependent_publish_button',
+                \Chamilo\Application\Weblcms\Manager :: context());
 
             if ($tool_dependent_publish == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_INDEPENDENT)
             {

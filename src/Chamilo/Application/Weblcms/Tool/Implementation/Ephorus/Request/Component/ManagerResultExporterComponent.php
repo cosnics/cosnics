@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * User: Pieterjan Broekaert
@@ -25,7 +26,8 @@ class ManagerResultExporterComponent extends Manager
             $request_id = \Chamilo\Libraries\Platform\Session\Request :: get(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS);
             $request = DataManager :: retrieve_by_id(Request :: class_name(), $request_id);
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $request->get_content_object_id());
 
             $html = array();

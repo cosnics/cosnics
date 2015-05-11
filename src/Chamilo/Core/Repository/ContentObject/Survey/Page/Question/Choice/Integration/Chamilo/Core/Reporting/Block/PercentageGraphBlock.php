@@ -22,12 +22,8 @@ class PercentageGraphBlock extends ReportingBlock
         $answer_count = array();
         
         // get options and matches
-        $opts = $question->get_options();
-        while ($option = $opts->next_result())
-        {
-            $options[$option->get_id()] = $option->get_value();
-        }
-        
+        $options = $question->getOptions();
+                
         // create answer matrix for answer counting
         foreach ($options as $option_id => $option)
         {

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table column model for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ElementTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -28,41 +28,41 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_PREFIX, 
+                self :: COLUMN_PREFIX,
                 Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(self :: COLUMN_PREFIX)->upperCamelize(), 
-                    null, 
-                    'core\metadata')));
-        
+                    (string) StringUtilities :: getInstance()->createString(self :: COLUMN_PREFIX)->upperCamelize(),
+                    null,
+                    'Chamilo\Core\MetadataOld')));
+
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Element :: class_name(), 
-                Element :: PROPERTY_NAME, 
+                Element :: class_name(),
+                Element :: PROPERTY_NAME,
                 Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(Element :: PROPERTY_NAME)->upperCamelize(), 
-                    null, 
-                    'core\metadata')));
-        
+                    (string) StringUtilities :: getInstance()->createString(Element :: PROPERTY_NAME)->upperCamelize(),
+                    null,
+                    'Chamilo\Core\MetadataOld')));
+
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Element :: class_name(), 
-                Element :: PROPERTY_DISPLAY_NAME, 
+                Element :: class_name(),
+                Element :: PROPERTY_DISPLAY_NAME,
                 Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString(Element :: PROPERTY_DISPLAY_NAME)->upperCamelize(), 
-                    null, 
-                    'core\metadata'), 
+                    (string) StringUtilities :: getInstance()->createString(Element :: PROPERTY_DISPLAY_NAME)->upperCamelize(),
+                    null,
+                    'Chamilo\Core\MetadataOld'),
                 false));
-        
+
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_CONTROLLED_VOCABULARY, 
+                self :: COLUMN_CONTROLLED_VOCABULARY,
                 Theme :: getInstance()->getImage(
-                    'action/controlled_vocabulary', 
-                    'png', 
-                    Translation :: get('HasControlledVocabulary', null, 'core\metadata'), 
-                    null, 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    false, 
+                    'action/controlled_vocabulary',
+                    'png',
+                    Translation :: get('HasControlledVocabulary', null, 'Chamilo\Core\MetadataOld'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
                     __NAMESPACE__)));
     }
 }

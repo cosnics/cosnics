@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Proces
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * handles request processing (calls to ephorus webservices)
@@ -78,7 +79,7 @@ class RequestProcessor
     {
         $index_document_service_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'index_document_service_wsdl',
-            'application\weblcms\tool\ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if (! $index_document_service_wsdl)
         {
@@ -97,7 +98,7 @@ class RequestProcessor
 
         $show_debug = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'debugging_enabled',
-            'application\weblcms\tool\ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if ($show_debug)
         {
@@ -176,7 +177,7 @@ class RequestProcessor
     {
         $hand_in_wsdl = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'handin_service_wsdl',
-            'application\weblcms\tool\ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if (! $hand_in_wsdl)
         {
@@ -191,7 +192,7 @@ class RequestProcessor
 
         $show_debug = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'debugging_enabled',
-            'application\weblcms\tool\ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
 
         if ($show_debug)
         {
@@ -242,7 +243,8 @@ class RequestProcessor
      */
     private function get_hand_in_request_parameters(Request $request)
     {
-        $document = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+        $document = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
             $request->get_content_object_id());
 
         if (! $document)
@@ -267,7 +269,7 @@ class RequestProcessor
 
         $hand_in_code = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
             'hand_in_code',
-            'application\weblcms\tool\ephorus');
+            'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus');
         if (! $hand_in_code)
         {
             /**

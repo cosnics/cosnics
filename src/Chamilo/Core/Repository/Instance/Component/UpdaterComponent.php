@@ -8,6 +8,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 
 class UpdaterComponent extends Manager
 {
@@ -25,7 +26,7 @@ class UpdaterComponent extends Manager
 
         if (isset($instance_id))
         {
-            $this->external_instance = DataManager :: retrieve_instance($instance_id);
+            $this->external_instance = DataManager :: retrieve_by_id(Instance :: class_name(), $instance_id);
 
             $form = new InstanceForm($this, $this->external_instance);
 

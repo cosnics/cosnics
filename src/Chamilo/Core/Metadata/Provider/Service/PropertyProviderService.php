@@ -13,6 +13,10 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Element\Service\ElementService;
 
 /**
  *
@@ -64,7 +68,7 @@ class PropertyProviderService
      */
     public function getPropertyValues(Element $element)
     {
-        $providerLink = $this->getProviderLink($element);
+        $providerLink = $this->getProviderLinkForElement($element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
 
@@ -75,7 +79,7 @@ class PropertyProviderService
      *
      * @param \Chamilo\Core\Metadata\Element\Storage\DataClass\Element $element
      */
-    public function getProviderLink(Element $element)
+    public function getProviderLinkForElement(Element $element)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -112,6 +116,10 @@ class PropertyProviderService
         return new $className();
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
     public function getProviderRegistrationsForEntity()
     {
         $condition = new EqualityCondition(
@@ -122,5 +130,108 @@ class PropertyProviderService
 
         $parameters = new DataClassRetrievesParameters($condition);
         return DataManager :: retrieves(ProviderRegistration :: class_name(), $parameters);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function getProviderLinksForEntity()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($this->getEntity()->getDataClassName()));
+
+        $parameters = new DataClassRetrievesParameters($condition);
+        return DataManager :: retrieves(ProviderLink :: class_name(), $parameters);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     * @param \Chamilo\Core\Metadata\Relation\Service\RelationServic $relationService
+     * @param string[] $submittedProviderLinkValues
+     * @return boolean
+     */
+    public function updateEntityProviderLinks(EntityService $entityService, ElementService $elementService,
+        RelationService $relationService, $submittedProviderLinkValues)
+    {
+        $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $this->getEntity())->as_array();
+
+        foreach ($availableSchemas as $availableSchema)
+        {
+            if (isset($submittedProviderLinkValues[$availableSchema->get_id()]))
+            {
+                if (! $this->updateEntityProviderLinksForSchema(
+                    $elementService,
+                    $availableSchema,
+                    $submittedProviderLinkValues[$availableSchema->get_id()]))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
+     * @param string[] $submittedSchemaValues
+     */
+    public function updateEntityProviderLinksForSchema(ElementService $elementService, Schema $schema,
+        $submittedSchemaValues)
+    {
+        $elements = $elementService->getElementsForSchema($schema);
+
+        while ($element = $elements->next_result())
+        {
+            if (isset($submittedSchemaValues[$element->get_id()]))
+            {
+                if (! $this->updateEntityProviderLinkForElement($element, $submittedSchemaValues[$element->get_id()]))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function updateEntityProviderLinkForElement(Element $element, $submittedProviderRegistrationId)
+    {
+        if ($submittedProviderRegistrationId)
+        {
+            try
+            {
+                $providerLink = $this->getProviderLinkForElement($element);
+                $providerLink->set_provider_registration_id($submittedProviderRegistrationId);
+                return $providerLink->update();
+            }
+            catch (NoProviderAvailableException $exception)
+            {
+                $providerLink = new ProviderLink();
+                $providerLink->set_entity_type($this->getEntity()->getDataClassName());
+                $providerLink->set_element_id($element->get_id());
+                $providerLink->set_provider_registration_id($submittedProviderRegistrationId);
+
+                return $providerLink->create();
+            }
+        }
+        else
+        {
+            try
+            {
+                $providerLink = $this->getProviderLinkForElement($element);
+                return $providerLink->delete();
+            }
+            catch (NoProviderAvailableException $exception)
+            {
+                return true;
+            }
+        }
     }
 }
