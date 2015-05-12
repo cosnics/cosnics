@@ -29,7 +29,7 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_CONTEXT, self :: PARAM_COMPONENT, self :: PARAM_COLUMN, self :: PARAM_ORDER);
+        return array(self :: PARAM_CONTEXT, self :: PARAM_COMPONENT, self :: PARAM_COLUMN);
     }
 
     public function unserialize_jquery($jquery)

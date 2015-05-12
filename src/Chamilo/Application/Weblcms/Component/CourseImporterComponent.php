@@ -54,6 +54,8 @@ class CourseImporterComponent extends Manager
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
         }
     }
 

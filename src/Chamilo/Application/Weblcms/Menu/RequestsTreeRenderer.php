@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 
 /**
  * $Id: request_tree_renderer.class.php 204 2009-11-13 12:51:30Z tristan $
@@ -44,7 +45,7 @@ class RequestsTreeRenderer extends HTML_Menu
     private function get_requests_array()
     {
         $sub_menu = array();
-        
+
         // $menu_item = array();
         // $menu_item['class'] = 'type type_request';
         // $menu_item['title'] = Translation :: get('CreationRequests');
@@ -52,7 +53,7 @@ class RequestsTreeRenderer extends HTML_Menu
         // $menu_item['url'] = '#';
         // $menu_item['sub'] = $this->get_sub_division(CommonRequest :: CREATION_REQUEST);
         // $sub_menu[] = $menu_item;
-        
+
         $menu_item = array();
         $menu_item['class'] = 'type type_request';
         $menu_item['title'] = Translation :: get('SubscriptionRequests');
@@ -66,7 +67,7 @@ class RequestsTreeRenderer extends HTML_Menu
     private function get_sub_division($request_type)
     {
         $sub_menu = array();
-        
+
         $request_database_method = null;
         switch ($request_type)
         {
@@ -77,11 +78,11 @@ class RequestsTreeRenderer extends HTML_Menu
                 $request_database_method = 'count_course_create_requests';
                 break;
         }
-        
+
         $request_view = null;
         $translation = null;
         $condition = null;
-        
+
         for ($i = 0; $i < 3; $i ++)
         {
             switch ($i)
@@ -90,27 +91,27 @@ class RequestsTreeRenderer extends HTML_Menu
                     $translation = 'Pending';
                     $request_view = AdminRequestBrowserComponent :: PENDING_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION), 
-                        new StaticConditionVariable(CommonRequest :: NO_DECISION));
+                        new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                        new StaticConditionVariable(CourseRequest :: NO_DECISION));
                     break;
                 case 1 :
                     $translation = 'Allowed';
                     $request_view = AdminRequestBrowserComponent :: ALLOWED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION), 
-                        new StaticConditionVariable(CommonRequest :: ALLOWED_DECISION));
+                        new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                        new StaticConditionVariable(CourseRequest :: ALLOWED_DECISION));
                     break;
                 case 2 :
                     $translation = 'Denied';
                     $request_view = AdminRequestBrowserComponent :: DENIED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
-                        new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION), 
-                        new StaticConditionVariable(CommonRequest :: DENIED_DECISION));
+                        new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                        new StaticConditionVariable(CourseRequest :: DENIED_DECISION));
                     break;
             }
-            
+
             $count = $this->parent->$request_database_method($condition);
-            
+
             $menu_item = array();
             $menu_item['class'] = 'type type_request';
             $menu_item['title'] = Translation :: get($translation) . ' (' . $count . ')';

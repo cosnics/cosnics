@@ -198,7 +198,7 @@ class HomeComponent extends Manager implements DelegateComponent
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))) . '">' .
              htmlspecialchars(Translation :: get('SortMyCourses')) . '</a></li>';
 
-        if (PlatformSetting :: get('show_subscribe_button_on_course_home', __NAMESPACE__))
+        if (PlatformSetting :: get('show_subscribe_button_on_course_home', self :: package()))
         {
             $html[] = '<li class="tool_list_menu" style="background-image: url(' .
                  htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Subscribe')) . ')">' .

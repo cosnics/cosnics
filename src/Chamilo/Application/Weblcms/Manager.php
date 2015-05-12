@@ -14,6 +14,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -70,7 +71,7 @@ abstract class Manager extends Application
     const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
     const ACTION_MANAGER_SORT = 'Sorter';
     const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
-    const ACTION_ADMIN_REQUEST_BROWSER = 'AminRequestBrowser';
+    const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
     const ACTION_REPORTING = 'Reporting';
     const ACTION_REQUEST = 'Request';
     const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
@@ -241,7 +242,7 @@ abstract class Manager extends Application
 
     public function count_requests($condition = null)
     {
-        return DataManager :: count(CourseRequest :: class_name(), $condition);
+        return DataManager :: count(CourseRequest :: class_name(), new DataClassCountParameters($condition));
     }
 
     /**

@@ -82,7 +82,7 @@ class BlockRendition
             if (! file_exists($image_path) || ! is_file($image_path))
             {
                 return Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 3),
+                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4),
                     'Logo/' . Theme :: ICON_MEDIUM);
             }
             else
@@ -306,15 +306,6 @@ class BlockRendition
                      '" class="configEl" title="' . $configure_text . '">';
                 $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Config')) .
                      '" alt="' . $configure_text . '" title="' . $configure_text . '"/></a>';
-            }
-
-            if ($this->is_editable())
-            {
-                $edit_text = Translation :: get('Edit');
-                $html[] = '<a href="' . htmlspecialchars($this->get_block_editing_link($this->get_block_info())) .
-                     '" class="editEl" title="' . $edit_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Edit')) .
-                     '" alt="' . $edit_text . '" title="' . $edit_text . '"/></a>';
             }
 
             if ($this->is_hidable())

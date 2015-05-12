@@ -276,14 +276,17 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
 
         $rrules = IcalExportImplementation :: rrule($this);
 
-        $bydays = array();
-
-        foreach ($rrules['BYDAY'] as $byday)
+        if (isset($rrules['BYDAY']))
         {
-            $bydays[] = implode('', $byday);
-        }
+            $bydays = array();
 
-        $rrules['BYDAY'] = implode(',', $bydays);
+            foreach ($rrules['BYDAY'] as $byday)
+            {
+                $bydays[] = implode('', $byday);
+            }
+
+            $rrules['BYDAY'] = implode(',', $bydays);
+        }
 
         $vevent->add('RRULE', $rrules);
         $vevent->add('UID', uniqid());
@@ -295,7 +298,6 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         $to_date_time->setTimestamp($to_date);
 
         $vcalendar->expand($from_date_time, $to_date_time);
-
         return $vcalendar->VEVENT;
     }
 
@@ -331,7 +333,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     {
         if ($this->has_frequency())
         {
-            return $size . '_repeat';
+            return $size . 'Repeat';
         }
         else
         {
@@ -352,7 +354,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
     {
         if ($has_frequency)
         {
-            $size = $size . '_repeat';
+            $size = $size . 'Repeat';
         }
 
         return parent :: icon_image($context, $size, $is_current);

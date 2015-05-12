@@ -116,7 +116,7 @@ class Basic extends Html
                             $key,
                             $title,
                             Theme :: getInstance()->getImagePath(
-                                ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 1),
+                                ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 2),
                                 ClassnameUtilities :: getInstance()->getClassnameFromObject($block)),
                             $this->get_context()->get_url($block_parameters),
                             $is_current_block));

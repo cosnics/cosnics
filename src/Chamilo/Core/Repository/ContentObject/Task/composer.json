@@ -17,7 +17,7 @@
     
     "require": {
         "php": ">=5.4.0",
-		"sabre/vobject": "~3.2.0"
+		"sabre/vobject": "~3.4.0"
     },
     "extra": {
         "install-path": "repository/content_object/task"

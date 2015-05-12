@@ -1143,6 +1143,7 @@ function _loadfont($font)
 {
 	// Load a font definition file from the font directory
 	include($this->fontpath.$font);
+	var_dump($this->fontpath.$font);
 	$a = get_defined_vars();
 	if(!isset($a['name']))
 		$this->Error('Could not include font definition file');
