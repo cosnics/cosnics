@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\calendar
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Calendrier"
+UpcomingEvents = "Événements à venir"
+CalendarToolBrowserComponent = "Parcourir des événements du calendrier"
+CalendarToolViewerComponent = "Calendrier"
+CalendarToolUpdaterComponent = "Modifier le calendrier"
+CalendarToolPublisherComponent = "Publier un événement dans le calendrier"
+CalendarToolIntroductionPublisherComponent = "Publier une introduction"
