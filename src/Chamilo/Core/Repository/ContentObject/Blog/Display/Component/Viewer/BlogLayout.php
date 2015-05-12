@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 
@@ -59,8 +58,7 @@ abstract class BlogLayout
     public function factory($parent, Blog $blog)
     {
         $type = $blog->get_blog_layout();
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
-             'BlogLayout';
+        $class = __NAMESPACE__ . '\BlogLayout\\' . $type . 'BlogLayout';
 
         if (! class_exists($class))
         {

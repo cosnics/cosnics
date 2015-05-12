@@ -7,11 +7,11 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\File\Path;
 
 /**
  * $Id: blog.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.blog
  */
 /**
@@ -52,22 +52,18 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     public static function get_available_blog_layouts()
     {
         $blog_layouts = array();
-        
-        $dir = __DIR__ . '/../../../../display/php/lib/manager/component/viewer/blog_layout/';
-        $files = Filesystem :: get_directory_content($dir, Filesystem :: LIST_FILES);
+
+        $dir = Path :: getInstance()->namespaceToFullPath(self :: package() . '\Display\Component\Viewer\BlogLayout');
+        $files = Filesystem :: get_directory_content($dir, Filesystem :: LIST_FILES, false);
+
         foreach ($files as $file)
         {
-            $file = basename($file);
-            if (substr($file, 0, 1) == '.')
-            {
-                continue;
-            }
-            
-            $type = substr($file, 0, - 22);
-            $blog_layouts[$type] = Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'BlogLayout');
+            $variable = str_replace('.php', '', $file);
+            $type = str_replace('BlogLayout.php', '', $file);
+
+            $blog_layouts[$type] = Translation :: get($variable);
         }
-        
+
         return $blog_layouts;
     }
 }

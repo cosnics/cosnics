@@ -346,14 +346,17 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
 
         $rrules = IcalExportImplementation :: rrule($this);
 
-        $bydays = array();
-
-        foreach ($rrules['BYDAY'] as $byday)
+        if (isset($rrules['BYDAY']))
         {
-            $bydays[] = implode('', $byday);
-        }
+            $bydays = array();
 
-        $rrules['BYDAY'] = implode(',', $bydays);
+            foreach ($rrules['BYDAY'] as $byday)
+            {
+                $bydays[] = implode('', $byday);
+            }
+
+            $rrules['BYDAY'] = implode(',', $bydays);
+        }
 
         $vevent->add('RRULE', $rrules);
         $vevent->add('UID', uniqid());

@@ -26,6 +26,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 
 /**
  * $Id: admin_course_type_browser.class.php 218 2010-03-11 14:21:26Z Yannick & Tristan $
@@ -139,10 +140,10 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_MOTIVATION),
+                new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_MOTIVATION),
                 '*' . $query . '*');
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_SUBJECT),
+                new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_SUBJECT),
                 '*' . $query . '*');
 
             $search_conditions = new OrCondition($conditions);
@@ -157,18 +158,18 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             case self :: PENDING_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION),
-                    new StaticConditionVariable(CommonRequest :: NO_DECISION));
+                    new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                    new StaticConditionVariable(CourseRequest :: NO_DECISION));
                 break;
             case self :: ALLOWED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION),
-                    new StaticConditionVariable(CommonRequest :: ALLOWED_DECISION));
+                    new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                    new StaticConditionVariable(CourseRequest :: ALLOWED_DECISION));
                 break;
             case self :: DENIED_REQUEST_VIEW :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CommonRequest :: class_name(), CommonRequest :: PROPERTY_DECISION),
-                    new StaticConditionVariable(CommonRequest :: DENIED_DECISION));
+                    new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_DECISION),
+                    new StaticConditionVariable(CourseRequest :: DENIED_DECISION));
                 break;
         }
 
