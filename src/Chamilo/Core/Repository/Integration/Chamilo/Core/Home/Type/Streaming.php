@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\User\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -52,15 +52,14 @@ class Streaming extends Block
      */
     public function display_content()
     {
-        $content_object = $this->get_object();
+        $contentObject = $this->get_object();
 
-        $rendition_implementation = ContentObjectRenditionImplementation :: factory(
-            $content_object,
+        $renditionImplementation = ContentObjectRenditionImplementation :: factory(
+            $contentObject,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_DESCRIPTION,
             $this);
-        $rendition = ContentObjectRendition :: factory($rendition_implementation);
 
-        return $rendition->render();
+        return ContentObjectRendition :: factory($renditionImplementation)->render();
     }
 }

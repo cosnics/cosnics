@@ -247,7 +247,7 @@ class Block extends DataClass implements DisplayOrderDataClassListenerSupport
     public function create_initial_settings()
     {
         $context = $this->get_context();
-        $file = Path :: getInstance()->namespaceToFullPath($context) . '/php/lib/type/' . $this->get_component() . '.xml';
+        $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $this->get_block() . '.xml';
 
         $result = array();
 
@@ -318,7 +318,7 @@ class Block extends DataClass implements DisplayOrderDataClassListenerSupport
     public function is_configurable()
     {
         $context = $this->get_context();
-        $file = Path :: getInstance()->namespaceToFullPath($context) . '/php/lib/type/' . $this->get_component() . '.xml';
+        $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $this->get_block() . '.xml';
 
         if (file_exists($file))
         {
@@ -339,7 +339,7 @@ class Block extends DataClass implements DisplayOrderDataClassListenerSupport
         $context = $this->get_context();
         $component = $this->get_component();
 
-        $file = Path :: getInstance()->namespaceToFullPath($context) . '/php/lib/type/' . $component . '.xml';
+        $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $component . '.xml';
         $result = array();
 
         if (file_exists($file))
