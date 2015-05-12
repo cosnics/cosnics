@@ -160,21 +160,20 @@ class DataManager
      */
     private static function retrieveCompositeDataClass($className, $parameters)
     {
-        $compositeDataClassName = CompositeDataClass :: class_name();
+        $parentClassName = self :: determineCompositeDataClassParentClassName($className);
 
-        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
+        if (self :: isCompositeDataClass($className) && ! self :: isExtensionClass($className))
         {
-            $parentClassName = $className :: parent_class_name();
-        }
-        else
-        {
-            $parentClassName = $className;
             $className = self :: determineCompositeDataClassType($className, $parameters);
         }
 
+        $parameters = self :: setCompositeDataClassParameters($parentClassName, $className, $parameters);
+
+        return self :: retrieveClass($parentClassName, $className, CompositeDataClass :: class_name(), $parameters);
+    }
+
+    private static function setCompositeDataClassParameters($parentClassName, $className, $parameters)
+    {
         if ($className :: is_extended())
         {
             $join = new Join(
@@ -196,7 +195,7 @@ class DataManager
             }
         }
 
-        if ($isExtensionClass)
+        if (self :: isExtensionClass($className))
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
@@ -212,7 +211,7 @@ class DataManager
             }
         }
 
-        return self :: retrieveClass($parentClassName, $className, CompositeDataClass :: class_name(), $parameters);
+        return $parameters;
     }
 
     private static function retrieveClass($cacheClass, $objectClass, $factoryClass, $parameters)
@@ -321,13 +320,13 @@ class DataManager
         // throw new \InvalidArgumentException(
         // Translation :: get('NoValidIdentifier', array('CLASS' => $class, 'ID' => $id)));
         // }
-        $conditionClass = self :: determineCompositeDataClassConditionClassName($class);
+        $parentClass = self :: determineCompositeDataClassParentClassName($class);
 
         return self :: retrieve(
             $class,
             new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
+                    new PropertyConditionVariable($parentClass, $parentClass :: PROPERTY_ID),
                     new StaticConditionVariable($id))));
     }
 
@@ -357,7 +356,7 @@ class DataManager
      * @param string $className
      * @return string
      */
-    private static function determineCompositeDataClassConditionClassName($className)
+    private static function determineCompositeDataClassParentClassName($className)
     {
         if (self :: isExtensionClass($className))
         {
@@ -378,7 +377,7 @@ class DataManager
      */
     public static function determineDataClassType($className, $identifier)
     {
-        $conditionClass = self :: determineCompositeDataClassConditionClassName($className);
+        $conditionClass = self :: determineCompositeDataClassParentClassName($className);
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
@@ -432,56 +431,8 @@ class DataManager
      */
     private static function retrievesCompositeDataClass($className, $parameters)
     {
-        $compositeDataClassName = CompositeDataClass :: class_name();
-
-        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            $parentClassName = $className :: parent_class_name();
-        }
-        else
-        {
-            $parentClassName = $className;
-        }
-
-        if ($className :: is_extended())
-        {
-            $join = new Join(
-                $parentClassName,
-                new EqualityCondition(
-                    new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
-                    new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
-
-            if ($parameters->get_joins() instanceof Joins)
-            {
-                $joins = $parameters->get_joins();
-                $joins->add($join);
-                $parameters->set_joins($joins);
-            }
-            else
-            {
-                $joins = new Joins(array($join));
-                $parameters->set_joins($joins);
-            }
-        }
-
-        if ($isExtensionClass)
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
-                new StaticConditionVariable($className));
-
-            if ($parameters->get_condition() instanceof Condition)
-            {
-                $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
-            }
-            else
-            {
-                $parameters->set_condition($condition);
-            }
-        }
+        $parentClassName = self :: determineCompositeDataClassParentClassName($className);
+        $parameters = self :: setCompositeDataClassParameters($parentClassName, $className, $parameters);
 
         return self :: retrievesClass($parentClassName, $className, $parameters);
     }
@@ -659,56 +610,8 @@ class DataManager
 
     private static function countCompositeDataClass($className, $parameters)
     {
-        $compositeDataClassName = CompositeDataClass :: class_name();
-
-        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            $parentClassName = $className :: parent_class_name();
-        }
-        else
-        {
-            $parentClassName = $className;
-        }
-
-        if ($className :: is_extended())
-        {
-            $join = new Join(
-                $parentClassName,
-                new EqualityCondition(
-                    new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
-                    new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
-
-            if ($parameters->get_joins() instanceof Joins)
-            {
-                $joins = $parameters->get_joins();
-                $joins->add($join);
-                $parameters->set_joins($joins);
-            }
-            else
-            {
-                $joins = new Joins(array($join));
-                $parameters->set_joins($joins);
-            }
-        }
-
-        if ($isExtensionClass)
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
-                new StaticConditionVariable($className));
-
-            if ($parameters->get_condition() instanceof Condition)
-            {
-                $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
-            }
-            else
-            {
-                $parameters->set_condition($condition);
-            }
-        }
+        $parentClassName = self :: determineCompositeDataClassParentClassName($className);
+        $parameters = self :: setCompositeDataClassParameters($parentClassName, $className, $parameters);
 
         return self :: countClass($parentClassName, $className, $parameters);
     }

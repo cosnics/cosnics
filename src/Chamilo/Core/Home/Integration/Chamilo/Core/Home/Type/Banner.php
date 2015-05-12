@@ -38,7 +38,6 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     {
         $block_id = $this->get_block_info()->get_id();
         $icon_url = $this->get_icon();
-        $widget_view_url = htmlspecialchars($this->get_block_widget_view_link($this->get_block_info()));
 
         $title = $this->display_title();
         if ($this->get_view() == self :: BLOCK_VIEW)
