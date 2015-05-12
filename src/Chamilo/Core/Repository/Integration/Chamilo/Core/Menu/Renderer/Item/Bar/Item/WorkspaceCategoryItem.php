@@ -24,13 +24,13 @@ class WorkspaceCategoryItem extends CategoryItem
 
         $workspaces = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(Workspace :: class_name());
 
+        $sub_html[] = '<ul>';
+
         if ($workspaces->size())
         {
-            $sub_html[] = '<ul>';
 
             while ($workspace = $workspaces->next_result())
             {
-
                 $workspaceItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem();
                 $workspaceItem->setWorkspaceId($workspace->getId());
                 $workspaceItem->setName($workspace->getName());
@@ -39,10 +39,17 @@ class WorkspaceCategoryItem extends CategoryItem
 
                 $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $workspaceItem);
             }
-
-            $sub_html[] = '</ul>';
-            $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
+
+        $configurationItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceConfigureItem();
+        $configurationItem->set_parent($this->get_item()->get_id());
+        $configurationItem->set_display();
+
+        $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $configurationItem);
+
+        $sub_html[] = '</ul>';
+        $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
+
         $html[] = '<ul>';
 
         $html[] = '<li>';
