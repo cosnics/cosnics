@@ -116,7 +116,7 @@
 				<options type="dynamic" source="get_languages" />
 				<availability source="is_allowed_to_change_platform_language" />
 			</setting>
-			<setting name="theme" field="select" default="aqua" user_setting="1">
+			<setting name="theme" field="select" default="Aqua" user_setting="1">
 				<options type="dynamic" source="get_themes" />
 				<availability source="is_allowed_to_change_theme" />
 			</setting>
@@ -235,7 +235,7 @@
 					<validation rule="numeric" message="MustBeNumeric" />
 				</validations>
 			</setting>
-			<setting name="version" field="text" default="5.0" locked="true" />
+			<setting name="version" field="text" default="2.0" locked="true" />
 			<setting name="enable_package_management" field="text" default="1" locked="true" />
 			<setting name="show_version_data" field="checkbox" default="0">
 				<options type="static">
