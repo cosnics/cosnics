@@ -23,8 +23,8 @@ class LocationResult extends ContextLocationResult
     {
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Calendar\Manager :: context();
-        $parameters[\Chamilo\Application\Calendar\Manager :: PARAM_ACTION] = \Chamilo\Application\Calendar\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Application\Calendar\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
+        $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_VIEW;
+        $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();

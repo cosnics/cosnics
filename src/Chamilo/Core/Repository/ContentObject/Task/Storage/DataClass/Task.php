@@ -425,7 +425,7 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     {
         if ($has_frequency)
         {
-            $size = $size . '_repeat';
+            $size = $size . 'Repeat';
         }
 
         return parent :: icon_image($context, $size, $is_current);

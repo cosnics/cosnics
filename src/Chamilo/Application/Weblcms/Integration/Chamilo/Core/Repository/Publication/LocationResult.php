@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Core\Repository\Publication\LocationSupport;
-use Chamilo\Core\Repository\Publication\Location\LocationResult;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LocationResult extends LocationResult
+class LocationResult extends \Chamilo\Core\Repository\Publication\Location\LocationResult
 {
 
     /**

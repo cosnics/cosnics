@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class Manager implements PublicationInterface
 {
@@ -274,8 +275,8 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_locations($content_object, $user = null)
     {
-        $locations = new Locations(__NAMESPACE__);
-        $allowed_types = \Chamilo\Application\Calendar\Manager :: get_allowed_content_object_types();
+        $locations = new Locations(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
+        $allowed_types = self :: get_allowed_content_object_types();
 
         $type = $content_object->get_type();
 
@@ -288,6 +289,23 @@ class Manager implements PublicationInterface
         }
 
         return $locations;
+    }
+
+    public static function get_allowed_content_object_types()
+    {
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            \Chamilo\Application\Calendar\Extension\Personal\Manager :: package(),
+            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $types = array();
+
+        foreach ($registrations as $registration)
+        {
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
+            $types[] = $namespace . '\Storage\DataClass\\' .
+                ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+        }
+
+        return $types;
     }
 
     /*

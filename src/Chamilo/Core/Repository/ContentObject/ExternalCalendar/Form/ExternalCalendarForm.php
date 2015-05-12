@@ -79,7 +79,7 @@ class ExternalCalendarForm extends ContentObjectForm
         $maximum_server_size = $post_max_size < $upload_max_filesize ? $upload_max_filesize : $post_max_size;
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager :: retrieve(
+            \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
