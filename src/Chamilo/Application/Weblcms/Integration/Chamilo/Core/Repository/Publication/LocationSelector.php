@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Core\Repository\Publication\LocationSupport;
-use Chamilo\Core\Repository\Publication\Location\LocationSelector;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LocationSelector extends LocationSelector
+class LocationSelector extends \Chamilo\Core\Repository\Publication\Location\LocationSelector
 {
 
     /**
@@ -37,14 +36,14 @@ class LocationSelector extends LocationSelector
     {
         $form_validator = $this->get_form_validator();
         $group = array();
-        
+
         $group[] = $form_validator->createElement(
-            'static', 
-            null, 
-            null, 
+            'static',
+            null,
+            null,
             $location->get_course_title() . ' (' . $location->get_visual_code() . ')');
         $group[] = $form_validator->createElement('static', null, null, $location->get_tool_name());
-        
+
         return $group;
     }
 }

@@ -173,7 +173,8 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         $this->add_selected_content_objects();
 
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository');
 
         $this->applications = array();
 
@@ -181,7 +182,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         foreach ($registrations as $registration)
         {
-            $manager_class = $registration->get_context() . '\Manager';
+            $manager_class = $registration->get_context() . '\Publication\Manager';
             $application = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 4);
 
             $locations = $manager_class :: get_content_object_publication_locations(
@@ -259,11 +260,11 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         $this->addElement('category', $category, 'publication-location');
 
-        $renderer_class = $locations->get_context() . '\LocationSelector';
+        $renderer_class = $locations->get_context() . '\Publication\LocationSelector';
         $renderer = new $renderer_class($this, $locations);
         $renderer->run();
 
-        $manager_class = $locations->get_context() . '\Manager';
+        $manager_class = $locations->get_context() . '\Publication\Manager';
         $manager_class :: add_publication_attributes_elements($this);
 
         $this->addElement('category');

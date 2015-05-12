@@ -74,12 +74,12 @@ abstract class LocationSelector
     {
         $form_validator = $this->get_form_validator();
         $locations = $this->get_locations();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        
+
         if ($locations->size() > 1)
         {
             $table_header[] = '<th class="checkbox"><input class="select-all" type="checkbox" /></th>';
@@ -88,42 +88,42 @@ abstract class LocationSelector
         {
             $table_header[] = '<th class="checkbox"></th>';
         }
-        
+
         $table_header[] = $this->get_header();
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        
+
         $form_validator->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         $renderer = $form_validator->defaultRenderer();
-        
+
         foreach ($locations->get_locations() as $key => $location)
         {
             $group = array();
-            
+
             $group[] = $form_validator->createElement(
-                'checkbox', 
-                $this->get_checkbox_name($locations->get_context()), 
-                null, 
-                null, 
-                null, 
-                $location->encode(), 
+                'checkbox',
+                $this->get_checkbox_name($locations->get_context()),
+                null,
+                null,
+                null,
+                $location->encode(),
                 $location->encode());
-            
+
             foreach ($this->get_group($location) as $group_element)
             {
                 $group[] = $group_element;
             }
-            
+
             $form_validator->addGroup($group, 'test_' . $key, null, '', false);
-            
+
             $renderer->setElementTemplate(
-                '<tr class="' . ($key % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
+                '<tr class="' . ($key % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
                 'test_' . $key);
             $renderer->setGroupElementTemplate('<td>{element}</td>', 'test_' . $key);
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $form_validator->addElement('html', implode(PHP_EOL, $table_footer));
@@ -137,7 +137,7 @@ abstract class LocationSelector
     public function get_checkbox_name($context)
     {
         $registration = Configuration :: registration($context);
-        
+
         return Manager :: WIZARD_LOCATION . '[' . $registration->get_id() . '][' . uniqid() . ']';
     }
 

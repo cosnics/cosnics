@@ -46,7 +46,7 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
     {
         $values = $page->controller->exportValues();
 
-        $content_object_ids = Request :: get(Manager :: PARAM_CONTENT_OBJECT_ID);
+        $content_object_ids = Request :: get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
         if (! is_array($content_object_ids))
         {
             $content_object_ids = array($content_object_ids);
@@ -76,14 +76,14 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
                     \Chamilo\Configuration\Storage\DataClass\Registration :: class_name(),
                     $registration_id);
 
-                $result_class = $registration->get_context() . '\LocationResult';
+                $result_class = $registration->get_context() . '\Publication\LocationResult';
                 $result = new $result_class($this, $registration->get_context());
 
                 foreach ($locations as $encoded_location)
                 {
                     $location = unserialize(base64_decode($encoded_location));
 
-                    $manager_class = $registration->get_context() . '\Manager';
+                    $manager_class = $registration->get_context() . '\Publication\Manager';
 
                     if (isset($values[Manager :: WIZARD_OPTION]) &&
                          isset($values[Manager :: WIZARD_OPTION][$registration_id]))

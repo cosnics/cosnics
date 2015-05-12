@@ -35,8 +35,7 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $query_condition = Utilities :: query_to_condition(
             Request :: get('query'),
-            new ConditionProperty(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE)));
+            array(new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE)));
         if (isset($query_condition))
         {
             $conditions[] = $query_condition;
@@ -65,7 +64,9 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $conditions[] = new NotCondition(new OrCondition($c));
         }
 
-        $conditions[] = new InCondition(ContentObject :: PROPERTY_TYPE, DataManager :: get_registered_types());
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
+            DataManager :: get_registered_types());
         $condition = new AndCondition($conditions);
 
         $order_property[] = new OrderBy(

@@ -28,15 +28,14 @@ class Login extends Block
         return false;
     }
 
-//     public function as_html($view = '')
-//     {
-//         if (! $this->get_user() || ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
-//              $this->get_user()->is_anonymous_user()))
-//         {
-//             return parent :: as_html($view);
-//         }
-//     }
-
+    // public function as_html($view = '')
+    // {
+    // if (! $this->get_user() || ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
+    // $this->get_user()->is_anonymous_user()))
+    // {
+    // return parent :: as_html($view);
+    // }
+    // }
     public function display_content()
     {
         $html = array();
@@ -94,11 +93,12 @@ class Login extends Block
 
     public function handle_login_failed()
     {
-        $messages = \Chamilo\Libraries\Platform\Session\Session :: retrieve('messages');
-        $message = $messages['message'][0];
+        // $messages = \Chamilo\Libraries\Platform\Session\Session :: retrieve('messages');
+        // $message = $messages['message'][0];
 
-        return '<div class="error-message" style="width: auto; left: 0%; margin: auto; margin-left: -40px;">' . $message .
-             '</div>';
+        // return Display::error_message(Translation ::get('LoginFailed'));
+        return '<div class="error-message" style="width: auto; left: 0%; right: 0%; margin: auto;">' .
+             Translation :: get('LoginFailed') . '</div>';
     }
 
     public function display_login_form()

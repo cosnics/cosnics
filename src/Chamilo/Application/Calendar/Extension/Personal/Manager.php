@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 abstract class Manager extends Application
 {
     // Parameters
+    const PARAM_ACTION = 'personal_action';
     const PARAM_PUBLICATION_ID = 'publication_id';
     const PARAM_OBJECT = 'object';
 

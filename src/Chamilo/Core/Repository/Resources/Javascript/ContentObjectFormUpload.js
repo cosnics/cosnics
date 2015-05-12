@@ -15,8 +15,8 @@ $(function() {
             'progressData' : 'percentage',
             'formData' : {
                 'user_id' : getMemory('_uid'),
-                'application' : 'Chamilo\\Core\\Repository',
-                'go' : 'upload_image'
+                'application' : 'Chamilo\\Core\\Repository\\Ajax',
+                'go' : 'UploadImage'
             },
             onUploadSuccess : function(file, data, response) {
                 var ajaxResult = eval('(' + data + ')');

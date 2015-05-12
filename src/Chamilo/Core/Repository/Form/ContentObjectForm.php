@@ -81,8 +81,8 @@ abstract class ContentObjectForm extends FormValidator
     private $extra;
 
     protected $form_type;
-    
-    
+
+
     /**
      * @var DynamicFormTabsRenderer
      */
@@ -111,7 +111,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $this->prepareTabs();
         $this->getTabsGenerator()->render();
-        
+
         if ($this->form_type != self :: TYPE_COMPARE)
         {
             $this->add_progress_bar(2);
@@ -170,14 +170,14 @@ abstract class ContentObjectForm extends FormValidator
         }
         return $this->tabsGenerator;
     }
-    
-    
+
+
     public function prepareTabs()
     {
        $this->addDefaultTab();
         $this->addMetadataTabs();
     }
-    
+
     public function addDefaultTab()
     {
         $this->getTabsGenerator()->add_tab(
@@ -187,7 +187,7 @@ abstract class ContentObjectForm extends FormValidator
                 Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
                 'build_general_form'));
     }
-    
+
     public function addMetadataTabs()
     {
         $relationService = new RelationService();
@@ -197,7 +197,7 @@ abstract class ContentObjectForm extends FormValidator
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
-        
+
         if (count($availableSchemaIds) > 0)
         {
             $entity = $entityFactory->getEntity(
@@ -225,7 +225,7 @@ abstract class ContentObjectForm extends FormValidator
                     'build_metadata_choice_form'));
         }
 
-        
+
     }
 
     public function build_general_form()
@@ -350,7 +350,7 @@ abstract class ContentObjectForm extends FormValidator
     protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         $object = $this->content_object;
-        
+
         $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             User :: class_name(),
             (int) $this->get_owner_id());
@@ -669,7 +669,7 @@ EOT;
             }
 
             $url = Path :: getInstance()->getBasePath(true) .
-                 'index.php?application=Chamilo\\Core\\Repository\\Ajax&go=xml_feed';
+                 'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
             $locale = array();
             $locale['Display'] = Translation :: get('AddAttachments');
             $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -1005,7 +1005,7 @@ EOT;
         {
             $class = $base_class_name . 'Form';
         }
-        
+
         return new $class(
             $form_type,
             $content_object,

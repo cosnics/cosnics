@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 class Manager implements PublicationInterface
 {
@@ -102,7 +103,7 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_locations($content_object, $user = null)
     {
-        $locations = new Locations(__NAMESPACE__);
+        $locations = new Locations(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
         $type = $content_object->get_type();
 
         $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
@@ -222,7 +223,8 @@ class Manager implements PublicationInterface
      */
     public static function add_publication_attributes_elements($form)
     {
-        $registration = Configuration :: registration(__NAMESPACE__);
+        $registration = Configuration :: registration(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
 
         $form->addElement(
             'splitter',

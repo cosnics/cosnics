@@ -28,6 +28,13 @@ class UpdaterComponent extends Manager implements DelegateComponent, CourseSubMa
             \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_UPDATE);
         Request :: set_get(\Chamilo\Application\Weblcms\Course\Manager :: PARAM_COURSE_ID, $this->get_course_id());
 
+        $this->getRequest()->query->set(
+            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION,
+            \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_UPDATE);
+        $this->getRequest()->query->set(
+            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_COURSE_ID,
+            $this->get_course_id());
+
         $factory = new ApplicationFactory(
             $this->getRequest(),
             \Chamilo\Application\Weblcms\Course\Manager :: context(),
