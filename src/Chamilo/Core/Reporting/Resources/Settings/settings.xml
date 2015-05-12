@@ -21,7 +21,7 @@
         </validations>
       </setting>
 
-      <setting name="template_header_font_style" field="select" default="Bold">
+      <setting name="template_header_font_style" field="select" default="B">
 				<options type="static">
 					<option name="Normal" value="" />
 					<option name="Bold" value="B" />
@@ -54,7 +54,7 @@
         </validations>
       </setting>
 
-      <setting name="template_footer_font_style" field="select" default="Bold">
+      <setting name="template_footer_font_style" field="select" default="B">
 				<options type="static">
 					<option name="Normal" value="" />
 					<option name="Bold" value="B" />
@@ -83,7 +83,7 @@
         </validations>
       </setting>
 
-      <setting name="block_title_font_style" field="select" default="Bold">
+      <setting name="block_title_font_style" field="select" default="B">
 				<options type="static">
 					<option name="Normal" value="" />
 					<option name="Bold" value="B" />

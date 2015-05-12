@@ -373,11 +373,11 @@ class PDF_MC_Table extends FPDF
 
 	private function IsImage($data)
 	{
-        $extensions = array('.png', '.jpg');
+        $extensions = array('.png', '.jpg', '.gif');
 
         foreach ($extensions as $extension)
         {
-            if (substr_compare($data, $extension, -strlen($extension)) === 0)
+            if (substr_compare(strtolower($data), $extension, -strlen($extension)) === 0)
             {
                 return true;
             }
