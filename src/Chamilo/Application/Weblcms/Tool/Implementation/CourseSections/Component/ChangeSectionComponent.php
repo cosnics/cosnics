@@ -91,14 +91,14 @@ class ChangeSectionComponent extends Manager
                 {
                     $new = 'New';
                 }
-                $tool_image = 'tool_' . $tool->name . $new;
+                $tool_image = 'Tool' . $tool->name . $new;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = 'make_visible';
                 $visible_image = 'Action/Invisible';
-                $tool_image = 'tool_' . $tool->name . '_na';
+                $tool_image = 'Tool' . $tool->name . 'Na';
                 $link_class = ' class="invisible"';
             }
             $title = htmlspecialchars(

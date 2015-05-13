@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicatio
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  * $Id: content_object_publication_details_renderer.class.php 216 2009-11-13
@@ -49,6 +50,7 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
         $html = array();
         $last_visit_date = $this->get_tool_browser()->get_last_visit_date();
         $icon_suffix = '';
+
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
             $icon_suffix = 'Na';
@@ -68,8 +70,8 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
         }
 
-        $html[] = '<div class="announcements level_1" style="background-image: url(' . $content_object->get_icon_path() .
-             $icon_suffix . ');">';
+        $html[] = '<div class="announcements level_1" style="background-image: url(' .
+             $content_object->get_icon_path(Theme :: ICON_SMALL . $icon_suffix) . ');">';
 
         if ($title_url)
         {

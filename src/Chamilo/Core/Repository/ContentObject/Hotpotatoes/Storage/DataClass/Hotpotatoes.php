@@ -76,12 +76,13 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     public function get_full_path()
     {
-        return Path :: getInstance()->getStoragePath('hotpotatoes') . $this->get_owner_id() . '/' . $this->get_path();
+        return Path :: getInstance()->getPublicStoragePath(Hotpotatoes :: package()) . $this->get_owner_id() . '/' .
+             $this->get_path();
     }
 
     public function get_full_url()
     {
-        return Path :: getInstance()->getStoragePath('hotpotatoes', true) . $this->get_owner_id() . '/' .
+        return Path :: getInstance()->getPublicStoragePath(Hotpotatoes :: package(), true) . $this->get_owner_id() . '/' .
              $this->get_path();
     }
 
@@ -156,8 +157,8 @@ class Hotpotatoes extends ContentObject implements Versionable
 
         if ($goback_url)
         {
-            $js_content .= "		if (C.ie)\n" . "			{\n" .             // " window.alert(Score);\n".
-            "				document.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n" . "			else\n" . "			{\n" . // "
+            $js_content .= "		if (C.ie)\n" . "			{\n" . // " window.alert(Score);\n".
+"				document.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n" . "			else\n" . "			{\n" . // "
                                                                                                                     // window.alert(Score);\n".
                 "				window.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n";
         }
@@ -191,7 +192,8 @@ class Hotpotatoes extends ContentObject implements Versionable
         $this->set_title($file_name);
         $this->set_description($file_name);
 
-        $hotpot_path = Path :: getInstance()->getStoragePath('hotpotatoes') . Session :: get_user_id() . '/';
+        $hotpot_path = Path :: getInstance()->getPublicStoragePath(Hotpotatoes :: package()) . Session :: get_user_id() .
+             '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $filecompression = Filecompression :: factory();

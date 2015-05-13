@@ -46,7 +46,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                     $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
                     $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
                     $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($attachment->get_type()),
+                        $attachment->package(),
                         'Logo/' . Theme :: ICON_MINI) . '" alt="' .
                          htmlentities(
                             Translation :: get(

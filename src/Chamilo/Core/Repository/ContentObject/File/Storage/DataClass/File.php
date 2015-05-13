@@ -189,7 +189,7 @@ class File extends ContentObject implements Versionable, Includeable
         $path = Theme :: getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
-            $size = $size . ($this->is_current() ? '' : '_na');
+            $size = $size . ($this->is_current() ? '' : 'Na');
             return Theme :: getInstance()->getFileExtension($extension, $size);
         }
         else

@@ -47,7 +47,7 @@ foreach ($extensions as $extension)
         }
 
         // Not available
-        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . '_na', false);
+        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . 'Na', false);
 
         if (! file_exists($icon_path))
         {
@@ -61,11 +61,11 @@ foreach ($extensions as $extension)
         }
         else
         {
-            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . '_na') . '" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . 'Na') . '" />';
         }
 
         // New
-        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . '_new', false);
+        $icon_path = Theme :: getInstance()->getFileExtension($extension, $size . 'New', false);
 
         if (! file_exists($icon_path))
         {
@@ -79,7 +79,7 @@ foreach ($extensions as $extension)
         }
         else
         {
-            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . '_new') . '" />';
+            $data_row[] = '<img src="' . Theme :: getInstance()->getFileExtension($extension, $size . 'New') . '" />';
         }
     }
 

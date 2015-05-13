@@ -178,7 +178,8 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement('category', Translation :: get('AutomaticFeedback'));
 
         // attachment uploader and selector
-        $url = Path :: getInstance()->getBasePath(true) . 'repository/php/xml_feed.php';
+        $url = Path :: getInstance()->getBasePath(true) .
+                 'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -293,20 +294,16 @@ class AssignmentForm extends ContentObjectForm
         $return_types = array();
         foreach ($types as $index => $type)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type));
+            $packageClassName = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
+            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($packageClassName);
+
             if (! $registration || ! $registration->is_active())
             {
                 unset($types[$index]);
                 continue;
             }
-            if (! strstr($type, 'survey_'))
-            {
-                $return_types[$type] = Translation :: get(
-                    'TypeName',
-                    array(),
-                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type));
-            }
+
+            $return_types[$type] = Translation :: get('TypeName', array(), $packageClassName);
         }
 
         asort($return_types);
