@@ -305,13 +305,15 @@ class PlatformInstaller
         $html = array();
 
         $html[] = $this->observers->before_filesystem_prepared();
-        $files_path = Path :: getInstance()->getStoragePath();
+
+        $filesPath = Path :: getInstance()->getStoragePath();
+
         $directories = array(
             'archive',
             'cache',
             'garbage',
             'repository',
-            'Temp',
+            'temp',
             'userpictures',
             'scorm',
             'logs',
@@ -319,7 +321,7 @@ class PlatformInstaller
 
         foreach ($directories as $directory)
         {
-            $path = $files_path . $directory;
+            $path = $filesPath . $directory;
 
             // if (file_exists($path) && is_dir($path))
             // {
@@ -330,6 +332,13 @@ class PlatformInstaller
             {
                 throw new \Exception(Translation :: get('FoldersCreatedFailed'));
             }
+        }
+
+        $publicFilesPath = Path :: getInstance()->getPublicStoragePath();
+
+        if (! Filesystem :: create_dir($publicFilesPath))
+        {
+            throw new \Exception(Translation :: get('FoldersCreatedFailed'));
         }
 
         $step_result = new StepResult(true, Translation :: get('FoldersCreatedSuccess'));

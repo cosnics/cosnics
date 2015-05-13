@@ -73,12 +73,13 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
                 $wizardProcess->getInstaller()->perform_install();
                 flush();
 
+                $page->controller->container(true);
+
                 echo $wizardProcess->getParent()->render_footer();
                 flush();
             });
 
         $response->send();
-        $page->controller->container(true);
     }
 
     public function getInstaller()

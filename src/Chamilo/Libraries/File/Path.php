@@ -29,6 +29,7 @@ class Path
     const JAVASCRIPT = 14;
     const I18N = 15;
     const VENDOR = 16;
+    const PUBLIC_STORAGE = 17;
 
     /**
      *
@@ -124,6 +125,24 @@ class Path
              ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
+    public function getPublicStoragePath($namespace = null, $web = false)
+    {
+        if ($web)
+        {
+            $basePath = $this->getBasePath($web) . 'Files';
+        }
+        else
+        {
+            $basePath = realpath(
+                $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'Files');
+        }
+
+        return $this->cache[self :: PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
+             ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->classnameUtilities->namespaceToPath(
+                $namespace,
+                $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+    }
+
     /**
      *
      * @param boolean $web
@@ -131,6 +150,11 @@ class Path
      */
     public function getVendorPath($web = false)
     {
+        if ($web)
+        {
+            throw new \Exception('Storage is not directly accessible');
+        }
+
         return $this->cache[self :: VENDOR][(string) $web] = realpath($this->getBasePath($web) . '../vendor/') .
              ($web ? '/' : DIRECTORY_SEPARATOR);
     }
@@ -190,7 +214,7 @@ class Path
      */
     public function getRepositoryPath($web = false)
     {
-        return $this->cache[self :: REPOSITORY][(string) $web] = $this->getStoragePath('Repository', $web);
+        return $this->cache[self :: REPOSITORY][(string) $web] = $this->getStoragePath('repository', $web);
     }
 
     /**

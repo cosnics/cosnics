@@ -141,15 +141,17 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
     {
         $hulp_last_changed = $last_topic_changed_cloi;
 
-        $lastpostforumtopics = DataManager :: retrieve_last_post_forum_topics($this->get_id());
-        $last_post_subforums = DataManager :: retrieve_forum_last_post_forum_subforums($this->get_id());
+        $lastpostforumtopics = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager :: retrieve_last_post_forum_topics(
+            $this->get_id());
+        $last_post_subforums = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager :: retrieve_forum_last_post_forum_subforums(
+            $this->get_id());
 
         $lastpostistopic = true;
 
         $last_post_subforums_date = null;
         if ($last_post_subforums)
         {
-            $last_post_subforums_date = DataManager :: retrieve_forum_post_date(
+            $last_post_subforums_date = \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager :: retrieve_forum_post_date(
                 $last_post_subforums[Forum :: PROPERTY_LAST_POST]);
         }
 
@@ -286,7 +288,9 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             $condition);
         if ($email_notificator)
         {
-            $email_notificator->add_users(DataManager :: retrieve_subscribed_forum_users($this->get_id()));
+            $email_notificator->add_users(
+                \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager :: retrieve_subscribed_forum_users(
+                    $this->get_id()));
         }
 
         while ($item = $wrappers->next_result())
@@ -340,7 +344,9 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
         if ($email_notificator)
         {
-            $email_notificator->add_users(DataManager :: retrieve_subscribed_forum_users($this->get_id()));
+            $email_notificator->add_users(
+                \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager :: retrieve_subscribed_forum_users(
+                    $this->get_id()));
         }
 
         $condition = new EqualityCondition(

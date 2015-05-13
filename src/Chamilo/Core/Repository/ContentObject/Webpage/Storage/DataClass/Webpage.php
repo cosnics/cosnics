@@ -349,14 +349,14 @@ class Webpage extends ContentObject implements Versionable, Includeable
 
         if (file_exists($path))
         {
-            $size = $size . ($this->is_current() ? '' : '_na');
+            $size = $size . ($this->is_current() ? '' : 'Na');
             return Theme :: getInstance()->getFileExtension($this->get_extension(), $size);
         }
         else
         {
             return Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type()),
-                'Logo/' . $size . ($this->is_current() ? '' : '_na'));
+                'Logo/' . $size . ($this->is_current() ? '' : 'Na'));
         }
     }
 

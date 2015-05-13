@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
@@ -27,9 +28,9 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
 
         switch ($column->get_name())
         {
-            case GlossaryItem :: PROPERTY_TITLE :
+            case ContentObject :: PROPERTY_TITLE :
                 return $this->glossary_item->get_title();
-            case GlossaryItem :: PROPERTY_DESCRIPTION :
+            case ContentObject :: PROPERTY_DESCRIPTION :
                 return $this->glossary_item->get_description();
         }
     }

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\Type\Table;
 
-use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\GlossaryItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class GlossaryViewerTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
@@ -12,8 +12,8 @@ class GlossaryViewerTableColumnModel extends DataClassTableColumnModel implement
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(GlossaryItem :: class_name(), GlossaryItem :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(GlossaryItem :: class_name(), GlossaryItem :: PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
     }
 }

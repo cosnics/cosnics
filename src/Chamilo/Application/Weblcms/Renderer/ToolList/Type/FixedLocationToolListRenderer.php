@@ -321,7 +321,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
                 $visible_image = 'Action/Invisible';
-                $tool_image = Theme :: ICON_MEDIUM . '_na';
+                $tool_image = Theme :: ICON_MEDIUM . 'Na';
                 $link_class = ' class="invisible"';
             }
 

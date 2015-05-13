@@ -184,7 +184,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $icon_suffix = '';
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
-            $icon_suffix = '_na';
+            $icon_suffix = 'Na';
         }
         else
         {
