@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\note
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Notities"
+TypeNameSingle = "Notitie"
+NoteToolBrowserComponent = "Blader door notities"
+DeleteSelected = "Wis geselecteerde notitie"
+NoteToolViewerComponent = "Bekijk notitie"
+NoteToolIntroductionPublisherComponent = "Publiceer introductietekst"
+NoteToolPublisherComponent = "Publiceer notitie"
+NoteToolUpdaterComponent = "Bewerk notitie"
