@@ -171,7 +171,7 @@ class ConfigurerComponent extends Manager
         $tab = Request :: get(self :: PARAM_TAB);
         if (! isset($tab))
         {
-            return 'core';
+            return 'Chamilo\Core';
         }
         else
         {

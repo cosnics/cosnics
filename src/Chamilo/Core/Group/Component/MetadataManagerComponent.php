@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\GroupMetadataValueCreator;
+use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\GroupMetadataValueCreator;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Metadata\Value\MetadataValueEditorComponent;
+use Chamilo\Core\MetadataOld\Value\MetadataValueEditorComponent;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -30,7 +30,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
 
         $factory = new ApplicationFactory(
             $this->getRequest(),
-            \Chamilo\Core\Metadata\Value\Manager :: context(),
+            \Chamilo\Core\MetadataOld\Value\Manager :: context(),
             $this->get_user(),
             $this);
         return $factory->run();
@@ -103,7 +103,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
      */
     public function get_element_values()
     {
-        return \Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataManager :: get_element_and_attribute_values_for_group(
+        return \Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: get_element_and_attribute_values_for_group(
             $this->get_selected_group()->get_id());
     }
 
@@ -112,7 +112,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
      */
     public function truncate_values()
     {
-        \Chamilo\Core\Group\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_group(
+        \Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: truncate_metadata_values_for_group(
             $this->get_selected_group()->get_id());
     }
 }

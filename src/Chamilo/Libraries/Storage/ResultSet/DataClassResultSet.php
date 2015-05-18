@@ -50,6 +50,24 @@ class DataClassResultSet extends ArrayResultSet
         return $this->class_name;
     }
 
+    public function getCacheClassName()
+    {
+        $compositeDataClassName = CompositeDataClass :: class_name();
+        $className = $this->get_class_name();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            return $className :: parent_class_name();
+        }
+        else
+        {
+            return $className;
+        }
+    }
+
     /**
      * Convert the record to a DataClass object
      *

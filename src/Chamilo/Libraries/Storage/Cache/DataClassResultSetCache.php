@@ -37,9 +37,9 @@ class DataClassResultSetCache extends DataClassCache
                      $type . '.');
         }
 
-        if (! DataClassCache :: get($result_set->get_class_name(), $parameters))
+        if (! DataClassCache :: get($result_set->getCacheClassName(), $parameters))
         {
-            DataClassCache :: set_cache($result_set->get_class_name(), $parameters->hash(), $result_set);
+            DataClassCache :: set_cache($result_set->getCacheClassName(), $parameters->hash(), $result_set);
         }
 
         return true;

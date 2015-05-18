@@ -84,17 +84,19 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="package-list">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' .
-                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
-                 '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Configuration',
-                    'Form/CheckUnchecked') . '" class="package-list-select-none" />';
+            $html[] = '<img src = "' . Theme :: getInstance()->getImagePath(
+                'Chamilo\Configuration',
+                'Form/CheckChecked') . '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
+                'Chamilo\Configuration',
+                'Form/CheckUnchecked') . '" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
             $this->addElement('html', implode(PHP_EOL, $html));
 
-            foreach ($packages as $title => $package)
+            foreach ($packages as $package)
             {
+                $title = Translation :: get('TypeName', null, $package->get_context());
+
                 $html = array();
                 $html[] = '<div class="' . $this->getPackageClasses($package) . '" style="background-image: url(' .
                      Theme :: getInstance()->getImagePath($package->get_context(), 'Logo/22') . ')">';
@@ -151,13 +153,21 @@ class PackagePage extends InstallWizardPage
         {
             if (strpos($namespace, '\Integration\Chamilo\\') === false)
             {
-                $packages[Translation :: get('TypeName', null, $package->get_context())] = $package;
+                $packages[] = $package;
             }
         }
 
-        ksort($packages);
+        usort($packages, array($this, "orderPackages"));
 
         return $packages;
+    }
+
+    public function orderPackages($packageLeft, $packageRight)
+    {
+        $packageNameLeft = Translation :: get('TypeName', null, $packageLeft->get_context());
+        $packageNameRight = Translation :: get('TypeName', null, $packageRight->get_context());
+
+        return strcmp($packageNameLeft, $packageNameRight);
     }
 
     /**

@@ -188,13 +188,22 @@ class Theme
      *
      * @param string $namespace
      * @param boolean $web
+     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g. .../Chamilo/Configuration/Resources/Css/Aqua/. 
+     *                              Else, selected theme will be ignored, e.g. .../Chamilo/Configuration/Resources/Css/
      * @return string
      */
-    public function getCssPath($namespace = null, $web = true)
+    public function getCssPath($namespace = null, $web = true, $includeTheme = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-        return $this->pathUtilities->getResourcesPath($namespace, $web) . 'Css' . $directory_separator .
-             $this->getTheme() . $directory_separator;
+        
+        $cssPath = $this->pathUtilities->getResourcesPath($namespace, $web) . 'Css' . $directory_separator;
+        
+        if ($includeTheme)
+        {
+            $cssPath .= $this->getTheme() . $directory_separator;
+        }
+        
+        return $cssPath;        
     }
 
     /**
@@ -263,7 +272,7 @@ class Theme
     {
         $options = array();
 
-        $path = $this->getCssPath('Chamilo\Configuration');
+        $path = $this->getCssPath('Chamilo\Configuration', false, false);
         $directories = Filesystem :: get_directory_content($path, Filesystem :: LIST_DIRECTORIES, false);
 
         foreach ($directories as $index => & $directory)

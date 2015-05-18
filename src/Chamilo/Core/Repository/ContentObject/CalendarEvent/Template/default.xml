@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\CalendarEvent">
 	<properties>
-		<name>default</name>
+		<name>Default</name>
 	</properties>
 	<translations>
 		<variable value="TypeName">

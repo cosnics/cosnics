@@ -148,7 +148,7 @@ class DataManager
         }
         else
         {
-            return self :: retrieveDataClass($class, $parameters);
+            return self :: retrieveClass($class, $class, DataClass :: class_name(), $parameters);
         }
     }
 
@@ -172,7 +172,6 @@ class DataManager
         else
         {
             $parentClassName = $className;
-
             $className = self :: determineCompositeDataClassType($className, $parameters);
         }
 
@@ -183,6 +182,7 @@ class DataManager
                 new EqualityCondition(
                     new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
                     new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
+
             if ($parameters->get_joins() instanceof Joins)
             {
                 $joins = $parameters->get_joins();
@@ -196,12 +196,23 @@ class DataManager
             }
         }
 
-        return self :: retrieveClass($parentClassName, $className, CompositeDataClass :: class_name(), $parameters);
-    }
+        if ($isExtensionClass)
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
+                new StaticConditionVariable($className));
 
-    private static function retrieveDataClass($class, $parameters)
-    {
-        return self :: retrieveClass($class, $class, DataClass :: class_name(), $parameters);
+            if ($parameters->get_condition() instanceof Condition)
+            {
+                $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
+            }
+            else
+            {
+                $parameters->set_condition($condition);
+            }
+        }
+
+        return self :: retrieveClass($parentClassName, $className, CompositeDataClass :: class_name(), $parameters);
     }
 
     private static function retrieveClass($cacheClass, $objectClass, $factoryClass, $parameters)
@@ -403,13 +414,88 @@ class DataManager
             $parameters = DataClassRetrievesParameters :: generate($parameters);
         }
 
-        if (! DataClassResultSetCache :: exists($class, $parameters))
+        if (is_subclass_of($class, CompositeDataClass :: class_name()))
         {
-            DataClassResultSetCache :: add(self :: get_instance()->retrieves($class, $parameters), $parameters);
+            return self :: retrievesCompositeDataClass($class, $parameters);
+        }
+        else
+        {
+            return self :: retrievesClass($class, $class, $parameters);
+        }
+    }
+
+    /**
+     *
+     * @param string $className
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @return Ambiguous
+     */
+    private static function retrievesCompositeDataClass($className, $parameters)
+    {
+        $compositeDataClassName = CompositeDataClass :: class_name();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            $parentClassName = $className :: parent_class_name();
+        }
+        else
+        {
+            $parentClassName = $className;
         }
 
-        $result_set = DataClassResultSetCache :: get($class, $parameters);
+        if ($className :: is_extended())
+        {
+            $join = new Join(
+                $parentClassName,
+                new EqualityCondition(
+                    new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
+                    new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
+
+            if ($parameters->get_joins() instanceof Joins)
+            {
+                $joins = $parameters->get_joins();
+                $joins->add($join);
+                $parameters->set_joins($joins);
+            }
+            else
+            {
+                $joins = new Joins(array($join));
+                $parameters->set_joins($joins);
+            }
+        }
+
+        if ($isExtensionClass)
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
+                new StaticConditionVariable($className));
+
+            if ($parameters->get_condition() instanceof Condition)
+            {
+                $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
+            }
+            else
+            {
+                $parameters->set_condition($condition);
+            }
+        }
+
+        return self :: retrievesClass($parentClassName, $className, $parameters);
+    }
+
+    public static function retrievesClass($cacheClass, $objectClass, $parameters = null)
+    {
+        if (! DataClassResultSetCache :: exists($cacheClass, $parameters))
+        {
+            DataClassResultSetCache :: add(self :: get_instance()->retrieves($objectClass, $parameters), $parameters);
+        }
+
+        $result_set = DataClassResultSetCache :: get($cacheClass, $parameters);
         $result_set->reset();
+
         return $result_set;
     }
 
@@ -561,11 +647,82 @@ class DataManager
             $parameters = DataClassCountParameters :: generate($parameters);
         }
 
-        if (! DataClassCountCache :: exists($class, $parameters))
+        if (is_subclass_of($class, CompositeDataClass :: class_name()))
         {
-            DataClassCountCache :: add($class, $parameters, self :: get_instance()->count($class, $parameters));
+            return self :: countCompositeDataClass($class, $parameters);
         }
-        return DataClassCountCache :: get($class, $parameters);
+        else
+        {
+            return self :: countClass($class, $class, $parameters);
+        }
+    }
+
+    private static function countCompositeDataClass($className, $parameters)
+    {
+        $compositeDataClassName = CompositeDataClass :: class_name();
+
+        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
+        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            $parentClassName = $className :: parent_class_name();
+        }
+        else
+        {
+            $parentClassName = $className;
+        }
+
+        if ($className :: is_extended())
+        {
+            $join = new Join(
+                $parentClassName,
+                new EqualityCondition(
+                    new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_ID),
+                    new PropertyConditionVariable($className, $className :: PROPERTY_ID)));
+
+            if ($parameters->get_joins() instanceof Joins)
+            {
+                $joins = $parameters->get_joins();
+                $joins->add($join);
+                $parameters->set_joins($joins);
+            }
+            else
+            {
+                $joins = new Joins(array($join));
+                $parameters->set_joins($joins);
+            }
+        }
+
+        if ($isExtensionClass)
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($parentClassName, $parentClassName :: PROPERTY_TYPE),
+                new StaticConditionVariable($className));
+
+            if ($parameters->get_condition() instanceof Condition)
+            {
+                $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
+            }
+            else
+            {
+                $parameters->set_condition($condition);
+            }
+        }
+
+        return self :: countClass($parentClassName, $className, $parameters);
+    }
+
+    public static function countClass($cacheClass, $objectClass, $parameters = null)
+    {
+        if (! DataClassCountCache :: exists($cacheClass, $parameters))
+        {
+            DataClassCountCache :: add(
+                $cacheClass,
+                $parameters,
+                self :: get_instance()->count($objectClass, $parameters));
+        }
+        return DataClassCountCache :: get($cacheClass, $parameters);
     }
 
     /**

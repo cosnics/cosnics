@@ -165,6 +165,11 @@ class ContentObjectRepository
             $conditions[] = $filterCondition;
         }
 
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_CURRENT),
+                new StaticConditionVariable(ContentObject :: CURRENT_OLD)));
+
         $conditions[] = $this->getStateCondition(ContentObject :: STATE_NORMAL);
         $conditions[] = $this->getActiveHelperTypeConditions();
 

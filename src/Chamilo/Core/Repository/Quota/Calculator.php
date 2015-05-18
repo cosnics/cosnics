@@ -19,6 +19,7 @@ use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * This class provides some functionality to manage user disk quota
@@ -512,12 +513,12 @@ class Calculator
 
                 $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
 
-                $record = self :: record(User :: class_name(), $parameters);
+                $record = DataManager :: record(User :: class_name(), $parameters);
                 $total_quota = $record['disk_quota'];
             }
             else
             {
-                $users = self :: retrieves(User :: class_name());
+                $users = DataManager :: retrieves(User :: class_name());
 
                 $total_quota = 0;
 
