@@ -4,25 +4,26 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleCho
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
 
 class Display extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay
 {
 
-    function process(ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
+    function process(ComplexContentObjectPathNode $complexContentObjectPathNode, $answer)
     {
-        $this->complex_content_object_item = $complex_content_object_path_node->get_complex_content_object_item();
-        $content_object = $complex_content_object_path_node->get_content_object();
+        $formValidator = $this->get_formvalidator();
+             
+        $formRendition = ContentObjectRenditionImplementation :: factory(
+            $complexContentObjectPathNode->get_content_object(),
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_FORM,
+            MultipleChoice :: package());
         
-        $rendition = ContentObjectRenditionImplementation :: factory(
-            $content_object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_FORM, 
-            $this);
-        
-        $rendition->render(
-            $this->get_formvalidator(), 
-            $complex_content_object_path_node->get_complex_content_object_item(), 
-            $answer);
+        $formRendition->setFormValidator($formValidator);
+        $formRendition->setComplexContentObjectPathNode($complexContentObjectPathNode);
+               
+        $formValidator = $formRendition->initialize();
+        $formValidator->setDefaults($answer);
     }
 }
 ?>

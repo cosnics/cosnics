@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleCho
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\ComplexMultipleChoice;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
 
 /**
  *
@@ -22,38 +22,25 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
 
     function render()
     {
-        $rendition = ContentObjectRenditionImplementation :: factory(
-            $this->get_content_object(), 
-            $this->get_format(), 
-            ContentObjectRendition :: VIEW_FORM, 
-            $this);
+        $formValidator = new FormValidator('mc_full_rendition');
+             
+        $formRendition = ContentObjectRenditionImplementation :: factory(
+            $this->get_content_object(),
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_FORM,
+            MultipleChoice :: package());
         
-        $rendition->render($this->get_formvalidator(), $this->get_complex_content_object_item());
+        $formRendition->setFormValidator($formValidator);
+        $formValidator = $formRendition->initialize();
         
         $html[] = ContentObjectRendition :: launch($this);
         $html[] = '<h4>' . Translation :: get('QuestionPreview') . '</h4>';
         $html[] = '<div style="border: 1px solid whitesmoke; padding: 10px; margin-bottom: 10px;">';
-        $html[] = $this->get_formvalidator()->toHtml();
+        $html[] = $formValidator->toHtml();
         $html[] = '</div>';
         
         return implode(PHP_EOL, $html);
     }
 
-    private function get_complex_content_object_item()
-    {
-        $complex_content_object_item = new ComplexMultipleChoice();
-        $complex_content_object_item->set_id(1);
-        $complex_content_object_item->set_ref_object($this->get_content_object());
-        return $complex_content_object_item;
-    }
-
-    private function get_formvalidator()
-    {
-        if (! $this->formvalidator)
-        {
-            $this->formvalidator = new FormValidator('mc_question_preview');
-        }
-        return $this->formvalidator;
-    }
 }
 ?>

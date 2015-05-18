@@ -15,7 +15,7 @@ class HTML_QuickForm_advmultiselect_chamilo extends HTML_QuickForm_advmultiselec
 
     function getElementJs($raw = true, $min = false)
     {
-        $js = __DIR__ . '/../../../../../vendor/pear-pear.php.net/HTML_QuickForm_advmultiselect/data' .
+        $js = __DIR__ . '/../../../../../../vendor/pear-pear.php.net/HTML_QuickForm_advmultiselect/data' .
              DIRECTORY_SEPARATOR . 'HTML_QuickForm_advmultiselect/HTML/QuickForm' . DIRECTORY_SEPARATOR;
         
         if ($min)

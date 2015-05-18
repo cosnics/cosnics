@@ -15,7 +15,7 @@ class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
 
     public function get_image()
     {
-        return Theme :: getInstance()->getCommonImage('preview');
+        return Theme :: getInstance()->getCommonImage('Preview');
     }
 
     public function get_text()

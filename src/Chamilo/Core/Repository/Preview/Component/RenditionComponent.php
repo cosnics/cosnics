@@ -29,7 +29,9 @@ class RenditionComponent extends Manager
             ContentObjectRendition :: VIEW_THUMBNAIL,
             ContentObjectRendition :: VIEW_DESCRIPTION,
             ContentObjectRendition :: VIEW_SHORT,
-            ContentObjectRendition :: VIEW_INLINE);
+            ContentObjectRendition :: VIEW_INLINE,
+            ContentObjectRendition :: VIEW_FORM
+        );
 
         foreach ($views as $view)
         {

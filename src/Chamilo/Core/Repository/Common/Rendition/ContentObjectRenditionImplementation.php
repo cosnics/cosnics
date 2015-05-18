@@ -28,6 +28,7 @@ abstract class ContentObjectRenditionImplementation extends AbstractContentObjec
         
         if (! class_exists($class, true))
         {
+           
             return new DummyContentObjectRenditionImplementation($context, $content_object, $format, $view);
         }
         else

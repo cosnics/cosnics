@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Implementation\Rendition\Html;
 
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\ComplexMultipleChoice;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -16,19 +16,225 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  */
 class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
 {
+    const FORM_NAME = 'multiple_choice_content_object_rendition_form';
 
-    function render(FormValidator $formvalidator, ComplexMultipleChoice $complex_content_object_item, 
-        $answer = null)
+    /**
+     *
+     * @var FormValidator
+     */
+    private $formValidator;
+
+    /**
+     *
+     * @var ComplexContentObjectPathNode
+     */
+    private $complexContentObjectPathNode;
+
+    function render()
     {
-        $display_type = ucfirst($this->get_content_object()->get_display_type());
+        return $this->initialize()->toHtml();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Form\FormValidator
+     */
+    function initialize()
+    {
+        $display_type = $this->get_content_object()->get_display_type();
         
-        $rendition = ContentObjectRenditionImplementation :: factory(
-            $this->get_content_object(), 
-            $this->get_format(), 
-            ContentObjectRendition :: VIEW_FORM . $display_type, 
-            $this->get_context());
+        if ($display_type == MultipleChoice :: DISPLAY_TYPE_SELECT)
+        {
+            return $this->initializeSelect();
+        }
+        elseif ($display_type == MultipleChoice :: DISPLAY_TYPE_TABLE)
+        {
+            return $this->initializeTable();
+        }
+               
+    }
+
+    /**
+     *
+     * @param FormValidator $formValidator
+     */
+    public function setFormValidator(FormValidator $formValidator)
+    {
+        if (! isset($this->formValidator))
+        {
+            $this->formValidator = $formValidator;
+        }
+    }
+
+    public function getFormValidator()
+    {
+        if (! isset($this->formValidator))
+        {
+            return new FormValidator(self :: FORM_NAME);
+        }
         
-        $rendition->render($formvalidator, $complex_content_object_item, $answer);
+        return $this->formValidator;
+    }
+
+    /**
+     *
+     * @return the $complexContentObjectPathNode
+     */
+    public function getComplexContentObjectPathNode()
+    {
+        return $this->complexContentObjectPathNode;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode $complexContentObjectPathNode
+     */
+    public function setComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
+    {
+        $this->complexContentObjectPathNode = $complexContentObjectPathNode;
+    }
+
+    function initializeSelect()
+    {
+        $formValidator = $this->getFormValidator();
+        $renderer = $formValidator->get_renderer();
+        $question = $this->get_content_object();
+        $options = $question->get_options();
+        $type = $question->get_answer_type();
+        
+        $answer_options = array();
+        
+        foreach ($options as $option)
+        {
+            $answer_options[$option->get_id()] = $option->get_value();
+        }
+        
+        $element_template = array();
+        $element_template[] = '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';
+        $element_template[] = '<div class="clear">&nbsp;</div>';
+        $element_template[] = '<div class="form_feedback"></div>';
+        $element_template[] = '<div class="clear">&nbsp;</div>';
+        $element_template[] = '</div>';
+        $element_template = implode(PHP_EOL, $element_template);
+        
+        if ($this->getComplexContentObjectPathNode())
+        {
+            $complexQuestion = $this->getComplexContentObjectPathNode()->get_complex_content_object_item();
+            $questionId = $complexQuestion->getId();
+        }
+        else
+        {
+            $questionId = $question->getId();
+        }
+        
+        if ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+        {
+            $advanced_select = $formValidator->createElement(
+                'advmultiselect', 
+                $questionId, 
+                '', 
+                $answer_options, 
+                array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
+            $advanced_select->setButtonAttributes('add', 'class="add"');
+            $advanced_select->setButtonAttributes('remove', 'class="remove"');
+            $formValidator->addElement($advanced_select);
+        }
+        else
+        {
+            $select_box = $formValidator->createElement(
+                'select', 
+                $questionId, 
+                '', 
+                $answer_options, 
+                'class="select_question"');
+            $formValidator->addElement($select_box);
+        }
+        
+        $renderer->setElementTemplate($element_template, $questionId);
+        return $formValidator;
+    }
+
+    function initializeTable()
+    {
+        $formValidator = $this->getFormValidator();
+        $renderer = $formValidator->defaultRenderer();
+        $question = $this->get_content_object();
+        $options = $question->get_options();
+        $type = $question->get_answer_type();
+        
+        $table_header = array();
+        $table_header[] = '<table class="data_table take_survey">';
+        $table_header[] = '<thead>';
+        $table_header[] = '<tr>';
+        $table_header[] = '<th class="checkbox"></th>';
+        $table_header[] = '<th class="info" >' . $this->get_instruction() . '</th>';
+        $table_header[] = '</tr>';
+        $table_header[] = '</thead>';
+        $table_header[] = '<tbody>';
+        $formValidator->addElement('html', implode(PHP_EOL, $table_header));
+        
+        if ($this->getComplexContentObjectPathNode())
+        {
+            $complexQuestion = $this->getComplexContentObjectPathNode()->get_complex_content_object_item();
+            $questionId = $complexQuestion->getId();
+        }
+        else
+        {
+            $questionId = $question->getId();
+        }
+        
+        foreach ($options as $option)
+        {
+            $i = $option->get_id();
+            $group = array();
+            
+            if ($type == MultipleChoice :: ANSWER_TYPE_RADIO)
+            {
+                $option_name = $questionId;
+                $radio_button = $formValidator->createElement('radio', $option_name, null, null, $i);
+                $group[] = $radio_button;
+                $group[] = $formValidator->createElement('static', null, null, $option->get_value());
+            }
+            elseif ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+            {
+                $option_name = $questionId . '_' . $i;
+                $check_box = $formValidator->createElement('checkbox', $option_name, null, null, null, $i);
+                $group[] = $check_box;
+                $group[] = $formValidator->createElement('static', null, null, $option->get_value());
+            }
+            
+            $formValidator->addGroup($group, 'option_' . $i, null, '', false);
+            
+            $renderer->setElementTemplate(
+                '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
+                'option_' . $i);
+            $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $i);
+        }
+        
+        $table_footer[] = '</tbody>';
+        $table_footer[] = '</table>';
+        $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
+        return $formValidator;
+    }
+
+    function get_instruction()
+    {
+        $type = $this->get_content_object()->get_answer_type();
+        
+        if ($type == MultipleChoice :: ANSWER_TYPE_RADIO && $this->get_content_object()->has_instruction())
+        {
+            $title = Translation :: get('SelectYourChoice');
+        }
+        elseif ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX && $this->get_content_object()->has_instruction())
+        {
+            $title = Translation :: get('SelectYourChoices');
+        }
+        else
+        {
+            $title = '';
+        }
+        
+        return $title;
     }
 }
 ?>

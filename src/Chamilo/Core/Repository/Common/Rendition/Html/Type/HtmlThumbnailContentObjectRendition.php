@@ -13,7 +13,7 @@ class HtmlThumbnailContentObjectRendition extends HtmlPreviewContentObjectRendit
 
     public function get_image()
     {
-        return Theme :: getInstance()->getCommonImage('no_thumbnail');
+        return Theme :: getInstance()->getCommonImage('NoThumbnail');
     }
 
     public function get_text()
