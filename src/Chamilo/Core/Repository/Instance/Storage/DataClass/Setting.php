@@ -19,6 +19,7 @@ class Setting extends DataClass
     const PROPERTY_EXTERNAL_ID = 'external_id';
     const PROPERTY_VARIABLE = 'variable';
     const PROPERTY_VALUE = 'value';
+    const PROPERTY_USER_ID = 'user_id';
 
     /**
      * A static array containing all settings of external repository instances
@@ -39,7 +40,11 @@ class Setting extends DataClass
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
-            array(self :: PROPERTY_EXTERNAL_ID, self :: PROPERTY_VARIABLE, self :: PROPERTY_VALUE));
+            array(
+                self :: PROPERTY_EXTERNAL_ID,
+                self :: PROPERTY_VARIABLE,
+                self :: PROPERTY_VALUE,
+                self :: PROPERTY_USER_ID));
     }
 
     /**
@@ -72,6 +77,16 @@ class Setting extends DataClass
     }
 
     /**
+     * Returns the user_id of this setting object
+     *
+     * @return string the user_id
+     */
+    public function get_user_id()
+    {
+        return $this->get_default_property(self :: PROPERTY_USER_ID);
+    }
+
+    /**
      *
      * @param $external_repository_id string
      */
@@ -98,6 +113,16 @@ class Setting extends DataClass
     public function set_value($value)
     {
         $this->set_default_property(self :: PROPERTY_VALUE, $value);
+    }
+
+    /**
+     * Sets the user_id of this setting.
+     *
+     * @param $user_id string the user_id.
+     */
+    public function set_user_id($user_id)
+    {
+        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
     }
 
     public static function get_class_name()

@@ -5,6 +5,6 @@
 		<property name="external_id" type="integer" unsigned="1" notnull="1" />
 		<property name="variable" type="text" length="255" />
 		<property name="value" type="text" />
-		<property name="user_setting" type="integer" unsigned="1" length="1" notnull="1" default="0" />
+		<property name="user_id" type="integer" unsigned="1" length="1" notnull="1" default="0" />
 	</properties>
 </object>

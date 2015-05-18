@@ -16,7 +16,8 @@
     ],
     
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "vimeo/vimeo-api":"1.2.*"
     },
     "extra": {
         "install-path": "common/extensions/external_repository_manager/implementation/vimeo"
