@@ -5,7 +5,8 @@
     "symfony/http-foundation" : "2.3.*",
     "doctrine/dbal" : "2.4.*",
     "doctrine/cache" : "1.4.*",
-    "pear-pear.php.net/HTML_Common" : "*",
+    "phpunit/phpunit" : "4.4.*",
+           "pear-pear.php.net/HTML_Common" : "*",
     "pear-pear.php.net/HTML_Menu" : "*",
     "pear-pear.php.net/HTML_Table" : "*",
     "pear-pear.php.net/HTML_QuickForm" : "*",
@@ -21,17 +22,24 @@
     "pear-pear.php.net/HTTP_Request2" : "*",
     "pear-pear.php.net/MDB2" : "*",
     "pear-pear.php.net/MDB2_Driver_mysqli" : "*",
-    "phpunit/phpunit" : "4.4.*"
+
+        "glenscott/soundcloud": "dev-psr-4"
+    
   },
   "autoload": {
     "psr-4": {
       "Chamilo\\": "src/Chamilo/"
     }
   },
-  "repositories" : [ {
-    "type" : "pear",
-    "url" : "http://pear.php.net"
-  } ],
+        "repositories" : [ {
+  		  	"type" : "pear",
+    		"url" : "http://pear.php.net"
+  			},
+   			{
+            "type": "git",
+            "url": "https://github.com/mptre/php-soundcloud"
+        	}
+   		],
   "require-dev" : {
     "behat/behat" : "*",
     "behat/mink" : "*",

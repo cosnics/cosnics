@@ -1,16 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Vimeo;
 
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use phpVimeo;
-
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'phpvimeo/vimeo.php';
+use Vimeo\Vimeo;
 
 /**
  * Consumer Key: Consumer Secret:
@@ -47,49 +41,45 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             'consumer_secret',
             $this->get_external_repository_instance_id());
 
-        $this->vimeo = new phpVimeo($this->consumer_key, $this->consumer_secret);
+        $this->vimeo = new Vimeo($this->consumer_key, $this->consumer_secret, 'f0259caafb186aec05e8d0b492584348');
 
+        // $oauth_token = Setting :: get('oauth_token', $this->get_external_repository_instance_id());
+        // $oauth_token_secret = Setting :: get('oauth_token_secret', $this->get_external_repository_instance_id());
 
-        $oauth_token = Setting :: get('oauth_token', $this->get_external_repository_instance_id());
-        $oauth_token_secret = Setting :: get('oauth_token_secret', $this->get_external_repository_instance_id());
+        // if (! $oauth_token || ! $oauth_token_secret)
+        // {
+        // if (! $_SESSION['request_token'])
+        // {
+        // $redirect = new Redirect();
+        // $currentUrl = $redirect->getCurrentUrl();
 
-        if (! $oauth_token || ! $oauth_token_secret)
-        {
-            if (! $_SESSION['request_token'])
-            {
-                $redirect = new Redirect();
-                $currentUrl = $redirect->getCurrentUrl();
+        // $redirect->writeHeader($this->vimeo->buildAuthorizationEndpoint($currentUrl, 'delete'));
+        // }
+        // else
+        // {
+        // $this->vimeo->setToken($_SESSION['request_token'], $_SESSION['request_token_secret'], 'access', true);
+        // var_dump($_GET);
+        // $this->token = $this->vimeo->getAccessToken($_GET['oauth_verifier']);
 
-                $this->vimeo->auth('delete', $currentUrl);
-            }
-            else
-            {
-                $this->vimeo->setToken($_SESSION['request_token'], $_SESSION['request_token_secret'], 'access', true);
+        // $user_setting = new Setting();
+        // $user_setting->set_external_id($this->get_external_repository_instance_id());
+        // $user_setting->set_variable('oauth_token');
+        // $user_setting->set_user_id(Session :: get_user_id());
+        // $user_setting->set_value($this->token['oauth_token']);
+        // $user_setting->create();
 
-                $this->token = $this->vimeo->getAccessToken($_GET['oauth_verifier']);
-                $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                    'oauth_token',
-                    $this->get_external_repository_instance_id());
-                $user_setting = new Setting();
-                $user_setting->set_setting_id($setting->get_id());
-                $user_setting->set_user_id(Session :: get_user_id());
-                $user_setting->set_value($this->token['oauth_token']);
-                $user_setting->create();
-
-                $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                    'oauth_token_secret',
-                    $this->get_external_repository_instance_id());
-                $user_setting = new Setting();
-                $user_setting->set_setting_id($setting->get_id());
-                $user_setting->set_user_id(Session :: get_user_id());
-                $user_setting->set_value($this->token['oauth_token_secret']);
-                $user_setting->create();
-            }
-        }
-        else
-        {
-            $this->vimeo->setToken($oauth_token, $oauth_token_secret, 'access');
-        }
+        // $user_setting = new Setting();
+        // $user_setting->set_external_id($this->get_external_repository_instance_id());
+        // $user_setting->set_variable('oauth_token_secret');
+        // $user_setting->set_user_id(Session :: get_user_id());
+        // $user_setting->set_value($this->token['oauth_token_secret']);
+        // $user_setting->create();
+        // }
+        // }
+        // else
+        // {
+        // $this->vimeo->setToken($oauth_token, $oauth_token_secret, 'access');
+        // }
     }
 
     /**
@@ -167,7 +157,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 }
                 else
                 {
-                    $videos = $this->vimeo->call('vimeo.videos.getAll');
+                    // get all videos
+                    $search_parameters['query'] = 'test';
+                    $videos = $this->vimeo->request('/videos', $search_parameters);
+                    var_dump($videos);
                 }
                 break;
         }
@@ -197,22 +190,23 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $videos = $this->retrieve_videos($condition, $order_property, $offset, $count);
         $videos_id = array();
-        foreach ($videos->videos->video as $video)
-        {
-            if ($video->title && $video->upload_date)
-            {
-                $videos_id[] = $video->id;
-            }
-        }
-        $videos_info = array();
-        foreach ($videos_id as $video_id)
-        {
-            $videos_info[] = $this->vimeo->call('vimeo.videos.getInfo', array('video_id' => $video_id));
-        }
+        foreach ($videos['body']['data'] as $video)
+        { var_dump($video);
+//             if ($video->title && $video->upload_date)
+//             {
 
-        $objects = array();
-        foreach ($videos_info as $video_info)
-        {
+//                 $videos_id[] = $video->id;
+//             }
+//         }
+//         $videos_info = array();
+//         foreach ($videos_id as $video_id)
+//         {
+//             $videos_info[] = $this->vimeo->call('vimeo.videos.getInfo', array('video_id' => $video_id));
+//         }
+
+//         $objects = array();
+//         foreach ($videos_info as $video_info)
+//         {
             $video = $video_info->video[0];
             $object = new ExternalObject();
             $object->set_external_repository_id($this->get_external_repository_instance_id());

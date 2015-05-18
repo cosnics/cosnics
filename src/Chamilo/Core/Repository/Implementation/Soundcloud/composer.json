@@ -13,11 +13,8 @@
             "name": "Hans De Bisschop",
             "email": "hans.de.bisschop@ehb.be"
         }
-    ],
-    
-    "require": {
-        "php": ">=5.4.0"
-    },
+    ],    
+
     "extra": {
         "install-path": "common/extensions/external_repository_manager/implementation/soundcloud"
     }
