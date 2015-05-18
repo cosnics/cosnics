@@ -58,7 +58,9 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
         if (($method == self :: METHOD_POST))
         {
             if (is_array($data))
+            {
                 $this->set_data_to_send($data);
+            }
             $url = $this->wikimedia_url . $url;
         }
         elseif ($method == self :: METHOD_GET)

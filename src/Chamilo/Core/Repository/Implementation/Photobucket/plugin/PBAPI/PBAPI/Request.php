@@ -1,8 +1,8 @@
 <?php
-use libraries\file\Path;
+use Chamilo\Libraries\File\Path;
 /**
  * Photobucket API Fluent interface for PHP5 Request parent class
- * 
+ *
  * @author jhart
  * @package PBAPI
  * @copyright Copyright (c) 2008, Photobucket, Inc.
@@ -16,7 +16,7 @@ require_once Path :: getInstance()->getPluginPath() . 'pear/OAuth/Request.php';
 
 /**
  * Request method parent class
- * 
+ *
  * @package PBAPI
  */
 abstract class PBAPI_Request
@@ -24,56 +24,56 @@ abstract class PBAPI_Request
 
     /**
      * Oauth consumer object
-     * 
+     *
      * @var OAuth_Consumer
      */
     private $oauth_consumer;
 
     /**
      * Oauth token object
-     * 
+     *
      * @var OAuth_Token
      */
     private $oauth_token;
 
     /**
      * Current subdomain
-     * 
+     *
      * @var string
      */
     protected $subdomain;
 
     /**
      * Default format id
-     * 
+     *
      * @var string
      */
     protected $default_format;
 
     /**
      * Full request URL (for debugging)
-     * 
+     *
      * @var string
      */
     public $request_url;
 
     /**
      * Oauth Request object (for debugging)
-     * 
+     *
      * @var OAuthRequest
      */
     public $oauth_request;
 
     /**
      * Request strategy parameters
-     * 
+     *
      * @var array
      */
     protected $request_params = array();
 
     /**
      * Photobucket Web Login url
-     * 
+     *
      * @static
      *
      *
@@ -84,7 +84,7 @@ abstract class PBAPI_Request
 
     /**
      * Class Constructor
-     * 
+     *
      * @param $request_parameters array parameters send to set in this object
      * @param $subdomain string default subdomain
      * @param $default_format string default format
@@ -98,7 +98,7 @@ abstract class PBAPI_Request
 
     /**
      * Set OAuth Consumer information
-     * 
+     *
      * @param $consumer_key string
      * @param $consumer_secret string
      */
@@ -109,7 +109,7 @@ abstract class PBAPI_Request
 
     /**
      * Set OAuth Token info
-     * 
+     *
      * @param $token string
      * @param $token_secret string
      */
@@ -120,7 +120,7 @@ abstract class PBAPI_Request
 
     /**
      * Set OAuth Token Object
-     * 
+     *
      * @param $oauth_token oAuth_Token
      */
     public function setOAuthTokenObject(OAuth_Token $oauth_token)
@@ -146,7 +146,7 @@ abstract class PBAPI_Request
 
     /**
      * set subdomain value
-     * 
+     *
      * @param $subdomain string
      */
     public function setSubdomain($subdomain)
@@ -157,7 +157,7 @@ abstract class PBAPI_Request
 
     /**
      * get subdomain value
-     * 
+     *
      * @return string subdomain
      */
     public function getSubdomain()
@@ -167,7 +167,7 @@ abstract class PBAPI_Request
 
     /**
      * get whole subdomain url
-     * 
+     *
      * @param $uri string uri ending
      * @return string http://...
      */
@@ -178,7 +178,7 @@ abstract class PBAPI_Request
 
     /**
      * set default response format
-     * 
+     *
      * @param $format string
      */
     public function setDefaultFormat($format)
@@ -189,7 +189,7 @@ abstract class PBAPI_Request
 
     /**
      * Request params
-     * 
+     *
      * @param $params array request params
      */
     public function setRequestParams($params)
@@ -199,7 +199,7 @@ abstract class PBAPI_Request
 
     /**
      * Get OAuthRequest for given items
-     * 
+     *
      * @param $method string HTTP method
      * @param $uri string URI (no http/host)
      * @param $params array key=>value parameters
@@ -208,10 +208,10 @@ abstract class PBAPI_Request
     protected function getSignedOAuthRequest($method, $uri, array $params)
     {
         $req = OAuth_Request :: fromConsumerAndToken(
-            $this->oauth_consumer, 
-            $this->oauth_token, 
-            $method, 
-            'http://api.photobucket.com/' . trim($uri, '/'), 
+            $this->oauth_consumer,
+            $this->oauth_token,
+            $method,
+            'http://api.photobucket.com/' . trim($uri, '/'),
             $params);
         $req->signRequest('HMAC-SHA1', $this->oauth_consumer, $this->oauth_token);
         return $req;
@@ -219,7 +219,7 @@ abstract class PBAPI_Request
 
     /**
      * Pre-Request filter
-     * 
+     *
      * @param $method string (ref) HTTP method
      * @param $uri string URI (no http://)
      * @param $params array parameters
@@ -229,13 +229,13 @@ abstract class PBAPI_Request
     {
         // cleanup method
         $method = strtoupper($method);
-        
+
         // cleanup/determine format
         if ($this->default_format && ! array_key_exists('format', $params))
         {
             $params['format'] = $this->default_format;
         }
-        
+
         // block uploadfile from parameters
         $uploadfile = null;
         if (! empty($params['uploadfile']))
@@ -243,13 +243,13 @@ abstract class PBAPI_Request
             $uploadfile = $params['uploadfile'];
             unset($params['uploadfile']);
         }
-        
+
         // get fullly signed request
         $req = $this->getSignedOAuthRequest($method, $uri, $params);
-        
+
         $url = '';
         $params = array();
-        
+
         // rebuild url and request with uploadfile
         if ($method != 'POST')
         {
@@ -264,7 +264,7 @@ abstract class PBAPI_Request
             }
             $params = $req->getParameters();
         }
-        
+
         $this->request_url = $url;
         $this->oauth_request = $req;
         return $url;
@@ -272,7 +272,7 @@ abstract class PBAPI_Request
 
     /**
      * Redirect to the login page (for given token)
-     * 
+     *
      * @param $extra string optional extra parameter to pass along (if you need to store a key without a cookie, for
      *        example)
      */
@@ -283,18 +283,18 @@ abstract class PBAPI_Request
             throw new PBAPI_Exception('OAuth Token is not a request token');
         }
         $req = $this->oauth_token->getKey();
-        
+
         $url = self :: $web_login_url . '?oauth_token=' . $req;
         if ($extra)
             $url .= '&extra=' . $extra;
-        
+
         header('Location: ' . $url);
         exit();
     }
 
     /**
      * #@+ Request function
-     * 
+     *
      * @param $uri string
      * @param $params array
      */
@@ -321,10 +321,10 @@ abstract class PBAPI_Request
     /**
      * #@-
      */
-    
+
     /**
      * Actual Request function
-     * 
+     *
      * @param $method string
      * @param $uri string
      * @param $params array
@@ -334,7 +334,7 @@ abstract class PBAPI_Request
 
     /**
      * Turn parameters into multipart encoded string
-     * 
+     *
      * @param $params array key value pairs of parameters
      * @param $bound string boundary (should be relatively unique)
      * @return string mime type multipart-form
@@ -344,11 +344,11 @@ abstract class PBAPI_Request
         $bound = '--' . trim($bound) . "\n";
         $result = '';
         $paramStr = array();
-        
+
         foreach ($params as $key => $val)
         {
             $file = false;
-            
+
             if (strpos($val, '@') === 0)
             {
                 $filepath = trim($val, '@');
@@ -363,17 +363,17 @@ abstract class PBAPI_Request
             {
                 $disp = 'content-disposition: form-data; name="' . $key . '"' . "\n";
             }
-            
+
             $paramStr[] = $disp . "\n" . $val . "\n";
         }
-        
+
         $result = $bound . implode($bound, $paramStr) . $bound;
         return $result;
     }
 
     /**
      * See if the given array has an upload filename as a parameter
-     * 
+     *
      * @param $params array parameters
      * @return bool array has at least one upload filename parameter
      */
@@ -389,7 +389,7 @@ abstract class PBAPI_Request
 
     /**
      * Determine an OAuth_Token's type
-     * 
+     *
      * @param $token OAuth_Token
      * @return string type of token [req|user]
      */

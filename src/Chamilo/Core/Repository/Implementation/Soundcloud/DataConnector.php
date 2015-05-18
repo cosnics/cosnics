@@ -68,10 +68,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             'secret',
             $this->get_external_repository_instance_id());
 
-        $this->soundcloud = new Soundcloud($this->key, $this->secret);
+//         $this->soundcloud = new Soundcloud($this->key, $this->secret);
+        $this->soundcloud = new Soundcloud\Client($this->key, $this->secret);
 
         $outh_token = Setting :: get('oauth_token', $this->get_external_repository_instance_id());
         $outh_token_secret = Setting :: get('oauth_token_secret', $this->get_external_repository_instance_id());
+
 
         if (! $outh_token || ! $outh_token_secret)
         {

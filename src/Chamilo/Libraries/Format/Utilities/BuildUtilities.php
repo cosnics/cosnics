@@ -7,7 +7,7 @@ use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Filesystem;
 use Composer\Package\Loader\JsonLoader;
-use Composer\Package\Loader\ArrayLoader;
+use Chamilo\Libraries\Format\Utilities\ArrayLoader;
 use Composer\Script\Event;
 
 class BuildUtilities
@@ -58,6 +58,7 @@ class BuildUtilities
         $requires = $package->getRequires();
         $devRequires = $package->getDevRequires();
         $autoload = $package->getAutoload();
+        $repositories = $package->getRepositories();
 
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -99,11 +100,18 @@ class BuildUtilities
                         }
                     }
                 }
+
+                // Process repositories
+                foreach ((array) $completePackage->getRepositories() as $repository)
+                {
+                    array_unshift($repositories, $repository);
+                }
             }
         }
 
         $package->setRequires($requires);
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);
+        $package->setRepositories($repositories);
     }
 }

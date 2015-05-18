@@ -1,14 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Bitbucket\DataConnector;
-
-use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient;
-
 /**
  * Description of mediamosa_rest_clientclass
  *
  * @author jevdheyd
  */
-class BitbucketRestClient extends RestClient
+class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
 {
 
     private $bitbucket_url;
