@@ -100,7 +100,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
 
             $html[] = '<div class="empty_portal_column" style="display:block;">';
             $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-            $img = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/RemoveColumn');
+            $img = Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn');
             $html[] = '<div class="deleteColumn"><a href="#"><img src="' . $img . '" alt="' .
                  Translation :: get('RemoveColumn') . '"/></a></div>';
             $html[] = '</div>';

@@ -6,7 +6,7 @@
         $('.range').hide();
         $('#frequency_' + frequency).show();
         if (frequency != 0) {
-            $('.range').show();
+        $('.range').show();
         }
 
     }
@@ -21,13 +21,13 @@
             onClose : function(dateText, inst) {
                 var endDateTextBox = $('#due_date');
                 if (endDateTextBox.val() != '') {
-                    var testStartDate = new Date(dateText);
-                    var testEndDate = new Date(endDateTextBox.val());
+                var testStartDate = new Date(dateText);
+                var testEndDate = new Date(endDateTextBox.val());
 
-                    if (testStartDate > testEndDate)
-                        endDateTextBox.val(dateText);
-                } else {
+                if (testStartDate > testEndDate)
                     endDateTextBox.val(dateText);
+                } else {
+                endDateTextBox.val(dateText);
                 }
             },
             onSelect : function(selectedDateTime) {
@@ -40,16 +40,17 @@
         $('#due_date').datetimepicker({
             timeFormat : 'hh:mm',
             dateFormat : 'dd-mm-yy',
+            controlType : 'select',
             separator : '  ',
             onClose : function(dateText, inst) {
                 var startDateTextBox = $('#start_date');
                 if (startDateTextBox.val() != '') {
-                    var testStartDate = new Date(startDateTextBox.val());
-                    var testEndDate = new Date(dateText);
-                    if (testStartDate > testEndDate)
-                        startDateTextBox.val(dateText);
-                } else {
+                var testStartDate = new Date(startDateTextBox.val());
+                var testEndDate = new Date(dateText);
+                if (testStartDate > testEndDate)
                     startDateTextBox.val(dateText);
+                } else {
+                startDateTextBox.val(dateText);
                 }
             },
             onSelect : function(selectedDateTime) {
@@ -66,7 +67,7 @@
         var frequency = $('input[name=frequency]:radio:checked').val();
         $('#frequency_' + frequency).show();
         if (frequency != 0) {
-            $('.range').show();
+        $('.range').show();
         }
 
     })

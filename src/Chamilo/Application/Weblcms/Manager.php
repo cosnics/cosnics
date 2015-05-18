@@ -405,7 +405,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_course_user_category_edit_url(CourseTypeUserCategory $course_type_user_category)
+    public function get_course_user_category_edit_url($course_type_user_category)
     {
         return $this->get_url(
             array(
@@ -450,7 +450,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_course_user_category_delete_url(CourseTypeUserCategory $course_type_user_category)
+    public function get_course_user_category_delete_url($course_type_user_category)
     {
         return $this->get_url(
             array(
@@ -535,7 +535,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_course_user_move_url(CourseTypeUserCategory $course_type_user_category, Course $course,
+    public function get_course_user_move_url($course_type_user_category, Course $course,
         $direction)
     {
         return $this->get_url(

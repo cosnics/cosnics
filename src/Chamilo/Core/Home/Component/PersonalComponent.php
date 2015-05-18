@@ -24,7 +24,7 @@ class PersonalComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            \Chamilo\Libraries\Platform\Session\Session :: unregister(__NAMESPACE__ . '\general');
+            \Chamilo\Libraries\Platform\Session\Session :: unregister('Chamilo\Core\Home\General');
         }
 
         $redirect = new Redirect();

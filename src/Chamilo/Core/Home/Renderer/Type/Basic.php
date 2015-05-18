@@ -40,7 +40,7 @@ class Basic extends Renderer
         $current_tab = $this->get_current_tab();
         $user = $this->get_user();
         $user_home_allowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $general_mode = \Chamilo\Libraries\Platform\Session\Session :: retrieve(__NAMESPACE__ . '\general');
+        $general_mode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
 
         // Get user id
         if ($user instanceof User && $general_mode && $user->is_platform_admin())

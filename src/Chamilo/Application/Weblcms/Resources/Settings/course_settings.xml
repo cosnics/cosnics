@@ -27,7 +27,7 @@
 			</setting>
 		</category>
 		<category name="layout">
-			<setting name="theme" field="select" default="aqua">
+			<setting name="theme" field="select" default="Aqua">
 				<options type="dynamic" source="get_themes" />
 			</setting>
 			<setting name="tool_layout" field="select" default="1">

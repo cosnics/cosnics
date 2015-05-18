@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order">
 	<properties>
-		<name>default</name>
+		<name>Default</name>
 		<question edit="1"></question>
 		<instruction edit="1"></instruction>
 		<display_type edit="1">two_column</display_type>

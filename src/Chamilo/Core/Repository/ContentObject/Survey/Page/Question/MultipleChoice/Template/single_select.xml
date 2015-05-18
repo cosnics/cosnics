@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice">
 	<properties>
-		<name>single_select</name>
+		<name>SingleSelect</name>
 		<question edit="1"></question>
 		<instruction edit="1"></instruction>
 		<answer_type edit="0">1</answer_type>

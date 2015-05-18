@@ -5,7 +5,7 @@
  */
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment;
 
-use Chamilo\Core\Metadata\Element\Storage\DataClass\Element;
+use Chamilo\Core\MetadataOld\Element\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Form\TagsFormBuilder;
 
 class MetadataObjectFilter
@@ -21,18 +21,18 @@ class MetadataObjectFilter
     {
         // $elements = $this->get_dynamic_metadata_elements();
         $this->md_elements = array();
-        $elements = \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Type\Storage\DataManager :: get_common_metadata_elements(
+        $elements = \Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Linker\Type\Storage\DataManager :: get_common_metadata_elements(
             $objects);
-        
+
         $element_values = array();
         foreach ($elements as $element)
         {
             $name = $this->get_element_form_name($element);
             $value = $form->exportValue($name);
-            
+
             $has_controlled_vocabulary = \Chamilo\Core\Metadata\Element\Storage\DataManager :: element_has_controlled_vocabulary(
                 $element->get_id());
-            
+
             if ((is_numeric($value) || ! empty($value)) &&
                  (! $has_controlled_vocabulary || (is_numeric($value) && $value > 0)))
             {
@@ -40,7 +40,7 @@ class MetadataObjectFilter
                 $this->md_elements[$element->get_id()] = $element;
             }
         }
-        
+
         return $element_values;
     }
 
@@ -50,10 +50,10 @@ class MetadataObjectFilter
         foreach ($objects as $obj)
         {
             $include = true;
-            $obj_values = \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Storage\DataManager :: retrieve_element_values_for_content_object_as_array(
+            $obj_values = \Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: retrieve_element_values_for_content_object_as_array(
                 $obj->get_ref());
             $obj_element_values = array();
-            
+
             foreach ($obj_values as $obj_value)
             {
                 if (in_array($obj_value->get_element_id(), array_keys($this->md_elements)))
@@ -78,26 +78,26 @@ class MetadataObjectFilter
                     $include = false;
                 }
             }
-            
+
             if ($include)
             {
                 $filtered_objects[] = $obj;
             }
         }
-        
+
         return $filtered_objects;
     }
 
     private function filter_objects_on_static_values(MetadataFilterForm $form, array $objects)
     {
         $filtered_objects = array();
-        
+
         $tags = $form->exportValue(TagsFormBuilder :: PROPERTY_TAGS);
-        
+
         if ($tags != '')
         {
             $tags_array = explode(',', $tags);
-            
+
             foreach ($objects as $obj)
             {
                 $include = true;
@@ -110,7 +110,7 @@ class MetadataObjectFilter
                         $include = false;
                     }
                 }
-                
+
                 if ($include)
                 {
                     $filtered_objects[] = $obj;
@@ -121,7 +121,7 @@ class MetadataObjectFilter
         {
             $filtered_objects = $objects;
         }
-        
+
         return $filtered_objects;
     }
 
@@ -132,14 +132,14 @@ class MetadataObjectFilter
         {
             // form is validated, check dynamic elements first
             $element_values = $this->get_dynamic_element_value_array($form, $objects);
-            
+
             if (sizeof($element_values) > 0)
             {
                 $objects = $this->filter_objects_on_dynamic_values($objects, $element_values);
             }
-            
+
             $objects = $this->filter_objects_on_static_values($form, $objects);
-            
+
             return $objects;
         }
         else
@@ -151,7 +151,7 @@ class MetadataObjectFilter
 
     /**
      * Returns the element form name
-     * 
+     *
      * @param Element $element
      *
      * @return string

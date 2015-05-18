@@ -184,11 +184,13 @@ class File extends ContentObject implements Versionable, Includeable
 
     public function get_icon_path($size = Theme :: ICON_SMALL)
     {
-        $path = Theme :: getInstance()->getFileExtension($this->get_extension(), $size, false);
+        $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
+
+        $path = Theme :: getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
             $size = $size . ($this->is_current() ? '' : '_na');
-            return Theme :: getInstance()->getFileExtension($this->get_extension(), $size);
+            return Theme :: getInstance()->getFileExtension($extension, $size);
         }
         else
         {

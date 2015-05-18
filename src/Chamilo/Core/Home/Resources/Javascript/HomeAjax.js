@@ -278,7 +278,7 @@ $(function() {
 	function prepareWidgetSearch(e, ui) {
 		var search = $("#portal-block-container input");
 		if (search.val() == getTranslation('SearchForWidgets', null,
-				'core\\home')) {
+				'Chamilo\\Core\\Home')) {
 			search.val('');
 			search.addClass('query');
 		}

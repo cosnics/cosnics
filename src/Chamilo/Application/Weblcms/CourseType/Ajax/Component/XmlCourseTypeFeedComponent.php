@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\CourseType\Ajax\Component;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class XmlCourseTypeFeedComponent extends \Chamilo\Application\Weblcms\CourseType\Ajax\Manager
@@ -27,8 +27,9 @@ class XmlCourseTypeFeedComponent extends \Chamilo\Application\Weblcms\CourseType
         if ($query)
         {
             $condition_properties = array();
-            $condition_properties[] = new ConditionProperty(
-                new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_TITLE));
+            $condition_properties[] = new PropertyConditionVariable(
+                CourseType :: class_name(),
+                CourseType :: PROPERTY_TITLE);
 
             $course_type_conditions[] = Utilities :: query_to_condition($query, $condition_properties);
         }
@@ -74,7 +75,7 @@ class XmlCourseTypeFeedComponent extends \Chamilo\Application\Weblcms\CourseType
             $course_type_condition,
             null,
             null,
-            array(new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_TITLE)));
+            array(new OrderBy(new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_TITLE))));
 
         $course_types_result_set = DataManager :: retrieves(CourseType :: class_name(), $parameters);
 

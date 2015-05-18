@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Package;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -51,7 +52,7 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
             }
         }
 
-        $workspace = new RepositoryImplementationCategoryItem();
+        $workspace = new WorkspaceCategoryItem();
         $workspace->set_display($this->getItemDisplay());
 
         if (! $workspace->create())

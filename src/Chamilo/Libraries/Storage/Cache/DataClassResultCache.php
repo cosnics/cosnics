@@ -37,8 +37,7 @@ class DataClassResultCache extends DataClassCache
                      '.');
         }
 
-        $class_name = ($object instanceof CompositeDataClass && $object :: parent_class_name() !=
-             CompositeDataClass :: class_name() ? $object :: parent_class_name() : $object :: class_name());
+        $class_name = self :: getCacheClassName($object);
 
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
@@ -85,7 +84,7 @@ class DataClassResultCache extends DataClassCache
             throw new Exception('Not a DataClass');
         }
 
-        $class_name = ($object instanceof CompositeDataClass ? $object :: parent_class_name() : $object :: class_name());
+        $class_name = self :: getCacheClassName($object);
 
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
@@ -97,5 +96,22 @@ class DataClassResultCache extends DataClassCache
         }
 
         return true;
+    }
+
+    private static function getCacheClassName(DataClass $object)
+    {
+        $compositeDataClassName = CompositeDataClass :: class_name();
+
+        $isCompositeDataClass = $object instanceof $compositeDataClassName;
+        $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            return $object :: parent_class_name();
+        }
+        else
+        {
+            return $object :: class_name();
+        }
     }
 }

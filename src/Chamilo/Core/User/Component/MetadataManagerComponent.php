@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Metadata\Value\MetadataValueEditorComponent;
-use Chamilo\Core\Metadata\Value\ValueCreator;
-use Chamilo\Core\User\Integration\Chamilo\Core\Metadata\MetadataValueCreator;
+use Chamilo\Core\MetadataOld\Value\MetadataValueEditorComponent;
+use Chamilo\Core\MetadataOld\Value\ValueCreator;
+use Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\MetadataValueCreator;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -44,7 +44,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
 
         $factory = new ApplicationFactory(
             $this->getRequest(),
-            \Chamilo\Core\Metadata\Value\Manager :: context(),
+            \Chamilo\Core\MetadataOld\Value\Manager :: context(),
             $this->get_user(),
             $this);
         return $factory->run();
@@ -110,7 +110,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
      */
     public function get_element_values()
     {
-        return \Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataManager :: get_element_and_attribute_values_for_user(
+        return \Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: get_element_and_attribute_values_for_user(
             $this->get_selected_user()->get_id());
     }
 
@@ -119,7 +119,7 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
      */
     public function truncate_values()
     {
-        \Chamilo\Core\User\Integration\Chamilo\Core\Metadata\Storage\DataManager :: truncate_metadata_values_for_user(
+        \Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: truncate_metadata_values_for_user(
             $this->get_selected_user()->get_id());
     }
 
