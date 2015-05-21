@@ -1,0 +1,46 @@
+tr.recycled td { /*text-decoration:line-through;*/
+	color: #cccccc;
+}
+
+tr.recycled td a {
+	color: #cccccc;
+}
+
+tr.recycled td a:hover {
+	color: #ff7777;
+}
+
+div.story_image {
+	width: 708px;
+	height: 300px;
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	/*background-image: url(../images/image_story.png);*/
+	background-repeat: norepeat;
+	position: relative;
+	margin-bottom: 10px;
+}
+
+div.story_text {
+	left: 0px;
+	right: 0px;
+	background-image: url(../images/common/background_overlay.png);
+	padding: 10px;
+	position: absolute;
+	bottom: 0px;
+}
+
+div.story_text span.title {
+	text-align: right;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: grey;
+	font-family: Ubuntu, "Trebuchet MS", sans-serif;
+	font-size: 18px;
+	word-spacing: 0.2em;
+	letter-spacing: -1px;
+}
+
+div.content_object.comic_book {
+	padding-left: 10px;
+}
