@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Implementation\Rendition\Html;
 
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -16,29 +13,8 @@ use Chamilo\Libraries\File\Path;
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
 {
-    const FORM_NAME = 'matching_content_object_rendition_form';
-
-    
-    private $match_objects;
-    
-    /**
-     *
-     * @var FormValidator
-     */
-    private $formValidator;
-
-    /**
-     *
-     * @var ComplexContentObjectPathNode
-     */
-    private $complexContentObjectPathNode;
-
-    function render()
-    {
-        return $this->initialize()->toHtml();
-    }
 
     /**
      *
@@ -46,7 +22,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
      */
     public function initialize()
     {
-        $formvalidator = $this->getFormValidator();
+        $formvalidator = parent :: initialize();
         $question = $this->get_content_object();
         
         if ($this->getComplexContentObjectPathNode())
@@ -161,45 +137,5 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'MatchingQuestionDisplay.js'));
     }
-    
 
-    /**
-     *
-     * @param FormValidator $formValidator
-     */
-    public function setFormValidator(FormValidator $formValidator)
-    {
-        if (! isset($this->formValidator))
-        {
-            $this->formValidator = $formValidator;
-        }
-    }
-
-    public function getFormValidator()
-    {
-        if (! isset($this->formValidator))
-        {
-            return new FormValidator(self :: FORM_NAME);
-        }
-        
-        return $this->formValidator;
-    }
-
-    /**
-     *
-     * @return the $complexContentObjectPathNode
-     */
-    public function getComplexContentObjectPathNode()
-    {
-        return $this->complexContentObjectPathNode;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode $complexContentObjectPathNode
-     */
-    public function setComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
-    {
-        $this->complexContentObjectPathNode = $complexContentObjectPathNode;
-    }
 }
