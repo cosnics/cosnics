@@ -54,7 +54,7 @@ div#emulator {
 	color: #ffffff;
 	position: relative;
 	height: 90px;
-	background-image: url('../../images/ruby/background_header.png');
+	background-image: url('../../Images/Ruby/Background/Header.png');
 	background-repeat: repeat-x;
 	background-position: center left;
 }
@@ -69,7 +69,7 @@ div#emulator {
 }
 
 #header1 div.banner span.logo {
-	background-image: url('../../images/ruby/logo_header.png');
+	background-image: url('../../Images/Ruby/LogoHeader.png');
 	background-repeat: no-repeat;
 	height: 58px;
 	width: 305px;
@@ -162,7 +162,7 @@ div#emulator {
 #breadcrumbtrail li a {
 	display: block;
 	padding: 0 15px 0 0;
-	background: url(../../images/ruby/background_breadcrumb.png) no-repeat
+	background: url(../../Images/Ruby/Background/Breadcrumb.png) no-repeat
 		right center;
 	color: #444444;
 }
@@ -337,28 +337,28 @@ div#emulator {
 }
 
 .normal-message {
-	background-image: url('../../images/ruby/status_normal_mini.png');
+	background-image: url('../../Images/Ruby/Status/NormalMini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .error-message {
-	background-image: url('../../images/ruby/status_error_mini.png');
+	background-image: url('../../Images/Ruby/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
 
 .warning-message {
-	background-image: url('../../images/ruby/status_warning_mini.png');
+	background-image: url('../../Images/Ruby/Status/WarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .confirm-message {
-	background-image: url('../../Images/Aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -416,28 +416,28 @@ div#emulator {
 }
 
 .notification-4 {
-	background-image: url('../../Images/Aqua/status_normal_mini.png');
+	background-image: url('../../Images/Aqua/Status/NormalMini.png');
 	background-color: #E5EDF9;
 	border: 1px solid #b9d0ef;
 	color: #272761;
 }
 
 .notification-1 {
-	background-image: url('../../Images/Aqua/status_error_mini.png');
+	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
 	color: #b40404;
 }
 
 .notification-2 {
-	background-image: url('../../Images/Aqua/status_warning_mini.png');
+	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
 .notification-3 {
-	background-image: url('../../Images/Aqua/status_confirm_mini.png');
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
 	border: 1px solid #339900;
 	background-color: #ddffaa;
 	color: #006600;
@@ -718,7 +718,7 @@ div.attachments {
 	border: 1px solid #F6F6F6;
 	margin: 0 0 1em 0;
 	padding: 10px 10px 10px 44px;
-	background: url(../../images/ruby/place_attachment.png) no-repeat 10px
+	background: url(../../Images/Ruby/Place/Attachment.png) no-repeat 10px
 		10px;
 }
 
@@ -803,12 +803,12 @@ div.versions,div.versions_na {
 }
 
 div.versions {
-	background: url(../../images/ruby/place_versions.png) no-repeat 10px
+	background: url(../../Images/Ruby/Place/Versions.png) no-repeat 10px
 		10px;
 }
 
 div.versions_na {
-	background: url(../../images/ruby/place_versions_na.png) no-repeat 10px
+	background: url(../../Images/Ruby/Place/VersionsNa.png) no-repeat 10px
 		10px;
 }
 
@@ -837,12 +837,12 @@ div.version_stats,div.version_stats_na {
 }
 
 div.version_stats {
-	background: url(../../images/ruby/place_version_quota.png) no-repeat
+	background: url(../../Images/Ruby/Place/VersionQuota.png) no-repeat
 		10px 10px;
 }
 
 div.version_stats_na {
-	background: url(../../images/ruby/place_version_quota_na.png) no-repeat
+	background: url(../../Images/Ruby/Place/VersionQuotaNa.png) no-repeat
 		10px 10px;
 }
 
@@ -887,12 +887,12 @@ div.publications,div.publications_na {
 }
 
 div.publications {
-	background: url(../../images/ruby/place_publications.png) no-repeat 10px
+	background: url(../../Images/Ruby/Place/Publications.png) no-repeat 10px
 		10px;
 }
 
 div.publications_na {
-	background: url(../../images/ruby/place_publications_na.png) no-repeat
+	background: url(../../Images/Ruby/Place/PublicationsNa.png) no-repeat
 		10px 10px;
 }
 
@@ -1292,7 +1292,7 @@ div.action_bar_text {
 	-moz-border-radius-bottomright: 15px;
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
-	background: #d4e0f1 url(../../images/ruby/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Ruby/Background/ActionBar.png)
 		no-repeat;
 }
 
@@ -1309,7 +1309,7 @@ div.action_bar {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
-	background: #d4e0f1 url(../../images/ruby/background_action_bar.png)
+	background: #d4e0f1 url(../../Images/Ruby/Background/ActionBar.png)
 		no-repeat;
 }
 
@@ -1362,7 +1362,7 @@ div.action_bar .action_bar_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../images/ruby/background_ajax_hide.png);
+	background-image: url(../../Images/Ruby/Background/AjaxHide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1434,7 +1434,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .hide
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../images/ruby/action_action_bar_hide_background.png);
+		url(../../Images/Ruby/Action/ActionBar/HideBackground.png);
 }
 
 div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
@@ -1442,7 +1442,7 @@ div.action_bar_left .action_bar_left_hide_container,div.action_bar_left .show
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../images/ruby/action_action_bar_show_background.png);
+		url(../../Images/Ruby/Action/ActionBar/ShowBackground.png);
 }
 
 .action_bar_left_show {
@@ -1468,7 +1468,7 @@ div.reporting_filter_text {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	background: #d4e0f1
-		url(../../images/ruby/background_reporting_filter.png) no-repeat;
+		url(../../Images/Ruby/Background/ReportingFilter.png) no-repeat;
 }
 
 div.reporting_filter_text img {
@@ -1485,7 +1485,7 @@ div.reporting_filter {
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
 	background: #d4e0f1
-		url(../../images/ruby/background_reporting_filter.png) no-repeat;
+		url(../../Images/Ruby/Background/ReportingFilter.png) no-repeat;
 }
 
 .reporting_filter_text {
@@ -1537,7 +1537,7 @@ div.reporting_filter .reporting_filter_hide_container {
 	display: none;
 	text-align: center;
 	clear: both;
-	background-image: url(../../images/ruby/background_ajax_hide.png);
+	background-image: url(../../Images/Ruby/Background/AjaxHide.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 26px;
@@ -1609,7 +1609,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.areporting_f
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../images/ruby/reporting_filter_hide_background.png);
+		url(../../Images/Ruby/Reporting/FilterHideBackground.png);
 }
 
 div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_filter_left .show
@@ -1617,7 +1617,7 @@ div.reporting_filter_left .reporting_filter_left_hide_container,div.reporting_fi
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../images/ruby/reporting_filter_show_background.png);
+		url(../../Images/Ruby/Reporting/FilterShowBackground.png);
 }
 
 .reporting_filter_left_show {
@@ -1727,7 +1727,7 @@ div.padding_10 {
 }
 
 a.help-modal-close {
-	background: url(../../Images/Aqua/action_close_modal.png) no-repeat;
+	background: url(../../Images/Aqua/Action/CloseModal.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;
@@ -1789,7 +1789,7 @@ a.help-modal-close {
 }
 
 .togglePlus {
-	background: url(../../images/ruby/treemenu/bullet_toggle_plus.png)
+	background: url(../../Images/Ruby/Treemenu/BulletTogglePlus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1799,7 +1799,7 @@ a.help-modal-close {
 }
 
 .toggleMinus {
-	background: url(../../images/ruby/treemenu/bullet_toggle_minus.png)
+	background: url(../../Images/Ruby/Treemenu/BulletToggleMinus.png)
 		no-repeat;
 	height: 16px;
 	width: 13px;
@@ -1820,7 +1820,7 @@ a.help-modal-close {
  * AJAX loading... icons
  **********************************/
 .loadingMini {
-	background-image: url(../../images/ruby/action_loading_mini.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingMini.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
@@ -1829,7 +1829,7 @@ a.help-modal-close {
 }
 
 .loadingSmall {
-	background-image: url(../../images/ruby/action_loading_small.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingSmall.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 22px;
@@ -1838,7 +1838,7 @@ a.help-modal-close {
 }
 
 .loadingMedium {
-	background-image: url(../../images/ruby/action_loading_medium.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingMedium.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 32px;
@@ -1847,7 +1847,7 @@ a.help-modal-close {
 }
 
 .loadingLarge {
-	background-image: url(../../images/ruby/action_loading_large.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingLarge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 48px;
@@ -1856,7 +1856,7 @@ a.help-modal-close {
 }
 
 .loadingHuge {
-	background-image: url(../../images/ruby/action_loading_huge.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingHuge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1865,7 +1865,7 @@ a.help-modal-close {
 }
 
 .statusConfirmation {
-	background-image: url(../../images/ruby/status_confirmation_huge.png);
+	background-image: url(../../Images/Ruby/Status/ConfirmationHuge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1874,7 +1874,7 @@ a.help-modal-close {
 }
 
 .statusError {
-	background-image: url(../../images/ruby/status_error_huge.png);
+	background-image: url(../../Images/Ruby/Status/ErrorHuge.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
@@ -1896,40 +1896,40 @@ a.help-modal-close {
 }
 
 .close_message {
-	background: url(../../images/ruby/action_close_message.png) no-repeat;
+	background: url(../../Images/Ruby/Action/CloseMessage.png) no-repeat;
 }
 
 .close_normal_message {
-	background: url(../../images/ruby/action_close_normal_message.png)
+	background: url(../../Images/Ruby/Action/CloseNormalMessage.png)
 		no-repeat;
 }
 
 .close_error_message {
-	background: url(../../images/ruby/action_close_error_message.png)
+	background: url(../../Images/Ruby/Action/CloseErrorMessage.png)
 		no-repeat;
 }
 
 .close_warning_message {
-	background: url(../../images/ruby/action_close_warning_message.png)
+	background: url(../../Images/Ruby/Action/CloseWarningMessage.png)
 		no-repeat;
 }
 
 .rightTrue {
-	background: url(../../images/ruby/action_setting_true.png) no-repeat;
+	background: url(../../Images/Ruby/Action/SettingTrue.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightFalse {
-	background: url(../../images/ruby/action_setting_false.png) no-repeat;
+	background: url(../../Images/Ruby/Action/SettingFalse.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
 .rightInheritTrue {
-	background: url(../../images/ruby/action_setting_true_inherit.png)
+	background: url(../../Images/Ruby/Action/SettingTrueInherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -1937,7 +1937,7 @@ a.help-modal-close {
 }
 
 .rightInheritFalse {
-	background: url(../../images/ruby/action_setting_false_inherit.png)
+	background: url(../../Images/Ruby/Action/SettingFalseInherit.png)
 		no-repeat;
 	width: 16px;
 	height: 16px;
@@ -2175,7 +2175,7 @@ li.buddyDrop {
  * ADDITIONAL ELEMENT FINDER STYLES *
  ************************************/
 .element_finder_loading {
-	background-image: url(../../images/ruby/action_loading_huge.gif);
+	background-image: url(../../Images/Ruby/Action/LoadingHuge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 100%;
@@ -2238,7 +2238,7 @@ div.question div.title {
 
 div.question div.title div.number,div.question div.title div.text {
 	border: 1px solid #CECECE;
-	background: #9e021b url(../../images/ruby/background_table_header.png)
+	background: #9e021b url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 
@@ -2588,7 +2588,7 @@ div.no_thumbnail div.background,div.no_preview div.background {
 	background-color: #efefef;
 	padding: 15px;
 	width: 268px;
-	background-image: url(../../images/ruby/background_no_thumbnail.png);
+	background-image: url(../../Images/Ruby/background_no_thumbnail.png);
 	background-position: top center;
 	background-repeat: repeat-x;
 }

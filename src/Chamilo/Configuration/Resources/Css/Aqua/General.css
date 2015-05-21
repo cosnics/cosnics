@@ -1862,7 +1862,7 @@ a.help-modal-close {
 }
 
 .loadingHuge {
-	background-image: url(../../Images/Aqua/ActionLoadingHuge.gif);
+	background-image: url(../../Images/Aqua/Action/LoadingHuge.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 64px;
