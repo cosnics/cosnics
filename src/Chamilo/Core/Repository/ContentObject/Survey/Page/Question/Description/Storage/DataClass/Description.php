@@ -1,0 +1,25 @@
+<?php
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass;
+
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+
+/**
+ *
+ * @package repository.content_object.survey_description
+ * @author Eduard Vossen
+ * @author Magali Gillard
+ * @author Hans De Bisschop
+ */
+class Description extends ContentObject implements Versionable
+{
+    const CLASS_NAME = __CLASS__;
+
+    static function get_type_name()
+    {
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+    }
+}
+
+?>
