@@ -4,7 +4,7 @@
 		<name>Default</name>
 		<question edit="1"></question>
 		<instruction edit="1"></instruction>
-		<display_type edit="1">two_column</display_type>
+		<display_type edit="1">TwoColumn</display_type>
 		<order_limit edit="1">3</order_limit>
 		<options edit="1" sort="1">
 			<option display_order="1"></option>

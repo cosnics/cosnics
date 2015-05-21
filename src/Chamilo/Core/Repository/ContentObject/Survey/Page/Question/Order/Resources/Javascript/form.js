@@ -48,10 +48,10 @@ $(function() {
 
 		var displayType = $('#display_type').val(), newLabel = getTranslation(
 				'SwitchToOneColumn', 'repository',
-				'repository\\content_object\\survey_order_question'), newType = 'two_column', counter = 0, order_limit = $('#order_limit');
+				'repository\\content_object\\survey_order_question'), newType = 'TwoColumn', counter = 0, order_limit = $('#order_limit');
 
-		if (displayType === 'two_column') {
-			newType = 'one_column';
+		if (displayType === 'TwoColumn') {
+			newType = 'OneColumn';
 			newLabel = getTranslation('SwitchToTwoColumn', 'repository',
 					'repository\\content_object\\survey_order_question');
 		}
