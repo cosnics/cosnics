@@ -10,7 +10,7 @@ ul.tree-menu,ul.tree-menu ul {
 
 ul.tree-menu ul {
 	background-repeat: repeat-y;
-	background-image: url(../../images/ruby/treemenu/tree-branch.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeBranch.png);
 	padding-left: 18px;
 	clear: both;
 }
@@ -30,27 +30,27 @@ ul.tree-menu li div,ul.tree-menu li div.last,ul.tree-menu li div.collapse,ul.tre
 }
 
 ul.tree-menu li div {
-	background-image: url(../../images/ruby/treemenu/tree-leaf.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeLeaf.png);
 }
 
 ul.tree-menu li div.last {
-	background-image: url(../../images/ruby/treemenu/tree-leaf-end.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeLeafEnd.png);
 }
 
 ul.tree-menu li div.collapse {
-	background-image: url(../../images/ruby/treemenu/tree-node-open.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeNodeOpen.png);
 }
 
 ul.tree-menu li div.lastCollapse {
-	background-image: url(../../images/ruby/treemenu/tree-node-open-end.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeNodeOpenEnd.png);
 }
 
 ul.tree-menu li div.expand {
-	background-image: url(../../images/ruby/treemenu/tree-node.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeNode.png);
 }
 
 ul.tree-menu li div.lastExpand {
-	background-image: url(../../images/ruby/treemenu/tree-node-end.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeNodeEnd.png);
 }
 
 ul.tree-menu li div a {
@@ -60,7 +60,7 @@ ul.tree-menu li div a {
 	padding-left: 21px;
 	background-repeat: no-repeat;
 	background-position: left top;
-	background-image: url(../../images/ruby/treemenu/tree-document.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeDocument.png);
 	white-space: nowrap;
 	font-weight: bold;
 }
@@ -92,112 +92,112 @@ ul.tree-menu li div img {
  * Special treemenu icons
  */
 ul.tree-menu li div a.home {
-	background-image: url(../../images/ruby/treemenu/home.png);
+	background-image: url(../../Images/Ruby/Treemenu/Home.png);
 }
 
 ul.tree-menu li div a.user {
-	background-image: url(../../images/ruby/treemenu/user.png);
+	background-image: url(../../Images/Ruby/Treemenu/User.png);
 }
 
 ul.tree-menu li div a.feed {
-	background-image: url(../../images/ruby/treemenu/feed.png);
+	background-image: url(../../Images/Ruby/Treemenu/Feed.png);
 }
 
 ul.tree-menu li div a.streaming {
-	background-image: url(../../images/ruby/treemenu/streaming.png);
+	background-image: url(../../Images/Ruby/Treemenu/Streaming.png);
 }
 
 ul.tree-menu li div a.trash {
-	background-image: url(../../images/ruby/treemenu/trash.png);
+	background-image: url(../../Images/Ruby/Treemenu/Trash.png);
 }
 
 ul.tree-menu li div a.trash_full {
-	background-image: url(../../images/ruby/treemenu/trash_full.png);
+	background-image: url(../../Images/Ruby/Treemenu/TrashFull.png);
 }
 
 ul.tree-menu li div a.quota {
-	background-image: url(../../images/ruby/treemenu/quota.png);
+	background-image: url(../../Images/Ruby/Treemenu/Quota.png);
 }
 
 ul.tree-menu li div a.userview {
-	background-image: url(../../images/ruby/treemenu/userview.png);
+	background-image: url(../../Images/Ruby/Treemenu/Userview.png);
 }
 
 ul.tree-menu li div a.publication {
-	background-image: url(../../images/ruby/treemenu/publication.png);
+	background-image: url(../../Images/Ruby/Treemenu/Publication.png);
 }
 
 ul.tree-menu li div a.create {
-	background-image: url(../../images/ruby/treemenu/create.png);
+	background-image: url(../../Images/Ruby/Treemenu/Create.png);
 }
 
 ul.tree-menu li div a.manage {
-	background-image: url(../../images/ruby/treemenu/manage.png);
+	background-image: url(../../Images/Ruby/Treemenu/Manage.png);
 }
 
 ul.tree-menu li div a.rights {
-	background-image: url(../../images/ruby/treemenu/rights.png);
+	background-image: url(../../Images/Ruby/Treemenu/Rights.png);
 }
 
 ul.tree-menu li div a.import {
-	background-image: url(../../images/ruby/treemenu/import.png);
+	background-image: url(../../Images/Ruby/Treemenu/Import.png);
 }
 
 ul.tree-menu li div a.external_instance {
-	background-image: url(../../images/ruby/treemenu/external_instance.png);
+	background-image: url(../../Images/Ruby/Treemenu/ExternalInstance.png);
 }
 
 ul.tree-menu li div a.search_results {
-	background-image: url(../../images/ruby/treemenu/search.png);
+	background-image: url(../../Images/Ruby/Treemenu/Search.png);
 }
 
 ul.tree-menu li div a.shared_objects {
-	background-image: url(../../images/ruby/treemenu/shared_objects.png);
+	background-image: url(../../Images/Ruby/Treemenu/SharedObjects.png);
 }
 
 ul.tree-menu li div a.template {
-	background-image: url(../../images/ruby/treemenu/template.png);
+	background-image: url(../../Images/Ruby/Treemenu/Template.png);
 }
 
 ul.tree-menu li div a.category {
-	background-image: url(../../images/ruby/treemenu/tree-folder-closed.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeFolderClosed.png);
 }
 
 ul.tree-menu li div a.hidden {
-	background-image: url(../../images/ruby/treemenu/hidden.png);
+	background-image: url(../../Images/Ruby/Treemenu/Hidden.png);
 }
 
 ul.tree-menu li div a.google_docs_pdf {
 	background-image:
-		url(../../images/ruby/external_repository/google_docs/types/pdf.png);
+		url(../../Images/Ruby/external_repository/google_docs/types/pdf.png);
 }
 
 ul.tree-menu li div a.google_docs_document {
 	background-image:
-		url(../../images/ruby/external_repository/google_docs/types/document.png);
+		url(../../Images/Ruby/external_repository/google_docs/types/document.png);
 }
 
 ul.tree-menu li div a.google_docs_presentation {
 	background-image:
-		url(../../images/ruby/external_repository/google_docs/types/presentation.png);
+		url(../../Images/Ruby/external_repository/google_docs/types/presentation.png);
 }
 
 ul.tree-menu li div a.google_docs_spreadsheet {
 	background-image:
-		url(../../images/ruby/external_repository/google_docs/types/spreadsheet.png);
+		url(../../Images/Ruby/external_repository/google_docs/types/spreadsheet.png);
 }
 
 ul.tree-menu li div a.survey {
-	background-image: url(../../images/ruby/treemenu/survey.png);
+	background-image: url(../../Images/Ruby/Treemenu/Survey.png);
 }
 
 ul.tree-menu li div a.survey_finished {
-	background-image: url(../../images/ruby/treemenu/survey_finished.png);
+	background-image: url(../../Images/Ruby/Treemenu/SurveyFinished.png);
 }
 
 ul.tree-menu li div a.divider {
 	background-repeat: repeat-x;
-	background-image: url(../../images/ruby/treemenu/tree-divider.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeDivider.png);
 	margin-left: 0px;
 	margin-right: 0px;
 	cursor: default;
@@ -205,31 +205,31 @@ ul.tree-menu li div a.divider {
 
 ul.tree-menu li.current_path>div a.category,ul.tree-menu li.current>div a.category
 	{
-	background-image: url(../../images/ruby/treemenu/tree-folder-open.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeFolderOpen.png);
 }
 
 ul.tree-menu li div a.new_category {
 	background-image:
-		url(../../images/ruby/treemenu/tree-folder-closed-new.png);
+		url(../../Images/Ruby/Treemenu/TreeFolderClosedNew.png);
 }
 
 ul.tree-menu li.current_path>div a.new_category,ul.tree-menu li.current>div a.new_category
 	{
 	background-image:
-		url(../../images/ruby/treemenu/tree-folder-open-new.png);
+		url(../../Images/Ruby/Treemenu/TreeFolderOpenNew.png);
 }
 
 ul.tree-menu li div a.invisible_category {
 	color: #666;
 	background-image:
-		url(../../images/ruby/treemenu/tree-folder-closed-invisible.png);
+		url(../../Images/Ruby/Treemenu/TreeFolderClosedInvisible.png);
 }
 
 ul.tree-menu li.current_path>div a.invisible_category,ul.tree-menu li.current>div a.invisible_category
 	{
 	color: #666;
 	background-image:
-		url(../../images/ruby/treemenu/tree-folder-open-invisible.png);
+		url(../../Images/Ruby/Treemenu/TreeFolderOpenInvisible.png);
 }
 
 ul.tree-menu li.current>div a {
@@ -239,16 +239,16 @@ ul.tree-menu li.current>div a {
 /*
 ul.tree-menu li.current_path ul li div a.category
 {
-	background-image: url(../../images/ruby/treemenu/tree-folder-closed.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeFolderClosed.png);
 }
 
 ul.tree-menu li.current_path ul li.current_path div a.category
 {
-	background-image: url(../../images/ruby/treemenu/tree-folder-open.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeFolderOpen.png);
 }
 */
 ul.tree-menu li div a.end_node {
-	background-image: url(../../images/ruby/treemenu/end-node.png);
+	background-image: url(../../Images/Ruby/Treemenu/EndNode.png);
 }
 
 ul.tree-menu li div a.no_link {
@@ -257,15 +257,15 @@ ul.tree-menu li div a.no_link {
 }
 
 ul.tree-menu li div a.type_user {
-	background-image: url(../../images/ruby/treemenu/user.png);
+	background-image: url(../../Images/Ruby/Treemenu/User.png);
 }
 
 ul.tree-menu li div a.type_user_platform {
-	background-image: url(../../images/ruby/treemenu/user_platform.png);
+	background-image: url(../../Images/Ruby/Treemenu/UserPlatform.png);
 }
 
 ul.tree-menu li div a.type_group {
-	background-image: url(../../images/ruby/treemenu/group.png);
+	background-image: url(../../Images/Ruby/Treemenu/Group.png);
 }
 
 /*************
@@ -380,7 +380,7 @@ div.tool_bar_left #tool_bar_hide_container.hide,div.tool_bar_icon_left #tool_bar
 	right: 0px;
 	margin-right: -1px;
 	background-image:
-		url(../../images/ruby/action_action_bar_left_hide_background.png);
+		url(../../Images/Ruby/Action/ActionBar/LeftHideBackground.png);
 }
 
 div.tool_bar_left #tool_bar_hide_container.show,div.tool_bar_icon_left #tool_bar_hide_container.show
@@ -388,7 +388,7 @@ div.tool_bar_left #tool_bar_hide_container.show,div.tool_bar_icon_left #tool_bar
 	right: -18px;
 	margin-left: 0px;
 	background-image:
-		url(../../images/ruby/action_action_bar_left_show_background.png);
+		url(../../Images/Ruby/Action/ActionBar/LeftShowBackground.png);
 }
 
 /******************************************
@@ -399,7 +399,7 @@ div.tool_bar_right #tool_bar_hide_container.hide,div.tool_bar_icon_right #tool_b
 	left: 0px;
 	margin-left: -1px;
 	background-image:
-		url(../../images/ruby/action_action_bar_right_hide_background.png);
+		url(../../Images/Ruby/Action/ActionBar/RightHideBackground.png);
 }
 
 div.tool_bar_right #tool_bar_hide_container.show,div.tool_bar_icon_right #tool_bar_hide_container.show
@@ -407,7 +407,7 @@ div.tool_bar_right #tool_bar_hide_container.show,div.tool_bar_icon_right #tool_b
 	left: -18px;
 	margin-right: 0px;
 	background-image:
-		url(../../images/ruby/action_action_bar_right_show_background.png);
+		url(../../Images/Ruby/Action/ActionBar/RightShowBackground.png);
 }
 
 /**************************

@@ -25,7 +25,7 @@
 	text-transform: uppercase;
 	text-align: left;
 	padding: 6px 10px 6px 10px;
-	background: #d4e0f1 url(../../images/ruby/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 	overflow: hidden;
 }
@@ -40,13 +40,13 @@
 	padding: 6px 10px 6px 10px;
 	vertical-align: top;
 	width: 10%;
-	background: #C6D6ED url(../../images/ruby/background_table_header.png)
+	background: #C6D6ED url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 
 .data_table tr.row_even td.header {
 	background: #EBEBEB
-		url(../../images/ruby/background_table_header_grey.png) repeat-x;
+		url(../../Images/Ruby/Background/TableHeaderGrey.png) repeat-x;
 	color: #7b7b7b;
 }
 
@@ -122,7 +122,7 @@
 	padding: 10px 36px;
 	background-position: 10px 50%;
 	background-repeat: no-repeat;
-	background-image: url("../../images/ruby/status_error_mini.png");
+	background-image: url("../../Images/Ruby/Status/ErrorMini.png");
 }
 
 .data_table td.highlight,.data_table th.highlight,.data_table tr.highlight
@@ -331,7 +331,7 @@
 	text-transform: uppercase;
 	text-align: center;
 	padding: 2px;
-	background: #d4e0f1 url(../../images/ruby/background_table_header.png)
+	background: #d4e0f1 url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 

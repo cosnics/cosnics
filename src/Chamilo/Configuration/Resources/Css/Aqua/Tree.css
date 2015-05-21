@@ -238,12 +238,12 @@ ul.tree-menu li.current>div a {
 /*
 ul.tree-menu li.current_path ul li div a.category
 {
-	background-image: url(../../Images/Aqua/Treemenu/tree-folder-closed.png);
+	background-image: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png);
 }
 
 ul.tree-menu li.current_path ul li.current_path div a.category
 {
-	background-image: url(../../Images/Aqua/Treemenu/tree-folder-open.png);
+	background-image: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png);
 }
 */
 ul.tree-menu li div a.end_node {
