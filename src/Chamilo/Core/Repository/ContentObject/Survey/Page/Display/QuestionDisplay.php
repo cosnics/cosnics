@@ -64,32 +64,32 @@ abstract class QuestionDisplay
         
         $html[] = '<a name=' . $complex_content_object_item->get_id() . '></a>';
         
-        if ($this->complex_content_object_path_node->is_question())
-        {
-            $html[] = '<div class="title">';
-            $html[] = '<div class="number">';
-            $html[] = '<div class="bevel">';
-            $html[] = $this->complex_content_object_path_node->get_question_nr() . '.';
-            $html[] = '</div>';
-            $html[] = '</div>';
-            $html[] = '<div class="text">';
-            $html[] = '<div class="bevel">';
-            $html[] = $title = $content_object->get_question();
-            $html[] = '<div class="onoff">';
-            $html[] = '</div>';
-            $html[] = '</div>';
-            $html[] = '</div>';
-            $html[] = '<div class="clear"></div>';
-            $html[] = '</div>';
-            $html[] = '<div class="answer">';
-            $html[] = '<div class="clear"></div>';
-        }
-        else
-        {
+//         if ($this->complex_content_object_path_node->is_question())
+//         {
+//             $html[] = '<div class="title">';
+//             $html[] = '<div class="number">';
+//             $html[] = '<div class="bevel">';
+//             $html[] = $this->complex_content_object_path_node->get_question_nr() . '.';
+//             $html[] = '</div>';
+//             $html[] = '</div>';
+//             $html[] = '<div class="text">';
+//             $html[] = '<div class="bevel">';
+//             $html[] = $title = $content_object->get_question();
+//             $html[] = '<div class="onoff">';
+//             $html[] = '</div>';
+//             $html[] = '</div>';
+//             $html[] = '</div>';
+//             $html[] = '<div class="clear"></div>';
+//             $html[] = '</div>';
+//             $html[] = '<div class="answer">';
+//             $html[] = '<div class="clear"></div>';
+//         }
+//         else
+//         {
             
-            $html[] = '<div class="survey">';
-            $html[] = '<div class="clear"></div>';
-        }
+//             $html[] = '<div class="survey">';
+//             $html[] = '<div class="clear"></div>';
+//         }
         
         $header = implode(PHP_EOL, $html);
         $formvalidator->addElement('html', $header);

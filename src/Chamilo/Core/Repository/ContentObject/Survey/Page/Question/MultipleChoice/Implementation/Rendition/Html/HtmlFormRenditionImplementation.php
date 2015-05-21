@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Implementation\Rendition\Html;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -14,26 +11,8 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
 {
-    const FORM_NAME = 'multiple_choice_content_object_rendition_form';
-
-    /**
-     *
-     * @var FormValidator
-     */
-    private $formValidator;
-
-    /**
-     *
-     * @var ComplexContentObjectPathNode
-     */
-    private $complexContentObjectPathNode;
-
-    function render()
-    {
-        return $this->initialize()->toHtml();
-    }
 
     /**
      *
@@ -41,62 +20,21 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
      */
     function initialize()
     {
-        $display_type = $this->get_content_object()->get_display_type();
+        $formValidator = parent :: initialize();
+        $displayType = $this->get_content_object()->get_display_type();
         
-        if ($display_type == MultipleChoice :: DISPLAY_TYPE_SELECT)
+        if ($displayType == MultipleChoice :: DISPLAY_TYPE_SELECT)
         {
-            return $this->initializeSelect();
+            return $this->initializeSelect($formValidator);
         }
-        elseif ($display_type == MultipleChoice :: DISPLAY_TYPE_TABLE)
+        elseif ($displayType == MultipleChoice :: DISPLAY_TYPE_TABLE)
         {
-            return $this->initializeTable();
-        }
-               
-    }
-
-    /**
-     *
-     * @param FormValidator $formValidator
-     */
-    public function setFormValidator(FormValidator $formValidator)
-    {
-        if (! isset($this->formValidator))
-        {
-            $this->formValidator = $formValidator;
+            return $this->initializeTable($formValidator);
         }
     }
 
-    public function getFormValidator()
+    function initializeSelect($formValidator)
     {
-        if (! isset($this->formValidator))
-        {
-            return new FormValidator(self :: FORM_NAME);
-        }
-        
-        return $this->formValidator;
-    }
-
-    /**
-     *
-     * @return the $complexContentObjectPathNode
-     */
-    public function getComplexContentObjectPathNode()
-    {
-        return $this->complexContentObjectPathNode;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode $complexContentObjectPathNode
-     */
-    public function setComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
-    {
-        $this->complexContentObjectPathNode = $complexContentObjectPathNode;
-    }
-
-    function initializeSelect()
-    {
-        $formValidator = $this->getFormValidator();
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         $options = $question->get_options();
@@ -116,16 +54,9 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
         $element_template = implode(PHP_EOL, $element_template);
-        
-        if ($this->getComplexContentObjectPathNode())
-        {
-            $complexQuestion = $this->getComplexContentObjectPathNode()->get_complex_content_object_item();
-            $questionId = $complexQuestion->getId();
-        }
-        else
-        {
-            $questionId = $question->getId();
-        }
+     
+        $questionId = $this->getQuestionId();
+   
         
         if ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
         {
@@ -154,9 +85,8 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         return $formValidator;
     }
 
-    function initializeTable()
+    function initializeTable($formValidator)
     {
-        $formValidator = $this->getFormValidator();
         $renderer = $formValidator->defaultRenderer();
         $question = $this->get_content_object();
         $options = $question->get_options();
@@ -172,16 +102,8 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $formValidator->addElement('html', implode(PHP_EOL, $table_header));
-        
-        if ($this->getComplexContentObjectPathNode())
-        {
-            $complexQuestion = $this->getComplexContentObjectPathNode()->get_complex_content_object_item();
-            $questionId = $complexQuestion->getId();
-        }
-        else
-        {
-            $questionId = $question->getId();
-        }
+       
+        $questionId = $this->getQuestionId();
         
         foreach ($options as $option)
         {

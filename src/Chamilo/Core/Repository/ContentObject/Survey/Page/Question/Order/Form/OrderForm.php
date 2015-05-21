@@ -85,20 +85,6 @@ class OrderForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    /**
-     * Initialize the general form based on the form type
-     */
-    function build_general_form()
-    {
-        if ($this->get_form_type() == self :: TYPE_CREATE)
-        {
-            parent :: build_creation_form(self :: $html_editor_options, true);
-        }
-        elseif ($this->get_form_type() == self :: TYPE_EDIT)
-        {
-            parent :: build_editing_form(self :: $html_editor_options, true);
-        }
-    }
 
     /**
      * Add the question and instruction fields
@@ -507,6 +493,7 @@ class OrderForm extends ContentObjectForm
         $values = $this->exportValues();
 
         $display_type = $values[Order :: PROPERTY_DISPLAY_TYPE];
+        
         $object->set_display_type($display_type);
         $object->set_question($values[Order :: PROPERTY_QUESTION]);
         $object->set_instruction($values[Order :: PROPERTY_INSTRUCTION]);
@@ -605,7 +592,7 @@ class OrderForm extends ContentObjectForm
             }
             $display_type = ($this->display_type == Order :: DISPLAY_TYPE_ONE_COLUMN ? Order :: DISPLAY_TYPE_TWO_COLUMN : Order :: DISPLAY_TYPE_ONE_COLUMN);
         }
-
+        
         return $display_type;
     }
 
