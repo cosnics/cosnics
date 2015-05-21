@@ -37,13 +37,13 @@ abstract class Renderer
     const MARKER_TYPE = '__TYPE__';
 
     // Types
-    const TYPE_DAY = 'day';
-    const TYPE_LIST = 'list';
-    const TYPE_MINI_DAY = 'mini_day';
-    const TYPE_MINI_MONTH = 'mini_month';
-    const TYPE_MONTH = 'month';
-    const TYPE_WEEK = 'week';
-    const TYPE_YEAR = 'year';
+    const TYPE_DAY = 'Day';
+    const TYPE_LIST = 'List';
+    const TYPE_MINI_DAY = 'Mini_day';
+    const TYPE_MINI_MONTH = 'Mini_month';
+    const TYPE_MONTH = 'Month';
+    const TYPE_WEEK = 'Week';
+    const TYPE_YEAR = 'Year';
 
     /**
      *
