@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Content Object Metadata Element Linker</name>
+		<code>ContentObjectMetadataElementLinker</code>
+		<context>Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Linker\Property</context>
+		<type>Chamilo\Core\Repository\Integration</type>
+		<category />
+		<authors>
+			<author>
+				<name>Sven Vanpoucke</name>
+				<email>sven.vanpoucke@hogent.be</email>
+				<company>Hogeschool Gent</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description>An interface to connect content object types to metadata
+			element. This makes it possible to only show a
+			partial metadata form
+			in the content object form</description>
+		<pre-depends>
+			<dependencies operator="1">
+				<dependency type="registration">
+					<id>Chamilo\Core\Repository</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+				<dependency type="registration">
+					<id>Chamilo\Core\Metadata</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+			</dependencies>
+		</pre-depends>
+	</package>
+</packages>

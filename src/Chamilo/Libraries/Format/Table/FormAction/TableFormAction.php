@@ -1,0 +1,125 @@
+<?php
+namespace Chamilo\Libraries\Format\Table\FormAction;
+
+/**
+ * This class represents a table form action
+ * Refactoring from ObjectTable to split between a table based on a record and based on an object
+ * 
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class TableFormAction
+{
+
+    /**
+     * **************************************************************************************************************
+     * Properties *
+     * **************************************************************************************************************
+     */
+    
+    /**
+     * The action parameter
+     * 
+     * @var string
+     */
+    private $action;
+
+    /**
+     * The title
+     * 
+     * @var string
+     */
+    private $title;
+
+    /**
+     * Whether or not a confirm box is necessary
+     * 
+     * @var bool
+     */
+    private $confirm;
+
+    /**
+     * **************************************************************************************************************
+     * Constructor *
+     * **************************************************************************************************************
+     */
+    
+    /**
+     * Constructor
+     * 
+     * @param string $action
+     * @param string $title
+     * @param bool $confirm
+     */
+    public function __construct($action, $title, $confirm = true)
+    {
+        $this->action = $action;
+        $this->title = $title;
+        $this->confirm = $confirm;
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+    
+    /**
+     * Returns the action
+     * 
+     * @return string
+     */
+    public function get_action()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Returns the title
+     * 
+     * @return string
+     */
+    public function get_title()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Returns the confirm flag
+     * 
+     * @return bool
+     */
+    public function get_confirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
+     * Sets the action
+     * 
+     * @param string $action
+     */
+    public function set_action($action)
+    {
+        $this->action = $action;
+    }
+
+    /**
+     * Sets the title
+     * 
+     * @param string $title
+     */
+    public function set_title($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Sets the confirm flag
+     * 
+     * @param bool $confirm
+     */
+    public function set_confirm($confirm)
+    {
+        $this->confirm = $confirm;
+    }
+}
