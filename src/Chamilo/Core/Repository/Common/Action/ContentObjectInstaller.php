@@ -113,7 +113,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
                     $template_registration->set_content_object_type(static :: package());
                     $template_registration->set_name($template_name);
 
-                    if ($template_name == 'default')
+                    if ($template_name == 'Default')
                     {
                         $template_registration->set_default(true);
                     }

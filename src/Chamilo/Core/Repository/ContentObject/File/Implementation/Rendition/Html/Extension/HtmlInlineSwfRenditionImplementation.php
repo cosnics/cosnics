@@ -10,8 +10,7 @@ class HtmlInlineSwfRenditionImplementation extends HtmlInlineRenditionImplementa
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
         
         $html = array();
         $html[] = '<object  classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"

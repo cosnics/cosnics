@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 
 /**
  *
@@ -19,7 +20,7 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
     {
         $properties = array();
                
-        if ($complex_content_object_item instanceof PageDisplayItem)
+        if ($complex_content_object_item instanceof PageDisplayItem && !($complex_content_object_item instanceof ComplexDescription) )
         {
             
             $properties[ComplexContentObjectPathNode :: PROPERTY_QUESTION] = $content_object->get_question();
