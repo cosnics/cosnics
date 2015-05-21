@@ -1,17 +1,18 @@
-@import url('Plugin/jquery/jquery.css');
+/* External CSS */
+@import url('External.css');
 
-@import url('Plugin/projekktor/projekktor.style.css');
+/* Plugin CSS */
+@import url('Plugin.css');
 
-@import url('../../../Plugin/jquery/uploadify/uploadify.css');
+/* Platform CSS */
+@import url('General.css');
 
-@import url('common_general.css');
+@import url('Form.css');
 
-@import url('common_form.css');
+@import url('Menu.css');
 
-@import url('common_menu.css');
+@import url('Table.css');
 
-@import url('common_table.css');
+@import url('Tabs.css');
 
-@import url('common_tabs.css');
-
-@import url('common_tree.css');
+@import url('Tree.css');
