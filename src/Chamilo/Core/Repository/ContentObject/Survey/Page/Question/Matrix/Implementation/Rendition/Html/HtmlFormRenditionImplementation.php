@@ -2,9 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Implementation\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
  *
@@ -13,26 +10,8 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
 {
-    const FORM_NAME = 'matrix_content_object_rendition_form';
-
-    /**
-     *
-     * @var FormValidator
-     */
-    private $formValidator;
-
-    /**
-     *
-     * @var ComplexContentObjectPathNode
-     */
-    private $complexContentObjectPathNode;
-
-    function render()
-    {
-        return $this->initialize()->toHtml();
-    }
 
     /**
      *
@@ -40,20 +19,12 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
      */
     public function initialize()
     {
-        $formvalidator = $this->getFormValidator();
-        $renderer = $formvalidator->get_renderer();
+        $formValidator = parent :: initialize();
+        $renderer = $formValidator->get_renderer();
+        
         $question = $this->get_content_object();
-        
-        if ($this->getComplexContentObjectPathNode())
-        {
-            $complex_question = $this->getComplexContentObjectPathNode()->get_complex_content_object_item();
-            $question_id = $complex_question->get_id();
-        }
-        else
-        {
-            $question_id = $question->get_id();
-        }
-        
+        $question_id = $this->getQuestionId();
+   
         $options = $question->get_options();
         $matches = $question->get_matches();
         $match_objects = array();
@@ -74,13 +45,13 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
-        $formvalidator->addElement('html', implode(PHP_EOL, $table_header));
+        $formValidator->addElement('html', implode(PHP_EOL, $table_header));
         
         foreach ($options as $option)
         {
             $group = array();
             $i = $option->get_id();
-            $group[] = $formvalidator->createElement(
+            $group[] = $formValidator->createElement(
                 'static', 
                 null, 
                 null, 
@@ -93,7 +64,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
                 {
                     $option_name = $question_id . '_' . $i;
                     
-                    $radio = $formvalidator->createElement('radio', $option_name, null, null, $j);
+                    $radio = $formValidator->createElement('radio', $option_name, null, null, $j);
                     
                     $group[] = $radio;
                 }
@@ -101,12 +72,12 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
                 {
                     $option_name = $question_id . '_' . $i . '_' . $j;
                     
-                    $checkbox = $formvalidator->createElement('checkbox', $option_name, null, null, null, $j);
+                    $checkbox = $formValidator->createElement('checkbox', $option_name, null, null, null, $j);
                     $group[] = $checkbox;
                 }
             }
             
-            $formvalidator->addGroup($group, 'matrix_option_' . $i, null, '', false);
+            $formValidator->addGroup($group, 'matrix_option_' . $i, null, '', false);
             
             $renderer->setElementTemplate(
                 '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>', 
@@ -116,47 +87,8 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
-        $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
-        return $formvalidator;
+        $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
+        return $formValidator;
     }
-
-    /**
-     *
-     * @param FormValidator $formValidator
-     */
-    public function setFormValidator(FormValidator $formValidator)
-    {
-        if (! isset($this->formValidator))
-        {
-            $this->formValidator = $formValidator;
-        }
-    }
-
-    public function getFormValidator()
-    {
-        if (! isset($this->formValidator))
-        {
-            return new FormValidator(self :: FORM_NAME);
-        }
-        
-        return $this->formValidator;
-    }
-
-    /**
-     *
-     * @return the $complexContentObjectPathNode
-     */
-    public function getComplexContentObjectPathNode()
-    {
-        return $this->complexContentObjectPathNode;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode $complexContentObjectPathNode
-     */
-    public function setComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
-    {
-        $this->complexContentObjectPathNode = $complexContentObjectPathNode;
-    }
+  
 }

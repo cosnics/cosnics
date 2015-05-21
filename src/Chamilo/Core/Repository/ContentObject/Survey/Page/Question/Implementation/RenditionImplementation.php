@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 
