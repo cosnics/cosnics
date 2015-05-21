@@ -5,7 +5,7 @@
 		<code>Vimeo</code>
 		<context>Chamilo\Core\Repository\ContentObject\Vimeo</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>media</category>
+		<category>Media</category>
 		<authors>
 			<author>
 				<name>Shoira Mukhsinova</name>

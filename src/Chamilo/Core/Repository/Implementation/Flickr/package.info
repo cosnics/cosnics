@@ -5,7 +5,7 @@
 		<code>Flickr</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Flickr</context>
-		<category>image</category>
+		<category>Image</category>
 		<authors>
 			<author>
 				<name>Hans De Bisschop</name>

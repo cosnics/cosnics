@@ -5,7 +5,7 @@
 		<code>Youtube</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Youtube</context>
-		<category>streaming</category>
+		<category>Streaming</category>
 		<authors>
 			<author>
 				<name>Magali Gillard</name>

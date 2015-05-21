@@ -5,7 +5,7 @@
 		<code>Scribd</code>
 		<context>Chamilo\Core\Repository\Implementation\Scribd</context>
 		<type>Chamilo\Core\Repository\Implementation</type>
-		<category>image</category>
+		<category>Image</category>
 		<authors>
 			<author>
 				<name>Gillard Magali</name>

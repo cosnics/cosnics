@@ -5,7 +5,7 @@
 		<code>Photobucket</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Photobucket</context>
-		<category>image</category>
+		<category>Image</category>
 		<authors>
 			<author>
 				<name>Magali Gillard</name>

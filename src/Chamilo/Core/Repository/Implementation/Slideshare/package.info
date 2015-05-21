@@ -5,7 +5,7 @@
 		<code>Slideshare</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Slideshare</context>
-		<category>streaming</category>
+		<category>Streaming</category>
 		<authors>
 			<author>
 				<name>Sven Francornel</name>

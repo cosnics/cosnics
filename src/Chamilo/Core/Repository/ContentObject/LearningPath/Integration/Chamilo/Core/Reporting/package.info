@@ -5,7 +5,7 @@
 		<code>Display</code>
 		<context>Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting</context>
 		<type>Chamilo\Core\Repository\ContentObject\LearningPath\Integration</type>
-		<category>core</category>
+		<category>Core</category>
 		<authors>
 		</authors>
 		<version>5.0.0</version>

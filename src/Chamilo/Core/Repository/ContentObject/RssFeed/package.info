@@ -5,7 +5,7 @@
 		<code>RssFeed</code>
 		<context>Chamilo\Core\Repository\ContentObject\RssFeed</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>news</category>
+		<category>News</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />
