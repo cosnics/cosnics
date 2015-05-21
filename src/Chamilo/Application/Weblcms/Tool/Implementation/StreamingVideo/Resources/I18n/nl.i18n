@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\streaming_video
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Streaming videos"
+TypeNameSingle = "Streaming video"
+StreamingVideoToolBrowserComponent = "Streaming videos"
+StreamingVideoToolViewerComponent = "Bekijk streaming video"
+StreamingVideoToolIntroductionPublisherComponent = "Doorblader introductietekst"
+StreamingVideoToolPublisherComponent = "Publiceer streaming video"
+StreamingVideoToolUpdaterComponent = "Werk streaming video bij"
