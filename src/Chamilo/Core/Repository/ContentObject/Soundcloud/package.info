@@ -5,7 +5,7 @@
 		<code>Soundcloud</code>
 		<context>Chamilo\Core\Repository\ContentObject\Soundcloud</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>media</category>
+		<category>Media</category>
 		<authors>
 			<author>
 				<name>Hans De Bisschop</name>

@@ -5,7 +5,7 @@
 		<code>Wikimedia</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Wikimedia</context>
-		<category>image</category>
+		<category>Image</category>
 		<authors>
 			<author>
 				<name>Hans De Bisschop</name>

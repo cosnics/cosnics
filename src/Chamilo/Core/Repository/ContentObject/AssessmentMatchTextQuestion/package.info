@@ -5,7 +5,7 @@
 		<code>AssessmentMatchTextQuestion</code>
 		<context>Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>assessment</category>
+		<category>Assessment</category>
 		<authors />
 		<version>5.0.0</version>
 		<description>Match user's response against a set of predefined answers using

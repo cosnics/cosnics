@@ -5,7 +5,7 @@
 		<code>Assignment</code>
 		<context>Chamilo\Core\Repository\ContentObject\Assignment</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>assessment</category>
+		<category>Assessment</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />

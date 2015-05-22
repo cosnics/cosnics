@@ -5,7 +5,7 @@
 		<code>PeerAssessment</code>
 		<context>Chamilo\Core\Repository\ContentObject\PeerAssessment</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>peer_assessment</category>
+		<category>PeerAssessment</category>
 		<authors>
 			<author>
 				<name>Renaat De Muynck</name>

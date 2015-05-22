@@ -6,7 +6,7 @@
 		<context>Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration\Chamilo\Application\Calendar\Extension\Personal
 		</context>
 		<type>Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration</type>
-		<category>agenda</category>
+		<category>Agenda</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />
