@@ -46,47 +46,47 @@ div.content_object.comic_book {
 }
 
 ul.tree-menu li div a.category_agenda {
-	background-image: url(../../images/ruby/category/agenda.png);
+	background-image: url(../../Images/Ruby/Category/Agenda.png);
 }
 
 ul.tree-menu li div a.category_assessment {
-	background-image: url(../../images/ruby/category/assessment.png);
+	background-image: url(../../Images/Ruby/Category/Assessment.png);
 }
 
 ul.tree-menu li div a.category_collaboration {
-	background-image: url(../../images/ruby/category/collaboration.png);
+	background-image: url(../../Images/Ruby/Category/Collaboration.png);
 }
 
 ul.tree-menu li div a.category_general {
-	background-image: url(../../images/ruby/category/general.png);
+	background-image: url(../../Images/Ruby/Category/General.png);
 }
 
 ul.tree-menu li div a.category_handbook {
-	background-image: url(../../images/ruby/category/handbook.png);
+	background-image: url(../../Images/Ruby/Category/Handbook.png);
 }
 
 ul.tree-menu li div a.category_media {
-	background-image: url(../../images/ruby/category/media.png);
+	background-image: url(../../Images/Ruby/Category/Media.png);
 }
 
 ul.tree-menu li div a.category_news {
-	background-image: url(../../images/ruby/category/news.png);
+	background-image: url(../../Images/Ruby/Category/News.png);
 }
 
 ul.tree-menu li div a.category_peer_assessment {
-	background-image: url(../../images/ruby/category/peer_assessment.png);
+	background-image: url(../../Images/Ruby/Category/PeerAssessment.png);
 }
 
 ul.tree-menu li div a.category_reference {
-	background-image: url(../../images/ruby/category/reference.png);
+	background-image: url(../../Images/Ruby/Category/Reference.png);
 }
 
 ul.tree-menu li div a.category_survey {
-	background-image: url(../../images/ruby/category/survey.png);
+	background-image: url(../../Images/Ruby/Category/Survey.png);
 }
 
 ul.tree-menu li div a.category_video_conferencing {
-	background-image: url(../../images/ruby/category/video_conferencing.png);
+	background-image: url(../../Images/Ruby/Category/VideoConferencing.png);
 }
 
 div#advanced_filter_tabs div.admin_tab {
@@ -99,7 +99,7 @@ div#advanced_filter_tabs .ui-tabs-selected {
 	background-image: none;
 }
 
-div#repository_menu,div#search_parameters {
+div#repository_menu, div#search_parameters {
 	padding: 10px;
 	margin-top: 5px;
 	border: 1px solid #EBEBEB;
@@ -143,12 +143,12 @@ div#search_parameters div.parameter#parameter_general_all {
 	right: 9px;
 	margin-top: -4px;
 	cursor: pointer;
-	background: url(../../images/ruby/action_clear_parameter.png) no-repeat;
+	background: url(../../Images/Ruby/Action/ClearParameter.png) no-repeat;
 }
 
 div#search_parameters div.parameter#parameter_general_all .clear_parameter
 	{
-	background: url(../../images/ruby/action_clear_all_parameter.png)
+	background: url(../../Images/Ruby/Action/ClearAllParameter.png)
 		no-repeat;
 }
 
