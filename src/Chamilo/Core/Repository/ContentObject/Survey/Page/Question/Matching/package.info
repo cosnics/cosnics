@@ -5,7 +5,7 @@
 		<code>Matching</code>
 		<context>Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>survey</category>
+		<category>Survey</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />

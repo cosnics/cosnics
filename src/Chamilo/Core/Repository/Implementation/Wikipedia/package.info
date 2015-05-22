@@ -5,7 +5,7 @@
 		<code>Wikipedia</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Wikipedia</context>
-		<category>reference</category>
+		<category>Reference</category>
 		<authors>
 			<author>
 				<name>Sven Francornel</name>

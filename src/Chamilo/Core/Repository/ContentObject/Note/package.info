@@ -5,7 +5,7 @@
 		<code>Note</code>
 		<context>Chamilo\Core\Repository\ContentObject\Note</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>general</category>
+		<category>General</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />

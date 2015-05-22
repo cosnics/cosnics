@@ -5,7 +5,7 @@
 		<code>GoogleDocs</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\GoogleDocs</context>
-		<category>document</category>
+		<category>Document</category>
 		<authors>
 			<author>
 				<name>Hans De Bisschop</name>

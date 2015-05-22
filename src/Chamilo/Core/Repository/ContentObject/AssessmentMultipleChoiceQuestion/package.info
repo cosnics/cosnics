@@ -5,7 +5,7 @@
 		<code>AssessmentMultipleChoiceQuestion</code>
 		<context>Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion</context>
 		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>assessment</category>
+		<category>Assessment</category>
 		<authors />
 		<version>5.0.0</version>
 		<description />

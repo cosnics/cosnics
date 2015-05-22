@@ -5,7 +5,7 @@
 		<code>Box</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Box</context>
-		<category>document</category>
+		<category>Document</category>
 		<authors>
 			<author>
 				<name>Sven Francornel</name>

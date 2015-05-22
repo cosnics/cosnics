@@ -5,7 +5,7 @@
 		<code>Hq23</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Hq23</context>
-		<category>image</category>
+		<category>Image</category>
 		<authors>
 			<author>
 				<name>Magali Gillard</name>

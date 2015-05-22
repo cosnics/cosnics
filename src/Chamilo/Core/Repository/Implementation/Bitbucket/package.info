@@ -5,7 +5,7 @@
 		<code>Bitbucket</code>
 		<type>Chamilo\Core\Repository\Implementation</type>
 		<context>Chamilo\Core\Repository\Implementation\Bitbucket</context>
-		<category>source</category>
+		<category>Source</category>
 		<authors>
 			<author>
 				<name>Magali Gillard</name>
