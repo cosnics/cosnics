@@ -1,0 +1,147 @@
+div.mini_calendar {
+	float: left;
+	width: 250px;
+	padding-right: 10px;
+}
+
+div.normal_calendar {
+	margin-left: 260px;
+}
+
+div.event_publication_info {
+	text-align: right;
+	font-style: italic;
+	margin: 1em 0;
+}
+
+.event-source-identifier-framed {
+	border: 1px solid #7f7f7f;
+}
+
+.event-source-identifier-0 {
+	background-color: #c61a3b;
+}
+
+.event-source-identifier-1,.event-source-identifier-19,.event-source-identifier-37,.event-source-identifier-55,.event-source-identifier-73
+	{
+	background-color: #DEDE78;
+}
+
+.event-source-identifier-2,.event-source-identifier-20,.event-source-identifier-38,.event-source-identifier-56,.event-source-identifier-74
+	{
+	background-color: #78DE78;
+}
+
+.event-source-identifier-3,.event-source-identifier-21,.event-source-identifier-39,.event-source-identifier-57,.event-source-identifier-75
+	{
+	background-color: #789ADE;
+}
+
+.event-source-identifier-4,.event-source-identifier-22,.event-source-identifier-40,.event-source-identifier-58,.event-source-identifier-76
+	{
+	background-color: #DE78DE;
+}
+
+.event-source-identifier-5,.event-source-identifier-23,.event-source-identifier-41,.event-source-identifier-59,.event-source-identifier-77
+	{
+	background-color: #DEBC78;
+}
+
+.event-source-identifier-6,.event-source-identifier-24,.event-source-identifier-42,.event-source-identifier-60,.event-source-identifier-78
+	{
+	background-color: #9ADE78;
+}
+
+.event-source-identifier-7,.event-source-identifier-25,.event-source-identifier-43,.event-source-identifier-61,.event-source-identifier-79
+	{
+	background-color: #DF7979;
+}
+
+.event-source-identifier-8,.event-source-identifier-26,.event-source-identifier-44,.event-source-identifier-62,.event-source-identifier-80
+	{
+	background-color: #78BCDE;
+}
+
+.event-source-identifier-9,.event-source-identifier-27,.event-source-identifier-45,.event-source-identifier-63,.event-source-identifier-81
+	{
+	background-color: #BC78DE;
+}
+
+.event-source-identifier-10,.event-source-identifier-28,.event-source-identifier-46,.event-source-identifier-64,.event-source-identifier-82
+	{
+	background-color: #BCDE78;
+}
+
+.event-source-identifier-11,.event-source-identifier-29,.event-source-identifier-47,.event-source-identifier-65,.event-source-identifier-83
+	{
+	background-color: #DE78BC;
+}
+
+.event-source-identifier-12,.event-source-identifier-30,.event-source-identifier-48,.event-source-identifier-66,.event-source-identifier-84
+	{
+	background-color: #78DE9A;
+}
+
+.event-source-identifier-13,.event-source-identifier-31,.event-source-identifier-49,.event-source-identifier-67,.event-source-identifier-85
+	{
+	background-color: #DE9A78;
+}
+
+.event-source-identifier-14,.event-source-identifier-32,.event-source-identifier-50,.event-source-identifier-68,.event-source-identifier-86
+	{
+	background-color: #78DEBC;
+}
+
+.event-source-identifier-15,.event-source-identifier-33,.event-source-identifier-51,.event-source-identifier-69,.event-source-identifier-87
+	{
+	background-color: #7878DE;
+}
+
+.event-source-identifier-16,.event-source-identifier-34,.event-source-identifier-52,.event-source-identifier-70,.event-source-identifier-88
+	{
+	background-color: #DE789A;
+}
+
+.event-source-identifier-17,.event-source-identifier-35,.event-source-identifier-53,.event-source-identifier-71,.event-source-identifier-89
+	{
+	background-color: #9A78DE;
+}
+
+.event-source-identifier-18,.event-source-identifier-36,.event-source-identifier-54,.event-source-identifier-72,.event-source-identifier-90
+	{
+	background-color: #78DEDE;
+}
+
+.event-source-identifier-19,.event-source-identifier-20,.event-source-identifier-21,.event-source-identifier-22,.event-source-identifier-23,.event-source-identifier-24,.event-source-identifier-25,.event-source-identifier-26,.event-source-identifier-27,.event-source-identifier-28,.event-source-identifier-29,.event-source-identifier-30,.event-source-identifier-31,.event-source-identifier-32,.event-source-identifier-33,.event-source-identifier-34,.event-source-identifier-35,.event-source-identifier-36
+	{
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,
+		255, 255, 1) 2px, rgba(255, 255, 255, 1) 4px);
+}
+
+.event-source-identifier-37,.event-source-identifier-38,.event-source-identifier-39,.event-source-identifier-40,.event-source-identifier-41,.event-source-identifier-42,.event-source-identifier-43,.event-source-identifier-44,.event-source-identifier-45,.event-source-identifier-46,.event-source-identifier-47,.event-source-identifier-48,.event-source-identifier-49,.event-source-identifier-50,.event-source-identifier-51,.event-source-identifier-52,.event-source-identifier-53,.event-source-identifier-54
+	{
+	background-image: radial-gradient(white 15%, transparent 16%),
+		radial-gradient(white 15%, transparent 16%);
+	background-size: 14px 14px;
+	background-position: 0 0, 7px 7px;
+}
+
+.event-source-identifier-55,.event-source-identifier-56,.event-source-identifier-57,.event-source-identifier-58,.event-source-identifier-59,.event-source-identifier-60,.event-source-identifier-61,.event-source-identifier-62,.event-source-identifier-63,.event-source-identifier-64,.event-source-identifier-65,.event-source-identifier-66,.event-source-identifier-67,.event-source-identifier-68,.event-source-identifier-69,.event-source-identifier-70,.event-source-identifier-71,.event-source-identifier-72
+	{
+	background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%,
+		white 75%, white),
+		linear-gradient(-45deg, white 25%, transparent 25%, transparent 75%,
+		white 75%, white);
+	background-size: 7px 7px;
+}
+
+.event-source-identifier-73,.event-source-identifier-74,.event-source-identifier-75,.event-source-identifier-76,.event-source-identifier-77,.event-source-identifier-78,.event-source-identifier-79,.event-source-identifier-80,.event-source-identifier-81,.event-source-identifier-82,.event-source-identifier-83,.event-source-identifier-84,.event-source-identifier-85,.event-source-identifier-86,.event-source-identifier-87,.event-source-identifier-88,.event-source-identifier-89,.event-source-identifier-90
+	{
+	background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, 1)
+		50%);
+	background-size: 4px 4px;
+}
+
+.event-source-identifier-faded {
+	opacity: 0.5;
+}

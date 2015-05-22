@@ -1,0 +1,426 @@
+/*****************************************************
+ *  ADMIN STYLES                                     *
+ *****************************************************/
+/* Platform admin overview */
+div.admin {
+	float: left;
+	width: 49%;
+	margin: 10px 20px 10px 0px;
+}
+
+div.admin_section {
+	clear: both;
+	padding: 10px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	background-color: #f6f6f6;
+}
+
+div.admin_header {
+	clear: both;
+}
+
+div.admin_header span.category {
+	float: left;
+	background-color: #f6f6f6;
+	font-weight: bold;
+	color: #9e021b;
+	padding: 5px 15px 0px 15px;
+	border: 1px solid #ebebeb;
+	border-bottom: 0px solid #efefef;
+	margin: 0px 0px -1px 15px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+	/*
+	background-image: url('../../images/ruby/admin/background_tab.png');
+	background-repeat: repeat-x;
+	*/
+}
+
+div.admin_header span.category img {
+	margin: 0px 5px 0px 0px;
+}
+
+div.admin_header span.category span.title {
+	color: #B1071C;
+	font-size: 14px;
+}
+
+div.admin_header div.admin_search {
+	float: right;
+	margin: -10px 15px 0px 0px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #9e021b;
+}
+
+div.admin_section div.actions {
+	clear: both;
+	text-align: center;
+}
+
+div.action {
+	float: left;
+	text-align: center;
+	padding: 5px 10px 5px 10px;
+	margin: 0;
+}
+
+div.action img {
+	margin: 8px 15px 8px 15px;
+}
+
+/*
+ * Various
+ */
+div.admin_search_form {
+	padding: 10px 0px 0px 0px;
+	margin: 0px;
+	height: 48px;
+}
+
+div.admin_search_form div.row {
+	clear: none;
+	float: left;
+	padding: 0px;
+}
+
+div.admin_search_form div.row div.formw {
+	float: none;
+	width: auto;
+}
+
+div.admin_search_form div.row div.formw button {
+	margin-top: -2px;
+	margin-left: 10px;
+}
+
+.tab {
+	border: 1px solid #ebebeb;
+}
+
+#tabs ul {
+	display: none;
+}
+
+div.vertical_action {
+	clear: both;
+	width: 100%;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+	border-top: 1px solid #EBEBEB;
+}
+
+div.vertical_action div.icon {
+	float: left;
+	width: 64px;
+	height: 64px;
+}
+
+div.vertical_action div.icon img {
+	margin: 16px;
+}
+
+div.vertical_action div.description {
+	margin-left: 64px;
+}
+
+div.vertical_action div.description .binary_checkbox {
+	margin-top: 10px;
+}
+
+div.vertical_action h4 {
+	margin: 0px;
+	padding: 0px;
+}
+
+span.active {
+	color: green;
+}
+
+span.inactive {
+	color: red;
+}
+
+/*********************************************
+ * jQuery CSS: Tabs
+ *********************************************/
+.ui-tabs {
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-panel {
+	border: 1px solid #ebebeb;
+	background-color: #FAFCFC;
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-nav {
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+}
+
+.ui-widget {
+	font-family: Ubuntu, verdana, sans-serif;
+}
+
+.ui-widget-content {
+	border: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-widget-header {
+	border-width: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+	border: 0px solid #c5dbec;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus,
+	.ui-widget-content .ui-state-focus {
+	border: 0px solid #79b7e7;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active {
+	border: 1px solid #ebebeb;
+}
+
+/*********************************************
+ * jQuery CSS: Scrollable actions in Tabs
+ *********************************************/ /* 
+	root element for the scrollable. 
+	when scrolling occurs this element stays still. 
+*/
+div.scrollable {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+/* 
+	root element for scrollable items. Must be absolutely positioned
+	and it should have a super large width to accomodate scrollable items.
+	it's enough that you set width and height for the root element and
+	not for this element.
+*/
+div.scrollable div.items {
+	clear: both;
+	width: 100%;
+}
+
+/* this makes it possible to add next button beside scrollable */
+div.scrollable {
+	float: left;
+}
+
+/* prev, next, prevPage and nextPage buttons */
+a.prev, a.next, a.prevPage, a.nextPage {
+	display: none;
+	width: 16px;
+	height: 16px;
+	background:
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Top.png)
+		no-repeat;
+	background-position: 0px -16px;
+	float: left;
+	/*position: relative;*/
+	margin-left: 50%;
+	cursor: pointer;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.hover, div.vertical_action:hover {
+	background-color: #f2f4f4;
+}
+
+/* mouseover state */
+a.prev:hover, a.next:hover, a.prevPage:hover, a.nextPage:hover {
+	background-position: 0px -32px;
+}
+
+/* disabled navigational button */
+a.disabled {
+	cursor: default;
+	background-position: 0px 0px;
+	/*visibility: hidden !important;*/
+}
+
+a.disabled:hover {
+	background-position: 0px 0px;
+}
+
+/* next button uses another background image */
+a.next, a.nextPage {
+	background-image:
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Bottom.png);
+	clear: right;
+}
+
+/*********** navigator ***********/
+/* position and dimensions of the navigator */
+div.navi {
+	margin-left: 328px;
+	width: 200px;
+	height: 20px;
+}
+
+/* items inside navigator */
+div.navi a {
+	width: 8px;
+	height: 8px;
+	float: left;
+	margin: 3px;
+	background:
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Navigator.png)
+		0 0 no-repeat;
+	cursor: pointer;
+}
+
+/* mouseover state */
+div.navi a:hover {
+	background-position: 0 -8px;
+}
+
+/* active state (current page state) */
+div.navi a.active {
+	background-position: 0 -16px;
+}
+
+/*********************************************
+ * jQuery CSS: Scrollable tabs
+ *********************************************/
+.ui-tabs-paging-next {
+	float: right;
+}
+
+.ui-tabs-paging-prev, .ui-tabs-paging-next {
+	position: relative;
+	top: 10px;
+	padding: 0px;
+	margin: 0px;
+	width: 16px;
+	height: 16px;
+	background-color: transparent;
+	background:
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Left.png)
+		no-repeat;
+}
+
+.ui-tabs-paging-next {
+	background:
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Right.png)
+		no-repeat;
+}
+
+.ui-tabs-paging-next:hover, .ui-tabs-paging-next:focus,
+	.ui-tabs-paging-next:active, .ui-tabs-paging-prev:hover,
+	.ui-tabs-paging-prev:focus, .ui-tabs-paging-prev:active {
+	background-position: 0px -16px;
+}
+
+.ui-tabs-paging-disabled {
+	visibility: hidden;
+}
+
+#progressbox {
+	clear: both;
+	position: relative;
+	left: 0px;
+	right: 0px;
+	padding: 0px 1% 0px 1%;
+	margin-bottom: 10px;
+	color: #444444;
+	background-color: #f2f2f2;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #dcdcdc;
+	margin-left: -1%;
+	margin-right: -1%;
+}
+
+#progressbox ul, #progresstrail li {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#progresstrail {
+	float: left;
+	height: 26px;
+	overflow: hidden;
+}
+
+#progresstrail li {
+	float: left;
+	line-height: 26px;
+	/*padding-left: 10px;*/
+	color: #777;
+}
+
+#progresstrail li a {
+	display: block;
+	padding: 0 15px 0 15px;
+	background-image:
+		url(../../../../Configuration/Resources/Images/Ruby/Background/Breadcrumb.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+	color: #a8a8a8;
+	cursor: default;
+}
+
+#progresstrail li.active a {
+	color: #444444;
+}
+
+.installation-step {
+	clear: both;
+	border: 1px solid #F0F0F0;
+	margin: 0 0 1em 0;
+	padding: 10px 10px 10px 42px;
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-color: #fafafa;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+}
+
+.installation-step-collapsed {
+	clear: none;
+	float: left;
+	height: 22px;
+	width: 22px;
+	padding: 10px;
+	margin-right: 1em;
+	overflow: hidden;
+}
+
+.installation-step-successful { /*	border: 1px solid #339900;*/
+	/*	background-color: #ddffaa;*/
+	/*	color: #006600;*/
+	
+}
+
+.installation-step-failed {
+	background-color: #FFD1D1;
+	border: 1px solid #ff9b9d;
+}
+
+.installation-step div {
+	display: none;
+}
+
+.installation-step div.title {
+	font-weight: bold;
+	border-bottom: 1px solid #CCCCCC;
+	width: 100%;
+	margin-bottom: 1em;
+}

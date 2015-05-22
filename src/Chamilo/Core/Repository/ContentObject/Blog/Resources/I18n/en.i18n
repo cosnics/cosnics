@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\blog
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+TypeCategory = "Content Objects"
+Properties = "Properties"
+BlogLayout = "Lay-out"
+AuthorUnknown = "Unknown author"
+Attachments = "Attachments"
+BlogLayoutNotExists = "The selected blog lay-out doesn't exist"
+Title = "Title"
+Description = "Description"
+BlogToolBrowserComponent = "Browser"
+BlogToolIntroductionPublisherComponent = "Publish"
+BlogToolUpdaterComponent = "Update"
+BlogToolViewerComponent = "Show"
+PersonalBlogLayout = "Lay-out personal blog"
