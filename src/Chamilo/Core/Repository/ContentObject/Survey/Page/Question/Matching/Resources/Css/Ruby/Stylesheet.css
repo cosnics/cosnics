@@ -1,19 +1,19 @@
 @CHARSET "ISO-8859-1";
 
 ul.tree-menu li div a.survey_matching_question {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_survey_matching_question {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.survey_matching_question_checked {
-	background-image: url(../../images/ruby/logo/16_checked.png);
+	background-image: url(../../Images/Ruby/Logo/16_checked.png);
 }
 
 ul.tree-menu li div a.type_survey_matching_question_checked {
-	background-image: url(../../images/ruby/logo/16_checked.png);
+	background-image: url(../../Images/Ruby/Logo/16_checked.png);
 }
 
 th.info {

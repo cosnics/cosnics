@@ -111,7 +111,7 @@
 	float: left;
 	padding-top: 88px;
 	background-position: 50% 20px;
-	background-image: url(../../images/ruby/logo/48.png);
+	background-image: url(../../Images/Ruby/Logo/48.png);
 	background-repeat: no-repeat;
 }
 
@@ -291,9 +291,9 @@ table.collapsed tr.collapsable {
 }
 
 ul.tree-menu li div a.wiki {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_wiki {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }

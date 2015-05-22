@@ -8,11 +8,11 @@ div.manage {
 	padding-bottom: 10px;
 }
 
-div.manage ul.toolbar,div.manage ul.toolbar_horizontal {
+div.manage ul.toolbar, div.manage ul.toolbar_horizontal {
 	float: none;
 }
 
-div.manage ul.toolbar li,div.manage ul.toolbar_horizontal li {
+div.manage ul.toolbar li, div.manage ul.toolbar_horizontal li {
 	float: none;
 	display: inline;
 }
@@ -310,7 +310,7 @@ div#portal-block-container div#list div#packages input {
 	margin: 0px;
 	height: 20px;
 	color: #bbbbbb;
-	background: white url(../../images/ruby/action_search_widget.png)
+	background: white url(../../Images/Ruby/Action/SearchWidget.png)
 		no-repeat 2px 2px;
 }
 
@@ -346,7 +346,7 @@ div#portal-block-container div#list div#packages div#packages-list span.package#
 	{
 	text-transform: uppercase;
 	font-size: 10px;
-	/*	background-image: url(../../images/ruby/block_show_all.png);*/
+	/*	background-image: url(../../Images/Ruby/Block/ShowAll.png);*/
 	line-height: 16px;
 }
 
@@ -368,7 +368,7 @@ div#portal-block-container div#list div#packages div#packages-list span.selected
 	float: right;
 	width: 16px;
 	height: 16px;
-	background: url(../../images/ruby/action_selected_package.png) no-repeat
+	background: url(../../Images/Ruby/Action/SelectedPackage.png) no-repeat
 		center center;
 }
 
@@ -377,7 +377,7 @@ div#portal-block-container div#list div#packages div#packages-list span.selected
 	float: right;
 	width: 16px;
 	height: 16px;
-	background: url(../../images/ruby/action_remove_package_filter.png)
+	background: url(../../Images/Ruby/Action/RemovePackageFilter.png)
 		no-repeat center center;
 }
 
@@ -424,19 +424,19 @@ div#portal-block-container div#list div#components div.component div.button
 	height: 26px;
 	background-position: top left;
 	background-repeat: no-repeat;
-	background-image: url(../../images/ruby/block_add.png);
+	background-image: url(../../Images/Ruby/BlockAdd.png);
 }
 
 div#portal-block-container div#list div#components div.component div.button:hover
 	{
-	background-image: url(../../images/ruby/block_add_hover.png);
+	background-image: url(../../Images/Ruby/Block/AddHover.png);
 }
 
 div#portal-block-container div#list div#components div.component div.content
 	{
 	width: 64px;
 	height: 64px;
-	background-image: url(../../images/ruby/block_background.png);
+	background-image: url(../../Images/Ruby/Block/Background.png);
 	background-position: top center;
 	background-repeat: no-repeat;
 }
@@ -462,9 +462,8 @@ div#portal-block-container div#list div#components div.component div.title
 
 div#portal-block-container div#remove-block-container {
 	width: 100%;
-	background: #bbbbbb
-		url(../../images/ruby/background_block_add_close.png) no-repeat center
-		center;
+	background: #bbbbbb url(../../Images/Ruby/Background/BlockAddClose.png)
+		no-repeat center center;
 	border-top: 1px solid #b1b1b1;
 	border-bottom: 1px solid #b1b1b1;
 	height: 9px;
@@ -492,7 +491,7 @@ div#portal-block-container div#remove-block-container {
 }
 
 a.home-modal-close {
-	background: url(../../images/ruby/action_close_form.png) no-repeat;
+	background: url(../../Images/Ruby/Action/CloseForm.png) no-repeat;
 	width: 16px;
 	height: 16px;
 	display: inline;

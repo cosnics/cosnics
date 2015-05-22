@@ -4,7 +4,8 @@
 table.forum {
 	background-color: #A9B8C2;
 	width: 100%;
-	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
+		sans-serif;
 	font-size: 90%;
 }
 
@@ -20,7 +21,7 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #C7D0D7;
-	background-image: url('../../images/ruby/backgrounds/cellpic1.gif');
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic1.gif');
 	height: 28px;
 	border: 0 none;
 	margin: 0;
@@ -29,13 +30,13 @@ table.forum td.category {
 }
 
 table.forum td.category_right {
-	background-image: url('../../images/ruby/backgrounds/cellpic2.jpg');
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic2.jpg');
 	height: 28px;
 }
 
 table.forum th {
 	background-color: #006699;
-	background-image: url(../../images/ruby/cellpic3.gif);
+	background-image: url(../../Images/Ruby/Backgrounds/Cellpic3.gif);
 	color: #FFA34F;
 	font-weight: bold;
 	padding: 7px 5px;
@@ -54,7 +55,8 @@ table.forum td.spacer {
 table.forum {
 	background-color: #c6d8ec;
 	width: 100%;
-	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
+		sans-serif;
 	font-size: 90%;
 }
 
@@ -70,7 +72,7 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #aec7e4;
-	/*background-image: url('../../images/ruby/backgrounds/cellpic1.png');*/
+	/*background-image: url('../../Images/Ruby/Backgrounds/Cellpic1.png');*/
 	background-image: none;
 	height: 28px;
 	border: 0 none;
@@ -80,13 +82,13 @@ table.forum td.category {
 }
 
 table.forum td.category_right {
-	background-image: url('../../images/ruby/backgrounds/cellpic2.png');
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic2.png');
 	height: 28px;
 }
 
 table.forum th {
 	background-color: #6694cc;
-	/*background-image:url('../../images/ruby/backgrounds/cellpic3.png');*/
+	/*background-image:url('../../Images/Ruby/Backgrounds/Cellpic3.png');*/
 	background-image: none;
 	color: #2b3f57;
 	font-weight: bold;
@@ -100,7 +102,7 @@ table.forum td.spacer {
 	height: 5px;
 }
 
-table.forum .quotetitle,.attachtitle {
+table.forum .quotetitle, .attachtitle {
 	background-color: #A9B8C2;
 	border-color: #A9B8C2;
 	border-style: solid;
@@ -112,7 +114,7 @@ table.forum .quotetitle,.attachtitle {
 	padding: 4px;
 }
 
-table.forum .quotecontent,.attachcontent {
+table.forum .quotecontent, .attachcontent {
 	background-color: #FAFAFA;
 	border-color: #A9B8C2;
 	border-style: solid;
@@ -128,9 +130,9 @@ table.forum .quotecontent,.attachcontent {
 }
 
 ul.tree-menu li div a.forum {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_forum {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }

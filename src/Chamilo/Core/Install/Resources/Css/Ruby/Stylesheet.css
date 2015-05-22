@@ -179,16 +179,16 @@ span.inactive {
 	background-color: transparent;
 }
 
-.ui-state-default,.ui-widget-content .ui-state-default {
+.ui-state-default, .ui-widget-content .ui-state-default {
 	border: 0px solid #c5dbec;
 }
 
-.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus
-	{
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus,
+	.ui-widget-content .ui-state-focus {
 	border: 0px solid #79b7e7;
 }
 
-.ui-state-active,.ui-widget-content .ui-state-active {
+.ui-state-active, .ui-widget-content .ui-state-active {
 	border: 1px solid #ebebeb;
 }
 
@@ -221,12 +221,12 @@ div.scrollable {
 }
 
 /* prev, next, prevPage and nextPage buttons */
-a.prev,a.next,a.prevPage,a.nextPage {
+a.prev, a.next, a.prevPage, a.nextPage {
 	display: none;
 	width: 16px;
 	height: 16px;
 	background:
-		url(../../../../configuration/resources/images/ruby/plugin/jquery/scrollable/top.png)
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Top.png)
 		no-repeat;
 	background-position: 0px -16px;
 	float: left;
@@ -237,12 +237,12 @@ a.prev,a.next,a.prevPage,a.nextPage {
 	margin-top: 10px;
 }
 
-.hover,div.vertical_action:hover {
+.hover, div.vertical_action:hover {
 	background-color: #f2f4f4;
 }
 
 /* mouseover state */
-a.prev:hover,a.next:hover,a.prevPage:hover,a.nextPage:hover {
+a.prev:hover, a.next:hover, a.prevPage:hover, a.nextPage:hover {
 	background-position: 0px -32px;
 }
 
@@ -258,9 +258,9 @@ a.disabled:hover {
 }
 
 /* next button uses another background image */
-a.next,a.nextPage {
+a.next, a.nextPage {
 	background-image:
-		url(../../../../configuration/resources/images/ruby/plugin/jquery/scrollable/bottom.png);
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Bottom.png);
 	clear: right;
 }
 
@@ -279,7 +279,7 @@ div.navi a {
 	float: left;
 	margin: 3px;
 	background:
-		url(../../../../configuration/resources/images/ruby/plugin/jquery/scrollable/navigator.png)
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Navigator.png)
 		0 0 no-repeat;
 	cursor: pointer;
 }
@@ -301,7 +301,7 @@ div.navi a.active {
 	float: right;
 }
 
-.ui-tabs-paging-prev,.ui-tabs-paging-next {
+.ui-tabs-paging-prev, .ui-tabs-paging-next {
 	position: relative;
 	top: 10px;
 	padding: 0px;
@@ -310,18 +310,19 @@ div.navi a.active {
 	height: 16px;
 	background-color: transparent;
 	background:
-		url(../../../../configuration/resources/images/ruby/plugin/jquery/scrollable/left.png)
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Left.png)
 		no-repeat;
 }
 
 .ui-tabs-paging-next {
 	background:
-		url(../../../../configuration/resources/images/ruby/plugin/jquery/scrollable/right.png)
+		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Right.png)
 		no-repeat;
 }
 
-.ui-tabs-paging-next:hover,.ui-tabs-paging-next:focus,.ui-tabs-paging-next:active,.ui-tabs-paging-prev:hover,.ui-tabs-paging-prev:focus,.ui-tabs-paging-prev:active
-	{
+.ui-tabs-paging-next:hover, .ui-tabs-paging-next:focus,
+	.ui-tabs-paging-next:active, .ui-tabs-paging-prev:hover,
+	.ui-tabs-paging-prev:focus, .ui-tabs-paging-prev:active {
 	background-position: 0px -16px;
 }
 
@@ -344,7 +345,7 @@ div.navi a.active {
 	margin-right: -1%;
 }
 
-#progressbox ul,#progresstrail li {
+#progressbox ul, #progresstrail li {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
@@ -367,7 +368,7 @@ div.navi a.active {
 	display: block;
 	padding: 0 15px 0 15px;
 	background-image:
-		url(../../../../configuration/resources/images/ruby/background_breadcrumb.png);
+		url(../../../../Configuration/Resources/Images/Ruby/Background/Breadcrumb.png);
 	background-repeat: no-repeat;
 	background-position: right center;
 	color: #a8a8a8;

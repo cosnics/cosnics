@@ -57,7 +57,6 @@ div.question div.title {
 		url(../../../../../../common/libraries/resources/images/ruby/background_table_header.png)
 		repeat-x;
 } */
-
 div.question div.title div.number {
 	float: left;
 	text-align: center;
@@ -71,7 +70,7 @@ div.question div.title div.text {
 	margin: 0px 0px 0px 50px;
 }
 
-div.question div.title div.text div.bevel,div.question div.title div.number div.bevel
+div.question div.title div.text div.bevel, div.question div.title div.number div.bevel
 	{
 	padding: 6px 10px 6px 10px;
 	border-left: 1px solid white;
@@ -129,7 +128,8 @@ div.question div.answer div.splitter {
 	font-size: 9px;
 	color: gray;
 	font-weight: bold;
-	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
+		sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	padding: 3px 10px 3px 10px;
@@ -159,19 +159,19 @@ div.question div.answer div.caption {
 }
 
 ul.tree-menu li div a.survey {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_survey {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.survey_context {
-	background-image: url(../../images/ruby/context_logo/16.png);
+	background-image: url(../../Images/Ruby/ContextLogo/16.png);
 }
 
 ul.tree-menu li div a.type_survey_context {
-	background-image: url(../../images/ruby/context_logo/16.png);
+	background-image: url(../../Images/Ruby/ContextLogo/16.png);
 }
 
 .tab {

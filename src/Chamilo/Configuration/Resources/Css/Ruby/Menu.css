@@ -64,7 +64,7 @@ div.applications li {
 }
 
 .navbar ul li.current {
-	background: #f2f2f2 url(../../images/ruby/background_header_current.png)
+	background: #f2f2f2 url(../../Images/Ruby/Background/HeaderCurrent.png)
 		repeat-x top left;
 	border-left: 1px solid white;
 	border-top: 1px solid white;

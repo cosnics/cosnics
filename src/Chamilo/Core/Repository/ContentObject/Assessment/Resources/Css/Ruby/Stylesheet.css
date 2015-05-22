@@ -49,10 +49,10 @@ div.question div.title {
 	/*margin-bottom: 10px;*/
 }
 
-div.question div.title div.number,div.question div.title div.text {
+div.question div.title div.number, div.question div.title div.text {
 	border: 1px solid #CECECE;
 	background: #9e021b
-		url(../../../../../../configuration/resources/images/ruby/background_table_header.png)
+		url(../../../../../../Configuration/Resources/Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 
@@ -69,7 +69,7 @@ div.question div.title div.text {
 	margin: 0px 0px 0px 50px;
 }
 
-div.question div.title div.text div.bevel,div.question div.title div.number div.bevel
+div.question div.title div.text div.bevel, div.question div.title div.number div.bevel
 	{
 	padding: 6px 10px 6px 10px;
 	border-left: 1px solid white;
@@ -123,7 +123,8 @@ div.question div.answer div.splitter {
 	color: #9e021b;
 	font-weight: bold;
 	font-size: 11px;
-	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
+		sans-serif;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	padding: 3px 10px 3px 10px;
@@ -149,7 +150,7 @@ div.question div.answer div.caption {
 	margin-left: 20px;
 }
 
-#hotspot_image,.hotspot_image {
+#hotspot_image, .hotspot_image {
 	position: relative;
 }
 
@@ -164,24 +165,24 @@ div.question div.answer div.caption {
 	border: 1px solid black;
 }
 
-#hotspot_container,.hotspot_container {
+#hotspot_container, .hotspot_container {
 	float: left;
 	position: relative;
 	padding: 1px;
 	background-color: #CECECE;
 }
 
-#hotspot_marking,.hotspot_marking {
+#hotspot_marking, .hotspot_marking {
 	margin-bottom: 10px;
 }
 
-#hotspot_marking .colour_box,#hotspot_marking .colour_box_label,.hotspot_marking .colour_box,.hotspot_marking .colour_box_label
-	{
+#hotspot_marking .colour_box, #hotspot_marking .colour_box_label,
+	.hotspot_marking .colour_box, .hotspot_marking .colour_box_label {
 	float: left;
 	font-weight: bold;
 }
 
-#hotspot_marking .colour_box,.hotspot_marking .colour_box {
+#hotspot_marking .colour_box, .hotspot_marking .colour_box {
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -192,7 +193,7 @@ div.description_hotspot {
 	border-top: 0px solid white;
 }
 
-div.description_hotspot #hotspot_marking,div.description_hotspot .hotspot_marking
+div.description_hotspot #hotspot_marking, div.description_hotspot .hotspot_marking
 	{
 	margin-top: 10px;
 	margin-bottom: 0px;
@@ -206,7 +207,7 @@ img.save_hotspot {
 	cursor: pointer;
 }
 
-div.time_left,div.time_left_alert {
+div.time_left, div.time_left_alert {
 	float: right;
 	padding: 6px 10px 6px 10px;
 	border: 1px solid #CECECE;
@@ -227,18 +228,18 @@ div.time {
 }
 
 ul.tree-menu li div a.assessment {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 ul.tree-menu li div a.type_assessment {
-	background-image: url(../../images/ruby/logo/16.png);
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
-button.hint,a.hint_button {
-	background-image: url(../../images/ruby/buttons/button_hint.png);
+button.hint, a.hint_button {
+	background-image: url(../../Images/Ruby/Buttons/Hint.png);
 }
 
-img.hint,img.hint_disabled {
+img.hint, img.hint_disabled {
 	vertical-align: text-bottom;
 	cursor: pointer;
 }
