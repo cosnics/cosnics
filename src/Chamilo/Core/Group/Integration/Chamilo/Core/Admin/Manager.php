@@ -24,7 +24,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('List', null, Utilities :: COMMON_LIBRARIES),
             Translation :: get('ListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/List'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -35,7 +35,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             Translation :: get('CreateDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Add'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Add'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -45,7 +45,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
             Translation :: get('ExportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Export'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Export'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -55,7 +55,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
             Translation :: get('ImportDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Import'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -65,7 +65,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('ImportGroupUsers'),
             Translation :: get('ImportGroupUsersDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Import'),
             $redirect->getUrl());
 
         $redirect = new Redirect(

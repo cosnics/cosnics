@@ -23,7 +23,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('List'),
             Translation :: get('ListDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
+            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/List'),
             $redirect->getUrl());
 
         return new Actions(\Chamilo\Core\Help\Manager :: context(), $links);
