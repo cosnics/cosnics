@@ -116,6 +116,24 @@ class Workspace extends DataClass implements WorkspaceInterface
 
     /**
      *
+     * @return integer
+     */
+    public function getCreationDate()
+    {
+        return $this->get_default_property(self :: PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     *
+     * @param integer $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->set_default_property(self :: PROPERTY_CREATION_DATE, $creationDate);
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Storage\DataClass\DataClass::get_dependencies()
      */
     public function get_dependencies()

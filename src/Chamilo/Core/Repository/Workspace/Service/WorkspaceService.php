@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 /**
  *
@@ -89,5 +90,54 @@ class WorkspaceService
     public function getUserPersonalWorkspace(User $user)
     {
         return new PersonalWorkspace($user);
+    }
+
+    /**
+     *
+     * @param string[] $workspaceProperties
+     * @return boolean
+     */
+    public function createWorkspace($workspaceProperties)
+    {
+        $workspace = new Workspace();
+        $this->setWorkspaceProperties($workspace, $workspaceProperties);
+
+        if (! $workspace->create())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param string[] $workspaceProperties
+     * @return boolean
+     */
+    public function updateWorkspace(Workspace $workspace, $workspaceProperties)
+    {
+        $this->setWorkspaceProperties($workspace, $workspaceProperties);
+
+        if (! $workspace->update())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param string[] $workspaceProperties
+     */
+    private function setWorkspaceProperties(Workspace $workspace, $workspaceProperties)
+    {
+        $workspace->setName($workspaceProperties[Workspace :: PROPERTY_NAME]);
+        $workspace->setDescription($workspaceProperties[Workspace :: PROPERTY_DESCRIPTION]);
+        $workspace->setCreationDate($workspaceProperties[Workspace :: PROPERTY_CREATION_DATE]);
+        $workspace->setCreatorId($workspaceProperties[Workspace :: PROPERTY_CREATOR_ID]);
     }
 }
