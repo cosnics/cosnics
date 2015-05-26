@@ -226,7 +226,7 @@ a.prev, a.next, a.prevPage, a.nextPage {
 	width: 16px;
 	height: 16px;
 	background:
-		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Top.png)
+		url(../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Top.png)
 		no-repeat;
 	background-position: 0px -16px;
 	float: left;
@@ -260,7 +260,7 @@ a.disabled:hover {
 /* next button uses another background image */
 a.next, a.nextPage {
 	background-image:
-		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Bottom.png);
+		url(../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Bottom.png);
 	clear: right;
 }
 
@@ -279,7 +279,7 @@ div.navi a {
 	float: left;
 	margin: 3px;
 	background:
-		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Navigator.png)
+		url(../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Navigator.png)
 		0 0 no-repeat;
 	cursor: pointer;
 }
@@ -310,13 +310,13 @@ div.navi a.active {
 	height: 16px;
 	background-color: transparent;
 	background:
-		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Left.png)
+		url(../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Left.png)
 		no-repeat;
 }
 
 .ui-tabs-paging-next {
 	background:
-		url(../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Right.png)
+		url(../../../../../Configuration/Resources/Images/Ruby/Plugin/Jquery/Scrollable/Right.png)
 		no-repeat;
 }
 
@@ -368,7 +368,7 @@ div.navi a.active {
 	display: block;
 	padding: 0 15px 0 15px;
 	background-image:
-		url(../../../../Configuration/Resources/Images/Ruby/Background/Breadcrumb.png);
+		url(../../../../../Configuration/Resources/Images/Ruby/Background/Breadcrumb.png);
 	background-repeat: no-repeat;
 	background-position: right center;
 	color: #a8a8a8;
