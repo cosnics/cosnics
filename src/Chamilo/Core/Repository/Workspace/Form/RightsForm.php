@@ -7,6 +7,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 
 /**
  *
@@ -24,11 +25,19 @@ class RightsForm extends FormValidator
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
+     */
+    private $entityRelation;
+
+    /**
+     *
      * @param string $formUrl
      */
-    public function __construct($formUrl)
+    public function __construct($formUrl, WorkspaceEntityRelation $entityRelation)
     {
         parent :: __construct('rights', 'post', $formUrl);
+
+        $this->entityRelation = $entityRelation;
 
         $this->build_form();
         $this->setDefaults();
@@ -91,7 +100,18 @@ class RightsForm extends FormValidator
 
     public function setDefaults($defaults = array())
     {
-        $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
+        if ($this->entityRelation instanceof WorkspaceEntityRelation)
+        {
+            // TODO: Add logic to determine the right default value
+            $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
+
+            $defaults[self :: PROPERTY_USE] = $this->entityRelation->get_rights() & RightsService :: RIGHT_USE;
+            $defaults[self :: PROPERTY_COPY] = $this->entityRelation->get_rights() & RightsService :: RIGHT_COPY;
+        }
+        else
+        {
+            $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
+        }
 
         parent :: setDefaults($defaults);
     }
