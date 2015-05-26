@@ -39,7 +39,7 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      */
-    public function __construct(ContentObjectRelationService $contentObjectRelationService, 
+    public function __construct(ContentObjectRelationService $contentObjectRelationService,
         EntityRelationService $entityRelationService)
     {
         $this->contentObjectRelationService = $contentObjectRelationService;
@@ -97,12 +97,12 @@ class RightsService
         {
             return true;
         }
-        
+
         if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
         {
             return true;
         }
-        
+
         return $this->getEntityRelationService()->hasRight($user, $right, $workspaceImplementation);
     }
 
@@ -198,7 +198,7 @@ class RightsService
      *
      * @return boolean
      */
-    public function canViewContentObject(User $user, ContentObject $contentObject, 
+    public function canViewContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_VIEW, $contentObject, $workspaceImplementation);
@@ -212,7 +212,7 @@ class RightsService
      *
      * @return boolean
      */
-    public function canEditContentObject(User $user, ContentObject $contentObject, 
+    public function canEditContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_EDIT, $contentObject, $workspaceImplementation);
@@ -226,7 +226,7 @@ class RightsService
      *
      * @return boolean
      */
-    public function canDeleteContentObject(User $user, ContentObject $contentObject, 
+    public function canDeleteContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_DELETE, $contentObject, $workspaceImplementation);
@@ -240,7 +240,7 @@ class RightsService
      *
      * @return boolean
      */
-    public function canUseContentObject(User $user, ContentObject $contentObject, 
+    public function canUseContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_USE, $contentObject, $workspaceImplementation);
@@ -254,7 +254,7 @@ class RightsService
      *
      * @return boolean
      */
-    public function canCopyContentObject(User $user, ContentObject $contentObject, 
+    public function canCopyContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         return $this->hasRightForContentObject(self :: RIGHT_COPY, $contentObject, $workspaceImplementation);
@@ -268,7 +268,7 @@ class RightsService
      *
      * @return boolean
      */
-    private function hasRightForContentObject(User $user, $right, ContentObject $contentObject, 
+    private function hasRightForContentObject(User $user, $right, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         // Check if the user is a platform administrator
@@ -276,19 +276,19 @@ class RightsService
         {
             return true;
         }
-        
+
         // Check if the user is also the owner of the content object
         if ($this->isContentObjectOwner($user, $contentObject))
         {
             return true;
         }
-        
+
         // Check if there is actually a workspaceImplementation
         if ($workspaceImplementation instanceof WorkspaceInterface)
         {
             // Check if the content object is in the workspace
             if ($this->getContentObjectRelationService()->isContentObjectInWorkspace(
-                $contentObject, 
+                $contentObject,
                 $workspaceImplementation))
             {
                 // Check if the user has the requested right in the workspace
