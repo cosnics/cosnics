@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component\Viewer;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,48 +16,18 @@ class Form extends FormValidator
     {
         parent :: __construct(self :: FORM_NAME, 'post', $action, '', array('autocomplete' => 'off'));
         $this->parent = $parent;
-        $this->add_buttons();
-        
-        if ($this->parent->get_current_complex_content_object_item() instanceof ComplexPage)
-        {
-            $this->buildPageForm();
-        }
-        else
-        {
-            $this->buildSurveyForm();
-        }
-        
-        $this->add_buttons();
+        $this->addButtons();
+        $this->buildForm();
+        $this->addButtons();
     }
 
-    function buildPageForm()
+    function buildForm()
     {
-        $page_display = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node());
-        $page_display->run();
+        $pageDisplay = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node());
+        $pageDisplay->run();
     }
 
-    function buildSurveyForm()
-    {
-        $current_content_object = $this->parent->get_current_content_object();
-        
-        $html = array();
-        $html[] = '<div class="clear"></div>';
-        $html[] = '<div class="content_object" style="background-image: url(' . $current_content_object->get_icon_path() .
-             ');">';
-        $html[] = '<div class="title">' . $current_content_object->get_title() . '</div>';
-        $html[] = '<div class="description" style="overflow: auto;">';
-        $html[] = '<div class="description">';
-        $html[] = $current_content_object->get_description();
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $this->addElement('html', implode(PHP_EOL, $html));
-    }
-
-    public function add_buttons()
+    public function addButtons()
     {
         $buttons = array();
         
@@ -98,7 +67,7 @@ class Form extends FormValidator
         $renderer->setGroupElementTemplate('{element}', 'buttons');
     }
 
-    public function get_parent()
+    public function getParent()
     {
         return $this->parent;
     }

@@ -131,7 +131,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 1);
+        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);
         $formvalidator->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(

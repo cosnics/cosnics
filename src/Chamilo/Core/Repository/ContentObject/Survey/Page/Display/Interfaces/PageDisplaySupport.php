@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
  * 
  * @author Hans De Bisschop
  */
-interface PageDisplaySupport
+interface PageDisplaySupport extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport
 {
     
       /**
@@ -29,7 +29,7 @@ interface PageDisplaySupport
      * 
      * @return string
      */
-    public function get_page_tree_menu_url();
+    public function get_tree_menu_url();
   
     /**
      * Is the user allowed to edit the content for the given node
@@ -37,7 +37,7 @@ interface PageDisplaySupport
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node);
+    public function is_allowed_to_edit_content_object();
 
     /**
      * Is the user allowed to view the content for the given node
@@ -45,13 +45,13 @@ interface PageDisplaySupport
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node);
+    public function is_allowed_to_view_content_object();
 
     /**
      *
      * @return \libraries\format\DynamicVisualTab[]
      */
-    public function get_page_additional_tabs();
+    public function get_additional_tabs();
 
     /**
      * Determine whether the page being displayed is the user's own page

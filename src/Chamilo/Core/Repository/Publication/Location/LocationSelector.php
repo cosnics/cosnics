@@ -137,7 +137,6 @@ abstract class LocationSelector
     public function get_checkbox_name($context)
     {
         $registration = Configuration :: registration($context);
-
         return Manager :: WIZARD_LOCATION . '[' . $registration->get_id() . '][' . uniqid() . ']';
     }
 
