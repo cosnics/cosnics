@@ -103,4 +103,13 @@ class EntityRelationRepository
             WorkspaceEntityRelation :: class_name(),
             new DataClassRetrieveParameters($entityCondition));
     }
+
+    /**
+     * @param integer $identifier
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
+     */
+    public function findEntityRelationByIdentifier($identifier)
+    {
+        return DataManager :: retrieve_by_id(WorkspaceEntityRelation :: class_name(), $identifier);
+    }
 }
