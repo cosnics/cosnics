@@ -131,6 +131,21 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @return boolean
+     */
+    public function deleteWorkspace(Workspace $workspace)
+    {
+        if (! $workspace->delete())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param string[] $workspaceProperties
      */
     private function setWorkspaceProperties(Workspace $workspace, $workspaceProperties)

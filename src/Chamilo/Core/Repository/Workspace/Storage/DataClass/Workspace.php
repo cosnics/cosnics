@@ -143,6 +143,16 @@ class Workspace extends DataClass implements WorkspaceInterface
                 new PropertyConditionVariable(
                     WorkspaceEntityRelation :: class_name(),
                     WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                new StaticConditionVariable($this->getId())),
+            WorkspaceContentObjectRelation :: class_name() => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceContentObjectRelation :: class_name(),
+                    WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                new StaticConditionVariable($this->getId())),
+            WorkspaceCategoryRelation :: class_name() => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceCategoryRelation :: class_name(),
+                    WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID),
                 new StaticConditionVariable($this->getId())));
     }
 }

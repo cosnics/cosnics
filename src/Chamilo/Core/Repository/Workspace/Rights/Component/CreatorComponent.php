@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
-use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -14,10 +16,10 @@ use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CreatorComponent extends Manager
+class CreatorComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
         $workspace = $this->getCurrentWorkspace();
 
@@ -30,12 +32,18 @@ class CreatorComponent extends Manager
                 $values = $form->exportValues();
 
                 $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-                $success = $entityRelationService->setEntityRelations(
-                    $workspace,
-                    $values[RightsForm :: PROPERTY_ACCESS],
+                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+                $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
+
+                $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],
                     (int) $values[RightsForm :: PROPERTY_USE],
                     (int) $values[RightsForm :: PROPERTY_COPY]);
+
+                $success = $entityRelationService->setEntityRelations(
+                    $workspace,
+                    $values[RightsForm :: PROPERTY_ACCESS],
+                    $right);
 
                 $translation = $success ? 'RightsSet' : 'RightsNotSet';
                 $message = Translation :: get($translation);
@@ -46,10 +54,7 @@ class CreatorComponent extends Manager
                 $message = $ex->getMessage();
             }
 
-            $this->redirect(
-                $message,
-                ! $success,
-                array(self :: PARAM_ACTION => self :: ACTION_RIGHTS, self :: PARAM_WORKSPACE_ID => $workspace->getId()));
+            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_CREATE));
         }
         else
         {

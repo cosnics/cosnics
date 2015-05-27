@@ -67,26 +67,11 @@ class EntityRelationService
      *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param integer[] $selectedEntityTypeIdentifiers
-     * @param integer $viewRight
-     * @param integer $useRight
-     * @param integer $copyRight
+     * @param integer $right
      * @return boolean
      */
-    public function setEntityRelations(Workspace $workspace, $selectedEntityTypeIdentifiers, $viewRight, $useRight,
-        $copyRight)
+    public function setEntityRelations(Workspace $workspace, $selectedEntityTypeIdentifiers, $right)
     {
-        $right = $viewRight;
-
-        if ($useRight)
-        {
-            $right = $right | $useRight;
-        }
-
-        if ($copyRight)
-        {
-            $right = $right | $copyRight;
-        }
-
         foreach ($selectedEntityTypeIdentifiers as $entityType => $entityIdentifiers)
         {
             foreach ($entityIdentifiers as $entityIdentifier)
@@ -214,5 +199,20 @@ class EntityRelationService
     public function getEntityRelationByIdentifier($identifier)
     {
         return $this->getEntityRelationRepository()->findEntityRelationByIdentifier($identifier);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation $entityRelation
+     * @return boolean
+     */
+    public function deleteEntityRelation(WorkspaceEntityRelation $entityRelation)
+    {
+        if (! $entityRelation->delete())
+        {
+            return false;
+        }
+
+        return true;
     }
 }
