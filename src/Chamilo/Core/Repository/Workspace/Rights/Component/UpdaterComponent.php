@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
-use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -16,10 +18,10 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UpdaterComponent extends Manager
+class UpdaterComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
         $entityRelation = $this->getCurrentEntityRelation();
 
@@ -28,7 +30,9 @@ class UpdaterComponent extends Manager
             throw new ObjectNotExistException(Translation :: get('WorkspaceEntityRelation'));
         }
 
-        $form = new RightsForm($this->get_url(), $entityRelation);
+        $form = new RightsForm(
+            $this->get_url(array(self :: PARAM_ENTITY_RELATION_ID => $this->getCurrentEntityRelation()->getId())),
+            $entityRelation);
 
         if ($form->validate())
         {
@@ -36,14 +40,22 @@ class UpdaterComponent extends Manager
             {
                 $values = $form->exportValues();
 
-                $success = $this->getEntityRelationService()->setEntityRelations(
-                    $workspace,
-                    $values[RightsForm :: PROPERTY_ACCESS],
+                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+                $rightsService = new RightsService($contentObjectRelationService, $this->getEntityRelationService());
+
+                $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],
                     (int) $values[RightsForm :: PROPERTY_USE],
                     (int) $values[RightsForm :: PROPERTY_COPY]);
 
-                $translation = $success ? 'RightsSet' : 'RightsNotSet';
+                $success = $this->getEntityRelationService()->updateEntityRelation(
+                    $entityRelation,
+                    $this->getCurrentWorkspace()->getId(),
+                    $entityRelation->get_entity_type(),
+                    $entityRelation->get_entity_id(),
+                    $right);
+
+                $translation = $success ? 'RightsUpdated' : 'RightsNotUpdated';
                 $message = Translation :: get($translation);
             }
             catch (\Exception $ex)
@@ -52,12 +64,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
 
-            $this->redirect(
-                $message,
-                ! $success,
-                array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                    self :: PARAM_WORKSPACE_ID => $this->getCurrentWorkspace()->getId()));
+            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
         else
         {
