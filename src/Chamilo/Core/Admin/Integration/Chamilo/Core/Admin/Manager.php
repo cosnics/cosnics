@@ -24,7 +24,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Settings'),
             Translation :: get('SettingsDescription'),
-            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Settings'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Settings'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -34,7 +34,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Importer'),
             Translation :: get('ImporterDescription'),
-            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Import'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Import'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -44,7 +44,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('SystemAnnouncements'),
             Translation :: get('SystemAnnouncementsDescription'),
-            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/List'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -64,7 +64,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('Diagnose'),
             Translation :: get('DiagnoseDescription'),
-            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Information'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
             $redirect->getUrl());
 
         $redirect = new Redirect(
@@ -74,7 +74,7 @@ class Manager implements ActionsSupportInterface
         $links[] = new DynamicAction(
             Translation :: get('LogsViewer'),
             Translation :: get('LogsViewerDescription'),
-            Theme :: getInstance()->getImagePath('Chamilo/Core/Admin', 'Admin/Information'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'),
             $redirect->getUrl());
 
         return new Actions(\Chamilo\Core\Admin\Manager :: context(), $links);
