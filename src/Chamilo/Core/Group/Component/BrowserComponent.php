@@ -102,7 +102,9 @@ class BrowserComponent extends Manager implements TableSupport
             new DynamicContentTab(
                 self :: TAB_SUBGROUPS,
                 Translation :: get('Subgroups'),
-                Theme :: getInstance()->getImagePath(self :: context(), 'Logo/' . Theme :: ICON_MINI),
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\Group\Manager :: context(),
+                    'Logo/' . Theme :: ICON_MINI),
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
