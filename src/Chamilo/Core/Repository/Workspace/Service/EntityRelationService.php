@@ -205,4 +205,14 @@ class EntityRelationService
             $entityType,
             $entityIdentifier);
     }
+
+    /**
+     *
+     * @param integer $identifier
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
+     */
+    public function getEntityRelationByIdentifier($identifier)
+    {
+        return $this->getEntityRelationRepository()->findEntityRelationByIdentifier($identifier);
+    }
 }

@@ -14,6 +14,10 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 class WorkspaceRepository
 {
 
+    /**
+     * @param integer $identifier
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
+     */
     public function findWorkspaceByIdentifier($identifier)
     {
         return DataManager :: retrieve_by_id(Workspace :: class_name(), $identifier);

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Workspace\Form;
+namespace Chamilo\Core\Repository\Workspace\Rights\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -33,7 +33,7 @@ class RightsForm extends FormValidator
      *
      * @param string $formUrl
      */
-    public function __construct($formUrl, WorkspaceEntityRelation $entityRelation)
+    public function __construct($formUrl, WorkspaceEntityRelation $entityRelation = null)
     {
         parent :: __construct('rights', 'post', $formUrl);
 
@@ -45,10 +45,16 @@ class RightsForm extends FormValidator
 
     public function build_form()
     {
-        $types = new AdvancedElementFinderElementTypes();
-        $types->add_element_type(UserEntity :: get_element_finder_type());
-        $types->add_element_type(PlatformGroupEntity :: get_element_finder_type());
-        $this->addElement('advanced_element_finder', self :: PROPERTY_ACCESS, Translation :: get('Users'), $types);
+        if ($this->entityRelation instanceof WorkspaceEntityRelation)
+        {
+        }
+        else
+        {
+            $types = new AdvancedElementFinderElementTypes();
+            $types->add_element_type(UserEntity :: get_element_finder_type());
+            $types->add_element_type(PlatformGroupEntity :: get_element_finder_type());
+            $this->addElement('advanced_element_finder', self :: PROPERTY_ACCESS, Translation :: get('Users'), $types);
+        }
 
         $this->addElement(
             'radio',
@@ -103,10 +109,13 @@ class RightsForm extends FormValidator
         if ($this->entityRelation instanceof WorkspaceEntityRelation)
         {
             // TODO: Add logic to determine the right default value
-            $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
+            $givenRights = $this->entityRelation->get_rights();
 
-            $defaults[self :: PROPERTY_USE] = $this->entityRelation->get_rights() & RightsService :: RIGHT_USE;
-            $defaults[self :: PROPERTY_COPY] = $this->entityRelation->get_rights() & RightsService :: RIGHT_COPY;
+            $defaults[self :: PROPERTY_VIEW] = $givenRights & ~ RightsService :: RIGHT_USE &
+                 ~ RightsService :: RIGHT_COPY;
+
+            $defaults[self :: PROPERTY_USE] = $givenRights & RightsService :: RIGHT_USE;
+            $defaults[self :: PROPERTY_COPY] = $givenRights & RightsService :: RIGHT_COPY;
         }
         else
         {
