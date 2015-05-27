@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
-use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation\EntityRelationTable;
 
@@ -12,7 +11,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation\EntityRelation
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends TabComponent implements TableSupport
 {
 
     /**
@@ -21,7 +20,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $actionBar;
 
-    public function run()
+    public function build()
     {
         $table = new EntityRelationTable($this);
 
