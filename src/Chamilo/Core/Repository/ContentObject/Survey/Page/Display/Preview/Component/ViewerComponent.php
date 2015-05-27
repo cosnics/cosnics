@@ -51,7 +51,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
         }
     }
   
-    function get_page_tree_menu_url()
+    function get_tree_menu_url()
     {
         return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
             \Chamilo\Core\Repository\Preview\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
@@ -62,7 +62,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
     }
     
   
-    public function get_page_additional_tabs()
+    public function get_additional_tabs()
     {
         return array();
     }

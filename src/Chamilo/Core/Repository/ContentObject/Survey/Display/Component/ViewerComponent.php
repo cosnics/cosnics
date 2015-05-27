@@ -31,13 +31,10 @@ class ViewerComponent extends TabComponent
             if ($action == self :: FORM_BACK)
             {
                 $this->current_step = $this->current_step-1;
-                
-//                 $this->current_step = $this->get_previous_step($this->current_step);
             }
             elseif ($action == self :: FORM_NEXT)
             {
                 $this->current_step = $this->current_step+1;
-//                 $this->current_step = $this->get_next_step($this->current_step);
             }
             elseif ($action == self :: FORM_SUBMIT)
             {
@@ -58,7 +55,6 @@ class ViewerComponent extends TabComponent
             $form = new Form($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
             
             $html = array();
-            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->get_hidden_fields();
@@ -66,29 +62,6 @@ class ViewerComponent extends TabComponent
             
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function get_current_content_object()
-    {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
-            $this->get_current_step())->get_content_object();
-    }
-
-    public function get_current_complex_content_object_path_node()
-    {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
-            $this->get_current_step());
-    }
-
-    public function get_current_complex_content_object_item()
-    {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
-            $this->get_current_step())->get_complex_content_object_item();
-    }
-
-    public function count_steps()
-    {
-        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->count_nodes();
     }
 
     private function get_progress_bar()
@@ -100,21 +73,6 @@ class ViewerComponent extends TabComponent
         $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round(25) .
              '%</div></div>';
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_form_current_step()
-    {
-        return $this->current_step;
-    }
-
-    private function get_previous_step($current_step)
-    {
-        return $this->get_root_content_object()->get_complex_content_object_path()->get_node($current_step)->get_previous_page_step();
-    }
-
-    private function get_next_step($current_step)
-    {
-        return $this->get_root_content_object()->get_complex_content_object_path()->get_node($current_step)->get_next_page_step();
     }
 
     private function is_form_submitted()

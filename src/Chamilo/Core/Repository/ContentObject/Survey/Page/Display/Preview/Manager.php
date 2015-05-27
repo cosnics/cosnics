@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview;
 
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+
 /**
  *
  * @package repository.content_object.survey_page
@@ -25,12 +25,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
         return parent :: get_root_content_object();
     }
  
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+    public function is_allowed_to_edit_content_object()
     {
         return true;
     }
    
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
+    public function is_allowed_to_view_content_object()
     {
         return true;
     }

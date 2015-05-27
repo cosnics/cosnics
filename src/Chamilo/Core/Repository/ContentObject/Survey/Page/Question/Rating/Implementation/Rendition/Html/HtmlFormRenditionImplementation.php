@@ -27,18 +27,17 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $question = $this->get_content_object();
         
         $questionId = $this->getQuestionId();
-        
-        $table_header = array();
-        $table_header[] = '<table class="data_table take_survey">';
-        $table_header[] = '<thead>';
-        $table_header[] = '<tr>';
-        $table_header[] = '<th class="info" >' . Translation :: get('ChooseYourRating') . '</th>';
-        $table_header[] = '</tr>';
-        $table_header[] = '</thead>';
-        $table_header[] = '<tbody>';
-        $table_header[] = '<tr>';
-        $table_header[] = '<td>';
-        $formValidator->addElement('html', implode(PHP_EOL, $table_header));
+        $tableHeader = array();
+        $tableHeader[] = '<table class="data_table take_survey">';
+        $tableHeader[] = '<thead>';
+        $tableHeader[] = '<tr>';
+        $tableHeader[] = '<th class="info" >' . Translation :: get('ChooseYourRating') . '</th>';
+        $tableHeader[] = '</tr>';
+        $tableHeader[] = '</thead>';
+        $tableHeader[] = '<tbody>';
+        $tableHeader[] = '<tr>';
+        $tableHeader[] = '<td>';
+        $formValidator->addElement('html', implode(PHP_EOL, $tableHeader));
         
         $min = $question->get_low();
         $max = $question->get_high();
@@ -62,6 +61,13 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             Translation :: get('Rating') . ': ', 
             $scores, 
             'class="rating_slider"');
+        
+        $tableFooter= array();
+        $tableFooter[] = '</td>';
+        $tableFooter[] = '</tr>';
+        $tableFooter[] = '</tbody>';
+        $tableFooter[] = '</table>';
+        $formValidator->addElement('html', implode(PHP_EOL, $tableFooter));
         
         $renderer->setElementTemplate($element_template, $questionId);
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);

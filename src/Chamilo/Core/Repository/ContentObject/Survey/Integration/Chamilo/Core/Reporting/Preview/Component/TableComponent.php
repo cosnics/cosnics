@@ -34,7 +34,7 @@ class TableComponent extends Manager implements TemplateSupport
      */
     public function get_pages($survey_id)
     {
-        return $this->get_survey()->get_pages();
+        return $this->get_survey()->getPages();
     }
 
     /*

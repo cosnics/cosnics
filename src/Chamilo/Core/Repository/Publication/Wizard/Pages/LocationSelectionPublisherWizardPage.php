@@ -260,11 +260,11 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         $this->addElement('category', $category, 'publication-location');
 
-        $renderer_class = $locations->get_context() . '\Publication\LocationSelector';
+        $renderer_class = $locations->get_context() . '\LocationSelector';
         $renderer = new $renderer_class($this, $locations);
         $renderer->run();
 
-        $manager_class = $locations->get_context() . '\Publication\Manager';
+        $manager_class = $locations->get_context() . '\Manager';
         $manager_class :: add_publication_attributes_elements($this);
 
         $this->addElement('category');

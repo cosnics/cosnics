@@ -28,6 +28,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $options = $question->getOptions();
         
         $table_header = array();
+        $table_header[] = '<div >';
         $table_header[] = '<table class="data_table take_survey">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -64,6 +65,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
+        $table_footer[] = '</div>';
         $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
         
         return $formValidator;
