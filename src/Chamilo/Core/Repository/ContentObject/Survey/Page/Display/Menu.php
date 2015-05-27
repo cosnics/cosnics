@@ -121,7 +121,7 @@ class Menu extends HTML_Menu
      */
     public function get_url($step)
     {
-        return sprintf($this->context->get_parent()->get_page_tree_menu_url(), $step);
+        return sprintf($this->context->get_parent()->get_tree_menu_url(), $step);
     }
 
     /**

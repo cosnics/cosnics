@@ -53,7 +53,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
     }
     
-    function get_survey_tree_menu_url()
+    function get_tree_menu_url()
     {
         return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
             \Chamilo\Core\Repository\Preview\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
@@ -64,7 +64,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
     }
     
     
-    public function get_survey_additional_tabs()
+    public function get_additional_tabs()
     {
         return array();
     }

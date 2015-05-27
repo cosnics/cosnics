@@ -88,7 +88,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->get_current_node()->get_complex_content_object_item();
     }
-
+    
+    public function get_current_complex_content_object_path_node()
+    {
+        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
+            $this->get_current_step());
+    }
+    
+    public function count_steps()
+    {
+        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->count_nodes();
+    }
+    
     /**
      * Get the node linked to the current step
      * 
