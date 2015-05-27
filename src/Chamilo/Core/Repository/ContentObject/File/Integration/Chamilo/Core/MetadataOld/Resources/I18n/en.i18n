@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\file\integration\repository\content_object_metadata_element_linker
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Content Object Property Metadata Linker"
+TypeCategory = "File Content Object Extensions"
+ContentObjectTypeName = "File"
+Filename = "Filename"
+FileExtension = "File extension"
+Filesize = "Filesize"
+
+
