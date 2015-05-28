@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\Viewer;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay;
 
 class Form extends FormValidator
 {
@@ -19,18 +19,13 @@ class Form extends FormValidator
 
     function buildForm()
     {
-        $nodes = $this->parent->get_root_content_object()->get_complex_content_object_path()->get_nodes();
-        
-        foreach ($nodes as $node)
-        {
-            if (! $node->is_root())
-            {
-                
-                $answer = $this->parent->get_answer($node->get_complex_content_object_item()->get_id());
-                $question_display = QuestionDisplay :: factory($this, $node, $answer);
-                $question_display->run();
-            }
-        }
+        $pageDisplay = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node());
+        $pageDisplay->run();
+    }
+    
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
 ?>

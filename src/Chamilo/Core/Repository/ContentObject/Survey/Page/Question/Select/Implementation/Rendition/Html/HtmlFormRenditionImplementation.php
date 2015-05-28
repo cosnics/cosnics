@@ -64,17 +64,6 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $formValidator->addElement($select_box);
         }
         
-        $tableFooter = array();
-        $tableFooter[] = '</td>';
-        $tableFooter[] = '</tr>';
-        $tableFooter[] = '</tbody>';
-        $tableFooter[] = '</table>';
-        
-        $tableFooter[] = '</div>';
-        $tableFooter[] = '</div>';
-        $tableFooter[] = '<div class="clear"></div>';
-        $formValidator->addElement('html', implode(PHP_EOL, $tableFooter));
-        
         $formValidator->get_renderer()->setElementTemplate($element_template, $questionId);
         return $formValidator;
     }

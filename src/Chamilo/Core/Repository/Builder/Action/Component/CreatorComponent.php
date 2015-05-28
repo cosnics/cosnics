@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -70,10 +71,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
             if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
             {
                 $factory = new ApplicationFactory(
-                    $this->getRequest(),
                     \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    $this->get_user(),
-                    $this);
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
                 $component = $factory->getComponent();
 

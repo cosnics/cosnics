@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
@@ -35,10 +36,8 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Configuration\Category\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

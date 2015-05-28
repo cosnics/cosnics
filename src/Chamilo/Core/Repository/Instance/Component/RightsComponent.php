@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Instance\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -45,10 +46,8 @@ class RightsComponent extends Manager
         $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Rights\Editor\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_locations($locations);
         $component->set_entities($entities);

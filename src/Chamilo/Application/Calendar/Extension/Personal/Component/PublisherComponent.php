@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  *
@@ -23,11 +24,9 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     {
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            $factory = new ApplicationFactory(
-                $this->getRequest(),
+            $factory = new ApplicationFactory(              
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

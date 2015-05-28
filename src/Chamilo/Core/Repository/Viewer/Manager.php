@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application
 {
@@ -69,9 +70,9 @@ abstract class Manager extends Application
      *
      * @param \libraries\architecture\application\Application $parent
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
         $this->maximum_select = self :: SELECT_MULTIPLE;
         $this->default_content_objects = array();
         $this->parameters = array();

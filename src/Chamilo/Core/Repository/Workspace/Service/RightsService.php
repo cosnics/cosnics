@@ -92,13 +92,7 @@ class RightsService
      */
     private function hasRightForWorkspace($right, User $user, WorkspaceInterface $workspaceImplementation)
     {
-        // Check if the user is a platform administrator
-        if ($user->is_platform_admin())
-        {
-            return true;
-        }
-
-        if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
+        if ($this->hasWorkspaceImplementationCreatorRights($user, $workspaceImplementation))
         {
             return true;
         }
@@ -110,12 +104,33 @@ class RightsService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
-     *
      * @return boolean
      */
     public function isWorkspaceImplementationCreator(User $user, WorkspaceInterface $workspaceImplementation)
     {
         return $user->getId() == $workspaceImplementation->getCreatorId();
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     * @return boolean
+     */
+    public function hasWorkspaceImplementationCreatorRights(User $user, WorkspaceInterface $workspaceImplementation)
+    {
+        // Check if the user is a platform administrator
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -316,5 +331,29 @@ class RightsService
     public function isContentObjectOwner(User $user, ContentObject $contentObject)
     {
         return $user->getId() == $contentObject->get_owner_id();
+    }
+
+    /**
+     *
+     * @param integer $viewRight
+     * @param integer $useRight
+     * @param integer $copyRight
+     * @return integer
+     */
+    public function getAggregatedRight($viewRight, $useRight, $copyRight)
+    {
+        $right = $viewRight;
+
+        if ($useRight)
+        {
+            $right = $right | $useRight;
+        }
+
+        if ($copyRight)
+        {
+            $right = $right | $copyRight;
+        }
+
+        return $right;
     }
 }

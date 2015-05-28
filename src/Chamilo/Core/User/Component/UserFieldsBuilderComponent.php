@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
@@ -25,10 +26,8 @@ class UserFieldsBuilderComponent extends Manager
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Configuration\Form\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_form_by_name('account_fields');
         return $component->run();

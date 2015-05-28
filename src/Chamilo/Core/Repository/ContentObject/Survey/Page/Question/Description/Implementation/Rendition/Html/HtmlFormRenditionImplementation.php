@@ -17,7 +17,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = $this->getFormValidator();
+        $formValidator = parent :: initialize();
         $renderer = $formValidator->get_renderer();
         $questionId = $this->getQuestionId();
      
@@ -25,6 +25,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         if ($this->get_content_object()->has_description())
         {
+            
             $html[] = '<div class="survey">';
             $html[] = '<div class="information">';
             $html[] = $this->get_content_object()->get_description();
@@ -35,6 +36,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $html[] = '</div>';
             
             $html[] = '<div class="clear"></div>';
+           
         }
         
         $formValidator->addElement('html', implode(PHP_EOL, $html));

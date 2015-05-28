@@ -6,6 +6,7 @@ use Chamilo\Core\MetadataOld\Value\ValueCreator;
 use Chamilo\Core\User\Integration\Chamilo\Core\MetadataOld\MetadataValueCreator;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -43,10 +44,8 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\MetadataOld\Value\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

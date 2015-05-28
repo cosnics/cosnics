@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\GroupMetadataValueCr
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\MetadataOld\Value\MetadataValueEditorComponent;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
@@ -29,10 +30,8 @@ class MetadataManagerComponent extends Manager implements DelegateComponent, Met
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\MetadataOld\Value\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

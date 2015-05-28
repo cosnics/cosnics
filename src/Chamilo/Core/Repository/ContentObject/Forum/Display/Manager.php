@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -54,15 +55,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @param unknown $parent
      * @throws \Exception
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if ($parent instanceof ForumDisplaySupport)
+        if ($applicationConfiguration->getApplication() instanceof ForumDisplaySupport)
         {
-            parent :: __construct($request, $user, $parent);
+            parent :: __construct($applicationConfiguration);
         }
         else
         {
-            throw new \Exception(get_class($parent) . ' must implement ForumDisplaySupport ');
+            throw new \Exception(get_class($applicationConfiguration->getApplication()) . ' must implement ForumDisplaySupport ');
         }
     }
 

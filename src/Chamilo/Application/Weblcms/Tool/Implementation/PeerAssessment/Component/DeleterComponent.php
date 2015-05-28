@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\PeerAssessmentFeedback as WeblcmsPeerAssessmentFeedbackTracker;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\PeerAssessmentScore as WeblcmsPeerAssessmentScoreTracker;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -89,10 +90,8 @@ class DeleterComponent extends Manager
         if ($success)
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

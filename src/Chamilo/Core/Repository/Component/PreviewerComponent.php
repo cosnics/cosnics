@@ -7,6 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
@@ -47,7 +48,7 @@ class PreviewerComponent extends Manager
             $contentObjectClassname);
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
         $namespace = $contentObjectNamespace . '\Display\Preview';
-        $factory = new ApplicationFactory($this->getRequest(), $namespace, $this->get_user(), $this);
+        $factory = new ApplicationFactory($namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory;
     }
 }

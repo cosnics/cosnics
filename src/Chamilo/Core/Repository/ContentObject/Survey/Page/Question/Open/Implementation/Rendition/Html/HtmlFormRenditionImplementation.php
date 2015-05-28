@@ -73,7 +73,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         if ($question->has_instruction())
         {
-        $instruction = $question->get_instruction();
+        $instruction = 'test';
         }
         else
         {

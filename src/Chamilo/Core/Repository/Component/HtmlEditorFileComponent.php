@@ -4,16 +4,18 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 class HtmlEditorFileComponent extends Manager
 {
     const PARAM_PLUGIN = 'plugin';
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $this->set_parameter('CKEditor', Request :: get('CKEditor'));
         $this->set_parameter('CKEditorFuncNum', Request :: get('CKEditorFuncNum'));
@@ -31,10 +33,8 @@ class HtmlEditorFileComponent extends Manager
         {
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
             return $component->run();

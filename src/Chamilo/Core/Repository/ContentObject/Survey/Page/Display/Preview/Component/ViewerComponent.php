@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Comp
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 
@@ -21,10 +22,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
     function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -51,7 +50,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
         }
     }
   
-    function get_page_tree_menu_url()
+    function get_tree_menu_url()
     {
         return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
             \Chamilo\Core\Repository\Preview\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
@@ -62,7 +61,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page
     }
     
   
-    public function get_page_additional_tabs()
+    public function get_additional_tabs()
     {
         return array();
     }

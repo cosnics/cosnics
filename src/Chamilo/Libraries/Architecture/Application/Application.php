@@ -33,22 +33,10 @@ abstract class Application
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
      */
-    private $request;
-
-    /**
-     *
-     * @var \core\user\User
-     */
-    private $user;
-
-    /**
-     *
-     * @var \libraries\architecture\application\Application
-     */
-    private $application;
-
+    private $applicationConfiguration;
+    
     // Parameters
     const PARAM_ACTION = 'go';
     const PARAM_MESSAGES = 'messages';
@@ -60,7 +48,7 @@ abstract class Application
     // references still exists and needs to be fixed first to avoid breaking functionality of an undefined number of
     // places
     const PARAM_CONTEXT = 'application';
-
+    
     // Result types
     const RESULT_TYPE_CREATED = 'Created';
     const RESULT_TYPE_UPDATED = 'Updated';
@@ -75,27 +63,31 @@ abstract class Application
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \core\user\storage\data_class\User $user $user
-     * @param \libraries\architecture\application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        $this->request = $request;
-        $this->user = $user;
-        $this->application = $application;
-
+        $this->applicationConfiguration = $applicationConfiguration;
         Page :: getInstance()->setSection($this->package());
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
+     */
+    public function getApplicationConfiguration()
+    {
+        return $this->applicationConfiguration;
     }
 
     public function getRequest()
     {
-        return $this->request;
+        return $this->getApplicationConfiguration()->getRequest();
     }
 
     /**
      * Get the parent application
-     *
+     * 
      * @return \libraries\architecture\application\Application
      * @deprecated User get_application() now
      */
@@ -106,20 +98,19 @@ abstract class Application
 
     /**
      * Get the parent application
-     *
+     * 
      * @return \libraries\architecture\application\Application
      */
     public function get_application()
     {
-        return $this->application;
+        return $this->getApplicationConfiguration()->getApplication();
     }
 
     /**
-     * Gets the URL of the current page in the application.
-     * Optionally takes an associative array of name/value pairs
+     * Gets the URL of the current page in the application. Optionally takes an associative array of name/value pairs
      * representing additional query string parameters; these will either be added to the parameters already present, or
      * override them if a value with the same name exists.
-     *
+     * 
      * @param multitype:string $parameters
      * @param multitype:string $filter
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
@@ -128,15 +119,14 @@ abstract class Application
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-
+        
         $redirect = new Redirect($parameters, $filter, $encode_entities);
         return $redirect->getUrl();
     }
 
     /**
-     * Redirect the end user to another location.
-     * The current url will be used as the basis.
-     *
+     * Redirect the end user to another location. The current url will be used as the basis.
+     * 
      * @param multitype:string $parameters
      * @param multitype:string $filter
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
@@ -145,17 +135,16 @@ abstract class Application
     public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-
+        
         $redirect = new Redirect($parameters, $filter, $encodeEntities);
         $redirect->toUrl();
         exit();
     }
 
     /**
-     * Redirect the end user to another location.
-     * The current url will be used as the basis. This method allows passing
+     * Redirect the end user to another location. The current url will be used as the basis. This method allows passing
      * on messages directly instead of using the parameters array
-     *
+     * 
      * @param string $message
      * @param boolean $error_message
      * @param multitype:string $parameters
@@ -167,22 +156,22 @@ abstract class Application
     {
         if ($message != null)
         {
-
+            
             $message_type = (! $error_message) ? NotificationMessage :: TYPE_NORMAL : NotificationMessage :: TYPE_ERROR;
-
+            
             $messages = Session :: retrieve(self :: PARAM_MESSAGES);
             $messages[self :: PARAM_MESSAGE_TYPE][] = $message_type;
             $messages[self :: PARAM_MESSAGE][] = $message;
-
+            
             Session :: register(self :: PARAM_MESSAGES, $messages);
         }
-
+        
         $this->simple_redirect($parameters, $filter, $encode_entities);
     }
 
     /**
      * Returns the current URL parameters.
-     *
+     * 
      * @return string[]
      */
     public function get_parameters()
@@ -192,7 +181,7 @@ abstract class Application
 
     /**
      * Returns the value of the given URL parameter.
-     *
+     * 
      * @param string $name
      * @return string
      */
@@ -203,7 +192,7 @@ abstract class Application
 
     /**
      * Sets the value of a URL parameter.
-     *
+     * 
      * @param string $name
      * @param string $value
      */
@@ -221,21 +210,21 @@ abstract class Application
         {
             return $this->get_application()->render_header();
         }
-
+        
         $breadcrumbtrail = BreadcrumbTrail :: get_instance();
         if ($breadcrumbtrail->size() == 1)
         {
             $breadcrumbtrail->add(
                 new Breadcrumb($this->get_url(), Translation :: get('TypeName', null, static :: context())));
         }
-
+        
         $page = Page :: getInstance();
         $page->setApplication($this);
-
+        
         $html = array();
-
+        
         $html[] = $page->getHeader()->toHtml();
-
+        
         if ($page->isFullPage())
         {
             // If there is an application-wide menu, show it
@@ -246,52 +235,52 @@ abstract class Application
                 $html[] = '</div>';
                 $html[] = '<div style="float: right; width: 82%;">';
             }
-
+            
             if ($breadcrumbtrail->size() > 0)
             {
                 $title = $breadcrumbtrail->get_last()->get_name();
-
+                
                 $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
                 $html[] = '<div class="clear">&nbsp;</div>';
             }
         }
-
+        
         if (PlatformSetting :: get('maintenance_mode'))
         {
             $html[] = Display :: error_message(Translation :: get('MaintenanceModeMessage'));
         }
-
+        
         // Display messages
         $messages = Session :: retrieve(self :: PARAM_MESSAGES);
-
+        
         Session :: unregister(self :: PARAM_MESSAGES);
         if (is_array($messages))
         {
             $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
         }
-
+        
         // DEPRECATED
         // Display messages
         $message = Request :: get(self :: PARAM_MESSAGE);
         $type = Request :: get(self :: PARAM_MESSAGE_TYPE);
-
+        
         if ($message)
         {
             $html[] = $this->display_message($message);
         }
-
+        
         $message = Request :: get(self :: PARAM_ERROR_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_error_message($message);
         }
-
+        
         $message = Request :: get(self :: PARAM_WARNING_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_warning_message($message);
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -305,9 +294,9 @@ abstract class Application
             return $this->get_application()->render_footer();
         }
         $page = Page :: getInstance();
-
+        
         $html = array();
-
+        
         if ($page->isFullPage())
         {
             // In case there is an application-wide menu, properly end it
@@ -316,28 +305,28 @@ abstract class Application
                 $html[] = '<div class="clear">&nbsp;</div>';
                 $html[] = '</div>';
             }
-
+            
             $html[] = '<div class="clear">&nbsp;</div>';
         }
-
+        
         $html[] = $page->getFooter()->toHtml();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a normal message.
-     *
+     * 
      * @param string $message
      */
     public function display_message($message)
     {
         $html = array();
-
+        
         $html[] = '<div class="notifications">';
         $html[] = NotificationMessage :: normal($message)->to_html();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -349,52 +338,52 @@ abstract class Application
     public function display_messages($messages, $types)
     {
         $html = array();
-
+        
         $html[] = '<div class="notifications">';
         foreach ($types as $key => $type)
         {
             $html[] = NotificationMessage :: create($messages[$key], $type)->to_html();
         }
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays an error message.
-     *
+     * 
      * @param string $message
      */
     public function display_error_message($message)
     {
         $html = array();
-
+        
         $html[] = '<div class="notifications">';
         $html[] = NotificationMessage :: error($message)->to_html();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a warning message.
-     *
+     * 
      * @param string $message
      */
     public function display_warning_message($message)
     {
         $html = array();
-
+        
         $html[] = '<div class="notifications">';
         $html[] = NotificationMessage :: warning($message)->to_html();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays an error page.
-     *
+     * 
      * @param string $message
      */
     public function display_error_page($message)
@@ -403,19 +392,19 @@ abstract class Application
         {
             return $this->get_application()->display_error_page($message);
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->display_error_message($message);
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a warning page.
-     *
+     * 
      * @param string $message
      */
     public function display_warning_page($message)
@@ -424,13 +413,13 @@ abstract class Application
         {
             return $this->get_application()->display_warning_page($message);
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->display_warning_message($message);
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -445,27 +434,27 @@ abstract class Application
 
     /**
      * Gets the user id of this personal calendars owner
-     *
+     * 
      * @return int
      */
     public function get_user_id()
     {
-        if ($this->user)
+        if ($this->getApplicationConfiguration()->getUser())
         {
-            return $this->user->get_id();
+            return $this->get_user()->get_id();
         }
-
+        
         return 0;
     }
 
     /**
      * Gets the user.
-     *
+     * 
      * @return \core\user\User
      */
     public function get_user()
     {
-        return $this->user;
+        return $this->getApplicationConfiguration()->getUser();
     }
 
     /**
@@ -479,7 +468,7 @@ abstract class Application
 
     /**
      * Sets the current action.
-     *
+     * 
      * @param string $action
      */
     public function set_action($action)
@@ -493,10 +482,9 @@ abstract class Application
     }
 
     /**
-     * Does the entire application have a leftside menu? False per default.
-     * Can be overwritten by the specific
+     * Does the entire application have a leftside menu? False per default. Can be overwritten by the specific
      * application
-     *
+     * 
      * @return boolean
      */
     public function has_menu()
@@ -505,9 +493,8 @@ abstract class Application
     }
 
     /**
-     * Returns the html for the application-menu.
-     * Empty per default Can be overwritten by the specific application
-     *
+     * Returns the html for the application-menu. Empty per default Can be overwritten by the specific application
+     * 
      * @return string
      */
     public function get_menu()
@@ -517,7 +504,7 @@ abstract class Application
 
     /**
      * Determines if a given name is the name of an application
-     *
+     * 
      * @param string $string
      * @return boolean
      */
@@ -536,7 +523,7 @@ abstract class Application
      * @param string $succes_message_multiple
      * @return string
      */
-    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
+    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single, 
         $succes_message_multiple)
     {
         if ($failures)
@@ -561,13 +548,13 @@ abstract class Application
                 $message = $succes_message_multiple;
             }
         }
-
+        
         return Translation :: get($message);
     }
 
     /**
      * Generates a general results message like ObjectCreated, ObjectUpdated, ObjectDeleted
-     *
+     * 
      * @param int $failures
      * @param int $count
      * @param string $single_object
@@ -575,13 +562,13 @@ abstract class Application
      * @param string $type
      * @return string
      */
-    public function get_general_result($failures, $count, $single_object, $multiple_object,
+    public function get_general_result($failures, $count, $single_object, $multiple_object, 
         $type = Application :: RESULT_TYPE_CREATED)
     {
         if ($count == 1)
         {
             $param = array('OBJECT' => $single_object);
-
+            
             if ($failures)
             {
                 $message = 'ObjectNot' . $type;
@@ -594,7 +581,7 @@ abstract class Application
         else
         {
             $param = array('OBJECTS' => $multiple_object);
-
+            
             if ($failures)
             {
                 $message = 'ObjectsNot' . $type;
@@ -604,13 +591,13 @@ abstract class Application
                 $message = 'Objects' . $type;
             }
         }
-
+        
         return Translation :: get($message, $param);
     }
 
     /**
      * Returns the breadcrumb generator
-     *
+     * 
      * @return BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
@@ -645,7 +632,7 @@ abstract class Application
         if (self :: exists($context))
         {
             $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($context);
-
+            
             if ($registration && $registration->is_active())
             {
                 return true;
@@ -698,7 +685,7 @@ abstract class Application
     public static function get_application_namespace($application_name)
     {
         $path = Path :: getInstance()->namespaceToFullPath('Chamilo\Core') . $application_name . '/';
-
+        
         if (is_dir($path))
         {
             return 'Chamilo\Core\\' . $application_name;
@@ -706,7 +693,7 @@ abstract class Application
         else
         {
             $path = Path :: getInstance()->namespaceToFullPath('Chamilo\Application') . $application_name . '/';
-
+            
             if (is_dir($path))
             {
                 return 'Chamilo\Application\\' . $application_name;
@@ -720,49 +707,49 @@ abstract class Application
 
     /**
      * Get a list of core and web applications from the filesystem as an array
-     *
+     * 
      * @return multitype:string
      */
     public static function get_packages_from_filesystem($type = null)
     {
         $applications = array();
-
+        
         if (! $type || $type == Registration :: TYPE_CORE)
         {
             $directories = Filesystem :: get_directory_content(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Core'),
-                Filesystem :: LIST_DIRECTORIES,
+                Path :: getInstance()->namespaceToFullPath('Chamilo\Core'), 
+                Filesystem :: LIST_DIRECTORIES, 
                 false);
-
+            
             foreach ($directories as $directory)
             {
                 $namespace = self :: get_application_namespace(basename($directory));
-
+                
                 if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
             }
         }
-
+        
         if (! $type || $type == Registration :: TYPE_APPLICATION)
         {
             $directories = Filesystem :: get_directory_content(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Application'),
-                Filesystem :: LIST_DIRECTORIES,
+                Path :: getInstance()->namespaceToFullPath('Chamilo\Application'), 
+                Filesystem :: LIST_DIRECTORIES, 
                 false);
-
+            
             foreach ($directories as $directory)
             {
                 $namespace = self :: get_application_namespace(basename($directory));
-
+                
                 if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
             }
         }
-
+        
         return $applications;
     }
 
@@ -773,16 +760,16 @@ abstract class Application
     public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
     {
         $applications = \Chamilo\Configuration\Storage\DataManager :: get_registrations_by_type($type);
-
+        
         $active_applications = array();
-
+        
         foreach ($applications as $application)
         {
             if (! $application->is_active())
             {
                 continue;
             }
-
+            
             $active_applications[] = $application->get_name();
         }
         return $active_applications;
@@ -792,19 +779,19 @@ abstract class Application
     {
         // Check if the context exists
         $context_path = Path :: getInstance()->namespaceToFullPath($context);
-
+        
         if (! is_dir($context_path))
         {
             $original_context = $context;
-
+            
             // Adding a fallback for old-style contexts which might still exis in certain applications, links, etc.
             $convertedContext = (string) StringUtilities :: getInstance()->createString($context)->upperCamelize();
-
+            
             $possible_contexts = array();
             $possible_contexts[] = 'Chamilo\Application\\' . $convertedContext;
             $possible_contexts[] = 'Chamilo\Core\\' . $convertedContext;
             $possible_contexts[] = 'Chamilo\\' . $convertedContext;
-
+            
             foreach ($possible_contexts as $possible_context)
             {
                 if (is_dir(Path :: getInstance()->namespaceToFullPath($possible_context)))
@@ -812,7 +799,7 @@ abstract class Application
                     $context = $possible_context;
                 }
             }
-
+            
             $context_path = Path :: getInstance()->namespaceToFullPath($context);
             if (! is_dir($context_path))
             {
@@ -822,26 +809,26 @@ abstract class Application
             {
                 $query = $_GET;
                 $query[self :: PARAM_CONTEXT] = $context;
-
+                
                 $messages = Session :: retrieve(self :: PARAM_MESSAGES);
                 $messages[self :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
                 $messages[self :: PARAM_MESSAGE][] = Translation :: get(
-                    'OldApplicationParameter',
+                    'OldApplicationParameter', 
                     array('OLD' => $original_context, 'NEW' => $context));
-
+                
                 Session :: register(self :: PARAM_MESSAGES, $messages);
-
+                
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
-
+                
                 $logger = new FileLogger(Path :: getInstance()->getLogPath() . '/application_parameters.log', true);
                 $logger->log_message($currentUrl);
-
+                
                 $redirect = new Redirect($query);
                 $redirect->toUrl();
             }
         }
-
+        
         return $context;
     }
 
@@ -853,13 +840,13 @@ abstract class Application
     {
         $level = 0;
         $application = $this;
-
+        
         while ($application->get_application() instanceof Application)
         {
             $level ++;
             $application = $application->get_application();
         }
-
+        
         return $level;
     }
 
@@ -870,7 +857,7 @@ abstract class Application
     public static function package()
     {
         $className = self :: class_name(false);
-
+        
         if ($className == 'Manager')
         {
             return static :: context();

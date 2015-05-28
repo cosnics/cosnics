@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Preview\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 
@@ -11,10 +12,8 @@ class ViewComponent extends \Chamilo\Core\Repository\Display\Preview implements 
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
