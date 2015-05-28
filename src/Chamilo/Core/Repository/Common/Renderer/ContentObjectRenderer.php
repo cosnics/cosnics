@@ -16,6 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 abstract class ContentObjectRenderer implements TableSupport
 {
@@ -51,12 +52,12 @@ abstract class ContentObjectRenderer implements TableSupport
     {
         $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
              'ContentObjectRenderer';
-
+        
         if (! class_exists($class))
         {
             throw new Exception(Translation :: get('ContentObjectRendererTypeDoesNotExist', array('type' => $type)));
         }
-
+        
         return new $class($repository_browser);
     }
 
@@ -65,16 +66,16 @@ abstract class ContentObjectRenderer implements TableSupport
     public function get_parameters($include_search = false)
     {
         $parameters = $this->get_repository_browser()->get_parameters();
-
+        
         $selected_types = TypeSelector :: get_selection();
-
+        
         if (is_array($selected_types) && count($selected_types))
         {
             $parameters[TypeSelector :: PARAM_SELECTION] = $selected_types;
         }
-
+        
         $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->get_repository_browser()->get_action_bar()->get_query();
-
+        
         return $parameters;
     }
 
@@ -121,131 +122,134 @@ abstract class ContentObjectRenderer implements TableSupport
     {
         $actions = array();
         $actions[] = new ToolbarItem(
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-            $this->get_repository_browser()->get_content_object_editing_url($content_object),
+            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+            Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+            $this->get_repository_browser()->get_content_object_editing_url($content_object), 
             ToolbarItem :: DISPLAY_ICON);
-
+        
         if ($content_object->get_owner_id() == Session :: get_user_id())
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Duplicate'),
-                Theme :: getInstance()->getCommonImagePath('Action/Reuse'),
-                $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
+                Translation :: get('Duplicate'), 
+                Theme :: getInstance()->getCommonImagePath('Action/Reuse'), 
+                $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
-        if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+        
+        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
-                $url,
-                ToolbarItem :: DISPLAY_ICON,
-                true);
+            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+            {
+                $actions[] = new ToolbarItem(
+                    Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'), 
+                    $url, 
+                    ToolbarItem :: DISPLAY_ICON, 
+                    true);
+            }
+            else
+            {
+                $actions[] = new ToolbarItem(
+                    Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
+                    null, 
+                    ToolbarItem :: DISPLAY_ICON);
+            }
         }
-        else
+        
+        if (DataManager :: workspace_has_categories($this->get_repository_browser()->getWorkspace()))
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
-                null,
+                Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Move'), 
+                $this->get_repository_browser()->get_content_object_moving_url($content_object), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
-        if (DataManager :: user_has_categories($this->get_repository_browser()->get_user_id()))
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Move'),
-                $this->get_repository_browser()->get_content_object_moving_url($content_object),
-                ToolbarItem :: DISPLAY_ICON);
-        }
-
+        
         $actions[] = new ToolbarItem(
-            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Export'),
-            $this->get_repository_browser()->get_content_object_exporting_url($content_object),
+            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
+            Theme :: getInstance()->getCommonImagePath('Action/Export'), 
+            $this->get_repository_browser()->get_content_object_exporting_url($content_object), 
             ToolbarItem :: DISPLAY_ICON);
         $actions[] = new ToolbarItem(
-            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-            $this->get_repository_browser()->get_publish_content_object_url($content_object),
+            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
+            Theme :: getInstance()->getCommonImagePath('Action/Publish'), 
+            $this->get_repository_browser()->get_publish_content_object_url($content_object), 
             ToolbarItem :: DISPLAY_ICON);
-
+        
         $actions[] = new ToolbarItem(
-            Translation :: get('ContentObjectAlternativeLinker'),
-            Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
-            $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
+            Translation :: get('ContentObjectAlternativeLinker'), 
+            Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'), 
+            $this->get_repository_browser()->get_content_object_alternative_linker($content_object), 
             ToolbarItem :: DISPLAY_ICON);
-
+        
         if ($this->get_repository_browser()->get_user()->is_platform_admin())
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('CopyToTemplates'),
-                Theme :: getInstance()->getCommonImagePath('Export/Template'),
+                Translation :: get('CopyToTemplates'), 
+                Theme :: getInstance()->getCommonImagePath('Export/Template'), 
                 $this->get_repository_browser()->get_url(
                     array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
-                        \Chamilo\Core\Repository\Template\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Template\Manager :: ACTION_CREATE)),
+                        Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE, 
+                        \Chamilo\Core\Repository\Template\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Template\Manager :: ACTION_CREATE)), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-
+        
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             if (\Chamilo\Core\Repository\Builder\Manager :: exists($content_object->package()))
             {
                 $actions[] = new ToolbarItem(
-                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                    $this->get_repository_browser()->get_browse_complex_content_object_url($content_object),
+                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Build'), 
+                    $this->get_repository_browser()->get_browse_complex_content_object_url($content_object), 
                     ToolbarItem :: DISPLAY_ICON);
-
+                
                 $actions[] = new ToolbarItem(
-                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-                    $preview_url,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
-                    $onclick,
+                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
+                    $preview_url, 
+                    ToolbarItem :: DISPLAY_ICON, 
+                    false, 
+                    $onclick, 
                     '_blank');
             }
             else
             {
                 $actions[] = new ToolbarItem(
-                    Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
-                    $preview_url,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
-                    $onclick,
+                    Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'), 
+                    $preview_url, 
+                    ToolbarItem :: DISPLAY_ICON, 
+                    false, 
+                    $onclick, 
                     '_blank');
             }
         }
         else
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-                $preview_url,
-                ToolbarItem :: DISPLAY_ICON,
-                false,
-                $onclick,
+                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
+                $preview_url, 
+                ToolbarItem :: DISPLAY_ICON, 
+                false, 
+                $onclick, 
                 '_blank');
         }
-
+        
         if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Download'),
-                $this->get_repository_browser()->get_document_downloader_url($content_object->get_id()),
+                Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Download'), 
+                $this->get_repository_browser()->get_document_downloader_url($content_object->get_id()), 
                 ToolbarItem :: DISPLAY_ICON);
         }
-
+        
         return $actions;
     }
 

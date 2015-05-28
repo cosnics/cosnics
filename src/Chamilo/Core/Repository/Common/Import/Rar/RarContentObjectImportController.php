@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class RarContentObjectImportController extends ContentObjectImportController
 {
@@ -78,7 +79,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                         $category = new RepositoryCategory();
                         $category->set_id(0);
                         $category->set_user_id($this->get_parameters()->get_user());
-                        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
+                        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
                     }
                     else
                     {
@@ -236,7 +237,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                 $base_name));
         $category->set_parent($this->created_categories[md5($dir_name)]->get_id());
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
+        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
         if (! $category->create())
         {
             return false;

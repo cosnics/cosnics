@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -58,13 +57,6 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         $success = DataManager :: transactional(
             function ($c) use($create_in_batch, $category)
             {
-                $user_id = $category->get_user_id();
-                
-                if (! $user_id)
-                {
-                    $user_id = Session :: get_user_id();
-                }
-                
                 if (! $category->check_before_save())
                 {
                     return false;
@@ -97,18 +89,16 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             $this->add_error(Translation :: get('TitleIsRequired'));
         }
         
-        if (! $this->get_user_id())
+        if (! $this->get_type_id())
         {
-            $user_id = Session :: get_user_id();
-            if ($user_id)
-            {
-                $this->set_user_id($user_id);
-            }
-            else
-            {
-                $this->add_error(Translation :: get('UserIdIsRequired'));
-            }
+            $this->add_error(Translation :: get('TypeIdIsRequired'));
         }
+        
+        if (! $this->get_type())
+        {
+            $this->add_error(Translation :: get('TypeIsRequired'));
+        }
+        
         if (! $this->get_parent())
         {
             $this->set_parent(0);
@@ -152,7 +142,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             new StaticConditionVariable($this->get_parent()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->get_type_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
             new StaticConditionVariable($this->get_type()));
@@ -215,11 +205,11 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             {
                 if ($category->get_type() == $category :: TYPE_WORKSPACE)
                 {
-//                     if (! DataManager :: delete_share_category_recursive($category))
-//                     {
-//                         $category->add_error(Translation :: get('CouldNotDeleteCategoryInDatabase'));
-//                         return false;
-//                     }
+                    // if (! DataManager :: delete_share_category_recursive($category))
+                    // {
+                    // $category->add_error(Translation :: get('CouldNotDeleteCategoryInDatabase'));
+                    // return false;
+                    // }
                 }
                 else
                 {

@@ -18,6 +18,7 @@ class WorkspaceContentObjectRelation extends DataClass
     
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
+    const PROPERTY_CATEGORY_ID = 'category_id';
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
@@ -39,7 +40,25 @@ class WorkspaceContentObjectRelation extends DataClass
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
-            array(self :: PROPERTY_WORKSPACE_ID, self :: PROPERTY_CONTENT_OBJECT_ID));
+            array(self :: PROPERTY_WORKSPACE_ID, self :: PROPERTY_CATEGORY_ID, self :: PROPERTY_CONTENT_OBJECT_ID));
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getCategoryId()
+    {
+        return $this->get_default_property(self :: PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     *
+     * @param integer $categoryId
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->set_default_property(self :: PROPERTY_CATEGORY_ID, $categoryId);
     }
 
     /**

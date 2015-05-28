@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * $Id: content_object_category_menu.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -32,9 +34,9 @@ class ContentObjectCategoryMenu extends HTML_Menu
     const TREE_NAME = __CLASS__;
 
     /**
-     * The owner of the categories
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
-    private $owner;
+    private $currentWorkspace;
 
     /**
      * The string passed to sprintf() to format category URLs
@@ -73,10 +75,10 @@ class ContentObjectCategoryMenu extends HTML_Menu
      * @param $filter_count_on_types string[] - Array to define the types on which the count on the categories should be
      *        filtered
      */
-    public function __construct($owner, $current_category = null, $url_format = '?category=%s', $extra_items = array(), 
+    public function __construct(WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s', $extra_items = array(), 
         $filter_count_on_types = array(), $exclude_types = array())
     {
-        $this->owner = $owner;
+        $this->currentWorkspace = $currentWorkspace;
         $this->urlFmt = $url_format;
         
         $this->filter_count_on_types = $filter_count_on_types;
@@ -100,10 +102,10 @@ class ContentObjectCategoryMenu extends HTML_Menu
         $menu = array();
         $menu_item = array();
         
-        $menu_item['title'] = Translation :: get('MyRepository');
+        $menu_item['title'] = $this->currentWorkspace->getTitle();
         $menu_item['url'] = $this->get_category_url(0);
         
-        if (DataManager :: user_has_categories($this->owner))
+        if (DataManager :: workspace_has_categories($this->currentWorkspace))
         {
             $sub_menu_items = $this->get_sub_menu_items();
             if (count($sub_menu_items) > 0)
@@ -139,7 +141,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
             new StaticConditionVariable($this->owner));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
-            new StaticConditionVariable(RepositoryCategory :: TYPE_PERSONAL));
+            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
             new StaticConditionVariable($parent));

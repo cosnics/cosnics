@@ -79,6 +79,7 @@ class EditorComponent extends Manager implements DelegateComponent
             
             $form = ContentObjectForm :: factory(
                 ContentObjectForm :: TYPE_EDIT, 
+                $this->getWorkspace(), 
                 $object, 
                 'edit', 
                 'post', 

@@ -31,7 +31,6 @@ abstract class Manager extends Application
     const ACTION_MOVE = 'Mover';
     const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
     const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
-    const ACTION_SHARE_CONTENT_OBJECTS = 'ShareContentObjects';
     const MOVE_TO_CATEGORY_COMPONENT = 'CategoryMover';
     const INTRODUCTION_PUBLISHER_COMPONENT = 'IntroductionPublisher';
     const MANAGE_CATEGORIES_COMPONENT = 'CategoryManager';

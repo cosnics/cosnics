@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
@@ -217,6 +218,7 @@ abstract class Manager extends Application
         
         $filter_form = FormFilterRenderer :: factory(
             FilterData :: get_instance(), 
+            $this->getWorkspace(), 
             $this->get_user_id(), 
             $this->get_allowed_content_object_types(), 
             $this->get_url(
@@ -531,7 +533,7 @@ abstract class Manager extends Application
                 $search_url = null;
             }
             
-            $this->category_menu = new RepositoryCategoryTreeMenu($this);
+            $this->category_menu = new RepositoryCategoryTreeMenu($this->getWorkspace(), $this);
             
             if (isset($search_url))
             {
@@ -743,5 +745,15 @@ abstract class Manager extends Application
     {
         $additionalParameters[] = self :: PARAM_WORKSPACE_ID;
         return $additionalParameters;
+    }
+    
+    /**
+     * Returns the admin breadcrumb generator
+     *
+     * @return \libraries\format\BreadcrumbGeneratorInterface
+     */
+    public function get_breadcrumb_generator()
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
     }
 }
