@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Email;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: email_manager.class.php 191 2009-11-13 11:50:28Z chellee $
@@ -17,9 +18,9 @@ abstract class Manager extends Application
 
     private $target_users;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $this->target_users = array();
 

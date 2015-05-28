@@ -30,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -182,11 +183,11 @@ abstract class Manager extends Application
      *
      * @param $user_id int The user id of current user
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
-        if (! is_null($user) && $user->is_anonymous_user())
+        if (! is_null($applicationConfiguration->getUser()) && $applicationConfiguration->getUser()->is_anonymous_user())
         {
             throw new NotAllowedException();
         }

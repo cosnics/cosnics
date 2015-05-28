@@ -22,6 +22,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
 require_once Path :: getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
@@ -63,9 +64,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @param string $user
      * @param string $parent
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $this->search_form = new ActionBarSearchForm($this->get_url());
     }

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * This class describes the submanager for course management
@@ -56,15 +57,15 @@ abstract class Manager extends Application
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
      * @throws \Exception
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if (! $application instanceof CourseSubManagerSupport)
+        if (! $applicationConfiguration->getApplication() instanceof CourseSubManagerSupport)
         {
             throw new \Exception(
                 'Components that use the course submanager support need to implement the CourseSubManagerSupport');
         }
 
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
     }
 
     /**

@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyNotific
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 
@@ -23,10 +24,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

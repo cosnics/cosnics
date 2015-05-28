@@ -3,6 +3,7 @@ namespace Chamilo\Core\Lynx;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application
 {
@@ -19,9 +20,9 @@ abstract class Manager extends Application
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }

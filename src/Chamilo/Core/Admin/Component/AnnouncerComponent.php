@@ -3,6 +3,7 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class AnnouncerComponent extends Manager
 {
@@ -13,10 +14,8 @@ class AnnouncerComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Admin\Announcement\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

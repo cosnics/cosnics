@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -35,10 +36,8 @@ class EmailerComponent extends Manager
             }
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\User\Email\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_target_users($users);
             $component->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS, $ids);

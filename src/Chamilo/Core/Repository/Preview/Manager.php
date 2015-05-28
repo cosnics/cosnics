@@ -11,7 +11,9 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application
 {
@@ -38,9 +40,9 @@ abstract class Manager extends Application
      * @param \core\user\storage\data_class\User $user
      * @param \libraries\architecture\application\Application,null $application
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         $content_object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
@@ -194,7 +196,7 @@ abstract class Manager extends Application
     {
         $package = $this->get_content_object()->package();
         $context = $package . '\Display\Preview';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         return $factory;
     }

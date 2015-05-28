@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Builder\Interfaces\MenuSupport;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application implements TabsTypeSelectorSupport, TableSupport
 {
@@ -69,9 +70,9 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     private $parent_content_object;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $parent)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $complex_content_object_item_id = Request :: get(self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)

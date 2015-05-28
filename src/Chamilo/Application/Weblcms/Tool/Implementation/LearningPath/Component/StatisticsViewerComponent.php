@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathTree;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -117,7 +118,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
                 $this->root_content_object = $object;
 
                 $context = ClassnameUtilities :: getInstance()->getNamespaceParent($object->get_type(), 3) . '\Display';
-                $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+                $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 return $factory->run();
             }
             else
@@ -125,10 +126,8 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
                 if ($cid)
                 {
                     $factory = new ApplicationFactory(
-                        $this->getRequest(),
                         \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                        $this->get_user(),
-                        $this);
+                        new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                     $component = $factory->getComponent();
                     $component->set_template_by_name(LearningPathAttemptProgressDetailsTemplate :: class_name());
                     return $component->run();
@@ -185,10 +184,8 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
                     }
 
                     $factory = new ApplicationFactory(
-                        $this->getRequest(),
                         \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                        $this->get_user(),
-                        $this);
+                        new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                     $component = $factory->getComponent();
                     $component->set_template_by_name(LearningPathAttemptProgressTemplate :: class_name());
                     $component->run();
@@ -209,10 +206,8 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
             }
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(LearningPathAttemptsTemplate :: class_name());
             $component->run();

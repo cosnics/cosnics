@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Preview\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
@@ -28,7 +29,7 @@ class ResetComponent extends Manager
         }
         
         $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->get_content_object()->context(), 2).'\Display\Preview';
-        $factory = new ApplicationFactory($this->getRequest(), $context , $this->get_user(), $this);
+        $factory = new ApplicationFactory($context , new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $preview = $factory->getComponent();
        
         if ($preview->supports_reset())

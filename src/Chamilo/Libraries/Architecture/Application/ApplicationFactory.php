@@ -21,9 +21,9 @@ class ApplicationFactory
 
     /**
      *
-     * @var \Symfony\Component\HttpFoundation\Request $request
+     * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
      */
-    private $request;
+    private $applicationConfiguration;
 
     /**
      *
@@ -33,30 +33,24 @@ class ApplicationFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
-     * @var \core\user\User
-     */
-    private $user;
-
-    /**
-     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $context
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $context, $user = null,
-        $application = null)
+    public function __construct($context, ApplicationConfigurationInterface $applicationConfiguration)
     {
-        $this->request = $request;
+        $this->applicationConfiguration = $applicationConfiguration;
         $this->context = $context;
-        $this->user = $user;
-        $this->application = $application;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
+     */
+    public function getApplicationConfiguration()
+    {
+        return $this->applicationConfiguration;
     }
 
     /**
@@ -65,7 +59,7 @@ class ApplicationFactory
      */
     public function getRequest()
     {
-        return $this->request;
+        return $this->getApplicationConfiguration()->getRequest();
     }
 
     /**
@@ -83,16 +77,16 @@ class ApplicationFactory
      */
     public function getApplication()
     {
-        return $this->application;
+        return $this->getApplicationConfiguration()->getApplication();
     }
 
     /**
      *
-     * @return \core\user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getUser()
     {
-        return $this->user;
+        return $this->getApplicationConfiguration()->getUser();
     }
 
     /**
@@ -113,13 +107,13 @@ class ApplicationFactory
         $actionParameter = $this->getActionParameter();
         $action = $this->getAction($actionParameter);
         $component = $this->createComponent($action);
-
+        
         if (! $component instanceof NoContextComponent)
         {
             $breadcrumbGenerator = $component->get_breadcrumb_generator();
             $breadcrumbGenerator->generate_breadcrumbs();
         }
-
+        
         return $component;
     }
 
@@ -131,12 +125,12 @@ class ApplicationFactory
     private function getManagerClass()
     {
         $managerClass = $this->getContext() . '\Manager';
-
+        
         if (! class_exists($managerClass))
         {
             throw new \Exception(Translation :: get('NoManagerFound', array('CONTEXT' => $this->getContext())));
         }
-
+        
         return $managerClass;
     }
 
@@ -159,22 +153,22 @@ class ApplicationFactory
     {
         $class = $this->getClassName($action);
         
-        $component = new $class($this->getRequest(), $this->getUser(), $this->getApplication());
-              
+        $component = new $class($this->getApplicationConfiguration());
+        
         $component->set_parameter($this->getActionParameter(), $action);
-
+        
         if (! $this->getApplication() instanceof Application)
         {
             $component->set_parameter(Application :: PARAM_CONTEXT, $this->getContext());
         }
-
+        
         $parameters = $component->get_additional_parameters();
-
+        
         foreach ($parameters as $parameter)
         {
             $component->set_parameter($parameter, $this->getRequest()->query->get($parameter));
         }
-
+        
         return $component;
     }
 
@@ -188,7 +182,7 @@ class ApplicationFactory
         $managerClass = $this->getManagerClass();
         $level = $this->determineLevel();
         $actions = $this->getRequestedAction($actionParameter);
-
+        
         if (is_array($actions))
         {
             if (isset($actions[$level]))
@@ -205,14 +199,14 @@ class ApplicationFactory
         {
             $action = $this->getRequestedAction($actionParameter);
         }
-
+        
         $tableAction = $this->processTableAction($actionParameter);
-
+        
         if ($tableAction)
         {
             $action = $tableAction;
         }
-
+        
         return $action;
     }
 
@@ -229,10 +223,10 @@ class ApplicationFactory
         }
         else
         {
-
+            
             $level = 0;
         }
-
+        
         return $level;
     }
 
@@ -245,11 +239,11 @@ class ApplicationFactory
     private function getRequestedAction($actionParameter)
     {
         $getAction = $this->getRequest()->query->get($actionParameter);
-
+        
         if (! $getAction)
         {
             $postAction = $this->getRequest()->request->get($actionParameter);
-
+            
             if (! $postAction)
             {
                 // TODO: Catch the fact that there might not be a default action
@@ -275,22 +269,22 @@ class ApplicationFactory
     private function getClassName($action)
     {
         $classname = $this->getContext() . '\Component\\' . $action . 'Component';
-
+        
         if (! class_exists($classname))
         {
             // TODO: Temporary fallback for backwards compatibility
             $classname = $this->getContext() . '\Component\\' .
                  (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
-
+            
             if (! class_exists($classname))
             {
                 $trail = BreadcrumbTrail :: get_instance();
                 $trail->add(new Breadcrumb('#', Translation :: get($classname)));
-
+                
                 throw new ClassNotExistException($classname);
             }
         }
-
+        
         return $classname;
     }
 
@@ -301,35 +295,35 @@ class ApplicationFactory
     private function processTableAction($actionParameter)
     {
         $tableName = $this->getRequest()->request->get('table_name');
-
+        
         if (isset($tableName))
         {
             $namespace = $this->getRequest()->request->get($tableName . '_namespace');
             $class = (string) StringUtilities :: getInstance()->createString($tableName)->upperCamelize();
             $classname = $namespace . '\\' . $class;
-
+            
             if (class_exists($classname))
             {
                 $ids = $classname :: get_selected_ids();
-
+                
                 $this->getRequest()->query->set($classname :: TABLE_IDENTIFIER, $ids);
                 Request :: set_get($classname :: TABLE_IDENTIFIER, $ids);
-
+                
                 $tableParameters = unserialize(base64_decode(Request :: post($tableName . '_action_value')));
-
+                
                 foreach ($tableParameters as $parameter => $value)
                 {
                     $this->getRequest()->query->set($parameter, $value);
                     Request :: set_get($parameter, $value);
                 }
-
+                
                 if (array_key_exists($actionParameter, $tableParameters))
                 {
                     return $tableParameters[$actionParameter];
                 }
             }
         }
-
+        
         return null;
     }
 }

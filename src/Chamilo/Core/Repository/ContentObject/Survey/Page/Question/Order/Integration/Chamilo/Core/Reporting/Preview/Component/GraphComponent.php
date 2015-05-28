@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Integration
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order\Integration\Chamilo\Core\Reporting\Template\GraphTemplate;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class GraphComponent extends Manager implements TemplateSupport
 {
@@ -22,7 +23,7 @@ class GraphComponent extends Manager implements TemplateSupport
             throw new NotAllowedException();
         }
         
-        $factory = new ApplicationFactory($this->getRequest(), '\Chamilo\Core\Reporting\Viewer', $this->get_user(), $this);
+        $factory = new ApplicationFactory('\Chamilo\Core\Reporting\Viewer', new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
         $viewer->set_template_by_name(GraphTemplate :: class_name());
          

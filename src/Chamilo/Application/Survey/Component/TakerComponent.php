@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class TakerComponent extends Manager implements DelegateComponent
 
@@ -58,10 +59,8 @@ class TakerComponent extends Manager implements DelegateComponent
         $this->started();
         
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
          
         $component = $factory->getComponent();
         $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Preview\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Blog\Display\Preview\Manager implements
@@ -11,10 +12,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Blog\Displa
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Blog\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

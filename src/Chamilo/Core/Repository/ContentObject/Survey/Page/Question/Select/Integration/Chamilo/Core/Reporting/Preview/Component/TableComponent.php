@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Integratio
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Integration\Chamilo\Core\Reporting\Template\TableTemplate;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class TableComponent extends Manager implements TemplateSupport
 {
@@ -23,10 +24,8 @@ class TableComponent extends Manager implements TemplateSupport
         }
         
         $factory = new ApplicationFactory(
-            $this->getRequest(), 
             '\Chamilo\Core\Reporting\Viewer', 
-            $this->get_user(), 
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
         $viewer->set_template_by_name(TableTemplate :: class_name());
         

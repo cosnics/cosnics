@@ -7,6 +7,7 @@ use Chamilo\Core\MetadataOld\Value\Manager;
 use Chamilo\Core\MetadataOld\Value\MetadataValueEditorComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * Displays and handles the metadata form
@@ -23,16 +24,15 @@ class EditorComponent extends Manager
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null,
-        MetadataValueEditorComponent $parent)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if (! $parent instanceof MetadataValueEditorComponent)
+        if (! $applicationConfiguration->getApplication() instanceof MetadataValueEditorComponent)
         {
             throw new \InvalidArgumentException(
                 'The parent component must be an instance of MetadataValueEditorComponent');
         }
 
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
     }
 
     /**

@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Builder\Action\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  * This component previews the complex content object
@@ -47,6 +48,6 @@ class PreviewComponent extends Manager
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
         $namespace = $contentObjectNamespace . '\Display\Preview';
 
-        return new ApplicationFactory($this->getRequest(), $namespace, $this->get_user(), $this);
+        return new ApplicationFactory($namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
     }
 }
