@@ -4,10 +4,8 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
@@ -31,16 +29,6 @@ class AttachmentViewerComponent extends Manager
             $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
                 $object_id);
-            $repo_rights = RepositoryRights :: get_instance();
-
-            if ($object->get_owner_id() != $this->get_user_id() && ! $repo_rights->is_allowed_in_user_subtree(
-                RepositoryRights :: VIEW_RIGHT,
-                $object_id,
-                RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                $object->get_owner_id()))
-            {
-                throw new NotAllowedException();
-            }
 
             $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),

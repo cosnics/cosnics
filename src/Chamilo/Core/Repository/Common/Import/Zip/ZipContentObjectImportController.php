@@ -207,7 +207,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             $category = new RepositoryCategory();
             $category->set_id(0);
             $category->set_user_id($this->get_parameters()->get_user());
-            $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+            $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
         }
         else
         {
@@ -377,7 +377,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
 
         $category->set_parent($parent_category->get_id());
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
 
         if ($category->create())
         {

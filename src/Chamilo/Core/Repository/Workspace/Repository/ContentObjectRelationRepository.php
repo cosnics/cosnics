@@ -15,6 +15,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Core\Rights\Entity\UserEntity;
 
 /**
  *
@@ -88,7 +89,7 @@ class ContentObjectRelationRepository
             new PropertyConditionVariable(
                 WorkspaceEntityRelation :: class_name(), 
                 WorkspaceEntityRelation :: PROPERTY_ENTITY_TYPE), 
-            new StaticConditionVariable(User :: class_name()));
+            new StaticConditionVariable(UserEntity :: ENTITY_TYPE));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation :: class_name(), 

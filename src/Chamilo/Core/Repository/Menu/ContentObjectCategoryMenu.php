@@ -135,11 +135,11 @@ class ContentObjectCategoryMenu extends HTML_Menu
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
             new StaticConditionVariable($this->owner));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
-            new StaticConditionVariable(RepositoryCategory :: TYPE_NORMAL));
+            new StaticConditionVariable(RepositoryCategory :: TYPE_PERSONAL));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
             new StaticConditionVariable($parent));

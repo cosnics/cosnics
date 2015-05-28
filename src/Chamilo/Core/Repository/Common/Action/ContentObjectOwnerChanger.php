@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -127,9 +126,6 @@ class ContentObjectOwnerChanger
 
         // Process the physical files
         $this->move_files($co, $old_user_id);
-
-        // Process the locations
-        $this->process_locations($co, $old_location);
 
         if (in_array($co->get_type(), DataManager :: get_active_helper_types()))
         {
@@ -312,37 +308,5 @@ class ContentObjectOwnerChanger
 
         $co->set_path($new_folder);
         $co->update();
-    }
-
-    /**
-     * Delete the old rights location and create a new one in the target repository
-     *
-     * @param ContentObject $co
-     */
-    private function process_locations($co, $old_location)
-    {
-        if ($old_location)
-        {
-            $old_location->delete();
-        }
-
-        $parent = $this->category_id;
-        if (! $parent)
-        {
-            $parent_id = RepositoryRights :: get_instance()->get_user_root_id($co->get_owner_id());
-        }
-        else
-        {
-            $parent_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                RepositoryRights :: TYPE_USER_CATEGORY,
-                $this->category_id,
-                $co->get_owner_id());
-        }
-
-        RepositoryRights :: get_instance()->create_location_in_user_tree(
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $co->get_id(),
-            $parent_id,
-            $co->get_owner_id());
     }
 }
