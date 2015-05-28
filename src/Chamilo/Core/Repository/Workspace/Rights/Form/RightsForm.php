@@ -108,7 +108,6 @@ class RightsForm extends FormValidator
     {
         if ($this->entityRelation instanceof WorkspaceEntityRelation)
         {
-            // TODO: Add logic to determine the right default value
             $givenRights = $this->entityRelation->get_rights();
 
             $defaults[self :: PROPERTY_VIEW] = $givenRights & ~ RightsService :: RIGHT_USE &
