@@ -11,8 +11,11 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 
-class EntityRelationTableCellRenderer extends DataClassTableCellRenderer implements
+class EntityRelationTableCellRenderer extends DataClassTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
@@ -20,6 +23,19 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer impleme
     {
         switch ($column->get_name())
         {
+            case EntityRelationTableColumnModel :: COLUMN_ENTITY :
+                if ($entityRelation->get_entity_type() == UserEntity :: ENTITY_TYPE)
+                {
+                    return \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+                        User :: class_name(), 
+                        $entityRelation->get_entity_id())->get_fullname();
+                }
+                else
+                {
+                    return \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+                        Group :: class_name(), 
+                        $entityRelation->get_entity_id())->get_name();
+                }
             case RightsService :: RIGHT_VIEW :
                 return $this->getRightsIcon(RightsService :: RIGHT_VIEW, $entityRelation);
             case RightsService :: RIGHT_ADD :
@@ -33,7 +49,7 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer impleme
             case RightsService :: RIGHT_COPY :
                 return $this->getRightsIcon(RightsService :: RIGHT_COPY, $entityRelation);
         }
-
+        
         return parent :: render_cell($column, $entityRelation);
     }
 
@@ -46,28 +62,28 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer impleme
     public function get_actions($entityRelation)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                        Manager :: PARAM_ENTITY_RELATION_ID => $entityRelation->get_id())),
+                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
+                        Manager :: PARAM_ENTITY_RELATION_ID => $entityRelation->get_id())), 
                 ToolbarItem :: DISPLAY_ICON));
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_ENTITY_RELATION_ID => $entityRelation->get_id())),
-                ToolbarItem :: DISPLAY_ICON,
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
+                        Manager :: PARAM_ENTITY_RELATION_ID => $entityRelation->get_id())), 
+                ToolbarItem :: DISPLAY_ICON, 
                 true));
-
+        
         return $toolbar->as_html();
     }
 }

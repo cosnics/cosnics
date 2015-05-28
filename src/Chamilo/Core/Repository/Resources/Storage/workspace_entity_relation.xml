@@ -3,7 +3,7 @@
 	<properties>
 		<property name="id" type="integer" notnull="1" autoincrement="true" />
 		<property name="workspace_id" type="integer" notnull="1" default="0" />
-		<property name="entity_type" type="text" length="255" notnull="1" default="" />
+		<property name="entity_type" type="integer" notnull="1" default="0" />
 		<property name="entity_id" type="integer" notnull="1" default="0" />
 		<property name="rights" type="integer" notnull="1" default="0" />
 	</properties>

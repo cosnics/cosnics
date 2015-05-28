@@ -196,17 +196,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         return count($this->get_allowed_types()) > 0;
     }
 
-    public function has_right($right, $user_id = null)
-    {
-        $ref_object = $this->get_ref_object();
-        if (! $ref_object)
-        {
-            // if we cannot fetch the reference object, surely we have no rights to do anything with it...
-            return false;
-        }
-        return $ref_object->has_right($right, $user_id);
-    }
-
     public static function factory($class, &$record)
     {
         if (is_subclass_of($class, ComplexContentObjectItem :: class_name()))

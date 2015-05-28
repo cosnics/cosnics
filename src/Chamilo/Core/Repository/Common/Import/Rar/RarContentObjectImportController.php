@@ -78,7 +78,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                         $category = new RepositoryCategory();
                         $category->set_id(0);
                         $category->set_user_id($this->get_parameters()->get_user());
-                        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+                        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
                     }
                     else
                     {
@@ -236,7 +236,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                 $base_name));
         $category->set_parent($this->created_categories[md5($dir_name)]->get_id());
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
         if (! $category->create())
         {
             return false;

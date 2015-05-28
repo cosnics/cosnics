@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -90,8 +89,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 DynamicVisualTab :: POSITION_LEFT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
-             $this->get_current_node()->get_content_object()->has_right(RepositoryRights :: COLLABORATE_RIGHT))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             if ($this->get_current_node()->is_root())
             {

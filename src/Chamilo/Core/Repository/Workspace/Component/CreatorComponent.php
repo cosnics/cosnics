@@ -22,7 +22,7 @@ class CreatorComponent extends Manager
     public function run()
     {
         $form = new WorkspaceForm($this->get_url());
-
+        
         if ($form->validate())
         {
             try
@@ -30,15 +30,15 @@ class CreatorComponent extends Manager
                 $values = $form->exportValues();
                 $values[Workspace :: PROPERTY_CREATOR_ID] = $this->get_user_id();
                 $values[Workspace :: PROPERTY_CREATION_DATE] = time();
-
+                
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
-                $success = $workspaceService->createWorkspace($values);
-
-                $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
+                $workspace = $workspaceService->createWorkspace($values);
+                
+                $translation = $workspace instanceof Workspace ? 'ObjectCreated' : 'ObjectNotCreated';
+                
                 $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Workspace')),
+                    $translation, 
+                    array('OBJECT' => Translation :: get('Workspace')), 
                     Utilities :: COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
@@ -46,17 +46,20 @@ class CreatorComponent extends Manager
                 $success = false;
                 $message = $ex->getMessage();
             }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_RIGHTS));
+            
+            $this->redirect(
+                $message, 
+                ! $success, 
+                array(self :: PARAM_ACTION => self :: ACTION_RIGHTS, self :: PARAM_WORKSPACE_ID => $workspace->getId()));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

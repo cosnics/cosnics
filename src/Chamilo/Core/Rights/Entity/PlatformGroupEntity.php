@@ -112,7 +112,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_entity_type()
     {
-        return self :: ENTITY_TYPE;
+        return static :: ENTITY_TYPE;
     }
 
     /**
@@ -218,7 +218,7 @@ class PlatformGroupEntity implements NestedRightsEntity
         }
 
         return new AdvancedElementFinderElement(
-            self :: ENTITY_TYPE . '_' . $id,
+            static :: ENTITY_TYPE . '_' . $id,
             'type type_group',
             $group->get_name(),
             $group->get_code());

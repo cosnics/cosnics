@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
@@ -119,8 +118,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             
             $current_content_object = $this->get_current_node()->get_content_object();
             
-            if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
-                 $current_content_object->has_right(RepositoryRights :: COLLABORATE_RIGHT))
+            if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
             {
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(

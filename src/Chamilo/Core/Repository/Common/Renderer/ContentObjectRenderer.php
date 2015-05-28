@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -160,19 +159,6 @@ abstract class ContentObjectRenderer implements TableSupport
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Move'),
                 $this->get_repository_browser()->get_content_object_moving_url($content_object),
-                ToolbarItem :: DISPLAY_ICON);
-        }
-
-        if (! PlatformSetting :: get('hide_sharing', __NAMESPACE__))
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_repository_browser()->get_url(
-                    array(
-                        \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_SHARE_CONTENT_OBJECTS,
-                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
-                        \Chamilo\Core\Repository\Share\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Share\Manager :: ACTION_ADD_ENTITIES)),
                 ToolbarItem :: DISPLAY_ICON);
         }
 

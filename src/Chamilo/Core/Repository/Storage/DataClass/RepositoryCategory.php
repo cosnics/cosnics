@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -28,7 +27,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      * Properties *
      * **************************************************************************************************************
      */
-    const PROPERTY_USER_ID = 'user_id';
+    const PROPERTY_TYPE_ID = 'type_id';
     const PROPERTY_TYPE = 'type';
     
     /**
@@ -36,8 +35,8 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      * Type Definition *
      * **************************************************************************************************************
      */
-    const TYPE_NORMAL = 1;
-    const TYPE_SHARED = 2;
+    const TYPE_PERSONAL = 1;
+    const TYPE_WORKSPACE = 2;
 
     /**
      * **************************************************************************************************************
@@ -78,33 +77,6 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                             'CouldNotCreateObjectInDatabase', 
                             array('OBJECT' => Translation :: get('Category'), Utilities :: COMMON_LIBRARIES)));
                     
-                    return false;
-                }
-                
-                $parent = $category->get_parent();
-                if ($parent == 0)
-                {
-                    $parent_id = RepositoryRights :: get_instance()->get_user_root_id($user_id);
-                }
-                else
-                {
-                    $parent_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                        RepositoryRights :: TYPE_USER_CATEGORY, 
-                        $category->get_parent(), 
-                        $user_id);
-                }
-                
-                if (! RepositoryRights :: get_instance()->create_location_in_user_tree(
-                    RepositoryRights :: TYPE_USER_CATEGORY, 
-                    $category->get_id(), 
-                    $parent_id, 
-                    $user_id, 
-                    $create_in_batch))
-                {
-                    $category->add_error(
-                        Translation :: get('CouldNotCreateLocation'), 
-                        array(), 
-                        Utilities :: COMMON_LIBRARIES);
                     return false;
                 }
                 
@@ -158,7 +130,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             $this->set_display_order(
                 DataManager :: select_next_category_display_order(
                     $this->get_parent(), 
-                    $this->get_user_id(), 
+                    $this->get_type_id(), 
                     $this->get_type()));
         }
         
@@ -179,7 +151,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_parent()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
@@ -223,32 +195,6 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                             array('OBJECT' => Translation :: get('Category'), Utilities :: COMMON_LIBRARIES)));
                 }
                 
-                if ($move)
-                {
-                    if ($category->get_parent())
-                    {
-                        $new_parent_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                            RepositoryRights :: TYPE_USER_CATEGORY, 
-                            $category->get_parent(), 
-                            $category->get_user_id());
-                    }
-                    else
-                    {
-                        $new_parent_id = RepositoryRights :: get_instance()->get_user_root_id(Session :: get_user_id());
-                    }
-                    
-                    $location = RepositoryRights :: get_instance()->get_location_by_identifier_from_users_subtree(
-                        RepositoryRights :: TYPE_USER_CATEGORY, 
-                        $category->get_id(), 
-                        $category->get_user_id());
-                    
-                    if (! $location->move($new_parent_id))
-                    {
-                        $category->add_error(Translation :: get('CouldNotMoveLocation'));
-                        return false;
-                    }
-                }
-                
                 return true;
             });
         return $success;
@@ -267,13 +213,13 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         $success = DataManager :: transactional(
             function ($c) use($category)
             {
-                if ($category->GetType() == $category :: TYPE_SHARED)
+                if ($category->get_type() == $category :: TYPE_WORKSPACE)
                 {
-                    if (! DataManager :: delete_share_category_recursive($category))
-                    {
-                        $category->add_error(Translation :: get('CouldNotDeleteCategoryInDatabase'));
-                        return false;
-                    }
+//                     if (! DataManager :: delete_share_category_recursive($category))
+//                     {
+//                         $category->add_error(Translation :: get('CouldNotDeleteCategoryInDatabase'));
+//                         return false;
+//                     }
                 }
                 else
                 {
@@ -292,19 +238,6 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
                     }
                 }
                 
-                $location = RepositoryRights :: get_instance()->get_location_by_identifier_from_users_subtree(
-                    RepositoryRights :: TYPE_USER_CATEGORY, 
-                    $category->get_id(), 
-                    $category->get_user_id());
-                if ($location)
-                {
-                    if (! $location->delete())
-                    {
-                        $category->add_error(Translation :: get('CouldNotDeleteLocation'));
-                        return false;
-                    }
-                }
-                
                 return true;
             });
         return $success;
@@ -318,7 +251,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
     public static function get_default_property_names()
     {
         return array(
-            self :: PROPERTY_USER_ID, 
+            self :: PROPERTY_TYPE_ID, 
             self :: PROPERTY_TYPE, 
             self :: PROPERTY_ID, 
             self :: PROPERTY_NAME, 
@@ -333,23 +266,21 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      */
     
     /**
-     * Returns the user id of this object
-     * 
+     *
      * @return int
      */
-    public function get_user_id()
+    public function get_type_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self :: PROPERTY_TYPE_ID);
     }
 
     /**
-     * Sets the user id of this object
-     * 
-     * @param $user_id int
+     *
+     * @param $type_id int
      */
-    public function set_user_id($user_id)
+    public function set_type_id($type_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self :: PROPERTY_TYPE_ID, $type_id);
     }
 
     /**
@@ -382,6 +313,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
+        
         return DataManager :: count(RepositoryCategory :: class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
@@ -390,6 +322,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
+        
         if (! $recursive)
         {
             $parameters = new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ID, $condition);
@@ -399,11 +332,13 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         {
             $children_ids = array();
             $children = DataManager :: retrieve_categories($condition);
+            
             while ($child = $children->next_result())
             {
                 $children_ids[] = $child->get_id();
                 $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
             }
+            
             return $children_ids;
         }
     }
@@ -416,11 +351,12 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         }
         else
         {
-            $parent = DataManager :: retrieve_by_id(ContentObject :: class_name(), $this->get_parent());
+            $parent = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $this->get_parent());
             
             $parent_ids = array();
             $parent_ids[] = $parent->get_id();
             $parent_ids = array_merge($parent->get_parent_ids(), $parent_ids);
+            
             return $parent_ids;
         }
     }

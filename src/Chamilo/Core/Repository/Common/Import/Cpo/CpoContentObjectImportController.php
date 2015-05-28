@@ -280,7 +280,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             DataManager :: create_unique_category_name($this->get_parameters()->get_user(), $parent_id, $base_name));
         $category->set_parent($parent_id);
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
         if (! $category->create())
         {
             return false;
