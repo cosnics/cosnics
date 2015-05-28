@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Preview\Component;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\PreviewSupport;
 use Chamilo\Core\Repository\Preview\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -26,7 +27,7 @@ class ReportingComponent extends Manager implements PreviewSupport
                 array(self :: PARAM_ACTION => self :: ACTION_DISPLAY));
         }
 
-        $factory = new ApplicationFactory($this->getRequest(), $this->get_preview_context(), $this->get_user(), $this);
+        $factory = new ApplicationFactory($this->get_preview_context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

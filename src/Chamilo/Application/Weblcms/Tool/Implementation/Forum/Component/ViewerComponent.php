@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -53,7 +54,7 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
         $this->root_content_object = $publication->get_content_object();
 
         $context = Forum :: package() . '\Display';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

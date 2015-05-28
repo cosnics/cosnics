@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
@@ -21,10 +22,8 @@ class CourseManagerComponent extends Manager implements DelegateComponent, Cours
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\Weblcms\Course\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

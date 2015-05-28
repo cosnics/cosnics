@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -43,10 +44,8 @@ class ShareContentObjectsComponent extends Manager
                 $parameters);
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Share\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_content_objects($content_objects->as_array());
             return $component->run();

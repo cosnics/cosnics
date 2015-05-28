@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
@@ -70,7 +71,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->get_root_content_object()->package() . '\Display';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
@@ -38,16 +39,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     private $current_step;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $application)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if (! $application instanceof SurveyDisplaySupport)
+        if (! $applicationConfiguration->getApplication() instanceof SurveyDisplaySupport)
         {
             throw new \Exception(
-                get_class($application) .
+                get_class($applicationConfiguration->getApplication()) .
                      ' uses the SurveyDisplaySupport, please implement the SurveyDisplaySupport interface');
         }
         
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
     }
 
     /**
@@ -88,7 +89,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->get_current_node()->get_complex_content_object_item();
     }
-
+    
+    public function get_current_complex_content_object_path_node()
+    {
+        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
+            $this->get_current_step());
+    }
+    
+    public function count_steps()
+    {
+        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->count_nodes();
+    }
+    
     /**
      * Get the node linked to the current step
      * 

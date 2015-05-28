@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -37,10 +38,8 @@ class ReportingViewerComponent extends Manager
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('ReportingViewerComponent')));
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_template_by_name($classname);
         return $component->run();

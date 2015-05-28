@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -51,9 +52,9 @@ abstract class Manager extends Application
      * @param unknown $user
      * @param unknown $parent
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $parent)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $action = Request :: get(self :: PARAM_ACTION);
         $this->set_action($action);

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Compone
 use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -36,10 +37,8 @@ class UpdaterComponent extends Manager implements DelegateComponent, CourseSubMa
             $this->get_course_id());
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\Weblcms\Course\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\PeerAssessmentDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -54,7 +55,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         // launch
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
             $this->get_root_content_object()->package()) . '\Display';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context,new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

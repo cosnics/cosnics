@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -44,10 +45,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         $this->type = Request :: get(self :: PARAM_CATEGORY_TYPE, RepositoryCategory :: TYPE_NORMAL);
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Configuration\Category\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_subcategories_allowed(true);
         return $component->run();

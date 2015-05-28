@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Template\ProgressDetailsTemplate;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Reporting\Template\ProgressTemplate;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class ReportingComponent extends TabComponent
 {
@@ -20,10 +21,8 @@ class ReportingComponent extends TabComponent
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_template_by_name($template_type);
         return $component->run();

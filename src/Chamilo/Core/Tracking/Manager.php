@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * A tracking manager provides some functionalities to the admin to manage his trackers and events.
@@ -42,9 +43,9 @@ abstract class Manager extends Application
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }

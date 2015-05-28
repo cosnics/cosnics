@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class AttachmentViewerComponent extends TabComponent
 {
@@ -9,10 +10,8 @@ class AttachmentViewerComponent extends TabComponent
     public function build()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\Display\Action\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

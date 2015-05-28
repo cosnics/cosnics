@@ -29,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -48,9 +49,9 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private $renderer;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $form_parameters = $this->get_parameter();
         $form_parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSER;

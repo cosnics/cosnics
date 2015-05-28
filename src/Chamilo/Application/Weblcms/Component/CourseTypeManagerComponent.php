@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -24,10 +25,8 @@ class CourseTypeManagerComponent extends Manager implements DelegateComponent
         if ($this->get_user()->is_platform_admin())
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Application\Weblcms\CourseType\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

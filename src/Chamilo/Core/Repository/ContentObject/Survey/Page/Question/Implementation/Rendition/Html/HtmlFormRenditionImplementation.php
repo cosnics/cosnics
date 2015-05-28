@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementat
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\Description;
 
 /**
  *
@@ -43,29 +44,42 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         $renderer = $formValidator->get_renderer();
         $question = $this->get_content_object();
         
-        $html = array();
-        $html[] = '<div class="question" >';
-        $html[] = '<div class="title">';
-        $html[] = '<div class="text">';
-        $html[] = '<div class="bevel">';
-        $html[] = $question->get_question();
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        
-        $html[] = '<div class="instruction">';
-        if ($question->has_instruction())
+        if (! $question instanceof Description)
         {
-            $html[] = $question->get_instruction();
+            $html = array();
+            
+            $html[] = '<div class="question" >';
+            
+            $html[] = '<div class="title">';
+            $html[] = '<div class="number">';
+            $html[] = '<div class="bevel">';
+            $html[] = $this->getQuestionNr() . '.';
+            $html[] = '</div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+                       
+            $html[] = '<div class="title">';
+            $html[] = '<div class="text">';
+            $html[] = '<div class="bevel">';
+            $html[] = $question->get_question();
+            $html[] = '</div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+            
+            $html[] = '<div class="instruction">';
+            if ($question->has_instruction())
+            {
+                $html[] = $question->get_instruction();
+            }
+            $html[] = '</div>';
+            
+            $html[] = '<div class="answer">';
+            $formValidator->addElement('html', implode(PHP_EOL, $html));
         }
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        
-        $html[] = '<div class="answer">';
-        
-        $html[] = '<div class="clear"></div>';
-        $formValidator->addElement('html', implode(PHP_EOL, $html));
+        else
+        {
+            $html[] = '<div class="clear"></div>';
+        }
         
         return $formValidator;
     }
@@ -127,4 +141,23 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         }
         return $questionId;
     }
+    
+    /**
+     *
+     * @return int
+     */
+    public function getQuestionNr()
+    {
+        if ($this->getComplexContentObjectPathNode())
+        {
+           $questionNr =  $this->getComplexContentObjectPathNode()->get_question_nr();
+        }
+        else
+        {
+            $questionNr = 1;
+        }
+        
+        return $questionNr;
+    }
+    
 }

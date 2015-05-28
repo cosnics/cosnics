@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -29,10 +30,8 @@ class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Re
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
             $component = $factory->getComponent();
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);

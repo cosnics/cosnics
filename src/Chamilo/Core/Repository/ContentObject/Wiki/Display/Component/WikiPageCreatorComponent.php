@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWiki
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -26,10 +27,8 @@ class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Reposito
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_PAGE);
             return $component->run();

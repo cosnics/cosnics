@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -74,10 +75,8 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                 }
 
                 $factory = new ApplicationFactory(
-                    $this->getRequest(),
                     \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    $this->get_user(),
-                    $this);
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 $component = $factory->getComponent();
                 $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
                 $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_SUBFORUM);

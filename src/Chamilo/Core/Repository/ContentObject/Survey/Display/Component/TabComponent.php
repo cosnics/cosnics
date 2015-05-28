@@ -138,7 +138,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 DynamicVisualTab :: POSITION_LEFT, 
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
         
-        $additional_tabs = $this->get_parent()->get_survey_additional_tabs();
+        $additional_tabs = $this->get_parent()->get_additional_tabs();
         
         foreach ($additional_tabs as $additional_tab)
         {

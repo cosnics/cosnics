@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -27,10 +28,8 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Configuration\Category\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_subcategories_allowed(false);
         return $component->run();

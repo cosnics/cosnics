@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -63,7 +64,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
             $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->content_object->get_type(), 3) .
                  '\Builder';
-            $application_factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+            $application_factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $application_factory->run();
         }
         catch (\Exception $exception)

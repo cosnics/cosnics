@@ -2,21 +2,25 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
+use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 abstract class PageDisplay
 {
 
-    private $formvalidator;
+    protected  $formvalidator;
 
-    private $complex_content_object_path_node;
+    protected $complex_content_object_path_node;
 
-    private $renderer;
+    protected $renderer;
+    
+    protected $answer;
 
-    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node)
+    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
     {
         $this->formvalidator = $formvalidator;
         $this->renderer = $formvalidator->defaultRenderer();
         $this->complex_content_object_path_node = $complex_content_object_path_node;
+        $this->answer = $answer;
     }
 
     function get_renderer()
@@ -33,16 +37,14 @@ abstract class PageDisplay
     {
         $formvalidator = $this->formvalidator;
         
-        $this->add_header();
-        $this->process($this->complex_content_object_path_node);
-        $this->add_footer();
+        $this->addHeader();
+        $this->process($this->complex_content_object_path_node, $this->answer);
+        $this->addFooter();
     }
 
     abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, $answer);
 
-    abstract function get_instruction();
-
-    function add_header()
+    function addHeader()
     {
         $formvalidator = $this->formvalidator;
         $html = array();
@@ -50,7 +52,7 @@ abstract class PageDisplay
         $formvalidator->addElement('html', $header);
     }
 
-    function add_footer($formvalidator)
+    function addFooter($formvalidator)
     {
         $formvalidator = $this->formvalidator;
         $html = array();
@@ -58,14 +60,23 @@ abstract class PageDisplay
         $formvalidator->addElement('html', $footer);
     }
 
-    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node)
+    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
     {
         $content_object = $complex_content_object_path_node->get_content_object();
         $package = $content_object->package();
-        $class = $package.'\Integration\Chamilo\Core\Repository\ContentObject\Survey\Display\Display';
-        $page_display = new $class($formvalidator, $complex_content_object_path_node);
         
-        return $page_display;
+        $class = $package . '\Integration\Chamilo\Core\Repository\ContentObject\Survey\Display';
+        
+        if (class_exists($class))
+        {
+            $display = new $class($formvalidator, $complex_content_object_path_node, $answer);
+        }
+        else
+        {
+            throw new ClassNotExistException($class);
+        }
+        
+        return $display;
     }
 }
 ?>

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyAttemp
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
@@ -44,10 +45,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

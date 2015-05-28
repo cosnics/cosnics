@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Exception;
@@ -33,10 +34,8 @@ class ViewerComponent extends Manager implements DelegateComponent
         if (! isset($template_id))
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseStudentTrackerTemplate :: class_name());
@@ -52,10 +51,8 @@ class ViewerComponent extends Manager implements DelegateComponent
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID, $template_id);
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name($template_id);
             return $component->run();

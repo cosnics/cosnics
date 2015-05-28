@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
@@ -30,10 +31,8 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
             return $component->run();

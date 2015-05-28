@@ -16,6 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: help_manager.class.php 226 2009-11-13 14:44:03Z chellee $
@@ -40,9 +41,9 @@ abstract class Manager extends Application
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::__construct()
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         Page :: getInstance()->setSection('Chamilo\Core\Admin');
     }

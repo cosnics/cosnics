@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Common\Action\ContentObjectCopier;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -142,10 +143,8 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             if ($result === true)
             {
                 $factory = new ApplicationFactory(
-                    $this->getRequest(),
                     \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    $this->get_user(),
-                    $this);
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 $component = $factory->getComponent();
                 $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
                 return $component->run();

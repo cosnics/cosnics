@@ -7,12 +7,14 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * This class executes the ephorus submanager
@@ -32,9 +34,9 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      *
      * @param $parent Application - The component in which this tool runs @codeCoverageIgnore
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
 
         $this->initialize_dependencies($this->get_dependency_container());
     }
@@ -47,10 +49,8 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

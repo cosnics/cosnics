@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -28,10 +29,8 @@ class ReportingComponent extends Manager implements DelegateComponent
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate :: class_name());
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate :: class_name());
@@ -42,10 +41,8 @@ class ReportingComponent extends Manager implements DelegateComponent
             $this->set_parameter(self :: PARAM_TEMPLATE_ID, $template_id);
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name($template_id);
             return $component->run();

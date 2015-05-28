@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: course_group_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -38,9 +39,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
         $this->set_parameter(self :: PARAM_COURSE_GROUP, Request :: get(self :: PARAM_COURSE_GROUP));
     }
 

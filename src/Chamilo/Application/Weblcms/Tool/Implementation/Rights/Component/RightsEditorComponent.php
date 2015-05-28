@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Rights\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
@@ -18,10 +19,8 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

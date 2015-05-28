@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
@@ -83,10 +84,8 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         if ($this->feedback_allowed)
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Feedback\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $result = $factory->run();
         }
         else
