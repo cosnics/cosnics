@@ -177,11 +177,11 @@ abstract class ContentObjectRenderer implements TableSupport
             $this->get_repository_browser()->get_publish_content_object_url($content_object), 
             ToolbarItem :: DISPLAY_ICON);
         
-        $actions[] = new ToolbarItem(
-            Translation :: get('ContentObjectAlternativeLinker'), 
-            Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'), 
-            $this->get_repository_browser()->get_content_object_alternative_linker($content_object), 
-            ToolbarItem :: DISPLAY_ICON);
+        // $actions[] = new ToolbarItem(
+        // Translation :: get('ContentObjectAlternativeLinker'),
+        // Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
+        // $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
+        // ToolbarItem :: DISPLAY_ICON);
         
         if ($this->get_repository_browser()->get_user()->is_platform_admin())
         {
