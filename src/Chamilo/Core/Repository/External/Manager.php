@@ -26,6 +26,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -72,7 +73,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         $external_instance_id = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY);
         $this->set_parameter(self :: PARAM_EXTERNAL_REPOSITORY, $external_instance_id);
