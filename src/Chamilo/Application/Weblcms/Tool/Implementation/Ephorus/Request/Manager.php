@@ -7,6 +7,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\EphorusRequest\EphorusRequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application
 {
@@ -30,15 +31,15 @@ abstract class Manager extends Application
      *
      * @param $parent
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $parent = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if (! $parent instanceof RequestSupport)
+        if (! $applicationConfiguration->getApplication() instanceof RequestSupport)
         {
             throw new \Exception(
                 'Components that use the ephorus request submanager need to implement the EphorusRequestSupport');
         }
 
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
     }
 
     /**

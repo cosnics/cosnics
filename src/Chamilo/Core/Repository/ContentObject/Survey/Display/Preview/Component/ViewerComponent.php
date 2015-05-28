@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Component
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Architecture\Application\Application;
 
@@ -16,10 +17,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
     function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

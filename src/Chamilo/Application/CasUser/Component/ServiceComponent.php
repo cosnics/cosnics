@@ -4,6 +4,7 @@ namespace Chamilo\Application\CasUser\Component;
 use Chamilo\Application\CasUser\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class ServiceComponent extends Manager implements DelegateComponent
 {
@@ -14,10 +15,8 @@ class ServiceComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\CasUser\Service\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

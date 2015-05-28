@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  *
@@ -17,10 +18,8 @@ class RightsComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\Workspace\Rights\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\AssessmentResults\AssessmentResultsTable;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -202,7 +203,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
             Request :: get(self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID));
 
         $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->assessment->get_type(), 3) . '\Display';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context,new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

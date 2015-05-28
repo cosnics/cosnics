@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -49,7 +50,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
             $this->publication->get_content_object()->package()) . '\Display';
-        $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

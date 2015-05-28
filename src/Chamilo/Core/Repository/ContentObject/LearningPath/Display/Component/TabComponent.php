@@ -17,6 +17,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -450,10 +451,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
             try
             {
                 $factory = new ApplicationFactory(
-                    $this->getRequest(), 
                     $integration_class_name :: context(), 
-                    $this->get_user(), 
-                    $this);
+                   new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 $component = $factory->getComponent();
                 
                 return $component->get_node_tabs($node);

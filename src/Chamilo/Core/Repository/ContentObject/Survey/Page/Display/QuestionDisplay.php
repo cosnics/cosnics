@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay
 {
     
-    function add_header()
+    function addHeader()
     {
         $formvalidator = $this->formvalidator;
         
@@ -30,7 +30,7 @@ abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Su
         $formvalidator->addElement('html', $header);
     }
 
-    function add_footer($formvalidator)
+    function addFooter($formvalidator)
     {
         $formvalidator = $this->formvalidator;
         

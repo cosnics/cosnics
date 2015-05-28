@@ -6,6 +6,7 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\DataTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -48,10 +49,8 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_template_by_name($class_name);
         return $component->run();

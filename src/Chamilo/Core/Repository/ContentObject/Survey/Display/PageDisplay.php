@@ -37,14 +37,14 @@ abstract class PageDisplay
     {
         $formvalidator = $this->formvalidator;
         
-        $this->add_header();
+        $this->addHeader();
         $this->process($this->complex_content_object_path_node, $this->answer);
-        $this->add_footer();
+        $this->addFooter();
     }
 
     abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, $answer);
 
-    function add_header()
+    function addHeader()
     {
         $formvalidator = $this->formvalidator;
         $html = array();
@@ -52,7 +52,7 @@ abstract class PageDisplay
         $formvalidator->addElement('html', $header);
     }
 
-    function add_footer($formvalidator)
+    function addFooter($formvalidator)
     {
         $formvalidator = $this->formvalidator;
         $html = array();

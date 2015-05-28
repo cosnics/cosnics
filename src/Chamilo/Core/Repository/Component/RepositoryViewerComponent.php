@@ -6,6 +6,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  * $Id: restorer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -31,10 +32,8 @@ class RepositoryViewerComponent extends Manager
             Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

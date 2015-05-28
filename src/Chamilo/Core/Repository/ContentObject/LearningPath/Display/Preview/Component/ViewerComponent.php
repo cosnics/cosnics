@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewSt
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
@@ -36,7 +37,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $className = $this->get_root_content_object()->package() . '\Display';
 
-        $factory = new ApplicationFactory($this->getRequest(), $className, $this->get_user(), $this);
+        $factory = new ApplicationFactory($className, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

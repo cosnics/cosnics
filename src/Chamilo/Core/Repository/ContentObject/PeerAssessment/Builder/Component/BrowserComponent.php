@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Translation;
 
 class BrowserComponent extends Manager
@@ -16,10 +17,8 @@ class BrowserComponent extends Manager
              $this->get_root_content_object()->get_assessment_type() != PeerAssessment :: TYPE_FEEDBACK)
         {
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else
@@ -31,10 +30,8 @@ class BrowserComponent extends Manager
                  ! $publication_has_scores)
             {
                 $factory = new ApplicationFactory(
-                    $this->getRequest(),
                     \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
-                    $this->get_user(),
-                    $this);
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 return $factory->run();
             }
             else

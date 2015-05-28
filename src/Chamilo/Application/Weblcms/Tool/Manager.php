@@ -19,6 +19,7 @@ use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introdu
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
@@ -36,6 +37,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * This is the base class for all tools used in applications.
@@ -135,9 +137,9 @@ abstract class Manager extends Application
      *
      * @param $parent Application - The component in which this tool runs
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $application);
+        parent :: __construct($applicationConfiguration);
 
         if ($this->get_course_id() && ! $this->get_parent()->is_tool_accessible())
         {
@@ -164,7 +166,7 @@ abstract class Manager extends Application
             throw new Exception(Translation :: get('ToolTypeDoesNotExist', array('type' => $namespace)));
         }
 
-        $factory = new ApplicationFactory($application->getRequest(), $namespace, $application->get_user(), $application);
+        $factory = new ApplicationFactory($namespace, new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application));
         return $factory->run();
     }
 
@@ -925,10 +927,8 @@ abstract class Manager extends Application
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-            $this->get_user(),
-            $this);
+          new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Survey\Component;
 
 use Chamilo\Application\Survey\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class PublicationRightsComponent extends Manager implements DelegateComponent
@@ -14,10 +15,8 @@ class PublicationRightsComponent extends Manager implements DelegateComponent
     function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Application\Survey\Rights\Publication\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         
 //         $component = $factory->getComponent();
 //         $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);

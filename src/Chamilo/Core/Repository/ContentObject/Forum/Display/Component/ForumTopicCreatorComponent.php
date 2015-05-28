@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -61,10 +62,8 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
             }
 
             $factory = new ApplicationFactory(
-                $this->getRequest(),
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                $this->get_user(),
-                $this);
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_TOPIC);
             $component->set_parameter(

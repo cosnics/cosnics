@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Display\Action\Component;
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -33,10 +34,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
             if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
             {
                 $factory = new ApplicationFactory(
-                    $this->getRequest(),
                     \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    $this->get_user(),
-                    $this);
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 $component = $factory->getComponent();
                 $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
                 $component->set_parameter(

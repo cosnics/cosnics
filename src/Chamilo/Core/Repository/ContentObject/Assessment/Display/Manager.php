@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -21,9 +22,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_ASSESSMENT;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user, $parent)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($request, $user, $parent);
+        parent :: __construct($applicationConfiguration);
         $this->register_parameters();
     }
 

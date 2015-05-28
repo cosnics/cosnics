@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
@@ -23,10 +24,8 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Metadata\Provider\Manager :: context(),
-            $this->get_user(),
-            $this);
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         $component = $factory->getComponent();
         $component->setEntities($this->getEntities());

@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManag
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -155,7 +156,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             }
 
             $context = $this->assessment->package() . '\Display';
-            $factory = new ApplicationFactory($this->getRequest(), $context, $this->get_user(), $this);
+            $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
     }

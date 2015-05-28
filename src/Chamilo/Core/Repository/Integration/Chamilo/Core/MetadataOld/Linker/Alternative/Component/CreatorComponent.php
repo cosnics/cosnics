@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Linker\Alternat
 use Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Linker\Alternative\Storage\DataClass\ContentObjectAlternative;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\MetadataOld\Linker\Alternative\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -77,10 +78,8 @@ class CreatorComponent extends Manager
         $excluded_content_object_ids[] = $this->get_selected_content_object_id();
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\Viewer\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_excluded_objects($excluded_content_object_ids);
         return $component->run();

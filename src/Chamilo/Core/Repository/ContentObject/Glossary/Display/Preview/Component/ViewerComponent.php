@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Preview\Compone
 
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Glossary\Display\Preview\Manager implements GlossaryDisplaySupport
 {
@@ -12,10 +13,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Glossary\Di
     {
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

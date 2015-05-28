@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -50,10 +51,8 @@ class RightsEditorComponent extends Manager
         }
 
         $factory = new ApplicationFactory(
-            $this->getRequest(),
             \Chamilo\Core\Rights\Editor\Manager :: context(),
-            $this->get_user(),
-            $this);
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         $component = $factory->getComponent();
         $component->set_locations($this->get_locations());
