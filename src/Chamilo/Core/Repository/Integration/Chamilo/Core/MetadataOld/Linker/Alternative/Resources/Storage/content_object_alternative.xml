@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="content_object_alternative">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="content_object_id" type="integer" unsigned="1" notnull="1" />
+		<property name="link_number" type="integer" unsigned="1" notnull="1" />
+		<property name="metadata_element_id" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="content_object_id">
+		<indexproperty name="content_object_id" />
+	</index>
+	<index name="link_number">
+		<indexproperty name="link_number" />
+	</index>
+	<index name="metadata_element_id">
+		<indexproperty name="metadata_element_id" />
+	</index>
+</object>
