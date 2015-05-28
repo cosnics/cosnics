@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\repository\publication
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Mijn publicaties"
+LocationSelection = "Selecteer locatie"
+LocationSelectionInfo = "Selecteer de locaties waar je het object wil publiceren"
+LocationSelectionsInfo = "Selecteer de locaties waar je de objecten wil publiceren"
+NoLocationsFound = "Geen locaties gevonden"
+SelectedObject = "Geselecteerd object"
+SelectedObjects = "Geselecteerde objecten"
+Result = "Resultaat"
+GoBack = "Ga terug naar je repository"
+ContentObject = "Content object"
+PublicationCreated = "Content object successvol gepubliceerd"
+PublicationFailed = "Publicatie content object mislukt"
+ViewPublication = "Bekijk publicatie"
