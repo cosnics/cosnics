@@ -22,4 +22,16 @@ interface WorkspaceInterface
      * @return integer
      */
     public function getCreatorId();
+
+    /**
+     *
+     * @return integer
+     */
+    public function getWorkspaceType();
+
+    /**
+     *
+     * @return string
+     */
+    public function getTitle();
 }

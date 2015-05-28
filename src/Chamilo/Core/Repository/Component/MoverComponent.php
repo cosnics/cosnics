@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: mover.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -172,7 +173,7 @@ class MoverComponent extends Manager
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
-            new StaticConditionVariable(RepositoryCategory :: TYPE_PERSONAL));
+            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
         
         $condition = new AndCondition($conditions);
         

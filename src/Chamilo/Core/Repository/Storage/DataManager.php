@@ -42,6 +42,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -57,7 +59,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static $registered_types;
 
-    private static $user_has_categories;
+    private static $workspace_has_categories;
 
     public static function count_content_objects($type, $parameters = null)
     {
@@ -361,14 +363,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self :: retrieves(RepositoryCategory :: class_name(), $parameters);
     }
 
-    public static function select_next_category_display_order($parent_category_id, $user_id, $type)
+    public static function select_next_category_display_order($parent_category_id, $type_id, $type)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
             new StaticConditionVariable($parent_category_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
-            new StaticConditionVariable($user_id));
+            new StaticConditionVariable($type_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
             new StaticConditionVariable($type));
@@ -841,7 +843,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $category->set_user_id($user_id);
             $category->set_name($title);
             $category->set_parent($parent_id);
-            $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
+            $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
             
             // Create category in database
             $category->create($create_in_batch);
@@ -862,17 +864,29 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return in_array($type, $helper_types);
     }
 
-    public static function user_has_categories($user_id)
+    public static function workspace_has_categories(WorkspaceInterface $workspaceImplemention)
     {
-        if (is_null(self :: $user_has_categories))
+        if (is_null(
+            self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()]))
         {
-            $condition = new EqualityCondition(
+            $conditions = array();
+            
+            $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
-                new StaticConditionVariable($user_id));
-            self :: $user_has_categories = (self :: count(RepositoryCategory :: class_name(), $condition) > 0);
+                new StaticConditionVariable($workspaceImplemention->getId()));
+            
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
+                new StaticConditionVariable($workspaceImplemention->getWorkspaceType()));
+            
+            $condition = new AndCondition($conditions);
+            
+            self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()] = (self :: count(
+                RepositoryCategory :: class_name(), 
+                $condition) > 0);
         }
         
-        return self :: $user_has_categories;
+        return self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()];
     }
 
     public static function retrieve_content_objects_for_user($user_id)
@@ -1125,7 +1139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
-            new StaticConditionVariable(RepositoryCategory :: TYPE_PERSONAL));
+            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
         $condition = new AndCondition($conditions);
         
         return self :: count(RepositoryCategory :: class_name(), $condition) > 0;

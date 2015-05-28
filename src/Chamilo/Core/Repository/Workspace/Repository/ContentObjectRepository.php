@@ -124,7 +124,7 @@ class ContentObjectRepository
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID));
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
 
         $join = new Join(WorkspaceContentObjectRelation :: class_name(), $joinCondition);
         return new Joins(array($join));

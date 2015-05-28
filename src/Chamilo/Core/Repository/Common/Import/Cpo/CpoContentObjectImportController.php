@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMXPath;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class CpoContentObjectImportController extends ContentObjectImportController
 {
@@ -280,7 +281,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
             DataManager :: create_unique_category_name($this->get_parameters()->get_user(), $parent_id, $base_name));
         $category->set_parent($parent_id);
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_PERSONAL);
+        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
+        
         if (! $category->create())
         {
             return false;
