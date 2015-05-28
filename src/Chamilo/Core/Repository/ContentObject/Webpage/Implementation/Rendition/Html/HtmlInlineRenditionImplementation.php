@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Webpage\Implementation\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\Webpage\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\File\Path;
 
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {
