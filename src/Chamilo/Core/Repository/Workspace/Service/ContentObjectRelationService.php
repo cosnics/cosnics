@@ -61,7 +61,7 @@ class ContentObjectRelationService
     public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectInWorkspace(
-            $contentObject, 
+            $contentObject,
             $workspaceImplementation);
     }
 
@@ -71,11 +71,11 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation
      */
-    public function getContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace, 
+    public function getContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace,
         ContentObject $contentObject)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
-            $workspace, 
+            $workspace,
             $contentObject);
     }
 
@@ -90,8 +90,8 @@ class ContentObjectRelationService
     public function hasRight(User $user, $right, ContentObject $contentObject)
     {
         return $this->getContentObjectRelationRepository()->findContentObjectForUserWithRight(
-            $user, 
-            $right, 
+            $user,
+            $right,
             $contentObject);
     }
 
@@ -105,12 +105,12 @@ class ContentObjectRelationService
     {
         $contentObjectRelation = new WorkspaceContentObjectRelation();
         $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-        
+
         if (! $contentObjectRelation->create())
         {
             return false;
         }
-        
+
         return $contentObjectRelation;
     }
 
@@ -121,16 +121,16 @@ class ContentObjectRelationService
      * @param integer $contentObjectId
      * @param integer $categoryId
      */
-    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation, $workspaceId, 
+    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation, $workspaceId,
         $contentObjectId, $categoryId)
     {
         $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-        
-        if (! $contentObjectRelation->create())
+
+        if (! $contentObjectRelation->update())
         {
             return false;
         }
-        
+
         return $contentObjectRelation;
     }
 
@@ -141,7 +141,7 @@ class ContentObjectRelationService
      * @param integer $contentObjectId
      * @param integer $categoryId
      */
-    private function setContentObjectRelationProperties(WorkspaceContentObjectRelation $contentObjectRelation, 
+    private function setContentObjectRelationProperties(WorkspaceContentObjectRelation $contentObjectRelation,
         $workspaceId, $contentObjectId, $categoryId)
     {
         $contentObjectRelation->setWorkspaceId($workspaceId);

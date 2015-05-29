@@ -16,27 +16,31 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $orderProperty = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
-        
+
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
         return $contentObjectService->getContentObjectsForWorkspace(
-            $this->get_component()->get_repository_browser()->getWorkspace(), 
-            ConditionFilterRenderer :: factory(FilterData :: get_instance()), 
-            $count, 
-            $offset, 
+            $this->get_component()->get_repository_browser()->getWorkspace(),
+            ConditionFilterRenderer :: factory(
+                FilterData :: get_instance(),
+                $this->get_component()->get_repository_browser()->getWorkspace()),
+            $count,
+            $offset,
             $orderProperty);
-        
+
         // return DataManager :: retrieve_active_content_objects($this->get_table()->get_type(), $parameters);
     }
 
     public function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        
+
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
         return $contentObjectService->countContentObjectsForWorkspace(
-            $this->get_component()->get_repository_browser()->getWorkspace(), 
-            ConditionFilterRenderer :: factory(FilterData :: get_instance()));
-        
+            $this->get_component()->get_repository_browser()->getWorkspace(),
+            ConditionFilterRenderer :: factory(
+                FilterData :: get_instance(),
+                $this->get_component()->get_repository_browser()->getWorkspace()));
+
         // return DataManager :: count_active_content_objects($this->get_table()->get_type(), $parameters);
     }
 }

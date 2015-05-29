@@ -45,39 +45,52 @@ class RepositoryMenu extends HTML_Menu
     private function get_menu_items()
     {
         $extra_items = array();
-        
+
         if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
         {
             $pub = array();
             $pub['title'] = Translation :: get('MyPublications');
             $pub['url'] = $this->repository_manager->get_url(
                 array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_PUBLICATION), 
-                array(\Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION), 
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_PUBLICATION),
+                array(\Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION),
                 false);
             $pub['class'] = 'publication';
-            
+
             $extra_items[] = $pub;
         }
-        
+
+        if (! $this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $add = array();
+            $add['title'] = Translation :: get('AddExisting', null, Utilities :: COMMON_LIBRARIES);
+            $add['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_WORKSPACE,
+                    \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_PUBLISH));
+            $add['class'] = 'add';
+
+            $extra_items[] = $add;
+        }
+
         $create = array();
         $create['title'] = Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES);
         $create['url'] = $this->repository_manager->get_url(
             array(
                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_CREATE_CONTENT_OBJECTS));
         $create['class'] = 'create';
-        
+
         $extra_items[] = $create;
-        
+
         $import = array();
         $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
         $import['url'] = $this->repository_manager->get_url(
             array(
                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
         $import['class'] = 'import';
-        
+
         $extra_items[] = $import;
-        
+
         if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
         {
             $templates = array();
@@ -85,30 +98,30 @@ class RepositoryMenu extends HTML_Menu
             $templates['url'] = $this->repository_manager->get_url(
                 array(Manager :: PARAM_ACTION => Manager :: ACTION_TEMPLATE));
             $templates['class'] = 'template';
-            
+
             $extra_items[] = $templates;
-            
+
             $quota = array();
             $quota['title'] = Translation :: get('Quota');
             $quota['url'] = $this->repository_manager->get_url(
                 array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA, 
-                    \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null, 
-                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null, 
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
+                    \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
+                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null,
                     DynamicTabsRenderer :: PARAM_SELECTED_TAB => null));
             $quota['class'] = 'quota';
-            
+
             $extra_items[] = $quota;
-            
+
             $doubles = array();
             $doubles['title'] = Translation :: get('ViewDoubles');
             $doubles['url'] = $this->repository_manager->get_url(
                 array(
                     \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_DOUBLES));
             $doubles['class'] = 'doubles';
-            
+
             $extra_items[] = $doubles;
-            
+
             $trash = array();
             $trash['title'] = Translation :: get('RecycleBin');
             $trash['url'] = $this->repository_manager->get_recycle_bin_url();
@@ -120,16 +133,16 @@ class RepositoryMenu extends HTML_Menu
             {
                 $trash['class'] = 'trash';
             }
-            
+
             $extra_items[] = $trash;
         }
-        
+
         return $extra_items;
     }
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param int $category The id of the category
      * @return string The requested URL
      */
@@ -141,7 +154,7 @@ class RepositoryMenu extends HTML_Menu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -161,7 +174,7 @@ class RepositoryMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

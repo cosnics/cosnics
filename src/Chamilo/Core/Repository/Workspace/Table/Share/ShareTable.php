@@ -11,16 +11,16 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class ShareTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_WORKSPACE_ID;
+    const TABLE_IDENTIFIER = Manager :: PARAM_SELECTED_WORKSPACE_ID;
 
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),
-                Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES),
-                true));
+                array(Manager :: PARAM_ACTION => Manager :: ACTION_SHARE),
+                Translation :: get('ShareSelected', null, Utilities :: COMMON_LIBRARIES),
+                false));
 
         return $actions;
     }

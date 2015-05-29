@@ -130,11 +130,11 @@ abstract class Manager extends Application
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_DELETE_LINK = 'LinkDeleter';
     const ACTION_VIEW_DOUBLES = 'DoublesViewer';
-    const ACTION_SHARE_CONTENT_OBJECTS = 'ShareContentObjects';
     const ACTION_HTML_EDITOR_FILE = 'HtmlEditorFile';
     const ACTION_REPOSITORY_VIEWER = 'RepositoryViewer';
     const ACTION_USER_VIEW = 'UserView';
     const ACTION_PREVIEW = 'Previewer';
+    const ACTION_WORKSPACE = 'Workspace';
     const ACTION_PUBLICATION = 'Publication';
     const ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA = 'PropertyMetadataLinker';
     const ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT = 'MetadataElementLinker';
@@ -281,7 +281,7 @@ abstract class Manager extends Application
 
         $html[] = ($tabs->render());
 
-        $html_filter_renderer = HtmlFilterRenderer :: factory(FilterData :: get_instance());
+        $html_filter_renderer = HtmlFilterRenderer :: factory(FilterData :: get_instance(), $this->getWorkspace());
 
         $html[] = $html_filter_renderer->render();
 
@@ -702,14 +702,6 @@ abstract class Manager extends Application
             array(
                 self :: PARAM_ACTION => self :: ACTION_COPY_CONTENT_OBJECT,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object_id));
-    }
-
-    public function get_share_content_objects_url($content_object_ids)
-    {
-        return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_SHARE_CONTENT_OBJECTS,
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object_ids));
     }
 
     /**

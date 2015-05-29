@@ -13,7 +13,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 abstract class Manager extends Application
 {
     // Parameters
+    const PARAM_ACTION = 'workspace_action';
     const PARAM_WORKSPACE_ID = 'workspace_id';
+    const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
 
     // Actions
     const ACTION_BROWSE = 'Browser';
@@ -21,6 +23,8 @@ abstract class Manager extends Application
     const ACTION_CREATE = 'Creator';
     const ACTION_UPDATE = 'Updater';
     const ACTION_RIGHTS = 'Rights';
+    const ACTION_SHARE = 'Share';
+    const ACTION_PUBLISH = 'Publisher';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

@@ -15,18 +15,17 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * $Id: content_object_category_menu.class.php 204 2009-11-13 12:51:30Z kariboe $
- * 
+ *
  * @package repository.lib
  */
 
 /**
  * This class provides a navigation menu to allow a user to browse through his categories of objects.
- * 
+ *
  * @author Bart Mollet
  */
 class ContentObjectCategoryMenu extends HTML_Menu
@@ -34,6 +33,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
     const TREE_NAME = __CLASS__;
 
     /**
+     *
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     private $currentWorkspace;
@@ -51,7 +51,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
     /**
      * Array to define the types on which the count on the categories should be filtered Leave empty if you want to
      * count everything
-     * 
+     *
      * @var String[]
      */
     private $filter_count_on_types;
@@ -59,14 +59,14 @@ class ContentObjectCategoryMenu extends HTML_Menu
     /**
      * Array to define the types on which the count on the categories should be excluded Leave empty if you want to
      * count everything
-     * 
+     *
      * @var String[]
      */
     private $exclude_types;
 
     /**
      * Creates a new category navigation menu.
-     * 
+     *
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
@@ -75,15 +75,15 @@ class ContentObjectCategoryMenu extends HTML_Menu
      * @param $filter_count_on_types string[] - Array to define the types on which the count on the categories should be
      *        filtered
      */
-    public function __construct(WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s', $extra_items = array(), 
-        $filter_count_on_types = array(), $exclude_types = array())
+    public function __construct(WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s',
+        $extra_items = array(), $filter_count_on_types = array(), $exclude_types = array())
     {
         $this->currentWorkspace = $currentWorkspace;
         $this->urlFmt = $url_format;
-        
+
         $this->filter_count_on_types = $filter_count_on_types;
         $this->exclude_types = $exclude_types;
-        
+
         $menu = $this->get_menu_items($extra_items);
         parent :: __construct($menu);
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
@@ -92,7 +92,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
     /**
      * Returns the menu items.
-     * 
+     *
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -101,10 +101,10 @@ class ContentObjectCategoryMenu extends HTML_Menu
     {
         $menu = array();
         $menu_item = array();
-        
+
         $menu_item['title'] = $this->currentWorkspace->getTitle();
         $menu_item['url'] = $this->get_category_url(0);
-        
+
         if (DataManager :: workspace_has_categories($this->currentWorkspace))
         {
             $sub_menu_items = $this->get_sub_menu_items();
@@ -113,21 +113,22 @@ class ContentObjectCategoryMenu extends HTML_Menu
                 $menu_item['sub'] = $sub_menu_items;
             }
         }
-        
+
         $menu_item['class'] = 'category';
         $menu_item[OptionsMenuRenderer :: KEY_ID] = 0;
         $menu[0] = $menu_item;
+
         if (count($extra_items))
         {
             $menu = array_merge($menu, $extra_items);
         }
-        
+
         return $menu;
     }
 
     /**
      * Returns the items of the sub menu.
-     * 
+     *
      * @param $categories array The categories to include in this menu.
      * @param $parent int The parent category ID.
      * @return array An array with all menu items. The structure of this array is the structure needed by
@@ -137,18 +138,19 @@ class ContentObjectCategoryMenu extends HTML_Menu
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
-            new StaticConditionVariable($this->owner));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->currentWorkspace->getId()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
-            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
+            new StaticConditionVariable($this->currentWorkspace->getWorkspaceType()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent));
         $condition = new AndCondition($conditions);
-        
+
         $objects = DataManager :: retrieve_categories($condition);
         $categories = array();
+
         while ($category = $objects->next_result())
         {
             $menu_item = array();
@@ -168,7 +170,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param $category int The id of the category
      * @return string The requested URL
      */
@@ -180,7 +182,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -200,7 +202,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

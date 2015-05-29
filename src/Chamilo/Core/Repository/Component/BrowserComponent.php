@@ -203,7 +203,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new StaticConditionVariable($type)));
         }
 
-        $filter_condition_renderer = ConditionFilterRenderer :: factory(FilterData :: get_instance());
+        $filter_condition_renderer = ConditionFilterRenderer :: factory(
+            FilterData :: get_instance(),
+            $this->getWorkspace());
         $filter_condition = $filter_condition_renderer->render();
 
         if ($filter_condition instanceof Condition)
