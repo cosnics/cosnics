@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking">
+	<!-- Publication trackers -->
+	<event name="create_publication">
+		<tracker name="publication_change" />
+	</event>
+	<event name="update_publication">
+		<tracker name="publication_change" />
+	</event>
+	<event name="delete_publication">
+		<tracker name="publication_change" />
+	</event>
+	<event name="create_publication_category">
+		<tracker name="publication_change" />
+	</event>
+	<event name="update_publication_category">
+		<tracker name="publication_change" />
+	</event>
+	<event name="delete_publication_category">
+		<tracker name="publication_change" />
+	</event>
+	<!-- Course trackers -->
+	<event name="create_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="update_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="delete_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="subscribe_user_to_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="subscribe_class_to_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="unsubscribe_user_to_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="unsubscribe_class_to_course">
+		<tracker name="course_change" />
+	</event>
+	<event name="create_course_category">
+		<tracker name="course_change" />
+	</event>
+	<event name="update_course_category">
+		<tracker name="course_change" />
+	</event>
+	<event name="delete_course_category">
+		<tracker name="course_change" />
+	</event>
+	<event name="create_course_user_category">
+		<tracker name="course_change" />
+	</event>
+	<event name="update_course_user_category">
+		<tracker name="course_change" />
+	</event>
+	<event name="delete_course_user_category">
+		<tracker name="course_change" />
+	</event>
+	<!-- Assessment trackers -->
+	<event name="attempt_assessment">
+		<tracker name="assessment_attempt" />
+	</event>
+	<event name="attempt_question">
+		<tracker name="question_attempt" />
+	</event>
+	<!-- Forum trackers -->
+	<event name="view_forum_topic">
+		<tracker name="forum_topic_view" />
+	</event>
+	<!-- Learning path trackers -->
+	<event name="attempt_learning_path">
+		<tracker name="lp_attempt" />
+	</event>
+	<event name="attempt_learning_path_item">
+		<tracker name="lpi_attempt" />
+	</event>
+	<event name="attempt_learning_path_item_interaction">
+		<tracker name="lpi_attempt_interaction" />
+	</event>
+	<event name="attempt_learning_path_item_objective">
+		<tracker name="lpi_attempt_objective" />
+	</event>
+	<event name="attempt_learning_path_question">
+		<tracker name="learning_path_question_attempt" />
+	</event>
+	<!-- Assignment trackers -->
+	<event name="submission_assignment">
+		<tracker name="assignment_submission" />
+	</event>
+	<event name="feedback_submission">
+		<tracker name="submission_feedback" />
+	</event>
+	<event name="score_submission">
+		<tracker name="submission_score" />
+	</event>
+	<event name="note_submission">
+		<tracker name="submission_note" />
+	</event>
+	<event name="visit_course">
+		<tracker name="course_visit" />
+	</event>
+	<event name="leave_course">
+		<tracker name="course_visit" />
+	</event>
+	<event name="user_status_change">
+		<tracker name="user_status_change" />
+	</event>
+</package>
