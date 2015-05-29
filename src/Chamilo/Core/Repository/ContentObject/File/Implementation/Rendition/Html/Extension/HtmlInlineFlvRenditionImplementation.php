@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\Extension;
 
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation;
-use Chamilo\Libraries\File\Path;
 
 class HtmlInlineFlvRenditionImplementation extends HtmlInlineRenditionImplementation
 {
@@ -38,7 +37,8 @@ class HtmlInlineFlvRenditionImplementation extends HtmlInlineRenditionImplementa
                             showtracker="true"
                             src="' . $url . '"
                             type="video/x-flv"
-                            width="' . $parameters[self :: PARAM_WIDTH] . '">';
+                            width="' . $parameters[self :: PARAM_WIDTH] .
+             '">';
         $html[] = '	</embed>';
         $html[] = '</object>';
         

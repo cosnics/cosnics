@@ -94,7 +94,7 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $cats = DataManager :: retrieve_categories(
             new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
                 new StaticConditionVariable(Session :: get_user_id())));
         while ($cat = $cats->next_result())
         {

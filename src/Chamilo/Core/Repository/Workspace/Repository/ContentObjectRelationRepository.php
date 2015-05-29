@@ -15,6 +15,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -88,7 +91,7 @@ class ContentObjectRelationRepository
             new PropertyConditionVariable(
                 WorkspaceEntityRelation :: class_name(), 
                 WorkspaceEntityRelation :: PROPERTY_ENTITY_TYPE), 
-            new StaticConditionVariable(User :: class_name()));
+            new StaticConditionVariable(UserEntity :: ENTITY_TYPE));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceEntityRelation :: class_name(), 
@@ -108,5 +111,29 @@ class ContentObjectRelationRepository
         return DataManager :: count(
             WorkspaceContentObjectRelation :: class_name(), 
             new DataClassCountParameters($relationCondition, $joins)) > 0;
+    }
+
+    public function findContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace, 
+        ContentObject $contentObject)
+    {
+        $relationConditions = array();
+        
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(), 
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID), 
+            new StaticConditionVariable($contentObject->getId()));
+        
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(), 
+                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID), 
+            new StaticConditionVariable($workspace->getId()));
+        
+        $relationCondition = new AndCondition($relationConditions);
+        
+        return DataManager :: retrieve(
+            WorkspaceContentObjectRelation :: class_name(), 
+            new DataClassRetrieveParameters($relationCondition));
     }
 }

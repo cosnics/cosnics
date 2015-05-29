@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -67,9 +66,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return $this->publication->get_content_object()->has_right(
-            RepositoryRights :: COLLABORATE_RIGHT,
-            $this->get_user_id());
+        return true;
     }
 
     public function is_allowed_to_view_content_object()
@@ -79,16 +76,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
     public function is_allowed_to_add_child()
     {
-        return $this->publication->get_content_object()->has_right(
-            RepositoryRights :: COLLABORATE_RIGHT,
-            $this->get_user_id());
+        return true;
     }
 
     public function is_allowed_to_delete_child()
     {
-        return $this->publication->get_content_object()->has_right(
-            RepositoryRights :: COLLABORATE_RIGHT,
-            $this->get_user_id());
+        return true;
     }
 
     public function is_allowed_to_delete_feedback()

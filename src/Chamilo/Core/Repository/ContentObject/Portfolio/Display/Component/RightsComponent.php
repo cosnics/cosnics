@@ -128,7 +128,6 @@ class RightsComponent extends TabComponent
     /**
      * Handle the submitted rights for the given locations
      *
-     * @param \core\rights\RightsLocation[] $locations
      * @param string[] $values
      * @return boolean
      */
@@ -172,7 +171,6 @@ class RightsComponent extends TabComponent
      * Handles the rights options for the specific location
      *
      * @param string[] $values
-     * @param \core\rights\RightsLocation $location
      */
     private function handle_location_rights($values, $location)
     {
