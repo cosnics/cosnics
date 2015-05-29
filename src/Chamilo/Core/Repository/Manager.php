@@ -28,6 +28,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -42,7 +43,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'repository';
-    
+
     /**
      * #@+ Constant defining a parameter of the repository manager.
      */
@@ -100,7 +101,7 @@ abstract class Manager extends Application
     const SHARED_VIEW_OWN_OBJECTS = 1;
     const SHARED_VIEW_ALL_OBJECTS = 2;
     const PARAM_RENDERER = 'renderer';
-    
+
     /**
      * Constant defining an action of the repository manager.
      */
@@ -142,7 +143,7 @@ abstract class Manager extends Application
     const ACTION_TEMPLATE = 'Template';
     const ACTION_LINK_SCHEMAS = 'SchemaLinker';
     const ACTION_LINK_PROVIDERS = 'ProviderLinker';
-    
+
     // Tabs
     const TABS_FILTER = 'advanced_filter';
     const TABS_CONTENT_OBJECT = 'content_object';
@@ -150,10 +151,10 @@ abstract class Manager extends Application
     const TAB_OBJECT_TYPE = 'ObjectType';
     const TAB_SEARCH = 'Search';
     const TAB_USERVIEW = 'Userview';
-    
+
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
-    
+
     // Sections
     const SECTION_IMPLEMENTATION = 'Implementation';
     const SECTION_WORKSPACE = 'Workspace';
@@ -175,25 +176,25 @@ abstract class Manager extends Application
 
     /**
      * Constructor
-     * 
+     *
      * @param $user_id int The user id of current user
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent :: __construct($applicationConfiguration);
-        
+
         if (! is_null($applicationConfiguration->getUser()) && $applicationConfiguration->getUser()->is_anonymous_user())
         {
             throw new NotAllowedException();
         }
-        
+
         $this->set_optional_parameters();
     }
 
     public function set_optional_parameters()
     {
         $this->set_parameter(
-            DynamicTabsRenderer :: PARAM_SELECTED_TAB, 
+            DynamicTabsRenderer :: PARAM_SELECTED_TAB,
             Request :: get(DynamicTabsRenderer :: PARAM_SELECTED_TAB));
     }
 
@@ -205,96 +206,96 @@ abstract class Manager extends Application
     public function get_menu()
     {
         $html = array();
-        
+
         $html[] = '<div id="repository_tree_container">';
         $tabs = new DynamicTabsRenderer(self :: TABS_FILTER);
-        
+
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_CATEGORY, 
-                '', 
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_CATEGORY), 
+                self :: TAB_CATEGORY,
+                '',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_CATEGORY),
                 $this->get_category_menu()->render_as_tree()));
-        
+
         $filter_form = FormFilterRenderer :: factory(
-            FilterData :: get_instance(), 
-            $this->getWorkspace(), 
-            $this->get_user_id(), 
-            $this->get_allowed_content_object_types(), 
+            FilterData :: get_instance(),
+            $this->getWorkspace(),
+            $this->get_user_id(),
+            $this->get_allowed_content_object_types(),
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_SEARCH), 
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS), 
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_SEARCH),
+                    self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
                 array(self :: PARAM_CATEGORY_ID)));
-        
+
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_SEARCH, 
-                '', 
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_SEARCH), 
+                self :: TAB_SEARCH,
+                '',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_SEARCH),
                 $filter_form->render()));
-        
+
         $selected_type = FilterData :: get_instance()->get_type();
         $selected_category = FilterData :: get_instance()->get_type_category();
-        
+
         $object_type = new ObjectTypeMenu(
-            $this, 
-            $selected_type, 
+            $this,
+            $selected_type,
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE), 
-                    FilterData :: FILTER_TYPE => '__SELECTION__', 
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE), 
-                    Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS), 
-                array(self :: PARAM_CATEGORY_ID, self :: PARAM_CONTENT_OBJECT_ID)), 
-            $selected_category, 
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
+                    FilterData :: FILTER_TYPE => '__SELECTION__',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
+                    Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
+                array(self :: PARAM_CATEGORY_ID, self :: PARAM_CONTENT_OBJECT_ID)),
+            $selected_category,
             $this->get_url(
                 array(
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE), 
-                    FilterData :: FILTER_TYPE => '__CATEGORY__', 
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE), 
-                    Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS), 
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
+                    FilterData :: FILTER_TYPE => '__CATEGORY__',
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_OBJECT_TYPE),
+                    Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS),
                 array(self :: PARAM_CATEGORY_ID, self :: PARAM_CONTENT_OBJECT_ID)));
-        
+
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_OBJECT_TYPE, 
-                '', 
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_OBJECT_TYPE), 
+                self :: TAB_OBJECT_TYPE,
+                '',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_OBJECT_TYPE),
                 $object_type->render_as_tree()));
-        
+
         $current_user_view_id = FilterData :: get_instance()->get_user_view();
         $user_view = new UserViewMenu(
-            $this, 
-            $current_user_view_id, 
+            $this,
+            $current_user_view_id,
             $this->get_url(
                 array(
-                    FilterData :: FILTER_USER_VIEW => '__VIEW__', 
+                    FilterData :: FILTER_USER_VIEW => '__VIEW__',
                     DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_USERVIEW))));
         $tabs->add_tab(
             new DynamicContentTab(
-                self :: TAB_USERVIEW, 
-                '', 
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_USERVIEW), 
+                self :: TAB_USERVIEW,
+                '',
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_USERVIEW),
                 $user_view->render_as_tree()));
-        
+
         $html[] = ($tabs->render());
-        
+
         $html_filter_renderer = HtmlFilterRenderer :: factory(FilterData :: get_instance());
-        
+
         $html[] = $html_filter_renderer->render();
-        
+
         $repository_menu = new RepositoryMenu($this);
         $html[] = ($repository_menu->render_as_tree());
-        
+
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Gets the parameter list
-     * 
+     *
      * @param $include_search boolean Include the search parameters in the returned list?
      * @return array The list of parameters.
      */
@@ -304,13 +305,13 @@ abstract class Manager extends Application
         {
             return array_merge($this->search_parameters, parent :: get_parameters());
         }
-        
+
         return parent :: get_parameters();
     }
 
     /**
      * Sets the active URL in the navigation menu.
-     * 
+     *
      * @param $url string The active URL.
      */
     public function force_menu_url($url)
@@ -320,20 +321,20 @@ abstract class Manager extends Application
 
     /**
      * Gets the URL to the recycle bin.
-     * 
+     *
      * @return string The URL.
      */
     public function get_recycle_bin_url()
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS,
                 self :: PARAM_CATEGORY_ID => null));
     }
 
     /**
      * Gets the url to view a object.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -343,21 +344,21 @@ abstract class Manager extends Application
         {
             return $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_CONTENT_OBJECTS, 
-                    self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                    self :: PARAM_ACTION => self :: ACTION_VIEW_CONTENT_OBJECTS,
+                    self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                     self :: PARAM_CATEGORY_ID => null));
         }
-        
+
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_VIEW_CONTENT_OBJECTS, 
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                self :: PARAM_ACTION => self :: ACTION_VIEW_CONTENT_OBJECTS,
+                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 FilterData :: FILTER_CATEGORY => $content_object->get_parent_id()));
     }
 
     /**
      * Gets the url to view a object.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -365,13 +366,13 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_EDIT_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_EDIT_CONTENT_OBJECTS,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
     /**
      * Gets the url to recycle a object (move the object to the recycle bin).
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -379,14 +380,14 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_CONTENT_OBJECTS, 
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                self :: PARAM_ACTION => self :: ACTION_DELETE_CONTENT_OBJECTS,
+                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 self :: PARAM_DELETE_RECYCLED => 1));
     }
 
     /**
      * Gets the url to restore a object from the recycle bin.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -398,13 +399,13 @@ abstract class Manager extends Application
         }
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_RESTORE_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_RESTORE_CONTENT_OBJECTS,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
     /**
      * Gets the url to delete a object from recycle bin.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -414,7 +415,7 @@ abstract class Manager extends Application
         {
             return null;
         }
-        
+
         if (isset($type))
         {
             $param = self :: PARAM_DELETE_VERSION;
@@ -432,14 +433,14 @@ abstract class Manager extends Application
         }
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_CONTENT_OBJECTS, 
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                self :: PARAM_ACTION => self :: ACTION_DELETE_CONTENT_OBJECTS,
+                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 $param => 1));
     }
 
     /**
      * Gets the url to revert to a object version.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -449,16 +450,16 @@ abstract class Manager extends Application
         {
             return null;
         }
-        
+
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_REVERT_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_REVERT_CONTENT_OBJECTS,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
     /**
      * Gets the url to move a object to another category.
-     * 
+     *
      * @param $content_object ContentObject The object.
      * @return string The requested URL.
      */
@@ -466,7 +467,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_MOVE_CONTENT_OBJECTS,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
@@ -477,24 +478,24 @@ abstract class Manager extends Application
     public function get_allowed_content_object_types()
     {
         $types = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types(true);
-        
+
         foreach ($types as $index => $type)
         {
             $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(
                 ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3));
-            
+
             if (! $registration || ! $registration->is_active())
             {
                 unset($types[$index]);
             }
         }
-        
+
         return $types;
     }
 
     /**
      * Gets the url for browsing objects of a given type
-     * 
+     *
      * @param int $template_registration_id
      * @return string The url
      */
@@ -511,7 +512,7 @@ abstract class Manager extends Application
      * This menu contains all categories in the repository of the current user. Additionally
      * some menu items are added - Recycle Bin - Create a new object - Quota - Search Results (ony if search is
      * performed)
-     * 
+     *
      * @param $force_search boolean Whether the user is searching. If true, overrides the default, which is to request
      *        this information from the search form.
      * @return ContentObjectCategoryMenu The menu
@@ -519,9 +520,9 @@ abstract class Manager extends Application
     private function get_category_menu($force_search = false)
     {
         $this->set_parameter(
-            DynamicTabsRenderer :: PARAM_SELECTED_TAB, 
+            DynamicTabsRenderer :: PARAM_SELECTED_TAB,
             array(self :: TABS_FILTER => self :: TAB_CATEGORY));
-        
+
         if (! isset($this->category_menu))
         {
             if ($force_search)
@@ -532,9 +533,9 @@ abstract class Manager extends Application
             {
                 $search_url = null;
             }
-            
+
             $this->category_menu = new RepositoryCategoryTreeMenu($this->getWorkspace(), $this);
-            
+
             if (isset($search_url))
             {
                 $this->category_menu->forceCurrentUrl($search_url, true);
@@ -544,25 +545,25 @@ abstract class Manager extends Application
                 $this->category_menu->forceCurrentUrl($this->get_url());
             }
         }
-        
+
         return $this->category_menu;
     }
 
     /**
      * Return a condition object that can be used to look for objects of the current logged user that are recycled
-     * 
+     *
      * @return AndCondition
      */
     public function get_current_user_recycle_bin_conditions()
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
             new StaticConditionVariable(ContentObject :: STATE_RECYCLED));
-        
+
         return new AndCondition($conditions);
     }
 
@@ -579,21 +580,21 @@ abstract class Manager extends Application
     public static function get_document_downloader_url($document_id)
     {
         $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(), 
+            ContentObject :: class_name(),
             $document_id);
-        
+
         if ($object)
         {
             $security_code = $object->calculate_security_code();
         }
-        
+
         $redirect = new Redirect(
             array(
-                self :: PARAM_CONTEXT => self :: context(), 
-                self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT, 
-                self :: PARAM_CONTENT_OBJECT_ID => $document_id, 
+                self :: PARAM_CONTEXT => self :: context(),
+                self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
+                self :: PARAM_CONTENT_OBJECT_ID => $document_id,
                 ContentObject :: PARAM_SECURITY_CODE => $security_code));
-        
+
         return $redirect->getUrl();
     }
 
@@ -601,9 +602,9 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEMS, 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(), 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id, 
+                self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEMS,
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
                 'publish' => Request :: get('publish')));
     }
 
@@ -611,9 +612,9 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEMS, 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(), 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id, 
+                self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEMS,
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
                 'publish' => Request :: get('publish')));
     }
 
@@ -621,10 +622,10 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEMS, 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(), 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id, 
-                self :: PARAM_MOVE_DIRECTION => $direction, 
+                self :: PARAM_ACTION => self :: ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEMS,
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
+                self :: PARAM_MOVE_DIRECTION => $direction,
                 'publish' => Request :: get('publish')));
     }
 
@@ -632,7 +633,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT, 
+                self :: PARAM_ACTION => self :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT,
                 self :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
     }
 
@@ -645,9 +646,9 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS, 
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
-                self :: PARAM_EXPORT_TYPE => $type), 
+                self :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS,
+                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                self :: PARAM_EXPORT_TYPE => $type),
             array(self :: PARAM_CATEGORY_ID));
     }
 
@@ -655,8 +656,8 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS, 
-                $type => $ids, 
+                self :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS,
+                $type => $ids,
                 self :: PARAM_EXPORT_TYPE => $format));
     }
 
@@ -664,8 +665,8 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_PUBLICATION, 
-                \Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager :: ACTION_PUBLISH, 
+                self :: PARAM_ACTION => self :: ACTION_PUBLICATION,
+                \Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager :: ACTION_PUBLISH,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
@@ -673,7 +674,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE, 
+                self :: PARAM_ACTION => self :: ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
     }
 
@@ -686,7 +687,7 @@ abstract class Manager extends Application
         $parameters = $this->get_parameters();
         $parameters[self :: PARAM_ATTACHMENT_ID] = $attachment->get_id();
         $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_ATTACHMENT;
-        
+
         return $this->get_url($parameters);
     }
 
@@ -699,7 +700,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_COPY_CONTENT_OBJECT, 
+                self :: PARAM_ACTION => self :: ACTION_COPY_CONTENT_OBJECT,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object_id));
     }
 
@@ -707,7 +708,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_SHARE_CONTENT_OBJECTS, 
+                self :: PARAM_ACTION => self :: ACTION_SHARE_CONTENT_OBJECTS,
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object_ids));
     }
 
@@ -731,13 +732,13 @@ abstract class Manager extends Application
         if (! isset($this->currentWorkspace))
         {
             $workspaceIdentifier = $this->getRequest()->query->get(self :: PARAM_WORKSPACE_ID);
-            
+
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
             $this->currentWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(
-                $this->get_user(), 
+                $this->get_user(),
                 $workspaceIdentifier);
         }
-        
+
         return $this->currentWorkspace;
     }
 
@@ -746,7 +747,7 @@ abstract class Manager extends Application
         $additionalParameters[] = self :: PARAM_WORKSPACE_ID;
         return $additionalParameters;
     }
-    
+
     /**
      * Returns the admin breadcrumb generator
      *

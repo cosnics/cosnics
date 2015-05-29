@@ -64,7 +64,9 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
             $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->content_object->get_type(), 3) .
                  '\Builder';
-            $application_factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $application_factory = new ApplicationFactory(
+                $context,
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $application_factory->run();
         }
         catch (\Exception $exception)
