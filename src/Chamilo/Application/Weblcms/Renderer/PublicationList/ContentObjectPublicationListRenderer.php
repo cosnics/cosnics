@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -775,12 +774,7 @@ abstract class ContentObjectPublicationListRenderer
 
         // TODO: check repository rights subcondition to try and hide the icon
         // when viewing as another user
-        if ($content_object->get_owner_id() == $this->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: COLLABORATE_RIGHT,
-            $content_object->get_id(),
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $content_object->get_owner_id(),
-            $this->get_user_id()))
+        if ($content_object->get_owner_id() == $this->get_user_id())
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -806,11 +800,7 @@ abstract class ContentObjectPublicationListRenderer
                     ToolbarItem :: DISPLAY_ICON));
 
             if ($content_object instanceof ComplexContentObjectSupport && ($content_object->get_owner_id() ==
-                 $this->get_tool_browser()->get_user_id() || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-                    RepositoryRights :: COLLABORATE_RIGHT,
-                    $content_object->get_id(),
-                    RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                    $content_object->get_owner_id())))
+                 $this->get_tool_browser()->get_user_id()))
             {
                 $toolbar->add_item(
                     new ToolbarItem(
@@ -939,19 +929,6 @@ abstract class ContentObjectPublicationListRenderer
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS,
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
-
-        if ($content_object->get_owner_id() == $this->get_user_id())
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('ShareContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/ManageShareRights'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_SHARE_CONTENT_OBJECTS,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
         }

@@ -107,7 +107,7 @@ class UserEntity implements RightsEntity
      */
     public function get_entity_type()
     {
-        return self :: ENTITY_TYPE;
+        return static :: ENTITY_TYPE;
     }
 
     /**
@@ -169,7 +169,7 @@ class UserEntity implements RightsEntity
             return null;
         }
         return new AdvancedElementFinderElement(
-            self :: ENTITY_TYPE . '_' . $id,
+            static :: ENTITY_TYPE . '_' . $id,
             'type type_user',
             $user->get_fullname(),
             $user->get_official_code());

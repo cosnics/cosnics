@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -28,19 +29,20 @@ class UpdaterComponent extends Manager
         {
             $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+                ContentObject :: class_name(), 
                 $selected_complex_content_object_item->get_ref());
             $form = \Chamilo\Core\Repository\Form\ContentObjectForm :: factory(
-                \Chamilo\Core\Repository\Form\ContentObjectForm :: TYPE_EDIT,
-                $content_object,
-                'edit',
-                'post',
+                \Chamilo\Core\Repository\Form\ContentObjectForm :: TYPE_EDIT, 
+                new PersonalWorkspace($this->get_user()), 
+                $content_object, 
+                'edit', 
+                'post', 
                 $this->get_url(
                     array(
-                        \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 
+                        \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(), 
                         \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())));
-
+            
             if ($form->validate())
             {
                 $succes = $form->update_content_object();
@@ -52,13 +54,13 @@ class UpdaterComponent extends Manager
                     $selected_complex_content_object_item->update();
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem :: class_name(),
-                            ComplexContentObjectItem :: PROPERTY_PARENT),
-                        new StaticConditionVariable($old_id),
+                            ComplexContentObjectItem :: class_name(), 
+                            ComplexContentObjectItem :: PROPERTY_PARENT), 
+                        new StaticConditionVariable($old_id), 
                         ComplexContentObjectItem :: get_table_name());
                     $parameters = new DataClassRetrievesParameters($condition);
                     $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                        ComplexContentObjectItem :: class_name(),
+                        ComplexContentObjectItem :: class_name(), 
                         $parameters);
                     $failures = 0;
                     while ($child = $children->next_result())
@@ -69,20 +71,20 @@ class UpdaterComponent extends Manager
                             $failures ++;
                         }
                     }
-
+                    
                     $succes = ($succes) && ($failures == 0);
                 }
-
+                
                 $message = htmlentities(
                     Translation :: get(
-                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation :: get('ContentObject')),
+                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
+                        array('OBJECT' => Translation :: get('ContentObject')), 
                         Utilities :: COMMON_LIBRARIES));
-
+                
                 $params = array();
                 $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Display\Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-
+                
                 $this->redirect($message, (! $succes), $params);
             }
             else
@@ -92,16 +94,16 @@ class UpdaterComponent extends Manager
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(),
-                                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())),
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(), 
+                                \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())), 
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES)));
-
+                
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }

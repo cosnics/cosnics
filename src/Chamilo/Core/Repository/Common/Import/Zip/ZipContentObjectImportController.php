@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class ZipContentObjectImportController extends ContentObjectImportController
 {
@@ -207,7 +208,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             $category = new RepositoryCategory();
             $category->set_id(0);
             $category->set_user_id($this->get_parameters()->get_user());
-            $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+            $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
         }
         else
         {
@@ -377,7 +378,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
 
         $category->set_parent($parent_category->get_id());
         $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
 
         if ($category->create())
         {

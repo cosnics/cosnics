@@ -20,10 +20,11 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: template_importer.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 /**
@@ -38,35 +39,35 @@ class ImporterComponent extends Manager
     public function run()
     {
         $extra_params = array();
-
+        
         $dummy_user_id = 0;
-
+        
         $type = Request :: get(self :: PARAM_IMPORT_TYPE);
-
+        
         if ($type)
         {
             // $import_form = new ContentObjectImportForm('import', 'post', $this->get_url($extra_params), 0, $user,
             // null, false);
             $import_form = ContentObjectImportForm :: factory(
-                $type,
-                $this,
-                'post',
-                $this->get_url($extra_params),
+                $type, 
+                $this, 
+                'post', 
+                $this->get_url($extra_params), 
                 FALSE);
-
+            
             if ($import_form->validate())
             {
                 $values = $import_form->exportValues();
                 $parent_id = $values[ContentObject :: PROPERTY_PARENT_ID];
                 $new_category_name = $values[ContentObjectImportForm :: NEW_CATEGORY];
-
+                
                 if (! StringUtilities :: getInstance()->isNullOrEmpty($new_category_name, true))
                 {
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
                     $new_category->set_user_id($this->get_user_id());
-                    $new_category->set_type(RepositoryCategory :: TYPE_NORMAL);
+                    $new_category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
                     if (! $new_category->create())
                     {
                         throw new \Exception(Translation :: get('CategoryCreationFailed'));
@@ -80,7 +81,7 @@ class ImporterComponent extends Manager
                 {
                     $category_id = $parent_id;
                 }
-
+                
                 if (isset($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]))
                 {
                     $file = FileProperties :: from_upload($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]);
@@ -89,21 +90,21 @@ class ImporterComponent extends Manager
                 {
                     $file = null;
                 }
-
+                
                 $parameters = ImportParameters :: factory(
-                    $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
-                    $dummy_user_id,
-                    $category_id,
-                    $file,
+                    $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE), 
+                    $dummy_user_id, 
+                    $category_id, 
+                    $file, 
                     $values);
                 $controller = ContentObjectImportController :: factory($parameters);
                 $co_ids = $controller->run();
-
+                
                 $condition = new InCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
                     $co_ids);
                 $content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-                    ContentObject :: class_name(),
+                    ContentObject :: class_name(), 
                     $condition);
                 $success = true;
                 while ($content_object = $content_objects->next_result())
@@ -112,35 +113,35 @@ class ImporterComponent extends Manager
                     $content_object->update() ? $success : $success = false;
                 }
                 // $content_object = $import_form->import_content_object();
-
+                
                 if (! $co_ids || count($co_ids) < 1 || ! $success)
                 {
                     $message = Translation :: get(
-                        'ObjectNotImported',
-                        array('OBJECT' => Translation :: get('ContentObject')),
+                        'ObjectNotImported', 
+                        array('OBJECT' => Translation :: get('ContentObject')), 
                         Utilities :: COMMON_LIBRARIES);
                 }
                 else
                 {
                     $message = Translation :: get(
-                        'ObjectImported',
-                        array('OBJECT' => Translation :: get('ContentObject')),
+                        'ObjectImported', 
+                        array('OBJECT' => Translation :: get('ContentObject')), 
                         Utilities :: COMMON_LIBRARIES);
                 }
-
+                
                 $this->redirect(
-                    $message,
-                    ! $co_ids || count($co_ids) < 1,
+                    $message, 
+                    ! $co_ids || count($co_ids) < 1, 
                     array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_TEMPLATES));
             }
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $import_form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
@@ -148,11 +149,11 @@ class ImporterComponent extends Manager
         {
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb($this->get_url(), Translation :: get('ChooseImportFormat')));
-
+            
             $html = array();
-
+            
             $html[] = $this->render_header();
-
+            
             foreach ($this->get_types() as $type => $name)
             {
                 $html[] = '<a href="' . $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
@@ -162,9 +163,9 @@ class ImporterComponent extends Manager
                 $html[] = '</div>';
                 $html[] = '</a>';
             }
-
+            
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -198,7 +199,7 @@ class ImporterComponent extends Manager
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

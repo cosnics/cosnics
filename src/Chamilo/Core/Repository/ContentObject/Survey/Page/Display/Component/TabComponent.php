@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -84,8 +83,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 DynamicVisualTab :: POSITION_LEFT, 
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
         
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
-             $this->get_current_node()->get_content_object()->has_right(RepositoryRights :: COLLABORATE_RIGHT))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             if ($this->get_current_node()->is_root())
             {
@@ -184,23 +182,20 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             if ($this->get_current_node()->get_content_object() instanceof Page)
             {
-               
+                
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
-                        self :: ACTION_MERGE,
-                        Translation :: getInstance()->getTranslation('MergerComponent'),
-                        Theme :: getInstance()->getImagePath(
-                            Manager :: package(),
-                            'Tab/' . self :: ACTION_MERGE),
+                        self :: ACTION_MERGE, 
+                        Translation :: getInstance()->getTranslation('MergerComponent'), 
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MERGE), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_MERGE,
-                                self :: PARAM_STEP => $this->get_current_step(),
-                                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER
-                            )),
-                        false,
-                        false,
-                        DynamicVisualTab :: POSITION_RIGHT,
+                                self :: PARAM_ACTION => self :: ACTION_MERGE, 
+                                self :: PARAM_STEP => $this->get_current_step(), 
+                                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)), 
+                        false, 
+                        false, 
+                        DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
                 
                 $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
@@ -209,7 +204,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $selected_template_id = TypeSelector :: get_selection();
                 
                 $is_selected = ($this->get_action() == self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM &&
-                    $selected_template_id != $template->get_id());
+                     $selected_template_id != $template->get_id());
                 
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
@@ -226,8 +221,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         false, 
                         DynamicVisualTab :: POSITION_RIGHT, 
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-                
-               
             }
         }
         

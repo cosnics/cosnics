@@ -17,10 +17,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: mover.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 /**
@@ -41,20 +42,20 @@ class MoverComponent extends Manager
             {
                 $ids = array($ids);
             }
-
+            
             $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $ids[0]);
             $parent = $object->get_parent_id();
-
+            
             $this->tree = array();
             if ($parent != 0)
                 $this->tree[] = Translation :: get('Repository');
-
+            
             $this->get_categories_for_select(0, $parent);
             $form = new FormValidator('move', 'post', $this->get_url(array(self :: PARAM_CONTENT_OBJECT_ID => $ids)));
             $form->addElement(
-                'select',
-                self :: PARAM_DESTINATION_CONTENT_OBJECT_ID,
-                Translation :: get('NewCategory'),
+                'select', 
+                self :: PARAM_DESTINATION_CONTENT_OBJECT_ID, 
+                Translation :: get('NewCategory'), 
                 $this->tree);
             $form->addElement('submit', 'submit', Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES));
             if ($form->validate())
@@ -65,7 +66,7 @@ class MoverComponent extends Manager
                 {
                     $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
                     $versions = DataManager :: get_version_ids($object);
-
+                    
                     foreach ($versions as $version)
                     {
                         $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version);
@@ -87,22 +88,22 @@ class MoverComponent extends Manager
                         }
                     }
                 }
-
+                
                 // TODO: SCARA - Correctto reflect possible version errors
                 if ($failures)
                 {
                     if (count($ids) == 1)
                     {
                         $message = Translation :: get(
-                            'ObjectNotMoved',
-                            array('OBJECT' => Translation :: get('ContentObject')),
+                            'ObjectNotMoved', 
+                            array('OBJECT' => Translation :: get('ContentObject')), 
                             Utilities :: COMMON_LIBRARIES);
                     }
                     else
                     {
                         $message = Translation :: get(
-                            'ObjectsNotMoved',
-                            array('OBJECTS' => Translation :: get('ContentObjects')),
+                            'ObjectsNotMoved', 
+                            array('OBJECTS' => Translation :: get('ContentObjects')), 
                             Utilities :: COMMON_LIBRARIES);
                     }
                 }
@@ -111,19 +112,19 @@ class MoverComponent extends Manager
                     if (count($ids) == 1)
                     {
                         $message = Translation :: get(
-                            'ObjectMoved',
-                            array('OBJECT' => Translation :: get('ContentObject')),
+                            'ObjectMoved', 
+                            array('OBJECT' => Translation :: get('ContentObject')), 
                             Utilities :: COMMON_LIBRARIES);
                     }
                     else
                     {
                         $message = Translation :: get(
-                            'ObjectsMoved',
-                            array('OBJECTS' => Translation :: get('ContentObjects')),
+                            'ObjectsMoved', 
+                            array('OBJECTS' => Translation :: get('ContentObjects')), 
                             Utilities :: COMMON_LIBRARIES);
                     }
                 }
-
+                
                 $parameters = array();
                 $parameters[Application :: PARAM_ACTION] = self :: ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData :: FILTER_CATEGORY] = $object->get_parent_id();
@@ -132,11 +133,11 @@ class MoverComponent extends Manager
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
@@ -145,15 +146,15 @@ class MoverComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('ContentObject')),
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation :: get('ContentObject')), 
                         Utilities :: COMMON_LIBRARIES)));
         }
     }
 
     /**
      * Get all categories from which a user can select a target category when moving objects.
-     *
+     * 
      * @param array $exclude An array of category-id's which should be excluded from the resulting list.
      * @return array A list of possible categories from which a user can choose. Can be used as input for a QuickForm
      *         select field.
@@ -165,30 +166,30 @@ class MoverComponent extends Manager
     private function get_categories_for_select($parent_id, $current_parent)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT), 
             new StaticConditionVariable($parent_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID), 
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable(RepositoryCategory :: TYPE_NORMAL));
-
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE), 
+            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
+        
         $condition = new AndCondition($conditions);
-
+        
         $categories = DataManager :: retrieve_categories($condition);
-
+        
         $tree = array();
         while ($cat = $categories->next_result())
         {
             $this->tree[$cat->get_id()] = str_repeat('--', $this->level) . ' ' . $cat->get_name();
-
+            
             if ($current_parent == $cat->get_id())
             {
                 $this->tree[$cat->get_id()] .= ' (' . Translation :: get('Current', null, Utilities :: COMMON_LIBRARIES) .
                      ')';
             }
-
+            
             $this->level ++;
             $this->get_categories_for_select($cat->get_id(), $current_parent);
             $this->level --;
@@ -199,7 +200,7 @@ class MoverComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)), 
                 Translation :: get('RepositoryManagerBrowserComponent')));
         $breadcrumbtrail->add_help('repository_mover');
     }

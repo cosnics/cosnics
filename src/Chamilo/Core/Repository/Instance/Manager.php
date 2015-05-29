@@ -25,7 +25,7 @@ abstract class Manager extends Application
     // Parameters
     const PARAM_INSTANCE_ID = 'instance';
     const PARAM_IMPLEMENTATION = 'implementation';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_ACTIVATE = 'Activator';
@@ -34,7 +34,7 @@ abstract class Manager extends Application
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
     const ACTION_RIGHTS = 'RightsEditor';
-
+    
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 
@@ -42,15 +42,15 @@ abstract class Manager extends Application
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_TYPE),
+            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_TYPE), 
             new StaticConditionVariable('Chamilo\Core\Repository\Implementation'));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_STATUS),
+            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_STATUS), 
             new StaticConditionVariable($status));
         $condition = new AndCondition($conditions);
-
+        
         return \Chamilo\Configuration\Storage\DataManager :: retrieves(
-            Registration :: class_name(),
+            Registration :: class_name(), 
             new DataClassRetrievesParameters($condition));
     }
 
@@ -71,7 +71,7 @@ abstract class Manager extends Application
             ClassnameUtilities :: getInstance()->getNamespaceParent($type));
         $instance_type = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($parent, true);
         $package = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($type, true);
-
+        
         return $type . '\\' . $package . $instance_type;
     }
 
@@ -87,7 +87,7 @@ abstract class Manager extends Application
 
     /**
      * Get a series of links for all external repository instances of one or more types
-     *
+     * 
      * @param $types array An array of external repository manager types
      * @param $auto_open unknown_type if there is only one instance, should it be opened automatically
      * @return string
@@ -101,72 +101,67 @@ abstract class Manager extends Application
             {
                 $types = array($types);
             }
-
+            
             $type_names = array();
             foreach ($types as $type)
             {
                 $type_names[] = Translation :: get('TypeName', null, Manager :: get_namespace($type));
             }
             $type_names = implode(', ', $type_names);
-
+            
             if (count($types) > 1)
             {
                 $translation = Translation :: get(
-                    'NoExternalInstanceTypeManagersAvailable',
-                    array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagersAvailable', 
+                    array('TYPES' => $type_names), 
                     \Chamilo\Core\Repository\Manager :: context());
             }
             else
             {
                 $translation = Translation :: get(
-                    'NoExternalInstanceTypeManagerAvailable',
-                    array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagerAvailable', 
+                    array('TYPES' => $type_names), 
                     \Chamilo\Core\Repository\Manager :: context());
             }
-
+            
             return Display :: warning_message($translation, true);
         }
         else
         {
             $html = array();
             $buttons = array();
-
+            
             $available_instances = 0;
-
+            
             while ($instance = $instances->next_result())
             {
-                // if (RepositoryRights :: get_instance()->is_allowed_in_external_instances_subtree(
-                // RepositoryRights :: USE_RIGHT,
-                // $instance->get_id()))
-                // {
                 $link = Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
                      urlencode($instance->get_implementation()) . '&' .
                      \Chamilo\Core\Repository\Manager :: PARAM_EXTERNAL_INSTANCE . '=' . $instance->get_id() . '&' .
                      \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED . '=1';
                 $image = Theme :: getInstance()->getImagePath($instance->get_implementation(), 'Logo/16');
                 $title = Translation :: get(
-                    'BrowseObject',
-                    array('OBJECT' => $instance->get_title()),
+                    'BrowseObject', 
+                    array('OBJECT' => $instance->get_title()), 
                     Utilities :: COMMON_LIBRARIES);
                 $buttons[] = '<a class="button normal_button upload_button" style="background-image: url(' .
                      htmlspecialchars($image) . ');" onclick="javascript:openPopup(\'' . htmlspecialchars($link) .
                      '\');"> ' . htmlspecialchars($title) . '</a>';
                 $available_instances ++;
-                // }
             }
-
+            
             if ($available_instances == 0)
             {
                 $translation = Translation :: get(
-                    'NoExternalInstanceTypeManagerAvailable',
-                    array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagerAvailable', 
+                    array('TYPES' => $type_names), 
                     \Chamilo\Core\Repository\Manager :: context());
                 return Display :: warning_message($translation, true);
             }
             else
             {
                 $html[] = '<div style="margin-bottom: 10px;">' . implode(' ', $buttons) . '</div>';
-
+                
                 if ($available_instances == 1 && $auto_open)
                 {
                     $html[] = '<script type="text/javascript">';
@@ -178,7 +173,7 @@ abstract class Manager extends Application
                     $html[] = '});';
                     $html[] = '</script>';
                 }
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
