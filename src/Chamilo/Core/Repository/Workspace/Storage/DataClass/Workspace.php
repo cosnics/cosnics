@@ -20,7 +20,7 @@ class Workspace extends DataClass implements WorkspaceInterface
 {
     const CLASS_NAME = __CLASS__;
     const WORKSPACE_TYPE = 2;
-    
+
     // Properties
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
@@ -41,9 +41,9 @@ class Workspace extends DataClass implements WorkspaceInterface
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_CREATOR_ID, 
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_DESCRIPTION,
+                self :: PROPERTY_CREATOR_ID,
                 self :: PROPERTY_CREATION_DATE));
     }
 
@@ -102,7 +102,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         {
             $this->creator = DataManager :: retrieve_by_id(User :: class_name(), $this->getCreatorId());
         }
-        
+
         return $this->creator;
     }
 
@@ -142,18 +142,18 @@ class Workspace extends DataClass implements WorkspaceInterface
         return array(
             WorkspaceEntityRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceEntityRelation :: class_name(), 
-                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())), 
+                    WorkspaceEntityRelation :: class_name(),
+                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                new StaticConditionVariable($this->getId())),
             WorkspaceContentObjectRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceContentObjectRelation :: class_name(), 
-                    WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())), 
+                    WorkspaceContentObjectRelation :: class_name(),
+                    WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                new StaticConditionVariable($this->getId())),
             WorkspaceCategoryRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    WorkspaceCategoryRelation :: class_name(), 
-                    WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID), 
+                    WorkspaceCategoryRelation :: class_name(),
+                    WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID),
                 new StaticConditionVariable($this->getId())));
     }
 
@@ -173,5 +173,14 @@ class Workspace extends DataClass implements WorkspaceInterface
     public function getTitle()
     {
         return $this->getName();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
+     */
+    public function getHash()
+    {
+        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
     }
 }

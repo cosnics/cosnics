@@ -14,9 +14,9 @@ class GalleryTable extends DataClassGalleryTable
     public function __construct($component)
     {
         parent :: __construct($component);
-        
-        $template_id = FilterData :: get_instance()->get_type();
-        
+
+        $template_id = FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace())->get_type();
+
         if (! $template_id)
         {
             $this->type = ContentObject :: class_name();
@@ -24,9 +24,9 @@ class GalleryTable extends DataClassGalleryTable
         else
         {
             $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($template_id);
-            
+
             $this->type = $template_registration->get_content_object_type() . '\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-                $template_registration->get_content_object_type(), 
+                $template_registration->get_content_object_type(),
                 true);
         }
     }

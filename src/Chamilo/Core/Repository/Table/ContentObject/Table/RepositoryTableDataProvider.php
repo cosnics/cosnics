@@ -21,7 +21,7 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
         return $contentObjectService->getContentObjectsForWorkspace(
             $this->get_component()->get_repository_browser()->getWorkspace(),
             ConditionFilterRenderer :: factory(
-                FilterData :: get_instance(),
+                FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace()),
                 $this->get_component()->get_repository_browser()->getWorkspace()),
             $count,
             $offset,
@@ -38,7 +38,7 @@ class RepositoryTableDataProvider extends DataClassTableDataProvider
         return $contentObjectService->countContentObjectsForWorkspace(
             $this->get_component()->get_repository_browser()->getWorkspace(),
             ConditionFilterRenderer :: factory(
-                FilterData :: get_instance(),
+                FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace()),
                 $this->get_component()->get_repository_browser()->getWorkspace()));
 
         // return DataManager :: count_active_content_objects($this->get_table()->get_type(), $parameters);

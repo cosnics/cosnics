@@ -68,12 +68,22 @@ class PersonalWorkspace implements WorkspaceInterface
     {
         return self :: WORKSPACE_TYPE;
     }
-    
-    /* (non-PHPdoc)
+
+    /*
+     * (non-PHPdoc)
      * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
      */
     public function getTitle()
     {
         return Translation :: get('MyRepository');
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
+     */
+    public function getHash()
+    {
+        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
     }
 }

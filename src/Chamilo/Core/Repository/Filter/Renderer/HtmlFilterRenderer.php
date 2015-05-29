@@ -12,6 +12,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -204,7 +205,11 @@ class HtmlFilterRenderer extends FilterRenderer
     public function add_header()
     {
         $html = array();
-        $html[] = '<div id="search_parameters"><h4>' . Translation :: get('SearchParameters') . '</h4>';
+
+        $workspaceId = $this->get_workspace() instanceof PersonalWorkspace ? null : $this->get_workspace()->getId();
+
+        $html[] = '<div id="search_parameters" data-current-workspace-id="' . $workspaceId . '"><h4>' .
+             Translation :: get('SearchParameters') . '</h4>';
 
         return implode(PHP_EOL, $html);
     }
