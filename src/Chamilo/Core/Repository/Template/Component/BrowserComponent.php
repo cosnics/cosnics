@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $filter_condition_renderer = ConditionFilterRenderer :: factory(
-            FilterData :: get_instance(),
+            FilterData :: get_instance($this->get_application()->getWorkspace()),
             $this->get_application()->getWorkspace());
         $filter_condition = $filter_condition_renderer->render();
 

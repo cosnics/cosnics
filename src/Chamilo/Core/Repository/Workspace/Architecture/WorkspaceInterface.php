@@ -34,4 +34,10 @@ interface WorkspaceInterface
      * @return string
      */
     public function getTitle();
+
+    /**
+     *
+     * @return string
+     */
+    public function getHash();
 }

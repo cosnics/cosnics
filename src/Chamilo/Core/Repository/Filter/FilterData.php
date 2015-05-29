@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * The data set via Session, $_POST and $_GET variables related to filtering a set of content objects
@@ -36,6 +37,12 @@ class FilterData
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $workspaceImplementation;
+
+    /**
+     *
      * @var string[]
      */
     private $storage;
@@ -49,9 +56,15 @@ class FilterData
     /**
      * Constructs a new Filter
      */
-    private function __construct()
+    private function __construct(WorkspaceInterface $workspaceImplementation)
     {
+        $this->workspaceImplementation = $workspaceImplementation;
         $this->initialize();
+    }
+
+    private function getStorageKey()
+    {
+        return self :: STORAGE . '_' . $this->workspaceImplementation->getHash();
     }
 
     /**
@@ -87,7 +100,7 @@ class FilterData
     public function update_session()
     {
         $data = serialize($this->get_storage());
-        Session :: register(self :: STORAGE, $data);
+        Session :: register($this->getStorageKey(), $data);
     }
 
     /**
@@ -266,7 +279,7 @@ class FilterData
      */
     public function initialize()
     {
-        $this->storage = unserialize(Session :: retrieve(self :: STORAGE));
+        $this->storage = unserialize(Session :: retrieve($this->getStorageKey()));
 
         foreach ($this->get_filter_properties() as $filter_property)
         {
@@ -306,11 +319,11 @@ class FilterData
      *
      * @return \core\repository\filter\FilterData
      */
-    public static function get_instance()
+    public static function get_instance(WorkspaceInterface $workspaceImplementation)
     {
         if (! isset(self :: $instance))
         {
-            $filter_data = new FilterData();
+            $filter_data = new FilterData($workspaceImplementation);
             $type = $filter_data->get_filter_property(FilterData :: FILTER_TYPE);
 
             if (is_numeric($type) && ! empty($type))
@@ -329,9 +342,9 @@ class FilterData
         return self :: $instance;
     }
 
-    public static function clean_url($url)
+    public static function clean_url(WorkspaceInterface $workspaceImplementation, $url)
     {
-        $filter_data = self :: get_instance();
+        $filter_data = self :: get_instance($workspaceImplementation);
         $url_parts = parse_url(urldecode($url));
 
         parse_str($url_parts['query'], $query);

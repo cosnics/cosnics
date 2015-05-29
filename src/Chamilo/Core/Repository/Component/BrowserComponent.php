@@ -174,7 +174,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS,
-                            FilterData :: FILTER_CATEGORY => FilterData :: get_instance()->get_filter_property(
+                            FilterData :: FILTER_CATEGORY => FilterData :: get_instance($this->getWorkspace())->get_filter_property(
                                 FilterData :: FILTER_CATEGORY))),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
@@ -204,7 +204,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $filter_condition_renderer = ConditionFilterRenderer :: factory(
-            FilterData :: get_instance(),
+            FilterData :: get_instance($this->getWorkspace()),
             $this->getWorkspace());
         $filter_condition = $filter_condition_renderer->render();
 
@@ -218,7 +218,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     private function get_parent_id()
     {
-        return FilterData :: get_instance()->get_filter_property(FilterData :: FILTER_CATEGORY);
+        return FilterData :: get_instance($this->getWorkspace())->get_filter_property(FilterData :: FILTER_CATEGORY);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

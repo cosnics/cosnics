@@ -218,7 +218,7 @@ abstract class Manager extends Application
                 $this->get_category_menu()->render_as_tree()));
 
         $filter_form = FormFilterRenderer :: factory(
-            FilterData :: get_instance(),
+            FilterData :: get_instance($this->getWorkspace()),
             $this->getWorkspace(),
             $this->get_user_id(),
             $this->get_allowed_content_object_types(),
@@ -235,8 +235,8 @@ abstract class Manager extends Application
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_SEARCH),
                 $filter_form->render()));
 
-        $selected_type = FilterData :: get_instance()->get_type();
-        $selected_category = FilterData :: get_instance()->get_type_category();
+        $selected_type = FilterData :: get_instance($this->getWorkspace())->get_type();
+        $selected_category = FilterData :: get_instance($this->getWorkspace())->get_type_category();
 
         $object_type = new ObjectTypeMenu(
             $this,
@@ -264,7 +264,7 @@ abstract class Manager extends Application
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_OBJECT_TYPE),
                 $object_type->render_as_tree()));
 
-        $current_user_view_id = FilterData :: get_instance()->get_user_view();
+        $current_user_view_id = FilterData :: get_instance($this->getWorkspace())->get_user_view();
         $user_view = new UserViewMenu(
             $this,
             $current_user_view_id,
@@ -281,7 +281,9 @@ abstract class Manager extends Application
 
         $html[] = ($tabs->render());
 
-        $html_filter_renderer = HtmlFilterRenderer :: factory(FilterData :: get_instance(), $this->getWorkspace());
+        $html_filter_renderer = HtmlFilterRenderer :: factory(
+            FilterData :: get_instance($this->getWorkspace()),
+            $this->getWorkspace());
 
         $html[] = $html_filter_renderer->render();
 

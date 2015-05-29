@@ -23,7 +23,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
     public function __construct($component)
     {
         parent :: __construct($component);
-        $template_id = FilterData :: get_instance()->get_type();
+        $template_id = FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace())->get_type();
         if (! $template_id)
         {
             $this->type = ContentObject :: class_name();
