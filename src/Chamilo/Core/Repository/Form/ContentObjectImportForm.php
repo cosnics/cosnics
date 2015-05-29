@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * $Id: content_object_import_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -28,6 +29,8 @@ abstract class ContentObjectImportForm extends FormValidator
     const NEW_CATEGORY = 'new_category';
     const IMPORT_FILE_NAME = 'content_object_file';
 
+    private $workspace;
+
     public $application;
 
     private $show_categories;
@@ -39,10 +42,12 @@ abstract class ContentObjectImportForm extends FormValidator
      * @param $method string The method to use ('post' or 'get').
      * @param $action string The URL to which the form should be submitted.
      */
-    public function __construct($application, $method = 'post', $action = null, $show_categories = true)
+    public function __construct(WorkspaceInterface $workspace, $application, $method = 'post', $action = null,
+        $show_categories = true)
     {
         parent :: __construct('import', $method, $action);
 
+        $this->workspace = $workspace;
         $this->application = $application;
         $this->show_categories = $show_categories;
 
@@ -58,7 +63,7 @@ abstract class ContentObjectImportForm extends FormValidator
      */
     public function get_categories()
     {
-        $categorymenu = new ContentObjectCategoryMenu($this->get_application()->get_user_id());
+        $categorymenu = new ContentObjectCategoryMenu($this->workspace, $this->get_application()->get_user_id());
         $renderer = new OptionsMenuRenderer();
         $categorymenu->render($renderer, 'sitemap');
         return $renderer->toArray();
@@ -129,7 +134,7 @@ abstract class ContentObjectImportForm extends FormValidator
         return $this->application;
     }
 
-    public static function factory($type, $application, $method, $action = null, $show_categories = true)
+    public static function factory($type, WorkspaceInterface $workspace, $application, $method, $action = null, $show_categories = true)
     {
         $class = Manager :: package() . '\Common\Import\\' .
              StringUtilities :: getInstance()->createString($type)->upperCamelize() . '\\' .
@@ -140,6 +145,6 @@ abstract class ContentObjectImportForm extends FormValidator
             throw new \Exception(Translation :: get('UnknownImportType', array('TYPE' => $type)));
         }
 
-        return new $class($application, $method, $action, $show_categories);
+        return new $class($workspace, $application, $method, $action, $show_categories);
     }
 }
