@@ -333,7 +333,7 @@ class FilterData
                     (int) $template_id);
 
                 $class_name = $template_registration->get_content_object_type() . '\Filter\FilterData';
-                $filter_data = new $class_name();
+                $filter_data = new $class_name($workspaceImplementation);
             }
 
             self :: $instance = $filter_data;
