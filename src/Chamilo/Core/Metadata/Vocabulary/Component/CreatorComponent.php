@@ -10,6 +10,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * Controller to create the schema
@@ -62,7 +63,8 @@ class CreatorComponent extends Manager
 
                 if ($success)
                 {
-                    $entityTranslationService = new EntityTranslationService($vocabulary);
+                    $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($vocabulary);
+                    $entityTranslationService = new EntityTranslationService($entity);
                     $success = $entityTranslationService->createEntityTranslations(
                         $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
                 }

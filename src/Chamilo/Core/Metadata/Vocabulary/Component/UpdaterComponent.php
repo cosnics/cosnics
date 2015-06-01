@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * Controller to update the controlled vocabulary
@@ -51,7 +52,8 @@ class UpdaterComponent extends Manager
 
                 if ($success)
                 {
-                    $entityTranslationService = new EntityTranslationService($vocabulary);
+                    $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($vocabulary);
+                    $entityTranslationService = new EntityTranslationService($entity);
                     $success = $entityTranslationService->updateEntityTranslations(
                         $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
                 }

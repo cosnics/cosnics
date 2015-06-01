@@ -50,7 +50,8 @@ class UpdaterComponent extends Manager
 
                 if ($success)
                 {
-                    $entityTranslationService = new EntityTranslationService($relation);
+                    $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($relation);
+                    $entityTranslationService = new EntityTranslationService($entity);
                     $success = $entityTranslationService->updateEntityTranslations(
                         $values[EntityTranslationService :: PROPERTY_TRANSLATION]);
                 }
