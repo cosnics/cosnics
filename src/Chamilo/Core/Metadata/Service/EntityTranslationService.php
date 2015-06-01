@@ -115,7 +115,7 @@ class EntityTranslationService
      */
     public function updateEntityTranslations($entityTranslations)
     {
-        $translations = $this->getEntity()->getTranslations();
+        $translations = $this->getEntity()->getDataClass()->getTranslations();
 
         foreach ($entityTranslations as $isocode => $value)
         {
