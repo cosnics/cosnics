@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: category_manager.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -196,8 +196,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     {
         return DataManager :: select_next_category_display_order(
             $parent_id,
-            Session :: get_user_id(),
-            $this->get_type());
+            $this->getWorkspace()->getId(),
+            $this->getWorkspace()->getWorkspaceType());
     }
 
     /**
@@ -209,13 +209,20 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function allowed_to_delete_category($category_id)
     {
-        $object_count = $this->count_category_objects($category_id);
-        if ($object_count > 0)
+        if ($this->getWorkspace() instanceof PersonalWorkspace)
         {
-            return false;
-        }
+            $object_count = $this->count_category_objects($category_id);
+            if ($object_count > 0)
+            {
+                return false;
+            }
 
-        return ! $this->contain_subcategories_objects($category_id);
+            return ! $this->contain_subcategories_objects($category_id);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**

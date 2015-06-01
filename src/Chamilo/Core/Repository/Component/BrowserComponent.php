@@ -120,12 +120,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                     Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(array('category' => Request :: get('category'))),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            $this->action_bar->add_common_action(
-                new ToolbarItem(
-                    Translation :: get('ManageCategories'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Category'),
-                    $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            // $this->action_bar->add_common_action(
+            // new ToolbarItem(
+            // Translation :: get('ManageCategories'),
+            // Theme :: getInstance()->getCommonImagePath('Action/Category'),
+            // $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
+            // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
             if ($this->has_filter_type())
             {
@@ -152,7 +152,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 foreach ($renderers as $renderer)
                 {
-                    $this->action_bar->add_tool_action(
+                    $this->action_bar->add_common_action(
                         new ToolbarItem(
                             Translation :: get(
                                 (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() .
@@ -165,6 +165,60 @@ class BrowserComponent extends Manager implements DelegateComponent
                             $this->get_url(array(self :: PARAM_RENDERER => $renderer)),
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                 }
+            }
+
+            $currentCategoryIdentifier = FilterData :: get_instance($this->getWorkspace())->get_filter_property(
+                FilterData :: FILTER_CATEGORY);
+
+            $this->action_bar->add_tool_action(
+                new ToolbarItem(
+                    Translation :: get('AddCategory', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                    $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
+                            \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager :: ACTION_CREATE_CATEGORY,
+                            \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
+                            FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+            if ($currentCategoryIdentifier)
+            {
+                $this->action_bar->add_tool_action(
+                    new ToolbarItem(
+                        Translation :: get('EditCategory', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager :: ACTION_UPDATE_CATEGORY,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
+                                FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+                $this->action_bar->add_tool_action(
+                    new ToolbarItem(
+                        Translation :: get('MoveCategory', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Move'),
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager :: ACTION_MOVE_CATEGORY,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
+                                FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+                $this->action_bar->add_tool_action(
+                    new ToolbarItem(
+                        Translation :: get('DeleteCategory', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager :: ACTION_DELETE_CATEGORY,
+                                \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
+                                FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
             $this->action_bar->add_tool_action(
@@ -228,7 +282,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_additional_parameters()
     {
-        return parent :: get_additional_parameters(array(self :: PARAM_RENDERER));
+        return parent :: get_additional_parameters(
+            array(
+                self :: PARAM_RENDERER,
+                ContentObject :: PROPERTY_PARENT_ID,
+                \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID));
     }
 
     /**

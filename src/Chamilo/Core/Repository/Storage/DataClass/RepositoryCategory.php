@@ -171,7 +171,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
         // TRANSACTION
         $success = DataManager :: transactional(
             function ($c) use($move, $category) {
-                if (! $category->CheckBeforeSave())
+                if (! $category->check_before_save())
                 {
                     return false;
                 }
