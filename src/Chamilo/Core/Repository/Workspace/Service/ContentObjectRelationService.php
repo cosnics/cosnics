@@ -148,4 +148,23 @@ class ContentObjectRelationService
         $contentObjectRelation->setContentObjectId($contentObjectId);
         $contentObjectRelation->setCategoryId($categoryId);
     }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @return boolean
+     */
+    public function deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(Workspace $workspace,
+        ContentObject $contentObject)
+    {
+        $contentObjectRelation = $this->getContentObjectRelationForWorkspaceAndContentObject($workspace, $contentObject);
+
+        if (! $contentObjectRelation->delete())
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

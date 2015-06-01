@@ -365,8 +365,9 @@ class Utilities
     public static function mimetype_to_image($mimetype)
     {
         $mimetype_image = str_replace('/', '_', $mimetype);
+        $mimetype_image = (string) StringUtilities :: getInstance()->createString($mimetype_image)->upperCamelize();
         return Theme :: getInstance()->getCommonImage(
-            'mimetype/' . $mimetype_image,
+            'Mimetype/' . $mimetype_image,
             'png',
             $mimetype,
             '',
