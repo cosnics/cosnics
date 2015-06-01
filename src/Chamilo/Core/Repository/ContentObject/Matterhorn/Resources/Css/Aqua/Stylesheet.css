@@ -1,4 +1,4 @@
-@CHARSET "ISO-8859-1";
+@import url(../../../../../Implementation/Matterhorn/Resources/Javascript/Plugin/Projekktor/themes/maccaco/projekktor.style.css);
 
 ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
 	ul.tree-menu li div a.type_matterhorn_default {
