@@ -31,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\UUID;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 /**
  *
@@ -827,11 +828,10 @@ class ContentObject extends CompositeDataClass
 
         // TRANSACTION
         $success = DataManager :: transactional(
-            function ($c) use($create_in_batch, $content_object)
-            { // checks wether to create a new content object or
-                                                                   // version:
-                                                                   // if the ID is set, we create a new version,
-                                                                   // otherwise a new CO.
+            function ($c) use($create_in_batch, $content_object) { // checks wether to create a new content object or
+              // version:
+              // if the ID is set, we create a new version,
+              // otherwise a new CO.
                 $orig_id = $content_object->get_id();
                 $version = isset($orig_id);
 
@@ -964,8 +964,7 @@ class ContentObject extends CompositeDataClass
 
         // TRANSACTION
         $success = DataManager :: transactional(
-            function ($c) use($new_parent_id, $content_object)
-            {
+            function ($c) use($new_parent_id, $content_object) {
                 $content_object->set_parent_id($new_parent_id);
                 $succes = call_user_func_array(
                     array($content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::update'),
@@ -998,8 +997,7 @@ class ContentObject extends CompositeDataClass
 
         // TRANSACTION
         $success = DataManager :: transactional(
-            function ($c) use($only_version, $content_object)
-            {
+            function ($c) use($only_version, $content_object) {
                 if ($only_version)
                 {
                     if (! $content_object->version_delete())
@@ -1085,12 +1083,25 @@ class ContentObject extends CompositeDataClass
 
     public function delete_links()
     {
+        // Delete links with workspaces
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        if (! DataManager :: deletes(WorkspaceContentObjectRelation :: class_name(), $condition))
+        {
+            return false;
+        }
+
         // Delete attachment links of the object
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment :: class_name(),
                 ContentObjectAttachment :: PROPERTY_ATTACHMENT_ID),
             new StaticConditionVariable($this->get_id()));
+
         if (! DataManager :: deletes(ContentObjectAttachment :: class_name(), $condition))
         {
             return false;

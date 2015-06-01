@@ -140,7 +140,6 @@ abstract class Manager extends Application
     const ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT = 'MetadataElementLinker';
     const ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE = 'AlternativeLinker';
     const ACTION_BATCH_EDIT_CONTENT_OBJECT_METADATA = 'MetadataBatchEditor';
-    const ACTION_TEMPLATE = 'Template';
     const ACTION_LINK_SCHEMAS = 'SchemaLinker';
     const ACTION_LINK_PROVIDERS = 'ProviderLinker';
 

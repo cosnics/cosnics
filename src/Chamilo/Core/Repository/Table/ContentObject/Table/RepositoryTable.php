@@ -82,15 +82,14 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
                     Translation :: get('ShareSelected'),
                     false));
         }
-
-        if ($this->get_component()->get_user()->is_platform_admin())
+        else
         {
             $actions->add_form_action(
                 new TableFormAction(
                     array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
-                        \Chamilo\Core\Repository\Template\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Template\Manager :: ACTION_CREATE),
-                    Translation :: get('CopySelectedToTemplates'),
+                        Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE),
+                    Translation :: get('UnshareSelected'),
                     false));
         }
 

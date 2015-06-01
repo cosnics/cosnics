@@ -24,6 +24,7 @@ abstract class Manager extends Application
     const ACTION_UPDATE = 'Updater';
     const ACTION_RIGHTS = 'Rights';
     const ACTION_SHARE = 'Share';
+    const ACTION_UNSHARE = 'Unshare';
     const ACTION_PUBLISH = 'Publisher';
 
     // Default action

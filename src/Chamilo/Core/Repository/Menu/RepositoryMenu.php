@@ -93,14 +93,6 @@ class RepositoryMenu extends HTML_Menu
 
             $extra_items[] = $import;
 
-            $templates = array();
-            $templates['title'] = Translation :: get('BrowseTemplates');
-            $templates['url'] = $this->repository_manager->get_url(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_TEMPLATE));
-            $templates['class'] = 'template';
-
-            $extra_items[] = $templates;
-
             $quota = array();
             $quota['title'] = Translation :: get('Quota');
             $quota['url'] = $this->repository_manager->get_url(
