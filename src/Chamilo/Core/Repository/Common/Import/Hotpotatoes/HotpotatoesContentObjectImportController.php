@@ -11,6 +11,10 @@ use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Properties\WebpageProperties;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class HotpotatoesContentObjectImportController extends ContentObjectImportController
 {
@@ -89,7 +93,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
         $hotpotatoes = ContentObject :: factory(
             'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes');
         $hotpotatoes->set_owner_id($this->get_parameters()->get_user());
-        $hotpotatoes->set_parent_id($this->get_parameters()->get_category());
+        $hotpotatoes->set_parent_id($this->determine_parent_id());
 
         if ($webpage_properties->get_title())
         {
@@ -120,6 +124,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
         if (! $hotpotatoes->create())
         {
+            $this->process_workspace($hotpotatoes);
+
             $this->failures ++;
         }
     }
@@ -272,5 +278,37 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
     public static function is_available()
     {
         return in_array(self :: FORMAT, DataManager :: get_registered_types(true));
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id()
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $this->get_parameters()->get_category();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+
+    /**
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace(ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $this->get_parameters()->get_category());
+        }
     }
 }

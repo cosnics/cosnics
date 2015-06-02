@@ -184,14 +184,18 @@ class FileContentObjectImportController extends ContentObjectImportController
         }
     }
 
-    public function process_workspace(File $file)
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace(ContentObject $contentObject)
     {
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
                 $this->get_parameters()->getWorkspace()->getId(),
-                $file->getId(),
+                $contentObject->getId(),
                 $this->get_parameters()->get_category());
         }
     }

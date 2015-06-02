@@ -10,6 +10,10 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class RarContentObjectImportController extends ContentObjectImportController
 {
@@ -58,28 +62,33 @@ class RarContentObjectImportController extends ContentObjectImportController
             {
                 $rar = \RarArchive :: open($file->get_path());
                 $entries = $rar->getEntries();
+
                 if (count($entries) != 0)
                 {
                     $total_filesize = 0;
+
                     foreach ($entries as $entry)
                     {
                         $total_filesize += $entry->getUnpackedSize();
                     }
+
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                             (int) $this->get_parameters()->get_user()));
+
                     if ($calculator->get_available_user_disk_quota() < $total_filesize)
                     {
                         $this->add_message(Translation :: get('InsufficientDiskQuota'), self :: TYPE_ERROR);
                         return array();
                     }
+
                     if ($this->get_parameters()->get_category() == 0)
                     {
                         $category = new RepositoryCategory();
                         $category->set_id(0);
-                        $category->set_user_id($this->get_parameters()->get_user());
-                        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
+                        $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
+                        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
                     }
                     else
                     {
@@ -87,12 +96,14 @@ class RarContentObjectImportController extends ContentObjectImportController
                             RepositoryCategory :: class_name(),
                             $this->get_parameters()->get_category());
                     }
+
                     if ($category instanceof RepositoryCategory)
                     {
                         $this->created_categories[md5('/')] = $category;
                         $failures = 0;
                         // Create categories
                         $folders = array();
+
                         foreach ($entries as $entry)
                         {
                             if ($entry->isDirectory())
@@ -101,7 +112,9 @@ class RarContentObjectImportController extends ContentObjectImportController
                                 $folders[count($path_parts)][] = $entry;
                             }
                         }
+
                         ksort($folders);
+
                         foreach ($folders as $subfolders)
                         {
                             foreach ($subfolders as $subfolder)
@@ -112,6 +125,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                                 }
                             }
                         }
+
                         // Create files
                         foreach ($entries as $entry)
                         {
@@ -119,6 +133,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                             {
                                 $path_parts = explode('/', $entry->getName());
                                 $file_name = array_pop($path_parts);
+
                                 if (count($path_parts) > 0)
                                 {
                                     $dir_name = '/' . implode('/', $path_parts) . '/';
@@ -127,9 +142,11 @@ class RarContentObjectImportController extends ContentObjectImportController
                                 {
                                     $dir_name = '/';
                                 }
+
                                 if (isset($this->created_categories[md5($dir_name)]))
                                 {
                                     $parent = $this->created_categories[md5($dir_name)];
+
                                     if (! $this->create_content_object($file_name, $entry, $parent->get_id()))
                                     {
                                         $failures ++;
@@ -141,6 +158,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                                 }
                             }
                         }
+
                         if ($failures == 0)
                         {
                             $this->add_message(Translation :: get('ObjectImported'), self :: TYPE_CONFIRM);
@@ -189,19 +207,23 @@ class RarContentObjectImportController extends ContentObjectImportController
     private function create_content_object($file_name, $entry, $parent)
     {
         $temporary_file_path = $this->temporary_path . DIRECTORY_SEPARATOR . uniqid();
+
         if (! $entry->extract(null, $temporary_file_path))
         {
             return false;
         }
+
         $file = new File();
         $file->set_title($file_name);
         $file->set_description($file_name);
         $file->set_owner_id($this->get_parameters()->get_user());
-        $file->set_parent_id($parent);
+        $file->set_parent_id($this->determine_parent_id($parent));
         $file->set_filename($file_name);
         $file->set_temporary_file_path($temporary_file_path);
+
         if ($file->create())
         {
+            $this->process_workspace($parent, $file);
             $this->created_content_object_ids[] = $file->get_id();
             return true;
         }
@@ -219,6 +241,7 @@ class RarContentObjectImportController extends ContentObjectImportController
     private function create_category($entry)
     {
         $path_parts = explode('/', $entry->getName());
+
         if (count($path_parts) > 1)
         {
             $base_name = array_pop($path_parts);
@@ -229,6 +252,7 @@ class RarContentObjectImportController extends ContentObjectImportController
             $dir_name = '/';
             $base_name = $path_parts[0];
         }
+
         $category = new RepositoryCategory();
         $category->set_name(
             DataManager :: create_unique_category_name(
@@ -236,8 +260,9 @@ class RarContentObjectImportController extends ContentObjectImportController
                 $this->created_categories[md5($dir_name)]->get_id(),
                 $base_name));
         $category->set_parent($this->created_categories[md5($dir_name)]->get_id());
-        $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
+        $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
+        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+
         if (! $category->create())
         {
             return false;
@@ -271,5 +296,37 @@ class RarContentObjectImportController extends ContentObjectImportController
         $rar_extension_available = extension_loaded('rar');
 
         return $rar_extension_available && $file_available;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id($parent)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $parent;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace($parent, ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $parent);
+        }
     }
 }

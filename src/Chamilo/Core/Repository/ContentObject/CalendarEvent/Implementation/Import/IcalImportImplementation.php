@@ -13,14 +13,14 @@ class IcalImportImplementation extends ImportImplementation
     public function import()
     {
         $content_object = new CalendarEvent();
-        
+
         // General properties
         $content_object->set_owner_id($this->get_controller()->get_parameters()->get_user());
-        $content_object->set_parent_id($this->get_controller()->get_parameters()->get_category());
-        
+        $content_object->set_parent_id($this->get_controller()->determine_parent_id());
+
         // Calendar event properties as retrieved from the iCal VEvent
         $component = $this->get_content_object_import_parameters()->get_calendar_component();
-        
+
         $content_object->set_title($component->summary->getValue());
         if ($component->description instanceof FlatText)
         {
@@ -30,14 +30,14 @@ class IcalImportImplementation extends ImportImplementation
         {
             $content_object->set_description('-');
         }
-        
+
         $content_object->set_start_date($component->dtstart->getDateTime()->getTimestamp());
         $content_object->set_end_date($component->dtend->getDateTime()->getTimestamp());
-        
+
         if ($component->rrule instanceof Recur)
         {
             $recurrence = $component->rrule->getParts();
-            
+
             switch ($recurrence['FREQ'])
             {
                 case 'MONTHLY' :
@@ -48,7 +48,7 @@ class IcalImportImplementation extends ImportImplementation
                     break;
                 case 'WEEKLY' :
                     $content_object->set_frequency(CalendarEvent :: FREQ_BIWEEK);
-                    
+
                     if ($recurrence['INTERVAL'] == '2')
                     {
                         $content_object->set_frequency(CalendarEvent :: FREQ_BIWEEK);
@@ -57,11 +57,11 @@ class IcalImportImplementation extends ImportImplementation
                     {
                         $content_object->set_frequency(CalendarEvent :: FREQ_WEEKLY);
                     }
-                    
+
                     break;
                 case 'DAILY' :
                     $weekdays = array('MO', 'TU', 'WE', 'TH', 'FR');
-                    
+
                     if ($recurrence['BYDAY'] == $weekdays)
                     {
                         $content_object->set_frequency(CalendarEvent :: FREQ_WEEK_DAYS);
@@ -72,22 +72,22 @@ class IcalImportImplementation extends ImportImplementation
                     }
                     break;
             }
-            
+
             if ($recurrence['UNTIL'])
             {
                 $content_object->set_until(DateTimeParser :: parseDateTime($recurrence['UNTIL'])->getTimestamp());
             }
-            
+
             if ($recurrence['COUNT'])
             {
                 $content_object->set_frequency_count($recurrence['COUNT']);
             }
-            
+
             if ($recurrence['INTERVAL'])
             {
                 $content_object->set_frequency_count($recurrence['INTERVAL']);
             }
-            
+
             if ($recurrence['BYMONTHDAY'])
             {
                 if (is_array($recurrence['BYMONTHDAY']))
@@ -98,10 +98,10 @@ class IcalImportImplementation extends ImportImplementation
                 {
                     $by_month_day = $recurrence['BYMONTHDAY'];
                 }
-                
+
                 $content_object->set_bymonthday($by_month_day);
             }
-            
+
             if ($recurrence['BYMONTH'])
             {
                 if (is_array($recurrence['BYMONTH']))
@@ -112,10 +112,10 @@ class IcalImportImplementation extends ImportImplementation
                 {
                     $by_month = $recurrence['BYMONTH'];
                 }
-                
+
                 $content_object->set_bymonth($by_month);
             }
-            
+
             if ($recurrence['BYDAY'] && $content_object->get_frequency() != CalendarEvent :: FREQ_WEEK_DAYS)
             {
                 if (is_array($recurrence['BYDAY']))
@@ -126,7 +126,7 @@ class IcalImportImplementation extends ImportImplementation
                 {
                     $by_day = $recurrence['BYDAY'];
                 }
-                
+
                 $content_object->set_byday($by_day);
             }
         }

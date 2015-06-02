@@ -73,9 +73,18 @@ class HtmlFilterRenderer extends FilterRenderer
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())) .
-                         '</div>';
+
+                    if ($category instanceof RepositoryCategory)
+                    {
+                        $html[] = '<div class="parameter" id="' .
+                             $this->get_parameter_name(FilterData :: FILTER_CATEGORY) . '">' .
+                             Translation :: get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())) .
+                             '</div>';
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
             else
@@ -90,8 +99,17 @@ class HtmlFilterRenderer extends FilterRenderer
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InCategory', array('CATEGORY' => $category->get_name())) . '</div>';
+
+                    if ($category instanceof RepositoryCategory)
+                    {
+                        $html[] = '<div class="parameter" id="' .
+                             $this->get_parameter_name(FilterData :: FILTER_CATEGORY) . '">' .
+                             Translation :: get('InCategory', array('CATEGORY' => $category->get_name())) . '</div>';
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
         }

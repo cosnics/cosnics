@@ -112,42 +112,61 @@ class ConditionFilterRenderer extends FilterRenderer
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $category_ids = $category->get_children_ids();
-                    $category_ids[] = $category_id;
 
-                    if ($this->get_workspace() instanceof PersonalWorkspace)
+                    if ($category instanceof RepositoryCategory)
                     {
-                        $conditions[] = new InCondition(
-                            new PropertyConditionVariable(
-                                ContentObject :: class_name(),
-                                ContentObject :: PROPERTY_PARENT_ID),
-                            $category_ids);
+                        $category_ids = $category->get_children_ids();
+                        $category_ids[] = $category_id;
+
+                        if ($this->get_workspace() instanceof PersonalWorkspace)
+                        {
+                            $conditions[] = new InCondition(
+                                new PropertyConditionVariable(
+                                    ContentObject :: class_name(),
+                                    ContentObject :: PROPERTY_PARENT_ID),
+                                $category_ids);
+                        }
+                        else
+                        {
+                            $conditions[] = new InCondition(
+                                new PropertyConditionVariable(
+                                    WorkspaceContentObjectRelation :: class_name(),
+                                    WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+                                $category_ids);
+                        }
                     }
                     else
                     {
-                        $conditions[] = new InCondition(
-                            new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation :: class_name(),
-                                WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
-                            $category_ids);
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
                     }
                 }
             }
             else
             {
-                if ($this->get_workspace() instanceof PersonalWorkspace)
+                $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
+
+                if ($category instanceof RepositoryCategory)
                 {
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
-                        new StaticConditionVariable($category_id));
+                    if ($this->get_workspace() instanceof PersonalWorkspace)
+                    {
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                ContentObject :: class_name(),
+                                ContentObject :: PROPERTY_PARENT_ID),
+                            new StaticConditionVariable($category_id));
+                    }
+                    else
+                    {
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                WorkspaceContentObjectRelation :: class_name(),
+                                WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+                            new StaticConditionVariable($category_id));
+                    }
                 }
                 else
                 {
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(
-                            WorkspaceContentObjectRelation :: class_name(),
-                            WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
-                        new StaticConditionVariable($category_id));
+                    $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
                 }
             }
         }
