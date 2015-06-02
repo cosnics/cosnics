@@ -17,6 +17,9 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 /**
  *
@@ -109,19 +112,62 @@ class ConditionFilterRenderer extends FilterRenderer
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $category_ids = $category->get_children_ids();
-                    $category_ids[] = $category_id;
 
-                    $conditions[] = new InCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
-                        $category_ids);
+                    if ($category instanceof RepositoryCategory)
+                    {
+                        $category_ids = $category->get_children_ids();
+                        $category_ids[] = $category_id;
+
+                        if ($this->get_workspace() instanceof PersonalWorkspace)
+                        {
+                            $conditions[] = new InCondition(
+                                new PropertyConditionVariable(
+                                    ContentObject :: class_name(),
+                                    ContentObject :: PROPERTY_PARENT_ID),
+                                $category_ids);
+                        }
+                        else
+                        {
+                            $conditions[] = new InCondition(
+                                new PropertyConditionVariable(
+                                    WorkspaceContentObjectRelation :: class_name(),
+                                    WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+                                $category_ids);
+                        }
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
             else
             {
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($category_id));
+                $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
+
+                if ($category instanceof RepositoryCategory)
+                {
+                    if ($this->get_workspace() instanceof PersonalWorkspace)
+                    {
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                ContentObject :: class_name(),
+                                ContentObject :: PROPERTY_PARENT_ID),
+                            new StaticConditionVariable($category_id));
+                    }
+                    else
+                    {
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                WorkspaceContentObjectRelation :: class_name(),
+                                WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+                            new StaticConditionVariable($category_id));
+                    }
+                }
+                else
+                {
+                    $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                }
             }
         }
 
@@ -270,9 +316,9 @@ class ConditionFilterRenderer extends FilterRenderer
      * @param \core\repository\filter\FilterData $filter_data
      * @return \core\repository\filter\renderer\ConditionFilterRenderer
      */
-    public static function factory(FilterData $filter_data)
+    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\ConditionFilterRenderer';
-        return new $class_name($filter_data);
+        return new $class_name($filter_data, $workspace);
     }
 }

@@ -5,15 +5,16 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class provides a navigation menu to allow a user to browse through repository categories
@@ -25,7 +26,17 @@ class RepositoryCategoryTreeMenu extends GenericTree
     const ROOT_NODE_CLASS = 'category';
     const CATEGORY_CLASS = 'category';
 
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Manager
+     */
     private $parent;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $workspaceImplementation;
 
     private $additional_items;
 
@@ -35,8 +46,9 @@ class RepositoryCategoryTreeMenu extends GenericTree
      * @param $parent - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
-    public function __construct($parent, $additional_items = array())
+    public function __construct(WorkspaceInterface $workspaceImplementation, $parent, $additional_items = array())
     {
+        $this->workspaceImplementation = $workspaceImplementation;
         $this->parent = $parent;
         $this->additional_items = $additional_items;
 
@@ -74,7 +86,8 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_current_node_id()
     {
-        return FilterData :: get_instance()->get_filter_property(FilterData :: FILTER_CATEGORY);
+        return FilterData :: get_instance($this->workspaceImplementation)->get_filter_property(
+            FilterData :: FILTER_CATEGORY);
     }
 
     public function get_node($node_id)
@@ -106,8 +119,11 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_search_url()
     {
-        return Path :: getInstance()->getBasePath(true) .
-             'repository/php/xml_feeds/xml_repository_category_menu_feed.php';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager :: package(),
+                \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager :: ACTION_CATEGORY_MENU_FEED));
+        return $redirect->getUrl();
     }
 
     public function get_url_format()
@@ -127,7 +143,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_root_node_title()
     {
-        return Translation :: get('MyRepository');
+        return $this->workspaceImplementation->getTitle();
     }
 
     public function get_node_title($node)
@@ -176,22 +192,12 @@ class RepositoryCategoryTreeMenu extends GenericTree
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent_node_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->parent->get_user_id()));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->workspaceImplementation->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type()));
+            new StaticConditionVariable($this->workspaceImplementation->getWorkspaceType()));
 
         return new AndCondition($conditions);
-    }
-
-    /**
-     * Returns the category type
-     *
-     * @return int
-     */
-    protected function get_type()
-    {
-        return RepositoryCategory :: TYPE_NORMAL;
     }
 }

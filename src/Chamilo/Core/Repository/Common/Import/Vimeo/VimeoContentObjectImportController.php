@@ -11,6 +11,10 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class VimeoContentObjectImportController extends ContentObjectImportController
 {
@@ -68,9 +72,12 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                 $vimeo->set_title($external_object->get_title());
                 $vimeo->set_description($external_object->get_description());
                 $vimeo->set_owner_id($this->get_parameters()->get_user());
+                $vimeo->set_parent_id($this->determine_parent_id());
 
                 if ($vimeo->create())
                 {
+                    $this->process_workspace($vimeo);
+
                     \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: quicksave(
                         $vimeo,
                         $external_object,
@@ -113,5 +120,37 @@ class VimeoContentObjectImportController extends ContentObjectImportController
         $vimeo_connector_available = $external_repositories->size() == 1;
 
         return $vimeo_object_available && $vimeo_connector_available;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id()
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $this->get_parameters()->get_category();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace(ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $this->get_parameters()->get_category());
+        }
     }
 }

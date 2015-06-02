@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class RepositoryTable extends DataClassTable implements TableFormActionsSupport
 {
@@ -22,7 +23,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
     public function __construct($component)
     {
         parent :: __construct($component);
-        $template_id = FilterData :: get_instance()->get_type();
+        $template_id = FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace())->get_type();
         if (! $template_id)
         {
             $this->type = ContentObject :: class_name();
@@ -38,16 +39,21 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        $actions->add_form_action(
-            new TableFormAction(
-                array(
-                    Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONTENT_OBJECTS,
-                    Manager :: PARAM_DELETE_RECYCLED => 1),
-                Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
-        $actions->add_form_action(
-            new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_UNLINK_CONTENT_OBJECTS),
-                Translation :: get('UnlinkSelected', null, Utilities :: COMMON_LIBRARIES)));
+
+        if ($this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $actions->add_form_action(
+                new TableFormAction(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONTENT_OBJECTS,
+                        Manager :: PARAM_DELETE_RECYCLED => 1),
+                    Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
+            $actions->add_form_action(
+                new TableFormAction(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_UNLINK_CONTENT_OBJECTS),
+                    Translation :: get('UnlinkSelected', null, Utilities :: COMMON_LIBRARIES)));
+        }
+
         $actions->add_form_action(
             new TableFormAction(
                 array(Manager :: PARAM_ACTION => Manager :: ACTION_MOVE_CONTENT_OBJECTS),
@@ -65,28 +71,25 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
                 array(Manager :: PARAM_ACTION => Manager :: ACTION_EXPORT_CONTENT_OBJECTS),
                 Translation :: get('ExportSelected', null, Utilities :: COMMON_LIBRARIES),
                 false));
-        $actions->add_form_action(
-            new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_SHARE_CONTENT_OBJECTS),
-                Translation :: get('ShareSelected', null, Utilities :: COMMON_LIBRARIES),
-                false));
-        $actions->add_form_action(
-            new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_BATCH_EDIT_CONTENT_OBJECT_METADATA),
-                Translation :: get(
-                    'MetadataBatchEditorComponent',
-                    null,
-                    'Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata'),
-                false));
 
-        if ($this->get_component()->get_user()->is_platform_admin())
+        if ($this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $actions->add_form_action(
                 new TableFormAction(
                     array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
-                        \Chamilo\Core\Repository\Template\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Template\Manager :: ACTION_CREATE),
-                    Translation :: get('CopySelectedToTemplates'),
+                        Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_SHARE),
+                    Translation :: get('ShareSelected'),
+                    false));
+        }
+        else
+        {
+            $actions->add_form_action(
+                new TableFormAction(
+                    array(
+                        Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE),
+                    Translation :: get('UnshareSelected'),
                     false));
         }
 

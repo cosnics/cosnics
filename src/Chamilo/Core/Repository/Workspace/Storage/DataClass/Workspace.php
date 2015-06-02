@@ -19,6 +19,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 class Workspace extends DataClass implements WorkspaceInterface
 {
     const CLASS_NAME = __CLASS__;
+    const WORKSPACE_TYPE = 2;
 
     // Properties
     const PROPERTY_NAME = 'name';
@@ -154,5 +155,32 @@ class Workspace extends DataClass implements WorkspaceInterface
                     WorkspaceCategoryRelation :: class_name(),
                     WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID),
                 new StaticConditionVariable($this->getId())));
+    }
+
+    /*
+     * (non-PHPdoc)
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
+     */
+    public function getWorkspaceType()
+    {
+        return self :: WORKSPACE_TYPE;
+    }
+
+    /*
+     * (non-PHPdoc)
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return $this->getName();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
+     */
+    public function getHash()
+    {
+        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
     }
 }

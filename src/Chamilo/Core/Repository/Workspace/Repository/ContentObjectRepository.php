@@ -59,7 +59,7 @@ class ContentObjectRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable($personalWorkspace->getOwner()->getId()));
+            new StaticConditionVariable($personalWorkspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
         return new AndCondition($conditions);
@@ -107,7 +107,9 @@ class ContentObjectRepository
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
@@ -124,7 +126,7 @@ class ContentObjectRepository
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID));
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
 
         $join = new Join(WorkspaceContentObjectRelation :: class_name(), $joinCondition);
         return new Joins(array($join));
@@ -137,9 +139,7 @@ class ContentObjectRepository
      */
     public function findAll(DataClassRetrievesParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_objects(
-            ContentObject :: class_name(),
-            $parameters);
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(ContentObject :: class_name(), $parameters);
     }
 
     /**
@@ -149,9 +149,7 @@ class ContentObjectRepository
      */
     public function countAll(DataClassCountParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: count_content_objects(
-            ContentObject :: class_name(),
-            $parameters);
+        return \Chamilo\Core\Repository\Storage\DataManager :: count(ContentObject :: class_name(), $parameters);
     }
 
     private function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)

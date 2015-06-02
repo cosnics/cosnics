@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Wizard\Pages;
 
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
@@ -76,19 +75,6 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             if (! $content_object instanceof ContentObject)
             {
                 throw new NoObjectSelectedException(Translation :: get('ContentObject'));
-            }
-
-            // check for USE right
-            $is_owner = $content_object->get_owner_id() == $this->get_parent()->get_user_id();
-            $has_use_right = RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-                RepositoryRights :: USE_RIGHT,
-                $content_object->get_id(),
-                RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                $content_object->get_owner_id());
-
-            if (! ($is_owner || $has_use_right))
-            {
-                throw new NotAllowedException();
             }
 
             // Don't allow publication is the content object is in the RECYCLED
@@ -247,16 +233,14 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
     {
         $this->applications[] = $locations->get_context();
 
-        $package_context = ClassnameUtilities :: getInstance()->getNamespaceParent($locations->get_context(), 4);
-
         $category = Theme :: getInstance()->getImage(
             'Logo/22',
             'png',
-            Translation :: get('TypeName', null, $package_context),
+            Translation :: get('TypeName', null, $locations->get_application()),
             null,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false,
-            $package_context);
+            $locations->get_application());
 
         $this->addElement('category', $category, 'publication-location');
 

@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -58,9 +59,10 @@ class FormFilterRenderer extends FilterRenderer
      * @param string[] $content_object_types
      * @param string $url;
      */
-    public function __construct(FilterData $filter_data, $user_id, $content_object_types, $url)
+    public function __construct(FilterData $filter_data, WorkspaceInterface $workspace, $user_id, $content_object_types,
+        $url)
     {
-        parent :: __construct($filter_data);
+        parent :: __construct($filter_data, $workspace);
 
         $this->user_id = $user_id;
         $this->content_object_types = $content_object_types;
@@ -268,7 +270,7 @@ class FormFilterRenderer extends FilterRenderer
      */
     private function get_categories()
     {
-        $menu = new ContentObjectCategoryMenu($this->get_user_id());
+        $menu = new ContentObjectCategoryMenu($this->get_workspace());
         $renderer = new OptionsMenuRenderer();
         $menu->render($renderer, 'sitemap');
 
@@ -328,9 +330,10 @@ class FormFilterRenderer extends FilterRenderer
      * @param string $url;
      * @return \core\repository\filter\renderer\FormFilterRenderer
      */
-    public static function factory(FilterData $filter_data, $user_id, $content_object_types, $url)
+    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace, $user_id,
+        $content_object_types, $url)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\FormFilterRenderer';
-        return new $class_name($filter_data, $user_id, $content_object_types, $url);
+        return new $class_name($filter_data, $workspace, $user_id, $content_object_types, $url);
     }
 }

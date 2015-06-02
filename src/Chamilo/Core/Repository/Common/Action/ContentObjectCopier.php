@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -18,6 +17,8 @@ use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -68,16 +69,8 @@ class ContentObjectCopier
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
                 $content_object_id);
-            if ($content_object->get_owner_id() == $this->source_user_id || $content_object->get_owner_id() == 0 || RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-                RepositoryRights :: COPY_RIGHT,
-                $content_object->get_id(),
-                RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                $content_object->get_owner_id()))
 
-            {
-
-                $export_content_object_ids[] = $content_object_id;
-            }
+            $export_content_object_ids[] = $content_object_id;
         }
 
         if (! $export_content_object_ids)
@@ -102,9 +95,14 @@ class ContentObjectCopier
         Filesystem :: move_file($path, $new_path);
         $file = FileProperties :: from_path($new_path);
 
+        $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+            User :: class_name(),
+            $this->target_user_id);
+
         $parameters = ImportParameters :: factory(
             ContentObjectImport :: FORMAT_CPO,
             $this->target_user_id,
+            new PersonalWorkspace($targetUser),
             $this->target_category,
             $file);
         $controller = ContentObjectImportController :: factory($parameters);

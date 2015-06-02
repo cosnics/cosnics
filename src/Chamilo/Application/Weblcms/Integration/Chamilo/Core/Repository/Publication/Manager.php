@@ -103,7 +103,7 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_locations($content_object, $user = null)
     {
-        $locations = new Locations(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
+        $locations = new Locations(__NAMESPACE__);
         $type = $content_object->get_type();
 
         $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);

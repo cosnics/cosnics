@@ -37,6 +37,7 @@ class ImporterComponent extends Manager
         {
             $import_form = ContentObjectImportForm :: factory(
                 $type,
+                $this->getWorkspace(),
                 $this,
                 'post',
                 $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)));
@@ -52,8 +53,9 @@ class ImporterComponent extends Manager
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
-                    $new_category->set_user_id($this->get_user_id());
-                    $new_category->set_type(RepositoryCategory :: TYPE_NORMAL);
+                    $new_category->set_type_id($this->getWorkspace()->getId());
+                    $new_category->set_type($this->getWorkspace()->getWorkspaceType());
+
                     if (! $new_category->create())
                     {
                         throw new \Exception(Translation :: get('CategoryCreationFailed'));
@@ -80,6 +82,7 @@ class ImporterComponent extends Manager
                 $parameters = ImportParameters :: factory(
                     $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
                     $this->get_user_id(),
+                    $this->getWorkspace(),
                     $category_id,
                     $file,
                     $values);

@@ -64,7 +64,7 @@ abstract class ContentObjectImportController
 
     /**
      * Adds a message to the message list
-     * 
+     *
      * @param String $message
      * @param int $type
      */
@@ -74,13 +74,13 @@ abstract class ContentObjectImportController
         {
             $this->messages[$type] = array();
         }
-        
+
         $this->messages[$type][] = $message;
     }
 
     /**
      * Checks wether the object has messages
-     * 
+     *
      * @return booleans
      */
     public function has_messages($type)
@@ -90,7 +90,7 @@ abstract class ContentObjectImportController
 
     /**
      * Retrieves the list of messages
-     * 
+     *
      * @return Array
      */
     public function get_messages($type = null)
@@ -117,7 +117,7 @@ abstract class ContentObjectImportController
     {
         $messages = array();
         $message_types = array();
-        
+
         foreach ($this->get_messages() as $type => $type_messages)
         {
             foreach ($type_messages as $message)
@@ -126,7 +126,7 @@ abstract class ContentObjectImportController
                 $message_types[] = $type;
             }
         }
-        
+
         return array(Application :: PARAM_MESSAGE => $messages, Application :: PARAM_MESSAGE_TYPE => $message_types);
     }
 

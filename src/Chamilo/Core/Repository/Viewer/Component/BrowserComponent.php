@@ -1,16 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer\Component;
 
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataClass\SharedContentObjectRelCategory;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu;
-use Chamilo\Core\Repository\Viewer\Menu\RepositorySharedCategoryMenu;
 use Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -77,7 +73,6 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-       
         $this->renderer = clone $this->form->defaultRenderer();
         $this->renderer->setElementTemplate('<span>{element}</span> ');
         $this->form->accept($this->renderer);
@@ -91,31 +86,22 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->renderer->toHTML();
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         if ($this->get_maximum_select() > self :: SELECT_SINGLE)
         {
             $html[] = '<b>' . sprintf(
                 Translation :: get('SelectMaximumNumberOfContentObjects'),
                 $this->get_maximum_select()) . '</b><br />';
         }
-    
+
         $menu = $this->get_menu();
-      
-        
-        if ($this->is_allowed_shared_object_browsing())
-        {
-            $shared_menu = $this->get_shared_menu();
-        }
 
         $table = $this->get_object_table();
-       
+
         $html[] = '<br />';
 
         $html[] = '<div style="width: 15%; overflow: auto; float:left">';
         $html[] = $menu->render_as_tree();
-        $html[] = '<br />';
-       
-        $html[] = $shared_menu ? $shared_menu->render_as_tree() : '';
         $html[] = '</div>';
 
         $html[] = '<div style="width: 83%; float: right;">';
@@ -183,7 +169,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_menu($allow_shared = true)
     {
         $url = $this->get_url($this->get_parameters()) . '&' . self :: PROPERTY_CATEGORY . '=%s';
-        
+
         $extra = array();
 
         if ($this->get_query())
@@ -212,6 +198,7 @@ class BrowserComponent extends Manager implements TableSupport
         $menu = new RepositoryCategoryMenu(
             $this,
             $this->get_user_id(),
+            new PersonalWorkspace($this->get_user()),
             Request :: get(self :: PROPERTY_CATEGORY) ? Request :: get(self :: PROPERTY_CATEGORY) : 0,
             $url,
             $extra,
@@ -221,7 +208,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $menu->forceCurrentUrl($search_url);
         }
-             
+
         return $menu;
     }
 
@@ -237,15 +224,6 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @return \core\repository\RepositorySharedCategoryMenu
-     */
-    public function get_shared_menu()
-    {
-        return new RepositorySharedCategoryMenu($this);
-    }
-
-    /**
-     *
      * @param \core\repository\ContentObject $content_object
      * @return \libraries\format\Toolbar
      */
@@ -253,53 +231,44 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
-        if ($content_object->has_right(RepositoryRights :: USE_RIGHT, $this->get_user_id()))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                    $this->get_url(
-                        array_merge(
-                            $this->get_parameters(),
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
-                                self :: PARAM_ID => $content_object->get_id())),
-                        false),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                $this->get_url(
+                    array_merge(
+                        $this->get_parameters(),
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
+                            self :: PARAM_ID => $content_object->get_id())),
+                    false),
+                ToolbarItem :: DISPLAY_ICON));
 
-        if ($content_object->has_right(RepositoryRights :: VIEW_RIGHT, $this->get_user_id()))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Preview'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(
-                        array_merge(
-                            $this->get_parameters(),
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEWER,
-                                self :: PARAM_ID => $content_object->get_id())),
-                        false),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation :: get('Preview'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(
+                    array_merge(
+                        $this->get_parameters(),
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_VIEWER,
+                            self :: PARAM_ID => $content_object->get_id())),
+                    false),
+                ToolbarItem :: DISPLAY_ICON));
 
-        if ($content_object->has_right(RepositoryRights :: COLLABORATE_RIGHT, $this->get_user_id()))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('EditAndPublish'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
-                    $this->get_url(
-                        array_merge(
-                            $this->get_parameters(),
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_CREATOR,
-                                self :: PARAM_EDIT_ID => $content_object->get_id())),
-                        false),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation :: get('EditAndPublish'),
+                Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
+                $this->get_url(
+                    array_merge(
+                        $this->get_parameters(),
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_CREATOR,
+                            self :: PARAM_EDIT_ID => $content_object->get_id())),
+                    false),
+                ToolbarItem :: DISPLAY_ICON));
 
         if ($content_object instanceof ComplexContentObjectSupport)
         {
@@ -332,24 +301,6 @@ class BrowserComponent extends Manager implements TableSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repo_viewer_browser');
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function is_allowed_shared_object_browsing()
-    {
-        $parameters = $this->get_parameters();
-        $allowed = $parameters[self :: SHARED_BROWSER_ALLOWED];
-        if ($allowed === false)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
     }
 
     /*
@@ -396,69 +347,28 @@ class BrowserComponent extends Manager implements TableSupport
             $conditions[] = new OrCondition($or_conditions);
         }
 
-        if (! $this->is_shared_object_browser())
+        if (! isset($query) || $query == '')
         {
-            if (! isset($query) || $query == '')
-            {
-                $category = Request :: get('category');
-                $category = $category ? $category : 0;
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($category));
-            }
-
+            $category = Request :: get('category');
+            $category = $category ? $category : 0;
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-                new StaticConditionVariable($this->get_user()->get_id()));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject :: STATE_NORMAL));
-
-            foreach ($this->get_excluded_objects() as $excluded)
-            {
-                $conditions[] = new NotCondition(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                        new StaticConditionVariable($excluded)));
-            }
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
+                new StaticConditionVariable($category));
         }
-        else
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->get_user()->get_id()));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
+            new StaticConditionVariable(ContentObject :: STATE_NORMAL));
+
+        foreach ($this->get_excluded_objects() as $excluded)
         {
-            $share_category = Request :: get(\Chamilo\Core\Repository\Manager :: PARAM_SHARED_CATEGORY_ID);
-            if ($share_category)
-            {
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(
-                        SharedContentObjectRelCategory :: class_name(),
-                        SharedContentObjectRelCategory :: PROPERTY_CATEGORY_ID),
-                    new StaticConditionVariable($share_category));
-            }
-
-            $entities = array();
-            $entities[] = new UserEntity();
-            $entities[] = new PlatformGroupEntity();
-
-            $retrieve_types = array(RepositoryRights :: TYPE_USER_CONTENT_OBJECT);
-
-            $shared_locations_by_type = RepositoryRights :: get_instance()->get_location_overview_with_rights_granted(
-                \Chamilo\Core\Repository\Manager :: context(),
-                $this->get_user_id(),
-                $entities,
-                null,
-                $retrieve_types,
-                RepositoryRights :: TREE_TYPE_USER);
-
-            if (empty($shared_locations_by_type))
-            {
-                $shared_locations_by_type[] = - 1;
-            }
-
-            $conditions[] = new InCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                array_unique($shared_locations_by_type[RepositoryRights :: TYPE_USER_CONTENT_OBJECT]));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject :: STATE_NORMAL));
+            $conditions[] = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                    new StaticConditionVariable($excluded)));
         }
 
         return new AndCondition($conditions);

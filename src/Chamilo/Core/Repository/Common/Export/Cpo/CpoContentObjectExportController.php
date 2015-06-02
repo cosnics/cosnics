@@ -67,7 +67,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function __construct(ExportParameters $parameters)
     {
         parent :: __construct($parameters);
-        
+
         $this->dom_document = new DOMDocument('1.0', 'UTF-8');
         $this->dom_document->formatOutput = true;
         $this->dom_xpath = new DOMXPath($this->dom_document);
@@ -143,7 +143,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function prepare_file_system()
     {
         $user_id = Session :: get_user_id();
-        
+
         $this->temporary_directory = Path :: getInstance()->getTemporaryPath() . md5($user_id . '_export') . '/';
         if (! is_dir($this->temporary_directory))
         {
@@ -158,7 +158,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_export_node()
     {
         $node_list = $this->dom_xpath->query('/export');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -176,7 +176,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_content_objects_node()
     {
         $node_list = $this->dom_xpath->query('/export/content_objects');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -195,7 +195,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_category_node($category_id)
     {
         $node_list = $this->dom_xpath->query('//category[@id="' . $category_id . '"]');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -206,7 +206,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $this->dom_document->createElement('category'));
             $content_object_node->appendChild($this->dom_document->createAttribute('id'))->appendChild(
                 $this->dom_document->createTextNode($category_id));
-            
+
             return $content_object_node;
         }
     }
@@ -218,7 +218,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_categories_node()
     {
         $node_list = $this->dom_xpath->query('/export/categories');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -232,7 +232,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_external_instances_node()
     {
         $node_list = $this->dom_xpath->query('/export/external_instances');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -251,7 +251,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_content_object_node($content_object_id)
     {
         $node_list = $this->dom_xpath->query('//content_object[@id="' . $content_object_id . '"]');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -262,7 +262,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $this->dom_document->createElement('content_object'));
             $content_object_node->appendChild($this->dom_document->createAttribute('id'))->appendChild(
                 $this->dom_document->createTextNode($content_object_id));
-            
+
             return $content_object_node;
         }
     }
@@ -270,7 +270,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function has_external_instance_node($external_instance_id)
     {
         $node_list = $this->dom_xpath->query('//external_instance[@id="' . $external_instance_id . '"]');
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -334,7 +334,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_content_object_sub_node($type, $content_object_id)
     {
         $node_list = $this->dom_xpath->query('//content_object[@id="' . $content_object_id . '"]/' . $type);
-        
+
         if ($node_list->length == 1)
         {
             return $node_list->item(0);
@@ -349,12 +349,12 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function run()
     {
         $content_object_ids = $this->get_parameters()->get_content_object_ids();
-        
+
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
-                $content_object_ids, 
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                $content_object_ids,
                 ContentObject :: get_table_name());
         }
         else
@@ -363,7 +363,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         }
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
-        
+
         while ($content_object = $content_objects->next_result())
         {
             if (! $this->in_id_cache($content_object->get_id()))
@@ -401,9 +401,9 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         // Export of the actual object itself to CPO XML
         ContentObjectExportImplementation :: launch(
-            $this, 
-            $content_object, 
-            ContentObjectExport :: FORMAT_CPO, 
+            $this,
+            $content_object,
+            ContentObjectExport :: FORMAT_CPO,
             $this->get_parameters()->get_type());
         $this->set_id_cache($content_object->get_id());
         if ($this->get_parameters()->has_categories() &&
@@ -418,7 +418,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         {
             $content_object_versions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_versions(
                 $content_object);
-            
+
             foreach ($content_object_versions as $content_object_version)
             {
                 if (! $this->in_id_cache($content_object_version->get_id()))
@@ -427,7 +427,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 }
             }
         }
-        
+
         $this->process_helpers($content_object);
         $this->process_complex_children($content_object);
         $this->process_attachments($content_object);
@@ -473,14 +473,14 @@ class CpoContentObjectExportController extends ContentObjectExportController
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_PARENT), 
-                new StaticConditionVariable($content_object->get_id()), 
+                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem :: PROPERTY_PARENT),
+                new StaticConditionVariable($content_object->get_id()),
                 ComplexContentObjectItem :: get_table_name());
             $children = DataManager :: retrieve_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(), 
+                ComplexContentObjectItem :: class_name(),
                 $condition);
-            
+
             if ($children->size() > 0)
             {
                 while ($child = $children->next_result())
@@ -502,13 +502,13 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function add_content_object_sub_item(ComplexContentObjectItem $child)
     {
         $sub_items_node = $this->get_content_object_sub_items_node($child->get_parent());
-        
+
         $sub_item = $sub_items_node->appendChild($this->dom_document->createElement('sub_item'));
         $id_ref = $sub_item->appendChild($this->dom_document->createAttribute('idref'));
         $id_ref->appendChild($this->dom_document->createTextNode($child->get_ref()));
         $id = $sub_item->appendChild($this->dom_document->createAttribute('id'));
         $id->appendChild($this->dom_document->createTextNode($child->get_id()));
-        
+
         foreach ($child->get_additional_properties() as $property_name => $property_value)
         {
             $attribute = $sub_item->appendChild($this->dom_document->createAttribute($property_name));
@@ -524,13 +524,13 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectAttachment :: class_name(), 
-                ContentObjectAttachment :: PROPERTY_CONTENT_OBJECT_ID), 
+                ContentObjectAttachment :: class_name(),
+                ContentObjectAttachment :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object->get_id()));
         $content_object_attachments = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-            ContentObjectAttachment :: class_name(), 
+            ContentObjectAttachment :: class_name(),
             $condition);
-        
+
         if ($content_object_attachments->size() > 0)
         {
             while ($content_object_attachment = $content_object_attachments->next_result())
@@ -552,7 +552,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $attachments_node = $this->get_content_object_attachments_node(
             $content_object_attachment->get_content_object_id());
-        
+
         $attachment = $attachments_node->appendChild($this->dom_document->createElement('attachment'));
         $type = $attachment->appendChild($this->dom_document->createAttribute('type'));
         $type->appendChild($this->dom_document->createTextNode($content_object_attachment->get_type()));
@@ -568,13 +568,13 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectInclude :: class_name(), 
-                ContentObjectInclude :: PROPERTY_CONTENT_OBJECT_ID), 
+                ContentObjectInclude :: class_name(),
+                ContentObjectInclude :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object->get_id()));
         $content_object_includes = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-            ContentObjectInclude :: class_name(), 
+            ContentObjectInclude :: class_name(),
             $condition);
-        
+
         if ($content_object_includes->size() > 0)
         {
             while ($content_object_include = $content_object_includes->next_result())
@@ -591,30 +591,32 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function process_external_instance($external_instance_id)
     {
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(), 
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
             $external_instance_id);
-        
+
         if (! $this->has_external_instance_node($external_instance_id))
         {
             $external_instance_node = $this->get_external_instance_node($external_instance_id);
-            
+
             $id = $external_instance_node->appendChild($this->dom_document->createAttribute('id'));
             $id->appendChild($this->dom_document->createTextNode($external_instance_id));
-            
+
             $type = $external_instance_node->appendChild($this->dom_document->createAttribute('type'));
             $type->appendChild($this->dom_document->createTextNode($external_instance->get_type()));
-            
+
             $settings_node = $external_instance_node->appendChild($this->dom_document->createElement('settings'));
+
             $settings = \Chamilo\Core\Repository\Instance\Manager :: get_instance_identifier(
-                $external_instance->get_type());
+                $external_instance->get_implementation());
+
             foreach ($settings as $setting)
             {
                 $setting = $external_instance->get_setting($setting);
                 $setting_node = $settings_node->appendChild($this->dom_document->createElement('setting'));
-                
+
                 $variable = $setting_node->appendChild($this->dom_document->createElement('variable'));
                 $variable->appendChild($this->dom_document->createTextNode($setting->get_variable()));
-                
+
                 $value = $setting_node->appendChild($this->dom_document->createElement('value'));
                 $value->appendChild($this->dom_document->createTextNode($setting->get_value()));
             }
@@ -628,12 +630,12 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function add_content_object_include(ContentObject $content_object, ContentObject $included_content_object)
     {
         $includes_node = $this->get_content_object_includes_node($content_object->get_id());
-        
+
         $include = $includes_node->appendChild($this->dom_document->createElement('include'));
         $id_ref = $include->appendChild($this->dom_document->createAttribute('idref'));
         $id_ref->appendChild($this->dom_document->createTextNode($included_content_object->get_id()));
     }
-    
+
     /*
      * (non-PHPdoc) @see repository.ContentObjectExportController::get_filename()
      */
@@ -648,11 +650,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
         {
             $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
             $this->set_category_id_cache($category->get_id());
-            
+
             $category_node = $this->get_category_node($category_id);
-            
+
             $export_properties = array(RepositoryCategory :: PROPERTY_PARENT, RepositoryCategory :: PROPERTY_NAME);
-            
+
             foreach ($export_properties as $property)
             {
                 $dom_property = $this->get_dom_document()->createElement($property);
@@ -668,7 +670,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         $cache_category_ids = $this->get_category_id_cache();
         if (count($cache_category_ids) > 1)
         {
-            
+
             $parents = array();
             if ($cache_category_ids == 0)
             {
@@ -677,11 +679,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
             else
             {
                 $category = DataManager :: retrieve_by_id(
-                    RepositoryCategory :: class_name(), 
+                    RepositoryCategory :: class_name(),
                     array_shift($cache_category_ids));
                 $previous = $category->get_parent_ids();
             }
-            
+
             foreach ($cache_category_ids as $cache_category_id)
             {
                 $parents[$cache_category_id] = $previous;
@@ -689,14 +691,14 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $parents[$cache_category_id] = $category->get_parent_ids();
                 $previous = array_intersect($previous, $parents[$cache_category_id]);
             }
-            
+
             $root = array_pop($previous);
-            
+
             if (! $this->in_category_id_cache($root))
             {
                 $this->process_category($root);
             }
-            
+
             foreach ($parents as $cache_category_id => $parent_ids)
             {
                 $add = false;
@@ -706,10 +708,10 @@ class CpoContentObjectExportController extends ContentObjectExportController
                     {
                         $add = true;
                     }
-                    
+
                     if ($add && $parent_id != $root)
                     {
-                        
+
                         if (! $this->in_category_id_cache($parent_id))
                         {
                             $this->process_category($parent_id);

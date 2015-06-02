@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -23,10 +22,10 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
 {
-    const TAB_GENERAL = 'general';
-    const TAB_TRACKS = 'tracks';
-    const TAB_ATTACHMENTS = 'attachments';
-    const TAB_METADATA = 'metadata';
+    const TAB_GENERAL = 'General';
+    const TAB_TRACKS = 'Tracks';
+    const TAB_ATTACHMENTS = 'Attachments';
+    const TAB_METADATA = 'Metadata';
 
     public function get_display_properties()
     {
@@ -274,7 +273,7 @@ $(document).ready(function(){
         {
             $table_row = array();
             $table_row[] = $key + 1;
-            $table_row[] = Utilities :: mimetype_to_image($track->get_mimetype());
+            $table_row[] = $track->get_mimetype();
 
             if ($track->get_video())
             {
@@ -325,7 +324,7 @@ $(document).ready(function(){
         foreach ($this->get_object()->get_attachments() as $attachment)
         {
             $table_row = array();
-            $table_row[] = Utilities :: mimetype_to_image($attachment->get_mimetype());
+            $table_row[] = $attachment->get_mimetype();
             $table_row[] = $attachment->get_type_as_image();
 
             $actions = new Toolbar();
@@ -357,7 +356,7 @@ $(document).ready(function(){
         foreach ($this->get_object()->get_metadata() as $metadata)
         {
             $table_row = array();
-            $table_row[] = Utilities :: mimetype_to_image($metadata->get_mimetype());
+            $table_row[] = $metadata->get_mimetype();
             $table_row[] = $metadata->get_type_as_image();
 
             $actions = new Toolbar();

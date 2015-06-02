@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -36,27 +35,15 @@ class ComplexBuilderComponent extends Manager
                 $this->get_url(),
                 Translation :: get('ToolComplexBuilderComponent', array('TITLE' => $content_object->get_title()))));
 
-        if (! ($content_object->get_owner_id() == $this->get_user_id()) && ! RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            RepositoryRights :: COLLABORATE_RIGHT,
-            $content_object->get_id(),
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $content_object->get_owner_id()))
-        {
-            $this->redirect(
-                Translation :: get("NotAllowed"),
-                '',
-                array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => null, 'tool_action' => null));
-        }
-        else
-        {
-            $this->content_object = $publication->get_content_object();
-            $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $pid);
+        $this->content_object = $publication->get_content_object();
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $pid);
 
-            $context = $this->content_object->package() . '\Builder';
+        $context = $this->content_object->package() . '\Builder';
 
-            $application_factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            return $application_factory->run();
-        }
+        $application_factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        return $application_factory->run();
     }
 
     public function get_root_content_object()

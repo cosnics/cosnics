@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Common\Import\Vimeo;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Libraries\File\Properties\FileProperties;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class VimeoImportParameters extends ImportParameters
 {
@@ -22,9 +23,9 @@ class VimeoImportParameters extends ImportParameters
      * @param FileProperties $file
      * @param multitype:string $values
      */
-    public function __construct($type, $user, $category, $file, $values)
+    public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $category);
+        parent :: __construct($type, $user, $workspace, $category);
         $this->url = $values[VimeoContentObjectImportForm :: PROPERTY_URL];
     }
 

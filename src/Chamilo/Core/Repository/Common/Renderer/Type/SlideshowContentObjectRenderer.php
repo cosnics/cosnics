@@ -4,17 +4,21 @@ namespace Chamilo\Core\Repository\Common\Renderer\Type;
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
+// use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+// use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+// use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+// use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
+use Chamilo\Core\Repository\Filter\FilterData;
 
 class SlideshowContentObjectRenderer extends ContentObjectRenderer
 {
@@ -32,12 +36,19 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $slideshow_index = Request :: get(self :: SLIDESHOW_INDEX);
         }
 
-        $content_object = DataManager :: retrieve_active_content_objects(
-            ContentObject :: class_name(),
-            new DataClassRetrievesParameters($this->get_condition(), 1, $slideshow_index))->next_result();
-        $content_object_count = DataManager :: count_active_content_objects(
-            ContentObject :: class_name(),
-            new DataClassCountParameters($this->get_condition()));
+        $workspace = $this->get_repository_browser()->getWorkspace();
+        $contentObjectService = new ContentObjectService(new ContentObjectRepository());
+
+        $content_object = $contentObjectService->getContentObjectsForWorkspace(
+            $workspace,
+            ConditionFilterRenderer :: factory(FilterData :: get_instance($workspace), $workspace),
+            1,
+            $slideshow_index)->next_result();
+
+        $content_object_count = $contentObjectService->countContentObjectsForWorkspace(
+            $workspace,
+            ConditionFilterRenderer :: factory(FilterData :: get_instance($workspace), $workspace));
+
         if ($content_object_count == 0)
         {
             $html[] = Display :: normal_message(Translation :: get('NoContentObjectsAvailable'), true);

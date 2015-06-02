@@ -7,6 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 class PersonalWorkspace implements WorkspaceInterface
 {
+    const WORKSPACE_TYPE = 1;
 
     /**
      *
@@ -50,8 +51,39 @@ class PersonalWorkspace implements WorkspaceInterface
         return $this->getOwner()->getId();
     }
 
+    /*
+     * (non-PHPdoc)
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getId()
+     */
     public function getId()
     {
-        throw new \Exception(Translation :: get('PersonalWorkspaceImplementedImplicitlyNoIdentifier'));
+        return $this->getOwner()->getId();
+    }
+
+    /*
+     * (non-PHPdoc)
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
+     */
+    public function getWorkspaceType()
+    {
+        return self :: WORKSPACE_TYPE;
+    }
+
+    /*
+     * (non-PHPdoc)
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return Translation :: get('MyRepository');
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
+     */
+    public function getHash()
+    {
+        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class RepositoryMenu extends HTML_Menu
 {
@@ -44,6 +45,34 @@ class RepositoryMenu extends HTML_Menu
     private function get_menu_items()
     {
         $extra_items = array();
+
+        if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $pub = array();
+            $pub['title'] = Translation :: get('MyPublications');
+            $pub['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_PUBLICATION),
+                array(\Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION),
+                false);
+            $pub['class'] = 'publication';
+
+            $extra_items[] = $pub;
+        }
+
+        if (! $this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $add = array();
+            $add['title'] = Translation :: get('AddExisting', null, Utilities :: COMMON_LIBRARIES);
+            $add['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_WORKSPACE,
+                    \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_PUBLISH));
+            $add['class'] = 'add';
+
+            $extra_items[] = $add;
+        }
+
         $create = array();
         $create['title'] = Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES);
         $create['url'] = $this->repository_manager->get_url(
@@ -51,11 +80,7 @@ class RepositoryMenu extends HTML_Menu
                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_CREATE_CONTENT_OBJECTS));
         $create['class'] = 'create';
 
-        $templates = array();
-        $templates['title'] = Translation :: get('BrowseTemplates');
-        $templates['url'] = $this->repository_manager->get_url(
-            array(Manager :: PARAM_ACTION => Manager :: ACTION_TEMPLATE));
-        $templates['class'] = 'template';
+        $extra_items[] = $create;
 
         $import = array();
         $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
@@ -64,51 +89,45 @@ class RepositoryMenu extends HTML_Menu
                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
         $import['class'] = 'import';
 
-        $quota = array();
-        $quota['title'] = Translation :: get('Quota');
-        $quota['url'] = $this->repository_manager->get_url(
-            array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
-                \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
-                \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null,
-                DynamicTabsRenderer :: PARAM_SELECTED_TAB => null));
-        $quota['class'] = 'quota';
-
-        $pub = array();
-        $pub['title'] = Translation :: get('MyPublications');
-        $pub['url'] = $this->repository_manager->get_url(
-            array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_PUBLICATION),
-            array(\Chamilo\Core\Repository\Publication\Manager :: PARAM_ACTION),
-            false);
-        $pub['class'] = 'publication';
-
-        $trash = array();
-        $trash['title'] = Translation :: get('RecycleBin');
-        $trash['url'] = $this->repository_manager->get_recycle_bin_url();
-        if ($this->repository_manager->current_user_has_recycled_objects())
-        {
-            $trash['class'] = 'trash_full';
-        }
-        else
-        {
-            $trash['class'] = 'trash';
-        }
-
-        $doubles = array();
-        $doubles['title'] = Translation :: get('ViewDoubles');
-        $doubles['url'] = $this->repository_manager->get_url(
-            array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_DOUBLES));
-        $doubles['class'] = 'doubles';
-
-        $extra_items[] = $pub;
-        $extra_items[] = $create;
         $extra_items[] = $import;
-        $extra_items[] = $templates;
-        $extra_items[] = $quota;
-        $extra_items[] = $doubles;
-        $extra_items[] = $trash;
+
+        if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $quota = array();
+            $quota['title'] = Translation :: get('Quota');
+            $quota['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
+                    \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
+                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null,
+                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => null));
+            $quota['class'] = 'quota';
+
+            $extra_items[] = $quota;
+
+            $doubles = array();
+            $doubles['title'] = Translation :: get('ViewDoubles');
+            $doubles['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_DOUBLES));
+            $doubles['class'] = 'doubles';
+
+            $extra_items[] = $doubles;
+
+            $trash = array();
+            $trash['title'] = Translation :: get('RecycleBin');
+            $trash['url'] = $this->repository_manager->get_recycle_bin_url();
+            if ($this->repository_manager->current_user_has_recycled_objects())
+            {
+                $trash['class'] = 'trash_full';
+            }
+            else
+            {
+                $trash['class'] = 'trash';
+            }
+
+            $extra_items[] = $trash;
+        }
 
         return $extra_items;
     }

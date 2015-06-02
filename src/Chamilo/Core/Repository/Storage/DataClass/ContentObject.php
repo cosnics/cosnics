@@ -5,10 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -18,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -35,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\UUID;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 /**
  *
@@ -832,9 +829,9 @@ class ContentObject extends CompositeDataClass
         // TRANSACTION
         $success = DataManager :: transactional(
             function ($c) use($create_in_batch, $content_object) { // checks wether to create a new content object or
-                                                                   // version:
-                                                                   // if the ID is set, we create a new version,
-                                                                   // otherwise a new CO.
+              // version:
+              // if the ID is set, we create a new version,
+              // otherwise a new CO.
                 $orig_id = $content_object->get_id();
                 $version = isset($orig_id);
 
@@ -892,60 +889,10 @@ class ContentObject extends CompositeDataClass
                     }
                 }
 
-                $parent = $content_object->get_parent_id();
-                if (! $parent)
-                {
-                    $parent_id = RepositoryRights :: get_instance()->get_user_root_id($content_object->get_owner_id());
-                }
-                else
-                {
-                    $parent_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                        RepositoryRights :: TYPE_USER_CATEGORY,
-                        $content_object->get_parent_id(),
-                        $content_object->get_owner_id());
-                }
-
-                $new_location = RepositoryRights :: get_instance()->create_location_in_user_tree(
-                    RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                    $content_object->get_id(),
-                    $parent_id,
-                    $content_object->get_owner_id(),
-                    $create_in_batch);
-
-                if (! $new_location)
-                {
-
-                    return false;
-                }
-
-                if ($version) // copy the granted rights
-                {
-                    $rights_entities = $original_location->get_rights_entities();
-                    foreach ($rights_entities as $rights_entity)
-                    {
-                        if (! RepositoryRights :: get_instance()->set_location_entity_right(
-                            $rights_entity->get_right_id(),
-                            $rights_entity->get_entity_id(),
-                            $rights_entity->get_entity_type(),
-                            $new_location->get_id()))
-                        {
-                            return false;
-                        }
-                    }
-                }
-
                 return true;
             });
 
         return $success;
-    }
-
-    public function get_rights_location()
-    {
-        return RepositoryRights :: get_instance()->get_location_by_identifier_from_users_subtree(
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $this->get_id(),
-            $this->get_owner_id());
     }
 
     public function create_all()
@@ -965,31 +912,6 @@ class ContentObject extends CompositeDataClass
         $this->set_object_number(UUID :: v4());
 
         if (! parent :: create())
-        {
-            return false;
-        }
-
-        if ($this->get_owner_id() == 0)
-            return true;
-
-        $parent = $this->get_parent_id();
-        if (! $parent)
-        {
-            $parent_id = RepositoryRights :: get_instance()->get_user_root_id($this->get_owner_id());
-        }
-        else
-        {
-            $parent_id = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                RepositoryRights :: TYPE_USER_CATEGORY,
-                $this->get_parent_id(),
-                $this->get_owner_id());
-        }
-
-        if (! RepositoryRights :: get_instance()->create_location_in_user_tree(
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $this->get_id(),
-            $parent_id,
-            $this->get_owner_id()))
         {
             return false;
         }
@@ -1052,30 +974,9 @@ class ContentObject extends CompositeDataClass
                 {
                     return false;
                 }
-                if ($new_parent_id == 0)
-                {
-                    $new_parent = RepositoryRights :: get_instance()->get_user_root_id($content_object->get_owner_id());
-                }
                 else
                 {
-                    $new_parent = RepositoryRights :: get_instance()->get_location_id_by_identifier_from_user_subtree(
-                        RepositoryRights :: TYPE_USER_CATEGORY,
-                        $new_parent_id,
-                        $content_object->get_owner_id());
-                }
-
-                $location = RepositoryRights :: get_instance()->get_location_by_identifier_from_users_subtree(
-                    RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-                    $content_object->get_id(),
-                    $content_object->get_owner_id());
-
-                if ($location)
-                {
-                    return $location->move($new_parent);
-                }
-                else
-                {
-                    return false;
+                    return true;
                 }
             });
         return $success;
@@ -1135,19 +1036,6 @@ class ContentObject extends CompositeDataClass
 
     public function version_delete()
     {
-        $location = RepositoryRights :: get_instance()->get_location_by_identifier_from_users_subtree(
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $this->get_id(),
-            $this->get_owner_id());
-
-        if ($location)
-        {
-            if (! $location->delete())
-            {
-                return false;
-            }
-        }
-
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment :: class_name(),
@@ -1195,12 +1083,25 @@ class ContentObject extends CompositeDataClass
 
     public function delete_links()
     {
+        // Delete links with workspaces
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($this->get_id()));
+
+        if (! DataManager :: deletes(WorkspaceContentObjectRelation :: class_name(), $condition))
+        {
+            return false;
+        }
+
         // Delete attachment links of the object
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment :: class_name(),
                 ContentObjectAttachment :: PROPERTY_ATTACHMENT_ID),
             new StaticConditionVariable($this->get_id()));
+
         if (! DataManager :: deletes(ContentObjectAttachment :: class_name(), $condition))
         {
             return false;
@@ -1339,26 +1240,6 @@ class ContentObject extends CompositeDataClass
             $aid = $ancestor->get_parent_id();
         }
         return false;
-    }
-
-    /**
-     * Determines whether this object may be moved to the object with the given ID.
-     * By default, a object may be moved to
-     * another object if the other object is not the object itself, the object is not an ancestor of the other object,
-     * and the other object is a category.
-     *
-     * @param $target int The ID of the target object.
-     * @return boolean True if the move is allowed, false otherwise.
-     */
-    public function move_allowed($target)
-    {
-        /*
-         * if ($target == $this->get_id()) { return false; } $target_object = RepositoryDataManager ::
-         * get_instance()->retrieve_by_id(ContentObject :: class_name(), $target); if ($target_object->get_type() !=
-         * 'category') { return
-         * false; } return !$target_object->has_ancestor($this->get_id());
-         */
-        return true;
     }
 
     // XXX: Keep this around? Override? Make useful?
@@ -1576,46 +1457,6 @@ class ContentObject extends CompositeDataClass
         $this->synchronization_data = $external_sync;
     }
 
-    public function get_shared_users()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectUserShare :: class_name(),
-                ContentObjectUserShare :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($this->get_id()));
-        $shared_users = DataManager :: retrieves(ContentObjectUserShare :: class_name(), $condition);
-
-        $users = array();
-
-        while ($shared_user = $shared_users->next_result())
-        {
-            $users[$shared_user->get_user_id()] = $shared_user->get_user()->get_fullname();
-        }
-
-        asort($users);
-        return $users;
-    }
-
-    public function get_shared_groups()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectGroupShare :: class_name(),
-                ContentObjectGroupShare :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($this->get_id()));
-        $shared_groups = DataManager :: retrieves(ContentObjectGroupShare :: class_name(), $condition);
-
-        $groups = array();
-
-        while ($shared_group = $shared_groups->next_result())
-        {
-            $groups[$shared_group->get_group_id()] = $shared_group->get_group()->get_name();
-        }
-
-        asort($groups);
-        return $groups;
-    }
-
     public function is_external()
     {
         $is_external = $this->get_synchronization_data();
@@ -1658,86 +1499,6 @@ class ContentObject extends CompositeDataClass
     public function is_not_allowed_shared_objects()
     {
         return false;
-    }
-
-    /**
-     * Checks if a user has the given right on this content object If user equals the owner then all rights are
-     * available
-     */
-    public function has_right($right, $user_id)
-    {
-        if (! $user_id)
-        {
-            $user_id = Session :: get_user_id();
-        }
-
-        if ($this->get_owner_id() == $user_id)
-        {
-            return true;
-        }
-
-        return RepositoryRights :: get_instance()->is_allowed_in_user_subtree(
-            $right,
-            $this->get_id(),
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $this->get_owner_id(),
-            $user_id);
-    }
-
-    public function share_with_user($user_id, $rights = array())
-    {
-        $location = \Chamilo\Core\Repository\Share\Manager :: get_current_user_tree_location(
-            Session :: get_user_id(),
-            $this->get_id());
-        if ($location)
-        {
-            $succes = true;
-            if (! is_array($rights))
-            {
-                $rights = array($rights);
-            }
-            foreach ($rights as $right)
-            {
-                $succes &= RepositoryRights :: get_instance()->set_location_entity_right(
-                    $right,
-                    $user_id,
-                    UserEntity :: ENTITY_TYPE,
-                    $location->get_id());
-            }
-        }
-        else
-        {
-            $succes = false;
-        }
-        return $succes;
-    }
-
-    public function share_with_group($group_id, $rights = array())
-    {
-        $location = \Chamilo\Core\Repository\Share\Manager :: get_current_user_tree_location(
-            Session :: get_user_id(),
-            $this->get_id());
-        if ($location)
-        {
-            $succes = true;
-            if (! is_array($rights))
-            {
-                $rights = array($rights);
-            }
-            foreach ($rights as $right)
-            {
-                $succes &= RepositoryRights :: get_instance()->set_location_entity_right(
-                    $right,
-                    $group_id,
-                    PlatformGroupEntity :: ENTITY_TYPE,
-                    $location->get_id());
-            }
-        }
-        else
-        {
-            $succes = false;
-        }
-        return $succes;
     }
 
     /**

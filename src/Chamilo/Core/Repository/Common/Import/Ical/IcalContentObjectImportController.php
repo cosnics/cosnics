@@ -10,6 +10,11 @@ use Chamilo\Libraries\Platform\Translation;
 use Sabre\VObject;
 use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\Component\VTodo;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class IcalContentObjectImportController extends ContentObjectImportController
 {
@@ -98,6 +103,8 @@ class IcalContentObjectImportController extends ContentObjectImportController
             $content_object = ContentObjectImportImplementation :: launch($this, $type, $content_object_parameter);
             if ($content_object->create())
             {
+                $this->process_workspace($content_object);
+
                 $this->cache[] = $content_object->get_id();
             }
             else
@@ -127,5 +134,37 @@ class IcalContentObjectImportController extends ContentObjectImportController
             DataManager :: get_registered_types(true));
 
         return $calendar_event_available || $task_available;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id()
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $this->get_parameters()->get_category();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace(ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $this->get_parameters()->get_category());
+        }
     }
 }

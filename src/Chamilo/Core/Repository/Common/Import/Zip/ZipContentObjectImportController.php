@@ -9,6 +9,11 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class ZipContentObjectImportController extends ContentObjectImportController
 {
@@ -206,8 +211,8 @@ class ZipContentObjectImportController extends ContentObjectImportController
         {
             $category = new RepositoryCategory();
             $category->set_id(0);
-            $category->set_user_id($this->get_parameters()->get_user());
-            $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+            $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
+            $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
         }
         else
         {
@@ -323,11 +328,12 @@ class ZipContentObjectImportController extends ContentObjectImportController
 
         $document->set_description($filename);
         $document->set_owner_id($this->get_parameters()->get_user());
-        $document->set_parent_id($parent);
+        $document->set_parent_id($this->determine_parent_id($parent));
         $document->set_filename($filename);
 
         if ($document->create())
         {
+            $this->process_workspace($parent, $document);
             $this->created_content_object_ids[] = $document->get_id();
             return true;
         }
@@ -376,8 +382,8 @@ class ZipContentObjectImportController extends ContentObjectImportController
                 $base_name));
 
         $category->set_parent($parent_category->get_id());
-        $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
+        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
 
         if ($category->create())
         {
@@ -400,5 +406,37 @@ class ZipContentObjectImportController extends ContentObjectImportController
         return in_array(
             'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File',
             DataManager :: get_registered_types(true));
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id($parent)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $parent;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace($parent, ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $parent);
+        }
     }
 }

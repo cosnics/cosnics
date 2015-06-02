@@ -11,12 +11,11 @@ use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
-    const TAB_GENERAL = 'general';
-    const TAB_TRACKS = 'tracks';
+    const TAB_GENERAL = 'General';
+    const TAB_TRACKS = 'Tracks';
 
     public function render()
     {
@@ -79,7 +78,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         {
             $table_row = array();
             $table_row[] = $key + 1;
-            $table_row[] = Utilities :: mimetype_to_image($track->get_mimetype());
+            $table_row[] = $track->get_mimetype();
 
             if ($track->get_video())
             {

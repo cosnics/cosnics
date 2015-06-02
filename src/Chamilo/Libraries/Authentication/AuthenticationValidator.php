@@ -115,8 +115,8 @@ class AuthenticationValidator
         foreach ($externalAuthenticationTypes as $externalAuthenticationType)
         {
             $typeAuthenticationEnabled = $this->getKernel()->getConfiguration()->get_setting(
-                'Chamilo\Core\Admin',
-                'enable' . $externalAuthenticationType . 'Authentication');
+                array('Chamilo\Core\Admin',
+                'enable' . $externalAuthenticationType . 'Authentication'));
             $bypassTypeAuthentication = Request :: get('no' . $externalAuthenticationType . 'Auth');
 
             if ($typeAuthenticationEnabled && ! $bypassTypeAuthentication)

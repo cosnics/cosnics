@@ -11,6 +11,8 @@ use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -19,15 +21,6 @@ use Chamilo\Libraries\Platform\Translation;
 class HtmlFilterRenderer extends FilterRenderer
 {
     const CLEAR_ALL = 'all';
-
-    /**
-     *
-     * @param \core\repository\filter\FilterData $filter_data
-     */
-    public function __construct(FilterData $filter_data)
-    {
-        parent :: __construct($filter_data);
-    }
 
     public function get_parameter_name($filter_property)
     {
@@ -73,14 +66,25 @@ class HtmlFilterRenderer extends FilterRenderer
                 if ($category_id == 0)
                 {
                     $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InEntireRepository') . '</div>';
+                         '">' . Translation :: get(
+                            'InCategoryAndChildren',
+                            array('CATEGORY' => $this->get_workspace()->getTitle())) . '</div>';
                 }
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())) .
-                         '</div>';
+
+                    if ($category instanceof RepositoryCategory)
+                    {
+                        $html[] = '<div class="parameter" id="' .
+                             $this->get_parameter_name(FilterData :: FILTER_CATEGORY) . '">' .
+                             Translation :: get('InCategoryAndChildren', array('CATEGORY' => $category->get_name())) .
+                             '</div>';
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
             else
@@ -88,13 +92,24 @@ class HtmlFilterRenderer extends FilterRenderer
                 if ($category_id == 0)
                 {
                     $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InMyRepository') . '</div>';
+                         '">' . Translation :: get(
+                            'InCategory',
+                            array('CATEGORY' => $this->get_workspace()->getTitle())) . '</div>';
                 }
                 else
                 {
                     $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-                    $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_CATEGORY) .
-                         '">' . Translation :: get('InCategory', array('CATEGORY' => $category->get_name())) . '</div>';
+
+                    if ($category instanceof RepositoryCategory)
+                    {
+                        $html[] = '<div class="parameter" id="' .
+                             $this->get_parameter_name(FilterData :: FILTER_CATEGORY) . '">' .
+                             Translation :: get('InCategory', array('CATEGORY' => $category->get_name())) . '</div>';
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
         }
@@ -208,7 +223,11 @@ class HtmlFilterRenderer extends FilterRenderer
     public function add_header()
     {
         $html = array();
-        $html[] = '<div id="search_parameters"><h4>' . Translation :: get('SearchParameters') . '</h4>';
+
+        $workspaceId = $this->get_workspace() instanceof PersonalWorkspace ? null : $this->get_workspace()->getId();
+
+        $html[] = '<div id="search_parameters" data-current-workspace-id="' . $workspaceId . '"><h4>' .
+             Translation :: get('SearchParameters') . '</h4>';
 
         return implode(PHP_EOL, $html);
     }
@@ -237,9 +256,9 @@ class HtmlFilterRenderer extends FilterRenderer
      * @param \core\repository\filter\FilterData $filter_data
      * @return \core\repository\filter\renderer\HtmlFilterRenderer
      */
-    public static function factory(FilterData $filter_data)
+    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\HtmlFilterRenderer';
-        return new $class_name($filter_data);
+        return new $class_name($filter_data, $workspace);
     }
 }

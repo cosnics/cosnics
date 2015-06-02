@@ -37,7 +37,8 @@ class HtmlInlineFlvRenditionImplementation extends HtmlInlineRenditionImplementa
                             showtracker="true"
                             src="' . $url . '"
                             type="video/x-flv"
-                            width="' . $parameters[self :: PARAM_WIDTH] . '">';
+                            width="' . $parameters[self :: PARAM_WIDTH] .
+             '">';
         $html[] = '	</embed>';
         $html[] = '</object>';
         

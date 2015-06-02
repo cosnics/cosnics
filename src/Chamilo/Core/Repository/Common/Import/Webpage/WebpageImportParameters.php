@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Import\Webpage;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class WebpageImportParameters extends ImportParameters
 {
@@ -33,9 +34,9 @@ class WebpageImportParameters extends ImportParameters
      * @param \libraries\file\FileProperties $file
      * @param multitype:mixed $values
      */
-    public function __construct($type, $user, $category, $file, $values)
+    public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $category);
+        parent :: __construct($type, $user, $workspace, $category);
         $this->document_type = $values[WebpageContentObjectImportForm :: PARAM_WEBPAGE_TYPE];
         $this->file = $file;
         $this->link = $values[WebpageContentObjectImportForm :: PROPERTY_LINK];

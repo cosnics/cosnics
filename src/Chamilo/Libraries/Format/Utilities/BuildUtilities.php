@@ -30,6 +30,12 @@ class BuildUtilities
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
             Filesystem :: recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
+            // Css
+            $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Css' .
+                DIRECTORY_SEPARATOR;
+            $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
+            Filesystem :: recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
+
             // Javascript
             $sourceResourceJavascriptPath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Javascript' .
                  DIRECTORY_SEPARATOR;

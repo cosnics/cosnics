@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Filter\Renderer;
 
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -21,9 +22,9 @@ class ParameterFilterRenderer extends FilterRenderer
      *
      * @param \core\repository\filter\FilterData $filter_data
      */
-    public function __construct(FilterData $filter_data, $filter_property)
+    public function __construct(FilterData $filter_data, WorkspaceInterface $workspace, $filter_property)
     {
-        parent :: __construct($filter_data);
+        parent :: __construct($filter_data, $workspace);
         $this->filter_property = $filter_property;
     }
 
@@ -48,7 +49,7 @@ class ParameterFilterRenderer extends FilterRenderer
     public function render()
     {
         $filter_data = $this->get_filter_data();
-        
+
         switch ($this->get_filter_property())
         {
             case FilterData :: FILTER_CATEGORY :
@@ -68,9 +69,9 @@ class ParameterFilterRenderer extends FilterRenderer
      * @param \core\repository\filter\FilterData $filter_data
      * @return \core\repository\filter\renderer\ParameterFilterRenderer
      */
-    public static function factory(FilterData $filter_data, $filter_property)
+    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace, $filter_property)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\ParameterFilterRenderer';
-        return new $class_name($filter_data, $filter_property);
+        return new $class_name($filter_data, $workspace, $filter_property);
     }
 }

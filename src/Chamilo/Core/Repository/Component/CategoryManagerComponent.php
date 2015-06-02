@@ -8,18 +8,17 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: category_manager.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -33,8 +32,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class CategoryManagerComponent extends Manager implements ImpactViewSupport, TableSupport, CategorySupport
 {
 
-    private $type;
-
     private $impact_view_table_condition;
 
     /**
@@ -42,8 +39,6 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function run()
     {
-        $this->type = Request :: get(self :: PARAM_CATEGORY_TYPE, RepositoryCategory :: TYPE_NORMAL);
-
         $factory = new ApplicationFactory(
             \Chamilo\Configuration\Category\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
@@ -59,14 +54,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
 
     public function get_category_parameters()
     {
-        $parameters = array();
-
-        if (Request :: get(self :: PARAM_CATEGORY_TYPE))
-        {
-            $parameters[] = self :: PARAM_CATEGORY_TYPE;
-        }
-
-        return $parameters;
+        return array();
     }
 
     /**
@@ -134,7 +122,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     public function get_category()
     {
         $category = new RepositoryCategory();
-        $category->set_type($this->get_type());
+        $category->set_type($this->getWorkspace()->getWorkspaceType());
+        $category->set_type_id($this->getWorkspace()->getId());
 
         return $category;
     }
@@ -154,11 +143,11 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getWorkspace()->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type()));
+            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
 
         $condition = new AndCondition($conditions);
 
@@ -185,11 +174,11 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getWorkspace()->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type()));
+            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
 
         $condition = new AndCondition($conditions);
 
@@ -207,8 +196,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     {
         return DataManager :: select_next_category_display_order(
             $parent_id,
-            Session :: get_user_id(),
-            $this->get_type());
+            $this->getWorkspace()->getId(),
+            $this->getWorkspace()->getWorkspaceType());
     }
 
     /**
@@ -220,13 +209,20 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function allowed_to_delete_category($category_id)
     {
-        $object_count = $this->count_category_objects($category_id);
-        if ($object_count > 0)
+        if ($this->getWorkspace() instanceof PersonalWorkspace)
         {
-            return false;
-        }
+            $object_count = $this->count_category_objects($category_id);
+            if ($object_count > 0)
+            {
+                return false;
+            }
 
-        return ! $this->contain_subcategories_objects($category_id);
+            return ! $this->contain_subcategories_objects($category_id);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**
@@ -274,17 +270,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function get_type()
     {
-        return $this->type;
-    }
-
-    /**
-     * Sets the type
-     *
-     * @param int $type
-     */
-    public function set_type($type)
-    {
-        $this->type = $type;
+        return $this->getWorkspace()->getWorkspaceType();
     }
 
     /**

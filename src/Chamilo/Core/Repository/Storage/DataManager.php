@@ -1,24 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\Storage;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\RepositoryRights;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObjectGroupShare;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectRelTag;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectTag;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObjectUserShare;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
-use Chamilo\Core\Repository\Storage\DataClass\SharedContentObjectRelCategory;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -50,6 +42,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -65,7 +60,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static $registered_types;
 
-    private static $user_has_categories;
+    private static $workspace_has_categories;
 
     public static function count_content_objects($type, $parameters = null)
     {
@@ -328,70 +323,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self :: count_active_content_objects(ContentObject :: class_name(), $parameters) > 0;
     }
 
-    public static function retrieve_shared_content_object_rel_categories($condition = null, $offset = null, $count = null,
-        OrderBy $order_by = null)
-    {
-        $join = new Join(
-            RepositoryCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    SharedContentObjectRelCategory :: class_name(),
-                    SharedContentObjectRelCategory :: PROPERTY_CATEGORY_ID),
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_ID)));
-
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
-        return self :: retrieves(SharedContentObjectRelCategory :: class_name(), $parameters);
-    }
-
-    public static function retrieve_shared_content_object_rel_category_for_user_and_content_object($user_id,
-        $content_object_id)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                SharedContentObjectRelCategory :: class_name(),
-                SharedContentObjectRelCategory :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($content_object_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-        $condition = new AndCondition($conditions);
-
-        return self :: retrieve_shared_content_object_rel_categories($condition)->next_result();
-    }
-
-    public static function count_shared_content_objects(Condition $condition = null)
-    {
-        $join = new Join(
-            SharedContentObjectRelCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    SharedContentObjectRelCategory :: class_name(),
-                    SharedContentObjectRelCategory :: PROPERTY_CONTENT_OBJECT_ID),
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID)),
-            Join :: TYPE_LEFT);
-
-        $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
-        return self :: count_active_content_objects(ContentObject :: class_name(), $parameters);
-    }
-
-    public static function retrieve_shared_content_objects(Condition $condition = null, $offset = null, $count = null,
-        OrderBy $order_by = null)
-    {
-        $join = new Join(
-            SharedContentObjectRelCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    SharedContentObjectRelCategory :: class_name(),
-                    SharedContentObjectRelCategory :: PROPERTY_CONTENT_OBJECT_ID),
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID)),
-            Join :: TYPE_LEFT);
-
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
-
-        return self :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
-    }
-
     public static function get_active_helper_types()
     {
         if (! isset(self :: $helper_types))
@@ -433,14 +364,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self :: retrieves(RepositoryCategory :: class_name(), $parameters);
     }
 
-    public static function select_next_category_display_order($parent_category_id, $user_id, $type)
+    public static function select_next_category_display_order($parent_category_id, $type_id, $type)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent_category_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($type_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
             new StaticConditionVariable($type));
@@ -880,7 +811,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! isset(self :: $number_of_categories{$user_id}))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
                 new StaticConditionVariable($user_id));
 
             self :: $number_of_categories[$user_id] = self :: count(RepositoryCategory :: class_name(), $condition);
@@ -899,7 +830,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_NAME),
             new StaticConditionVariable($title));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
@@ -913,7 +844,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $category->set_user_id($user_id);
             $category->set_name($title);
             $category->set_parent($parent_id);
-            $category->set_type(RepositoryCategory :: TYPE_NORMAL);
+            $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
 
             // Create category in database
             $category->create($create_in_batch);
@@ -934,63 +865,29 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return in_array($type, $helper_types);
     }
 
-    /**
-     *
-     * @param $user User
-     * @param $object ContentObject
-     */
-    public static function is_object_shared_with_user($user, $object)
+    public static function workspace_has_categories(WorkspaceInterface $workspaceImplemention)
     {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectUserShare :: class_name(),
-                ContentObjectUserShare :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object->get_id()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectUserShare :: class_name(),
-                ContentObjectUserShare :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user->get_id()));
-        $condition = new AndCondition($conditions);
-        $count = self :: count(ContentObjectUserShare :: class_name(), $condition);
-        if ($count > 0)
+        if (is_null(
+            self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()]))
         {
-            return true;
+            $conditions = array();
+
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+                new StaticConditionVariable($workspaceImplemention->getId()));
+
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
+                new StaticConditionVariable($workspaceImplemention->getWorkspaceType()));
+
+            $condition = new AndCondition($conditions);
+
+            self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()] = (self :: count(
+                RepositoryCategory :: class_name(),
+                $condition) > 0);
         }
 
-        $groups = $user->get_groups(true);
-
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectGroupShare :: class_name(),
-                ContentObjectGroupShare :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($object->get_id()));
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObjectGroupShare :: PROPERTY_GROUP_ID),
-            $groups);
-        $condition = new AndCondition($conditions);
-        $count = self :: count(ContentObjectGroupShare :: class_name(), $condition);
-        if ($count > 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static function user_has_categories($user_id)
-    {
-        if (is_null(self :: $user_has_categories))
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-                new StaticConditionVariable($user_id));
-            self :: $user_has_categories = (self :: count(RepositoryCategory :: class_name(), $condition) > 0);
-        }
-
-        return self :: $user_has_categories;
+        return self :: $workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()];
     }
 
     public static function retrieve_content_objects_for_user($user_id)
@@ -999,55 +896,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id));
         return DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $condition);
-    }
-
-    public static function get_content_object_user_shares($content_object_id, $user_id)
-    {
-        $shares = RepositoryRights :: get_instance()->get_share_target_entities_overview(
-            $content_object_id,
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $user_id);
-        $in_condition = new InCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
-            $shares[UserEntity :: ENTITY_TYPE]);
-
-        return \Chamilo\Core\User\Storage\DataManager :: retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-            new DataClassRetrievesParameters($in_condition));
-    }
-
-    public static function get_content_object_group_shares($content_object_id, $user_id)
-    {
-        $shares = RepositoryRights :: get_instance()->get_share_target_entities_overview(
-            $content_object_id,
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $user_id);
-
-        $in_condition = new InCondition(
-            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
-            $shares[PlatformGroupEntity :: ENTITY_TYPE]);
-
-        return \Chamilo\Core\Group\Storage\DataManager :: retrieves(Group :: class_name(), $in_condition);
-    }
-
-    public static function count_content_object_user_shares($content_object_id, $user_id)
-    {
-        $shares = RepositoryRights :: get_instance()->get_share_target_entities_overview(
-            $content_object_id,
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $user_id);
-
-        return count(array_unique($shares[UserEntity :: ENTITY_TYPE]));
-    }
-
-    public static function count_content_object_group_shares($content_object_id, $user_id)
-    {
-        $shares = RepositoryRights :: get_instance()->get_share_target_entities_overview(
-            $content_object_id,
-            RepositoryRights :: TYPE_USER_CONTENT_OBJECT,
-            $user_id);
-
-        return count(array_unique($shares[PlatformGroupEntity :: ENTITY_TYPE]));
     }
 
     public static function retrieve_recycled_content_objects_from_category($category_id)
@@ -1231,63 +1079,24 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $succes;
     }
 
-    public static function delete_share_category_recursive($category, $fix_display_order = true)
-    {
-        $succes = true;
-
-        // Remove the relations
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                SharedContentObjectRelCategory :: class_name(),
-                SharedContentObjectRelCategory :: PROPERTY_CATEGORY_ID),
-            new StaticConditionVariable($category->get_id()));
-
-        $succes = self :: deletes(SharedContentObjectRelCategory :: class_name(), $condition);
-
-        // delete the category
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_ID),
-            new StaticConditionVariable($category->get_id()));
-        $succes &= self :: deletes(RepositoryCategory :: class_name(), $condition);
-
-        // the ordering should only be fixed on the top level (down levels are
-        // always deleted)
-        if ($fix_display_order)
-        {
-            // Correct the display order of the remaining categories
-            self :: fix_category_display_order($category);
-        }
-
-        // Delete all subcategories by recursively repeating the entire process
-        $categories = self :: retrieves(
-            RepositoryCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
-                new StaticConditionVariable($category->get_id())));
-        while ($category = $categories->next_result())
-        {
-            if (! self :: delete_share_category_recursive($category, false))
-            {
-                $succes = false;
-            }
-        }
-
-        return $succes;
-    }
-
     private static function fix_category_display_order($category)
     {
         $conditions = array();
         $conditions[] = new InequalityCondition(
-            RepositoryCategory :: PROPERTY_DISPLAY_ORDER,
+            new PropertyConditionVariable(
+                RepositoryCategory :: class_name(),
+                RepositoryCategory :: PROPERTY_DISPLAY_ORDER),
             InequalityCondition :: GREATER_THAN,
-            $category->get_display_order());
+            new StaticConditionVariable($category->get_display_order()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($category->get_parent()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($category->get_user_id()));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($category->get_type_id()));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
+            new StaticConditionVariable($category->get_type()));
         $condition = new AndCondition($conditions);
 
         $properties = new DataClassProperty(
@@ -1332,11 +1141,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable(RepositoryCategory :: TYPE_NORMAL));
+            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
         $condition = new AndCondition($conditions);
 
         return self :: count(RepositoryCategory :: class_name(), $condition) > 0;
@@ -1561,5 +1370,49 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $tags;
+    }
+
+    public static function delete_workspace_category_recursive($category, $fix_display_order = true)
+    {
+        $succes = true;
+
+        // Remove the relations
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+            new StaticConditionVariable($category->get_id()));
+
+        $succes = self :: deletes(WorkspaceContentObjectRelation :: class_name(), $condition);
+
+        // delete the category
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_ID),
+            new StaticConditionVariable($category->get_id()));
+        $succes &= self :: deletes(RepositoryCategory :: class_name(), $condition);
+
+        // the ordering should only be fixed on the top level (down levels are
+        // always deleted)
+        if ($fix_display_order)
+        {
+            // Correct the display order of the remaining categories
+            self :: fix_category_display_order($category);
+        }
+
+        // Delete all subcategories by recursively repeating the entire process
+        $categories = self :: retrieves(
+            RepositoryCategory :: class_name(),
+            new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
+                new StaticConditionVariable($category->get_id())));
+        while ($category = $categories->next_result())
+        {
+            if (! self :: delete_workspace_category_recursive($category, false))
+            {
+                $succes = false;
+            }
+        }
+
+        return $succes;
     }
 }

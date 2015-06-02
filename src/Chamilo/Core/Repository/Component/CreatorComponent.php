@@ -84,13 +84,15 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
             $object->set_owner_id($this->get_user_id());
 
-            $category = FilterData :: get_instance()->get_filter_property(FilterData :: FILTER_CATEGORY);
+            $category = FilterData :: get_instance($this->getWorkspace())->get_filter_property(
+                FilterData :: FILTER_CATEGORY);
             $object->set_parent_id($category);
 
             $object->set_template_registration_id($this->template_id);
 
             $content_object_form = ContentObjectForm :: factory(
                 ContentObjectForm :: TYPE_CREATE,
+                $this->getWorkspace(),
                 $object,
                 'create_content_object',
                 'post',

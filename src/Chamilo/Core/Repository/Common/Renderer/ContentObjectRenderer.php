@@ -5,18 +5,17 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 abstract class ContentObjectRenderer implements TableSupport
 {
@@ -136,25 +135,28 @@ abstract class ContentObjectRenderer implements TableSupport
                 ToolbarItem :: DISPLAY_ICON);
         }
 
-        if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
-                $url,
-                ToolbarItem :: DISPLAY_ICON,
-                true);
-        }
-        else
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
-                null,
-                ToolbarItem :: DISPLAY_ICON);
+            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+            {
+                $actions[] = new ToolbarItem(
+                    Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
+                    $url,
+                    ToolbarItem :: DISPLAY_ICON,
+                    true);
+            }
+            else
+            {
+                $actions[] = new ToolbarItem(
+                    Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON);
+            }
         }
 
-        if (DataManager :: user_has_categories($this->get_repository_browser()->get_user_id()))
+        if (DataManager :: workspace_has_categories($this->get_repository_browser()->getWorkspace()))
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
@@ -163,17 +165,32 @@ abstract class ContentObjectRenderer implements TableSupport
                 ToolbarItem :: DISPLAY_ICON);
         }
 
-        if (! PlatformSetting :: get('hide_sharing', __NAMESPACE__))
+        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                 $this->get_repository_browser()->get_url(
                     array(
-                        \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_SHARE_CONTENT_OBJECTS,
-                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
-                        \Chamilo\Core\Repository\Share\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Share\Manager :: ACTION_ADD_ENTITIES)),
+                        Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                        Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_SHARE)),
                 ToolbarItem :: DISPLAY_ICON);
+        }
+        else
+        {
+            $url = $this->get_repository_browser()->get_url(
+                array(
+                    Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                    \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE,
+                    Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->getId()));
+
+            $actions[] = new ToolbarItem(
+                Translation :: get('Unshare', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Unshare'),
+                $url,
+                ToolbarItem :: DISPLAY_ICON,
+                true);
         }
 
         $actions[] = new ToolbarItem(
@@ -187,23 +204,11 @@ abstract class ContentObjectRenderer implements TableSupport
             $this->get_repository_browser()->get_publish_content_object_url($content_object),
             ToolbarItem :: DISPLAY_ICON);
 
-        $actions[] = new ToolbarItem(
-            Translation :: get('ContentObjectAlternativeLinker'),
-            Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
-            $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
-            ToolbarItem :: DISPLAY_ICON);
-
-        if ($this->get_repository_browser()->get_user()->is_platform_admin())
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('CopyToTemplates'),
-                Theme :: getInstance()->getCommonImagePath('Export/Template'),
-                $this->get_repository_browser()->get_url(
-                    array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_TEMPLATE,
-                        \Chamilo\Core\Repository\Template\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Template\Manager :: ACTION_CREATE)),
-                ToolbarItem :: DISPLAY_ICON);
-        }
+        // $actions[] = new ToolbarItem(
+        // Translation :: get('ContentObjectAlternativeLinker'),
+        // Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
+        // $this->get_repository_browser()->get_content_object_alternative_linker($content_object),
+        // ToolbarItem :: DISPLAY_ICON);
 
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';

@@ -1,6 +1,4 @@
-@import
-	url('../../Javascript/Plugin/Projekktor/themes/maccaco/projektor.style.css')
-	;
+@import url(../../Javascript/Plugin/Projekktor/themes/maccaco/projekktor.style.css);
 
 ul.tree-menu li div a.matterhorn {
 	background-image: url(../../Images/Aqua/Logo/16.png);

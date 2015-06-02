@@ -32,6 +32,12 @@ use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Service\InstanceFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -71,6 +77,12 @@ abstract class ContentObjectForm extends FormValidator
     private $owner_id;
 
     /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $workspace;
+
+    /**
      * The content object.
      */
     private $content_object;
@@ -82,8 +94,8 @@ abstract class ContentObjectForm extends FormValidator
 
     protected $form_type;
 
-
     /**
+     *
      * @var DynamicFormTabsRenderer
      */
     private $tabsGenerator;
@@ -97,12 +109,13 @@ abstract class ContentObjectForm extends FormValidator
      * @param $method string The method to use ('post' or 'get').
      * @param $action string The URL to which the form should be submitted.
      */
-    public function __construct($form_type, $content_object, $form_name, $method = 'post', $action = null, $extra = null,
-        $additional_elements, $allow_new_version = true)
+    public function __construct($form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post',
+        $action = null, $extra = null, $additional_elements, $allow_new_version = true)
     {
         parent :: __construct($form_name, $method, $action);
 
         $this->form_type = $form_type;
+        $this->workspace = $workspace;
         $this->content_object = $content_object;
         $this->owner_id = $content_object->get_owner_id();
         $this->extra = $extra;
@@ -118,6 +131,15 @@ abstract class ContentObjectForm extends FormValidator
             $this->add_footer();
         }
         $this->setDefaults();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    public function get_workspace()
+    {
+        return $this->workspace;
     }
 
     /**
@@ -161,20 +183,21 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
      */
     public function getTabsGenerator()
     {
-        if(! isset ($this->tabsGenerator)){
+        if (! isset($this->tabsGenerator))
+        {
             $this->tabsGenerator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
         }
         return $this->tabsGenerator;
     }
 
-
     public function prepareTabs()
     {
-       $this->addDefaultTab();
+        $this->addDefaultTab();
         $this->addMetadataTabs();
     }
 
@@ -217,15 +240,13 @@ abstract class ContentObjectForm extends FormValidator
                         array($schemaInstance)));
             }
 
-           $this->getTabsGenerator()->add_tab(
+            $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema',
                     Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
                     'build_metadata_choice_form'));
         }
-
-
     }
 
     public function build_general_form()
@@ -297,7 +318,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function get_categories()
     {
-        $categorymenu = new ContentObjectCategoryMenu($this->get_owner_id());
+        $categorymenu = new ContentObjectCategoryMenu($this->get_workspace());
         $renderer = new OptionsMenuRenderer();
         $categorymenu->render($renderer, 'sitemap');
 
@@ -511,7 +532,6 @@ EOT;
                 ContentObject :: PROPERTY_PARENT_ID,
                 Translation :: get('CategoryTypeName'),
                 $this->get_categories());
-            // $select->setSelected($this->content_object->get_parent_id());
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
@@ -526,8 +546,6 @@ EOT;
             $group[] = $this->createElement('static', null, null, '</div>');
             $this->addGroup($group);
         }
-
-        // $this->add_tags_input();
 
         $value = PlatformSetting :: get('description_required', Manager :: context());
         $required = ($value == 1) ? true : false;
@@ -794,7 +812,8 @@ EOT;
         $object->set_title($values[ContentObject :: PROPERTY_TITLE]);
         $desc = $values[ContentObject :: PROPERTY_DESCRIPTION] ? $values[ContentObject :: PROPERTY_DESCRIPTION] : '';
         $object->set_description($desc);
-        if ($this->allows_category_selection())
+
+        if ($this->allows_category_selection() && $this->workspace instanceof PersonalWorkspace)
         {
             $this->set_category_from_values($object, $values);
         }
@@ -804,6 +823,11 @@ EOT;
         if ($object->has_errors())
         {
             return null;
+        }
+
+        if ($this->allows_category_selection() && $this->workspace instanceof Workspace)
+        {
+            $this->set_category_from_values($object, $values);
         }
 
         $values = $this->exportValues();
@@ -850,7 +874,33 @@ EOT;
             }
         }
 
-        $object->set_parent_id($parent_id);
+        if ($this->workspace instanceof PersonalWorkspace)
+        {
+            $object->set_parent_id($parent_id);
+        }
+        else
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                $this->workspace,
+                $object);
+
+            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
+            {
+                $contentObjectRelationService->updateContentObjectRelation(
+                    $contentObjectRelation,
+                    $this->workspace->getId(),
+                    $object->getId(),
+                    $parent_id);
+            }
+            else
+            {
+                $contentObjectRelationService->createContentObjectRelation(
+                    $this->workspace->getId(),
+                    $object->getId(),
+                    $parent_id);
+            }
+        }
     }
 
     /**
@@ -866,8 +916,8 @@ EOT;
         $new_category = new RepositoryCategory();
         $new_category->set_name($category_name);
         $new_category->set_parent($parent_id);
-        $new_category->set_user_id($this->get_owner_id());
-        $new_category->set_type(RepositoryCategory :: TYPE_NORMAL);
+        $new_category->set_type_id($this->workspace->getId());
+        $new_category->set_type($this->workspace->getWorkspaceType());
 
         if (! $new_category->create())
         {
@@ -989,8 +1039,8 @@ EOT;
      * @param $action string The URL to which the form should be submitted.
      * @return ContentObjectForm
      */
-    public static function factory($form_type, $content_object, $form_name, $method = 'post', $action = null, $extra = null,
-        $additional_elements = array(), $allow_new_version = true, $form_variant = null)
+    public static function factory($form_type, WorkspaceInterface $workspace, $content_object, $form_name,
+        $method = 'post', $action = null, $extra = null, $additional_elements = array(), $allow_new_version = true, $form_variant = null)
     {
         $type = $content_object->get_type();
 
@@ -1008,6 +1058,7 @@ EOT;
 
         return new $class(
             $form_type,
+            $workspace,
             $content_object,
             $form_name,
             $method,

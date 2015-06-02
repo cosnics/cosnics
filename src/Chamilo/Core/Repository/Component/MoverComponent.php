@@ -17,14 +17,15 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 /**
- * $Id: mover.class.php 204 2009-11-13 12:51:30Z kariboe $
+ * Repository manager component to move objects between categories in the repository.
  *
  * @package repository.lib.repository_manager.component
- */
-/**
- * Repository manager component to move objects between categories in the repository.
  */
 class MoverComponent extends Manager
 {
@@ -57,6 +58,7 @@ class MoverComponent extends Manager
                 Translation :: get('NewCategory'),
                 $this->tree);
             $form->addElement('submit', 'submit', Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES));
+
             if ($form->validate())
             {
                 $destination = $form->exportValue(self :: PARAM_DESTINATION_CONTENT_OBJECT_ID);
@@ -69,26 +71,39 @@ class MoverComponent extends Manager
                     foreach ($versions as $version)
                     {
                         $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version);
-                        // TODO: Roles & Rights.
-                        if ($object->get_owner_id() != $this->get_user_id())
+
+                        if ($this->getWorkspace() instanceof PersonalWorkspace)
                         {
-                            $failures ++;
+                            $object->set_parent_id($destination);
                         }
-                        elseif ($object->get_parent_id() != $destination)
+                        else
                         {
-                            if (! $object->move_allowed($destination))
+                            $contentObjectRelationService = new ContentObjectRelationService(
+                                new ContentObjectRelationRepository());
+                            $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                                $this->getWorkspace(),
+                                $object);
+
+                            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
                             {
-                                $failures ++;
+                                $contentObjectRelationService->updateContentObjectRelation(
+                                    $contentObjectRelation,
+                                    $this->getWorkspace()->getId(),
+                                    $object->getId(),
+                                    $destination);
                             }
                             else
                             {
-                                $object->move($destination);
+                                $contentObjectRelationService->createContentObjectRelation(
+                                    $this->getWorkspace()->getId(),
+                                    $object->getId(),
+                                    $destination);
                             }
                         }
                     }
                 }
 
-                // TODO: SCARA - Correctto reflect possible version errors
+                // TODO: SCARA - Correct to reflect possible version errors
                 if ($failures)
                 {
                     if (count($ids) == 1)
@@ -168,11 +183,11 @@ class MoverComponent extends Manager
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getWorkspace()->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable(RepositoryCategory :: TYPE_NORMAL));
+            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
 
         $condition = new AndCondition($conditions);
 

@@ -9,7 +9,9 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use PhpCAS;
+use phpCAS;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * $Id: cas_authentication.class.php 166 2009-11-12 11:03:06Z vanpouckesven $
@@ -59,6 +61,10 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
                     'login',
                     \Chamilo\Core\User\Manager :: context(),
                     array('server' => $_SERVER, 'user' => $user));
+
+                $redirect = new Redirect(
+                    array(Application :: PARAM_CONTEXT => PlatformSetting :: get('page_after_login')));
+                $redirect->toUrl();
 
                 return true;
             }
@@ -130,7 +136,7 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
         $user->set_username($user_attributes['email']);
         $user->set_password('PLACEHOLDER');
         $user->set_status(5);
-        $user->set_auth_source('cas');
+        $user->set_auth_source('Cas');
         $user->set_platformadmin(0);
         // $user->set_language('english');
         $user->set_email($user_attributes['email']);

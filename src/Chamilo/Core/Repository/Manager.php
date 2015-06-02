@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer;
 use Chamilo\Core\Repository\Menu\ObjectTypeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryCategoryTreeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryMenu;
-use Chamilo\Core\Repository\Menu\SharedRepositoryCategoryTreeMenu;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -20,9 +19,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -30,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
@@ -132,17 +130,16 @@ abstract class Manager extends Application
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_DELETE_LINK = 'LinkDeleter';
     const ACTION_VIEW_DOUBLES = 'DoublesViewer';
-    const ACTION_SHARE_CONTENT_OBJECTS = 'ShareContentObjects';
     const ACTION_HTML_EDITOR_FILE = 'HtmlEditorFile';
     const ACTION_REPOSITORY_VIEWER = 'RepositoryViewer';
     const ACTION_USER_VIEW = 'UserView';
     const ACTION_PREVIEW = 'Previewer';
+    const ACTION_WORKSPACE = 'Workspace';
     const ACTION_PUBLICATION = 'Publication';
     const ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA = 'PropertyMetadataLinker';
     const ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT = 'MetadataElementLinker';
     const ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE = 'AlternativeLinker';
     const ACTION_BATCH_EDIT_CONTENT_OBJECT_METADATA = 'MetadataBatchEditor';
-    const ACTION_TEMPLATE = 'Template';
     const ACTION_LINK_SCHEMAS = 'SchemaLinker';
     const ACTION_LINK_PROVIDERS = 'ProviderLinker';
 
@@ -169,8 +166,6 @@ abstract class Manager extends Application
     private $search_form;
 
     private $category_menu;
-
-    private $shared_category_menu;
 
     /**
      *
@@ -214,21 +209,16 @@ abstract class Manager extends Application
         $html[] = '<div id="repository_tree_container">';
         $tabs = new DynamicTabsRenderer(self :: TABS_FILTER);
 
-        $hide_sharing = PlatformSetting :: get('hide_sharing', __NAMESPACE__) === 1 ? true : false;
-        if (! $hide_sharing)
-        {
-            $shared_category_menu = $this->get_shared_category_menu()->render_as_tree();
-        }
-
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_CATEGORY,
                 '',
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_CATEGORY),
-                $this->get_category_menu()->render_as_tree() . '<br />' . $shared_category_menu));
+                $this->get_category_menu()->render_as_tree()));
 
         $filter_form = FormFilterRenderer :: factory(
-            FilterData :: get_instance(),
+            FilterData :: get_instance($this->getWorkspace()),
+            $this->getWorkspace(),
             $this->get_user_id(),
             $this->get_allowed_content_object_types(),
             $this->get_url(
@@ -244,8 +234,8 @@ abstract class Manager extends Application
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_SEARCH),
                 $filter_form->render()));
 
-        $selected_type = FilterData :: get_instance()->get_type();
-        $selected_category = FilterData :: get_instance()->get_type_category();
+        $selected_type = FilterData :: get_instance($this->getWorkspace())->get_type();
+        $selected_category = FilterData :: get_instance($this->getWorkspace())->get_type_category();
 
         $object_type = new ObjectTypeMenu(
             $this,
@@ -273,7 +263,7 @@ abstract class Manager extends Application
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_OBJECT_TYPE),
                 $object_type->render_as_tree()));
 
-        $current_user_view_id = FilterData :: get_instance()->get_user_view();
+        $current_user_view_id = FilterData :: get_instance($this->getWorkspace())->get_user_view();
         $user_view = new UserViewMenu(
             $this,
             $current_user_view_id,
@@ -290,7 +280,9 @@ abstract class Manager extends Application
 
         $html[] = ($tabs->render());
 
-        $html_filter_renderer = HtmlFilterRenderer :: factory(FilterData :: get_instance());
+        $html_filter_renderer = HtmlFilterRenderer :: factory(
+            FilterData :: get_instance($this->getWorkspace()),
+            $this->getWorkspace());
 
         $html[] = $html_filter_renderer->render();
 
@@ -543,7 +535,7 @@ abstract class Manager extends Application
                 $search_url = null;
             }
 
-            $this->category_menu = new RepositoryCategoryTreeMenu($this);
+            $this->category_menu = new RepositoryCategoryTreeMenu($this->getWorkspace(), $this);
 
             if (isset($search_url))
             {
@@ -554,51 +546,8 @@ abstract class Manager extends Application
                 $this->category_menu->forceCurrentUrl($this->get_url());
             }
         }
+
         return $this->category_menu;
-    }
-
-    /**
-     * Returns the category menu for shared items
-     *
-     * @return RepositoryCategory
-     */
-    private function get_shared_category_menu()
-    {
-        if (! $this->shared_category_menu)
-        {
-            $extra_items = array();
-
-            $shared_own = array();
-            $shared_own['title'] = Translation :: get('ContentObjectsSharedByMe');
-            $shared_own['url'] = $this->get_url(
-                array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE_SHARED_CONTENT_OBJECTS,
-                    self :: PARAM_CATEGORY_ID => null,
-                    self :: PARAM_SHARED_VIEW => self :: SHARED_VIEW_OWN_OBJECTS,
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => array(self :: TABS_FILTER => self :: TAB_CATEGORY)));
-            $shared_own['class'] = 'category';
-            $extra_items[] = $shared_own;
-
-            $this->shared_category_menu = new SharedRepositoryCategoryTreeMenu($this, $extra_items);
-
-            /**
-             * Fix for the selected menu item when the content objects shared by me is selected because this is an
-             * additional item that is not selected by default.
-             */
-            if (Request :: get(self :: PARAM_ACTION) != self :: ACTION_BROWSE_SHARED_CONTENT_OBJECTS)
-            {
-                $this->shared_category_menu->forceCurrentUrl('');
-            }
-            else
-            {
-                if (Request :: get(self :: PARAM_SHARED_VIEW) == self :: SHARED_VIEW_OWN_OBJECTS)
-                {
-                    $this->shared_category_menu->forceCurrentUrl($shared_own['url']);
-                }
-            }
-        }
-
-        return $this->shared_category_menu;
     }
 
     /**
@@ -642,7 +591,7 @@ abstract class Manager extends Application
 
         $redirect = new Redirect(
             array(
-                self :: PARAM_CONTEXT => self :: context(),
+                self :: PARAM_CONTEXT => self :: package(),
                 self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
                 self :: PARAM_CONTENT_OBJECT_ID => $document_id,
                 ContentObject :: PARAM_SECURITY_CODE => $security_code));
@@ -756,14 +705,6 @@ abstract class Manager extends Application
                 self :: PARAM_CONTENT_OBJECT_ID => $content_object_id));
     }
 
-    public function get_share_content_objects_url($content_object_ids)
-    {
-        return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_SHARE_CONTENT_OBJECTS,
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object_ids));
-    }
-
     /**
      *
      * @param string $content_object_type
@@ -798,5 +739,15 @@ abstract class Manager extends Application
     {
         $additionalParameters[] = self :: PARAM_WORKSPACE_ID;
         return $additionalParameters;
+    }
+
+    /**
+     * Returns the admin breadcrumb generator
+     *
+     * @return \libraries\format\BreadcrumbGeneratorInterface
+     */
+    public function get_breadcrumb_generator()
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
     }
 }

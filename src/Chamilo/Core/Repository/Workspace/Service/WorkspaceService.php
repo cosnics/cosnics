@@ -95,7 +95,7 @@ class WorkspaceService
     /**
      *
      * @param string[] $workspaceProperties
-     * @return boolean
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     public function createWorkspace($workspaceProperties)
     {
@@ -107,7 +107,7 @@ class WorkspaceService
             return false;
         }
 
-        return true;
+        return $workspace;
     }
 
     /**

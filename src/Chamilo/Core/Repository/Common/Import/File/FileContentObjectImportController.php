@@ -18,6 +18,10 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class FileContentObjectImportController extends ContentObjectImportController
 {
@@ -96,7 +100,7 @@ class FileContentObjectImportController extends ContentObjectImportController
             $document->set_title($file->get_name());
             $document->set_description($file->get_name());
             $document->set_owner_id($this->get_parameters()->get_user());
-            $document->set_parent_id($this->get_parameters()->get_category());
+            $document->set_parent_id($this->determine_parent_id());
             $document->set_filename($file->get_name_extension());
 
             $hash = md5_file($file->get_path());
@@ -140,6 +144,8 @@ class FileContentObjectImportController extends ContentObjectImportController
 
                 if ($document->create())
                 {
+                    $this->process_workspace($document);
+
                     $this->add_message(Translation :: get('ObjectImported'), self :: TYPE_CONFIRM);
                     return array($document->get_id());
                 }
@@ -160,5 +166,37 @@ class FileContentObjectImportController extends ContentObjectImportController
     public static function is_available()
     {
         return in_array(self :: FORMAT, DataManager :: get_registered_types(true));
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id()
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $this->get_parameters()->get_category();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     *
+     * @param ContentObject $contentObject
+     */
+    public function process_workspace(ContentObject $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $this->get_parameters()->get_category());
+        }
     }
 }

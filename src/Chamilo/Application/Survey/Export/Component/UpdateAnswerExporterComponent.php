@@ -11,6 +11,7 @@ use PHPExcel_Style_Alignment;
 use PHPExcel_Style_Color;
 use PHPExcel_Style_Fill;
 use PHPExcel_Style_Font;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
