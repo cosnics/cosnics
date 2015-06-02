@@ -21,7 +21,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
     public function __construct($content = '', $status = 200, $headers = array())
     {
         $headers['Content-Type'] = 'text/html';
-        $headers['X-Powered-By'] = 'Chamilo Connect' .
+        $headers['X-Powered-By'] = 'Chamilo Connect ' .
              \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'version');
 
         parent :: __construct($content, $status, $headers);

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Import\File;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class FileImportParameters extends ImportParameters
 {
@@ -33,9 +34,9 @@ class FileImportParameters extends ImportParameters
      * @param \libraries\file\FileProperties $file
      * @param multitype:mixed $values
      */
-    public function __construct($type, $user, $category, $file, $values)
+    public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $category);
+        parent :: __construct($type, $user, $workspace, $category);
         $this->document_type = $values[FileContentObjectImportForm :: PARAM_DOCUMENT_TYPE];
         $this->file = $file;
         $this->link = $values[FileContentObjectImportForm :: PROPERTY_LINK];

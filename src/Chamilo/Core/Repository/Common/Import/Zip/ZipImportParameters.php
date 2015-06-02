@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Import\Zip;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class ZipImportParameters extends ImportParameters
 {
@@ -9,9 +10,9 @@ class ZipImportParameters extends ImportParameters
 
     private $file;
 
-    public function __construct($type, $user, $category, $file, $values)
+    public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $category);
+        parent :: __construct($type, $user, $workspace, $category);
         $this->file = $file;
     }
 

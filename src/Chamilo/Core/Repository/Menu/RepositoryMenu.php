@@ -82,17 +82,17 @@ class RepositoryMenu extends HTML_Menu
 
         $extra_items[] = $create;
 
+        $import = array();
+        $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
+        $import['url'] = $this->repository_manager->get_url(
+            array(
+                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
+        $import['class'] = 'import';
+
+        $extra_items[] = $import;
+
         if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
         {
-            $import = array();
-            $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
-            $import['url'] = $this->repository_manager->get_url(
-                array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
-            $import['class'] = 'import';
-
-            $extra_items[] = $import;
-
             $quota = array();
             $quota['title'] = Translation :: get('Quota');
             $quota['url'] = $this->repository_manager->get_url(
