@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Component;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
 
-class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Manager
+class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager
 {
     const TEMPORARY_STORAGE = 'survey_preview';
     const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';

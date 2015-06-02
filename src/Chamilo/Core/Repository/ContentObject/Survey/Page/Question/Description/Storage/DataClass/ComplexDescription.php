@@ -40,7 +40,7 @@ class ComplexDescription extends ComplexContentObjectItem implements PageDisplay
         $this->set_visible(! $this->get_visible());
     }
 
-    function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
         return array();
     }

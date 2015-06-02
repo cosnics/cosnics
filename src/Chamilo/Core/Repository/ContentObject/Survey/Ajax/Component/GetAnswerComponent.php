@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Component;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Session\Session;
 
-class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Manager
+class GetAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager
 {
     const TEMPORARY_STORAGE = 'survey_preview';
     const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';

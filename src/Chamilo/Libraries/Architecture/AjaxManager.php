@@ -24,8 +24,7 @@ abstract class AjaxManager extends Application
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

@@ -40,14 +40,31 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
         $answer_ids = array();
         
-        foreach ($this->get_ref_object()->get_options() as $option)
+        if ($prefix)
         {
-            $answer_ids[] = $this->get_id() . '_' . $option->get_id();
+            $answerId = $prefix . '_' . $this->getId();
         }
+        else
+        {
+            $answerId = $this->getId();
+        }
+        
+        if ($this->get_ref_object()->get_display_type() == MultipleChoice :: DISPLAY_TYPE_TABLE  && $this->get_ref_object()->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+        {
+            foreach ($this->get_ref_object()->get_options() as $option)
+            {
+                $answer_ids[] = $answerId . '_' . $option->get_id();
+            }
+        }
+        else
+        {
+            $answer_ids[] = $answerId;
+        }
+        
         return $answer_ids;
     }
 }

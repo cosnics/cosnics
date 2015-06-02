@@ -112,7 +112,17 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         while ($option = $options->next_result())
         {
             $option_id = $option->get_id();
-            $option_name = $questionId . '_' . $option_id;
+            
+            if ($this->getPrefix())
+            {
+                $questionName = $this->getPrefix() . '_' . $questionId;
+            }
+            else
+            {
+                $questionName = $questionId;
+            }
+            
+            $option_name = $questionName . '_' . $option_id;
             
             $group = array();
             $option_number = ($option_count + 1) . '.';

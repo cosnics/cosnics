@@ -62,10 +62,20 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $element_template = implode(PHP_EOL, $element_template);
         $renderer = $formValidator->get_renderer();
         
-        $name = $question->get_id();
-        $formValidator->add_html_editor($name, '', false, $html_editor_options);
+        $questionId = $this->getQuestionId();
         
-        $renderer->setElementTemplate($element_template, $name);
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
+        
+        $formValidator->add_html_editor($questionName, '', false, $html_editor_options);
+        
+        $renderer->setElementTemplate($element_template, $questionName);
     }
 
     function get_instruction($question)

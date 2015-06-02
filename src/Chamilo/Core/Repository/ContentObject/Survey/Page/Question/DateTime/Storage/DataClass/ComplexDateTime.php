@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDis
  * @author Eduard Vossen
  * @author Magali Gillard
  */
-class ComplexDateTime extends ComplexContentObjectItem  implements PageDisplayItem
+class ComplexDateTime extends ComplexContentObjectItem implements PageDisplayItem
 {
     const PROPERTY_VISIBLE = 'visible';
 
@@ -39,9 +39,18 @@ class ComplexDateTime extends ComplexContentObjectItem  implements PageDisplayIt
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
-        return array($this->get_id());
+        if ($prefix)
+        {
+            $answerId = $prefix . '_' . $this->getId();
+        }
+        else
+        {
+            $answerId = $this->getId();
+        }
+        
+        return array($answerId);
     }
 }
 ?>

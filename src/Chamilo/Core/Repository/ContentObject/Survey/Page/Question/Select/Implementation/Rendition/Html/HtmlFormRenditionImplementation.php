@@ -39,13 +39,22 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $element_template = implode(PHP_EOL, $element_template);
       
         $questionId = $this->getQuestionId();
+        
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
    
         
         if ($type == 'checkbox')
         {
             $advanced_select = $formValidator->createElement(
                 'advmultiselect', 
-                $questionId, 
+                $questionName, 
                 '', 
                 $answer_options, 
                 array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
@@ -57,14 +66,14 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         {
             $select_box = $formValidator->createElement(
                 'select', 
-                $questionId, 
+                $questionName, 
                 '', 
                 $answer_options, 
                 'class="select_question"');
             $formValidator->addElement($select_box);
         }
         
-        $formValidator->get_renderer()->setElementTemplate($element_template, $questionId);
+        $formValidator->get_renderer()->setElementTemplate($element_template, $questionName);
         return $formValidator;
     }
   

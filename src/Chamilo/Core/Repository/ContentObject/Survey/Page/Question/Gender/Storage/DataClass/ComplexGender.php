@@ -39,9 +39,17 @@ class ComplexGender extends ComplexContentObjectItem implements PageDisplayItem
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
-        return array($this->get_id());
+        if ($prefix)
+        {
+            $answerId = $prefix . '_' . $this->getId();
+        }
+        else
+        {
+            $answerId = $this->getId();
+        }
+        return array($answerId);
     }
 }
 ?>

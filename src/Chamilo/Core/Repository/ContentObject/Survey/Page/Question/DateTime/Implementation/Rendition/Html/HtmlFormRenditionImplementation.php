@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Im
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\DateTime\Storage\DataClass\DateTime;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -14,7 +13,8 @@ use Chamilo\Libraries\File\Path;
  */
 class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
 {
-     /**
+
+    /**
      *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
@@ -22,9 +22,8 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
     {
         $formValidator = parent :: initialize();
         $renderer = $formValidator->get_renderer();
-        $question =  $this->get_content_object();
+        $question = $this->get_content_object();
         $questionId = $this->getQuestionId();
-      
         
         $tableHeader = array();
         $tableHeader[] = '<table class="data_table take_survey">';
@@ -49,20 +48,23 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $namespace = $question->package();
         
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
+        
         if ($question->get_question_type() == DateTime :: TYPE_DATE)
         {
-            $formValidator->add_datepicker($questionId, '', false);
+            $formValidator->add_datepicker($questionName, '', false);
         }
         
         if ($question->get_question_type() == DateTime :: TYPE_TIME)
         {
-            $html = array();
-            $html[] = '<div id="timepicker_' . $questionId . '" name="' . $questionId .
-                 '"></div>';
-            $html[] = '<script type="text/javascript" src="' . Path :: getInstance()->getJavascriptPath(
-                $namespace, 
-                true) . 'Time.js' . '"></script>';
-            $formValidator->addElement('html', implode(PHP_EOL, $html));
+            $formValidator->add_timepicker($questionName);
         }
         
         $tableFooter = array();
@@ -73,5 +75,4 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $formValidator->addElement('html', implode(PHP_EOL, $tableFooter));
         return $formValidator;
     }
-  
 }

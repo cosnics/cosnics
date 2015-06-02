@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax;
 
 use Chamilo\Libraries\Architecture\AjaxManager;
 
