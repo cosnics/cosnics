@@ -608,8 +608,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->update_helpers($content_object_node, $content_object);
         $content_object->create();
 
-        var_dump($content_object);
-
         $this->set_content_object_id_cache_id($content_object_node->getAttribute('id'), $content_object->get_id());
 
         $this->create_attachments($content_object_node);
