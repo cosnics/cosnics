@@ -29,6 +29,12 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
      */
     private $complexContentObjectPathNode;
 
+    /**
+     *
+     * @var string
+     */
+    private $prefix;
+
     function render()
     {
         return $this->initialize()->toHtml();
@@ -57,7 +63,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '</div>';
             $html[] = '</div>';
             $html[] = '</div>';
-                       
+            
             $html[] = '<div class="title">';
             $html[] = '<div class="text">';
             $html[] = '<div class="bevel">';
@@ -141,7 +147,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         }
         return $questionId;
     }
-    
+
     /**
      *
      * @return int
@@ -150,7 +156,7 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
     {
         if ($this->getComplexContentObjectPathNode())
         {
-           $questionNr =  $this->getComplexContentObjectPathNode()->get_question_nr();
+            $questionNr = $this->getComplexContentObjectPathNode()->get_question_nr();
         }
         else
         {
@@ -159,5 +165,21 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
         
         return $questionNr;
     }
-    
+
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+    }
+
+    public function getPrefix()
+    {
+        if ($this->prefix)
+        {
+            return $this->prefix;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

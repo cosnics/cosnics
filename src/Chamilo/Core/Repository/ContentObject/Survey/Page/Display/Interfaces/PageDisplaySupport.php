@@ -20,9 +20,7 @@ interface PageDisplaySupport extends \Chamilo\Core\Repository\ContentObject\Surv
      * @todo Fix DisplaySupport conflicts
      */
     public function get_root_content_object();
-
     
-    public function get_answer($complex_question_id);
 
     /**
      * Return a URI-template for the page tree menu

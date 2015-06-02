@@ -40,14 +40,24 @@ class ComplexMatching extends ComplexContentObjectItem implements PageDisplayIte
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
         $answer_ids = array();
         
-        foreach ($this->get_ref_object()->get_matches() as $match)
+        foreach ($this->get_ref_object()->get_options()->as_array() as $option)
         {
-            $answer_ids[] = $this->get_id() . '_' . $match->get_id();
+            if ($prefix)
+            {
+                $answerId = $prefix . '_' . $this->getId();
+            }
+            else
+            {
+                $answerId = $this->getId();
+            }
+            
+            $answer_ids[] = $answerId . '_' . $option->get_id();
         }
+
         return $answer_ids;
     }
 }

@@ -39,12 +39,19 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_header[] = '<tbody>';
         $formValidator->addElement('html', implode(PHP_EOL, $table_header));
         
+        if ($this->getPrefix())
+        {
+            $option_name = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $option_name = $questionId;
+        }
+        
         foreach ($options as $i => $option)
         {
             $group = array();
-            
-            $option_name = $questionId . '_1' ;
-            
+                     
             $radio = $formValidator->createElement('radio', $option_name, null, null, $i);
             
             $group[] = $radio;

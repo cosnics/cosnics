@@ -27,6 +27,16 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $question = $this->get_content_object();
         
         $questionId = $this->getQuestionId();
+        
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
+        
         $tableHeader = array();
         $tableHeader[] = '<table class="data_table take_survey">';
         $tableHeader[] = '<thead>';
@@ -57,7 +67,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $formValidator->addElement(
             'select', 
-            $questionId, 
+            $questionName, 
             Translation :: get('Rating') . ': ', 
             $scores, 
             'class="rating_slider"');
@@ -69,7 +79,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $tableFooter[] = '</table>';
         $formValidator->addElement('html', implode(PHP_EOL, $tableFooter));
         
-        $renderer->setElementTemplate($element_template, $questionId);
+        $renderer->setElementTemplate($element_template, $questionName);
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);
         $formValidator->addElement(
             'html', 

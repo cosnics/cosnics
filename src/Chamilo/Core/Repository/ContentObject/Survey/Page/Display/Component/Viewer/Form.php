@@ -19,7 +19,8 @@ class Form extends FormValidator
 
     function buildForm()
     {
-        $pageDisplay = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node());
+        $surveyConfiguration = $this->parent->getApplicationConfiguration();
+        $pageDisplay = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node(), $surveyConfiguration->getAnswerService());
         $pageDisplay->run();
     }
     

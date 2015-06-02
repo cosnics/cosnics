@@ -507,6 +507,44 @@ EOT;
     }
 
     /**
+     * Add a option_orderer element to the form 
+     *
+     * @param string $label The label for the form-element
+     * @param string $name The element name
+     * @return HTML_QuickForm_datepicker The element.
+     */
+    public function add_option_orderer($name, $label, $options, $separator)
+    {
+        $element = $this->addElement(
+            'option_orderer',
+            $name,
+            $label,
+            $options,
+            $separator,
+            array('form_name' => $this->getAttribute('name'), 'class' => $name));
+        return $element;
+    }
+    
+    
+    /**
+     * Add a timepicker element to the form
+     *
+     * @param string $label The label for the form-element
+     * @param string $name The element name
+     * @return HTML_QuickForm_datepicker The element.
+     */
+    public function add_timepicker($name, $label, $include_minutes_picker = true)
+    {
+        $element = $this->addElement(
+            'timepicker',
+            $name,
+            $label,
+            array('form_name' => $this->getAttribute('name'), 'class' => $name),
+            $include_minutes_picker);
+        return $element;
+    }
+    
+    /**
      * Add a timewindow element to the form.
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.

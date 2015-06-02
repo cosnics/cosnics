@@ -48,50 +48,57 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $questionId = $this->getQuestionId();
         
-        $table_height = $options_count * 2.5;
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
         
-        $table_header = array();
-        $table_header[] = '<table style="height: ' . $table_height . 'em;" >';
-        $table_header[] = '<thead>';
-        $table_header[] = '<tr>';
-        $table_header[] = '<th class="info">' . Translation :: get('YourRanking') . '</th>';
-        $table_header[] = '</tr>';
-        $table_header[] = '</thead>';
-        $table_header[] = '<tbody>';
-        $formValidator->addElement('html', implode(PHP_EOL, $table_header));
+//         $table_height = $options_count * 2.5;
         
-        $html = array();
-        
-        $html[] = '<tr >';
-        $html[] = '<td>';
-        $html[] = '<ul id="sortable1" class="connectedSortable" style="height: ' . $table_height . 'em; width: 250px;" >';
+//         $table_header = array();
+//         $table_header[] = '<table style="height: ' . $table_height . 'em;" >';
+//         $table_header[] = '<thead>';
+//         $table_header[] = '<tr>';
+//         $table_header[] = '<th class="info">' . Translation :: get('YourRanking') . '</th>';
+//         $table_header[] = '</tr>';
+//         $table_header[] = '</thead>';
+//         $table_header[] = '<tbody>';
+//         $table_header[] = '<tr >';
+//         $table_header[] = '<td>';
+//         $formValidator->addElement('html', implode(PHP_EOL, $table_header));
+//         $html[] = '<ul id="sortable1" class="connectedSortable" style="height: ' . $table_height . 'em; width: 250px;" >';
         foreach ($options as $option)
         {
             $answer_options[$option->get_id()] = $option->get_value();
             
-            $html[] = '<li class="ui-state-default">' . $option->get_value() . '</li>';
+            
+            
+//             $html[] = '<li class="ui-state-default">' . $option->get_value() . '</li>';
         }
-        $html[] = '</ul>';
-        $html[] = '</td>';
-        $html[] = '</tr>';
+//         $html[] = '</ul>';
+        $formValidator->add_option_orderer($questionName, '' ,$answer_options, '_');
         
-        $formValidator->addElement('html', implode(PHP_EOL, $html));
+//         $table_footer = array();
+//         $table_footer[] = '</td>';
+//         $table_footer[] = '</tr>';
+//         $table_footer[] = '</tbody>';
+//         $table_footer[] = '</table>';
+//         $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
         
-        $table_footer = array();
-        $table_footer[] = '</tbody>';
-        $table_footer[] = '</table>';
-        $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
+//         $script[] = '<script>';
+//         $script[] = '$(function() {';
+//         $script[] = '$( "#sortable1, #sortable2" ).sortable({';
+//         $script[] = '   connectWith: ".connectedSortable"';
+//         $script[] = '   ,placeholder: "ui-state-highlight"';
+//         $script[] = ' }).disableSelection();';
+//         $script[] = '});';
+//         $script[] = '</script>';
         
-        $script[] = '<script>';
-        $script[] = '$(function() {';
-        $script[] = '$( "#sortable1, #sortable2" ).sortable({';
-        $script[] = '   connectWith: ".connectedSortable"';
-        $script[] = '   ,placeholder: "ui-state-highlight"';
-        $script[] = ' }).disableSelection();';
-        $script[] = '});';
-        $script[] = '</script>';
-        
-        $formValidator->addElement('html', implode(PHP_EOL, $script));
+//         $formValidator->addElement('html', implode(PHP_EOL, $script));
         return $formValidator;
     }
 

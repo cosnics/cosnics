@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Component;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  *
  * @package repository.content_object.survey;
  */
-class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Ajax\Manager
+class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager
 {
     const TEMPORARY_STORAGE = 'survey_preview';
     const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';

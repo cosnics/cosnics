@@ -40,14 +40,31 @@ class ComplexOrder extends ComplexContentObjectItem implements PageDisplayItem
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
         $answer_ids = array();
         
-        foreach ($this->get_ref_object()->get_options() as $option)
+        if ($prefix)
         {
-            $answer_ids[] = $this->get_id() . '_' . $option->get_id();
+            $answerId = $prefix . '_' . $this->getId();
         }
+        else
+        {
+            $answerId = $this->getId();
+        }
+        
+        if ($this->get_ref_object()->get_display_type() == Order :: DISPLAY_TYPE_TWO_COLUMN)
+        {
+            foreach ($this->get_ref_object()->get_options() as $option)
+            {
+                $answer_ids[] = $this->get_id() . '_' . $option->get_id();
+            }
+        }
+        else
+        {
+            $answer_ids[] = $answerId;
+        }
+        
         return $answer_ids;
     }
 }

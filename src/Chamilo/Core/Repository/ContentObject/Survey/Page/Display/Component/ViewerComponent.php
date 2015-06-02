@@ -43,9 +43,5 @@ class ViewerComponent extends TabComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function get_answer($complex_question_id)
-    {
-        return $this->get_parent()->get_answer($complex_question_id);
-    }
 }
 ?>
