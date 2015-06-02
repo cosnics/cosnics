@@ -89,6 +89,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $parameters = ImportParameters :: factory(
                     $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
                     $this->get_user_id(),
+                    new PersonalWorkspace($this->get_user()),
                     $category_id,
                     $file,
                     $values);

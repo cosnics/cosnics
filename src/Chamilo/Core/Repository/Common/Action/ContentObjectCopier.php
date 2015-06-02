@@ -17,6 +17,8 @@ use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -93,9 +95,14 @@ class ContentObjectCopier
         Filesystem :: move_file($path, $new_path);
         $file = FileProperties :: from_path($new_path);
 
+        $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+            User :: class_name(),
+            $this->target_user_id);
+
         $parameters = ImportParameters :: factory(
             ContentObjectImport :: FORMAT_CPO,
             $this->target_user_id,
+            new PersonalWorkspace($targetUser),
             $this->target_category,
             $file);
         $controller = ContentObjectImportController :: factory($parameters);

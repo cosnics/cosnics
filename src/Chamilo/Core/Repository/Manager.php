@@ -591,7 +591,7 @@ abstract class Manager extends Application
 
         $redirect = new Redirect(
             array(
-                self :: PARAM_CONTEXT => self :: context(),
+                self :: PARAM_CONTEXT => self :: package(),
                 self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
                 self :: PARAM_CONTENT_OBJECT_ID => $document_id,
                 ContentObject :: PARAM_SECURITY_CODE => $security_code));
