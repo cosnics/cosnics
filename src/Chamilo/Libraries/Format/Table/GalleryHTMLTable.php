@@ -10,7 +10,8 @@ use HTML_Table;
 use Pager;
 
 /**
- * This class allows you to display a sortable data-table. It is possible to split the data in several pages. Using this
+ * This class allows you to display a sortable data-table.
+ * It is possible to split the data in several pages. Using this
  * class you can: - automatically create checkboxes of the first table column - a "select all" and "deselect all" link
  * is added - only if you provide a list of actions for the selected items - click on the table header to sort the data
  * - choose how many items you see per page - navigate through all data-pages
@@ -209,7 +210,8 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Returns the complete table HTML. Alias of as_html().
+     * Returns the complete table HTML.
+     * Alias of as_html().
      */
     public function toHTML()
     {
@@ -400,7 +402,7 @@ class GalleryHTMLTable extends HTML_Table
      * @param mixed $attributes1 Associative array or string of table col attributes
      * @param mixed $attributes2 Associative array or string of table col attributes
      * @param bool $inTR false if attributes are to be applied in TD tags; true if attributes are to be applied in TR
-     *            tag
+     *        tag
      * @param int $firstAttributes (optional) Which attributes should be applied to the first col, 1 or 2.
      * @param int $body (optional) The index of the body to set. Pass null to set for all bodies.
      * @access public
@@ -446,7 +448,7 @@ class GalleryHTMLTable extends HTML_Table
      * @param mixed $attributes1 Associative array or string of table col attributes
      * @param mixed $attributes2 Associative array or string of table col attributes
      * @param bool $inTR false if attributes are to be applied in TD tags; true if attributes are to be applied in TR
-     *            tag
+     *        tag
      * @param int $firstAttributes (optional) Which attributes should be applied to the first row, 1 or 2.
      * @access public
      */
@@ -472,30 +474,38 @@ class GalleryHTMLTable extends HTML_Table
     public function get_page_select_form()
     {
         $result = array();
+
         if ($this->allow_page_selection)
         {
             $total_number_of_items = $this->total_number_of_items;
+
             if ($total_number_of_items <= $this->default_items_per_page)
             {
                 return '';
             }
+
             $result[] = '<form method="get" action="' . $_SERVER['PHP_SELF'] . '" style="display:inline;">';
             $param[$this->param_prefix . 'direction'] = $this->direction;
             $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
             $param[$this->param_prefix . 'property'] = $this->property;
             $param = array_merge($param, $this->additional_parameters);
+
             foreach ($param as $key => & $value)
             {
-                if (is_array($value))
+                if (! is_null($value))
                 {
-                    $ser = self :: serialize_array($value, $key);
-                    $result = array_merge($result, $ser);
-                }
-                else
-                {
-                    $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    if (is_array($value))
+                    {
+                        $ser = self :: serialize_array($value, $key);
+                        $result = array_merge($result, $ser);
+                    }
+                    else
+                    {
+                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    }
                 }
             }
+
             $result[] = '<select name="' . $this->param_prefix . 'per_page" onchange="javascript:this.form.submit();">';
 
             $lower_limit = 5 * $this->default_items_per_page;
@@ -541,14 +551,17 @@ class GalleryHTMLTable extends HTML_Table
 
             foreach ($param as $key => $value)
             {
-                if (is_array($value))
+                if (! is_null($value))
                 {
-                    $ser = self :: serialize_array($value, $key);
-                    $result = array_merge($result, $ser);
-                }
-                else
-                {
-                    $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    if (is_array($value))
+                    {
+                        $ser = self :: serialize_array($value, $key);
+                        $result = array_merge($result, $ser);
+                    }
+                    else
+                    {
+                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    }
                 }
             }
 
@@ -590,14 +603,17 @@ class GalleryHTMLTable extends HTML_Table
 
             foreach ($param as $key => $value)
             {
-                if (is_array($value))
+                if (! is_null($value))
                 {
-                    $ser = self :: serialize_array($value, $key);
-                    $result = array_merge($result, $ser);
-                }
-                else
-                {
-                    $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    if (is_array($value))
+                    {
+                        $ser = self :: serialize_array($value, $key);
+                        $result = array_merge($result, $ser);
+                    }
+                    else
+                    {
+                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
+                    }
                 }
             }
 
@@ -683,11 +699,12 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Add a filter to a column. If another filter was allready defined for the given column, it will be overwritten.
+     * Add a filter to a column.
+     * If another filter was allready defined for the given column, it will be overwritten.
      *
      * @param int $column The number of the column
      * @param string $function The name of the filter-function. This should be a function wich requires 1 parameter and
-     *            returns the filtered value.
+     *        returns the filtered value.
      */
     public function set_column_filter($column, $function)
     {
@@ -695,13 +712,14 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Define a list of actions which can be performed on the table-date. If you define a list of actions, the first
+     * Define a list of actions which can be performed on the table-date.
+     * If you define a list of actions, the first
      * column of the table will be converted into checkboxes.
      *
      * @param array $actions A list of actions. The key is the name of the action. The value is the label to show in the
-     *            select-box
+     *        select-box
      * @param string $checkbox_name The name of the generated checkboxes. The value of the checkbox will be the value of
-     *            the first column.
+     *        the first column.
      */
     public function set_form_actions($actions, $checkbox_name = 'id', $select_name = 'action')
     {
@@ -721,7 +739,8 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Set other tables on the same page. If you have other sortable tables on the page displaying this sortable tables,
+     * Set other tables on the same page.
+     * If you have other sortable tables on the page displaying this sortable tables,
      * you can define those other tables with this function. If you don't define the other tables, there sorting and
      * pagination will return to their default state when sorting this table.
      *
@@ -734,7 +753,8 @@ class GalleryHTMLTable extends HTML_Table
 
     /**
      * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class. If you've defined actions, the first element of the given row will be converted into a
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
      * checkbox
      *
      * @param array $row A row from the table.
@@ -766,7 +786,8 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Get the total number of items. This function calls the function given as 2nd argument in the constructor of a
+     * Get the total number of items.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      */
     public function get_total_number_of_items()
@@ -779,7 +800,8 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Get the data to display. This function calls the function given as 2nd argument in the constructor of a
+     * Get the data to display.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
      * @param int $from Index of the first item to return.
@@ -797,7 +819,8 @@ class GalleryHTMLTable extends HTML_Table
     }
 
     /**
-     * Get the sort properties. This function calls the function given as 3rd argument in the constructor of a
+     * Get the sort properties.
+     * This function calls the function given as 3rd argument in the constructor of a
      * GalleryTable. Make sure your function has the same parameters as defined here.
      */
     public function get_table_properties()
