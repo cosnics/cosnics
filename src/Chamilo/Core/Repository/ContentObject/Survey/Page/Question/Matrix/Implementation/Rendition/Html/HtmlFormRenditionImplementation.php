@@ -24,7 +24,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         
         $question = $this->get_content_object();
         $question_id = $this->getQuestionId();
-   
+        
         $options = $question->get_options();
         $matches = $question->get_matches();
         $match_objects = array();
@@ -60,9 +60,18 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             foreach ($match_objects as $match)
             {
                 $j = $match->get_id();
-                if ($type == Matrix :: MATRIX_TYPE_RADIO)
+                
+                if ($this->getPrefix())
+                {
+                    $option_name = $this->getPrefix() . '_' . $question_id . '_' . $i;
+                }
+                else
                 {
                     $option_name = $question_id . '_' . $i;
+                }
+                
+                if ($type == Matrix :: MATRIX_TYPE_RADIO)
+                {
                     
                     $radio = $formValidator->createElement('radio', $option_name, null, null, $j);
                     
@@ -70,7 +79,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
                 }
                 elseif ($type == Matrix :: MATRIX_TYPE_CHECKBOX)
                 {
-                    $option_name = $question_id . '_' . $i . '_' . $j;
+                    $option_name = $option_name . '_' . $j;
                     
                     $checkbox = $formValidator->createElement('checkbox', $option_name, null, null, null, $j);
                     $group[] = $checkbox;
@@ -90,5 +99,4 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $formValidator->addElement('html', implode(PHP_EOL, $table_footer));
         return $formValidator;
     }
-  
 }

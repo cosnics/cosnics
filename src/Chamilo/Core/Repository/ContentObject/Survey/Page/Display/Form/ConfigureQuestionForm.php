@@ -1,25 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Form;
 
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\Description;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 
 /**
- * @author Eduard.Vossen
  *
+ * @author Eduard.Vossen
  */
 class ConfigureQuestionForm extends FormValidator
 {
@@ -31,13 +23,15 @@ class ConfigureQuestionForm extends FormValidator
     const TO_VISIBLE_QUESTION_ID = 'to_visible_question_id';
 
     private $parent;
-    
+
     /**
+     *
      * @var Configuration
      */
     private $configuration;
-    
+
     /**
+     *
      * @var Page
      */
     private $page;
@@ -57,12 +51,12 @@ class ConfigureQuestionForm extends FormValidator
         parent :: __construct(self :: FORM_NAME, self :: FORM_METHOD_POST, $parent->get_url());
         
         $this->parent = $parent;
-               
-        $this->page = $page; 
+        
+        $this->page = $page;
         
         $this->complex_content_object_path_node = $this->parent->get_current_node();
         
-        $this->complex_question =  $parent->get_current_complex_content_object_item();
+        $this->complex_question = $parent->get_current_complex_content_object_item();
         
         if ($config_id)
         {
@@ -73,12 +67,11 @@ class ConfigureQuestionForm extends FormValidator
             $this->form_type = self :: TYPE_CREATE;
         }
         
-                
         if ($this->form_type == self :: TYPE_EDIT)
         {
             $this->config_id = $config_id;
-            $this->configuration = DataManager::retrieve_by_id(Configuration::class_name(), $config_id);
-            $this->answer =  $this->configuration->getAnswerMatches();
+            $this->configuration = DataManager :: retrieve_by_id(Configuration :: class_name(), $config_id);
+            $this->answer = $this->configuration->getAnswerMatches();
             $this->build_editing_form();
             $this->setDefaults();
         }
@@ -103,34 +96,27 @@ class ConfigureQuestionForm extends FormValidator
             'html', 
             '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
         
-        $question_display = \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay :: factory(
+        $question_display = QuestionDisplay :: factory(
             $this, 
-            $this->complex_content_object_path_node, $this->answer);
-     
+            $this->complex_content_object_path_node, 
+            $this->parent->getApplicationConfiguration()->getAnswerService());
+        
         $question_display->run();
         
         $this->addElement('html', '</div></div><div class="clear">&nbsp;</div></div>');
+     
+        $nodes = $this->complex_content_object_path_node->get_siblings();
         
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
-            new StaticConditionVariable($this->page->get_id()));
-        $order = new OrderBy(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER));
-        $complex_questions = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-            ComplexContentObjectItem :: class_name(), 
-            new DataClassRetrievesParameters($condition, null, null, array($order)));
-        $sub_nr = 0;
-        
-        while ($complex_question = $complex_questions->next_result())
+        foreach ($nodes as $node)
         {
-            if (! $complex_question->is_visible())
+            
+            $complexQuestion = $node->get_complex_content_object_item();
+            
+            if (! $complexQuestion->is_visible())
             {
+                $complexQuestion->set_visible(1);
                 
-                $complex_id = $complex_question->get_id();
+                $complex_id = $complexQuestion->get_id();
                 
                 $checkbox = $this->createElement(
                     'checkbox', 
@@ -140,22 +126,18 @@ class ConfigureQuestionForm extends FormValidator
                     array());
                 $this->addElement($checkbox);
                 
-                $question = $complex_question->get_ref_object();
-                $question_rendition = ContentObjectRenditionImplementation :: factory(
-                    $question, 
-                    ContentObjectRendition :: FORMAT_HTML, 
-                    ContentObjectRendition :: VIEW_FULL, 
-                    $this);
-                if (! $question instanceof Description)
-                {
-                    $sub_nr ++;
-                }
+                $question_display = QuestionDisplay :: factory(
+                    $this, 
+                    $node, 
+                    $this->parent->getApplicationConfiguration()->getAnswerService());
+             
+                $this->addElement(
+                    'html', 
+                    '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
                 
-                $html = array();
-                $html[] = '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >';
-                $html[] = $question_rendition->get_question_preview('1.' . $sub_nr, $complex_id);
-                $html[] = '</div></div><div class="clear">&nbsp;</div></div>';
-                $this->addElement('html', implode(PHP_EOL, $html));
+                $question_display->run();
+                
+                $this->addElement('html', '</div></div><div class="clear">&nbsp;</div></div>');
             }
         }
     }
@@ -235,33 +217,36 @@ class ConfigureQuestionForm extends FormValidator
     function create_configuration()
     {
         $values = $this->exportValues();
-
+        
         $configuration = new Configuration();
         $configuration->setPageId($this->page->get_id());
         $configuration->setName($values[Configuration :: PROPERTY_NAME]);
-        $configuration->setDescription( $values[Configuration :: PROPERTY_DESCRIPTION]);
+        $configuration->setDescription($values[Configuration :: PROPERTY_DESCRIPTION]);
         $configuration->setComplexQuestionId($this->complex_question->get_id());
         $configuration->setToVisibleQuestionIds($this->get_to_visible_question_ids($values));
         $configuration->setAnswerMatches($this->create_answers($values));
         
         $duplicate = $this->isDuplicate($configuration);
-             
+        
         if (! $duplicate)
         {
             $time = time();
             $configuration->setUpdated($time);
             
-            if($this->configuration){
+            if ($this->configuration)
+            {
                 $configuration->set_id($this->configuration->get_id());
                 $succes = $configuration->update();
-                
-            }else{
+            }
+            else
+            {
                 $configuration->setCreated($time);
                 $succes = $configuration->create();
             }
- 
-            if($succes){
-               $this->configuration = $configuration; 
+            
+            if ($succes)
+            {
+                $this->configuration = $configuration;
             }
             return $succes;
         }
@@ -273,18 +258,21 @@ class ConfigureQuestionForm extends FormValidator
 
     private function create_answers($values)
     {
-        
-//         var_dump($values);
-//         exit;
-        
-        $keys = array_keys($values);
+        $answerService = $this->parent->getApplicationConfiguration()->getAnswerService();
+        $answerIds = $this->complex_question->getAnswerIds($answerService->getPrefix());
         $answers = array();
-        foreach ($keys as $key)
+        
+        foreach ($answerIds as $answerId)
         {
-            $ids = explode('_', $key);
-            if ($ids[0] == $this->complex_question->get_id())
+            $answer = $values[$answerId];
+            if ($answer)
             {
-                $answers[$key] = $values[$key];
+                $ids = explode('_', $answerId);
+                $reverseIds = array_reverse($ids);
+                array_pop($reverseIds);
+                $ids = array_reverse($reverseIds);
+                $answerId = implode('_', $ids);
+                $answers[$answerId] = $answer;
             }
         }
         return $answers;
@@ -297,15 +285,9 @@ class ConfigureQuestionForm extends FormValidator
         
         foreach ($configs as $conf)
         {
-           $answer_diff = array_diff_assoc(
-                $configuration->getAnswerMatches(), 
-                $conf->getAnswerMatches());
-            $same_from_id = $configuration->getComplexQuestionId() ==
-                 $conf->getComplexQuestionId();
-            $to_ids_diff = array_diff(
-                $configuration->getToVisibleQuestionIds(), 
-                $conf->getToVisibleQuestionIds());
-            
+            $answer_diff = array_diff_assoc($configuration->getAnswerMatches(), $conf->getAnswerMatches());
+            $same_from_id = $configuration->getComplexQuestionId() == $conf->getComplexQuestionId();
+            $to_ids_diff = array_diff($configuration->getToVisibleQuestionIds(), $conf->getToVisibleQuestionIds());
             
             if ($same_from_id && count($answer_diff) == 0 && count($to_ids_diff) == 0)
             {
@@ -369,10 +351,10 @@ class ConfigureQuestionForm extends FormValidator
         
         return $complex_question_ids;
     }
-    
-    public function getConfiguration(){
+
+    public function getConfiguration()
+    {
         return $this->configuration;
     }
-    
 }
 ?>

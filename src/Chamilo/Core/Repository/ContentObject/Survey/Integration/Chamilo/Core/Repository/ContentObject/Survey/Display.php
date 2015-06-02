@@ -3,11 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Integration\Chamilo\Core\
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 class Display extends PageDisplay
 {
 
-    function process(ComplexContentObjectPathNode $complexContentObjectPathNode, $answer)
+    function process(ComplexContentObjectPathNode $complexContentObjectPathNode, AnswerServiceInterface $answer)
     {
         $survey = $complexContentObjectPathNode->get_content_object();
         

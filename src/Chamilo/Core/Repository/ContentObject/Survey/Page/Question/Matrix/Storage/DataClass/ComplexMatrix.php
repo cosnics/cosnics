@@ -40,24 +40,33 @@ class ComplexMatrix extends ComplexContentObjectItem implements PageDisplayItem
         $this->set_visible(! $this->get_visible());
     }
 
-    public function get_answer_ids()
+    public function getAnswerIds($prefix = null)
     {
         $answer_ids = array();
         $content_object = $this->get_ref_object();
         
+        if ($prefix)
+        {
+            $answerId = $prefix . '_' . $this->get_id();
+        }
+        else
+        {
+            $answerId = $this->get_id();
+        }
+        
         foreach ($content_object->get_options() as $option)
         {
-          
+            
             if ($content_object->get_matrix_type() == Matrix :: MATRIX_TYPE_CHECKBOX)
             {
                 foreach ($content_object->get_matches() as $match)
                 {
-                    $answer_ids[] = $this->get_id() . '_' . $option->get_id() . '_' . $match->get_id();
+                    $answer_ids[] = $answerId. '_' . $option->get_id(). '_' . $match->get_id();
                 }
             }
             else
             {
-                $answer_ids[] = $this->get_id() . '_' . $option->get_id();
+                $answer_ids[] = $answerId. '_' . $option->get_id() ;
             }
         }
         

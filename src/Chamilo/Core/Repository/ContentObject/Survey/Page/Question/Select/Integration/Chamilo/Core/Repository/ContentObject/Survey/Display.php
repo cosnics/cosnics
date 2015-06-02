@@ -6,13 +6,14 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 class Display extends QuestionDisplay
 {
 
     private $question;
 
-    function process(ComplexContentObjectPathNode $complexContentObjectPathNode, $answer)
+    function process(ComplexContentObjectPathNode $complexContentObjectPathNode, AnswerServiceInterface $answerService)
     {
         $formValidator = $this->get_formvalidator();
              
@@ -24,8 +25,9 @@ class Display extends QuestionDisplay
         
         $formRendition->setFormValidator($formValidator);
         $formRendition->setComplexContentObjectPathNode($complexContentObjectPathNode);
+        $formRendition->setPrefix($answerService->getPrefix());
         $formValidator = $formRendition->initialize();
-        $formValidator->setDefaults($answer);
+        $formValidator->setDefaults($answerService->getAnswer($complexContentObjectPathNode->get_id()));
     }
 }
 ?>

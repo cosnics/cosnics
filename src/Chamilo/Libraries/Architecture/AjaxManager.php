@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -23,12 +24,11 @@ abstract class AjaxManager extends Application
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
-    public function __construct($user = null, $application = null)
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($user, $application);
+        parent :: __construct($applicationConfiguration);
         $this->validateRequest();
     }
 

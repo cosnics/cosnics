@@ -3,24 +3,25 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 abstract class PageDisplay
 {
 
-    protected  $formvalidator;
+    protected $formvalidator;
 
     protected $complex_content_object_path_node;
 
     protected $renderer;
     
-    protected $answer;
+    protected $answerService;
 
-    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
+    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answerService)
     {
         $this->formvalidator = $formvalidator;
         $this->renderer = $formvalidator->defaultRenderer();
         $this->complex_content_object_path_node = $complex_content_object_path_node;
-        $this->answer = $answer;
+        $this->answerService = $answerService;
     }
 
     function get_renderer()
@@ -38,11 +39,11 @@ abstract class PageDisplay
         $formvalidator = $this->formvalidator;
         
         $this->addHeader();
-        $this->process($this->complex_content_object_path_node, $this->answer);
+        $this->process($this->complex_content_object_path_node, $this->answerService);
         $this->addFooter();
     }
 
-    abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, $answer);
+    abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService);
 
     function addHeader()
     {
@@ -60,7 +61,7 @@ abstract class PageDisplay
         $formvalidator->addElement('html', $footer);
     }
 
-    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answer)
+    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService)
     {
         $content_object = $complex_content_object_path_node->get_content_object();
         $package = $content_object->package();
@@ -69,7 +70,7 @@ abstract class PageDisplay
         
         if (class_exists($class))
         {
-            $display = new $class($formvalidator, $complex_content_object_path_node, $answer);
+            $display = new $class($formvalidator, $complex_content_object_path_node, $answerService);
         }
         else
         {

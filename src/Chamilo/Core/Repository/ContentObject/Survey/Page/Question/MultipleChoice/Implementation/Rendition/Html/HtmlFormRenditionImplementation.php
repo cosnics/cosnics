@@ -56,13 +56,21 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $element_template = implode(PHP_EOL, $element_template);
      
         $questionId = $this->getQuestionId();
-   
+        
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
         
         if ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formValidator->createElement(
                 'advmultiselect', 
-                $questionId, 
+                $questionName, 
                 '', 
                 $answer_options, 
                 array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
@@ -74,14 +82,14 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         {
             $select_box = $formValidator->createElement(
                 'select', 
-                $questionId, 
+                $questionName, 
                 '', 
                 $answer_options, 
                 'class="select_question"');
             $formValidator->addElement($select_box);
         }
         
-        $renderer->setElementTemplate($element_template, $questionId);
+        $renderer->setElementTemplate($element_template, $questionName);
         return $formValidator;
     }
 
@@ -105,6 +113,15 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
        
         $questionId = $this->getQuestionId();
         
+        if ($this->getPrefix())
+        {
+            $questionName = $this->getPrefix() . '_' . $questionId;
+        }
+        else
+        {
+            $questionName = $questionId;
+        }
+        
         foreach ($options as $option)
         {
             $i = $option->get_id();
@@ -112,14 +129,14 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             
             if ($type == MultipleChoice :: ANSWER_TYPE_RADIO)
             {
-                $option_name = $questionId;
+                $option_name = $questionName;
                 $radio_button = $formValidator->createElement('radio', $option_name, null, null, $i);
                 $group[] = $radio_button;
                 $group[] = $formValidator->createElement('static', null, null, $option->get_value());
             }
             elseif ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
             {
-                $option_name = $questionId . '_' . $i;
+                $option_name = $questionName . '_' . $i;
                 $check_box = $formValidator->createElement('checkbox', $option_name, null, null, null, $i);
                 $group[] = $check_box;
                 $group[] = $formValidator->createElement('static', null, null, $option->get_value());
@@ -133,6 +150,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $i);
         }
         
+        $table_footer = array();
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formValidator->addElement('html', implode(PHP_EOL, $table_footer));

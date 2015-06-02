@@ -12,6 +12,12 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
+     */
+    private $applicationConfiguration;
     const TEMPORARY_STORAGE = 'survey_page_preview';
     const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
     const PARAM_PARAMETERS = 'parameters';
@@ -20,4 +26,6 @@ abstract class Manager extends AjaxManager
     const PARAM_ANSWER_ID = 'answer_id';
     const PARAM_ANSWER_VALUE = 'answer_value';
     const PARAM_QUESTION_VISIBILITY = 'question_visibility';
+    
+  
 }

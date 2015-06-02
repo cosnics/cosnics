@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Component\Viewer\Form;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
+use Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode;
 
 class ViewerComponent extends TabComponent
 {
@@ -26,15 +28,15 @@ class ViewerComponent extends TabComponent
         {
             $action = $this->get_action();
             
-            $this->save_answers();
+            $this->saveAnswers();
             
             if ($action == self :: FORM_BACK)
             {
-                $this->current_step = $this->current_step-1;
+                $this->current_step = $this->current_step - 1;
             }
             elseif ($action == self :: FORM_NEXT)
             {
-                $this->current_step = $this->current_step+1;
+                $this->current_step = $this->current_step + 1;
             }
             elseif ($action == self :: FORM_SUBMIT)
             {
@@ -131,41 +133,50 @@ class ViewerComponent extends TabComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function get_answer($complex_question_id)
+    private function saveAnswers()
     {
-        return $this->get_parent()->get_answer($complex_question_id);
-    }
-
-    public function save_answers()
-    {
-        if ($this->get_current_complex_content_object_item() instanceof ComplexPage)
+        if ($this->get_current_complex_content_object_item() instanceof PageDisplayItem)
         {
-            
-            $nodes = $this->get_current_content_object()->get_complex_content_object_path()->get_nodes();
+            $this->saveAnswer($this->get_current_node());
+        }
+        elseif ($this->get_current_complex_content_object_item() instanceof ComplexPage)
+        {
+            $nodes = $this->get_current_complex_content_object_path_node()->get_descendants();
             
             foreach ($nodes as $node)
             {
                 if (! $node->is_root())
                 {
-                    $complex_content_object_item = $node->get_complex_content_object_item();
-                    $answer_ids = $complex_content_object_item->get_answer_ids();
-                    $answers = array();
+                   $this->saveAnswer($node);
                     
-                    foreach ($answer_ids as $answer_id)
-                    {
-                        $answer = Request :: post($answer_id);
-                        if ($answer)
-                        {
-                            $answers[$answer_id] = Request :: post($answer_id);
-                        }
-                    }
-                    
-                    if (count($answers) > 0)
-                    {
-                        $this->get_parent()->save_answer($complex_content_object_item->get_id(), $answers);
-                    }
                 }
             }
+        }
+    }
+    
+    private function saveAnswer(ComplexContentObjectPathNode $node)
+    {
+        $answerService = $this->getApplicationConfiguration()->getAnswerService();
+        $complexContentObjectItem = $node->get_complex_content_object_item();
+        $answerIds = $complexContentObjectItem->getAnswerIds($answerService->getPrefix());
+        
+        $answers = $answerService->getAnswer($node->get_id());
+        
+        foreach ($answerIds as $answerId)
+        {
+            $answer = Request :: post($answerId);
+            if ($answer)
+            {
+                $answers[$answerId] = $answer;
+            }
+            else
+            {
+                unset($answers[$answerId]);
+            }
+        }
+        
+        if($answers){
+            $answerService->saveAnswer($node->get_id(), $answers);
         }
     }
 }
