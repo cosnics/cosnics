@@ -55,67 +55,67 @@ class ContentObjectCopier
             $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
             return false;
         }
-        
+
         if (! is_array($this->content_object_ids))
         {
             $this->content_object_ids = array($this->content_object_ids);
         }
-        
+
         $export_content_object_ids = array();
         foreach ($this->content_object_ids as $content_object_id)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 $content_object_id);
-            
+
             $export_content_object_ids[] = $content_object_id;
         }
-        
+
         if (! $export_content_object_ids)
         {
             $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
             return false;
         }
-        
+
         $export_parameters = new ExportParameters(
-            $this->source_user_id, 
-            ContentObjectExport :: FORMAT_CPO, 
+            $this->source_user_id,
+            ContentObjectExport :: FORMAT_CPO,
             $export_content_object_ids);
-        
+
         $exporter = ContentObjectExportController :: factory($export_parameters);
-        
+
         $path = $exporter->run();
-        
+
         $file = FileProperties :: from_path($path);
         $path_info = pathinfo($path);
         $new_path = $path_info['dirname'] . DIRECTORY_SEPARATOR . $file->get_name() . '.cpo';
-        
+
         Filesystem :: move_file($path, $new_path);
         $file = FileProperties :: from_path($new_path);
-        
+
         $parameters = ImportParameters :: factory(
-            ContentObjectImport :: FORMAT_CPO, 
-            $this->target_user_id, 
-            $this->target_category, 
+            ContentObjectImport :: FORMAT_CPO,
+            $this->target_user_id,
+            $this->target_category,
             $file);
         $controller = ContentObjectImportController :: factory($parameters);
         $content_object_ids = $controller->run();
-        
+
         $this->messages = $controller->get_messages();
-        
+
         if ($this->source_user_id == $this->target_user_id)
         {
             $this->change_content_object_names($content_object_ids);
         }
-        
+
         Filesystem :: remove($new_path);
-        
+
         return $content_object_ids;
     }
 
     /**
      * Adds a message to the message list
-     * 
+     *
      * @param String $message
      * @param int $type
      */
@@ -125,13 +125,13 @@ class ContentObjectCopier
         {
             $this->messages[$type] = array();
         }
-        
+
         $this->messages[$type][] = $message;
     }
 
     /**
      * Checks wether the object has messages
-     * 
+     *
      * @return booleans
      */
     public function has_messages($type)
@@ -141,7 +141,7 @@ class ContentObjectCopier
 
     /**
      * Retrieves the list of messages
-     * 
+     *
      * @return Array
      */
     public function get_messages($type = null)
@@ -168,7 +168,7 @@ class ContentObjectCopier
     {
         $messages = array();
         $message_types = array();
-        
+
         foreach ($this->get_messages() as $type => $type_messages)
         {
             foreach ($type_messages as $message)
@@ -177,28 +177,28 @@ class ContentObjectCopier
                 $message_types[] = $type;
             }
         }
-        
+
         return array(Application :: PARAM_MESSAGE => $messages, Application :: PARAM_MESSAGE_TYPE => $message_types);
     }
 
     /**
      * Changes the title of the duplicated content objects by adding a copy value to show which object is the copied
      * one.
-     * 
+     *
      * @param array $content_object_ids
      */
     protected function change_content_object_names(array $content_object_ids)
     {
         DataClassCache :: reset();
-        
+
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
             $content_object_ids);
-        
+
         $parameters = new DataClassRetrievesParameters($condition);
-        
+
         $content_objects = DataManager :: retrieve_content_objects(ContentObject :: class_name(), $parameters);
-        
+
         while ($content_object = $content_objects->next_result())
         {
             $content_object->set_title($content_object->get_title() . ' (' . Translation :: get('Copy') . ')');

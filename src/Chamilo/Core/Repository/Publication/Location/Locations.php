@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Location;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+
 /**
  *
  * @package core\repository\publication
@@ -51,6 +53,16 @@ class Locations
     public function get_context()
     {
         return $this->context;
+    }
+
+    public function get_package()
+    {
+        return ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_context());
+    }
+
+    public function get_application()
+    {
+        return ClassnameUtilities :: getInstance()->getNamespaceParent($this->get_context(), 5);
     }
 
     /**

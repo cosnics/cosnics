@@ -275,7 +275,9 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_locations($content_object, $user = null)
     {
-        $locations = new Locations(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
+        $applicationContext = \Chamilo\Application\Calendar\Extension\Personal\Manager :: context();
+
+        $locations = new Locations(__NAMESPACE__);
         $allowed_types = self :: get_allowed_content_object_types();
 
         $type = $content_object->get_type();
@@ -283,9 +285,7 @@ class Manager implements PublicationInterface
         if (in_array($type, $allowed_types))
         {
             $locations->add_location(
-                new Location(
-                    __NAMESPACE__,
-                    Translation :: get('TypeName', null, \Chamilo\Application\Calendar\Manager :: context())));
+                new Location($applicationContext, Translation :: get('TypeName', null, $applicationContext)));
         }
 
         return $locations;
@@ -302,7 +302,7 @@ class Manager implements PublicationInterface
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
-                ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }
 
         return $types;

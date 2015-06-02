@@ -104,7 +104,7 @@ abstract class LocationSelector
 
             $group[] = $form_validator->createElement(
                 'checkbox',
-                $this->get_checkbox_name($locations->get_context()),
+                $this->get_checkbox_name($locations->get_package()),
                 null,
                 null,
                 null,
