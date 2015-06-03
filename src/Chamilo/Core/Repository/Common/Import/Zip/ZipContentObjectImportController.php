@@ -377,7 +377,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
 
         $category->set_name(
             DataManager :: create_unique_category_name(
-                $this->get_parameters()->get_user(),
+                $this->get_parameters()->getWorkspace(),
                 $parent_category->get_id(),
                 $base_name));
 
