@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -360,6 +361,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
         $copier = new ContentObjectCopier(
             array($object->get_id()),
             $this->get_user_id(),
+            new PersonalWorkspace($this->assignment->get_owner_id()),
             $this->assignment->get_owner_id(),
             $category_id);
         $content_object_ids = $copier->run();

@@ -542,7 +542,13 @@ EOT;
             $group = array();
             $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_CATEGORY . '">');
             $group[] = $this->createElement('static', null, null, Translation :: get('AddNewCategory'));
-            $group[] = $this->createElement('text', self :: NEW_CATEGORY);
+            $group[] = $this->createElement(
+                'text',
+                self :: NEW_CATEGORY,
+                null,
+                array(
+                    'data-workspace-type' => $this->get_workspace()->getWorkspaceType(),
+                    'data-workspace-id' => $this->get_workspace()->getId()));
             $group[] = $this->createElement('static', null, null, '</div>');
             $this->addGroup($group);
         }
