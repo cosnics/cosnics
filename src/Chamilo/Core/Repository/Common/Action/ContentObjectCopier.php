@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -38,14 +38,22 @@ class ContentObjectCopier
 
     private $source_user_id;
 
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $target_workspace;
+
     private $target_user_id;
 
     private $target_category;
 
-    public function __construct($content_object_ids, $source_user_id, $target_user_id, $target_category = 0)
+    public function __construct($content_object_ids, $source_user_id, WorkspaceInterface $target_workspace,
+        $target_user_id, $target_category = 0)
     {
         $this->content_object_ids = $content_object_ids;
         $this->source_user_id = $source_user_id;
+        $this->target_workspace = $target_workspace;
         $this->target_user_id = $target_user_id;
         $this->target_category = $target_category;
     }
@@ -102,7 +110,7 @@ class ContentObjectCopier
         $parameters = ImportParameters :: factory(
             ContentObjectImport :: FORMAT_CPO,
             $this->target_user_id,
-            new PersonalWorkspace($targetUser),
+            $this->target_workspace,
             $this->target_category,
             $file);
         $controller = ContentObjectImportController :: factory($parameters);
