@@ -36,12 +36,17 @@ class PublisherComponent extends Manager
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
+            $this->getRequest()->query->set(
+                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION,
+                \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER);
+
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
             $component = $factory->getComponent();
             $component->set_excluded_objects($this->getExcludedObjects());
+            $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER));
             return $component->run();
         }
         else

@@ -2,10 +2,8 @@
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace;
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 
 /**
  *
@@ -17,15 +15,19 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 class WorkspaceTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
-        return DataManager :: retrieves(Workspace :: class_name(), $parameters);
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        return $workspaceService->getWorkspacesByCreator(
+            $this->get_component()->get_user(),
+            $limit,
+            $offset,
+            $orderProperty);
     }
 
     public function count_data($condition)
     {
-        $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(Workspace :: class_name(), $parameters);
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        return $workspaceService->countWorkspacesByCreator($this->get_component()->get_user());
     }
 }

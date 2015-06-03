@@ -35,7 +35,7 @@ class WorkspaceCategoryItem extends CategoryItem
                 $workspaceItem->setWorkspaceId($workspace->getId());
                 $workspaceItem->setName($workspace->getName());
                 $workspaceItem->set_parent($this->get_item()->get_id());
-                $workspaceItem->set_display();
+                $workspaceItem->set_display($this->get_item()->get_display());
 
                 $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $workspaceItem);
             }
@@ -43,7 +43,7 @@ class WorkspaceCategoryItem extends CategoryItem
 
         $configurationItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceConfigureItem();
         $configurationItem->set_parent($this->get_item()->get_id());
-        $configurationItem->set_display();
+        $configurationItem->set_display($this->get_item()->get_display());
 
         $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $configurationItem);
 

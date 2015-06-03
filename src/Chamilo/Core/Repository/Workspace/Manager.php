@@ -26,6 +26,8 @@ abstract class Manager extends Application
     const ACTION_SHARE = 'Share';
     const ACTION_UNSHARE = 'Unshare';
     const ACTION_PUBLISH = 'Publisher';
+    const ACTION_BROWSE_PERSONAL = 'PersonalBrowser';
+    const ACTION_BROWSE_SHARED = 'SharedBrowser';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;

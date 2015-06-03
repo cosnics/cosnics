@@ -38,14 +38,16 @@ class WorkspaceConfigureItem extends Bar
 
         if ($this->get_item()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Integration\Chamilo\Core\Menu', 'ConfigureWorkspaces');
+            $imagePath = Theme :: getInstance()->getImagePath(
+                'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
+                'ConfigureWorkspaces');
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
         if ($this->get_item()->show_title())
         {
-            $html[] = $title;
+            $html[] = '<em>' . $title . '</em>';
         }
 
         $html[] = '</a>';
