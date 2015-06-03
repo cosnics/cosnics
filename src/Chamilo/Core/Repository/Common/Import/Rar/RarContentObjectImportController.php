@@ -256,7 +256,7 @@ class RarContentObjectImportController extends ContentObjectImportController
         $category = new RepositoryCategory();
         $category->set_name(
             DataManager :: create_unique_category_name(
-                $this->get_parameters()->get_user(),
+                $this->get_parameters()->getWorkspace(),
                 $this->created_categories[md5($dir_name)]->get_id(),
                 $base_name));
         $category->set_parent($this->created_categories[md5($dir_name)]->get_id());

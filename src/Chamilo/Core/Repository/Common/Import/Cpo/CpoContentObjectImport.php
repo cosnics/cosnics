@@ -20,6 +20,7 @@ class CpoContentObjectImport extends ContentObjectImport
 
         $content_object->set_owner_id(
             $this->get_import_implementation()->get_controller()->get_parameters()->get_user());
+
         // default_properties
         $import_properties = array(
             ContentObject :: PROPERTY_TITLE,
@@ -58,7 +59,8 @@ class CpoContentObjectImport extends ContentObjectImport
         {
             $parent_id = $this->get_import_implementation()->get_controller()->get_parameters()->get_category();
         }
-        $content_object->set_parent_id($parent_id);
+        $content_object->set_parent_id(
+            $this->get_import_implementation()->get_controller()->determine_parent_id($parent_id));
 
         // additional_properties
         foreach ($content_object->get_additional_property_names() as $additional_property)
