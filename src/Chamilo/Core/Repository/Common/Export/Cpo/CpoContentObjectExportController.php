@@ -23,6 +23,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use DOMDocument;
 use DOMXPath;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class CpoContentObjectExportController extends ContentObjectExportController
 {
@@ -413,9 +416,23 @@ class CpoContentObjectExportController extends ContentObjectExportController
         if ($this->get_parameters()->has_categories() &&
              $content_object->get_owner_id() == $this->get_parameters()->get_user())
         {
-            if (! $this->in_category_id_cache($content_object->get_parent_id()))
+            if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
             {
-                $this->process_category($content_object->get_parent_id());
+                $parent_id = $content_object->get_parent_id();
+            }
+            else
+            {
+                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+                $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                    $this->get_parameters()->getWorkspace(),
+                    $content_object);
+
+                $parent_id = $contentObjectRelation->getCategoryId();
+            }
+
+            if (! $this->in_category_id_cache($parent_id))
+            {
+                $this->process_category($parent_id);
             }
         }
 

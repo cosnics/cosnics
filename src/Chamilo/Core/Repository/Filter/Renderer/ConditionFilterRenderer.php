@@ -143,9 +143,7 @@ class ConditionFilterRenderer extends FilterRenderer
             }
             else
             {
-                $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
-
-                if ($category instanceof RepositoryCategory)
+                if ($category_id == 0)
                 {
                     if ($this->get_workspace() instanceof PersonalWorkspace)
                     {
@@ -166,7 +164,31 @@ class ConditionFilterRenderer extends FilterRenderer
                 }
                 else
                 {
-                    $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
+
+                    if ($category instanceof RepositoryCategory || $category == 0)
+                    {
+                        if ($this->get_workspace() instanceof PersonalWorkspace)
+                        {
+                            $conditions[] = new EqualityCondition(
+                                new PropertyConditionVariable(
+                                    ContentObject :: class_name(),
+                                    ContentObject :: PROPERTY_PARENT_ID),
+                                new StaticConditionVariable($category_id));
+                        }
+                        else
+                        {
+                            $conditions[] = new EqualityCondition(
+                                new PropertyConditionVariable(
+                                    WorkspaceContentObjectRelation :: class_name(),
+                                    WorkspaceContentObjectRelation :: PROPERTY_CATEGORY_ID),
+                                new StaticConditionVariable($category_id));
+                        }
+                    }
+                    else
+                    {
+                        $filter_data->set_filter_property(FilterData :: FILTER_CATEGORY, null);
+                    }
                 }
             }
         }
