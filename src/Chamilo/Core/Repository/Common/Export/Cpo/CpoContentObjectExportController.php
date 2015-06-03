@@ -361,6 +361,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         {
             $condition = null;
         }
+
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
 
@@ -371,11 +372,12 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $this->process($content_object);
             }
         }
+
         if ($this->get_parameters()->has_categories())
         {
             $this->process_categories();
         }
-        // dump(htmlentities($this->dom_document->saveXML()));
+
         $this->dom_document->save($this->get_xml_path());
         return $this->zip();
     }
@@ -405,7 +407,9 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $content_object,
             ContentObjectExport :: FORMAT_CPO,
             $this->get_parameters()->get_type());
+
         $this->set_id_cache($content_object->get_id());
+
         if ($this->get_parameters()->has_categories() &&
              $content_object->get_owner_id() == $this->get_parameters()->get_user())
         {
@@ -414,6 +418,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $this->process_category($content_object->get_parent_id());
             }
         }
+
         if ($content_object->has_versions())
         {
             $content_object_versions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_versions(
@@ -668,6 +673,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function process_categories()
     {
         $cache_category_ids = $this->get_category_id_cache();
+
         if (count($cache_category_ids) > 1)
         {
 
