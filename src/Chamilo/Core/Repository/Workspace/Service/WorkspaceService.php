@@ -78,7 +78,7 @@ class WorkspaceService
         }
         else
         {
-            return $this->getUserPersonalWorkspace($user);
+            return $this->getPersonalWorkspaceForUser($user);
         }
     }
 
@@ -87,9 +87,29 @@ class WorkspaceService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace
      */
-    public function getUserPersonalWorkspace(User $user)
+    public function getPersonalWorkspaceForUser(User $user)
     {
         return new PersonalWorkspace($user);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspacesByCreator(User $user)
+    {
+        return $this->getWorkspaceRepository()->findWorkspacesByCreator($user);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countWorkspacesByCreator(User $user)
+    {
+        return $this->getWorkspaceRepository()->countWorkspacesByCreator($user);
     }
 
     /**
