@@ -75,7 +75,9 @@ $(function()
     {
         checkTitle();
         var ajaxUri = getPath('WEB_PATH') + 'index.php';
-        var categoryName = $('input[name="new_category"]').attr("value");
+        var categoryNameElement = $('input[name="new_category"]');
+        
+        var categoryName = categoryNameElement.val();
         var parentId = $('select[name="parent_id"]').attr("value");
 
         if (categoryName.length == 0)
@@ -93,7 +95,9 @@ $(function()
                 'application' : 'Chamilo\\Core\\Repository\\Ajax',
                 'go' : 'check_category_name',
                 'name' : categoryName,
-                'parent_id' : parentId
+                'parent_id' : parentId,
+                'workspace_type' : categoryNameElement.data('workspace-type'),
+                'workspace_id': categoryNameElement.data('workspace-id')
             };
 
             var response = $.ajax({

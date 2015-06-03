@@ -1120,18 +1120,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $content_object_id type
      * @return DataClass
      */
-    public static function create_unique_category_name($user_id, $parent_id, $category_name)
+    public static function create_unique_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
     {
         $index = 0;
         $old_category_name = $category_name;
-        while (self :: check_category_name($user_id, $parent_id, $category_name))
+        while (self :: check_category_name($workspace, $parent_id, $category_name))
         {
             $category_name = $old_category_name . ' (' . ++ $index . ')';
         }
         return $category_name;
     }
 
-    public static function check_category_name($user_id, $parent_id, $category_name)
+    public static function check_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -1142,10 +1142,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($parent_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
-            new StaticConditionVariable($user_id));
+            new StaticConditionVariable($workspace->getId()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable(PersonalWorkspace :: WORKSPACE_TYPE));
+            new StaticConditionVariable($workspace->getWorkspaceType()));
         $condition = new AndCondition($conditions);
 
         return self :: count(RepositoryCategory :: class_name(), $condition) > 0;

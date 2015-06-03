@@ -21,8 +21,11 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMXPath;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 
 class CpoContentObjectImportController extends ContentObjectImportController
 {
@@ -279,10 +282,10 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $category = new RepositoryCategory();
         $base_name = $this->dom_xpath->query('name', $node)->item(0)->nodeValue;
         $category->set_name(
-            DataManager :: create_unique_category_name($this->get_parameters()->get_user(), $parent_id, $base_name));
+            DataManager :: create_unique_category_name($this->get_parameters()->getWorkspace(), $parent_id, $base_name));
         $category->set_parent($parent_id);
-        $category->set_user_id($this->get_parameters()->get_user());
-        $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
+        $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
+        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
 
         if (! $category->create())
         {
@@ -608,6 +611,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->update_helpers($content_object_node, $content_object);
         $content_object->create();
 
+        $this->process_workspace_category($content_object_node, $content_object);
+
         $this->set_content_object_id_cache_id($content_object_node->getAttribute('id'), $content_object->get_id());
 
         $this->create_attachments($content_object_node);
@@ -622,6 +627,29 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue),
             $content_object_parameter,
             $content_object);
+    }
+
+    public function process_workspace_category($contentObjectNode, $contentObject)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof Workspace)
+        {
+            $parentId = $this->dom_xpath->query('general/parent_id', $contentObjectNode)->item(0)->nodeValue;
+
+            if ($parentId != 0)
+            {
+                $parentId = $this->get_category_id_cache_id($parentId);
+            }
+            else
+            {
+                $parentId = $this->get_parameters()->get_category();
+            }
+
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService->createContentObjectRelation(
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->getId(),
+                $parentId);
+        }
     }
 
     public function unzip()
@@ -671,5 +699,21 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public static function is_available()
     {
         return true;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function determine_parent_id($parent_id)
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $parent_id;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
