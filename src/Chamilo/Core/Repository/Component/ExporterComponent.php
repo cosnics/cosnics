@@ -70,29 +70,40 @@ class ExporterComponent extends Manager
         if (count($content_object_ids) > 0 || count($category_ids) > 0)
         {
             $type = Request :: get(self :: PARAM_EXPORT_TYPE);
-            $export_parameters = new ExportParameters($this->get_user_id(), $type, $content_object_ids, $category_ids);
+            $export_parameters = new ExportParameters(
+                $this->getWorkspace(),
+                $this->get_user_id(),
+                $type,
+                $content_object_ids,
+                $category_ids);
+
             if (! $type)
             {
                 $table_data = $this->export_table($export_parameters->get_content_object_ids());
 
                 $table_row = array(' ', ' ', count($export_parameters->get_content_object_ids()));
+
                 foreach (ContentObjectExport :: get_types() as $export_type)
                 {
                     if ($this->is_exportable[$export_type])
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CONTENT_OBJECT_ID,
-                                $this->get_export_types_cache($export_type),
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CONTENT_OBJECT_ID,
+                                    $this->get_export_types_cache($export_type),
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CATEGORY_ID,
-                                $category_ids,
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CATEGORY_ID,
+                                    $category_ids,
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                     }
                     else
@@ -105,6 +116,7 @@ class ExporterComponent extends Manager
                             ToolbarItem :: DISPLAY_ICON);
                     }
                 }
+
                 $table_data[] = $table_row;
 
                 $export_table = new ExportTable($table_data);

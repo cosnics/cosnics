@@ -12,6 +12,11 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 class ExportParameters
 {
@@ -25,19 +30,26 @@ class ExportParameters
 
     private $format = ContentObjectExport :: FORMAT_CPO;
 
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $workspace;
+
     private $user;
 
     private $category_content_object_ids;
 
-    public function __construct($user, $format = ContentObjectExport :: FORMAT_CPO, $content_object_ids = array(), $category_ids = array(), 
-        $type = ContentObjectExport :: TYPE_DEFAULT)
+    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport :: FORMAT_CPO, $content_object_ids = array(),
+        $category_ids = array(), $type = ContentObjectExport :: TYPE_DEFAULT)
     {
+        $this->workspace = $workspace;
         $this->user = $user;
         $this->type = $type;
         $this->content_object_ids = $content_object_ids;
         $this->category_ids = $category_ids;
         $this->format = $format;
-        
+
         if (count($content_object_ids) > 0 && count($category_ids) > 0)
         {
             throw new Exception(Translation :: get('ChooseContentObjectsOrCategories'));
@@ -56,31 +68,63 @@ class ExportParameters
             {
                 if (in_array(0, $this->get_category_ids()))
                 {
-                    $condition = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
-                        new StaticConditionVariable($this->get_user()));
+                    if ($this->getWorkspace() instanceof PersonalWorkspace)
+                    {
+                        $condition = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                ContentObject :: class_name(),
+                                ContentObject :: PROPERTY_OWNER_ID),
+                            new StaticConditionVariable($this->get_user()));
+
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID);
+                    }
+                    else
+                    {
+                        $joins = new Joins();
+                        $joins->add(
+                            new Join(
+                                WorkspaceContentObjectRelation :: class_name(),
+                                new EqualityCondition(
+                                    new PropertyConditionVariable(
+                                        WorkspaceContentObjectRelation :: class_name(),
+                                        WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+                                    new PropertyConditionVariable(
+                                        ContentObject :: class_name(),
+                                        ContentObject :: PROPERTY_ID))));
+
+                        $condition = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                WorkspaceContentObjectRelation :: class_name(),
+                                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                            new StaticConditionVariable($this->getWorkspace()->getId()));
+
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID, $joins);
+                    }
                 }
                 else
                 {
                     $category_ids = array();
+
                     foreach ($this->get_category_ids() as $category_id)
                     {
                         $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
                         $category_ids[] = $category_id;
                         $category_ids = array_merge($category_ids, $category->get_children_ids());
                     }
-                    
+
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
+                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
                         new StaticConditionVariable($this->get_user()));
                     $conditions[] = new InCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID), 
+                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_PARENT_ID),
                         $category_ids);
+
                     $condition = new AndCondition($conditions);
+
+                    $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID);
                 }
-                
-                $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID);
+
                 $this->category_content_object_ids = DataManager :: distinct(ContentObject :: class_name(), $parameters);
             }
             return $this->category_content_object_ids;
@@ -152,6 +196,24 @@ class ExportParameters
     public function set_user($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    public function getWorkspace()
+    {
+        return $this->workspace;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
+     */
+    public function setWorkspace($workspace)
+    {
+        $this->workspace = $workspace;
     }
 
     /**
