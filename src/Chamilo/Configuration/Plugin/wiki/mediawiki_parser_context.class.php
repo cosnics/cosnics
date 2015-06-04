@@ -1,5 +1,5 @@
 <?php
-use core\repository\content_object\wiki\storage\data_class\Wiki;
+use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 class MediawikiParserContext
 {
 
