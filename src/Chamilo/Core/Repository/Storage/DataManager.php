@@ -333,7 +333,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 Manager :: package() . '\\ContentObject');
             foreach ($registrations as $registration)
             {
-                if ($registration->get_category() == 'helper')
+                if ($registration->get_category() == 'Helper')
                 {
                     $types[] = $registration->get_context() . '\Storage\DataClass\\' . StringUtilities :: getInstance()->createString(
                         $registration->get_name())->upperCamelize();
