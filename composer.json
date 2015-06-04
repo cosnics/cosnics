@@ -6,7 +6,7 @@
     "doctrine/dbal" : "2.4.*",
     "doctrine/cache" : "1.4.*",
     "phpunit/phpunit" : "4.4.*",
-           "pear-pear.php.net/HTML_Common" : "*",
+    "pear-pear.php.net/HTML_Common" : "*",
     "pear-pear.php.net/HTML_Menu" : "*",
     "pear-pear.php.net/HTML_Table" : "*",
     "pear-pear.php.net/HTML_QuickForm" : "*",
@@ -22,8 +22,7 @@
     "pear-pear.php.net/HTTP_Request2" : "*",
     "pear-pear.php.net/MDB2" : "*",
     "pear-pear.php.net/MDB2_Driver_mysqli" : "*",
-
-        "glenscott/soundcloud": "dev-psr-4"
+    "glenscott/soundcloud": "dev-psr-4"
     
   },
   "autoload": {
@@ -31,15 +30,20 @@
       "Chamilo\\": "src/Chamilo/"
     }
   },
-        "repositories" : [ {
-  		  	"type" : "pear",
-    		"url" : "http://pear.php.net"
-  			},
-   			{
-            "type": "git",
-            "url": "https://github.com/mptre/php-soundcloud"
-        	}
-   		],
+  "repositories" : [
+    {
+        "type" : "pear",
+        "url" : "http://pear.php.net"
+    },
+    {
+        "type": "git",
+        "url": "https://github.com/mptre/php-soundcloud"
+	},
+    {
+        "type": "vcs",
+        "url": "https://github.com/yakovlev-vladimir/FastFeed/"
+    }
+  ],
   "require-dev" : {
     "behat/behat" : "*",
     "behat/mink" : "*",

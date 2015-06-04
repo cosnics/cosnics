@@ -133,4 +133,9 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $conditions[false] = $this->get_full_condition();
         return $conditions;
     }
+
+    public function get_repository_browser()
+    {
+        return $this;
+    }
 }

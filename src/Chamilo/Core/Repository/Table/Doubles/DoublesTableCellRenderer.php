@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class DoublesTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -27,8 +29,8 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 $conditions = array();
 
                 $conditions[] = new EqualityCondition(
-                    ContentObject :: PROPERTY_CONTENT_HASH,
-                    $content_object->get_content_hash());
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_CONTENT_HASH),
+                    new StaticConditionVariable($content_object->get_content_hash()));
 
                 if ($this->condition)
                 {
@@ -43,8 +45,9 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
                 $title_short = StringUtilities :: getInstance()->truncate($title, 53, false);
-                return '<a href="' . htmlentities($this->browser->get_content_object_viewing_url($content_object)) .
-                     '" title="' . $title . '">' . $title_short . '</a>';
+                return '<a href="' .
+                     htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) . '" title="' .
+                     $title . '">' . $title_short . '</a>';
             case Theme :: getInstance()->getCommonImage(
                 'Action/Category',
                 'png',
@@ -54,7 +57,8 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $content_object->get_icon_image(Theme :: ICON_MINI);
 
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
+                return Utilities :: htmlentities(
+                    StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
         }
 
         return parent :: render_cell($column, $content_object);
