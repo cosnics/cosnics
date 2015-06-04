@@ -11,11 +11,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class ContentObjectExport
 {
-    const FORMAT_CPO = 'cpo';
-    const FORMAT_ICAL = 'ical';
-    const FORMAT_ZIP = 'zip';
-    const FORMAT_HTML = 'html';
-    const TYPE_DEFAULT = 'default';
+    const FORMAT_CPO = 'Cpo';
+    const FORMAT_ICAL = 'Ical';
+    const FORMAT_ZIP = 'Zip';
+    const FORMAT_HTML = 'Html';
+    const TYPE_DEFAULT = 'Default';
 
     private $export_implementation;
 
