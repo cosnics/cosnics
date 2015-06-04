@@ -12,7 +12,7 @@ class ViewComponent extends \Chamilo\Core\Repository\Display\Preview implements 
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

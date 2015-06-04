@@ -14,7 +14,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_complex_wiki_pages($type, $parameters = null)
     {
-        $parameters = \Chamilo\Core\Repository\Storage\DataManager :: prepare_complex_parameters(
+        $parameters = \Chamilo\Core\Repository\Storage\DataManager :: prepare_parameters(
             \Chamilo\Core\Repository\Storage\DataManager :: ACTION_RETRIEVES, 
             $type, 
             $parameters);
@@ -41,7 +41,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function count_complex_wiki_pages($type, $parameters = null)
     {
-        $parameters = \Chamilo\Core\Repository\Storage\DataManager :: prepare_complex_parameters(
+        $parameters = \Chamilo\Core\Repository\Storage\DataManager :: prepare_parameters(
             \Chamilo\Core\Repository\Storage\DataManager :: ACTION_COUNT, 
             $type, 
             $parameters);

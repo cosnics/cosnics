@@ -22,7 +22,7 @@ class PersonalBlogLayout extends BlogLayout
     public function display_blog_item(ComplexBlogItem $complex_blog_item)
     {
         $blog_item = $complex_blog_item->get_ref_object();
-        $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+        $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             User :: class_name(),
             (int) $blog_item->get_owner_id());
 
