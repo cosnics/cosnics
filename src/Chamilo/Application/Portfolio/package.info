@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Portfolio</name>
+		<code>Portfolio</code>
+		<context>Chamilo\Application\Portfolio</context>
+		<type>Chamilo\Application</type>
+		<category>social</category>
+		<authors>
+			<author>
+				<name>Hans De Bisschop</name>
+				<email>hans.de.bisschop@ehb.be</email>
+				<company>Erasmushogeschool Brussel</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description>&lt;p&gt;An electronic portfolio, also known as an
+			e-portfolio or digital portfolio, is a collection of
+			electronic
+			evidence assembled and managed by a user, usually on the Web. Such
+			electronic evidence may include inputted
+			text,
+			electronic files,
+			images, multimedia, blog entries, and hyperlinks. E-portfolios are
+			both demonstrations of the
+			user's abilities and platforms for
+			self-expression, and, if they are online, they can be maintained
+			dynamically over
+			time. Some e-portfolio applications permit varying
+			degrees of audience access, so the same portfolio might be used
+			for
+			multiple purposes.&lt;/p&gt; </description>
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Configuration</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+		<extra>
+			<default-install>1</default-install>
+		</extra>
+	</package>
+</packages>
