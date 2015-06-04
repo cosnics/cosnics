@@ -40,6 +40,17 @@ abstract class TabComponent extends Manager
 
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
+                self :: ACTION_FAVOURITE,
+                Translation :: get(self :: ACTION_FAVOURITE . 'Component'),
+                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_FAVOURITE),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_FAVOURITE)),
+                $this->get_action() == self :: ACTION_FAVOURITE,
+                false,
+                DynamicVisualTab :: POSITION_LEFT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+
+        $this->tabsRenderer->add_tab(
+            new DynamicVisualTab(
                 self :: ACTION_BROWSE_PERSONAL,
                 Translation :: get(self :: ACTION_BROWSE_PERSONAL . 'Component'),
                 Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_PERSONAL),
