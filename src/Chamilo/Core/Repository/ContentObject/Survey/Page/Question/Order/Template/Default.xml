@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Order">
+	<properties>
+		<name>Default</name>
+		<question edit="1"></question>
+		<instruction edit="1"></instruction>
+		<display_type edit="1">TwoColumn</display_type>
+		<order_limit edit="1">3</order_limit>
+		<options edit="1" sort="1">
+			<option display_order="1"></option>
+			<option display_order="2"></option>
+			<option display_order="3"></option>
+		</options>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Order Question</translation>
+			<translation language="nl"></translation>
+		</variable>
+	</translations>
+</template>
