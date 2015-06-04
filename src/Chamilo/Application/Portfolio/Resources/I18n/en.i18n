@@ -6,7 +6,7 @@
 TypeName = "Portfolio"
 TypeCategory = "Applications"
 GoBackHome = "Go back to my portfolio"
-NoInstructionYetDescription = "Start using your portfolio by adding an introduction. Afterwards start by adding folders and/or other content to fill your portfolio.<br />< br/>"
+NoInstructionYetDescription = "Start using your portfolio by adding an introduction. Afterwards start by adding folders and/or other content to fill your portfolio.<br />"
 BookmarkTitle = "Portfolio-bookmark {NAME}"
 BookmarkDescription = "Bookmark for the portfolio-homepage of {NAME}"
 BrowserComponent = "Search portfolios"
