@@ -30,5 +30,5 @@ abstract class Manager extends Application
     const ACTION_BROWSE_SHARED = 'SharedBrowser';
 
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self :: ACTION_BROWSE_PERSONAL;
 }
