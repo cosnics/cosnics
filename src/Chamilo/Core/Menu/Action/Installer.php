@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Menu\Rights;
 
 /**
  *
@@ -196,6 +197,44 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
 
+        if (! $this->setDefaultRights($item))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     */
+    public function setDefaultRights(Item $item)
+    {
+        $rightsUtilities = Rights :: get_instance();
+        $rightsLocation = $rightsUtilities->get_location_by_identifier(
+            'Chamilo\Core\Menu',
+            Rights :: TYPE_ITEM,
+            $item->getId());
+
+        if (! $this->isAvailableForEveryone())
+        {
+            // Delete the default right (everyone can see the item)
+            if (! $rightsUtilities->delete_location_entity_right_for_entity($rightsLocation, 0, 0))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isAvailableForEveryone()
+    {
         return true;
     }
 }
