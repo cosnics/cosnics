@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -74,12 +75,18 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
                 $this->get_component()->get_item_editing_url($menu),
                 ToolbarItem :: DISPLAY_ICON));
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_component()->get_item_rights_url($menu),
-                ToolbarItem :: DISPLAY_ICON));
+        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+
+        if ($setting == 1)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                    $this->get_component()->get_item_rights_url($menu),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+
         if ($index == 'first' || $index == 'single')
         {
             $toolbar->add_item(

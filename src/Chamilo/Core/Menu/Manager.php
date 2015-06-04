@@ -8,6 +8,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -99,6 +100,13 @@ abstract class Manager extends Application
     public function check_allowed()
     {
         if (! $this->get_user()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
+        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+
+        if ($setting != 1)
         {
             throw new NotAllowedException();
         }

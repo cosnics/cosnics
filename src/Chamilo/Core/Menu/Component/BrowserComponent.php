@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -92,12 +93,17 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     array(self :: PARAM_ACTION => self :: ACTION_CREATE, self :: PARAM_TYPE => LinkItem :: class_name())),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        $action_bar->add_tool_action(
-            new ToolbarItem(
-                Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+
+        if ($setting == 1)
+        {
+            $action_bar->add_tool_action(
+                new ToolbarItem(
+                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        }
 
         return $action_bar;
     }
