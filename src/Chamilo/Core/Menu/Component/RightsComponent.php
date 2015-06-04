@@ -28,12 +28,12 @@ class RightsComponent extends Manager implements DelegateComponent
 
         if (! $item_id)
         {
-            $location = array(Rights :: get_instance()->get_root(__NAMESPACE__));
+            $location = array(Rights :: get_instance()->get_root(self :: package()));
         }
         else
         {
             $location = array(
-                Rights :: get_instance()->get_location_by_identifier(__NAMESPACE__, Rights :: TYPE_ITEM, $item_id));
+                Rights :: get_instance()->get_location_by_identifier(self :: package(), Rights :: TYPE_ITEM, $item_id));
         }
 
         $entities = array();
@@ -42,10 +42,13 @@ class RightsComponent extends Manager implements DelegateComponent
 
         $factory = new ApplicationFactory(
             \Chamilo\Core\Rights\Editor\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+
         $component = $factory->getComponent();
+        $component->set_context(self :: package());
         $component->set_locations($location);
         $component->set_entities($entities);
+
         return $component->run();
     }
 
