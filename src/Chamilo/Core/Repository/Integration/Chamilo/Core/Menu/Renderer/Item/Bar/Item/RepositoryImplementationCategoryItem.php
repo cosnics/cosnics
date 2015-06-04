@@ -21,8 +21,8 @@ class RepositoryImplementationCategoryItem extends CategoryItem
     {
         $html = array();
         $sub_html = array();
-        $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_instances(
-            Instance :: class_name());
+        $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(Instance :: class_name());
+
         if ($instances->size())
         {
             $sub_html[] = '<ul>';
@@ -43,6 +43,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
             $sub_html[] = '</ul>';
             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
+
         $html[] = '<ul>';
 
         $html[] = '<li>';
