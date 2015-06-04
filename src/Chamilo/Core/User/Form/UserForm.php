@@ -335,11 +335,6 @@ class UserForm extends FormValidator
 
         $value = $user->update();
 
-        if (! $user->update_rights_template_links($values['rights_templates']['template']))
-        {
-            return false;
-        }
-
         if ($value)
         {
             Event :: trigger(
