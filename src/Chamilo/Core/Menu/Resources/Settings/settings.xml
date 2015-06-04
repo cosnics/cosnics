@@ -9,7 +9,7 @@
 			</setting>
 		</category>
 		<category name="rights">
-			<setting name="enable_rights" field="checkbox" default="0">
+			<setting name="enable_rights" field="checkbox" default="1">
 				<options type="static">
 					<option name="enable_rights" value="1" />
 				</options>
