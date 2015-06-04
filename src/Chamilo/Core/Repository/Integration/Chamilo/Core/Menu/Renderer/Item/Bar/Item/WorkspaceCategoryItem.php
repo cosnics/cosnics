@@ -6,6 +6,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 
 /**
  *
@@ -22,13 +24,13 @@ class WorkspaceCategoryItem extends CategoryItem
         $html = array();
         $sub_html = array();
 
-        $workspaces = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(Workspace :: class_name());
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $workspaces = $workspaceService->getWorkspacesByCreator($this->get_menu_renderer()->get_user());
 
         $sub_html[] = '<ul>';
 
         if ($workspaces->size())
         {
-
             while ($workspace = $workspaces->next_result())
             {
                 $workspaceItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem();
