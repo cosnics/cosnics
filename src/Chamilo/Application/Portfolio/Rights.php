@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -198,11 +197,13 @@ class Rights
      * @param boolean $to_string
      * @return \libraries\storage\Condition
      */
-    private function get_entities_condition($user_id, $entities, $to_string = false)
+    private function get_entities_condition($user_id, $entities)
     {
         if (! empty($entities))
         {
-            if (is_null($this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string]))
+            $entitiesHash = md5(serialize($entities));
+
+            if (is_null($this->entities_condition_cache[$user_id][$entitiesHash]))
             {
                 $or_conditions = array();
                 foreach ($entities as $entity)
@@ -248,14 +249,10 @@ class Rights
 
                 $condition = new OrCondition($or_conditions);
 
-                if ($to_string)
-                {
-                    $condition = ConditionTranslator :: render(DataManager :: get_type(), $condition);
-                }
-
-                $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string] = $condition;
+                $this->entities_condition_cache[$user_id][$entitiesHash] = $condition;
             }
-            return $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string];
+
+            return $this->entities_condition_cache[$user_id][$entitiesHash];
         }
     }
 

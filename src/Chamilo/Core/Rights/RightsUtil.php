@@ -86,7 +86,7 @@ class RightsUtil
     {
         $rights_array = DataManager :: retrieve_granted_rights_array(
             $location,
-            $this->get_entities_condition($context, $user_id, $entities, true));
+            $this->get_entities_condition($context, $user_id, $entities));
         return in_array($right, $rights_array);
     }
 
@@ -154,7 +154,9 @@ class RightsUtil
     {
         if (! empty($entities))
         {
-            if (is_null($this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string]))
+            $entitiesHash = md5(serialize($entities));
+
+            if (is_null($this->entities_condition_cache[$user_id][$entitiesHash][(int) $to_string]))
             {
                 $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
@@ -198,14 +200,15 @@ class RightsUtil
 
                 $condition = new OrCondition($or_conditions);
 
-                if ($to_string)
-                {
-                    $condition = DataManager :: translateCondition($condition);
-                }
+                // if ($to_string)
+                // {
+                // $condition = DataManager :: translateCondition($condition);
+                // }
 
-                $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string] = $condition;
+                $this->entities_condition_cache[$user_id][$entitiesHash][(int) $to_string] = $condition;
             }
-            return $this->entities_condition_cache[$user_id][spl_object_hash($entities)][(int) $to_string];
+
+            return $this->entities_condition_cache[$user_id][$entitiesHash][(int) $to_string];
         }
     }
 

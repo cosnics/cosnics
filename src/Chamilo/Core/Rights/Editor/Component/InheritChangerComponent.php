@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Rights\Editor\Component;
 
-use Chamilo\Core\Rights\Manager;
+use Chamilo\Core\Rights\Editor\Manager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
