@@ -21,7 +21,7 @@ abstract class Manager extends Application
     public function get_tabs($current_tab, $content)
     {
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__NAMESPACE__, true),
+            ClassnameUtilities :: getInstance()->getNamespaceId(__NAMESPACE__),
             $content);
 
         $tabs->add_tab(
