@@ -65,7 +65,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         {
             throw new NotAllowedException();
         }
-
+        
         if (is_null($this->get_course()))
         {
             throw new \Exception(Translation :: get('SelectedCourseNotValid'));
@@ -81,8 +81,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
 
         $category = Request :: get(self :: PARAM_CATEGORY);
-
+        
         $this->course_tool_registration = DataManager :: retrieve_course_tool_by_name($tool);
+        
         if (! $this->course_tool_registration)
         {
             throw new \Exception(Translation :: get('SelectedCourseToolNotValid'));
