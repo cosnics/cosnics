@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\value\attribute
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Attribute Value Manager"
+BrowserComponent = "Browse default values"
+CreatorComponent = "Create default value"
+UpdaterComponent = "Update default value"
+DeleterComponent = "Delete default value"
+DefaultAttributeValue = "Default attribute value"
