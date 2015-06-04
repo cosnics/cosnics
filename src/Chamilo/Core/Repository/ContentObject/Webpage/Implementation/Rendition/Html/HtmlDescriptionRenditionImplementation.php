@@ -16,8 +16,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function get_description()
     {
         $object = $this->get_content_object();
-        $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
         
         $html = array();
         
