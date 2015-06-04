@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
  */
 abstract class RssReader
 {
-    const TYPE_FASTFEED = 'Fastfeed';
+    const TYPE_FASTFEED = 'FastFeed';
 
     /**
      * Keeps instances of the rss readers per type

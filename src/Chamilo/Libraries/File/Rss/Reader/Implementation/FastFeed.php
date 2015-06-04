@@ -12,7 +12,7 @@ use FastFeed\Processor\LimitProcessor;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Fastfeed extends RssReader
+class FastFeed extends RssReader
 {
 
     /**
