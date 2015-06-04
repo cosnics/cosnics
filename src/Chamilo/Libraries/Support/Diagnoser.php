@@ -79,11 +79,17 @@ class Diagnoser
     {
         $array = array();
 
-        $writable_folders = array('/files', '/files/repository/', '/files/temp', '/files/configuration');
+        $pathRenderer = Path :: getInstance();
+
+        $writable_folders = array();
+        $writable_folders[] = $pathRenderer->getStoragePath();
+        $writable_folders[] = $pathRenderer->getRepositoryPath();
+        $writable_folders[] = $pathRenderer->getTemporaryPath();
+        $writable_folders[] = $pathRenderer->getConfigurationPath();
 
         foreach ($writable_folders as $index => $folder)
         {
-            $writable = is_writable(Path :: getInstance()->getBasePath() . $folder);
+            $writable = is_writable($folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting(
                 $status,
@@ -96,12 +102,14 @@ class Diagnoser
                 Translation :: get('DirectoryMustBeWritable'));
         }
 
-        $exists = ! file_exists(Path :: getInstance()->getBasePath() . '/install');
+        $installationPath = $pathRenderer->namespaceToFullPath('Chamilo\Core\Install');
+
+        $exists = ! file_exists($installationPath);
         $status = $exists ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting(
             $status,
             '[FILES]',
-            Translation :: get('DirectoryExists') . ': /install',
+            Translation :: get('DirectoryExists') . ': ' . $installationPath,
             'http://be2.php.net/file_exists',
             $writable,
             0,
@@ -215,7 +223,7 @@ class Diagnoser
             Translation :: get('RegisterGlobalsInfo'));
 
         $setting = ini_get('short_open_tag');
-        $req_setting = 1;
+        $req_setting = 0;
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting(
             $status,
@@ -417,6 +425,7 @@ class Diagnoser
         // $client_info = mysql_get_client_info();
         // due to abstraction of storage we can not rely on the mysql settings anymore
         $connection = Connection :: get_instance()->get_connection()->connection;
+
         $host_info = $connection->host_info;
         $server_info = $connection->server_info;
         $proto_info = $connection->protocol_version;
