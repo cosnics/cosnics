@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Component;
 
-use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
@@ -12,10 +11,10 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RightsComponent extends Manager
+class RightsComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
         $factory = new ApplicationFactory(
             \Chamilo\Core\Repository\Workspace\Rights\Manager :: context(),

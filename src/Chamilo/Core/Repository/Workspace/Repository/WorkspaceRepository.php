@@ -9,6 +9,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 
 /**
  *
@@ -43,7 +48,10 @@ class WorkspaceRepository
         return DataManager :: retrieves(
             Workspace :: class_name(),
             new DataClassRetrievesParameters(
-                $this->getWorkspacesByCreatorCondition($user, $limit, $offset, $orderProperty)));
+                $this->getWorkspacesByCreatorCondition($user),
+                $limit,
+                $offset,
+                $orderProperty));
     }
 
     /**
@@ -68,5 +76,117 @@ class WorkspaceRepository
         return new EqualityCondition(
             new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_CREATOR_ID),
             new StaticConditionVariable($user->getId()));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $limit
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findAllWorkspaces($limit, $offset, $orderProperty = array())
+    {
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countAllWorkspaces()
+    {
+        return DataManager :: count(Workspace :: class_name());
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $limit
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findSharedWorkspacesForEntities($entities, $limit, $offset, $orderProperty = array())
+    {
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters(
+                $this->getSharedWorkspacesForEntitiesCondition($entities),
+                $limit,
+                $offset,
+                $orderProperty,
+                $this->getSharedWorkspacesJoins()));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countSharedWorkspacesForEntities($entities)
+    {
+        return DataManager :: count(
+            Workspace :: class_name(),
+            new DataClassCountParameters(
+                $this->getSharedWorkspacesForEntitiesCondition($entities),
+                $this->getSharedWorkspacesJoins()));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     */
+    private function getSharedWorkspacesForEntitiesCondition($entities)
+    {
+        $conditions = array();
+
+        foreach ($entities as $entityType => $entityIdentifiers)
+        {
+            foreach ($entityIdentifiers as $entityIdentifier)
+            {
+                $entityConditions = array();
+
+                $entityConditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        WorkspaceEntityRelation :: class_name(),
+                        WorkspaceEntityRelation :: PROPERTY_ENTITY_ID),
+                    new StaticConditionVariable($entityIdentifier));
+                $entityConditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        WorkspaceEntityRelation :: class_name(),
+                        WorkspaceEntityRelation :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable($entityType));
+
+                $conditions[] = new AndCondition($entityConditions);
+            }
+        }
+
+        return new OrCondition($conditions);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Joins
+     */
+    private function getSharedWorkspacesJoins()
+    {
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                WorkspaceEntityRelation :: class_name(),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        WorkspaceEntityRelation :: class_name(),
+                        WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                    new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID))));
+
+        return $joins;
     }
 }

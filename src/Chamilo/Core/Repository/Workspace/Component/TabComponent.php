@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Platform\Translation;
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Format\Theme;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class TabComponent extends Manager implements DelegateComponent
+abstract class TabComponent extends Manager
 {
 
     /**
@@ -39,30 +38,30 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 DynamicVisualTab :: POSITION_LEFT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
-//         $this->tabsRenderer->add_tab(
-//             new DynamicVisualTab(
-//                 self :: ACTION_BROWSE_PERSONAL,
-//                 Translation :: get(self :: ACTION_BROWSE_PERSONAL . 'Component'),
-//                 Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_PERSONAL),
-//                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_PERSONAL)),
-//                 $this->get_action() == self :: ACTION_BROWSE_PERSONAL,
-//                 false,
-//                 DynamicVisualTab :: POSITION_LEFT,
-//                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+        $this->tabsRenderer->add_tab(
+            new DynamicVisualTab(
+                self :: ACTION_BROWSE_PERSONAL,
+                Translation :: get(self :: ACTION_BROWSE_PERSONAL . 'Component'),
+                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_PERSONAL),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_PERSONAL)),
+                $this->get_action() == self :: ACTION_BROWSE_PERSONAL,
+                false,
+                DynamicVisualTab :: POSITION_LEFT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
-//         $this->tabsRenderer->add_tab(
-//             new DynamicVisualTab(
-//                 self :: ACTION_BROWSE_SHARED,
-//                 Translation :: get(self :: ACTION_BROWSE_SHARED . 'Component'),
-//                 Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_SHARED),
-//                 $this->get_url(array(self :: ACTION_BROWSE_SHARED => self :: ACTION_BROWSE_SHARED)),
-//                 $this->get_action() == self :: ACTION_BROWSE_SHARED,
-//                 false,
-//                 DynamicVisualTab :: POSITION_LEFT,
-//                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+        $this->tabsRenderer->add_tab(
+            new DynamicVisualTab(
+                self :: ACTION_BROWSE_SHARED,
+                Translation :: get(self :: ACTION_BROWSE_SHARED . 'Component'),
+                Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_BROWSE_SHARED),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_SHARED)),
+                $this->get_action() == self :: ACTION_BROWSE_SHARED,
+                false,
+                DynamicVisualTab :: POSITION_LEFT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
-//         if ($this->get_user()->is_platform_admin())
-//         {
+        if ($this->get_user()->is_platform_admin())
+        {
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_BROWSE,
@@ -73,7 +72,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                     false,
                     DynamicVisualTab :: POSITION_LEFT,
                     DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
-//         }
+        }
 
         if ($this->get_action() == self :: ACTION_UPDATE)
         {
@@ -84,6 +83,20 @@ abstract class TabComponent extends Manager implements DelegateComponent
                     Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_UPDATE),
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPDATE)),
                     $this->get_action() == self :: ACTION_UPDATE,
+                    false,
+                    DynamicVisualTab :: POSITION_LEFT,
+                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+        }
+
+        if ($this->get_action() == self :: ACTION_RIGHTS)
+        {
+            $this->tabsRenderer->add_tab(
+                new DynamicVisualTab(
+                    self :: ACTION_RIGHTS,
+                    Translation :: get(self :: ACTION_RIGHTS . 'Component'),
+                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_RIGHTS),
+                    $this->get_url(array(self :: ACTION_RIGHTS => self :: ACTION_RIGHTS)),
+                    $this->get_action() == self :: ACTION_RIGHTS,
                     false,
                     DynamicVisualTab :: POSITION_LEFT,
                     DynamicVisualTab :: DISPLAY_BOTH_SELECTED));

@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 
 /**
  *
@@ -110,6 +112,66 @@ class WorkspaceService
     public function countWorkspacesByCreator(User $user)
     {
         return $this->getWorkspaceRepository()->countWorkspacesByCreator($user);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getAllWorkspaces()
+    {
+        return $this->getWorkspaceRepository()->findAllWorkspaces();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function countAllWorkspaces()
+    {
+        return $this->getWorkspaceRepository()->countAllWorkspaces();
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getSharedWorkspacesForUser(User $user)
+    {
+        return $this->getWorkspaceRepository()->findSharedWorkspacesForEntities($this->getEntitiesForUser($user));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countSharedWorkspacesForUser(User $user)
+    {
+        return $this->getWorkspaceRepository()->countSharedWorkspacesForEntities($this->getEntitiesForUser($user));
+    }
+
+    /**
+     *
+     * @param User $user
+     * @return integer[]
+     */
+    public function getEntitiesForUser(User $user)
+    {
+        $entities = array();
+
+        $entities[UserEntity :: ENTITY_TYPE] = array($user->get_id());
+        $entities[PlatformGroupEntity :: ENTITY_TYPE] = array();
+
+        $userGroupIdentifiers = $user->get_groups(true);
+
+        foreach ($userGroupIdentifiers as $userGroupIdentifier)
+        {
+            $entities[PlatformGroupEntity :: ENTITY_TYPE][] = $userGroupIdentifier;
+        }
+
+        return $entities;
     }
 
     /**

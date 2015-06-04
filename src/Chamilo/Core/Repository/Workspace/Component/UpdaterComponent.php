@@ -20,13 +20,13 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UpdaterComponent extends Manager
+class UpdaterComponent extends TabComponent
 {
 
     /**
      * Executes this controller
      */
-    public function run()
+    public function build()
     {
         $workspaceId = Request :: get(self :: PARAM_WORKSPACE_ID);
         $workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $workspaceId);

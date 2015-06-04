@@ -18,16 +18,12 @@ class WorkspaceTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        return $workspaceService->getWorkspacesByCreator(
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
-            $orderProperty);
+        return $workspaceService->getAllWorkspaces($limit, $offset, $orderProperty);
     }
 
     public function count_data($condition)
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        return $workspaceService->countWorkspacesByCreator($this->get_component()->get_user());
+        return $workspaceService->countAllWorkspaces();
     }
 }
