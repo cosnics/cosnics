@@ -45,32 +45,32 @@ class Rights extends RightsUtil
     public function create_menu_location($item_id, $parent_id)
     {
         return parent :: create_location(
-            __NAMESPACE__, 
-            Rights :: TYPE_ITEM, 
-            $item_id, 
-            0, 
-            $parent_id, 
-            false, 
-            0, 
-            self :: TREE_TYPE_ROOT, 
+            __NAMESPACE__,
+            Rights :: TYPE_ITEM,
+            $item_id,
+            0,
+            $parent_id,
+            false,
+            0,
+            self :: TREE_TYPE_ROOT,
             true);
     }
 
-    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0, 
+    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
         $tree_type = self :: TREE_TYPE_ROOT)
     {
         $setting = PlatformSetting :: get('enable_rights', __NAMESPACE__);
-        
+
         if ($setting == 1)
         {
             return parent :: is_allowed(
-                $right, 
-                $context, 
-                $user_id, 
-                $entities, 
-                $identifier, 
-                $type, 
-                $tree_identifier, 
+                $right,
+                $context,
+                $user_id,
+                $entities,
+                $identifier,
+                $type,
+                $tree_identifier,
                 $tree_type);
         }
         else
