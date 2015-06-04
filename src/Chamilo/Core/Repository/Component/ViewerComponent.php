@@ -74,6 +74,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $is_owner = $object->get_owner_id() == $this->get_user_id();
 
+            $this->allowed_to_modify = $is_owner;
+
             $display = ContentObjectRenditionImplementation :: factory(
                 $object,
                 ContentObjectRendition :: FORMAT_HTML,
@@ -536,5 +538,15 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->object->get_object_number()));
+    }
+
+    /**
+     * Returns whether or not a user can change the links
+     *
+     * @return s bool
+     */
+    public function is_allowed_to_modify()
+    {
+        return $this->allowed_to_modify;
     }
 }
