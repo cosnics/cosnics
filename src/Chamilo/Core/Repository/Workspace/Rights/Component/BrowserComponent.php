@@ -3,6 +3,10 @@ namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation\EntityRelationTable;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 
 /**
  *
@@ -35,6 +39,10 @@ class BrowserComponent extends TabComponent implements TableSupport
 
     public function get_table_condition($table_class_name)
     {
-
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceEntityRelation :: class_name(),
+                WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+            new StaticConditionVariable($this->getCurrentWorkspace()->getId()));
     }
 }
