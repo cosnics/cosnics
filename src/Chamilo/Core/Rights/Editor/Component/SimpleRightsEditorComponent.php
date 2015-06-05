@@ -19,7 +19,7 @@ class SimpleRightsEditorComponent extends RightsEditorComponent
     public function run()
     {
         $this->action_bar = $this->get_action_bar();
-
+        
         $form = new SimpleRightsEditorForm(
             $this->get_url(),
             $this->get_context(),

@@ -45,11 +45,12 @@ class RightsEditorComponent extends Manager
     public function run()
     {
         $course = $this->get_course();
+        
         if (! $course->is_course_admin($this->get_user()) && ! $this->get_user()->is_platform_admin())
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-
+        
         $factory = new ApplicationFactory(
             \Chamilo\Core\Rights\Editor\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
@@ -57,7 +58,7 @@ class RightsEditorComponent extends Manager
         $component = $factory->getComponent();
         $component->set_locations($this->get_locations());
         $component->set_entities($this->get_entities());
-
+        $component->set_context('Chamilo\Application\Weblcms');
         return $component->run();
     }
 
@@ -217,15 +218,18 @@ class RightsEditorComponent extends Manager
         $relation_condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
-
+        
         $platform_group_relations = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseGroupRelation :: class_name(),
             $relation_condition);
-
+        
         $limited_users = array();
-
+       
         while ($platform_group_relation = $platform_group_relations->next_result())
         {
+
+           
+            
             $platform_group_id = $platform_group_relation->get_group_id();
             $subscribed_platform_group_ids[] = $platform_group_id;
             $limited_platform_groups[] = $platform_group_id;
@@ -249,7 +253,9 @@ class RightsEditorComponent extends Manager
             {
                 continue;
             }
+            
 
+            
             $children_conditions = array();
 
             $children_conditions[] = new InequalityCondition(
@@ -284,17 +290,18 @@ class RightsEditorComponent extends Manager
                 }
             }
         }
-
+       
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_course_id()));
+    
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: PROPERTY_STATUS),
+            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_STATUS),
             new StaticConditionVariable(CourseUserRelation :: STATUS_STUDENT));
 
         $condition = new AndCondition($conditions);
-
+        
         $relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseUserRelation :: class_name(),
             $condition);

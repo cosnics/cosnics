@@ -68,13 +68,13 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
             new Breadcrumb(
                 $this->get_url(
                     array(\Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID => 2), 
-                    array(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_TEMPLATE_ID)), 
+                    array(\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID)), 
                 Translation :: get('Assessments')));
         
         $filters = array(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
         
         $params = array();
-        $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate :: class_name();
+        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate :: class_name();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $this->publication_id;
         
         $trail->add(new Breadcrumb($this->get_url($params, $filters), $assessment->get_title()));
