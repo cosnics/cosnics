@@ -58,9 +58,11 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
     public function import_content_object()
     {
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this);
-        $file = Path :: getInstance()->namespaceToFullPath($context) . '/php/package/install/example.cpo';
+        $exampleFolderPath = Path :: getInstance()->getResourcesPath($context) . 'Example/';
 
-        if (file_exists($file))
+        $examplePaths = Filesystem :: get_directory_content($exampleFolderPath);
+
+        foreach ($examplePaths as $examplePath)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_PLATFORMADMIN),
@@ -73,7 +75,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
                 ContentObjectImport :: FORMAT_CPO,
                 $user->get_id(),
                 0,
-                FileProperties :: from_path($file));
+                FileProperties :: from_path($examplePath));
             $import = ContentObjectImportController :: factory($parameters);
             $import->run();
 

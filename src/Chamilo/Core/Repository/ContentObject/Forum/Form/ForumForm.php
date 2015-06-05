@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: forum_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.forum
  */
 class ForumForm extends ContentObjectForm
@@ -28,12 +28,6 @@ class ForumForm extends ContentObjectForm
         $object->set_locked($this->exportValue(Forum :: PROPERTY_LOCKED));
         // $this->set_content_object($object);
         return parent :: update_content_object();
-    }
-
-    public function build_creation_form()
-    {
-        parent :: build_creation_form();
-        $this->addElement('category');
     }
 
     public function build_editing_form()
