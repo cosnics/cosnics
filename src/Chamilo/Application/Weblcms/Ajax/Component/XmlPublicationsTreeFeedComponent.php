@@ -90,7 +90,7 @@ class XmlPublicationsTreeFeedComponent extends \Chamilo\Application\Weblcms\Ajax
 
         if (! $course)
         {
-            $course = CourseDataManager :: retrieve(Course :: class_name(), $category->get_course());
+            $course = CourseDataManager :: retrieve_by_id(Course :: class_name(), $category->get_course());
         }
 
         if (! $user)

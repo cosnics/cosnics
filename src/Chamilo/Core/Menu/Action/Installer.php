@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Menu\Rights;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -136,7 +137,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                     new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_ID),
                     $titles);
 
-                $category = DataManager :: retrieve(CategoryItem :: class_name(), new AndCondition($conditions));
+                $category = DataManager :: retrieve(
+                    CategoryItem :: class_name(),
+                    new DataClassRetrieveParameters(new AndCondition($conditions)));
             }
             else
             {

@@ -19,7 +19,8 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @package user.lib.user_manager.component
  */
 /**
- * User manager component which displays the quota to the user. This component displays two progress-bars. The first one
+ * User manager component which displays the quota to the user.
+ * This component displays two progress-bars. The first one
  * displays the used disk space and the second one the number of learning objects in the users user.
  *
  * @author Bart Mollet
@@ -49,7 +50,7 @@ class QuotaViewerComponent extends Manager
         }
         else
         {
-            $this->selected_user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+            $this->selected_user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 User :: class_name(),
                 (int) $selected_user_id);
         }

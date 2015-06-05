@@ -152,7 +152,7 @@ class LearningPathAttemptProgressDetailsBlock extends ToolBlock
         {
             $pid = $this->get_publication_id();
 
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                 ContentObjectPublication :: class_name(),
                 $pid);
 

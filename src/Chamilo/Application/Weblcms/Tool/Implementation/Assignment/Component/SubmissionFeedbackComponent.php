@@ -69,7 +69,7 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
         {
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
             $component->set_parameter(self :: PARAM_SUBMISSION, $this->submission_id);
@@ -204,7 +204,7 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER :
                 return $user_name->get_fullname();
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
-                return $user_name->get_fullname() . ' - ' . \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+                return $user_name->get_fullname() . ' - ' . \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                     CourseGroup :: class_name(),
                     $submission_tracker->get_submitter_id())->get_name();
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :

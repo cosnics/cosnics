@@ -32,6 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\UUID;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -720,7 +721,10 @@ class ContentObject extends CompositeDataClass
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
 
-        $attachment = DataManager :: retrieve(ContentObjectAttachment :: class_name(), $condition);
+        $attachment = DataManager :: retrieve(
+            ContentObjectAttachment :: class_name(),
+            new DataClassRetrieveParameters($condition));
+
         if ($attachment instanceof ContentObjectAttachment)
         {
             return $attachment->delete();
@@ -810,7 +814,9 @@ class ContentObject extends CompositeDataClass
             new StaticConditionVariable($id));
         $condition = new AndCondition($conditions);
 
-        $include = DataManager :: retrieve(ContentObjectInclude :: class_name(), $condition);
+        $include = DataManager :: retrieve(
+            ContentObjectInclude :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
         if ($include instanceof ContentObjectInclude)
         {
@@ -829,9 +835,9 @@ class ContentObject extends CompositeDataClass
         // TRANSACTION
         $success = DataManager :: transactional(
             function ($c) use($create_in_batch, $content_object) { // checks wether to create a new content object or
-              // version:
-              // if the ID is set, we create a new version,
-              // otherwise a new CO.
+                                                                   // version:
+                                                                   // if the ID is set, we create a new version,
+                                                                   // otherwise a new CO.
                 $orig_id = $content_object->get_id();
                 $version = isset($orig_id);
 

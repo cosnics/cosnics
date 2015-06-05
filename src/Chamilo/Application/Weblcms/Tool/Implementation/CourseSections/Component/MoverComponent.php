@@ -29,7 +29,7 @@ class MoverComponent extends Manager
 
         if (! empty($id))
         {
-            $course_section = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+            $course_section = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                 CourseSection :: class_name(),
                 $id);
             $course_section->set_display_order($course_section->get_display_order() + $direction);

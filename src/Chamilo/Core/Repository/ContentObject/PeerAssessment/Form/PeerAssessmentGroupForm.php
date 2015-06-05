@@ -192,7 +192,7 @@ class PeerAssessmentGroupForm extends FormValidator
                             }
                             else
                             {
-                                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+                                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                                     \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                                     (int) $id);
                                 $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();

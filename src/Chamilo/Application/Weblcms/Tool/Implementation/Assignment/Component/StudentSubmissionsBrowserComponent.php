@@ -598,7 +598,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     protected function define_class_variables()
     {
-        $this->assignment = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+        $this->assignment = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $this->get_publication_id())->get_content_object();
 

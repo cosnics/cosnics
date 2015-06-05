@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * Base class for specific removal extensions of web applications
@@ -34,7 +35,9 @@ class WebApplicationRemover extends \Chamilo\Configuration\Package\Action\Remove
             new PropertyConditionVariable(ApplicationItem :: class_name(), ApplicationItem :: PROPERTY_APPLICATION),
             new StaticConditionVariable(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($context)));
 
-        $menu_item = \Chamilo\Core\Menu\Storage\DataManager :: retrieve(ApplicationItem :: class_name(), $condition);
+        $menu_item = \Chamilo\Core\Menu\Storage\DataManager :: retrieve(
+            ApplicationItem :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
         if ($menu_item instanceof \Chamilo\Core\Menu\Storage\DataClass\Item)
         {

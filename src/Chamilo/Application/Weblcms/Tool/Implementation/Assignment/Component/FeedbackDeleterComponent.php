@@ -22,7 +22,7 @@ class FeedbackDeleterComponent extends Manager
 
     public function run()
     {
-        $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+        $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
 

@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  * Extension on the content object publication table cell renderer for this tool
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
@@ -27,10 +27,10 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Renders a cell for a given object
-     * 
+     *
      * @param $column \libraries\ObjectTableColumn
      *
      * @param mixed $publication
@@ -53,7 +53,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                     }
                 }
         }
-        
+
         return parent :: render_cell($column, $publication);
     }
 
@@ -62,10 +62,10 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      * Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the progress of a given publication
-     * 
+     *
      * @param mixed[] $publication
      *
      * @return string
@@ -73,25 +73,25 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     public function get_progress($publication)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_component()->get_course_id()));
-        
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathAttempt :: class_name(), 
-                LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID), 
+                LearningPathAttempt :: class_name(),
+                LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID),
             new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID]));
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_USER_ID), 
+            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_component()->get_user_id()));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         $attempt = DataManager :: retrieve(
-            LearningPathAttempt :: class_name(), 
+            LearningPathAttempt :: class_name(),
             new DataClassRetrieveParameters($condition));
-        
+
         if ($attempt instanceof LearningPathAttempt)
         {
             $progress = $attempt->get_progress();
@@ -100,20 +100,20 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         {
             $progress = 0;
         }
-        
+
         $bar = $this->get_progress_bar($progress);
         $url = $this->get_component()->get_url(
             array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
+                Manager :: PARAM_ACTION => Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
                 'lp_action' => 'view_progress'));
-        
+
         return Text :: create_link($url, $bar);
     }
 
     /**
      * Returns a progress bar
-     * 
+     *
      * @param number $progress
      *
      * @return string
@@ -126,7 +126,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         $html[] = '</div>';
         $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($progress) .
              '%</div></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

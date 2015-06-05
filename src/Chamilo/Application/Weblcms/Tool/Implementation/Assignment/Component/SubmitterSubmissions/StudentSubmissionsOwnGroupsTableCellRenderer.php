@@ -138,7 +138,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
         switch ($submission->get_submitter_type())
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
-                $group = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+                $group = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                     CourseGroup :: class_name(),
                     $submission->get_submitter_id());
                 break;

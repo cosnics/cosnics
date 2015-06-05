@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $request = DataManager :: retrieve(Request :: class_name(), (int) $id);
+                $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
 
                 if (/*(\core\repository\quota\rights\Rights :: get_instance()->quota_is_allowed() && \core\repository\quota\rights\Rights :: get_instance()->is_target_user(
                         $this->get_user(), $request->get_user_id())) || */$this->get_user()->is_platform_admin() ||

@@ -124,7 +124,9 @@ class LocalSetting
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_ID),
                 new StaticConditionVariable($user_setting->get_setting_id()));
-            $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve(Setting :: class_name(), $condition);
+            $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve(
+                Setting :: class_name(),
+                new DataClassRetrieveParameters($condition));
             $params[$setting->get_application()][$setting->get_variable()] = $user_setting->get_value();
         }
 

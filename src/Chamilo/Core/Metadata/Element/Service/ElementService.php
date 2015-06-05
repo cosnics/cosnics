@@ -193,6 +193,6 @@ class ElementService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager :: retrieve(Element :: class_name(), $condition);
+        return DataManager :: retrieve(Element :: class_name(), new DataClassRetrieveParameters($condition));
     }
 }

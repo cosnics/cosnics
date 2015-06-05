@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -182,7 +183,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $rights_location = $context_dm :: retrieve($context_class :: class_name(), $condition);
+        $rights_location = $context_dm :: retrieve(
+            $context_class :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
         if ($rights_location)
         {
@@ -217,7 +220,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $location = $context_dm :: retrieve($context_class :: class_name(), $condition);
+        $location = $context_dm :: retrieve($context_class :: class_name(), new DataClassRetrieveParameters($condition));
 
         if (! $location)
         {
@@ -266,7 +269,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($right));
         $condition = new AndCondition($conditions);
 
-        $rights_location_entity_right = $context_dm :: retrieve($context_class :: class_name(), $condition);
+        $rights_location_entity_right = $context_dm :: retrieve(
+            $context_class :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
         if ($rights_location_entity_right)
         {

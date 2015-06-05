@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Weblcms application courses submanager subcontext
- * 
+ *
  * @author : Pieterjan Broekaert
  */
 class CoursesFeatureSubContext implements Context
@@ -32,7 +32,7 @@ class CoursesFeatureSubContext implements Context
      * Hooks Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Create some prerequisites before running a course scenario
      * @BeforeScenario @courses
@@ -59,40 +59,40 @@ class CoursesFeatureSubContext implements Context
      * Prerequisites Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Creates a new course
-     * 
+     *
      * @return \application\weblcms\course\Course
      */
     protected function create_course()
     {
         $course = new Course();
-        
+
         $course->set_title('Testcourse 1');
         $course->set_titular_id(2); // User admin
         $course->set_visual_code('TESTCOURSE1');
         $course->set_course_type_id(0);
-        
+
         $course->create();
         $setting_values = array();
-        
+
         $setting_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS] = array();
-        
+
         $setting_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector :: CATEGORY] = $course->get_category_id();
         $setting_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector :: LANGUAGE] = $course->get_language();
         $setting_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector :: TITULAR] = $course->get_titular_id();
-        
+
         $course->create_course_settings_from_values($setting_values, true);
-        
+
         CourseManagementRights :: get_instance()->create_rights_from_values($course, array());
-        
+
         return $course;
     }
 
     /**
      * Subscribes the admin to the course
-     * 
+     *
      * @param $course
      * @return bool
      */
@@ -103,7 +103,7 @@ class CoursesFeatureSubContext implements Context
 
     /**
      * Subscribes the student to the course
-     * 
+     *
      * @param $course
      * @return bool
      */
@@ -114,7 +114,7 @@ class CoursesFeatureSubContext implements Context
 
     /**
      * Subscribes the teacher to the course
-     * 
+     *
      * @param $course
      * @return bool
      */
@@ -125,7 +125,7 @@ class CoursesFeatureSubContext implements Context
 
     /**
      * Subscribes a user by a given username
-     * 
+     *
      * @param string $username
      * @param \application\weblcms\course\Course $course
      * @param int $status
@@ -139,10 +139,10 @@ class CoursesFeatureSubContext implements Context
         {
             return false;
         }
-        
+
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: subscribe_user_to_course(
-            $course->get_id(), 
-            $status, 
+            $course->get_id(),
+            $status,
             $user->get_id());
     }
 
@@ -151,7 +151,7 @@ class CoursesFeatureSubContext implements Context
      * Steps Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * @When /^I go to the course "([^"]*)"$/
      */
@@ -176,10 +176,10 @@ class CoursesFeatureSubContext implements Context
      * Steps Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the url for the course viewer for a given course by course title
-     * 
+     *
      * @param string $course_title
      *
      * @return string
@@ -195,7 +195,7 @@ class CoursesFeatureSubContext implements Context
 
     /**
      * Retrieves a course by a given title
-     * 
+     *
      * @param string $course_title
      *
      * @return Course
@@ -205,24 +205,24 @@ class CoursesFeatureSubContext implements Context
     protected function get_course_by_title($course_title)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE), 
+            new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE),
             new StaticConditionVariable($course_title));
-        
+
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve(
-            Course :: class_name(), 
-            $condition);
-        
+            Course :: class_name(),
+            new DataClassRetrieveParameters($condition));
+
         if (! $course)
         {
             throw new \Exception('Could not find course with title ' . $course_title);
         }
-        
+
         return $course;
     }
 
     /**
      * Returns the url to a tool by a given course title and tool title
-     * 
+     *
      * @param string $course_title
      * @param string $tool_title
      *

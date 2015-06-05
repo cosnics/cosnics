@@ -12,10 +12,11 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * This class represents the datamanager for this tool
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
@@ -24,7 +25,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      * Retrieves a request by a given guid
-     * 
+     *
      * @param string $guid
      *
      * @throws \InvalidArgumentException
@@ -37,17 +38,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             throw new \InvalidArgumentException('A valid guid is required to retrieve a request by guid');
         }
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID), 
+            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID),
             new StaticConditionVariable($guid));
-        
-        return static :: retrieve(Request :: class_name(), $condition);
+
+        return static :: retrieve(Request :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieves a request by a given id
-     * 
+     *
      * @param string $id
      *
      * @throws \InvalidArgumentException
@@ -60,14 +61,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             throw new \InvalidArgumentException('A valid id is required to retrieve a request by id');
         }
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_ID), 
+            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_ID),
             new StaticConditionVariable($id));
-        
-        return static :: retrieve(Request :: class_name(), $condition);
+
+        return static :: retrieve(Request :: class_name(), new DataClassRetrieveParameters($condition));
     }
-    
+
     // TODO: Fix implementation
     public function retrieve_results_by_assignment(DataClassRetrievesParameters $params)
     {
@@ -76,7 +77,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $usr_alias = \Chamilo\Core\User\Storage\DataManager :: get_alias(User :: get_table_name());
         $ast_alias = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: get_alias(
             AssignmentSubmission :: get_table_name());
-        
+
         $query = 'SELECT ' . $er_alias . '.' . Request :: PROPERTY_ID . ' AS ' . Request :: PROPERTY_REQUEST_ID . ', ' .
              $er_alias . '.' . Request :: PROPERTY_AUTHOR_ID . ', ' . $er_alias . '.' .
              Request :: PROPERTY_CONTENT_OBJECT_ID . ', ' . $er_alias . '.' . Request :: PROPERTY_COURSE_ID . ', ' .
@@ -90,9 +91,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
              AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE . ', ' . $ast_alias . '.' .
              AssignmentSubmission :: PROPERTY_DATE_SUBMITTED . ', ' . $usr_alias . '.' . User :: PROPERTY_FIRSTNAME .
              ', ' . $usr_alias . '.' . User :: PROPERTY_LASTNAME . ' FROM ';
-        
+
         $query .= $this->create_by_assignment_base_query($params->get_condition());
-        
+
         $order_by = $params->get_order_by();
         $ob = 'ORDER BY ';
         if ($order_by != null)
@@ -111,9 +112,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $ob .= 'DESC';
             }
         }
-        
+
         $query .= ' ' . $ob;
-        
+
         return new DataClassResultSet($this, $this->query($query), ContentObject :: class_name());
     }
 
@@ -122,17 +123,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $query = 'SELECT COUNT(*) FROM ';
         $query .= $this->create_by_assignment_base_query($condition);
         $statement = $this->query($query);
-        
+
         if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO :: FETCH_NUM);
-            
+
             return (int) $record[0];
         }
         else
         {
             $this->error_handling($statement);
-            
+
             return false;
         }
     }
@@ -142,36 +143,36 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
         $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
         $tdm = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: get_instance();
-        
+
         // ephorus_request (application\weblcms\tool\ephorus\Request)
         $er_table = $this->escape_table_name(Request :: get_table_name());
         $er_alias = $this->get_alias(Request :: get_table_name());
         $er_content_object_id = parent :: escape_column_name(Request :: PROPERTY_CONTENT_OBJECT_ID, $er_alias);
         $er_author_id = parent :: escape_column_name(Request :: PROPERTY_AUTHOR_ID, $er_alias);
-        
+
         // repository_content_object (repository\ContentObject)
         $rco_table = $rdm->escape_table_name(ContentObject :: get_table_name());
         $rco_alias = $rdm->get_alias(ContentObject :: get_table_name());
         $rco_id = $rdm->escape_column_name(ContentObject :: PROPERTY_ID, $rco_alias);
-        
+
         // user
         $usr_table = $udm->escape_table_name(User :: get_table_name());
         $usr_alias = $udm->get_alias(User :: get_table_name());
         $usr_id = $udm->escape_column_name(User :: PROPERTY_ID, $usr_alias);
-        
+
         // submission tracker
         $ast_table = $tdm->escape_table_name(AssignmentSubmission :: get_table_name());
         $ast_alias = $tdm->get_alias(AssignmentSubmission :: get_table_name());
         $ast_cid = $tdm->escape_column_name(AssignmentSubmission :: PROPERTY_CONTENT_OBJECT_ID, $ast_alias);
         $ast_sid = $tdm->escape_column_name(AssignmentSubmission :: PROPERTY_SUBMITTER_ID, $ast_alias);
-        
+
         $query = $ast_table . ' ' . $ast_alias . ' JOIN ' . $rco_table . ' ' . $rco_alias . ' ON ' . $rco_id . '=' .
              $ast_cid . ' JOIN ' . $usr_table . ' ' . $usr_alias . ' ON ' . $usr_id . '=' . $ast_sid . ' LEFT JOIN ' .
              $er_table . ' ' . $er_alias . ' ON ' . $ast_cid . '=' . $er_content_object_id . ' AND ' . $ast_sid . '=' .
              $er_author_id;
         // $join;
         $query .= ' WHERE ' . ConditionTranslator :: render($condition);
-        
+
         return $query;
     }
 
@@ -179,28 +180,28 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
         $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
-        
+
         // ephorus_request (application\weblcms\tool\ephorus\Request)
         $er_table = $this->escape_table_name(Request :: get_table_name());
         $er_alias = $this->get_alias(Request :: get_table_name());
         $er_content_object_id = parent :: escape_column_name(Request :: PROPERTY_CONTENT_OBJECT_ID, $er_alias);
         $er_author_id = parent :: escape_column_name(Request :: PROPERTY_AUTHOR_ID, $er_alias);
-        
+
         // repository_content_object (repository\ContentObject)
         $rco_table = $rdm->escape_table_name(ContentObject :: get_table_name());
         $rco_alias = $rdm->get_alias(ContentObject :: get_table_name());
         $rco_id = $rdm->escape_column_name(ContentObject :: PROPERTY_ID, $rco_alias);
-        
+
         // user
         $usr_table = $udm->escape_table_name(User :: get_table_name());
         $usr_alias = $udm->get_alias(User :: get_table_name());
         $usr_id = $udm->escape_column_name(User :: PROPERTY_ID, $usr_alias);
-        
+
         $query = $er_table . ' ' . $er_alias . ' JOIN ' . $rco_table . ' ' . $rco_alias . ' ON ' . $rco_id . '=' .
              $er_content_object_id . ' JOIN ' . $usr_table . ' ' . $usr_alias . ' ON ' . $usr_id . '=' . $er_author_id;
         // $join;
         $query .= ' WHERE ' . ConditionTranslator :: render($condition);
-        
+
         return $query;
     }
 
@@ -209,17 +210,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $query = 'SELECT COUNT(*) FROM ';
         $query .= $this->create_by_params_base_query($condition);
         $statement = $this->query($query);
-        
+
         if (! $statement instanceof \PDOException)
         {
             $record = $statement->fetch(\PDO :: FETCH_NUM);
-            
+
             return (int) $record[0];
         }
         else
         {
             $this->error_handling($statement);
-            
+
             return false;
         }
     }
@@ -229,15 +230,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $er_alias = $this->get_alias(Request :: get_table_name());
         $rco_alias = \Chamilo\Core\Repository\Storage\DataManager :: get_alias(ContentObject :: get_table_name());
         $usr_alias = \Chamilo\Core\User\Storage\DataManager :: get_alias(User :: get_table_name());
-        
+
         $query = 'SELECT ' . $er_alias . '.*, ' . $rco_alias . '.' . ContentObject :: PROPERTY_TITLE . ', ' . $rco_alias .
              '.' . ContentObject :: PROPERTY_DESCRIPTION . ', ' . $rco_alias . '.' . ContentObject :: PROPERTY_TYPE .
              ', ' . $usr_alias . '.' . User :: PROPERTY_FIRSTNAME . ', ' . $usr_alias . '.' . User :: PROPERTY_LASTNAME .
              ' FROM ';
         $query .= $this->create_by_params_base_query($params->get_condition());
-        
+
         $order_by = $params->get_order_by();
-        
+
         $ob = 'ORDER BY ';
         if ($order_by != null)
         {
@@ -255,9 +256,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $ob .= 'DESC';
             }
         }
-        
+
         $query .= ' ' . $ob;
-        
+
         return new DataClassResultSet($this, $this->query($query), ContentObject :: class_name());
     }
 
@@ -275,9 +276,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $guids = array($guids);
         }
         $condition = new InCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID), 
+            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID),
             $guids);
-        
+
         /**
          *
          * @var \libraries\Mdb2Database $rdm
@@ -285,25 +286,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
          */
         $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
         $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
-        
+
         // Dynamic variable constants (requires the following variables for each table 'x': x_ref = 'x', x_table,
         // x_alias).
         $ref_table = '_table';
         $ref_alias = '_alias';
-        
+
         // ephorus_request (application\weblcms\tool\ephorus\Request)
         $er_ref = 'er';
         $er_table = $this->escape_table_name(Request :: get_table_name());
         $er_alias = $this->get_alias(Request :: get_table_name());
         $er_guid = parent :: escape_column_name(Request :: PROPERTY_GUID, $er_alias);
         $er_content_object_id = parent :: escape_column_name(Request :: PROPERTY_CONTENT_OBJECT_ID, $er_alias);
-        
+
         // repository_content_object (repository\ContentObject)
         $rco_ref = 'rco';
         $rco_table = $rdm->escape_table_name(ContentObject :: get_table_name());
         $rco_alias = $rdm->get_alias(ContentObject :: get_table_name());
         $rco_id = $rdm->escape_column_name(ContentObject :: PROPERTY_ID, $rco_alias);
-        
+
         $selects = array();
         $selects[] = $er_guid;
         foreach (ContentObject :: get_default_property_names() as $default_property)
@@ -311,17 +312,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $selects[] = $rdm->escape_column_name($default_property, $rco_alias);
         }
         $select = implode(', ', $selects);
-        
+
         $table_aliases = array();
         $table_aliases[] = $er_ref;
         $table_aliases[] = $rco_ref;
-        
+
         $tables = array();
         foreach ($table_aliases as $table_alias)
         {
             $tables[${$table_alias . $ref_table}] = ${$table_alias . $ref_table} . ' AS ' . ${$table_alias . $ref_alias};
         }
-        
+
         // Join syntax: $join_left_table JOIN $join_right_table ON $join_left_value = $join_right_value [AND
         // $conditions].
         // Condition syntax: $join_condition_column $join_condition_operator $join_condition_value.
@@ -341,12 +342,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $join_type_right = 'RIGHT JOIN';
         $join_declarations = array();
         $join_declarations[] = array(
-            $join_left_table => $tables[$er_table], 
-            $join_type => $join_type_inner, 
-            $join_right_table => $tables[$rco_table], 
-            $join_left_value => $er_content_object_id, 
+            $join_left_table => $tables[$er_table],
+            $join_type => $join_type_inner,
+            $join_right_table => $tables[$rco_table],
+            $join_left_value => $er_content_object_id,
             $join_right_value => $rco_id);
-        
+
         $joins = array();
         foreach ($join_declarations as $join_declaration)
         {
@@ -371,7 +372,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $joins[] = implode(' ', $joins_entry_parts);
         }
         $join = implode(' ', $joins);
-        
+
         $query_parts = array();
         $query_parts[] = 'SELECT';
         $query_parts[] = $select;
@@ -380,13 +381,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $query_parts[] = 'WHERE';
         $query_parts[] = ConditionTranslator :: render($condition);
         $query = implode(' ', $query_parts);
-        
+
         return new DataClassResultSet($this, $this->query($query), ContentObject :: class_name());
     }
 
     /**
      * Executes a query
-     * 
+     *
      * @param string $query
      *
      * @return mixed
