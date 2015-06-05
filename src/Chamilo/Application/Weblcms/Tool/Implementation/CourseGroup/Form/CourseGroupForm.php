@@ -101,7 +101,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement('html', '<div class="configuration_form">');
         $this->addElement(
             'html',
-            '<span class="category">' . $header_title .             // Translation :: get($header_title, null, Utilities ::
+            '<span class="category">' . $header_title . // Translation :: get($header_title, null, Utilities ::
                                                         // COMMON_LIBRARIES) .
             '</span>');
     }
@@ -1608,24 +1608,24 @@ class CourseGroupForm extends FormValidator
     public function create_category($course_group, $tool, $parent)
     {
         $conditions[] = new EqualityCondition(
-            new EqualityCondition(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory :: class_name(),
                 ContentObjectPublicationCategory :: PROPERTY_NAME),
             new StaticConditionVariable($course_group->get_name()));
 
         $conditions[] = new EqualityCondition(
-            new EqualityCondition(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory :: class_name(),
                 ContentObjectPublicationCategory :: PROPERTY_COURSE),
             new StaticConditionVariable($course_group->get_course_code()));
 
         $conditions[] = new EqualityCondition(
-            new EqualityCondition(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory :: class_name(),
                 ContentObjectPublicationCategory :: PROPERTY_TOOL),
             new StaticConditionVariable($tool));
         $conditions[] = new EqualityCondition(
-            new EqualityCondition(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory :: class_name(),
                 ContentObjectPublicationCategory :: PROPERTY_PARENT),
             new StaticConditionVariable($parent));

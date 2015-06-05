@@ -110,7 +110,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
      */
     public function get_actions($assessment_attempt)
     {
-        $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
+        $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $assessment_attempt[AssessmentAttempt :: PROPERTY_ASSESSMENT_ID]);
 
