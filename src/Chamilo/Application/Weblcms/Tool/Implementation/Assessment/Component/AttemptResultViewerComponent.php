@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -24,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class displays the result of a single attempt
@@ -119,11 +119,15 @@ class AttemptResultViewerComponent extends Manager
 
         $this->add_assessment_title_breadcrumb($assessment);
 
-        Request :: set_get(\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION, self :: ACTION_VIEW_RESULTS);
+        $this->getRequest()->query->set(
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION,
+            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager :: ACTION_VIEW_ASSESSMENT_RESULT);
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($assessment->get_type(), 3) .
-             '\Display';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $context = $assessment->package() . '\Display';
+
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -137,9 +141,12 @@ class AttemptResultViewerComponent extends Manager
         if (! Request :: get(self :: PARAM_SHOW_FULL))
         {
             Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+            $html[] = Application :: render_header();
         }
-
-        $html[] = parent :: render_header();
+        else
+        {
+            $html[] = parent :: render_header();
+        }
 
         if ($this->assessment_attempt->get_status() == AssessmentAttempt :: STATUS_NOT_COMPLETED)
         {

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
  * Table cell renderer for the schema
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActivityTableCellRenderer extends DataClassTableCellRenderer
@@ -19,7 +19,7 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
 
     /**
      * Renders a single cell
-     * 
+     *
      * @param TableColumn $column
      * @param DataClass $result
      *
@@ -30,8 +30,14 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
         switch ($column->get_name())
         {
             case ActivityTableColumnModel :: PROPERTY_TYPE_ICON :
-                return Theme :: getInstance()->getImage('type/' . $result->get_type(), 'png', null, null, ToolbarItem :: DISPLAY_ICON, false,
-                         'Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\\');
+                return Theme :: getInstance()->getImage(
+                    'Type/' . $result->get_type(),
+                    'png',
+                    null,
+                    null,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    'Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\\');
                 break;
             case Activity :: PROPERTY_TYPE :
                 return $result->get_type_string();
@@ -44,7 +50,7 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
                 return $result->get_user()->get_fullname();
                 break;
         }
-        
+
         return parent :: render_cell($column, $result);
     }
 }

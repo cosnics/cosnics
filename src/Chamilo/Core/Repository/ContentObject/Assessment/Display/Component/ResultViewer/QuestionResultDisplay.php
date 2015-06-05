@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -268,12 +269,12 @@ abstract class QuestionResultDisplay
         $class = $complex_content_object_question->get_ref_object()->get_type();
         $type = $class :: get_type_name();
 
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
-             'ResultDisplay';
+        $class = __NAMESPACE__ . '\QuestionResultDisplay\\' .
+             StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ResultDisplay';
 
         if (! class_exists($class))
         {
-            die('class does not exist: ' . $class);
+            throw new ClassNotExistException($class);
         }
 
         $question_result_display = new $class(
