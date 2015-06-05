@@ -9,6 +9,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: assessment_results_deleter.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -28,20 +31,23 @@ class ResultsDeleterComponent extends Manager
         if (Request :: get(self :: PARAM_USER_ASSESSMENT))
         {
             $uaid = Request :: get(self :: PARAM_USER_ASSESSMENT);
-            $track = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt();
+
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ID),
                 new StaticConditionVariable($uaid));
-            $items = $track->retrieve_tracker_items($condition);
 
-            if ($items[0] != null)
+            $item = DataManager :: retrieve(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
+                new DataClassRetrieveParameters($condition));
+
+            if ($item)
             {
-                $redirect_aid = $items[0]->get_assessment_id();
+                $redirect_aid = $item->get_assessment_id();
             }
 
-            $this->delete_user_assessment_results($items[0]);
+            $this->delete_user_assessment_results($item);
         }
         elseif (Request :: get(self :: PARAM_ASSESSMENT))
         {
@@ -64,15 +70,17 @@ class ResultsDeleterComponent extends Manager
     {
         if ($user_assessment != null)
         {
-            $track = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt();
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: PROPERTY_ASSESSMENT_ATTEMPT_ID),
                 new StaticConditionVariable($user_assessment->get_id()));
-            $items = $track->retrieve_tracker_items($condition);
 
-            foreach ($items as $question_attempt)
+            $items = DataManager :: retrieves(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
+                new DataClassRetrievesParameters($condition));
+
+            while ($question_attempt = $items->next_result())
             {
                 $question_attempt->delete();
             }
@@ -83,15 +91,17 @@ class ResultsDeleterComponent extends Manager
 
     public function delete_assessment_results($aid)
     {
-        $track = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($aid));
-        $items = $track->retrieve_tracker_items($condition);
 
-        foreach ($items as $assessment_attempt)
+        $items = DataManager :: retrieves(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
+        while ($assessment_attempt = $items->next_result())
         {
             $this->delete_user_assessment_results($assessment_attempt);
         }

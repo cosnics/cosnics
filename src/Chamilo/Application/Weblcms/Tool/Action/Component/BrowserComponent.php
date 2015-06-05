@@ -235,7 +235,7 @@ class BrowserComponent extends Manager
      *
      * @return array An array of ContentObjectPublication objects
      */
-    public function get_publications($offset, $max_objects, OrderBy $object_table_order)
+    public function get_publications($offset, $max_objects, $object_table_order = array())
     {
         if (empty($this->publications))
         {
