@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<block name="personal_calendar_day">
+<block name="Day">
 	<settings>
 		<category name="time">
 			<setting name="hour_step" field="text" default="1" />

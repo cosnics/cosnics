@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<block name="course_type_course_list">
+<block name="CourseTypeCourseList">
 	<settings>
 		<category name="display">
 			<setting name="show_when_empty" field="radio" default="1">
