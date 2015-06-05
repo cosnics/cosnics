@@ -24,6 +24,10 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  *
@@ -107,6 +111,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
             $breadcrumb_title);
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
 
+        $this->get_submissions_from_target();
         return $this->display_assignment_submissions();
     }
 
@@ -194,6 +199,20 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
     public function get_assignment()
     {
         return $this->assignment;
+    }
+
+    /**
+     * Gets all submissions from a target user or group for the publication
+     */
+    private function get_submissions_from_target()
+    {
+        $order_by[] = new OrderBy(
+            new PropertyConditionVariable(
+                AssignmentSubmission :: class_name(),
+                AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
+        $this->submissions = DataManager :: retrieves(
+            AssignmentSubmission :: class_name(),
+            new DataClassRetrievesParameters($this->get_table_conditions(), null, null, $order_by));
     }
 
     /**
@@ -684,7 +703,14 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-        $conditions[] = $this->get_search_condition();
+
+        $searchConditions = $this->get_search_condition();
+
+        if ($searchConditions)
+        {
+            $conditions[] = $searchConditions;
+        }
+
         $conditions[] = $this->get_table_conditions();
         return new AndCondition($conditions);
     }

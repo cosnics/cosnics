@@ -5,10 +5,12 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Description of submitter_user_submissions_browser_table_data_provider
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  */
 class SubmitterUserSubmissionsTableDataProvider extends DataClassTableDataProvider
@@ -20,18 +22,13 @@ class SubmitterUserSubmissionsTableDataProvider extends DataClassTableDataProvid
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
+                    AssignmentSubmission :: class_name(),
                     AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
         }
-        // From here on, the tracking model is circumvented.
-        $data = AssignmentSubmission :: get_data(
-            AssignmentSubmission :: CLASS_NAME, 
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
-            $condition, 
-            $offset, 
-            $count, 
-            $order_property);
-        return $data;
+
+        return DataManager :: retrieves(
+            AssignmentSubmission :: class_name(),
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)

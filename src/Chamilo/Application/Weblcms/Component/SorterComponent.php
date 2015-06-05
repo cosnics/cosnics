@@ -25,6 +25,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
 
 /**
  * $Id: sorter.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -113,6 +115,8 @@ class SorterComponent extends Manager
             {
                 \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: create_course_type_user_orders_for_user(
                     $this->get_user_id());
+
+                DataClassCache :: truncate(CourseTypeUserOrder :: class_name());
 
                 $selected_course_type_user_order = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_user_order_for_course_type(
                     $selected_course_type_id,

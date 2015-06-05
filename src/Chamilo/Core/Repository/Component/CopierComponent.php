@@ -51,6 +51,7 @@ class CopierComponent extends Manager
             {
                 $copier = new ContentObjectCopier(
                     array($content_object->get_id()),
+                    $this->getWorkspace(),
                     $source_user_id,
                     $this->getWorkspace(),
                     $target_user_id,

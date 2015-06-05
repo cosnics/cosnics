@@ -837,7 +837,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (! $category)
         {
             $category = new RepositoryCategory();
-            $category->set_user_id($user_id);
+            $category->set_type_id($user_id);
             $category->set_name($title);
             $category->set_parent($parent_id);
             $category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);

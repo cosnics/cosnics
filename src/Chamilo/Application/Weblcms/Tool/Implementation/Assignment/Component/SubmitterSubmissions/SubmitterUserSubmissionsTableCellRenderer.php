@@ -13,6 +13,10 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Description of submitter_submissions_user_browser_table_cell_renderer
@@ -67,7 +71,7 @@ class SubmitterUserSubmissionsTableCellRenderer extends DataClassTableCellRender
      * @param $submission type
      * @return string The HTML code that represents the actions.
      */
-    private function get_actions($submission)
+    public function get_actions($submission)
     {
         $toolbar = new Toolbar();
 
@@ -155,17 +159,21 @@ class SubmitterUserSubmissionsTableCellRenderer extends DataClassTableCellRender
      */
     private function get_score_from_submission($submission_id)
     {
-        $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID,
-            $submission_id);
-        $trackers = $tracker->retrieve_tracker_items($condition);
-        // $trackers = $tracker->get_data()
+            new PropertyConditionVariable(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
+            new StaticConditionVariable($submission_id));
 
-        if (count($trackers) > 0)
+        $trackers = DataManager :: retrieves(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
+        if ($trackers->size() > 0)
         {
-            return $trackers[0]->get_score() . '%';
+            return $trackers->next_result()->get_score() . '%';
         }
+
         return null;
     }
 
