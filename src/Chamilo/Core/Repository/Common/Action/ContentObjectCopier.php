@@ -36,6 +36,12 @@ class ContentObjectCopier
 
     private $content_object_ids;
 
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $source_workspace;
+
     private $source_user_id;
 
     /**
@@ -48,10 +54,11 @@ class ContentObjectCopier
 
     private $target_category;
 
-    public function __construct($content_object_ids, $source_user_id, WorkspaceInterface $target_workspace,
-        $target_user_id, $target_category = 0)
+    public function __construct($content_object_ids, WorkspaceInterface $source_workspace, $source_user_id,
+        WorkspaceInterface $target_workspace, $target_user_id, $target_category = 0)
     {
         $this->content_object_ids = $content_object_ids;
+        $this->source_workspace = $source_workspace;
         $this->source_user_id = $source_user_id;
         $this->target_workspace = $target_workspace;
         $this->target_user_id = $target_user_id;
@@ -88,6 +95,7 @@ class ContentObjectCopier
         }
 
         $export_parameters = new ExportParameters(
+            $this->source_workspace,
             $this->source_user_id,
             ContentObjectExport :: FORMAT_CPO,
             $export_content_object_ids);

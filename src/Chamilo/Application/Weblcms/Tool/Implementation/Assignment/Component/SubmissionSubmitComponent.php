@@ -360,8 +360,9 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
 
         $copier = new ContentObjectCopier(
             array($object->get_id()),
+            new PersonalWorkspace($this->get_user()),
             $this->get_user_id(),
-            new PersonalWorkspace($this->assignment->get_owner_id()),
+            new PersonalWorkspace($this->assignment->get_owner()),
             $this->assignment->get_owner_id(),
             $category_id);
         $content_object_ids = $copier->run();
