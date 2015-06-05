@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
             new StaticConditionVariable($variable));
         $condition = new AndCondition($conditions);
-        return self :: retrieve(Setting :: class_name(), $condition);
+        return self :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     public static function retrieve_synchronization_data($condition)

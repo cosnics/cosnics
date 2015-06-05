@@ -40,7 +40,9 @@ class UserStatusViewerComponent extends Manager
 
         if ($this->user_id != $this->get_user()->get_id())
         {
-            $subject_user = \Chamilo\Core\User\Storage\Datamanager :: retrieve(User :: class_name(), $this->user_id);
+            $subject_user = \Chamilo\Core\User\Storage\Datamanager :: retrieve_by_id(
+                User :: class_name(),
+                $this->user_id);
         }
         else
         {

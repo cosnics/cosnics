@@ -94,7 +94,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
     private function get_user_html($user_id)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             (int) $user_id);
 
@@ -111,13 +111,13 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $html[] = $user->get_email() . '<br />';
         $html[] = $user->get_status_name() . '<br />';
         $html[] = '</div><div style="float: right; max-width: 400px;">';
-        
+
         $profilePhotoUrl = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                 Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                 \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user_id));
-        
+
         $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" />';
         $html[] = '</div>';
 

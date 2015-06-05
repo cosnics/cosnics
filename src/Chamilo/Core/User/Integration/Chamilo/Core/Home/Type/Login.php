@@ -93,10 +93,6 @@ class Login extends Block
 
     public function handle_login_failed()
     {
-        // $messages = \Chamilo\Libraries\Platform\Session\Session :: retrieve('messages');
-        // $message = $messages['message'][0];
-
-        // return Display::error_message(Translation ::get('LoginFailed'));
         return '<div class="error-message" style="width: auto; left: 0%; right: 0%; margin: auto;">' .
              Translation :: get('LoginFailed') . '</div>';
     }

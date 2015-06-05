@@ -63,7 +63,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         if (! is_null($request_key) && ! is_null($request_user_id))
         {
 
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $request_user_id);
             if ($this->get_user_key($user) == $request_key)

@@ -334,7 +334,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),
             new StaticConditionVariable($id));
 
-        return self :: retrieve(Course :: class_name(), $condition);
+        return self :: retrieve(Course :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -350,7 +350,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_VISUAL_CODE),
             new StaticConditionVariable($visual_code));
 
-        return self :: retrieve(Course :: class_name(), $condition);
+        return self :: retrieve(Course :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**

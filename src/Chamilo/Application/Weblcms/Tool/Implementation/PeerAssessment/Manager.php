@@ -63,7 +63,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if (! isset($this->publication))
         {
             $publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-            $this->publication = WeblcmsDataManager :: retrieve(
+            $this->publication = WeblcmsDataManager :: retrieve_by_id(
                 ContentObjectPublication :: class_name(),
                 $publication_id);
         }

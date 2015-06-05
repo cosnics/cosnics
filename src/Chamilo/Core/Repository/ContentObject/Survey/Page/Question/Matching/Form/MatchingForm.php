@@ -22,7 +22,6 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-
 /**
  *
  * @package repository.content_object.survey_matching_question
@@ -36,14 +35,14 @@ class MatchingForm extends ContentObjectForm
     const TAB_QUESTION = 'question';
     const TAB_OPTION = 'option';
     const TAB_MATCH = 'match';
-    
+
     private static $html_editor_options = array(
         FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
         FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
-    
+
     /**
      * Prepare all the different tabs
-    */
+     */
     function prepareTabs()
     {
         $this->addElement(
@@ -52,8 +51,7 @@ class MatchingForm extends ContentObjectForm
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching',
                     true) . 'Form.js'));
-    
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_QUESTION,
@@ -63,7 +61,7 @@ class MatchingForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching',
                     'Tab/' . self :: TAB_QUESTION),
                 'build_question_form'));
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_OPTION,
@@ -73,7 +71,7 @@ class MatchingForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching',
                     'Tab/' . self :: TAB_OPTION),
                 'build_option_form'));
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_MATCH,
@@ -83,12 +81,11 @@ class MatchingForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching',
                     'Tab/' . self :: TAB_MATCH),
                 'build_match_form'));
-    
+
         $this->addDefaultTab();
         $this->addMetadataTabs();
     }
-    
-    
+
     /**
      * Initialize the general form based on the form type
      */
@@ -103,7 +100,7 @@ class MatchingForm extends ContentObjectForm
             parent :: build_editing_form(self :: $html_editor_options, true);
         }
     }
-    
+
     function build_question_form()
     {
         $this->add_textfield(
@@ -111,8 +108,11 @@ class MatchingForm extends ContentObjectForm
             Translation :: get('Question'),
             true,
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
-        $this->add_html_editor(Matching :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false, self ::$html_editor_options);
-
+        $this->add_html_editor(
+            Matching :: PROPERTY_INSTRUCTION,
+            Translation :: get('Instruction'),
+            false,
+            self :: $html_editor_options);
     }
 
     /**
@@ -123,7 +123,7 @@ class MatchingForm extends ContentObjectForm
         $this->update_number_of_options_and_matches();
         $this->add_options();
     }
-    
+
     /**
      * Adds the options and matches to the form
      */
@@ -189,7 +189,8 @@ class MatchingForm extends ContentObjectForm
     }
 
     /**
-     * Adds the answer to the current learning object. This function adds the list of possible options and matches and
+     * Adds the answer to the current learning object.
+     * This function adds the list of possible options and matches and
      * the relation between the options and the matches to the question.
      */
     function add_answers()

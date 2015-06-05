@@ -58,7 +58,7 @@ class PropertyProvider implements PropertyProviderInterface
 
                 return implode(', ', $tags);
             case self :: PROPERTY_OWNER_FULLNAME :
-                $author = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+                $author = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                     \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                     $content_object->get_owner_id());
                 if ($author)

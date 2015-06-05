@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Libraries\Platform\Session\Session;
 /**
@@ -20,7 +18,9 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
     {
         $size = $file['size'];
         $calculator = new Calculator(
-                \Chamilo\Core\User\Storage\DataManager :: retrieve(\Chamilo\Core\User\Storage\DataClass\User :: class_name(), (int) Session :: get_user_id()));
+            \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                (int) Session :: get_user_id()));
 
         return $calculator->get_available_user_disk_quota() > $size;
     }

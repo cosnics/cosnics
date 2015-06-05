@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * $Id: course_group_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -70,7 +71,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $this->introduction_text = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve(
             ContentObjectPublication :: class_name(),
-            $condition);
+            new DataClassRetrieveParameters($condition));
 
         $this->action_bar = $this->get_action_bar();
 

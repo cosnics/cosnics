@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * $Id: user_group_subscribe_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -120,9 +121,10 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve(
                 Group :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(0)));
+                new DataClassRetrieveParameters(
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
+                        new StaticConditionVariable(0))));
             $this->root_group = $group;
         }
 

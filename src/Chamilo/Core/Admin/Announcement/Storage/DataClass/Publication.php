@@ -171,7 +171,7 @@ class Publication extends DataClass
     {
         if (! isset($this->publisher))
         {
-            $this->publisher = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+            $this->publisher = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 User :: class_name(),
                 (int) $this->get_publisher_id());
         }

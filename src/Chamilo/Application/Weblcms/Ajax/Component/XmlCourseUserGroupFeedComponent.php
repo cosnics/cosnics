@@ -29,7 +29,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
         if ($course)
         {
-            $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve(
+            $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_by_id(
                 Course :: class_name(),
                 $course);
 

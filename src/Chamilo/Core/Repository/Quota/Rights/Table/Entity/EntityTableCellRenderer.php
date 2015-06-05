@@ -45,7 +45,7 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 switch ($location_entity_right->get_entity_type())
                 {
                     case UserEntity :: ENTITY_TYPE :
-                        return \Chamilo\Core\User\Storage\DataManager :: retrieve(
+                        return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                             (int) $location_entity_right->get_entity_id())->get_fullname();
                     case PlatformGroupEntity :: ENTITY_TYPE :
