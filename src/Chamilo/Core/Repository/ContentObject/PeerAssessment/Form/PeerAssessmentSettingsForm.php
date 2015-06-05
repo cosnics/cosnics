@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
-use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component\ViewerComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -33,7 +32,7 @@ class PeerAssessmentSettingsForm extends FormValidator
      *
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
-    public function __construct(ViewerComponent $viewer)
+    public function __construct($viewer)
     {
         $this->viewer = $viewer;
 

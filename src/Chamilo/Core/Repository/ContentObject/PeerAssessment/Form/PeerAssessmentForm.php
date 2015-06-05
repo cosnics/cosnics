@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\PeerAssessment;
+namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: peer_assessment_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.peer_assessment
  * @author Renaat De Muynck
  * @author Sven Vanpoucke
@@ -22,7 +22,7 @@ class PeerAssessmentForm extends ContentObjectForm
     {
         $defaults[PeerAssessment :: PROPERTY_SCALE] = $this->get_content_object()->get_scale();
         $defaults[PeerAssessment :: PROPERTY_ASSESSMENT_TYPE] = $this->get_content_object()->get_assessment_type();
-        
+
         parent :: setDefaults($defaults);
     }
 
@@ -31,19 +31,19 @@ class PeerAssessmentForm extends ContentObjectForm
         $locked = null;
         if (! is_null($this->get_content_object()->get_id()))
             $locked = array('disabled' => 'disabled');
-        
+
         $this->addElement('category', Translation :: get('Properties'));
         $this->addElement(
-            'select', 
-            PeerAssessment :: PROPERTY_ASSESSMENT_TYPE, 
-            Translation :: get('Type'), 
-            $this->get_types(), 
+            'select',
+            PeerAssessment :: PROPERTY_ASSESSMENT_TYPE,
+            Translation :: get('Type'),
+            $this->get_types(),
             $locked);
         $this->addElement(
-            'select', 
-            PeerAssessment :: PROPERTY_SCALE, 
-            Translation :: get('Scale'), 
-            $this->get_scales(), 
+            'select',
+            PeerAssessment :: PROPERTY_SCALE,
+            Translation :: get('Scale'),
+            $this->get_scales(),
             $locked);
         $this->addElement('category');
     }
@@ -63,8 +63,8 @@ class PeerAssessmentForm extends ContentObjectForm
     private function get_types()
     {
         return array(
-            PeerAssessment :: TYPE_SCORES => Translation :: get('TypeScores'), 
-            PeerAssessment :: TYPE_FEEDBACK => Translation :: get('TypeFeedback'), 
+            PeerAssessment :: TYPE_SCORES => Translation :: get('TypeScores'),
+            PeerAssessment :: TYPE_FEEDBACK => Translation :: get('TypeFeedback'),
             PeerAssessment :: TYPE_BOTH => Translation :: get('TypeBoth'));
     }
 
@@ -77,7 +77,7 @@ class PeerAssessmentForm extends ContentObjectForm
         }
         return $scales;
     }
-    
+
     /*
      * (non-PHPdoc) @see repository.ContentObjectForm::create_content_object()
      */
@@ -85,26 +85,26 @@ class PeerAssessmentForm extends ContentObjectForm
     {
         $object = new PeerAssessment();
         $values = $this->exportValues();
-        
+
         $object->set_assessment_type($values[PeerAssessment :: PROPERTY_ASSESSMENT_TYPE]);
         $object->set_scale($values[PeerAssessment :: PROPERTY_SCALE]);
-        
+
         $this->set_content_object($object);
         return parent :: create_content_object();
     }
-    
+
     /*
      * (non-PHPdoc) @see repository.ContentObjectForm::update_content_object()
      */
     public function update_content_object()
     {
         $object = $this->get_content_object();
-        
+
         $values = $this->exportValues();
-        
+
         $object->set_assessment_type($values[PeerAssessment :: PROPERTY_ASSESSMENT_TYPE]);
         $object->set_scale($values[PeerAssessment :: PROPERTY_SCALE]);
-        
+
         $this->set_content_object($object);
         return parent :: update_content_object();
     }

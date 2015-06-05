@@ -141,7 +141,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         return implode(PHP_EOL, $html);
     }
 
-    function get_action_bar(\Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object)
+    function get_action_bar()
     {
         $repository_context = $this->get_parent() instanceof \Chamilo\Core\Repository\Component\BuilderComponent;
 
