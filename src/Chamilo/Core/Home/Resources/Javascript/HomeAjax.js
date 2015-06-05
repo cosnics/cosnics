@@ -11,7 +11,7 @@ $(function() {
 	function checkForEmptyColumns() {
 		$("div.portal_tab div.portal_column").each(function(i) {
 			var numberOfBlocks, emptyBlock;
-			numberOfBlocks = $(".portal_block", this).length;
+			numberOfBlocks = $(".portal-block", this).length;
 			emptyBlock = $(".empty_portal_column", this);
 			if (numberOfBlocks === 0) {
 				emptyBlock.show();
@@ -1106,7 +1106,7 @@ $(function() {
 		$(document).on('dblclick', "#tab_menu li.current a.tabTitle", editTab);
 
 		$(document).on('dblclick',
-				"div.portal_block div.title div.entry-title", editBlock);
+				"div.portal-block div.title div.entry-title", editBlock);
 		$(document).on('click', "a.configEl", configureBlock);
 
 		$(document).on('click', "a.addTab", addTab);
@@ -1183,9 +1183,9 @@ $(function() {
 							if (json.result_code == 200) {
 								// Does the column have blocks
 								var blockCount = $("#" + newColumn
-										+ " .portal_block").length;
+										+ " .portal-block").length;
 								if (blockCount > 0) {
-									$("#" + newColumn + " .portal_block:last")
+									$("#" + newColumn + " .portal-block:last")
 											.after(theBlock);
 								} else {
 									$("#" + newColumn).append(theBlock);
