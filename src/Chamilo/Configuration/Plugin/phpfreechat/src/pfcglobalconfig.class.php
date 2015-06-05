@@ -891,8 +891,8 @@ class pfcGlobalConfig
         }
         
         // calculate datapublic url
-        if ($this->data_public_url == "")
-            $this->data_public_url = pfc_RelativePath($this->client_script_path, $this->data_public_path);
+//         if ($this->data_public_url == "")
+//             $this->data_public_url = pfc_RelativePath($this->client_script_path, $this->data_public_path);
         
         if ($this->server_script_path == '')
             $this->server_script_path = $this->client_script_path;

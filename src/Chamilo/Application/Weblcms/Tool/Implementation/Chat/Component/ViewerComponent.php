@@ -31,9 +31,9 @@ class ViewerComponent extends Manager implements DelegateComponent
         if (($course_rel_user && $course_rel_user->get_status() == 1) || $user->is_platform_admin())
             $params["isadmin"] = true;
 
-        $params["data_public_url"] = Path :: getInstance()->getBasePath(true) . 'files/logs/chat/data/public';
-        $params["data_public_path"] = Path :: getInstance()->getBasePath() . 'files/logs/chat/data/public';
-        $params["data_private_path"] = Path :: getInstance()->getBasePath() . 'files/logs/chat/data/private';
+        $params["data_public_url"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public' ,true);
+        $params["data_public_path"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public');
+        $params["data_private_path"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Private');
         $params["server_script_url"] = $_SERVER['REQUEST_URI'];
         $params["serverid"] = $course->get_id();
         $params["title"] = $course->get_title();
@@ -48,6 +48,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $params["btn_sh_whosonline"] = false;
         $params["btn_sh_smileys"] = false;
         $params["displaytabimage"] = false;
+//         var_dump($params);
 
         $chat = new phpFreeChat($params);
 
