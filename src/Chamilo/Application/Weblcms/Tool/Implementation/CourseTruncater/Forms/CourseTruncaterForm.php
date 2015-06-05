@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This form can let the user select the sections and publications of a course for deleting them.
- * 
+ *
  * @author Mattias De Pauw - Hogeschool Gent
  * @author Maarten Volckaert - Hogeschool Gent
  */
@@ -25,12 +25,12 @@ class CourseTruncaterForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param type $parent
      */
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent :: __construct('course_truncater_form');
         $this->parent = $parent;
     }
 
@@ -40,39 +40,39 @@ class CourseTruncaterForm extends FormValidator
     public function buildForm()
     {
         $defaults = array();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_COURSE_ID), 
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->parent->get_course_id()));
-        
+
         $publications_set = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             new DataClassRetrievesParameters(
-                $condition, 
-                null, 
-                null, 
+                $condition,
+                null,
+                null,
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            ContentObjectPublication :: class_name(), 
+                            ContentObjectPublication :: class_name(),
                             ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX)))));
-        
+
         while ($publication = $publications_set->next_result())
         {
             $publications[$publication->get_tool()][] = $publication;
         }
-        
+
         $this->addElement('html', '<h3>' . Translation :: get('Publications') . '</h3>');
-        
+
         foreach ($publications as $tool => $tool_publications)
         {
             foreach ($tool_publications as $index => $publication)
             {
                 $label = $index == 0 ? Translation :: get(
-                    'TypeName', 
-                    null, 
+                    'TypeName',
+                    null,
                     \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool)) : '';
                 $content_object = $publication->get_content_object();
                 $id = 'publications[' . $publication->get_id() . ']';
@@ -80,25 +80,25 @@ class CourseTruncaterForm extends FormValidator
                 $defaults[$id] = true;
             }
         }
-        
+
         $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
-        
+
         $this->addElement('html', '<h3>' . Translation :: get('CourseSections') . '</h3>');
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->parent->get_course_id()));
-        
+
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            CourseSection :: class_name(), 
+            CourseSection :: class_name(),
             $condition);
-        
+
         $common_sections = array(
-            CourseSection :: TYPE_TOOL, 
-            CourseSection :: TYPE_DISABLED, 
-            CourseSection :: TYPE_LINK, 
+            CourseSection :: TYPE_TOOL,
+            CourseSection :: TYPE_DISABLED,
+            CourseSection :: TYPE_LINK,
             CourseSection :: TYPE_ADMIN);
-        
+
         while ($course_section = $course_sections->next_result())
         {
             if (! in_array($course_section->get_type(), $common_sections))
@@ -108,23 +108,23 @@ class CourseTruncaterForm extends FormValidator
                 $defaults[$id] = true;
             }
         }
-        
+
         $this->addElement('html', '<h3>' . Translation :: get('Other') . '</h3>');
         $this->addElement('checkbox', 'content_object_categories', Translation :: get('PublicationCategories'));
         $defaults['content_object_categories'] = true;
-        
+
         $this->setDefaults($defaults);
-        
+
         $this->addElement('html', '<h3>' . Translation :: get('EmptyThisCourseInformation') . '</h3>');
         $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
-            'confirm', 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            'confirm',
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
         $prevnext = array();
         $prevnext[] = $this->createElement(
-            'submit', 
-            $this->parent->get_url(), 
+            'submit',
+            $this->parent->get_url(),
             Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));

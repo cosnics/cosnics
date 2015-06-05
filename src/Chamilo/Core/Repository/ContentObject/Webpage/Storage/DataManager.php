@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -14,17 +15,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_webpage_id_by_hash($hash)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_HASH), 
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_HASH),
             new StaticConditionVariable($hash));
         $webpage = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-            Webpage :: class_name(), 
+            Webpage :: class_name(),
             $condition)->next_result();
-        
+
         if ($webpage)
         {
             return $webpage->get_id();
         }
-        
+
         return false;
     }
 
@@ -32,38 +33,38 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_HASH), 
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_HASH),
             new StaticConditionVariable($hash));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id));
-        
+
         $condition = new AndCondition($conditions);
-        
+
         return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_by_condition(
-            Webpage :: class_name(), 
+            Webpage :: class_name(),
             $condition);
     }
 
     public static function get_webpage_by_filename($filename)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_FILENAME), 
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_FILENAME),
             new StaticConditionVariable($filename));
         return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_by_condition(
-            Webpage :: class_name(), 
+            Webpage :: class_name(),
             $condition);
     }
 
     public static function is_only_webpage_occurence($path)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_PATH), 
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_PATH),
             new StaticConditionVariable($path));
         $count = \Chamilo\Core\Repository\Storage\DataManager :: count_content_objects(
-            Webpage :: class_name(), 
-            $condition);
-        
+            Webpage :: class_name(),
+            new DataClassCountParameters($condition));
+
         return ($count == 1 ? true : false);
     }
 }

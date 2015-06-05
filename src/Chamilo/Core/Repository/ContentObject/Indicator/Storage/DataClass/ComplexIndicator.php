@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Indicator;
+namespace Chamilo\Core\Repository\ContentObject\Indicator\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 

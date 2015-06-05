@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Form;
 
-use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component\ViewerComponent;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -37,7 +36,7 @@ class PeerAssessmentGroupForm extends FormValidator
      *
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
-    public function __construct(ViewerComponent $viewer, $group_id, $url, $type = self :: FORM_TYPE_CREATE)
+    public function __construct($viewer, $group_id, $url, $type = self :: FORM_TYPE_CREATE)
     {
         $this->viewer = $viewer;
         $this->group_id = $group_id;

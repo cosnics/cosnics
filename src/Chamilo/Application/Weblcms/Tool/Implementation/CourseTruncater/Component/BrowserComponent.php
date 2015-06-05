@@ -189,7 +189,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
+                    ContentObjectPublicationCategory :: class_name(),
                     ContentObjectPublicationCategory :: PROPERTY_COURSE),
                 new StaticConditionVariable($this->get_course_id()));
 
