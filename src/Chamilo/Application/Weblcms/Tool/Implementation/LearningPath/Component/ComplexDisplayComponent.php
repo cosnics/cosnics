@@ -71,7 +71,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->get_root_content_object()->package() . '\Display';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -126,9 +128,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         if ($this->is_embedded())
         {
             Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+            return Application :: render_header();
         }
-
-        return parent :: render_header();
+        else
+        {
+            return parent :: render_header();
+        }
     }
 
     public function get_publication()
@@ -210,7 +215,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = Request :: get('course');
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-            $this->context());
+            $this->package());
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $this->publication->get_id();
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();

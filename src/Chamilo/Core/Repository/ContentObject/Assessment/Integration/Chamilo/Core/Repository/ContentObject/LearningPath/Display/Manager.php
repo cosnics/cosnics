@@ -11,9 +11,14 @@ use Chamilo\Libraries\Platform\Translation;
 
 abstract class Manager extends Application
 {
+    // Parameters
+    const PARAM_ACTION = 'type_action';
+
+    // Actions
     const ACTION_MASTERY = 'Mastery';
     const ACTION_CONFIGURE = 'Configurer';
-    const PARAM_ACTION = 'type_action';
+
+    // Default action
     const DEFAULT_ACTION = self :: ACTION_MASTERY;
 
     public function get_node_tabs(ComplexContentObjectPathNode $node)

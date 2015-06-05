@@ -239,7 +239,7 @@ class DynamicVisualTab extends DynamicTab
         }
         elseif ($this->get_link() && $this->get_target() == self :: TARGET_POPUP)
         {
-            $link[] = 'onclick="javascript:openPopup(\'' . $this->get_link() . '\'); return false"';
+            $link[] = 'href="" onclick="javascript:openPopup(\'' . $this->get_link() . '\'); return false"';
         }
         else
         {

@@ -802,12 +802,31 @@ abstract class ContentObjectPublicationListRenderer
             if ($content_object instanceof ComplexContentObjectSupport && ($content_object->get_owner_id() ==
                  $this->get_tool_browser()->get_user_id()))
             {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                        $this->get_complex_builder_url($publication_id),
-                        ToolbarItem :: DISPLAY_ICON));
+                if (\Chamilo\Core\Repository\Builder\Manager :: exists($content_object->package()))
+                {
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                            $this->get_complex_builder_url($publication_id),
+                            ToolbarItem :: DISPLAY_ICON));
+
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                            $this->get_complex_display_url($publication_id),
+                            ToolbarItem :: DISPLAY_ICON));
+                }
+                else
+                {
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
+                            $this->get_complex_display_url($publication_id),
+                            ToolbarItem :: DISPLAY_ICON));
+                }
             }
 
             // quick-win: correct implementation of moving up and down.
