@@ -33,7 +33,8 @@ class CreatorComponent extends TabComponent
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $workspace = $workspaceService->createWorkspace($values);
 
-                $translation = $workspace instanceof Workspace ? 'ObjectCreated' : 'ObjectNotCreated';
+                $success = $workspace instanceof Workspace;
+                $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
                 $message = Translation :: get(
                     $translation,
