@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableCellRenderer;
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 
 /**
  *
@@ -20,9 +21,9 @@ class SharedWorkspaceTableCellRenderer extends WorkspaceTableCellRenderer
 
     public function get_actions($workspace)
     {
-        $toolbar = $this->getToolbar($workspace);
+        $toolbar = new Toolbar();
 
-        $toolbar->prepend_item(
+        $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'),
