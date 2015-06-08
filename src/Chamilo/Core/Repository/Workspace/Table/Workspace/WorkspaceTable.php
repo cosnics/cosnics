@@ -27,6 +27,15 @@ class WorkspaceTable extends DataClassTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
+
+        $actions->add_form_action(
+            new TableFormAction(
+                array(
+                    Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
+                    \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE),
+                Translation :: get('FavouriteSelected', null, Utilities :: COMMON_LIBRARIES),
+                true));
+
         $actions->add_form_action(
             new TableFormAction(
                 array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),

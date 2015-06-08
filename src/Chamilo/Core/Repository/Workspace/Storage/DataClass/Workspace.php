@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 
 /**
  *
@@ -154,6 +155,11 @@ class Workspace extends DataClass implements WorkspaceInterface
                 new PropertyConditionVariable(
                     WorkspaceCategoryRelation :: class_name(),
                     WorkspaceCategoryRelation :: PROPERTY_WORKSPACE_ID),
+                new StaticConditionVariable($this->getId())),
+            WorkspaceUserFavourite :: class_name() => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceUserFavourite :: class_name(),
+                    WorkspaceUserFavourite :: PROPERTY_WORKSPACE_ID),
                 new StaticConditionVariable($this->getId())));
     }
 
