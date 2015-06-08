@@ -39,6 +39,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'Viewer';
     const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
     const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
+    const ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM = 'Copier';
     const ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM = 'Mover';
     const ACTION_CHANGE_PARENT = 'ParentChanger';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
@@ -208,7 +209,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     public function get_complex_content_object_table_html()
     {
-        $name_space = $this->get_root_content_object()->context();
+        $name_space = $this->get_root_content_object()->package();
 
         $class = $name_space . '\Builder\Component\Browser\ComplexTable';
 
@@ -275,6 +276,15 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+    }
+
+    public function get_complex_content_object_item_copy_url($selected_content_object_item_id)
+    {
+        return $this->get_url(
+            array(
+                self :: PARAM_ACTION => self :: ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM,
                 self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: assessment_browser_table_cell_renderer.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_builder.assessment.component.browser
  */
 /**
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\ComplexTableCellRenderer
 {
-    
+
     // Inherited
     public function render_cell($column, $cloi)
     {
@@ -22,7 +22,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
             case Translation :: get(ComplexTableColumnModel :: WEIGHT) :
                 return $cloi->get_weight();
         }
-        
+
         return parent :: render_cell($column, $cloi);
     }
 }
