@@ -7,10 +7,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
@@ -42,11 +38,8 @@ class DeleterComponent extends Manager
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
 
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
+            $rightsService = RightsService :: getInstance();
 
             foreach ($workspaceIdentifiers as $workspaceIdentifier)
             {

@@ -4,6 +4,9 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 
 /**
  *
@@ -23,6 +26,12 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    private static $instance;
+
+    /**
+     *
      * @var \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService
      */
     private $contentObjectRelationService;
@@ -35,15 +44,22 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Service\EntityService
+     */
+    private $entityService;
+
+    /**
+     *
      * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     * @param \Chamilo\Core\Repository\Workspace\Service\EntityRelationService $entityRelationService
+     * @param \Chamilo\Core\Repository\Workspace\Service\EntityService $entityService
      */
     public function __construct(ContentObjectRelationService $contentObjectRelationService,
-        EntityRelationService $entityRelationService)
+        EntityRelationService $entityRelationService, EntityService $entityService)
     {
         $this->contentObjectRelationService = $contentObjectRelationService;
         $this->entityRelationService = $entityRelationService;
+        $this->entityService = $entityService;
     }
 
     /**
@@ -84,6 +100,24 @@ class RightsService
 
     /**
      *
+     * @return \Chamilo\Core\Repository\Workspace\Service\EntityService
+     */
+    public function getEntityService()
+    {
+        return $this->entityService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Service\EntityService $entityService
+     */
+    public function setEntityService($entityService)
+    {
+        $this->entityService = $entityService;
+    }
+
+    /**
+     *
      * @param integer $right
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
@@ -97,7 +131,10 @@ class RightsService
             return true;
         }
 
-        return $this->getEntityRelationService()->hasRight($user, $right, $workspaceImplementation);
+        return $this->getEntityRelationService()->hasRight(
+            $this->getEntityService()->getEntitiesForUser($user),
+            $right,
+            $workspaceImplementation);
     }
 
     /**
@@ -317,7 +354,18 @@ class RightsService
         // Is the contentObject in a workspace the user has the requested right for
         else
         {
-            return $this->getContentObjectRelationService()->hasRight($user, $right, $contentObject);
+            $contentObjectWorkspaces = $this->getContentObjectRelationService()->getWorkspacesForContentObject(
+                $contentObject);
+
+            while ($contentObjectWorkspace = $contentObjectWorkspaces->next_result())
+            {
+                if ($this->hasRightForWorkspace($right, $user, $contentObjectWorkspace))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -355,5 +403,23 @@ class RightsService
         }
 
         return $right;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    static public function getInstance()
+    {
+        if (is_null(static :: $instance))
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $entityRelationService = new EntityRelationService(new EntityRelationRepository());
+            $entityService = new EntityService();
+
+            self :: $instance = new static($contentObjectRelationService, $entityRelationService, $entityService);
+        }
+
+        return static :: $instance;
     }
 }

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 
@@ -52,15 +51,15 @@ class EntityRelationService
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
      * @param integer $right
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
      * @return boolean
      */
-    public function hasRight(User $user, $right, WorkspaceInterface $workspaceImplementation)
+    public function hasRight($entities, $right, WorkspaceInterface $workspaceImplementation)
     {
-        return $this->getEntityRelationRepository()->findUserWithRight($user, $right, $workspaceImplementation);
+        return $this->getEntityRelationRepository()->findEntitiesWithRight($entities, $right, $workspaceImplementation);
     }
 
     /**

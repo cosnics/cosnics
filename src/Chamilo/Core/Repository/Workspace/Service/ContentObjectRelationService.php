@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
@@ -81,22 +80,6 @@ class ContentObjectRelationService
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer $right
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     */
-    public function hasRight(User $user, $right, ContentObject $contentObject)
-    {
-        return $this->getContentObjectRelationRepository()->findContentObjectForUserWithRight(
-            $user,
-            $right,
-            $contentObject);
-    }
-
-    /**
-     *
      * @param integer $workspaceId
      * @param integer $contentObjectId
      * @param integer $categoryId
@@ -166,5 +149,27 @@ class ContentObjectRelationService
         }
 
         return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceService $workspaceService
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspacesForContentObject(WorkspaceService $workspaceService, ContentObject $contentObject)
+    {
+        $workspaceIdentifiers = $this->getWorkspaceIdentifiersForContentObject($contentObject);
+        return $workspaceService->getWorkspacesByIdentifiers($workspaceIdentifiers);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @return integer[]
+     */
+    public function getWorkspaceIdentifiersForContentObject(ContentObject $contentObject)
+    {
+        return $this->getContentObjectRelationRepository()->findWorkspaceIdentifiersForContentObject($contentObject);
     }
 }

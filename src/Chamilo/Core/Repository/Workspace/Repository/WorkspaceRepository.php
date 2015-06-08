@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 
 /**
  *
@@ -38,13 +39,29 @@ class WorkspaceRepository
 
     /**
      *
+     * @param integer[] $identifiers
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = array())
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID),
+            $identifiers);
+
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters($condition, $limit, $offset, $orderProperty));
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $limit
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = array())
+    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -86,7 +103,7 @@ class WorkspaceRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllWorkspaces($limit, $offset, $orderProperty = array())
+    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -110,7 +127,7 @@ class WorkspaceRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findSharedWorkspacesForEntities($entities, $limit, $offset, $orderProperty = array())
+    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -195,7 +212,7 @@ class WorkspaceRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findWorkspaceFavouritesByUser(User $user, $entities, $limit, $offset, $orderProperty = array())
+    public function findWorkspaceFavouritesByUser(User $user, $entities, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),

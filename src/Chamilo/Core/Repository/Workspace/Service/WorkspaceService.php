@@ -65,6 +65,16 @@ class WorkspaceService
 
     /**
      *
+     * @param integer[] $identifiers
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspacesByIdentifiers($identifiers)
+    {
+        return $this->getWorkspaceRepository()->findWorkspacesByIdentifiers($identifiers);
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $identifier
      * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
@@ -246,10 +256,12 @@ class WorkspaceService
 
     /**
      *
+     * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspaceFavouritesByUser(User $user, $limit, $offset, $orderProperty = null)
+    public function getWorkspaceFavouritesByUser(EntityService $entityService, User $user, $limit, $offset,
+        $orderProperty = null)
     {
         if (is_null($orderProperty))
         {
@@ -261,7 +273,7 @@ class WorkspaceService
 
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
             $user,
-            $this->getEntitiesForUser($user),
+            $entityService->getEntitiesForUser($user),
             $limit,
             $offset,
             $orderProperty);
@@ -269,11 +281,14 @@ class WorkspaceService
 
     /**
      *
+     * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return integer
      */
-    public function countWorkspaceFavouritesByUser(User $user)
+    public function countWorkspaceFavouritesByUser(EntityService $entityService, User $user)
     {
-        return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser($user, $this->getEntitiesForUser($user));
+        return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser(
+            $user,
+            $entityService->getEntitiesForUser($user));
     }
 }

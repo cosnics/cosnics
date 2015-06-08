@@ -5,8 +5,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
@@ -32,8 +30,7 @@ class CreatorComponent extends TabComponent
                 $values = $form->exportValues();
 
                 $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
+                $rightsService = RightsService :: getInstance();
 
                 $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],
