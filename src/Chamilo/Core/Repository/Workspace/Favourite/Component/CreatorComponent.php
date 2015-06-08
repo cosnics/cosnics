@@ -2,13 +2,14 @@
 namespace Chamilo\Core\Repository\Workspace\Favourite\Component;
 
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
-use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Favourite\Manager;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
+use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -22,50 +23,41 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $workspace = $this->getCurrentWorkspace();
+        $workspaceIdentifier = $this->getRequest()->query->get(
+            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
-        $form = new RightsForm($this->get_url());
-
-        if ($form->validate())
+        if (! $workspaceIdentifier)
         {
-            try
-            {
-                $values = $form->exportValues();
+            throw new NoObjectSelectedException(Translation :: get('Workspace'));
+        }
 
-                $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+        $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceIdentifier);
 
-                $right = $rightsService->getAggregatedRight(
-                    (int) $values[RightsForm :: PROPERTY_VIEW],
-                    (int) $values[RightsForm :: PROPERTY_USE],
-                    (int) $values[RightsForm :: PROPERTY_COPY]);
+        $favouriteService = new FavouriteService(new FavouriteRepository());
+        $workspaceUserFavourite = $favouriteService->createWorkspaceUserFavourite(
+            $this->get_user(),
+            $workspaceIdentifier);
 
-                $success = $entityRelationService->setEntityRelations(
-                    $workspace,
-                    $values[RightsForm :: PROPERTY_ACCESS],
-                    $right);
-
-                $translation = $success ? 'RightsSet' : 'RightsNotSet';
-                $message = Translation :: get($translation);
-            }
-            catch (\Exception $ex)
-            {
-                $success = false;
-                $message = $ex->getMessage();
-            }
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_CREATE));
+        if ($workspaceUserFavourite instanceof WorkspaceUserFavourite)
+        {
+            $this->redirect(
+                Translation :: get(
+                    'ObjectCreated',
+                    array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES),
+                false,
+                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
         else
         {
-            $html = array();
-
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
+            $this->redirect(
+                Translation :: get(
+                    'ObjectNotCreated',
+                    array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES),
+                true,
+                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
         }
     }
 }

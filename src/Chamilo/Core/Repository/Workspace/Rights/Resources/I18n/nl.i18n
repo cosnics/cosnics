@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeCategory = "Rights"
+CreatorComponent = "Ken rechten toe"
+BrowserComponent = "Beheer rechten"
+ContentRight = "Inhoudsrechten"
+UseRight = "Gebruik toestaan"
+CopyRight = "Kopiëren toestaan"
+ViewRight = "Bekijken"
+AddRight = "+ Toevoegen"
+EditRight = "+ Aanpassen"
+DeleteRight = "+ Verwijderen"

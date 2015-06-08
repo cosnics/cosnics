@@ -599,37 +599,6 @@ abstract class Manager extends Application
         return $redirect->getUrl();
     }
 
-    public function get_complex_content_object_item_edit_url($complex_content_object_item, $root_id)
-    {
-        return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEMS,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
-                'publish' => Request :: get('publish')));
-    }
-
-    public function get_complex_content_object_item_delete_url($complex_content_object_item, $root_id)
-    {
-        return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEMS,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
-                'publish' => Request :: get('publish')));
-    }
-
-    public function get_complex_content_object_item_move_url($complex_content_object_item, $root_id, $direction)
-    {
-        return $this->get_url(
-            array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEMS,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ROOT_ID => $root_id,
-                self :: PARAM_MOVE_DIRECTION => $direction,
-                'publish' => Request :: get('publish')));
-    }
-
     public function get_browse_complex_content_object_url($object)
     {
         return $this->get_url(

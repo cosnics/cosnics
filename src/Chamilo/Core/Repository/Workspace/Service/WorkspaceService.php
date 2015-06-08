@@ -7,6 +7,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -99,9 +101,9 @@ class WorkspaceService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspacesByCreator(User $user)
+    public function getWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = null)
     {
-        return $this->getWorkspaceRepository()->findWorkspacesByCreator($user);
+        return $this->getWorkspaceRepository()->findWorkspacesByCreator($user, $limit, $offset, $orderProperty);
     }
 
     /**
@@ -137,9 +139,13 @@ class WorkspaceService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getSharedWorkspacesForUser(User $user)
+    public function getSharedWorkspacesForUser(User $user, $limit, $offset, $orderProperty = null)
     {
-        return $this->getWorkspaceRepository()->findSharedWorkspacesForEntities($this->getEntitiesForUser($user));
+        return $this->getWorkspaceRepository()->findSharedWorkspacesForEntities(
+            $this->getEntitiesForUser($user),
+            $limit,
+            $offset,
+            $orderProperty);
     }
 
     /**
@@ -236,5 +242,38 @@ class WorkspaceService
         $workspace->setDescription($workspaceProperties[Workspace :: PROPERTY_DESCRIPTION]);
         $workspace->setCreationDate($workspaceProperties[Workspace :: PROPERTY_CREATION_DATE]);
         $workspace->setCreatorId($workspaceProperties[Workspace :: PROPERTY_CREATOR_ID]);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspaceFavouritesByUser(User $user, $limit, $offset, $orderProperty = null)
+    {
+        if (is_null($orderProperty))
+        {
+            $orderProperty = array(
+                new OrderBy(
+                    new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_NAME),
+                    SORT_ASC));
+        }
+
+        return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
+            $user,
+            $this->getEntitiesForUser($user),
+            $limit,
+            $offset,
+            $orderProperty);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countWorkspaceFavouritesByUser(User $user)
+    {
+        return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser($user, $this->getEntitiesForUser($user));
     }
 }

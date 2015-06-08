@@ -1,15 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Component;
 
-use Chamilo\Core\Repository\Workspace\Rights\Manager;
+use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
+use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
 
 /**
  *
@@ -26,48 +23,43 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $entityRelationIdentifiers = $this->getRequest()->query->get(self :: PARAM_ENTITY_RELATION_ID);
+        $workspaceIdentifiers = $this->getRequest()->query->get(
+            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
         try
         {
-            if (empty($entityRelationIdentifiers))
+            if (empty($workspaceIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('WorkspaceEntityRelation'));
+                throw new NoObjectSelectedException(Translation :: get('Workspace'));
             }
 
-            if (! is_array($entityRelationIdentifiers))
+            if (! is_array($workspaceIdentifiers))
             {
-                $entityRelationIdentifiers = array($entityRelationIdentifiers);
+                $workspaceIdentifiers = array($workspaceIdentifiers);
             }
 
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $entityRelationService = new EntityRelationService(new EntityRelationRepository());
+            $favouriteService = new FavouriteService(new FavouriteRepository());
 
-            $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
-
-            foreach ($entityRelationIdentifiers as $entityRelationIdentifier)
+            foreach ($workspaceIdentifiers as $workspaceIdentifier)
             {
-                $entityRelation = $entityRelationService->getEntityRelationByIdentifier($entityRelationIdentifier);
-
-                if ($rightsService->hasWorkspaceImplementationCreatorRights(
+                $success = $favouriteService->deleteWorkspaceByUserAndWorkspaceIdentifier(
                     $this->get_user(),
-                    $this->getCurrentWorkspace()))
+                    $workspaceIdentifier);
+
+                if (! $success)
                 {
-                    if (! $entityRelationService->deleteEntityRelation($entityRelation))
-                    {
-                        throw new \Exception(
-                            Translation :: get(
-                                'ObjectNotDeleted',
-                                array('OBJECT' => Translation :: get('Workspace')),
-                                Utilities :: COMMON_LIBRARIES));
-                    }
+                    throw new \Exception(
+                        Translation :: get(
+                            'ObjectNotDeleted',
+                            array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
+                            Utilities :: COMMON_LIBRARIES));
                 }
             }
 
             $success = true;
             $message = Translation :: get(
                 'ObjectDeleted',
-                array('OBJECT' => Translation :: get('Workspace')),
+                array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
                 Utilities :: COMMON_LIBRARIES);
         }
         catch (\Exception $ex)

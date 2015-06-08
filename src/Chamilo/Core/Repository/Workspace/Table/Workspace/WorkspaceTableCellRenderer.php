@@ -11,6 +11,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -25,12 +27,20 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                 return DatetimeUtilities :: format_locale_date(
                     Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
                     $workspace->getCreationDate());
+            case Workspace :: PROPERTY_NAME :
+                return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
+                     parent :: render_cell($column, $workspace) . '</a>';
         }
 
         return parent :: render_cell($column, $workspace);
     }
 
     public function get_actions($workspace)
+    {
+        return $this->getToolbar($workspace)->as_html();
+    }
+
+    public function getToolbar($workspace)
     {
         $toolbar = new Toolbar();
 
@@ -65,6 +75,16 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                 ToolbarItem :: DISPLAY_ICON,
                 true));
 
-        return $toolbar->as_html();
+        return $toolbar;
+    }
+
+    private function getWorkspaceUrl($workspace)
+    {
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: package(),
+                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $workspace->getId()));
+
+        return $redirect->getUrl();
     }
 }

@@ -24,7 +24,7 @@ class WorkspaceCategoryItem extends CategoryItem
         $sub_html = array();
 
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $workspaces = $workspaceService->getWorkspacesByCreator($this->get_menu_renderer()->get_user());
+        $workspaces = $workspaceService->getWorkspaceFavouritesByUser($this->get_menu_renderer()->get_user());
 
         $sub_html[] = '<ul>';
 
