@@ -44,6 +44,10 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
             new StaticTableColumn(
                 RightsService :: RIGHT_COPY,
                 $this->getRightIcon(RightsService :: RIGHT_COPY, 'CopyRight')));
+        $this->add_column(
+            new StaticTableColumn(
+                RightsService :: RIGHT_MANAGE,
+                $this->getRightIcon(RightsService :: RIGHT_MANAGE, 'ManageRight')));
     }
 
     /**

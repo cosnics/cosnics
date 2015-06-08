@@ -23,6 +23,7 @@ class RightsService
     const RIGHT_DELETE = 8;
     const RIGHT_USE = 16;
     const RIGHT_COPY = 32;
+    const RIGHT_MANAGE = 64;
 
     /**
      *
@@ -167,7 +168,10 @@ class RightsService
             return true;
         }
 
-        return false;
+        return $this->getEntityRelationService()->hasRight(
+            $this->getEntityService()->getEntitiesForUser($user),
+            self :: RIGHT_MANAGE,
+            $workspaceImplementation);
     }
 
     /**
@@ -240,6 +244,18 @@ class RightsService
     public function canCopyContentObjects(User $user, WorkspaceInterface $workspaceImplementation)
     {
         return $this->hasRightForWorkspace(self :: RIGHT_COPY, $user, $workspaceImplementation);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
+     */
+    public function canManageWorkspace(User $user, WorkspaceInterface $workspaceImplementation)
+    {
+        return $this->hasRightForWorkspace(self :: RIGHT_MANAGE, $user, $workspaceImplementation);
     }
 
     /**
@@ -388,7 +404,7 @@ class RightsService
      * @param integer $copyRight
      * @return integer
      */
-    public function getAggregatedRight($viewRight, $useRight, $copyRight)
+    public function getAggregatedRight($viewRight, $useRight, $copyRight, $manageRight)
     {
         $right = $viewRight;
 
@@ -400,6 +416,11 @@ class RightsService
         if ($copyRight)
         {
             $right = $right | $copyRight;
+        }
+
+        if ($manageRight)
+        {
+            $right = $right | $manageRight;
         }
 
         return $right;

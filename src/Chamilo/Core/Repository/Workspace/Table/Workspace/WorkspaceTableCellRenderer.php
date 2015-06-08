@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -66,34 +67,50 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'),
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                        Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE,
                         Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
-                        Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
+        if (RightsService :: getInstance()->canManageWorkspace(
+            $this->get_component()->get_user(),
+            $workspace))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
+                    ToolbarItem :: DISPLAY_ICON));
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
-                ToolbarItem :: DISPLAY_ICON,
-                true));
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
+                    ToolbarItem :: DISPLAY_ICON));
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
+                    ToolbarItem :: DISPLAY_ICON,
+                    true));
+        }
 
         return $toolbar;
     }

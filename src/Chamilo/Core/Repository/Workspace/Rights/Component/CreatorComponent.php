@@ -35,7 +35,8 @@ class CreatorComponent extends TabComponent
                 $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],
                     (int) $values[RightsForm :: PROPERTY_USE],
-                    (int) $values[RightsForm :: PROPERTY_COPY]);
+                    (int) $values[RightsForm :: PROPERTY_COPY],
+                    (int) $values[RightsForm :: PROPERTY_MANAGE]);
 
                 $success = $entityRelationService->setEntityRelations(
                     $workspace,

@@ -59,6 +59,8 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer impleme
                 return $this->getRightsIcon(RightsService :: RIGHT_USE, $entityRelation);
             case RightsService :: RIGHT_COPY :
                 return $this->getRightsIcon(RightsService :: RIGHT_COPY, $entityRelation);
+            case RightsService :: RIGHT_MANAGE :
+                return $this->getRightsIcon(RightsService :: RIGHT_MANAGE, $entityRelation);
         }
 
         return parent :: render_cell($column, $entityRelation);
