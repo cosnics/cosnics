@@ -6,9 +6,20 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumn
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\Workspace\Table\Workspace
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class WorkspaceTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\TableColumnModel::initialize_columns()
+     */
     public function initialize_columns()
     {
         $this->add_column(new DataClassPropertyTableColumn(Workspace :: class_name(), Workspace :: PROPERTY_NAME));

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace\Shared;
 
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 
 /**
  *
@@ -12,4 +13,13 @@ use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable;
  */
 class SharedWorkspaceTable extends WorkspaceTable
 {
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable::get_implemented_form_actions()
+     */
+    public function get_implemented_form_actions()
+    {
+        return new TableFormActions(__NAMESPACE__);
+    }
 }
