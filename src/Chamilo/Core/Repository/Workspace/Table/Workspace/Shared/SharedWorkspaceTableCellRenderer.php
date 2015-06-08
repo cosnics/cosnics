@@ -19,6 +19,10 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 class SharedWorkspaceTableCellRenderer extends WorkspaceTableCellRenderer
 {
 
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableCellRenderer::get_actions()
+     */
     public function get_actions($workspace)
     {
         $toolbar = new Toolbar();

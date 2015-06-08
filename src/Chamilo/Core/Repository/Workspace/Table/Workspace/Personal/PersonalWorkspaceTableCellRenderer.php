@@ -18,6 +18,10 @@ use Chamilo\Core\Repository\Workspace\Manager;
 class PersonalWorkspaceTableCellRenderer extends WorkspaceTableCellRenderer
 {
 
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableCellRenderer::get_actions()
+     */
     public function get_actions($workspace)
     {
         $toolbar = $this->getToolbar($workspace);

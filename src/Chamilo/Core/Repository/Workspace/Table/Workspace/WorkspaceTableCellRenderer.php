@@ -14,9 +14,20 @@ use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\Workspace\Table\Workspace
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
+     */
     public function render_cell($column, $workspace)
     {
         switch ($column->get_name())
@@ -35,11 +46,20 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         return parent :: render_cell($column, $workspace);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
+     */
     public function get_actions($workspace)
     {
         return $this->getToolbar($workspace)->as_html();
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @return \Chamilo\Libraries\Format\Structure\Toolbar
+     */
     public function getToolbar($workspace)
     {
         $toolbar = new Toolbar();
@@ -78,6 +98,11 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         return $toolbar;
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @return string
+     */
     private function getWorkspaceUrl($workspace)
     {
         $redirect = new Redirect(
