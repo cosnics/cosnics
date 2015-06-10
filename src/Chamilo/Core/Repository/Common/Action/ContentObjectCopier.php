@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -34,113 +35,150 @@ class ContentObjectCopier
 
     private $messages;
 
-    private $content_object_ids;
+    /**
+     *
+     * @var integer[]
+     */
+    private $contentObjectIdentifiers;
 
     /**
      *
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
-    private $source_workspace;
+    private $sourceWorkspace;
 
-    private $source_user_id;
+    /**
+     *
+     * @var integer
+     */
+    private $sourceUserIdentifier;
 
     /**
      *
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
-    private $target_workspace;
+    private $targetWorkspace;
 
-    private $target_user_id;
+    /**
+     *
+     * @var integer
+     */
+    private $targetUserIdentifier;
 
-    private $target_category;
+    /**
+     *
+     * @var integer
+     */
+    private $targetCategory;
 
-    public function __construct($content_object_ids, WorkspaceInterface $source_workspace, $source_user_id,
-        WorkspaceInterface $target_workspace, $target_user_id, $target_category = 0)
+    /**
+     *
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    private $currentUser;
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param integer[] $contentObjectIdentifiers
+     * @param WorkspaceInterface $sourceWorkspace
+     * @param integer $sourceUserIdentifier
+     * @param WorkspaceInterface $targetWorkspace
+     * @param integer $targetUserIdentifier
+     * @param integer $targetCategory
+     */
+    public function __construct(User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace,
+        $sourceUserIdentifier, WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0)
     {
-        $this->content_object_ids = $content_object_ids;
-        $this->source_workspace = $source_workspace;
-        $this->source_user_id = $source_user_id;
-        $this->target_workspace = $target_workspace;
-        $this->target_user_id = $target_user_id;
-        $this->target_category = $target_category;
+        $this->currentUser = $currentUser;
+        $this->contentObjectIdentifiers = $contentObjectIdentifiers;
+        $this->sourceWorkspace = $sourceWorkspace;
+        $this->sourceUserIdentifier = $sourceUserIdentifier;
+        $this->targetWorkspace = $targetWorkspace;
+        $this->targetUserIdentifier = $targetUserIdentifier;
+        $this->targetCategory = $targetCategory;
     }
 
     public function run()
     {
-        if (! $this->content_object_ids)
+        if (! $this->contentObjectIdentifiers)
         {
             $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
             return false;
         }
 
-        if (! is_array($this->content_object_ids))
+        if (! is_array($this->contentObjectIdentifiers))
         {
-            $this->content_object_ids = array($this->content_object_ids);
+            $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
 
-        $export_content_object_ids = array();
-        foreach ($this->content_object_ids as $content_object_id)
+        $exportableContentObjectIdentifiers = array();
+
+        foreach ($this->contentObjectIdentifiers as $contentObjectIdentifier)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
-                $content_object_id);
+                $contentObjectIdentifier);
 
-            $export_content_object_ids[] = $content_object_id;
+            if (RightsService :: getInstance()->canCopyContentObject($this->currentUser, $content_object))
+            {
+                $exportableContentObjectIdentifiers[] = $contentObjectIdentifier;
+            }
         }
 
-        if (! $export_content_object_ids)
+        if (! $exportableContentObjectIdentifiers)
         {
             $this->add_message(Translation :: get('NoObjectSelected'), self :: TYPE_ERROR);
             return false;
         }
 
-        $export_parameters = new ExportParameters(
-            $this->source_workspace,
-            $this->source_user_id,
+        $exportParameters = new ExportParameters(
+            $this->sourceWorkspace,
+            $this->sourceUserIdentifier,
             ContentObjectExport :: FORMAT_CPO,
-            $export_content_object_ids);
+            $exportableContentObjectIdentifiers);
 
-        $exporter = ContentObjectExportController :: factory($export_parameters);
+        $exporter = ContentObjectExportController :: factory($exportParameters);
 
         $path = $exporter->run();
 
         $file = FileProperties :: from_path($path);
-        $path_info = pathinfo($path);
-        $new_path = $path_info['dirname'] . DIRECTORY_SEPARATOR . $file->get_name() . '.cpo';
+        $pathInfo = pathinfo($path);
+        $newPath = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $file->get_name() . '.cpo';
 
-        Filesystem :: move_file($path, $new_path);
-        $file = FileProperties :: from_path($new_path);
+        Filesystem :: move_file($path, $newPath);
+        $file = FileProperties :: from_path($newPath);
 
         $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
             User :: class_name(),
-            $this->target_user_id);
+            $this->targetUserIdentifier);
 
         $parameters = ImportParameters :: factory(
             ContentObjectImport :: FORMAT_CPO,
-            $this->target_user_id,
-            $this->target_workspace,
-            $this->target_category,
+            $this->targetUserIdentifier,
+            $this->targetWorkspace,
+            $this->targetCategory,
             $file);
         $controller = ContentObjectImportController :: factory($parameters);
-        $content_object_ids = $controller->run();
+        $contentObjectIdentifiers = $controller->run();
 
         $this->messages = $controller->get_messages();
 
-        if ($this->source_user_id == $this->target_user_id)
+        if ($this->sourceUserIdentifier == $this->targetUserIdentifier)
         {
-            $this->change_content_object_names($content_object_ids);
+            $this->changeContentObjectNames($contentObjectIdentifiers);
         }
 
-        Filesystem :: remove($new_path);
+        Filesystem :: remove($newPath);
 
-        return $content_object_ids;
+        return $contentObjectIdentifiers;
     }
 
     /**
      * Adds a message to the message list
      *
-     * @param String $message
-     * @param int $type
+     * @param string $message
+     * @param integer $type
      */
     public function add_message($message, $type)
     {
@@ -155,7 +193,7 @@ class ContentObjectCopier
     /**
      * Checks wether the object has messages
      *
-     * @return booleans
+     * @return boolean
      */
     public function has_messages($type)
     {
@@ -165,7 +203,7 @@ class ContentObjectCopier
     /**
      * Retrieves the list of messages
      *
-     * @return Array
+     * @return string[]
      */
     public function get_messages($type = null)
     {
@@ -187,6 +225,10 @@ class ContentObjectCopier
         unset($this->messages[$type]);
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function get_messages_for_url()
     {
         $messages = array();
@@ -208,15 +250,15 @@ class ContentObjectCopier
      * Changes the title of the duplicated content objects by adding a copy value to show which object is the copied
      * one.
      *
-     * @param array $content_object_ids
+     * @param array $contentObjectIdentifiers
      */
-    protected function change_content_object_names(array $content_object_ids)
+    protected function changeContentObjectNames(array $contentObjectIdentifiers)
     {
         DataClassCache :: reset();
 
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            $content_object_ids);
+            $contentObjectIdentifiers);
 
         $parameters = new DataClassRetrievesParameters($condition);
 

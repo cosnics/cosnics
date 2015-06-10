@@ -269,7 +269,7 @@ class RightsService
     public function canViewContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_VIEW, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self :: RIGHT_VIEW, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -283,7 +283,7 @@ class RightsService
     public function canEditContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_EDIT, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self :: RIGHT_EDIT, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -297,7 +297,7 @@ class RightsService
     public function canDeleteContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_DELETE, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self :: RIGHT_DELETE, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -311,7 +311,7 @@ class RightsService
     public function canUseContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_USE, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self :: RIGHT_USE, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
@@ -325,18 +325,18 @@ class RightsService
     public function canCopyContentObject(User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        return $this->hasRightForContentObject(self :: RIGHT_COPY, $contentObject, $workspaceImplementation);
+        return $this->hasRightForContentObject(self :: RIGHT_COPY, $user, $contentObject, $workspaceImplementation);
     }
 
     /**
      *
+     * @param integer $right
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
-     *
      * @return boolean
      */
-    private function hasRightForContentObject(User $user, $right, ContentObject $contentObject,
+    private function hasRightForContentObject($right, User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
         // Check if the user is a platform administrator

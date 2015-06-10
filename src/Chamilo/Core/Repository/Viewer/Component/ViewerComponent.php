@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class ViewerComponent extends Manager
 {
@@ -22,45 +23,52 @@ class ViewerComponent extends Manager
         if (Request :: get(self :: PARAM_ID))
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 Request :: get(self :: PARAM_ID));
             $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-            
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Publish'), 
-                    $this->get_url(
-                        array_merge(
-                            $this->get_parameters(), 
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_PUBLISHER, 
-                                self :: PARAM_ID => $content_object->get_id())), 
-                        false)));
-            
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('EditAndPublish'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Editpublish'), 
-                    $this->get_url(
-                        array_merge(
-                            $this->get_parameters(), 
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_CREATOR, 
-                                self :: PARAM_EDIT_ID => $content_object->get_id())))));
-            
+
+            if (RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                        $this->get_url(
+                            array_merge(
+                                $this->get_parameters(),
+                                array(
+                                    self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
+                                    self :: PARAM_ID => $content_object->get_id())),
+                            false)));
+            }
+
+            if (RightsService :: getInstance()->canEditContentObject($this->get_user(), $content_object) &&
+                 RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('EditAndPublish'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
+                        $this->get_url(
+                            array_merge(
+                                $this->get_parameters(),
+                                array(
+                                    self :: PARAM_ACTION => self :: ACTION_CREATOR,
+                                    self :: PARAM_EDIT_ID => $content_object->get_id())))));
+            }
+
             $html = array();
-            
+
             $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation :: launch(
-                $content_object, 
-                ContentObjectRendition :: FORMAT_HTML, 
-                ContentObjectRendition :: VIEW_FULL, 
+                $content_object,
+                ContentObjectRendition :: FORMAT_HTML,
+                ContentObjectRendition :: VIEW_FULL,
                 $this);
             $html[] = $toolbar->as_html();
             $html[] = '<div class="clear"></div>';
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -70,7 +78,7 @@ class ViewerComponent extends Manager
         $breadcrumbtrail->add_help('repo_viewer_viewer');
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSER)), 
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSER)),
                 Translation :: get('BrowserComponent')));
     }
 
