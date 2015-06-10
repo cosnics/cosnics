@@ -16,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * $Id: forum_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -54,7 +56,9 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
         $this->root_content_object = $publication->get_content_object();
 
         $context = Forum :: package() . '\Display';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -87,8 +91,9 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
             new StaticConditionVariable($complex_topic_id));
         $condition = new AndCondition($conditions);
 
-        $dummy = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView();
-        return $dummy->count_tracker_items($condition);
+        return DataManager :: count(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: class_name(),
+            new DataClassCountParameters($condition));
     }
 
     public function get_additional_parameters()

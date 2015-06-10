@@ -10,6 +10,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -49,7 +51,12 @@ class FeedbackDeleterComponent extends Manager
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_ID),
                 new StaticConditionVariable($fid));
-            $feedbacks = $tracker->retrieve_tracker_items($condition);
+
+            $feedbacks = DataManager :: retrieves(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
+
+
             foreach ($feedbacks as $feedback)
             {
                 $submission_id = $feedback->get_submission_id();

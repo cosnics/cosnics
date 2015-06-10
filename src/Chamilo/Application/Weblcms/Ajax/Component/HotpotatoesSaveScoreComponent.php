@@ -7,6 +7,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 class HotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
@@ -16,24 +18,26 @@ class HotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\Ma
         $id = Request :: post('id');
         $score = Request :: post('score');
 
-        $dummy = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ID),
             new StaticConditionVariable($id));
 
-        $trackers = $dummy->retrieve_tracker_items($condition);
+        $tracker = DataManager :: retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
+            new DataClassRetrieveParameters());
 
-        if ($trackers[0])
+        if ($tracker)
         {
             $end_time = time();
 
-            $trackers[0]->set_total_score($score);
-            $trackers[0]->set_status(AssessmentAttempt :: STATUS_COMPLETED);
-            $trackers[0]->set_end_time($end_time);
-            $trackers[0]->set_total_time($trackers[0]->get_total_time() + ($end_time - $trackers[0]->get_start_time()));
-            $trackers[0]->update();
+            $tracker->set_total_score($score);
+            $tracker->set_status(AssessmentAttempt :: STATUS_COMPLETED);
+            $tracker->set_end_time($end_time);
+            $tracker->set_total_time($tracker->get_total_time() + ($end_time - $tracker->get_start_time()));
+
+            $tracker->update();
         }
 
         JsonAjaxResult :: success();
