@@ -35,6 +35,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * This class represents a form to allow a user to publish a learning object.
@@ -98,10 +99,17 @@ class ContentObjectPublicationForm extends FormValidator
      */
     private $collaborate_possible;
 
+
     /**
-     * Creates a new learning object publication form.
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $form_type
+     * @param ContentObjectPublication[] $publications
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string $action
+     * @param boolean $is_course_admin
+     * @throws NoObjectSelectedException
      */
-    public function __construct($form_type, $publications, $course, $action, $is_course_admin)
+    public function __construct(User $user, $form_type, $publications, $course, $action, $is_course_admin)
     {
         parent :: __construct('content_object_publication_form', 'post', $action);
 
@@ -292,9 +300,9 @@ class ContentObjectPublicationForm extends FormValidator
         {
             $first_publication = $this->publications[0];
 
-            // TODO: Workspace rights: Collaborate right
-            if ($first_publication && ($first_publication->get_content_object()->get_owner_id() ==
-                 Session :: get_user_id()))
+            if ($first_publication && RightsService :: getInstance()->canEditContentObject(
+                $this->user,
+                $first_publication->get_content_object()))
             {
                 $contentObject = $first_publication->get_content_object();
 
@@ -760,7 +768,7 @@ class ContentObjectPublicationForm extends FormValidator
                 // exclude myself
                 if ($admin_user[User :: PROPERTY_ID] != Session :: get_user_id())
                 {
-                    // TODO: Share with the user via a workspace?
+                    // TODO: WORKSPACES - Share with the user via a workspace?
                     $succes = true;
                 }
             }
@@ -768,7 +776,7 @@ class ContentObjectPublicationForm extends FormValidator
             // loop groups
             foreach ($admin_groups as $admin_group)
             {
-                // TODO: Share with the group via a workspace?
+                // TODO: WORKSPACES - Share with the group via a workspace?
                 $succes = true;
             }
         }

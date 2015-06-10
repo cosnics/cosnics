@@ -45,6 +45,7 @@ class PublicationUpdaterComponent extends Manager
             $is_course_admin = $course->is_course_admin($this->get_user());
 
             $publication_form = new ContentObjectPublicationForm(
+                $this->get_user(),
                 ContentObjectPublicationForm :: TYPE_UPDATE,
                 array($publication),
                 $course,
