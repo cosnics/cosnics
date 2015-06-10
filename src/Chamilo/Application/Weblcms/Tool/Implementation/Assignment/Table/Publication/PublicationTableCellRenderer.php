@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Extension on the content object publication table cell renderer for this tool
@@ -63,7 +65,10 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
                     new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID]));
-                return $tracker->count_tracker_items($condition);
+
+                return DataManager :: count(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                    new DataClassCountParameters($condition));
             case Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS :
                 if ($content_object->get_allow_group_submissions())
                 {

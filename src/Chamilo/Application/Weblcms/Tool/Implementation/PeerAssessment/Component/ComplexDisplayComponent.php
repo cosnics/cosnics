@@ -17,6 +17,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Represents the view component for the peer assessment tool.
@@ -55,7 +57,9 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         // launch
         $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
             $this->get_root_content_object()->package()) . '\Display';
-        $factory = new ApplicationFactory($context,new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -154,13 +158,17 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
             // get the scores the user has submitted
             $status = $this->get_user_attempt_status($user_id, $attempt_id);
             $tracker = new PeerAssessmentScoreTracker();
-            $items = $tracker->retrieve_tracker_items(
-                new AndCondition(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            PeerAssessmentScoreTracker :: class_name(),
-                            PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                        new StaticConditionVariable($status->get_id()))));
+
+            $condition = new AndCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        PeerAssessmentScoreTracker :: class_name(),
+                        PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+                    new StaticConditionVariable($status->get_id())));
+
+            $items = DataManager :: retrieves(
+                PeerAssessmentScoreTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             // get the non empty values of the scores
             $s_count = array_reduce(
@@ -226,18 +234,21 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
             }
 
             $status = $this->get_user_attempt_status($u->get_id(), $attempt_id);
-            $items = $tracker->retrieve_tracker_items(
-                new AndCondition(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            PeerAssessmentScoreTracker :: class_name(),
-                            PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                        new StaticConditionVariable($status->get_id())),
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            PeerAssessmentScoreTracker :: class_name(),
-                            PeerAssessmentScoreTracker :: PROPERTY_USER_ID),
-                        new StaticConditionVariable($user_id))));
+            $condition = new AndCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        PeerAssessmentScoreTracker :: class_name(),
+                        PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+                    new StaticConditionVariable($status->get_id())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        PeerAssessmentScoreTracker :: class_name(),
+                        PeerAssessmentScoreTracker :: PROPERTY_USER_ID),
+                    new StaticConditionVariable($user_id)));
+
+            $items = DataManager :: retrieves(
+                PeerAssessmentScoreTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             foreach ($items as $item)
             {
@@ -253,18 +264,24 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         // get the current attempt status and scores from the user
         $status = $this->get_user_attempt_status($user_id, $attempt_id);
         $tracker = new PeerAssessmentScoreTracker();
-        $items = $tracker->retrieve_tracker_items(
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    PeerAssessmentScoreTracker :: class_name(),
-                    PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                new StaticConditionVariable($status->get_id())));
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                PeerAssessmentScoreTracker :: class_name(),
+                PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+            new StaticConditionVariable($status->get_id()));
+
+        $items = DataManager :: retrieves(
+            PeerAssessmentScoreTracker :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
+
         // iterate over the results and put them in a two dimensional array
         $scores = array();
+
         foreach ($items as $item)
         {
             $scores[$item->get_user_id()][$item->get_indicator_id()] = $item->get_score();
         }
+
         return $scores;
     }
 
@@ -279,12 +296,16 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
             // get the scores the user has already filled in
         $tracker = new PeerAssessmentScoreTracker();
-        $items = $tracker->retrieve_tracker_items(
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    PeerAssessmentScoreTracker :: class_name(),
-                    PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                new StaticConditionVariable($status->get_id())));
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                PeerAssessmentScoreTracker :: class_name(),
+                PeerAssessmentScoreTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+            new StaticConditionVariable($status->get_id()));
+
+        $items = DataManager :: retrieves(
+            PeerAssessmentScoreTracker :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
+
         // loop through the existing scores and update/delete them if necessary
         foreach ($items as $item)
         {
@@ -355,18 +376,21 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
              */
 
             $status = $this->get_user_attempt_status($u->get_id(), $attempt_id);
-            $items = $tracker->retrieve_tracker_items(
-                new AndCondition(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            PeerAssessmentFeedbackTracker :: class_name(),
-                            PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                        new StaticConditionVariable($status->get_id())),
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            PeerAssessmentFeedbackTracker :: class_name(),
-                            PeerAssessmentFeedbackTracker :: PROPERTY_USER_ID),
-                        new StaticConditionVariable($user_id))));
+            $condition = new AndCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        PeerAssessmentFeedbackTracker :: class_name(),
+                        PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+                    new StaticConditionVariable($status->get_id())),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        PeerAssessmentFeedbackTracker :: class_name(),
+                        PeerAssessmentFeedbackTracker :: PROPERTY_USER_ID),
+                    new StaticConditionVariable($user_id)));
+
+            $items = DataManager :: retrieves(
+                PeerAssessmentFeedbackTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             foreach ($items as $item)
             {
@@ -385,12 +409,15 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         $items = array();
         if ($status->get_id())
         {
-            $items = $tracker->retrieve_tracker_items(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        PeerAssessmentFeedbackTracker :: class_name(),
-                        PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                    new StaticConditionVariable($status->get_id())));
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    PeerAssessmentFeedbackTracker :: class_name(),
+                    PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+                new StaticConditionVariable($status->get_id()));
+
+            $items = DataManager :: retrieves(
+                PeerAssessmentFeedbackTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
         }
         // iterate over the results and put them in a two dimensional array
         $feedback = array();
@@ -416,12 +443,15 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
 
         if ($status->get_id())
         {
-            $items = $tracker->retrieve_tracker_items(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        PeerAssessmentFeedbackTracker :: class_name(),
-                        PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
-                    new StaticConditionVariable($status->get_id())));
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    PeerAssessmentFeedbackTracker :: class_name(),
+                    PeerAssessmentFeedbackTracker :: PROPERTY_ATTEMPT_STATUS_ID),
+                new StaticConditionVariable($status->get_id()));
+
+            $items = DataManager :: retrieves(
+                PeerAssessmentFeedbackTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
         }
 
         // loop through the existing feedback and update/delete them if necessary

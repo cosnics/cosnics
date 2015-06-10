@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: complex_browser_table_cell_renderer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -91,19 +92,35 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $toolbar = new Toolbar();
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
-                ToolbarItem :: DISPLAY_ICON));
+        $contentObject = $cloi->get_ref_object();
+
+        if ($contentObject &&
+             RightsService :: getInstance()->canEditContentObject($this->get_component()->get_user(), $contentObject))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                    $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/EditNa'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('CopyEdit', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Copy'),
                 $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()),
-                ToolbarItem :: DISPLAY_ICON, true));
+                ToolbarItem :: DISPLAY_ICON,
+                true));
 
         $toolbar->add_item(
             new ToolbarItem(

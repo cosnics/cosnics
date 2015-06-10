@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: assessment_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -106,7 +108,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_USER_ID),
                 new StaticConditionVariable($this->get_user_id()));
             $condition = new AndCondition(array($condition_t, $condition_u));
-            $trackers = $track->retrieve_tracker_items($condition);
+
+            $trackers = DataManager :: retrieves(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             $count = count($trackers);
 

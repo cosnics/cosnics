@@ -25,6 +25,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * Manages the submissions
@@ -142,8 +144,10 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable($submission_id));
-        $trackers = $tracker->retrieve_tracker_items($condition);
-        return $trackers[0];
+
+        return DataManager :: retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+            new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -161,8 +165,10 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable($submission_id));
-        $trackers = $feedback_tracker->retrieve_tracker_items($condition);
-        return $trackers[0];
+
+        return DataManager :: retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+            new DataClassRetrieveParameters($condition));
     }
 
     /**

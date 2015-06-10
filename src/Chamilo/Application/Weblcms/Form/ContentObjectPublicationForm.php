@@ -137,6 +137,7 @@ class ContentObjectPublicationForm extends FormValidator
             }
         }
 
+        $this->user = $user;
         $this->publications = $publications;
         $this->course = $course;
         $this->form_type = $form_type;

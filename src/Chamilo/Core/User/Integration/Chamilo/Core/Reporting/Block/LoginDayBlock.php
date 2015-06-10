@@ -9,6 +9,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class LoginDayBlock extends Block
 {
@@ -24,6 +26,7 @@ class LoginDayBlock extends Block
                 \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $user_id = $this->get_user_id();
+
         if (isset($user_id))
         {
             $conditions[] = new EqualityCondition(
@@ -32,10 +35,12 @@ class LoginDayBlock extends Block
                     \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
         }
+
         $condition = new AndCondition($conditions);
 
-        $login_logout_tracker = new \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout();
-        $data = $login_logout_tracker->retrieve_tracker_items($condition);
+        $data = DataManager :: retrieves(
+            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
 
         $days = array();
         foreach ($data as $date)

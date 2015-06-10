@@ -11,6 +11,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -30,8 +32,11 @@ class PlatformStatisticsBlock extends Block
             new PropertyConditionVariable(LoginLogout :: class_name(), LoginLogout :: PROPERTY_TYPE),
             new StaticConditionVariable('login'));
         $condition = new AndCondition($conditions);
-        $tracker = new LoginLogout();
-        $trackerdata = $tracker->retrieve_tracker_items($condition);
+
+        $trackerdata = DataManager :: retrieves(
+            LoginLogout :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
+
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)
         {
