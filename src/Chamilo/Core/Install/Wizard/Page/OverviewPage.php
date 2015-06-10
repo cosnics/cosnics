@@ -37,6 +37,7 @@ class OverviewPage extends InstallWizardPage
         $this->addElement('category', Translation :: get('GeneralProperties'));
         $this->addElement('static', 'platform_language', Translation :: get('MainLang'));
         $this->addElement('static', 'platform_url', Translation :: get('ChamiloURL'));
+        $this->addElement('static', 'storage_path', Translation :: get('StoragePath'));
         $this->addElement('static', 'server_type', Translation :: get('ServerType'));
         $this->addElement('category');
 
@@ -108,6 +109,7 @@ class OverviewPage extends InstallWizardPage
         // Platform settings
         $defaults['platform_language'] = $this->controller->exportValue('page_language', 'install_language');
         $defaults['platform_url'] = $this->controller->exportValue('page_settings', 'platform_url');
+        $defaults['storage_path'] = $this->controller->exportValue('page_settings', 'storage_path');
         $defaults['admin_email'] = $this->controller->exportValue('page_settings', 'admin_email');
         $defaults['admin_surname'] = $this->controller->exportValue('page_settings', 'admin_surname');
         $defaults['admin_firstname'] = $this->controller->exportValue('page_settings', 'admin_firstname');

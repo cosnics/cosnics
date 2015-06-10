@@ -36,6 +36,7 @@ class SettingsPage extends InstallWizardPage
             Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
         $this->addRule('platform_url', 'AddTrailingSlash', 'regex', '/^.*\/$/');
+        $this->addElement('text', 'storage_path', Translation :: get("StoragePath"), array('size' => '40'));
 
         $serverTypes = array();
         $serverTypes[] = $this->createElement(
@@ -149,6 +150,7 @@ class SettingsPage extends InstallWizardPage
         $defaults['platform_language'] = $this->controller->exportValue('page_language', 'install_language');
         $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
         $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
+        $defaults['storage_path'] = Path :: getInstance()->getStoragePath('repository');
         $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
         $email_parts = explode('@', $defaults['admin_email']);
         if ($email_parts[1] == 'localhost')
