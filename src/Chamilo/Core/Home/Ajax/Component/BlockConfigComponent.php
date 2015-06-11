@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\BlockRendition;
-use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
 use Chamilo\Core\Home\Storage\DataManager;
@@ -15,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Core\Home\Renderer\Renderer;
 
 /**
  *
@@ -100,7 +100,10 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                     User :: class_name(),
                     (int) Session :: get_user_id());
-                $renderer = Renderer :: factory(Renderer :: TYPE_BASIC, $user);
+
+                $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
+                $renderer = $rendererFactory->getRenderer();
+
                 $html = BlockRendition :: factory($renderer, $block)->as_html();
 
                 $result = new JsonAjaxResult(200);

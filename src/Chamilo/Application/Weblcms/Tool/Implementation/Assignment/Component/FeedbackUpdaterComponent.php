@@ -16,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -36,8 +38,11 @@ class FeedbackUpdaterComponent extends Manager
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_ID),
             new StaticConditionVariable($feedback_id));
-        $feedbacks = $tracker->retrieve_tracker_items($condition);
-        $feedback = $feedbacks[0];
+
+        $feedback = DataManager :: retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+            new DataClassRetrieveParameters($condition));
+
         $feedback_content_object = $feedback->get_content_object();
 
         $object_form = ContentObjectForm :: factory(
@@ -89,8 +94,10 @@ class FeedbackUpdaterComponent extends Manager
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID),
             new StaticConditionVariable($submission_id));
-        $submission_trackers = $tracker->retrieve_tracker_items($condition);
-        $submission_tracker = $submission_trackers[0];
+
+        $submission_tracker = DataManager :: retrieve(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+            new DataClassRetrieveParameters($condition));
 
         $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,

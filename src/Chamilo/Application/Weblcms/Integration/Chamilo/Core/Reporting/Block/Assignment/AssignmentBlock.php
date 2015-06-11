@@ -18,6 +18,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -71,9 +74,13 @@ class AssignmentBlock extends CourseBlock
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($pub[ContentObjectPublication :: PROPERTY_ID]));
-            $submissions = $submissions_tracker->retrieve_tracker_items($condition);
+
+            $submissions = DataManager :: retrieves(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             $score = $score_count = $last_submission = null;
+
             foreach ($submissions as $submission)
             {
                 if ($submission->get_date_submitted() > $last_submission)
@@ -83,13 +90,17 @@ class AssignmentBlock extends CourseBlock
 
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
                     new StaticConditionVariable($submission->get_id()));
-                $result = $score_tracker->retrieve_tracker_items($condition);
-                if ($result[0] != null)
+
+                $result = DataManager :: retrieve(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                    new DataClassRetrieveParameters($condition));
+
+                if ($result)
                 {
-                    $score += $result[0]->get_score();
+                    $score += $result->get_score();
                     $score_count ++;
                 }
             }

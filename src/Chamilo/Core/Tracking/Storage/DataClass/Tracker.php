@@ -57,7 +57,7 @@ abstract class Tracker extends DataClass
 
     /**
      * Write the values of the properties from the tracker to the database
-     * 
+     *
      * @return boolean
      */
     public function run(array $parameters = array())
@@ -68,48 +68,12 @@ abstract class Tracker extends DataClass
 
     /**
      * Removes tracker items with a given condition
-     * 
+     *
      * @param $condition Condition
      */
     public function remove(Condition $condition = null)
     {
         return DataManager :: deletes($this->class_name(), $condition);
-    }
-
-    /**
-     * Retrieves tracker items with a given condition
-     * 
-     * @param Condition condition on which we want to retrieve the trackers
-     * @return array Array of tracker items
-     * @deprecated Use get_data()->as_array() now
-     */
-    public function retrieve_tracker_items($condition)
-    {
-        return DataManager :: retrieves($this->class_name(), new DataClassRetrievesParameters($condition))->as_array();
-    }
-
-    /**
-     * Retrieves tracker items with a given condition
-     * 
-     * @param Condition condition on which we want to retrieve the trackers
-     * @return ObjectResultSet ResultSet of tracker items
-     * @deprecated Use get_data() now
-     */
-    public function retrieve_tracker_items_result_set($condition, $offset = null, $max_objects = null, $order_by = array())
-    {
-        return DataManager :: retrieves(
-            $this->class_name(), 
-            new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by));
-    }
-
-    /**
-     *
-     * @param Condition condition on which we want to retrieve the trackers
-     * @deprecated Use count_data() now
-     */
-    public function count_tracker_items($condition)
-    {
-        return DataManager :: count($this->class_name(), new DataClassCountParameters($condition));
     }
 
     /**
@@ -135,11 +99,11 @@ abstract class Tracker extends DataClass
      * @param $order_by ObjectTableOrder
      * @return ObjectResultSet The tracker data resultset
      */
-    public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null, 
+    public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null,
         $order_by = array())
     {
         return DataManager :: retrieves(
-            $class_name, 
+            $class_name,
             new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by));
     }
 
@@ -171,7 +135,7 @@ abstract class Tracker extends DataClass
     public static function remove_data($class_name, $application, $condition = null)
     {
         $table_name = call_user_func(array($class_name, 'get_table_name'));
-        
+
         return self :: get_data_manager()->remove_tracker_items($table_name, $condition);
     }
 }

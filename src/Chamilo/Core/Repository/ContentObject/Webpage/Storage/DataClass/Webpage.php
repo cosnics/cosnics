@@ -14,6 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
 use Exception;
+use Chamilo\Libraries\File\FileType;
 
 /**
  *
@@ -21,17 +22,22 @@ use Exception;
  */
 class Webpage extends ContentObject implements Versionable, Includeable
 {
+    const CLASS_NAME = __CLASS__;
+
+    // Properties
+    const PROPERTY_STORAGE_PATH = 'storage_path';
     const PROPERTY_PATH = 'path';
     const PROPERTY_FILENAME = 'filename';
     const PROPERTY_FILESIZE = 'filesize';
     const PROPERTY_HASH = 'hash';
     const PROPERTY_EXTENSION = 'extension';
+
+    // Filetype groups
     const TYPE_IMAGE = 'image';
     const TYPE_FLASH = 'flash';
     const TYPE_FLASH_VIDEO = 'flash_video';
     const TYPE_VIDEO = 'video';
     const TYPE_AUDIO = 'audio';
-    const CLASS_NAME = __CLASS__;
 
     private $contents;
 
@@ -46,14 +52,16 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @var mixed
      */
     private $in_memory_file;
 
     /**
-     * Temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved. Useful for
+     * Temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved. Useful for
      * instance when a file is uploaded to the server.
      *
      * @var string
@@ -75,6 +83,16 @@ class Webpage extends ContentObject implements Versionable, Includeable
     public function set_path($path)
     {
         return $this->set_additional_property(self :: PROPERTY_PATH, $path);
+    }
+
+    public function get_storage_path()
+    {
+        return $this->get_additional_property(self :: PROPERTY_STORAGE_PATH);
+    }
+
+    public function set_storage_path($storage_path)
+    {
+        return $this->set_additional_property(self :: PROPERTY_STORAGE_PATH, $storage_path);
     }
 
     public function get_filename()
@@ -109,205 +127,23 @@ class Webpage extends ContentObject implements Versionable, Includeable
 
     public function get_mime_type()
     {
-        $mime_types = array(
-            'aac' => 'audio/aac',
-            'ai' => 'application/postscript',
-            'aif' => 'audio/x-aiff',
-            'aifc' => 'audio/x-aiff',
-            'aiff' => 'audio/x-aiff',
-            'asf' => 'video/x-ms-asf',
-            'asc' => 'text/plain',
-            'au' => 'audio/basic',
-            'avi' => 'video/x-msvideo',
-            'bcpio' => 'application/x-bcpio',
-            'bin' => 'application/octet-stream',
-            'bmp' => 'image/bmp',
-            'cdf' => 'application/x-netcdf',
-            'class' => 'application/octet-stream',
-            'cpio' => 'application/x-cpio',
-            'cpt' => 'application/mac-compactpro',
-            'csh' => 'application/x-csh',
-            'css' => 'text/css',
-            'dcr' => 'application/x-director',
-            'dir' => 'application/x-director',
-            'djv' => 'image/vnd.djvu',
-            'djvu' => 'image/vnd.djvu',
-            'dll' => 'application/octet-stream',
-            'dmg' => 'application/x-diskcopy',
-            'dms' => 'application/octet-stream',
-            'doc' => 'application/msword',
-            'dvi' => 'application/x-dvi',
-            'dwg' => 'application/vnd.dwg',
-            'dxf' => 'application/vnd.dxf',
-            'dxr' => 'application/x-director',
-            'eps' => 'application/postscript',
-            'etx' => 'text/x-setext',
-            'exe' => 'application/octet-stream',
-            'ez' => 'application/andrew-inset',
-            'gif' => 'image/gif',
-            'gtar' => 'application/x-gtar',
-            'gz' => 'application/x-gzip',
-            'hdf' => 'application/x-hdf',
-            'hqx' => 'application/mac-binhex40',
-            'htm' => 'text/html',
-            'html' => 'text/html',
-            'ice' => 'x-conference-xcooltalk',
-            'ief' => 'image/ief',
-            'iges' => 'model/iges',
-            'igs' => 'model/iges',
-            'jar' => 'application/java-archiver',
-            'jpe' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'jpg' => 'image/jpeg',
-            'js' => 'application/x-javascript',
-            'kar' => 'audio/midi',
-            'latex' => 'application/x-latex',
-            'lha' => 'application/octet-stream',
-            'log' => 'text/plain',
-            'lzh' => 'application/octet-stream',
-            'm1a' => 'audio/mpeg',
-            'm2a' => 'audio/mpeg',
-            'm3u' => 'audio/x-mpegurl',
-            'm4a' => 'audio/x-m4a',
-            'man' => 'application/x-troff-man',
-            'me' => 'application/x-troff-me',
-            'mesh' => 'model/mesh',
-            'mid' => 'audio/midi',
-            'midi' => 'audio/midi',
-            'mkv' => 'video/x-matroska',
-            'mov' => 'video/quicktime',
-            'movie' => 'video/x-sgi-movie',
-            'mp2' => 'audio/mpeg',
-            'mp3' => 'audio/mpeg',
-            'mp4' => 'video/mpeg4-generic',
-            'mpa' => 'audio/mpeg',
-            'mpe' => 'video/mpeg',
-            'mpeg' => 'video/mpeg',
-            'mpg' => 'video/mpeg',
-            'mpga' => 'audio/mpeg',
-            'ms' => 'application/x-troff-ms',
-            'msh' => 'model/mesh',
-            'mxu' => 'video/vnd.mpegurl',
-            'nc' => 'application/x-netcdf',
-            'oda' => 'application/oda',
-            'ogg' => 'audio/ogg',
-            'ogv' => 'video/ogg',
-            'pbm' => 'image/x-portable-bitmap',
-            'pct' => 'image/pict',
-            'pdb' => 'chemical/x-pdb',
-            'pdf' => 'application/pdf',
-            'pgm' => 'image/x-portable-graymap',
-            'pgn' => 'application/x-chess-pgn',
-            'pict' => 'image/pict',
-            'png' => 'image/png',
-            'pnm' => 'image/x-portable-anymap',
-            'ppm' => 'image/x-portable-pixmap',
-            'ppt' => 'application/vnd.ms-powerpoint',
-            'pps' => 'application/vnd.ms-powerpoint',
-            'ps' => 'application/postscript',
-            'qt' => 'video/quicktime',
-            'ra' => 'audio/x-realaudio',
-            'ram' => 'audio/x-pn-realaudio',
-            'rar' => 'image/x-rar-compressed',
-            'ras' => 'image/x-cmu-raster',
-            'rgb' => 'image/x-rgb',
-            'rm' => 'audio/x-pn-realaudio',
-            'roff' => 'application/x-troff',
-            'rpm' => 'audio/x-pn-realaudio-plugin',
-            'rtf' => 'text/rtf',
-            'rtx' => 'text/richtext',
-            'sgm' => 'text/sgml',
-            'sgml' => 'text/sgml',
-            'sh' => 'application/x-sh',
-            'shar' => 'application/x-shar',
-            'silo' => 'model/mesh',
-            'sib' => 'application/X-Sibelius-Score',
-            'sit' => 'application/x-stuffit',
-            'skd' => 'application/x-koan',
-            'skm' => 'application/x-koan',
-            'skp' => 'application/x-koan',
-            'skt' => 'application/x-koan',
-            'smi' => 'application/smil',
-            'smil' => 'application/smil',
-            'snd' => 'audio/basic',
-            'so' => 'application/octet-stream',
-            'spl' => 'application/x-futuresplash',
-            'src' => 'application/x-wais-source',
-            'sv4cpio' => 'application/x-sv4cpio',
-            'sv4crc' => 'application/x-sv4crc',
-            'svf' => 'application/vnd.svf',
-            'swf' => 'application/x-shockwave-flash',
-            'sxc' => 'application/vnd.sun.xml.calc',
-            'sxi' => 'application/vnd.sun.xml.impress',
-            'sxw' => 'application/vnd.sun.xml.writer',
-            't' => 'application/x-troff',
-            'tar' => 'application/x-tar',
-            'tcl' => 'application/x-tcl',
-            'tex' => 'application/x-tex',
-            'texi' => 'application/x-texinfo',
-            'texinfo' => 'application/x-texinfo',
-            'tga' => 'image/x-targa',
-            'tif' => 'image/tif',
-            'tiff' => 'image/tiff',
-            'tr' => 'application/x-troff',
-            'tsv' => 'text/tab-seperated-values',
-            'txt' => 'text/plain',
-            'ustar' => 'application/x-ustar',
-            'vcd' => 'application/x-cdlink',
-            'vrml' => 'model/vrml',
-            'wav' => 'audio/x-wav',
-            'wbmp' => 'image/vnd.wap.wbmp',
-            'wbxml' => 'application/vnd.wap.wbxml',
-            'webm' => 'video/webm',
-            'wml' => 'text/vnd.wap.wml',
-            'wmlc' => 'application/vnd.wap.wmlc',
-            'wmls' => 'text/vnd.wap.wmlscript',
-            'wmlsc' => 'application/vnd.wap.wmlscriptc',
-            'wma' => 'video/x-ms-wma',
-            'wmv' => 'audio/x-ms-wmv',
-            'wrl' => 'model/vrml',
-            'xbm' => 'image/x-xbitmap',
-            'xht' => 'application/xhtml+xml',
-            'xhtml' => 'application/xhtml+xml',
-            'xls' => 'application/vnd.ms-excel',
-            'xml' => 'text/xml',
-            'xpm' => 'image/x-xpixmap',
-            'xsl' => 'text/xml',
-            'xwd' => 'image/x-windowdump',
-            'xyz' => 'chemical/x-xyz',
-            'zip' => 'application/zip',
-            'xlsx' => 'application/vnd.openxmlformats',
-            'docx' => 'application/vnd.openxmlformats',
-            'pptx' => 'application/vnd.openxmlformats');
-
-        $extension = $this->get_extension();
-
-        if (isset($mime_types[$extension]))
-        {
-            return $mime_types[$extension];
-        }
-        else
-        {
-            return "application/octet-stream";
-        }
+        return FileType :: get_mimetype($this->get_extension());
     }
 
     public function delete($only_version = false)
     {
         if ($only_version)
         {
-            $path = Path :: getInstance()->getRepositoryPath() . $this->get_path();
-            if (DataManager :: is_only_webpage_occurence($this->get_path()))
+            if (DataManager :: is_only_webpage_occurence($this->get_storage_path(), $this->get_path()))
             {
-                Filesystem :: remove($path);
+                Filesystem :: remove($this->get_full_path());
             }
         }
         else
         {
-            if (Text :: is_valid_path($this->get_path()))
+            if (Text :: is_valid_path($this->get_full_path()))
             {
-                $path = Path :: getInstance()->getRepositoryPath() . $this->get_path();
-                Filesystem :: remove($path);
+                Filesystem :: remove($this->get_full_path());
             }
         }
         return parent :: delete($only_version);
@@ -320,7 +156,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
 
     public function get_full_path()
     {
-        return Path :: getInstance()->getRepositoryPath() . $this->get_path();
+        return $this->get_storage_path() . $this->get_path();
     }
 
     public function get_icon_name($size = Theme :: ICON_SMALL)
@@ -343,19 +179,26 @@ class Webpage extends ContentObject implements Versionable, Includeable
         return $icon_name;
     }
 
+    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    {
+        return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
+             $this->get_extension() . '"/>';
+    }
+
     public function get_icon_path($size = Theme :: ICON_SMALL)
     {
-        $path = Theme :: getInstance()->getFileExtension($this->get_extension(), $size, false);
+        $extension = (string) StringUtilities :: getInstance()->createString($this->get_extension())->upperCamelize();
 
+        $path = Theme :: getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
             $size = $size . ($this->is_current() ? '' : 'Na');
-            return Theme :: getInstance()->getFileExtension($this->get_extension(), $size);
+            return Theme :: getInstance()->getFileExtension($extension, $size);
         }
         else
         {
             return Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($this->get_type()),
+                ClassnameUtilities :: getInstance()->getNamespaceParent($this->context(), 2),
                 'Logo/' . $size . ($this->is_current() ? '' : 'Na'));
         }
     }
@@ -373,7 +216,8 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * Get In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @return mixed
      */
@@ -383,7 +227,8 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     * Set In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
      *
      * @var $in_memory_file mixed
      * @return void
@@ -428,7 +273,8 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved
+     * Get temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved
      *
      * @return string
      */
@@ -438,7 +284,8 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set temporary file path. A path to a file that has to be moved and renamed when the Webpage is saved
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved
      *
      * @var $temporary_file_path string
      * @return void
@@ -469,8 +316,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
      */
     public function is_image()
     {
-        $extension = $this->get_extension();
-        return in_array($extension, $this->get_image_types());
+        return FileType :: is_image($this->get_extension());
     }
 
     /**
@@ -480,8 +326,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
      */
     public function is_flash()
     {
-        $extension = $this->get_extension();
-        return in_array($extension, $this->get_flash_types());
+        return FileType :: is_flash($this->get_extension());
     }
 
     /**
@@ -491,8 +336,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
      */
     public function is_video()
     {
-        $extension = $this->get_extension();
-        return in_array($extension, $this->get_video_types());
+        return FileType :: is_video($this->get_extension());
     }
 
     /**
@@ -502,30 +346,29 @@ class Webpage extends ContentObject implements Versionable, Includeable
      */
     public function is_audio()
     {
-        $extension = $this->get_extension();
-        return in_array($extension, $this->get_audio_types());
+        return FileType :: is_audio($this->get_extension());
     }
 
+    /**
+     * Get extensions for images
+     *
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
+     * @return string[]
+     */
     public static function get_image_types()
     {
-        $image_types = array();
-        $image_types[] = 'gif';
-        $image_types[] = 'png';
-        $image_types[] = 'jpg';
-        $image_types[] = 'jpeg';
-        $image_types[] = 'jpe';
-        $image_types[] = 'svg';
-        $image_types[] = 'bmp';
-
-        return $image_types;
+        return FileType :: get_type_extensions(FileType :: TYPE_IMAGE);
     }
 
+    /**
+     * Get extensions for flash
+     *
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
+     * @return string[]
+     */
     public static function get_flash_types()
     {
-        $flash_types = array();
-        $flash_types[] = 'swf';
-
-        return $flash_types;
+        return FileType :: get_type_extensions(FileType :: TYPE_FLASH);
     }
 
     public static function get_flash_video_types()
@@ -536,35 +379,26 @@ class Webpage extends ContentObject implements Versionable, Includeable
         return $flash_types;
     }
 
+    /**
+     * Get extensions for video
+     *
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
+     * @return string[]
+     */
     public static function get_video_types()
     {
-        $video_types = array();
-        $video_types[] = 'mpg';
-        $video_types[] = 'mpeg';
-        $video_types[] = 'mp4';
-        $video_types[] = 'avi';
-        $video_types[] = 'wmv';
-        $video_types[] = 'mov';
-        $video_types[] = '3gp';
-        $video_types[] = 'flv';
-        $video_types[] = 'mkv';
-        $video_types[] = 'webm';
-
-        return $video_types;
+        return FileType :: get_type_extensions(FileType :: TYPE_VIDEO);
     }
 
+    /**
+     * Get extensions for audio
+     *
+     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
+     * @return string[]
+     */
     public static function get_audio_types()
     {
-        $audio_types = array();
-        $audio_types[] = 'mp3';
-        $audio_types[] = 'wma';
-        $audio_types[] = 'ogg';
-        $audio_types[] = 'aac';
-        $audio_types[] = 'm4a';
-        $audio_types[] = 'midi';
-        $audio_types[] = 'wav';
-
-        return $audio_types;
+        return FileType :: get_type_extensions(FileType :: TYPE_AUDIO);
     }
 
     public static function get_showable_types()
@@ -623,11 +457,11 @@ class Webpage extends ContentObject implements Versionable, Includeable
         header('Content-length: ' . $this->get_filesize());
         if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
         {
-            header('Content-Disposition: filename= ' . $filename);
+            header('Content-Disposition: filename= "' . $filename . '"');
         }
         else
         {
-            header('Content-Disposition: attachment; filename= ' . $filename);
+            header('Content-Disposition: attachment; filename= "' . $filename . '"');
         }
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         {
@@ -651,7 +485,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
         header('Content-type: ' . $this->get_mime_type());
         header('Content-length: ' . $this->get_filesize());
         header('Content-Description: ' . $filename);
-        header('Content-Disposition: inline; filename= ' . $filename);
+        header('Content-Disposition: inline; filename= "' . $filename . '"');
         $fp = fopen($this->get_full_path(), 'r');
         fpassthru($fp);
         return true;
@@ -659,7 +493,12 @@ class Webpage extends ContentObject implements Versionable, Includeable
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_FILENAME, self :: PROPERTY_FILESIZE, self :: PROPERTY_PATH, self :: PROPERTY_HASH);
+        return array(
+            self :: PROPERTY_FILENAME,
+            self :: PROPERTY_FILESIZE,
+            self :: PROPERTY_PATH,
+            self :: PROPERTY_HASH,
+            self :: PROPERTY_STORAGE_PATH);
     }
 
     /**
@@ -755,10 +594,11 @@ class Webpage extends ContentObject implements Versionable, Includeable
             if (isset($filename))
             {
                 /*
-                 * Delete current file before to create it again if the object is not saved as a new version
+                 * Delete current file before to create it again if the object is not saved as a new version @TODO: This
+                 * should not happen when the object is newly created, only for an update
                  */
                 $as_new_version = $this->get_save_as_new_version();
-                if (! $as_new_version)
+                if (! $as_new_version && $this->is_identified())
                 {
                     $current_path = $this->get_path();
 
@@ -810,6 +650,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
                     $file_bytes = Filesystem :: get_disk_space($path_to_save);
 
                     $this->set_filesize($file_bytes);
+                    $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
                     $this->set_path($relative_path);
                     $this->set_hash($unique_hash);
                     $this->set_content_hash(md5_file($path_to_save));
@@ -829,7 +670,8 @@ class Webpage extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Copy the current file to a new unique filename. Set the new values of path and hash of the current object. Useful
+     * Copy the current file to a new unique filename.
+     * Set the new values of path and hash of the current object. Useful
      * when a Webpage is updated as a new version, without replacing the content Note: needed as when saving a new
      * version of a Webpage, a new record is saved in the repository_document table, and the 'hash' field must be
      * unique.
@@ -850,6 +692,7 @@ class Webpage extends ContentObject implements Versionable, Includeable
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
+            $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
 

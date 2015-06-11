@@ -8,6 +8,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class represents a block that shows courses of a specific type
@@ -21,11 +23,27 @@ class CourseTypeCourseList extends Block
 
     function display_content()
     {
+        $configuration = $this->get_configuration();
+
         $html = array();
         $renderer = $this->get_renderer();
-        $renderer->show_new_publication_icons();
+
+        if ($configuration['show_new_icons'])
+        {
+            $renderer->show_new_publication_icons();
+        }
+
         $html[] = $renderer->as_html(false);
-        
+
+        if (! $configuration['show_new_icons'])
+        {
+            $courseTypeLink = new Redirect(array());
+
+            $html[] = '<div style="margin-top: 5px;">';
+            $html[] = Translation :: get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
+            $html[] = '</div>';
+        }
+
         return implode(PHP_EOL, $html);
     }
 
@@ -49,8 +67,8 @@ class CourseTypeCourseList extends Block
             // $this->renderer = new SelectedCourseTypeCourseListRenderer($this, $this->get_link_target(),
             // $course_type);
             $this->renderer = new FilteredCourseListRenderer(
-                $this, 
-                $this->get_link_target(), 
+                $this,
+                $this->get_link_target(),
                 $this->get_course_type_id());
         }
         return $this->renderer;
@@ -62,23 +80,23 @@ class CourseTypeCourseList extends Block
         if (isset($configuration['course_type']))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_ID), 
+                new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_ID),
                 new StaticConditionVariable($configuration['course_type']));
             $this->course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve(
-                CourseType :: class_name(), 
+                CourseType :: class_name(),
                 new DataClassRetrieveParameters($condition));
         }
         else
         {
             $this->course_type = null;
         }
-        
+
         return $this->course_type;
     }
 
     /**
      * Returns the course type id of the selected course type or 0 if no course type is not selected
-     * 
+     *
      * @return int
      */
     protected function get_course_type_id()
@@ -89,7 +107,7 @@ class CourseTypeCourseList extends Block
 
     /**
      * We need to override this because else we would redirect to the home page
-     * 
+     *
      * @param $parameters
      */
     function get_link($parameters)
@@ -105,7 +123,7 @@ class CourseTypeCourseList extends Block
             {
                 return false;
             }
-            
+
             return true; // i.e.display on homepage when anonymous
         }
         else
@@ -117,7 +135,7 @@ class CourseTypeCourseList extends Block
     function show_when_empty()
     {
         $configuration = $this->get_configuration();
-        
+
         $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
         $result = (bool) $result;
         return $result;

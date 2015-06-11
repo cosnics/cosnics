@@ -30,6 +30,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This component allows a user to view the details of a single submission.
@@ -219,9 +222,9 @@ class SubmissionViewerComponent extends SubmissionsManager
             new PropertyConditionVariable(AssignmentSubmission :: class_name(), AssignmentSubmission :: PROPERTY_ID),
             new StaticConditionVariable(Request :: get(self :: PARAM_SUBMISSION)));
 
-        $submission_tracker = new AssignmentSubmission();
-        $submission_trackers = $submission_tracker->retrieve_tracker_items_result_set($condition)->as_array();
-        return $submission_trackers[0];
+        return DataManager :: retrieve(
+            AssignmentSubmission :: class_name(),
+            new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -235,9 +238,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             new PropertyConditionVariable(SubmissionScore :: class_name(), SubmissionScore :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable(Request :: get(self :: PARAM_SUBMISSION)));
 
-        $score_tracker = new SubmissionScore();
-        $score_trackers = $score_tracker->retrieve_tracker_items_result_set($condition)->as_array();
-        return $score_trackers[0];
+        return DataManager :: retrieve(SubmissionScore :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -253,8 +254,9 @@ class SubmissionViewerComponent extends SubmissionsManager
                 SubmissionFeedback :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable(Request :: get(self :: PARAM_SUBMISSION)));
 
-        $feedback_tracker = new SubmissionFeedback();
-        return $feedback_tracker->retrieve_tracker_items_result_set($condition)->as_array();
+        return DataManager :: retrieves(
+            SubmissionFeedback :: class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -268,9 +270,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             new PropertyConditionVariable(SubmissionNote :: class_name(), SubmissionNote :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable(Request :: get(self :: PARAM_SUBMISSION)));
 
-        $note_tracker = new SubmissionNote();
-        $note_trackers = $note_tracker->retrieve_tracker_items_result_set($condition)->as_array();
-        return $note_trackers[0];
+        return DataManager :: retrieve(SubmissionNote :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**

@@ -19,6 +19,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Generator\TabsGenerator;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Storage\DataClass\AbstractNotification;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -89,7 +90,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 DynamicVisualTab :: POSITION_LEFT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) && RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $this->get_current_content_object()))
         {
             if ($this->get_current_node()->is_root())
             {

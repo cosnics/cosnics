@@ -18,6 +18,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  *
@@ -60,7 +63,10 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER));
 
         $condition = new AndCondition($conditions);
-        $submissions = $subm_tracker->retrieve_tracker_items($condition);
+
+        $submissions = DataManager :: retrieves(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
 
         $feedback_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
@@ -147,7 +153,9 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID),
                     $pub_submissions[$publication[ContentObjectPublication :: PROPERTY_ID]]['subm_ids']);
 
-                $feedback_count = $feedback_tracker->count_tracker_items($condition);
+                $feedback_count = DataManager :: count(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+                    new DataClassCountParameters($condition));
 
                 $score_display = null;
 
@@ -157,7 +165,10 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
                     $pub_submissions[$publication[ContentObjectPublication :: PROPERTY_ID]]['subm_ids']);
 
-                $scores = $score_tracker->retrieve_tracker_items($condition);
+                $scores = DataManager :: retrieves(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                    new DataClassRetrievesParameters($condition))->as_array();
+
                 foreach ($scores as $score)
                 {
                     $score_display += $score->get_score();

@@ -17,6 +17,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -119,7 +120,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
             $current_content_object = $this->get_current_node()->get_content_object();
 
-            if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+            if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+                 RightsService :: getInstance()->canEditContentObject($this->get_user(), $current_content_object))
             {
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
@@ -365,7 +367,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                             Translation :: get('MoveUpNotAvailable'),
                             Theme :: getInstance()->getImagePath(
                                 Manager :: package(),
-                                'Tab/' . self :: ACTION_SORT .self :: SORT_UP . 'Na'),
+                                'Tab/' . self :: ACTION_SORT . self :: SORT_UP . 'Na'),
                             null,
                             false,
                             false,
@@ -450,7 +452,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $factory = new ApplicationFactory(
                     $integration_class_name :: context(),
-                   new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                 $component = $factory->getComponent();
 
                 return $component->get_node_tabs($node);

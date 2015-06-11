@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: blog_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -50,7 +51,9 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Blog
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->publication->get_content_object()->package() . '\Display';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
@@ -67,7 +70,9 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Blog
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return true;
+        return RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $this->publication->get_content_object());
     }
 
     public function is_allowed_to_view_content_object()
@@ -77,12 +82,16 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Blog
 
     public function is_allowed_to_add_child()
     {
-        return true;
+        return RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $this->publication->get_content_object());
     }
 
     public function is_allowed_to_delete_child()
     {
-        return true;
+        return RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $this->publication->get_content_object());
     }
 
     public function is_allowed_to_delete_feedback()

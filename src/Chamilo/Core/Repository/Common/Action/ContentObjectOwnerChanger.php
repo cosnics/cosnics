@@ -262,6 +262,7 @@ class ContentObjectOwnerChanger
 
         $co->set_hash($new_hash);
         $co->set_path($new_path . '/' . $new_hash);
+        $co->set_storage_path($base_path);
         $co->update();
     }
 

@@ -25,6 +25,7 @@ class File extends ContentObject implements Versionable, Includeable
     const CLASS_NAME = __CLASS__;
 
     // Properties
+    const PROPERTY_STORAGE_PATH = 'storage_path';
     const PROPERTY_PATH = 'path';
     const PROPERTY_FILENAME = 'filename';
     const PROPERTY_FILESIZE = 'filesize';
@@ -58,14 +59,16 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @var mixed
      */
     private $in_memory_file;
 
     /**
-     * Temporary file path. A path to a file that has to be moved and renamed when the File is saved. Useful for
+     * Temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
      *
      * @var string
@@ -87,6 +90,16 @@ class File extends ContentObject implements Versionable, Includeable
     public function set_path($path)
     {
         return $this->set_additional_property(self :: PROPERTY_PATH, $path);
+    }
+
+    public function get_storage_path()
+    {
+        return $this->get_additional_property(self :: PROPERTY_STORAGE_PATH);
+    }
+
+    public function set_storage_path($storage_path)
+    {
+        return $this->set_additional_property(self :: PROPERTY_STORAGE_PATH, $storage_path);
     }
 
     public function get_filename()
@@ -128,18 +141,16 @@ class File extends ContentObject implements Versionable, Includeable
     {
         if ($only_version)
         {
-            $path = Path :: getInstance()->getRepositoryPath() . $this->get_path();
-            if (DataManager :: is_only_file_occurence($this->get_path()))
+            if (DataManager :: is_only_file_occurence($this->get_storage_path(), $this->get_path()))
             {
-                Filesystem :: remove($path);
+                Filesystem :: remove($this->get_full_path());
             }
         }
         else
         {
-            if (Text :: is_valid_path($this->get_path()))
+            if (Text :: is_valid_path($this->get_full_path()))
             {
-                $path = Path :: getInstance()->getRepositoryPath() . $this->get_path();
-                Filesystem :: remove($path);
+                Filesystem :: remove($this->get_full_path());
             }
         }
 
@@ -153,7 +164,7 @@ class File extends ContentObject implements Versionable, Includeable
 
     public function get_full_path()
     {
-        return Path :: getInstance()->getRepositoryPath() . $this->get_path();
+        return $this->get_storage_path() . $this->get_path();
     }
 
     public function get_icon_name($size = Theme :: ICON_SMALL)
@@ -184,7 +195,7 @@ class File extends ContentObject implements Versionable, Includeable
 
     public function get_icon_path($size = Theme :: ICON_SMALL)
     {
-        $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
+        $extension = (string) StringUtilities :: getInstance()->createString($this->get_extension())->upperCamelize();
 
         $path = Theme :: getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
@@ -213,7 +224,8 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * Get In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @return mixed
      */
@@ -223,7 +235,8 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * Set In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @var $in_memory_file mixed
      * @return void
@@ -266,7 +279,8 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get temporary file path. A path to a file that has to be moved and renamed when the File is saved
+     * Get temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
      *
      * @return string
      */
@@ -276,7 +290,8 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set temporary file path. A path to a file that has to be moved and renamed when the File is saved
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
      *
      * @var $temporary_file_path string
      * @return void
@@ -484,7 +499,12 @@ class File extends ContentObject implements Versionable, Includeable
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_FILENAME, self :: PROPERTY_FILESIZE, self :: PROPERTY_PATH, self :: PROPERTY_HASH);
+        return array(
+            self :: PROPERTY_FILENAME,
+            self :: PROPERTY_FILESIZE,
+            self :: PROPERTY_PATH,
+            self :: PROPERTY_HASH,
+            self :: PROPERTY_STORAGE_PATH);
     }
 
     /**
@@ -634,6 +654,7 @@ class File extends ContentObject implements Versionable, Includeable
                     $file_bytes = Filesystem :: get_disk_space($path_to_save);
 
                     $this->set_filesize($file_bytes);
+                    $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
                     $this->set_path($relative_path);
                     $this->set_hash($unique_hash);
                     $this->set_content_hash(md5_file($path_to_save));
@@ -653,7 +674,8 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Copy the current file to a new unique filename. Set the new values of path and hash of the current object. Useful
+     * Copy the current file to a new unique filename.
+     * Set the new values of path and hash of the current object. Useful
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
      *
@@ -673,6 +695,7 @@ class File extends ContentObject implements Versionable, Includeable
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
+            $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
 
