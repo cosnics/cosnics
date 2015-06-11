@@ -14,6 +14,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 
 /**
  *
@@ -37,13 +39,29 @@ class WorkspaceRepository
 
     /**
      *
+     * @param integer[] $identifiers
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = array())
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID),
+            $identifiers);
+
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters($condition, $limit, $offset, $orderProperty));
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $limit
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = array())
+    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -80,13 +98,12 @@ class WorkspaceRepository
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $limit
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllWorkspaces($limit, $offset, $orderProperty = array())
+    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -95,7 +112,6 @@ class WorkspaceRepository
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return integer
      */
     public function countAllWorkspaces()
@@ -105,13 +121,13 @@ class WorkspaceRepository
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findSharedWorkspacesForEntities($entities, $limit, $offset, $orderProperty = array())
+    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = array())
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
@@ -120,12 +136,12 @@ class WorkspaceRepository
                 $limit,
                 $offset,
                 $orderProperty,
-                $this->getSharedWorkspacesJoins()));
+                new Joins(array($this->getSharedWorkspacesJoin()))));
     }
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
      * @return integer
      */
     public function countSharedWorkspacesForEntities($entities)
@@ -134,13 +150,13 @@ class WorkspaceRepository
             Workspace :: class_name(),
             new DataClassCountParameters(
                 $this->getSharedWorkspacesForEntitiesCondition($entities),
-                $this->getSharedWorkspacesJoins()));
+                new Joins(array($this->getSharedWorkspacesJoin()))));
     }
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     * @param integer[] $entities
+     * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
     private function getSharedWorkspacesForEntitiesCondition($entities)
     {
@@ -172,21 +188,99 @@ class WorkspaceRepository
 
     /**
      *
+     * @param integer $joinType
+     * @return \Chamilo\Libraries\Storage\Query\Join
+     */
+    private function getSharedWorkspacesJoin($joinType = Join :: TYPE_NORMAL)
+    {
+        return new Join(
+            WorkspaceEntityRelation :: class_name(),
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceEntityRelation :: class_name(),
+                    WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID)),
+            $joinType);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @param integer $limit
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findWorkspaceFavouritesByUser(User $user, $entities, $limit = null, $offset = null, $orderProperty = array())
+    {
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters(
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities),
+                $limit,
+                $offset,
+                $orderProperty,
+                $this->getWorkspaceFavouritesByUserJoins()));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @return integer
+     */
+    public function countWorkspaceFavouritesByUser(User $user, $entities)
+    {
+        return DataManager :: count(
+            Workspace :: class_name(),
+            new DataClassCountParameters(
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities),
+                $this->getWorkspaceFavouritesByUserJoins()));
+    }
+
+    /**
+     *
+     * @param integer $joinType
+     * @return \Chamilo\Libraries\Storage\Query\Join
+     */
+    private function getFavouritesJoin($joinType = Join :: TYPE_NORMAL)
+    {
+        return new Join(
+            WorkspaceUserFavourite :: class_name(),
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceUserFavourite :: class_name(),
+                    WorkspaceUserFavourite :: PROPERTY_WORKSPACE_ID),
+                new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID)),
+            $joinType);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Storage\Query\Joins
      */
-    private function getSharedWorkspacesJoins()
+    private function getWorkspaceFavouritesByUserJoins()
     {
         $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                WorkspaceEntityRelation :: class_name(),
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        WorkspaceEntityRelation :: class_name(),
-                        WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
-                    new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID))));
-
+        $joins->add($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT));
+        $joins->add($this->getFavouritesJoin());
         return $joins;
+    }
+
+    /**
+     *
+     * @param User $user
+     * @param integer[] $entities
+     * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
+     */
+    private function getWorkspaceFavouritesByUserCondition(User $user, $entities)
+    {
+        $orConditions = array();
+
+        $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
+        $orConditions[] = $this->getSharedWorkspacesForEntitiesCondition($entities);
+
+        return new OrCondition($orConditions);
     }
 }

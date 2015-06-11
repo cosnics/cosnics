@@ -9,6 +9,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: content_object_copier.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -49,15 +50,24 @@ class CopierComponent extends Manager
 
             if ($content_object instanceof ContentObject)
             {
-                $copier = new ContentObjectCopier(
-                    array($content_object->get_id()),
-                    $this->getWorkspace(),
-                    $source_user_id,
-                    $this->getWorkspace(),
-                    $target_user_id,
-                    $target_category_id);
-                $copier->run();
-                $messages += $copier->get_messages_for_url();
+                if (RightsService :: getInstance()->canCopyContentObject(
+                    $this->get_user(),
+                    $content_object,
+                    $this->getWorkspace()))
+                {
+                    $copier = new ContentObjectCopier(
+                        $this->get_user(),
+                        array($content_object->get_id()),
+                        $this->getWorkspace(),
+                        $source_user_id,
+                        $this->getWorkspace(),
+                        $target_user_id,
+                        $target_category_id);
+
+                    $copier->run();
+
+                    $messages += $copier->get_messages_for_url();
+                }
             }
         }
 

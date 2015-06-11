@@ -2,6 +2,8 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 
 use Chamilo\Core\Reporting\ReportingBlock;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 abstract class Block extends ReportingBlock
 {
@@ -14,11 +16,11 @@ abstract class Block extends ReportingBlock
     public static function getDateArray($data, $format)
     {
         $login_dates = array();
-        
+
         while ($login_date = $data->next_result())
         {
             $date = date($format, $login_date->get_date());
-            
+
             if (array_key_exists($date, $login_dates))
             {
                 $login_dates[$date] ++;
@@ -28,13 +30,13 @@ abstract class Block extends ReportingBlock
                 $login_dates[$date] = 1;
             }
         }
-        
+
         return $login_dates;
     }
 
     /**
      * Generates an array from a tracker Currently only supports 1 serie
-     * 
+     *
      * @todo support multiple series
      * @param Tracker $tracker
      * @return array
@@ -43,8 +45,9 @@ abstract class Block extends ReportingBlock
     {
         $c = 0;
         $array = array();
-        $trackerdata = $tracker->retrieve_tracker_items($condition);
-        
+
+        $trackerdata = DataManager :: retrieves($tracker :: class_name(), new DataClassRetrievesParameters($condition))->as_array();
+
         foreach ($trackerdata as $key => $value)
         {
             $arr[$value->get_name()] = $value->get_value();

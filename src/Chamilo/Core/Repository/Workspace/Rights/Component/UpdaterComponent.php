@@ -7,8 +7,6 @@ use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
@@ -40,8 +38,7 @@ class UpdaterComponent extends TabComponent
             {
                 $values = $form->exportValues();
 
-                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $rightsService = new RightsService($contentObjectRelationService, $this->getEntityRelationService());
+                $rightsService = RightsService :: getInstance();
 
                 $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],

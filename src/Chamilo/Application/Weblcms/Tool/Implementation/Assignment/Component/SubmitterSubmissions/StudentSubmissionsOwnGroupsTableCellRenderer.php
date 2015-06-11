@@ -20,6 +20,8 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Description of student_submissions_browser_own_groups_table_cell_renderer
@@ -163,13 +165,17 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
         $condition = new EqualityCondition(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID,
             $submission_id);
-        $trackers = $tracker->retrieve_tracker_items($condition);
+
+        $trackers = DataManager :: retrieves(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
 
         if (count($trackers) > 0)
         {
             $score_tracker = $trackers[0];
             return $score_tracker->get_score() . '%';
         }
+
         return null;
     }
 
@@ -183,9 +189,14 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
     {
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $condition = new EqualityCondition(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID,
-            $submission_id);
-        return $tracker->count_tracker_items($condition);
+            new PropertyConditionVariable(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_SUBMISSION_ID),
+            new StaticConditionVariable($submission_id));
+
+        return DataManager :: count(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
+            new DataClassCountParameters($condition));
     }
 
     /**

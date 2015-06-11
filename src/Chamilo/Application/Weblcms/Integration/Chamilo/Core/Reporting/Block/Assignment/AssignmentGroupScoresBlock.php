@@ -18,6 +18,8 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -147,7 +149,10 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
                         new StaticConditionVariable($group->get_id()));
 
                     $condition = new AndCondition($conditions);
-                    $submissions_by_group = $submission_tracker->retrieve_tracker_items($condition);
+
+                    $submissions_by_group = DataManager :: retrieves(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                        new DataClassRetrievesParameters($condition))->as_array();
 
                     $submission_ids = array();
                     foreach ($submissions_by_group as $submission)
@@ -175,7 +180,10 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
                             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
                             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
                         $submission_ids);
-                    $score_trackers = $score_tracker->retrieve_tracker_items($condition);
+
+                    $score_trackers = DataManager :: retrieves(
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                        new DataClassRetrievesParameters($condition))->as_array();
 
                     if (count($score_trackers) > 0)
                     {

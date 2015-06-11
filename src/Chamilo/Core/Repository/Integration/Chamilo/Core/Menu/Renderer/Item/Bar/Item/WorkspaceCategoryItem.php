@@ -7,6 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\EntityService;
 
 /**
  *
@@ -24,7 +25,10 @@ class WorkspaceCategoryItem extends CategoryItem
         $sub_html = array();
 
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $workspaces = $workspaceService->getWorkspacesByCreator($this->get_menu_renderer()->get_user());
+        $entityService = new EntityService();
+        $workspaces = $workspaceService->getWorkspaceFavouritesByUser(
+            $entityService,
+            $this->get_menu_renderer()->get_user());
 
         $sub_html[] = '<ul>';
 

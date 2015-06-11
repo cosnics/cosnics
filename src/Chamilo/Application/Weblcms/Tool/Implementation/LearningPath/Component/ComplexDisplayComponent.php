@@ -36,6 +36,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
@@ -472,8 +473,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             new StaticConditionVariable($complex_topic_id));
         $condition = new AndCondition($conditions);
 
-        $dummy = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView();
-        return $dummy->count_tracker_items($condition);
+        return DataManager :: count(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: class_name(),
+            new DataClassCountParameters($condition));
     }
 
     /**

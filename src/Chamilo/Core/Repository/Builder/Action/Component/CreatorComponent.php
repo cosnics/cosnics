@@ -100,6 +100,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                     $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
                         ContentObject :: class_name(),
                         $content_object_id);
+
                     if (method_exists($this->get_parent(), 'get_helper_object'))
                     {
                         $helper_object = $this->get_parent()->get_helper_object($type);
@@ -109,6 +110,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                             $content_object_id = $helper_object->get_id();
                         }
                     }
+
                     // gets the type of the helper object
                     $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
                         ContentObject :: class_name(),

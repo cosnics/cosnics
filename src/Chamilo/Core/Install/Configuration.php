@@ -28,6 +28,8 @@ class Configuration
 
     private $base_url = 'http://localhost/chamilo/web';
 
+    private $storage_path;
+
     private $url_append = '/chamilo/web';
 
     private $admin_email = '';
@@ -75,6 +77,7 @@ class Configuration
 
         $values['platform_language'] = $this->get_platform_language();
         $values['platform_url'] = $this->get_base_url();
+        $values['storage_path'] = $this->get_storage_path();
         $values['url_append'] = $this->get_url_append();
 
         $values['admin_email'] = $this->get_admin_email();
@@ -93,7 +96,7 @@ class Configuration
         $values['hashing_algorithm'] = $this->get_crypt_algorithm();
 
         $values['server_type'] = $this->get_server_type();
-        
+
         foreach ($this->packages as $package)
         {
             $values['install'][$package] = '1';
@@ -147,6 +150,8 @@ class Configuration
             $this->set_platform_language($values['platform_language']);
         if (isset($values['platform_url']))
             $this->set_base_url($values['platform_url']);
+        if (isset($values['storage_path']))
+            $this->set_storage_path($values['storage_path']);
         if (isset($values['url_append']))
             $this->set_url_append($values['url_append']);
 
@@ -283,6 +288,16 @@ class Configuration
     public function set_base_url($base_url)
     {
         $this->base_url = $base_url;
+    }
+
+    public function get_storage_path()
+    {
+        return $this->storage_path;
+    }
+
+    public function set_storage_path($storage_path)
+    {
+        $this->storage_path = $storage_path;
     }
 
     public function get_admin_email()

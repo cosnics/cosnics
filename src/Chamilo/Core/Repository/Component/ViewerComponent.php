@@ -31,6 +31,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: viewer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -72,9 +74,18 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $this->object = $object;
 
-            $is_owner = $object->get_owner_id() == $this->get_user_id();
+            if (! RightsService :: getInstance()->canViewContentObject(
+                $this->get_user(),
+                $this->object,
+                $this->getWorkspace()))
+            {
+                throw new NotAllowedException();
+            }
 
-            $this->allowed_to_modify = $is_owner;
+            $this->allowed_to_modify = RightsService :: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $this->object,
+                $this->getWorkspace());
 
             $display = ContentObjectRenditionImplementation :: factory(
                 $object,

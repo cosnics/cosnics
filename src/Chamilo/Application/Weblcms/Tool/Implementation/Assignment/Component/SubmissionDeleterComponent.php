@@ -10,6 +10,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -57,8 +59,10 @@ class SubmissionDeleterComponent extends Manager
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_ID),
                 new StaticConditionVariable($sid));
 
-            $submissions = $submission_tracker->retrieve_tracker_items($condition);
-            $submission = $submissions[0];
+            $submission = DataManager :: retrieve(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+                new DataClassRetrieveParameters($condition));
+
             $submission_id = $submission->get_id();
             $publication_id = $submission->get_publication_id();
             $submitter_type = $submission->get_submitter_type();

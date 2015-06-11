@@ -30,6 +30,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class Manager extends Application
 {
     const APPLICATION_NAME = 'weblcms';
+
+    // Parameters
     const PARAM_REQUEST_TYPE = 'request_type';
     const PARAM_REQUEST_VIEW = 'request_view';
     const PARAM_REQUEST = 'request';
@@ -65,6 +67,8 @@ abstract class Manager extends Application
     const PARAM_ALLOW_SELECTED_REQUESTS = 'allow_selected_requests';
     const PARAM_REFUSE_SELECTED_REQUESTS = 'refuse_selected_requests';
     const PARAM_TEMPLATE_ID = 'template_id';
+
+    // Actions
     const ACTION_VIEW_WEBLCMS_HOME = 'Home';
     const ACTION_VIEW_COURSE = 'CourseViewer';
     const ACTION_IMPORT_COURSES = 'CourseImporter';
@@ -78,6 +82,9 @@ abstract class Manager extends Application
     const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
     const ACTION_COURSE_MANAGER = 'CourseManager';
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+    const ACTION_ANNOUNCEMENT = 'Announcement';
+
+    // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_WEBLCMS_HOME;
 
     /**
@@ -536,8 +543,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_course_user_move_url($course_type_user_category, Course $course,
-        $direction)
+    public function get_course_user_move_url($course_type_user_category, Course $course, $direction)
     {
         return $this->get_url(
             array(

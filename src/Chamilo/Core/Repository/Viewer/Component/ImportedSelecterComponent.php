@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class ImportedSelecterComponent extends Manager implements TableSupport, DelegateComponent
 {
@@ -22,13 +23,13 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
     public function run()
     {
         $table = new ImportTable($this);
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -41,7 +42,7 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
     {
         $content_object_ids = Session :: retrieve(self :: PARAM_IMPORTED_CONTENT_OBJECT_IDS);
         return new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
             $content_object_ids);
     }
 
@@ -53,62 +54,72 @@ class ImportedSelecterComponent extends Manager implements TableSupport, Delegat
     public function get_default_browser_actions($content_object)
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Publish'), 
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), 
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_PUBLISHER, 
-                            self :: PARAM_ID => $content_object->get_id())), 
-                    false), 
-                ToolbarItem :: DISPLAY_ICON));
-        
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Preview'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), 
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_VIEWER, 
-                            self :: PARAM_ID => $content_object->get_id())), 
-                    false), 
-                ToolbarItem :: DISPLAY_ICON));
-        
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('EditAndPublish'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Editpublish'), 
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), 
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATOR, 
-                            self :: PARAM_EDIT_ID => $content_object->get_id())), 
-                    false), 
-                ToolbarItem :: DISPLAY_ICON));
-        
-        if ($content_object instanceof ComplexContentObjectSupport)
+
+        if (RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
         {
-            
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
+                                self :: PARAM_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+
+        if (RightsService :: getInstance()->canViewContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Preview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_VIEWER,
+                                self :: PARAM_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+
+        if (RightsService :: getInstance()->canEditContentObject($this->get_user(), $content_object) &&
+             RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('EditAndPublish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_CREATOR,
+                                self :: PARAM_EDIT_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+
+        if ($content_object instanceof ComplexContentObjectSupport &&
+             RightsService :: getInstance()->canViewContentObject($this->get_user(), $content_object))
+        {
             $preview_url = \Chamilo\Core\Repository\Manager :: get_preview_content_object_url($content_object);
             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
-                    $preview_url, 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    false, 
-                    $onclick, 
+                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                    $preview_url,
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    $onclick,
                     '_blank'));
         }
-        
+
         return $toolbar;
     }
 }

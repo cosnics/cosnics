@@ -33,6 +33,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * Main portfolio viewing component
@@ -265,14 +266,18 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
     {
-        $is_publisher = $this->get_publication()->get_publisher_id() == $this->get_rights_user_id();
+        $isPublisher = $this->get_publication()->get_publisher_id() == $this->get_rights_user_id();
 
-        $edit_right = Rights :: get_instance()->is_allowed(
+        $contextEditRight = Rights :: get_instance()->is_allowed(
             Rights :: EDIT_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id());
 
-        return $is_publisher || $edit_right;
+        $contentObjectEditRight = RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $node->get_content_object());
+
+        return $isPublisher || $contextEditRight || $contentObjectEditRight;
     }
 
     /**

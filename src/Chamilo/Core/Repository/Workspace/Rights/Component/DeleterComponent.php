@@ -5,9 +5,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
@@ -40,10 +38,9 @@ class DeleterComponent extends Manager
                 $entityRelationIdentifiers = array($entityRelationIdentifiers);
             }
 
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
 
-            $rightsService = new RightsService($contentObjectRelationService, $entityRelationService);
+            $rightsService = RightsService :: getInstance();
 
             foreach ($entityRelationIdentifiers as $entityRelationIdentifier)
             {
