@@ -56,11 +56,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition);
     }
 
-    public static function is_only_webpage_occurence($path)
+    public static function is_only_webpage_occurence($storage_path, $path)
     {
-        $condition = new EqualityCondition(
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_STORAGE_PATH),
+            new StaticConditionVariable($storage_path));
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Webpage :: class_name(), Webpage :: PROPERTY_PATH),
             new StaticConditionVariable($path));
+        $condition = new AndCondition($conditions);
+
         $count = \Chamilo\Core\Repository\Storage\DataManager :: count_content_objects(
             Webpage :: class_name(),
             new DataClassCountParameters($condition));
