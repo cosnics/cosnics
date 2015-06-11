@@ -51,6 +51,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $document = new File();
             $document->set_owner_id($owner);
             $document->set_parent_id(0);
+            $document->set_storage_path($upload_path);
             $document->set_path($path);
             $document->set_filename($filename);
             $document->set_filesize(Filesystem :: get_disk_space($full_path));
@@ -65,7 +66,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $document->set_description($title);
             $document->create();
 
-//             var_dump($document);
+            // var_dump($document);
 
             $dimensions = getimagesize($full_path);
 

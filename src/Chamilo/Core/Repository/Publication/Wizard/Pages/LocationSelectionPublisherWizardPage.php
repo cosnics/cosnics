@@ -12,6 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: location_selection_publisher_wizard_page.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -75,6 +76,12 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             if (! $content_object instanceof ContentObject)
             {
                 throw new NoObjectSelectedException(Translation :: get('ContentObject'));
+            }
+
+            // Check the USE-right
+            if (! RightsService :: getInstance()->canUseContentObject($this->get_parent()->get_user(), $content_object))
+            {
+                throw new NotAllowedException();
             }
 
             // Don't allow publication is the content object is in the RECYCLED

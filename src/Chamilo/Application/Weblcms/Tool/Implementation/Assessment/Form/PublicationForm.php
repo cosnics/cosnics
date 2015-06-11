@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Extension of the default Content to allow for the feedback-functionality
@@ -20,9 +21,19 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class PublicationForm extends ContentObjectPublicationForm
 {
 
-    public function __construct($form_type, $publications, $course, $action, $is_course_admin)
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer $form_type
+     * @param ContentObjectPublication[] $publications
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string $action
+     * @param boolean $is_course_admin
+     * @throws NoObjectSelectedException
+     */
+    public function __construct(User $user, $form_type, $publications, $course, $action, $is_course_admin)
     {
-        parent :: __construct($form_type, $publications, $course, $action, $is_course_admin);
+        parent :: __construct($user, $form_type, $publications, $course, $action, $is_course_admin);
 
         $publications = $this->get_publications();
 

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -211,9 +212,12 @@ class Path
      * @param boolean $web
      * @return string
      */
-    public function getRepositoryPath($web = false)
+    public function getRepositoryPath()
     {
-        return $this->cache[self :: REPOSITORY][(string) $web] = $this->getStoragePath('repository', $web);
+        return $this->cache[self :: REPOSITORY] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'repository',
+            'storage_path');
     }
 
     /**

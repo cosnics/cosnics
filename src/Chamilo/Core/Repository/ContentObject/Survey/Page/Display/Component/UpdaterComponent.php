@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class UpdaterComponent extends TabComponent
 {
@@ -24,82 +25,85 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+             RightsService :: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $this->get_current_content_object()))
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
-            
+
             $form = ContentObjectForm :: factory(
-                ContentObjectForm :: TYPE_EDIT, 
-                new PersonalWorkspace($this->get_user()), 
-                $content_object, 
-                'edit', 
-                'post', 
+                ContentObjectForm :: TYPE_EDIT,
+                new PersonalWorkspace($this->get_user()),
+                $content_object,
+                'edit',
+                'post',
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 
+                        self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                         self :: PARAM_STEP => $this->get_current_step())));
-            
+
             if ($form->validate())
             {
                 $succes = $form->update_content_object();
-                
+
                 if ($succes)
                 {
                     Event :: trigger(
-                        'activity', 
-                        \Chamilo\Core\Repository\Manager :: context(), 
+                        'activity',
+                        \Chamilo\Core\Repository\Manager :: context(),
                         array(
-                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED, 
-                            Activity :: PROPERTY_USER_ID => $this->get_user_id(), 
-                            Activity :: PROPERTY_DATE => time(), 
-                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,
+                            Activity :: PROPERTY_USER_ID => $this->get_user_id(),
+                            Activity :: PROPERTY_DATE => time(),
+                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
                             Activity :: PROPERTY_CONTENT => $content_object->get_title()));
                 }
-                
+
                 if ($succes && $form->is_version())
                 {
                     $old_id = $selected_complex_content_object_item->get_ref();
                     $new_id = $content_object->get_latest_version()->get_id();
                     $selected_complex_content_object_item->set_ref($new_id);
                     $selected_complex_content_object_item->update();
-                    
+
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem :: class_name(), 
-                            ComplexContentObjectItem :: PROPERTY_PARENT), 
-                        new StaticConditionVariable($old_id), 
+                            ComplexContentObjectItem :: class_name(),
+                            ComplexContentObjectItem :: PROPERTY_PARENT),
+                        new StaticConditionVariable($old_id),
                         ComplexContentObjectItem :: get_table_name());
                     $parameters = new DataClassRetrievesParameters($condition);
                     $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                        ComplexContentObjectItem :: class_name(), 
+                        ComplexContentObjectItem :: class_name(),
                         $parameters);
-                    
+
                     $failures = 0;
-                    
+
                     while ($child = $children->next_result())
                     {
                         $child->set_parent($new_id);
-                        
+
                         if (! $child->update())
                         {
                             $failures ++;
                         }
                     }
-                    
+
                     $succes = ($succes) && ($failures == 0);
                 }
-                
+
                 $message = htmlentities(
                     Translation :: get(
-                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
-                        array('OBJECT' => Translation :: get('ContentObject')), 
+                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
+                        array('OBJECT' => Translation :: get('ContentObject')),
                         Utilities :: COMMON_LIBRARIES));
-                
+
                 $params = array();
                 $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-                
+
                 $this->redirect($message, (! $succes), $params);
             }
             else
@@ -112,17 +116,17 @@ class UpdaterComponent extends TabComponent
                 {
                     $title = Translation :: get('EditQuestion');
                 }
-                
+
                 $trail = BreadcrumbTrail :: get_instance();
                 $trail->add(
                     new Breadcrumb($this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), $title));
-                
+
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }

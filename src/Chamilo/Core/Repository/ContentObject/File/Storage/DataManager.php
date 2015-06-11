@@ -58,11 +58,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition);
     }
 
-    public static function is_only_file_occurence($path)
+    public static function is_only_file_occurence($storage_path, $path)
     {
-        $condition = new EqualityCondition(
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_STORAGE_PATH),
+            new StaticConditionVariable($storage_path));
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_PATH),
             new StaticConditionVariable($path));
+        $condition = new AndCondition($conditions);
+
         $count = \Chamilo\Core\Repository\Storage\DataManager :: count_content_objects(
             File :: class_name(),
             new DataClassCountParameters($condition));

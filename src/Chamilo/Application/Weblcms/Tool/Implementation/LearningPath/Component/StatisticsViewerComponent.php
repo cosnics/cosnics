@@ -368,9 +368,6 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt :: class_name(),
             new DataClassRetrievesParameters($condition));
 
-        $dummy = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt();
-        $trackers = $dummy->retrieve_tracker_items($condition);
-
         $results = array();
 
         while ($question_attempt = $question_attempts->next_result())

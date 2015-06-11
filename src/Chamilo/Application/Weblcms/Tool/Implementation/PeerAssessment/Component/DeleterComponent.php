@@ -12,6 +12,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Enter description here .
@@ -45,12 +47,15 @@ class DeleterComponent extends Manager
         {
 
             $status_tracker = new WeblcmsPeerAssessmentAttemptStatusTracker();
-            $statuses = $status_tracker->retrieve_tracker_items(
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        WeblcmsPeerAssessmentAttemptStatusTracker :: class_name(),
-                        WeblcmsPeerAssessmentAttemptStatusTracker :: PROPERTY_ATTEMPT_ID),
-                    new StaticConditionVariable($attempt->get_id())));
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    WeblcmsPeerAssessmentAttemptStatusTracker :: class_name(),
+                    WeblcmsPeerAssessmentAttemptStatusTracker :: PROPERTY_ATTEMPT_ID),
+                new StaticConditionVariable($attempt->get_id()));
+
+            $statuses = DataManager :: retrieves(
+                WeblcmsPeerAssessmentAttemptStatusTracker :: class_name(),
+                new DataClassRetrievesParameters($condition))->as_array();
 
             // delete scores and feedaback
             foreach ($statuses as $status)

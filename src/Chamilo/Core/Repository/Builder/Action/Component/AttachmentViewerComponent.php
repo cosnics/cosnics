@@ -29,11 +29,13 @@ class AttachmentViewerComponent extends Manager
          * Retrieve data and check if it is a valid attachment
          */
         $attachment_id = Request :: get(\Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_ATTACHMENT_ID);
+
         if (is_null($attachment_id))
         {
             throw new ParameterNotDefinedException(
                 \Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_ATTACHMENT_ID);
         }
+
         $complex_content_object_item = $this->get_parent()->get_selected_complex_content_object_item();
         $reference_content_object_id = $complex_content_object_item->get_ref();
         $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(

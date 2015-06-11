@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -231,46 +232,57 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(),
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
-                            self :: PARAM_ID => $content_object->get_id())),
-                    false),
-                ToolbarItem :: DISPLAY_ICON));
+        if (RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
+                                self :: PARAM_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Preview'),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(),
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_VIEWER,
-                            self :: PARAM_ID => $content_object->get_id())),
-                    false),
-                ToolbarItem :: DISPLAY_ICON));
+        if (RightsService :: getInstance()->canViewContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Preview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_VIEWER,
+                                self :: PARAM_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('EditAndPublish'),
-                Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
-                $this->get_url(
-                    array_merge(
-                        $this->get_parameters(),
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_CREATOR,
-                            self :: PARAM_EDIT_ID => $content_object->get_id())),
-                    false),
-                ToolbarItem :: DISPLAY_ICON));
+        if (RightsService :: getInstance()->canEditContentObject($this->get_user(), $content_object) &&
+             RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('EditAndPublish'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
+                    $this->get_url(
+                        array_merge(
+                            $this->get_parameters(),
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_CREATOR,
+                                self :: PARAM_EDIT_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
-        if ($content_object instanceof ComplexContentObjectSupport)
+        if ($content_object instanceof ComplexContentObjectSupport &&
+             RightsService :: getInstance()->canViewContentObject($this->get_user(), $content_object))
         {
 
             $preview_url = \Chamilo\Core\Repository\Manager :: get_preview_content_object_url($content_object);

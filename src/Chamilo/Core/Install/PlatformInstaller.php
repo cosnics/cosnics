@@ -219,6 +219,7 @@ class PlatformInstaller
         $configuration['database']['host'] = $this->installer_config->get_db_host();
         $configuration['database']['name'] = $this->installer_config->get_db_name();
         $configuration['debug']['show_errors'] = false;
+        $configuration['repository']['storage_path'] = $this->installer_config->get_storage_path();
 
         $content = array();
 
