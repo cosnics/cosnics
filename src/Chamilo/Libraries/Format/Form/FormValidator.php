@@ -494,13 +494,14 @@ EOT;
      * @param string $name The element name
      * @return HTML_QuickForm_datepicker The element.
      */
-    public function add_datepicker($name, $label, $include_time_picker = true)
+    public function add_datepicker($name, $label, $include_time_picker = true, $attributes = null)
     {
+        $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
         $element = $this->addElement(
             'datepicker',
             $name,
             $label,
-            array('form_name' => $this->getAttribute('name'), 'class' => $name),
+            $attributes,
             $include_time_picker);
         $this->addRule($name, Translation :: get('InvalidDate'), 'date');
         return $element;

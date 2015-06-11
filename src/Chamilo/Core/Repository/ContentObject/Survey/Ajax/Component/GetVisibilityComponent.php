@@ -1,11 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -13,144 +11,25 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager
 {
-    const TEMPORARY_STORAGE = 'survey_preview';
-    const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
-    const PARAM_PARAMETERS = 'parameters';
-    const PARAM_RESULT = 'result';
-    const PARAM_QUESTION_VISIBILITY = 'question_visibility';
-    
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    function getRequiredPostParameters()
-    {
-        return array(self :: PARAM_PARAMETERS);
-    }
-    
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
+
     function run()
     {
-        $parameters = $this->getPostDataValue(self :: PARAM_PARAMETERS);
-        $step = $parameters[Manager :: PARAM_STEP];
-        $content_object_id = $parameters['content_object_id'];
+        $result = new JsonAjaxResult(200);
+        $nodeId = $this->getRequest()->request->get(self :: PARAM_NODE_ID);
+        $complexQuestionId = $this->getRequest()->request->get(self :: PARAM_COMPLEX_QUESTION_ID);
+        $contentObjectId = $this->getRequest()->request->get(self :: PARAM_CONTENT_OBJECT_ID);
         
-        $content_object = DataManager :: retrieve_by_id(Survey :: class_name(), $content_object_id);
+        $contentObject = DataManager :: retrieve_by_id(Survey :: class_name(), $contentObjectId);
         
-        $path = $content_object->get_complex_content_object_path();
+        $path = $contentObject->get_complex_content_object_path();
         
-        $question_visibility = array();
-        $question_answers = array();
+        $node = $path->get_node($nodeId);
         
-        $page_node = $path->get_node($step);
-        
-        $survey_page = $page_node->get_content_object();
-        
-        foreach ($page_node->get_children() as $node)
-        {
-            
-            if (! $node->is_root())
-            {
-                
-                $complex_content_object_item = $node->get_complex_content_object_item();
-                $complex_question_id = $complex_content_object_item->get_id();
-                
-                if ($complex_content_object_item->is_visible())
-                {
-                    
-                    $question_visibility[$complex_question_id] = true;
-                }
-                else
-                {
-                    $question_visibility[$complex_question_id] = false;
-                }
-                
-                $answer = $this->get_answer($complex_question_id);
-                
-                if ($answer)
-                {
-                    $question_answers[$complex_question_id] = $answer;
-                }
-            }
-        }
-        
-        if (count($question_answers) > 0)
-        {
-            $configs = $survey_page->getConfiguration();
-            
-            foreach ($question_answers as $complex_question_id => $answers)
-            {
-                foreach ($configs as $configuration)
-                {
-                    $from_question_id = $configuration->getComplexQuestionId();
-                    if ($complex_question_id == $from_question_id)
-                    {
-                        $answer_matches = $configuration->getAnswerMatches();
-                        
-                        $visible = false;
-                        if (count($answer_matches) == count($answers))
-                        {
-                            foreach ($answer_matches as $key => $value)
-                            {
-                                
-                                if (array_key_exists($key, $answers))
-                                {
-                                    if ($value == $answers[$key])
-                                    {
-                                        $visible = true;
-                                    }
-                                    else
-                                    {
-                                        $visible = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    $visible = false;
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        if ($visible)
-                        {
-                            foreach ($configuration->getToVisibleQuestionIds() as $id)
-                            {
-                                $question_visibility[$id] = true;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PARAM_QUESTION_VISIBILITY, $question_visibility);
-            $result->display();
-        }
-        else
-        {
-            $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PARAM_QUESTION_VISIBILITY, array());
-            $result->display();
-        }
-    }
-
-    private function get_answer($complex_question_id)
-    {
-        $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        
-        $answer = $answers[$complex_question_id];
-        
-        if ($answer)
-        {
-            return $answer;
-        }
-        else
-        {
-            return null;
-        }
+        $nodeVisibility = $node->getSiblingVisibility($this->getApplicationConfiguration()->getAnswerService());
+               
+        $result = new JsonAjaxResult(200);
+        $result->set_property(self :: PARAM_QUESTION_VISIBILITY, $nodeVisibility);
+        $result->display();
     }
 }
 ?>

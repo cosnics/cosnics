@@ -4,6 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Service;
 interface AnswerServiceInterface
 {
     
+
+    /**
+     * @var string
+     */
+    const PARAM_SERVICE_CONTEXT = 'answerServiceContext';
+    
     /**
      * @param int $questionId
      * @return mixed $answer
@@ -26,5 +32,10 @@ interface AnswerServiceInterface
      * @return string
      */
     public function getPrefix();
+    
+    /**
+     * @return string
+     */
+    public function getServiceContext();
     
 }

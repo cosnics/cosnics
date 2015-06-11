@@ -104,7 +104,7 @@ class ConfigureQuestionForm extends FormValidator
         $question_display->run();
         
         $this->addElement('html', '</div></div><div class="clear">&nbsp;</div></div>');
-     
+        
         $nodes = $this->complex_content_object_path_node->get_siblings();
         
         foreach ($nodes as $node)
@@ -130,7 +130,7 @@ class ConfigureQuestionForm extends FormValidator
                     $this, 
                     $node, 
                     $this->parent->getApplicationConfiguration()->getAnswerService());
-             
+                
                 $this->addElement(
                     'html', 
                     '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
@@ -329,26 +329,21 @@ class ConfigureQuestionForm extends FormValidator
         
         foreach ($nodes as $node)
         {
-            
             if (! $node->is_root())
             {
                 $complex_content_object_item = $node->get_complex_content_object_item();
                 
-                if (! $complex_content_object_item->is_visible())
+                $id = $complex_content_object_item->get_id();
+                $key = self :: TO_VISIBLE_QUESTION_ID . '_' . $id;
+                if (in_array($key, $keys))
                 {
-                    $id = $complex_content_object_item->get_id();
-                    $key = self :: TO_VISIBLE_QUESTION_ID . '_' . $id;
-                    if (in_array($key, $keys))
+                    if ($values[$key] == 1)
                     {
-                        if ($values[$key] == 1)
-                        {
-                            $complex_question_ids[] = $id;
-                        }
+                        $complex_question_ids[] = $id;
                     }
                 }
             }
         }
-        
         return $complex_question_ids;
     }
 

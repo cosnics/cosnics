@@ -72,5 +72,11 @@ class Form extends FormValidator
     {
         return $this->parent;
     }
+    
+    public function addHiddenField($name, $value)
+    {
+        $hidden = $this->createElement('hidden','param_'.$name ,$value);
+        $this->addElement($hidden);
+    }
 }
 ?>

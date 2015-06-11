@@ -14,9 +14,12 @@ abstract class PageDisplay
 
     protected $renderer;
     
+    /**
+     * @var Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface
+     */
     protected $answerService;
 
-    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, $answerService)
+    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService)
     {
         $this->formvalidator = $formvalidator;
         $this->renderer = $formvalidator->defaultRenderer();
@@ -78,6 +81,13 @@ abstract class PageDisplay
         }
         
         return $display;
+    }
+    
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface
+     */
+    public function getAnswerService(){
+        return $this->answerService;
     }
 }
 ?>

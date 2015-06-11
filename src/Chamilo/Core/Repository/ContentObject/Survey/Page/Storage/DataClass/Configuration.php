@@ -144,9 +144,19 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
      * 
      * @return the answer_matches.
      */
-    function getAnswerMatches()
+    function getAnswerMatches($prefix = null)
     {
-        return unserialize($this->get_default_property(self :: PROPERTY_ANSWER_MATCHES));
+        $answerMatches = unserialize($this->get_default_property(self :: PROPERTY_ANSWER_MATCHES));
+        if($prefix){
+            
+            $prefixAnswerMatches = array();
+            foreach ($answerMatches as $answerId => $answerMatch){
+                $prefixAnswerMatches[$prefix.'_'.$answerId] = $answerMatch;
+            }
+            $answerMatches = $prefixAnswerMatches;
+        }
+        
+        return $answerMatches;
     }
 
     /**

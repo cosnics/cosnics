@@ -6,7 +6,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
-use Chamilo\Core\Repository\ContentObject\Survey\Service\SessionAnswerService;
 
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Preview\Manager implements 
     SurveyDisplaySupport
@@ -17,8 +16,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Disp
         $surveyConfiguration = new SurveyConfiguration(
             $this->getRequest(), 
             $this->get_user(), 
-            $this, 
-            new SessionAnswerService());
+            $this, '\Chamilo\Core\Repository\ContentObject\Survey');
         $factory = new ApplicationFactory(
             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(), 
             $surveyConfiguration);
