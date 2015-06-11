@@ -3,6 +3,7 @@
 	<properties>
 		<property name="id" type="integer" unsigned="1" notnull="1" />
 		<property name="path_type" type="integer" length="1" unsigned="1" notnull="1" />
+		<property name="storage_path" type="text" length="255" notnull="1" />
 		<property name="path" type="text" length="255" notnull="1" />
 		<property name="filename" type="text" length="255" notnull="1" />
 		<property name="filesize" type="integer" unsigned="1" notnull="1" />

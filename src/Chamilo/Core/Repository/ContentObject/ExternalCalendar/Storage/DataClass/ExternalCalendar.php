@@ -21,6 +21,7 @@ use Chamilo\Libraries\File\Cache\FilesystemCache;
 class ExternalCalendar extends ContentObject implements Versionable
 {
     // Properties
+    const PROPERTY_STORAGE_PATH = 'storage_path';
     const PROPERTY_PATH_TYPE = 'path_type';
     const PROPERTY_PATH = 'path';
     const PROPERTY_FILENAME = 'filename';
@@ -99,6 +100,16 @@ class ExternalCalendar extends ContentObject implements Versionable
         return $this->set_additional_property(self :: PROPERTY_PATH, $path);
     }
 
+    public function get_storage_path()
+    {
+        return $this->get_additional_property(self :: PROPERTY_STORAGE_PATH);
+    }
+
+    public function set_storage_path($storage_path)
+    {
+        return $this->set_additional_property(self :: PROPERTY_STORAGE_PATH, $storage_path);
+    }
+
     public function get_filename()
     {
         return $this->get_additional_property(self :: PROPERTY_FILENAME);
@@ -136,7 +147,7 @@ class ExternalCalendar extends ContentObject implements Versionable
             self :: PROPERTY_FILESIZE,
             self :: PROPERTY_PATH,
             self :: PROPERTY_HASH,
-            self :: PROPERTY_PATH_TYPE);
+            self :: PROPERTY_PATH_TYPE, self :: PROPERTY_STORAGE_PATH);
     }
 
     public function get_full_path()
@@ -144,7 +155,7 @@ class ExternalCalendar extends ContentObject implements Versionable
         switch ($this->get_path_type())
         {
             case self :: PATH_TYPE_LOCAL :
-                return Path :: getInstance()->getRepositoryPath() . $this->get_path();
+                return $this->get_storage_path() . $this->get_path();
                 break;
             case self :: PATH_TYPE_REMOTE :
                 return $this->get_path();
@@ -159,7 +170,7 @@ class ExternalCalendar extends ContentObject implements Versionable
     public function get_calendar()
     {
         $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Object'));
-        $cacheId = md5('ical_' . serialize($this->get_path()));
+        $cacheId = md5('ical_' . serialize($this->get_full_path()));
 
         if ($cache->contains($cacheId))
         {
@@ -439,6 +450,7 @@ class ExternalCalendar extends ContentObject implements Versionable
                     $file_bytes = Filesystem :: get_disk_space($path_to_save);
 
                     $this->set_filesize($file_bytes);
+                    $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
                     $this->set_path($relative_path);
                     $this->set_hash($unique_hash);
                     $this->set_content_hash(md5_file($path_to_save));
@@ -479,6 +491,7 @@ class ExternalCalendar extends ContentObject implements Versionable
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
+            $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
 
