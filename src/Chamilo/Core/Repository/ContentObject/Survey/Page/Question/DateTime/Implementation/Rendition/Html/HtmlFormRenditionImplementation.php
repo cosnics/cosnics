@@ -57,9 +57,11 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $questionName = $questionId;
         }
         
+        $attributes = $this->getAttributes();
+        
         if ($question->get_question_type() == DateTime :: TYPE_DATE)
         {
-            $formValidator->add_datepicker($questionName, '', false);
+            $formValidator->add_datepicker($questionName, '', false, $attributes);
         }
         
         if ($question->get_question_type() == DateTime :: TYPE_TIME)

@@ -178,7 +178,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      *
-     * @return \core\repository\storage\data_class\ComplexContentObjectItem
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem
      */
     public function get_complex_content_object_item()
     {

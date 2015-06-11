@@ -64,13 +64,13 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
     function get_allowed_types()
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            'Chamilo\Core\Repository\ContentObject\Survey\Page', 
+            'Chamilo\Core\Repository\ContentObject\Survey', 
             \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
         $types = array();
         
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 7);
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
             $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }

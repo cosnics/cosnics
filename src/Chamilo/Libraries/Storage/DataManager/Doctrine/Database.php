@@ -1355,13 +1355,15 @@ class Database
         $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object :: get_table_name() . ' WHERE ' .
              $object :: PROPERTY_ID . '=' . $this->quote($object->get_id());
 
+        
+        
         $statement = $this->get_connection()->query($query);
 
         if (! $statement instanceof \PDOException)
         {
             $distinct_elements = array();
             $record = $statement->fetch(\PDO :: FETCH_ASSOC);
-
+            
             $additional_properties = array();
 
             if (is_array($record))

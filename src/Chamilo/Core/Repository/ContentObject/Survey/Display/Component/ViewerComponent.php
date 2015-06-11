@@ -4,10 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Component\Viewer\Form;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
 use Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 class ViewerComponent extends TabComponent
 {
@@ -54,12 +56,15 @@ class ViewerComponent extends TabComponent
         }
         else
         {
+//             var_dump($_SESSION);
+            
             $form = new Form($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
             
             $html = array();
             $html[] = $this->render_header();
+            $html[] = $this->addHiddenFields($form);
+            $html[] = $this->addJavascript();
             $html[] = $form->toHtml();
-            $html[] = $this->get_hidden_fields();
             $html[] = $this->render_footer();
             
             return implode(PHP_EOL, $html);
@@ -97,23 +102,25 @@ class ViewerComponent extends TabComponent
         return self :: FORM_NEXT;
     }
 
-    private function get_hidden_fields()
+    private function addHiddenFields($form)
     {
-        $html = array();
         $paramaters = $this->get_parameters();
+        $answerServiceContext = $this->getApplicationConfiguration()->getAnswerService()->getServiceContext();
         
-        $ajaxNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_parent());
-        $ajaxContext = ClassnameUtilities :: getInstance()->getNamespaceParent($ajaxNamespace, 1) . '\Ajax';
-        
-        $paramaters[Manager :: PARAM_AJAX_CONTEXT] = $ajaxContext;
+        $paramaters[AnswerServiceInterface::PARAM_SERVICE_CONTEXT] = $answerServiceContext;
         $paramaters[Manager :: PARAM_STEP] = $this->get_current_step();
+        
         foreach ($paramaters as $name => $value)
         {
-            $html[] = '<input type="hidden" value="' . $value . '" name="param_' . $name . '">';
+            $form->addHiddenField($name, $value);
         }
-        return implode(PHP_EOL, $html);
     }
 
+    private function addJavascript()
+    {
+        return ResourceManager::get_instance()->get_resource_html(Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true).'ProcessVisibility.js');
+    }
+    
     private function get_finish_html()
     {
         $html = array();
@@ -145,7 +152,7 @@ class ViewerComponent extends TabComponent
             
             foreach ($nodes as $node)
             {
-                if (! $node->is_root())
+                if ($node->get_complex_content_object_item() instanceof PageDisplayItem)
                 {
                    $this->saveAnswer($node);
                     

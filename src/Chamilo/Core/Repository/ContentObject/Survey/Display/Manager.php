@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
+// use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -41,12 +41,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if (! $applicationConfiguration->getApplication() instanceof SurveyDisplaySupport)
-        {
-            throw new \Exception(
-                get_class($applicationConfiguration->getApplication()) .
-                     ' uses the SurveyDisplaySupport, please implement the SurveyDisplaySupport interface');
-        }
+//         if (! $applicationConfiguration->getApplication() instanceof SurveyDisplaySupport)
+//         {
+//             throw new \Exception(
+//                 get_class($applicationConfiguration->getApplication()) .
+//                      ' uses the SurveyDisplaySupport, please implement the SurveyDisplaySupport interface');
+//         }
+        
+//         var_dump("hallo");
+//         exit;
         
         parent :: __construct($applicationConfiguration);
     }

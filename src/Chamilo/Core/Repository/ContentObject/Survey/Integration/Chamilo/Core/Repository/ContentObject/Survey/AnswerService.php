@@ -1,9 +1,10 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Service;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Integration\Chamilo\Core\Repository\ContentObject\Survey;
 
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
-class SessionAnswerService implements AnswerServiceInterface
+class AnswerService implements AnswerServiceInterface
 {
     const TEMPORARY_STORAGE = 'surveyTempSessionStorage';
     const PARAM_QUESTION_ID = 'questionId';
@@ -51,5 +52,9 @@ class SessionAnswerService implements AnswerServiceInterface
     {
         return 'session';
     }
-    
+   
+    public function getServiceContext()
+    {
+        return 'Chamilo\Core\Repository\ContentObject\Survey';
+    }
 }
