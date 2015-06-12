@@ -283,7 +283,6 @@ class Kernel
     private function loadUser()
     {
         $user_id = Session :: get_user_id();
-
         if ($user_id)
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: CLASS_NAME, $user_id);
@@ -293,7 +292,7 @@ class Kernel
         {
             $this->user = Authentication :: as_anonymous_user();
         }
-
+        
         if ($this->getUser() instanceof User)
         {
             $themeSettable = \Chamilo\Configuration\Configuration :: get(
@@ -306,7 +305,7 @@ class Kernel
                 Theme :: getInstance()->setTheme($userTheme);
             }
         }
-
+        
         return $this;
     }
 
@@ -321,12 +320,12 @@ class Kernel
             set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
         }
-
+        
         if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type') === 'production')
         {
             error_reporting(0);
         }
-
+        
         $timezone = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'platform_timezone');
         date_default_timezone_set($timezone);
 

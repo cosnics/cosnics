@@ -180,7 +180,7 @@ class Configuration
         if (! isset($this->isAvailable))
         {
             $file = $this->getConfigurationPath();
-
+            
             if (is_file($file) && is_readable($file))
             {
                 $this->isAvailable = true;
@@ -190,7 +190,7 @@ class Configuration
                 $this->isAvailable = false;
             }
         }
-
+    
         return $this->isAvailable;
     }
 
