@@ -26,7 +26,7 @@ class WebpageContentObjectImportForm extends ContentObjectImportForm
             self :: DOCUMENT_UPLOAD);
 
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_upload">');
-        $this->addElement('file', self :: IMPORT_FILE_NAME, null);
+        $this->addElement('file', self :: IMPORT_FILE_NAME, null, 'accept=".htm,.html"');
         $this->addElement('html', '</div>');
 
         $this->addElement('radio', self :: PARAM_WEBPAGE_TYPE, null, Translation :: get('Link'), self :: DOCUMENT_LINK);
