@@ -418,6 +418,9 @@ class Configuration
 
         $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
+        $this->set(
+            array('Chamilo\Configuration', 'repository', 'storage_path'),
+            Path :: getInstance()->getStoragePath('repository'));
     }
 
     /**
