@@ -21,9 +21,10 @@ class ExceptionResponse extends Response
      * @param int $status The response status code
      * @param array $headers An array of response headers
      */
-    public function __construct($exception)
+    public function __construct($exception, $application)
     {
         $page = Page :: getInstance();
+        $page->setApplication($application);
 
         $html = array();
         $html[] = $page->getHeader()->toHtml();

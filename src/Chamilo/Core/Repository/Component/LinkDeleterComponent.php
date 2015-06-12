@@ -11,14 +11,16 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * $Id: link_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
  *
- * @package repository.lib.repository_manager.component
- */
-/**
- * Repository manager component which provides functionality to delete a link to a content object
+ * @package Chamilo\Core\Repository\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LinkDeleterComponent extends Manager
 {
@@ -28,33 +30,54 @@ class LinkDeleterComponent extends Manager
      */
     public function run()
     {
-        $type = Request :: get(self :: PARAM_LINK_TYPE);
-        $object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
-        $link_ids = Request :: get(self :: PARAM_LINK_ID);
+        $linkType = Request :: get(self :: PARAM_LINK_TYPE);
+        $contentObjectIdentifier = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $linkIdentifiers = Request :: get(self :: PARAM_LINK_ID);
 
-        if (! is_array($link_ids))
+        if (! $contentObjectIdentifier)
         {
-            $link_ids = array($link_ids);
+            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
-        if ($type && $object_id && count($link_ids) > 0)
+        $contentObject = DataManager :: retrieve_by_id(ContentObject :: class_name(), $contentObjectIdentifier);
+
+        if (! RightsService :: getInstance()->canDestroyContentObject(
+            $this->get_user(),
+            $contentObject,
+            $this->getWorkspace()))
         {
-            switch ($type)
+            throw new NotAllowedException();
+        }
+
+        if (! is_array($linkIdentifiers))
+        {
+            $linkIdentifiers = array($linkIdentifiers);
+        }
+
+        if ($linkType && $contentObjectIdentifier && count($linkIdentifiers) > 0)
+        {
+            switch ($linkType)
             {
                 case LinkTable :: TYPE_PUBLICATIONS :
-                    list($message, $is_error_message) = $this->delete_publication($object_id, $link_ids);
+                    list($message, $is_error_message) = $this->delete_publication(
+                        $contentObjectIdentifier,
+                        $linkIdentifiers);
                     break;
                 case LinkTable :: TYPE_PARENTS :
-                    list($message, $is_error_message) = $this->delete_complex_wrapper($link_ids);
+                    list($message, $is_error_message) = $this->delete_complex_wrapper($linkIdentifiers);
                     break;
                 case LinkTable :: TYPE_CHILDREN :
-                    list($message, $is_error_message) = $this->delete_complex_wrapper($link_ids);
+                    list($message, $is_error_message) = $this->delete_complex_wrapper($linkIdentifiers);
                     break;
                 case LinkTable :: TYPE_ATTACHED_TO :
-                    list($message, $is_error_message) = $this->delete_attacher($object_id, $link_ids);
+                    list($message, $is_error_message) = $this->delete_attacher(
+                        $contentObjectIdentifier,
+                        $linkIdentifiers);
                     break;
                 case LinkTable :: TYPE_ATTACHES :
-                    list($message, $is_error_message) = $this->delete_attachment($object_id, $link_ids);
+                    list($message, $is_error_message) = $this->delete_attachment(
+                        $contentObjectIdentifier,
+                        $linkIdentifiers);
                     break;
             }
 
@@ -63,7 +86,7 @@ class LinkDeleterComponent extends Manager
                 $is_error_message,
                 array(
                     self :: PARAM_ACTION => self :: ACTION_VIEW_CONTENT_OBJECTS,
-                    self :: PARAM_CONTENT_OBJECT_ID => $object_id));
+                    self :: PARAM_CONTENT_OBJECT_ID => $contentObjectIdentifier));
         }
         else
         {

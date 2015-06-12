@@ -55,8 +55,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $toolbar = new Toolbar();
 
-        // delete only for owner
-        if ($content_object->get_owner_id() == $this->get_component()->get_user_id())
+        if (RightsService :: getInstance()->canDestroyContentObject($this->get_component()->get_user(), $content_object))
         {
             $remove_url = $this->get_component()->get_content_object_deletion_url($content_object, 'version');
             if ($remove_url)
