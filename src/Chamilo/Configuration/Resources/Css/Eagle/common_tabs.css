@@ -1,0 +1,298 @@
+/*********************************************
+ * jQuery CSS: Form tabs ElementFinder
+ *********************************************/
+#form_tabs ul.tree-menu,#form_tabs ul.tree-menu ul {
+	display: block;
+}
+
+/*********************************************
+ * jQuery CSS: Form tabs
+ *********************************************/
+.form_tab {
+	border: 0px solid #ebebeb;
+	background-color: white;
+	z-index: 1000;
+	clear: both;
+}
+
+#form_tabs .ui-tabs-panel {
+	padding: 10px 20px 20px 20px;
+	margin: 0px;
+}
+
+#form_tabs ul {
+	display: none;
+}
+
+#form_tabs h2 {
+	font-size: 14px;
+}
+
+#form_tabs.ui-tabs div.configuration_form { /*
+	 * border-top: 0px;
+	 * background-color: white;
+	 * margin: 20px;
+	 */
+	border-top: 1px solid #ebebeb;
+	border-bottom: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-top-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+}
+
+#form_tabs.ui-tabs div.configuration_form span.category {
+	background-color: #fafcfc;
+}
+
+/*********************************************
+ * jQuery CSS: Tabs
+ *********************************************/
+ul.tabs-header {
+	display: none;
+}
+
+.ui-tabs {
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-panel {
+	border: 1px solid #ebebeb;
+	background-color: #FAFCFC;
+}
+
+.ui-tabs .ui-tabs-panel.no-padding {
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-nav {
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+}
+
+.ui-widget {
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.ui-widget-content {
+	border: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-widget-header {
+	border-width: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-state-default,.ui-widget-content .ui-state-default {
+	border: 0px solid #c5dbec;
+}
+
+.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus
+	{
+	border: 0px solid #79b7e7;
+}
+
+.ui-state-active,.ui-widget-content .ui-state-active {
+	border: 1px solid #ebebeb;
+}
+
+/* prev, next, prevPage and nextPage buttons */
+a.prev,a.next,a.prevPage,a.nextPage {
+	display: none;
+	width: 16px;
+	height: 16px;
+	background: url(../../images/ruby/plugin/jquery/scrollable/top.png)
+		no-repeat;
+	background-position: 0px -16px;
+	float: left;
+	/*position: relative;*/
+	margin-left: 50%;
+	cursor: pointer;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.hover,div.vertical_action:hover { /*background-color: #f2f4f4;*/
+	background-image: url(../../images/eagle/background_vertical_action.png);
+	background-repeat: no-repeat;
+	background-position: 0px center;
+}
+
+/* mouseover state */
+a.prev:hover,a.next:hover,a.prevPage:hover,a.nextPage:hover {
+	background-position: 0px -32px;
+}
+
+/* disabled navigational button */
+a.disabled {
+	cursor: default;
+	background-position: 0px 0px;
+	/*visibility: hidden !important;*/
+}
+
+a.disabled:hover {
+	background-position: 0px 0px;
+}
+
+/* next button uses another background image */
+a.next,a.nextPage {
+	background-image:
+		url(../../images/ruby/plugin/jquery/scrollable/bottom.png);
+	clear: right;
+}
+
+.ui-tabs ul li.dynamic_visual_tab {
+	background-image:
+		url(../../images/ruby/background_dynamic_visual_tab.png);
+	background-position: center center;
+	background-repeat: repeat-x;
+}
+
+.ui-tabs div.dynamic_visual_tab {
+	background-color: white;
+}
+
+/*********** navigator ***********/
+/* position and dimensions of the navigator */
+div.navi {
+	margin-left: 328px;
+	width: 200px;
+	height: 20px;
+}
+
+/* items inside navigator */
+div.navi a {
+	width: 8px;
+	height: 8px;
+	float: left;
+	margin: 3px;
+	background:
+		url(../../images/ruby/plugin/jquery/scrollable/navigator.png) 0 0
+		no-repeat;
+	cursor: pointer;
+}
+
+/* mouseover state */
+div.navi a:hover {
+	background-position: 0 -8px;
+}
+
+/* active state (current page state) */
+div.navi a.active {
+	background-position: 0 -16px;
+}
+
+/*********************************************
+ * jQuery CSS: Scrollable tabs
+ *********************************************/
+.ui-tabs-paging-next {
+	float: right;
+}
+
+.ui-tabs-paging-prev,.ui-tabs-paging-next {
+	position: relative;
+	top: 10px;
+	padding: 0px;
+	margin: 0px;
+	width: 16px;
+	height: 16px;
+	background-color: transparent;
+	background: url(../../images/ruby/plugin/jquery/scrollable/left.png)
+		no-repeat;
+}
+
+.ui-tabs-paging-next {
+	background: url(../../images/ruby/plugin/jquery/scrollable/right.png)
+		no-repeat;
+}
+
+.ui-tabs-paging-next:hover,.ui-tabs-paging-next:focus,.ui-tabs-paging-next:active,.ui-tabs-paging-prev:hover,.ui-tabs-paging-prev:focus,.ui-tabs-paging-prev:active
+	{
+	background-position: 0px -16px;
+}
+
+.ui-tabs-paging-disabled {
+	visibility: hidden;
+}
+
+/****************************************************************************************************************
+* Dynamic Content Menu												*
+****************************************************************************************************************/
+div.dynamic_content_menu_container {
+	height: 100%;
+}
+
+div.dynamic_content_menu_menu_container {
+	width: 200px;
+	float: left;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	display: none;
+}
+
+ul.dynamic_content_menu_list {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+li.dynamic_content_menu_item {
+	background:
+		url(../../images/ruby/plugin/jquery/images/ui-bg_glass_85_dfeffc_1x400.png)
+		repeat-x scroll 50% 50% #DFEFFC;
+	color: #9e2e2e;
+	font-weight: bold;
+	padding: 0.7em 1em;
+	margin-bottom: 0.5em;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+li.dynamic_content_menu_item.selected {
+	background-color: #fcfafa;
+	background-image: none;
+	border: 1px solid #EBEBEB;
+	border-right: 0px;
+	color: #E17009;
+	margin-right: -1px;
+}
+
+div.dynamic_content_menu_content_container h3 {
+	margin-top: 10px;
+}
+
+div.dynamic_content_menu_content_container.ui-dynamic-content {
+	padding: 15px;
+	padding-left: 25px;
+	border: 1px solid #EBEBEB;
+	background-color: #fcfafa;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+div.ui-tabs-panel li.dynamic_content_menu_item.selected,div.ui-tabs-panel div.dynamic_content_menu_content_container
+	{
+	background-color: #FFFFFF;
+}
+
+/**
+ * Fix for categories in forms
+ */
+div.dynamic_content_menu_item_content div.configuration_form,div.dynamic_content_menu_item_content div.row
+	{
+	clear: none;
+}
