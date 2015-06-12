@@ -1,12 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-
-
-
-
-
-
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -14,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 class SessionHandler
 {
@@ -46,6 +41,7 @@ class SessionHandler
 
     public function read($session_id)
     {
+        DataClassCache :: truncate(\Chamilo\Core\User\Storage\DataClass\Session :: class_name());
         $session = \Chamilo\Core\User\Storage\DataManager :: retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
             new DataClassRetrieveParameters($this->get_condition($session_id)));
@@ -68,6 +64,8 @@ class SessionHandler
     public function write($session_id, $data)
     {
         $data = base64_encode($data);
+
+        DataClassCache :: truncate(\Chamilo\Core\User\Storage\DataClass\Session :: class_name());
 
         $session = \Chamilo\Core\User\Storage\DataManager :: retrieve(
             \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
@@ -94,30 +92,42 @@ class SessionHandler
 
     public function destroy($session_id)
     {
-        return \Chamilo\Core\User\Storage\DataManager :: deletes(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), $this->get_condition($session_id));
+        return \Chamilo\Core\User\Storage\DataManager :: deletes(
+            \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+            $this->get_condition($session_id));
     }
 
     public function garbage($max_lifetime)
     {
         $border = time() - $this->lifetime;
         $condition = new InequalityCondition(
-            new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_MODIFIED),
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_MODIFIED),
             InequalityCondition :: LESS_THAN,
             new StaticConditionVariable($border));
-        return \Chamilo\Core\User\Storage\DataManager :: deletes(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), $condition);
+        return \Chamilo\Core\User\Storage\DataManager :: deletes(
+            \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+            $condition);
     }
 
     public function get_condition($session_id)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_SESSION_ID),
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_SESSION_ID),
             new StaticConditionVariable($session_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_NAME),
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_NAME),
             new StaticConditionVariable($this->name));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\Session :: class_name(), \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_SAVE_PATH),
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_SAVE_PATH),
             new StaticConditionVariable($this->save_path));
 
         return new AndCondition($conditions);

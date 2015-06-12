@@ -483,7 +483,7 @@ class User extends DataClass
         }
         else
         {
-            $profilePictureIdentifier = Session :: get('profile_picture_identifier');
+            $profilePictureIdentifier = Session :: get('profile_picture_identifier', false);
 
             if (! $profilePictureIdentifier)
             {
