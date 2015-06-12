@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * $Id: user.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -484,12 +483,16 @@ class User extends DataClass
         }
         else
         {
-            $profilePictureIdentifier = Session :: get('profile_picture_identifier', false);
+            $profilePictureIdentifier = \Chamilo\Libraries\Platform\Session\Session :: get(
+                'profile_picture_identifier',
+                false);
 
             if (! $profilePictureIdentifier)
             {
                 $profilePictureIdentifier = rand(0, 75);
-                Session :: register('profile_picture_identifier', $profilePictureIdentifier);
+                \Chamilo\Libraries\Platform\Session\Session :: register(
+                    'profile_picture_identifier',
+                    $profilePictureIdentifier);
             }
 
             return Theme :: getInstance()->getImagePath(
