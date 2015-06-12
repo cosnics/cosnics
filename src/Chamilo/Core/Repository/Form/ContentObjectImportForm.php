@@ -134,7 +134,8 @@ abstract class ContentObjectImportForm extends FormValidator
         return $this->application;
     }
 
-    public static function factory($type, WorkspaceInterface $workspace, $application, $method, $action = null, $show_categories = true)
+    public static function factory($type, WorkspaceInterface $workspace, $application, $method, $action = null,
+        $show_categories = true)
     {
         $class = Manager :: package() . '\Common\Import\\' .
              StringUtilities :: getInstance()->createString($type)->upperCamelize() . '\\' .
