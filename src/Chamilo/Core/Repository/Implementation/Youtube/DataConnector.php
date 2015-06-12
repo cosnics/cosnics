@@ -2,21 +2,11 @@
 namespace Chamilo\Core\Repository\Implementation\Youtube;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
-use Zend_Gdata_App_Exception;
-use Zend_Gdata_App_HttpException;
-use Zend_Gdata_AuthSub;
-use Zend_Gdata_YouTube;
-use Zend_Gdata_YouTube_VideoEntry;
-use Zend_Loader;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -33,62 +23,71 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
+        // parent :: __construct($external_repository_instance);
 
-        $this->session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
+        // $this->session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
 
-        Zend_Loader :: loadClass('Zend_Gdata_YouTube');
-        Zend_Loader :: loadClass('Zend_Gdata_AuthSub');
+        // Zend_Loader :: loadClass('Zend_Gdata_YouTube');
+        // Zend_Loader :: loadClass('Zend_Gdata_AuthSub');
 
-        $httpClient = Zend_Gdata_AuthSub :: getHttpClient($this->session_token);
+        // $httpClient = Zend_Gdata_AuthSub :: getHttpClient($this->session_token);
 
-        $client = '';
-        $application = PlatformSetting :: get('site_name');
-        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'developer_key',
-            $this->get_external_repository_instance_id());
+        // $client = '';
+        // $application = PlatformSetting :: get('site_name');
+        // $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+        // 'developer_key',
+        // $this->get_external_repository_instance_id());
 
-        $this->youtube = new Zend_Gdata_YouTube($httpClient, $application, $client, $key);
-        $this->youtube->setMajorProtocolVersion(2);
+        // $this->youtube = new Zend_Gdata_YouTube($httpClient, $application, $client, $key);
+        // $this->youtube->setMajorProtocolVersion(2);
+        $OAUTH2_CLIENT_ID = '494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com';
+        $OAUTH2_CLIENT_SECRET = 'V6-lsZFVTSSeeqdLNzaqkyI1';
+
+        $client = new \Google_Client();
+        $client->setClientId($OAUTH2_CLIENT_ID);
+        $client->setClientSecret($OAUTH2_CLIENT_SECRET);
+
+        $this->youtube = new \Google_Service_YouTube($client);
+        var_dump($this->youtube);
     }
 
     public function login()
     {
-        $session_token = Request :: get('token');
+        // $session_token = Request :: get('token');
 
-        if (! $this->session_token && ! $session_token)
-        {
-            $redirect = new Redirect();
-            $currentUrl = $redirect->getCurrentUrl();
+        // if (! $this->session_token && ! $session_token)
+        // {
+        // $redirect = new Redirect();
+        // $currentUrl = $redirect->getCurrentUrl();
 
-            $scope = 'http://gdata.youtube.com';
-            $secure = false;
-            $session = true;
-            $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
+        // $scope = 'http://gdata.youtube.com';
+        // $secure = false;
+        // $session = true;
+        // $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
 
-            header('Location: ' . $redirect_url);
-            exit();
-        }
-        elseif ($session_token)
-        {
-            $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
+        // header('Location: ' . $redirect_url);
+        // exit();
+        // }
+        // elseif ($session_token)
+        // {
+        // $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
 
-            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                'session_token',
-                $this->get_external_repository_instance_id());
-            $user_setting = new Setting();
-            $user_setting->set_setting_id($setting->get_id());
-            $user_setting->set_user_id(Session :: get_user_id());
-            $user_setting->set_value($session_token);
-            if ($user_setting->create())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        // $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
+        // 'session_token',
+        // $this->get_external_repository_instance_id());
+        // $user_setting = new Setting();
+        // $user_setting->set_setting_id($setting->get_id());
+        // $user_setting->set_user_id(Session :: get_user_id());
+        // $user_setting->set_value($session_token);
+        // if ($user_setting->create())
+        // {
+        return true;
+        // }
+        // else
+        // {
+        // return false;
+        // }
+        // }
     }
 
     public static function get_sort_properties()
