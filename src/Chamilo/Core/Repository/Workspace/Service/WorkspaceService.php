@@ -9,6 +9,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  *
@@ -19,6 +20,8 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 class WorkspaceService
 {
+    const TYPE_PERSONAL = 1;
+    const TYPE_WORKSPACE = 2;
 
     /**
      *
@@ -114,6 +117,32 @@ class WorkspaceService
     public function getWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = null)
     {
         return $this->getWorkspaceRepository()->findWorkspacesByCreator($user, $limit, $offset, $orderProperty);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspacesForUser(User $user, $right = RightsService :: VIEW_RIGHT, $limit, $offset, $orderProperty = null)
+    {
+        return $this->getWorkspaceRepository()->findWorkspacesForUser(
+            $user,
+            $this->getEntitiesForUser($user),
+            $right,
+            $limit,
+            $offset,
+            $orderProperty);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function countWorkspacesForUser(User $user, $right = RightsService :: VIEW_RIGHT)
+    {
+        return $this->getWorkspaceRepository()->countWorkspacesForUser($user, $this->getEntitiesForUser($user), $right);
     }
 
     /**
@@ -290,5 +319,24 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser(
             $user,
             $entityService->getEntitiesForUser($user));
+    }
+
+    /**
+     *
+     * @param integer $type
+     * @param integer $typeIdentifier
+     * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace|\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
+     */
+    public function getWorkspaceByTypeAndTypeIdentifier($type, $typeIdentifier)
+    {
+        if ($type == self :: TYPE_PERSONAL)
+        {
+            $user = DataManager :: retrieve_by_id(User :: class_name(), $typeIdentifier);
+            return $this->getPersonalWorkspaceForUser($user);
+        }
+        else
+        {
+            return $this->getWorkspaceByIdentifier($typeIdentifier);
+        }
     }
 }

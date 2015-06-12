@@ -10,6 +10,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: comparer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -43,9 +45,25 @@ class ComparerComponent extends Manager
 
         if ($object_id && $version_id)
         {
-            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
+            $contentObject = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
+            $contentObjectVersion = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version_id);
 
-            if ($object->get_state() == ContentObject :: STATE_RECYCLED)
+            $isAllowedToViewObject = RightsService :: getInstance()->canViewContentObject(
+                $this->get_user(),
+                $contentObject,
+                $this->getWorkspace());
+
+            $isAllowedToViewVersion = RightsService :: getInstance()->canViewContentObject(
+                $this->get_user(),
+                $contentObjectVersion,
+                $this->getWorkspace());
+
+            if (! $isAllowedToViewObject || ! $isAllowedToViewVersion)
+            {
+                throw new NotAllowedException();
+            }
+
+            if ($contentObject->get_state() == ContentObject :: STATE_RECYCLED)
             {
                 $this->force_menu_url($this->get_recycle_bin_url());
             }
@@ -53,7 +71,7 @@ class ComparerComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $object->get_difference($version_id)->render();
+            $html[] = $contentObject->get_difference($version_id)->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

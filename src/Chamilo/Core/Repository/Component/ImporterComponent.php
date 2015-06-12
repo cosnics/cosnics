@@ -17,6 +17,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: importer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -31,6 +33,11 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
+        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        {
+            throw new NotAllowedException();
+        }
+
         $type = Request :: get(self :: PARAM_IMPORT_TYPE);
 
         if ($type)

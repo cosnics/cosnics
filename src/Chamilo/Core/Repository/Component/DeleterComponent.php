@@ -12,6 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -41,11 +42,15 @@ class DeleterComponent extends Manager
             $delete_version = Request :: get(self :: PARAM_DELETE_VERSION);
             $permanent = Request :: get(self :: PARAM_DELETE_PERMANENTLY);
             $recycled = Request :: get(self :: PARAM_DELETE_RECYCLED);
+
             foreach ($ids as $object_id)
             {
                 $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
-                // only owner can remove the object
-                if ($object->get_owner_id() == $this->get_user_id())
+
+                if (RightsService :: getInstance()->canDestroyContentObject(
+                    $this->get_user(),
+                    $object,
+                    $this->getWorkspace()))
                 {
                     if ($delete_version)
                     {

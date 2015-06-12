@@ -41,6 +41,12 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 case OperationConditionVariable :: MULTIPLICATION :
                     $strings[] = '*';
                     break;
+                case OperationConditionVariable :: BITWISE_AND :
+                    $strings[] = '&';
+                    break;
+                case OperationConditionVariable :: BITWISE_OR :
+                    $strings[] = '|';
+                    break;
             }
 
             $strings[] = static :: render($this->get_condition_variable()->get_right());
