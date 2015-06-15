@@ -124,6 +124,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
 
                     $redirect = new Redirect(
                         array(
+                            Application :: PARAM_CONTEXT => Manager :: package(),
                             Application :: PARAM_ACTION => Manager :: ACTION_VIEW_CONTENT_OBJECTS,
                             Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
 
