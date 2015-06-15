@@ -311,9 +311,14 @@ class SortableTable extends HTML_Table
                 {
                     if ($form_action instanceof TableFormAction)
                     {
-                        $html[] = '<option value="' . base64_encode(serialize($form_action->get_action())) . '" class="' .
-                             ($form_action->get_confirm() ? 'confirm' : '') . '">' . $form_action->get_title() .
-                             '</option>';
+                        $message = $form_action->getConfirmationMessage() ? $form_action->getConfirmationMessage() : Translation :: get(
+                            'ConfirmYourSelectionAndAction',
+                            null,
+                            Utilities :: COMMON_LIBRARIES);
+
+                        $html[] = '<option value="' . base64_encode(serialize($form_action->get_action())) . '"' .
+                             ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') .
+                             '>' . $form_action->get_title() . '</option>';
                     }
                 }
 
