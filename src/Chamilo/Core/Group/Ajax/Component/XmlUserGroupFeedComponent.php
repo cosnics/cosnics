@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\XmlFeeds;
+namespace Chamilo\Core\Group\Ajax\Component;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -38,10 +38,18 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
 
             $user_conditions[] = new OrCondition(
                 array(
-                    new PatternMatchCondition(User :: PROPERTY_USERNAME, $q),
-                    new PatternMatchCondition(User :: PROPERTY_FIRSTNAME, $q),
-                    new PatternMatchCondition(User :: PROPERTY_LASTNAME, $q)));
-            $group_conditions[] = new PatternMatchCondition(Group :: PROPERTY_NAME, $q);
+                    new PatternMatchCondition(
+                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                        $q),
+                    new PatternMatchCondition(
+                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                        $q),
+                    new PatternMatchCondition(
+                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                        $q)));
+            $group_conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME),
+                $q);
         }
 
         if ($exclude)

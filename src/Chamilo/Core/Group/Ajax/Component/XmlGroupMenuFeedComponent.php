@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\XmlFeeds;
+namespace Chamilo\Core\Group\Ajax\Component;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;

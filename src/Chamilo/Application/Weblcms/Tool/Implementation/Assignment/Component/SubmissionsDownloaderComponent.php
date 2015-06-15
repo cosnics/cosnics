@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * This component allows the download of submissions.
@@ -265,6 +266,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
             }
         }
         $parameters = new ExportParameters(
+            new PersonalWorkspace($this->get_user()),
             $this->get_user_id(),
             ContentObjectExport :: FORMAT_ZIP,
             $content_object_ids,

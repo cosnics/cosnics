@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\XmlFeeds;
+namespace Chamilo\Core\Group\Ajax\Component;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
@@ -33,7 +33,9 @@ class XmlGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         if ($query)
         {
             $q = '*' . $query . '*';
-            $group_conditions[] = new PatternMatchCondition(Group :: PROPERTY_NAME, $q);
+            $group_conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME),
+                $q);
         }
 
         if ($exclude)
