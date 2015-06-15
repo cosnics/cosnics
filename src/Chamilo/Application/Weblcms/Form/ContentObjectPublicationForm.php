@@ -98,7 +98,11 @@ class ContentObjectPublicationForm extends FormValidator
      * @var boolean
      */
     private $collaborate_possible;
-
+    
+    /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    private $user;
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user

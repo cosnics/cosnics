@@ -17,7 +17,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class UnsubscribedGroupTable extends DataClassTable implements TableFormActionsSupport
 {
-
+    const TABLE_IDENTIFIER = Manager :: PARAM_OBJECTS;
+    
     public function get_implemented_form_actions()
     {
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
