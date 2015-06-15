@@ -10,10 +10,11 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Application\Weblcms\Ajax\Manager;
 
 /**
  * Extension on the platform group entity specific for the course to limit the platform groups
- * 
+ *
  * @author Sven Vanpoucke
  */
 class CoursePlatformGroupEntity extends PlatformGroupEntity
@@ -21,21 +22,21 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
 
     /**
      * The subscribed group ids for the course
-     * 
+     *
      * @var Array<int>
      */
     private $subscribed_platform_group_ids;
 
     /**
      * Limits the groups by id
-     * 
+     *
      * @var Array<int>
      */
     private $limited_groups;
 
     /**
      * Excludes the groups by id
-     * 
+     *
      * @var Array<int>
      */
     private $excluded_groups;
@@ -55,7 +56,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         return self :: $instance;
     }
 
-    public function __construct($course_id, $subscribed_platform_group_ids = array(), $limited_groups = array(), 
+    public function __construct($course_id, $subscribed_platform_group_ids = array(), $limited_groups = array(),
         $excluded_groups = array())
     {
         $this->course_id = $course_id;
@@ -89,40 +90,40 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
 
     /**
      * Builds the condition with the limited and excluded groups
-     * 
+     *
      * @param $condition Condition
      * @return Condition
      */
     public function get_condition(Condition $condition)
     {
         $conditions = array();
-        
+
         if ($this->limited_groups)
         {
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                 $this->limited_groups);
         }
-        
+
         if ($this->excluded_groups)
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                     $this->excluded_groups));
         }
-        
+
         if ($condition)
         {
             $conditions[] = $condition;
         }
-        
+
         $count = count($conditions);
         if ($count > 1)
         {
             return new AndCondition($conditions);
         }
-        
+
         if ($count == 1)
         {
             return $conditions[0];
@@ -131,7 +132,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
 
     /**
      * Override the get root ids to only return the subscribed groups instead of the chamilo root group
-     * 
+     *
      * @return Array<int>
      */
     public function get_root_ids()
@@ -140,7 +141,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         {
             return $this->subscribed_platform_group_ids;
         }
-        
+
         return parent :: get_root_ids();
     }
 
@@ -149,7 +150,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
      * Overrides because only subscribed platformgroups need to
      * be checked. Also none of their parents as they are not subscribed in the course, and therefore cannot have
      * specific rights set to them
-     * 
+     *
      * @param $user_id integer
      * @return array
      */
@@ -158,7 +159,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         if (is_null($this->platform_group_cache[$user_id]))
         {
             $this->platform_group_cache[$user_id] = \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
-                $user_id, 
+                $user_id,
                 true);
         }
         return $this->platform_group_cache[$user_id];
@@ -170,10 +171,10 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'platform_groups', 
-            Translation :: get('PlatformGroups'), 
-            __NAMESPACE__, 
-            'platform_groups_feed', 
+            'platform_groups',
+            Translation :: get('PlatformGroups'),
+            Manager :: package(),
+            'platform_groups_feed',
             array('course_id' => $this->course_id));
     }
 }
