@@ -3,7 +3,6 @@ namespace Chamilo\Core\Rights\Entity;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Theme;
@@ -11,6 +10,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * Class that describes the platform groups for the rights editor
@@ -180,7 +181,12 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_xml_feed()
     {
-        return Path :: getInstance()->getBasePath(true) . 'group/php/xml_feeds/xml_group_menu_feed.php';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager :: package(),
+                \Chamilo\Core\Group\Ajax\Manager :: PARAM_ACTION => 'xml_group_menu_feed'));
+
+        return $redirect->getUrl();
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Group\Menu;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -15,6 +14,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Group\Ajax\Manager;
 
 /**
  * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -237,10 +239,10 @@ class GroupMenu extends HTML_Menu
      */
     public function render_as_tree()
     {
-        $renderer = new TreeMenuRenderer(
-            $this->get_tree_name(),
-            Path :: getInstance()->getBasePath(true) . 'group/php/xml_feeds/xml_group_menu_feed.php',
-            $this->urlFmt);
+        $redirect = new Redirect(
+            array(Application :: PARAM_CONTEXT => Manager :: package(), Manager :: PARAM_ACTION => 'xml_group_menu_feed'));
+
+        $renderer = new TreeMenuRenderer($this->get_tree_name(), $redirect->getUrl(), $this->urlFmt);
         $this->render($renderer, 'sitemap');
         return $renderer->toHTML();
     }
