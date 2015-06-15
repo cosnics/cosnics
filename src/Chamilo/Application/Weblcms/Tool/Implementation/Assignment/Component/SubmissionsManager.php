@@ -200,7 +200,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
         $condition = new AndCondition($conditions);
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: clas,
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_DATE_SUBMITTED),
             SORT_ASC);
         $this->index_array_by_id(
