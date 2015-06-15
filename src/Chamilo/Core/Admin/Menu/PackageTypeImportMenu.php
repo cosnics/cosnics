@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\Menu;
 
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
@@ -63,17 +62,19 @@ class PackageTypeImportMenu extends HTML_Menu
 
         $has_links = false;
         $packages = $package_list->get_packages();
+
         foreach ($packages as $package)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package);
+            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package->get_context());
 
             if ($registration instanceof Registration && $registration->is_active())
             {
-                $manager_class = $package . '\Integration\Chamilo\Core\Admin\Manager';
+                $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
 
-                if (class_exists($manager_class) && $manager_class instanceof ActionsSupportInterface)
+                if (class_exists($manager_class) && is_subclass_of($manager_class , 'Chamilo\Core\Admin\ImportActionsInterface', true))
                 {
                     $has_links = true;
+
                     break;
                 }
             }

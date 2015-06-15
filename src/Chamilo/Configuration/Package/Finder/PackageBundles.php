@@ -144,10 +144,18 @@ class PackageBundles extends BasicBundles
             $packageImageNamespace = $packageNamespace;
         }
 
-        $this->packageLists[$packageNamespace] = new PackageList(
-            $packageNamespace,
-            $typeName,
-            Theme :: getInstance()->getImagePath($packageImageNamespace, 'Logo/16'));
+        $iconPath = Theme :: getInstance()->getImagePath($packageImageNamespace, 'Logo/16', 'png', false);
+
+        if (file_exists($iconPath))
+        {
+            $iconPath = Theme :: getInstance()->getImagePath($packageImageNamespace, 'Logo/16');
+        }
+        else
+        {
+            $iconPath = null;
+        }
+
+        $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $iconPath);
     }
 
     /**
