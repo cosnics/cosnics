@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
 {
     const ACTION_DOWNLOAD_DOCUMENTS = 'DocumentSaver';
-    const ACTION_IMPORT_SCORM = 'ScormImporter';
     const ACTION_VIEW_ASSESSMENT_RESULTS = 'AssessmentResultsViewer';
     const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
     const ACTION_VIEW_STATISTICS = 'StatisticsViewer';
