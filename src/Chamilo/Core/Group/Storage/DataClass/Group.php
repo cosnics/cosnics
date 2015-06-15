@@ -280,24 +280,7 @@ class Group extends NestedSet
     public function delete_related_content()
     {
         // First, truncate the group so that users are removed.
-        $success = $this->truncate();
-
-        // Second, delete the associated meta-data (element values).
-        //
-        // Since these may have dependent attribute values, we must use
-        // the delete method to ensure that the necessary cleanup occurs.
-        //
-        // Once again, cascading deletes could be a solution.
-        if ($success)
-        {
-            if (! \Chamilo\Core\Group\Integration\Chamilo\Core\MetadataOld\Storage\DataManager :: truncate_metadata_values_for_group(
-                $this->get_id()))
-            {
-                return false;
-            }
-        }
-
-        return $success;
+        return $this->truncate();
     }
 
     /**

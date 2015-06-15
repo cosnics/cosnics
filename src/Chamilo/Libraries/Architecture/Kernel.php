@@ -504,7 +504,7 @@ class Kernel
         }
         catch (\Exception $exception)
         {
-            $response = new ExceptionResponse($exception);
+            $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
     }

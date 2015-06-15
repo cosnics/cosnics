@@ -21,6 +21,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * Repository manager component to move objects between categories in the repository.
@@ -36,6 +37,7 @@ class MoverComponent extends Manager
     public function run()
     {
         $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+
         if (! empty($ids))
         {
             if (! is_array($ids))
@@ -48,7 +50,9 @@ class MoverComponent extends Manager
 
             $this->tree = array();
             if ($parent != 0)
+            {
                 $this->tree[] = Translation :: get('Repository');
+            }
 
             $this->get_categories_for_select(0, $parent);
             $form = new FormValidator('move', 'post', $this->get_url(array(self :: PARAM_CONTENT_OBJECT_ID => $ids)));
@@ -63,43 +67,67 @@ class MoverComponent extends Manager
             {
                 $destination = $form->exportValue(self :: PARAM_DESTINATION_CONTENT_OBJECT_ID);
                 $failures = 0;
+
                 foreach ($ids as $id)
                 {
                     $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
-                    $versions = DataManager :: get_version_ids($object);
 
-                    foreach ($versions as $version)
+                    if (RightsService :: getInstance()->canEditContentObject(
+                        $this->get_user(),
+                        $object,
+                        $this->getWorkspace()))
                     {
-                        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version);
 
-                        if ($this->getWorkspace() instanceof PersonalWorkspace)
-                        {
-                            $object->set_parent_id($destination);
-                        }
-                        else
-                        {
-                            $contentObjectRelationService = new ContentObjectRelationService(
-                                new ContentObjectRelationRepository());
-                            $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
-                                $this->getWorkspace(),
-                                $object);
+                        $versions = DataManager :: get_version_ids($object);
 
-                            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
+                        foreach ($versions as $version)
+                        {
+                            $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $version);
+
+                            if ($this->getWorkspace() instanceof PersonalWorkspace)
                             {
-                                $contentObjectRelationService->updateContentObjectRelation(
-                                    $contentObjectRelation,
-                                    $this->getWorkspace()->getId(),
-                                    $object->getId(),
-                                    $destination);
+                                $object->set_parent_id($destination);
+
+                                if (! $object->update())
+                                {
+                                    $failures ++;
+                                }
                             }
                             else
                             {
-                                $contentObjectRelationService->createContentObjectRelation(
-                                    $this->getWorkspace()->getId(),
-                                    $object->getId(),
-                                    $destination);
+                                $contentObjectRelationService = new ContentObjectRelationService(
+                                    new ContentObjectRelationRepository());
+                                $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                                    $this->getWorkspace(),
+                                    $object);
+
+                                if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
+                                {
+                                    if (! $contentObjectRelationService->updateContentObjectRelation(
+                                        $contentObjectRelation,
+                                        $this->getWorkspace()->getId(),
+                                        $object->getId(),
+                                        $destination))
+                                    {
+                                        $failures ++;
+                                    }
+                                }
+                                else
+                                {
+                                    if (! $contentObjectRelationService->createContentObjectRelation(
+                                        $this->getWorkspace()->getId(),
+                                        $object->getId(),
+                                        $destination))
+                                    {
+                                        $failures ++;
+                                    }
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        $failures ++;
                     }
                 }
 

@@ -21,6 +21,8 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: creator.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -46,6 +48,11 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     public function run()
     {
+        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        {
+            throw new NotAllowedException();
+        }
+
         $type_selector = TypeSelector :: populate($this->get_allowed_content_object_types(), $this->get_user_id());
         $type_selector_renderer = new FullTypeSelectorRenderer($this, $type_selector);
 

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: restorer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -46,8 +47,11 @@ class RestorerComponent extends Manager
             foreach ($ids as $object_id)
             {
                 $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
-                // TODO: Roles & Rights.
-                if ($object->get_owner_id() == $this->get_user_id())
+
+                if (RightsService :: getInstance()->canDestroyContentObject(
+                    $this->get_user(),
+                    $object,
+                    $this->getWorkspace()))
                 {
                     if ($object->get_state() == ContentObject :: STATE_RECYCLED)
                     {

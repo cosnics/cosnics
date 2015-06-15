@@ -12,6 +12,7 @@ use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class RepositoryMenu extends HTML_Menu
 {
@@ -44,6 +45,10 @@ class RepositoryMenu extends HTML_Menu
 
     private function get_menu_items()
     {
+        $rightsService = RightsService :: getInstance();
+        $canAddContentObjects = $rightsService->canAddContentObjects(
+            $this->repository_manager->get_user(),
+            $this->repository_manager->getWorkspace());
         $extra_items = array();
 
         if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
@@ -60,7 +65,7 @@ class RepositoryMenu extends HTML_Menu
             $extra_items[] = $pub;
         }
 
-        if (! $this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
+        if (! $this->repository_manager->getWorkspace() instanceof PersonalWorkspace && $canAddContentObjects)
         {
             $add = array();
             $add['title'] = Translation :: get('AddExisting', null, Utilities :: COMMON_LIBRARIES);
@@ -73,23 +78,26 @@ class RepositoryMenu extends HTML_Menu
             $extra_items[] = $add;
         }
 
-        $create = array();
-        $create['title'] = Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES);
-        $create['url'] = $this->repository_manager->get_url(
-            array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_CREATE_CONTENT_OBJECTS));
-        $create['class'] = 'create';
+        if ($canAddContentObjects)
+        {
+            $create = array();
+            $create['title'] = Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES);
+            $create['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_CREATE_CONTENT_OBJECTS));
+            $create['class'] = 'create';
 
-        $extra_items[] = $create;
+            $extra_items[] = $create;
 
-        $import = array();
-        $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
-        $import['url'] = $this->repository_manager->get_url(
-            array(
-                \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
-        $import['class'] = 'import';
+            $import = array();
+            $import['title'] = Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES);
+            $import['url'] = $this->repository_manager->get_url(
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_IMPORT_CONTENT_OBJECTS));
+            $import['class'] = 'import';
 
-        $extra_items[] = $import;
+            $extra_items[] = $import;
+        }
 
         if ($this->repository_manager->getWorkspace() instanceof PersonalWorkspace)
         {

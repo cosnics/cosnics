@@ -33,6 +33,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * $Id: viewer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -203,176 +204,221 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         }
     }
 
-    private function get_action_bar($object)
+    private function get_action_bar($contentObject)
     {
-        $is_owner = $object->get_owner_id() == $this->get_user_id();
+        $actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+        $rightsService = RightsService :: getInstance();
 
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+        $contentObjectDeletionAllowed = DataManager :: content_object_deletion_allowed($contentObject);
+        $isRecycled = $contentObject->get_state() == ContentObject :: STATE_RECYCLED;
 
-        if ($object->is_latest_version())
+        if ($contentObject->is_latest_version())
         {
-            $edit_url = $this->get_content_object_editing_url($object);
-        }
-
-        if (isset($edit_url))
-        {
-            $recycle_url = $this->get_content_object_recycling_url($object);
-            $in_recycle_bin = false;
-
-            if (isset($recycle_url) && $is_owner)
+            if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
             {
-                $action_bar->add_common_action(
-                    new ToolbarItem(
-                        Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
-                        $recycle_url,
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                        Translation :: get('ConfirmRemove', null, Utilities :: COMMON_LIBRARIES)));
-            }
-            else
-            {
-                if ($is_owner)
+                // Move to recycle bin
+                if ($contentObjectDeletionAllowed && ! $isRecycled)
                 {
-                    $delete_url = $this->get_content_object_deletion_url($object);
-                    if (isset($delete_url))
-                    {
-                        $recycle_bin_button = new ToolbarItem(
+                    $recycle_url = $this->get_content_object_recycling_url($contentObject);
+                    $actionBar->add_tool_action(
+                        new ToolbarItem(
+                            Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
+                            $recycle_url,
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                            Translation :: get('ConfirmRemove', null, Utilities :: COMMON_LIBRARIES)));
+                }
+
+                // Delete permanently
+                if ($contentObjectDeletionAllowed && $isRecycled)
+                {
+                    $delete_url = $this->get_content_object_deletion_url($contentObject);
+                    $actionBar->add_tool_action(
+                        new ToolbarItem(
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                             Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                             $delete_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                            Translation :: get('ConfirmDelete', null, Utilities :: COMMON_LIBRARIES));
-                        $in_recycle_bin = true;
-                    }
-                    else
-                    {
-                        $recycle_bin_button = new ToolbarItem(
-                            Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'));
-                    }
-                }
-            }
-
-            if (! $in_recycle_bin)
-            {
-                $delete_link_url = $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_UNLINK_CONTENT_OBJECTS,
-                        self :: PARAM_CONTENT_OBJECT_ID => $object->get_id()));
-
-                if (! DataManager :: content_object_deletion_allowed($object) &&
-                     $object->get_state() != ContentObject :: STATE_RECYCLED && $is_owner)
-                {
-                    $force_delete_button = new ToolbarItem(
-                        Translation :: get('Unlink', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Unlink'),
-                        $delete_link_url,
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                        true);
+                            Translation :: get('ConfirmDelete', null, Utilities :: COMMON_LIBRARIES)));
                 }
 
-                $edit_url = $this->get_content_object_editing_url($object);
-
-                if (isset($edit_url))
+                // Unlink
+                if (! $contentObjectDeletionAllowed && ! $isRecycled)
                 {
-                    $action_bar->add_common_action(
+                    $unlink_url = $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_UNLINK_CONTENT_OBJECTS,
+                            self :: PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
+                    $actionBar->add_tool_action(
                         new ToolbarItem(
-                            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                            $edit_url,
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-                }
-                else
-                {
-                    $action_bar->add_common_action(
-                        new ToolbarItem(
-                            Translation :: get('EditNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/EditNa')));
+                            Translation :: get('Unlink', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Unlink'),
+                            $unlink_url,
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                            true));
                 }
 
-                if (isset($recycle_bin_button) && $is_owner)
+                // Restore
+                if ($isRecycled)
                 {
-                    $action_bar->add_common_action($recycle_bin_button);
-                }
-
-                if (isset($force_delete_button) && $is_owner)
-                {
-                    $action_bar->add_common_action($force_delete_button);
-                }
-
-                if (DataManager :: get_number_of_categories($this->get_user()->get_id()) > 1 && $is_owner)
-                {
-                    $move_url = $this->get_content_object_moving_url($object);
-                    $action_bar->add_common_action(
-                        new ToolbarItem(
-                            Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Move'),
-                            $move_url,
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-                }
-
-                if ($object instanceof ComplexContentObjectSupport)
-                {
-                    if (\Chamilo\Core\Repository\Builder\Manager :: exists($object->package()))
-                    {
-
-                        $action_bar->add_common_action(
-                            new ToolbarItem(
-                                Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                                $this->get_browse_complex_content_object_url($object),
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-                        $preview_url = $this->get_preview_content_object_url($object);
-                        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-                        $action_bar->add_common_action(
-                            new ToolbarItem(
-                                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-                                $preview_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                                false,
-                                $onclick,
-                                '_blank'));
-                    }
-                    else
-                    {
-
-                        $preview_url = $this->get_preview_content_object_url($object);
-                        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-                        $action_bar->add_common_action(
-                            new ToolbarItem(
-                                Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
-                                $preview_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                                false,
-                                $onclick,
-                                '_blank'));
-                    }
-                }
-            }
-            else
-            {
-                if ($is_owner)
-                {
-                    $restore_url = $this->get_content_object_restoring_url($object);
-                    $action_bar->add_common_action(
+                    $restore_url = $this->get_content_object_restoring_url($contentObject);
+                    $actionBar->add_tool_action(
                         new ToolbarItem(
                             Translation :: get('Restore', null, Utilities :: COMMON_LIBRARIES),
                             Theme :: getInstance()->getCommonImagePath('Action/Restore'),
                             $restore_url,
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             true));
-                    if (isset($recycle_bin_button))
+                }
+            }
+
+            if ($rightsService->canEditContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+            {
+                if (! $isRecycled)
+                {
+                    // Edit
+                    $edit_url = $this->get_content_object_editing_url($contentObject);
+                    $actionBar->add_common_action(
+                        new ToolbarItem(
+                            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                            $edit_url,
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+                    // Move
+                    if (DataManager :: workspace_has_categories($this->getWorkspace()))
                     {
-                        $action_bar->add_common_action($recycle_bin_button);
+                        $move_url = $this->get_content_object_moving_url($contentObject);
+                        $actionBar->add_common_action(
+                            new ToolbarItem(
+                                Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+                                Theme :: getInstance()->getCommonImagePath('Action/Move'),
+                                $move_url,
+                                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    }
+
+                    if ($contentObject instanceof ComplexContentObjectSupport)
+                    {
+                        if (\Chamilo\Core\Repository\Builder\Manager :: exists($contentObject->package()))
+                        {
+                            $actionBar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                                    $this->get_browse_complex_content_object_url($contentObject),
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+                            $preview_url = $this->get_preview_content_object_url($contentObject);
+                            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                            $actionBar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                                    $preview_url,
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    false,
+                                    $onclick,
+                                    '_blank'));
+                        }
+                        else
+                        {
+                            $preview_url = $this->get_preview_content_object_url($contentObject);
+                            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                            $actionBar->add_common_action(
+                                new ToolbarItem(
+                                    Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
+                                    Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
+                                    $preview_url,
+                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    false,
+                                    $onclick,
+                                    '_blank'));
+                        }
                     }
                 }
             }
 
-            return $action_bar;
+            // Copy
+            if ($rightsService->canCopyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+            {
+                $actionBar->add_common_action(
+                    new ToolbarItem(
+                        Translation :: get('Duplicate', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Copy'),
+                        $this->get_copy_content_object_url($contentObject->get_id())));
+            }
+
+            // Publish
+            if ($rightsService->canUseContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+            {
+                $actionBar->add_common_action(
+                    new ToolbarItem(
+                        Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                        $this->get_publish_content_object_url($contentObject)));
+            }
+
+            // Share
+            if ($this->getWorkspace() instanceof PersonalWorkspace)
+            {
+                $actionBar->add_common_action(
+                    new ToolbarItem(
+                        Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                        $this->get_url(
+                            array(
+                                Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                                Manager :: PARAM_CONTENT_OBJECT_ID => $contentObject->get_id(),
+                                \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_SHARE))));
+            }
+            else
+            {
+                if ($rightsService->canDeleteContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+                {
+                    $url = $this->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE,
+                            Manager :: PARAM_CONTENT_OBJECT_ID => $contentObject->getId()));
+
+                    $actionBar->add_tool_action(
+                        new ToolbarItem(
+                            Translation :: get('Unshare', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Unshare'),
+                            $url,
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                            true));
+                }
+            }
         }
+        else
+        {
+            // Revert
+            if ($rightsService->canEditContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+            {
+                $revert_url = $this->get_content_object_revert_url($contentObject, 'version');
+                $actionBar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Revert'),
+                        $revert_url,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+
+            // Delete
+            if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
+            {
+                $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
+                $actionBar->add_tool_item(
+                    new ToolbarItem(
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Remove'),
+                        $deleteUrl,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+        }
+
+        return $actionBar;
     }
 
     public function add_links_to_content_object_tabs($content_object)
@@ -553,8 +599,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
     /**
      * Returns whether or not a user can change the links
-     *
-     * @return s bool
+     * * @return s bool
      */
     public function is_allowed_to_modify()
     {

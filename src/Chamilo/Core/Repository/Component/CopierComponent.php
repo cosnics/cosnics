@@ -37,36 +37,43 @@ class CopierComponent extends Manager
         foreach ($selected_content_object_ids as $selected_content_object_id)
         {
             $content_object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $selected_content_object_id);
-            $source_user_id = $content_object->get_owner_id();
 
-            if ($target_user_id != $content_object->get_owner_id())
+            if (RightsService :: getInstance()->canCopyContentObject(
+                $this->get_user(),
+                $content_object,
+                $this->getWorkspace()))
             {
-                $target_category_id = 0;
-            }
-            else
-            {
-                $target_category_id = $content_object->get_parent_id();
-            }
+                $source_user_id = $content_object->get_owner_id();
 
-            if ($content_object instanceof ContentObject)
-            {
-                if (RightsService :: getInstance()->canCopyContentObject(
-                    $this->get_user(),
-                    $content_object,
-                    $this->getWorkspace()))
+                if ($target_user_id != $content_object->get_owner_id())
                 {
-                    $copier = new ContentObjectCopier(
+                    $target_category_id = 0;
+                }
+                else
+                {
+                    $target_category_id = $content_object->get_parent_id();
+                }
+
+                if ($content_object instanceof ContentObject)
+                {
+                    if (RightsService :: getInstance()->canCopyContentObject(
                         $this->get_user(),
-                        array($content_object->get_id()),
-                        $this->getWorkspace(),
-                        $source_user_id,
-                        $this->getWorkspace(),
-                        $target_user_id,
-                        $target_category_id);
+                        $content_object,
+                        $this->getWorkspace()))
+                    {
+                        $copier = new ContentObjectCopier(
+                            $this->get_user(),
+                            array($content_object->get_id()),
+                            $this->getWorkspace(),
+                            $source_user_id,
+                            $this->getWorkspace(),
+                            $target_user_id,
+                            $target_category_id);
 
-                    $copier->run();
+                        $copier->run();
 
-                    $messages += $copier->get_messages_for_url();
+                        $messages += $copier->get_messages_for_url();
+                    }
                 }
             }
         }

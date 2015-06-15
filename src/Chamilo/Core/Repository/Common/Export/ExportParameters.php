@@ -17,6 +17,9 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+// use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class ExportParameters
 {
@@ -68,6 +71,13 @@ class ExportParameters
             {
                 if (in_array(0, $this->get_category_ids()))
                 {
+                    // if (! RightsService :: getInstance()->canCopyContentObjects(
+                    // $this->get_user(),
+                    // $this->getWorkspace()))
+                    // {
+                    // return array();
+                    // }
+
                     if ($this->getWorkspace() instanceof PersonalWorkspace)
                     {
                         $condition = new EqualityCondition(
@@ -108,8 +118,17 @@ class ExportParameters
                     foreach ($this->get_category_ids() as $category_id)
                     {
                         $category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $category_id);
+
+                        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+                        $workspace = $workspaceService->getWorkspaceByTypeAndTypeIdentifier(
+                            $category->get_type(),
+                            $category->get_type_id());
+
+                        // if (RightsService :: getInstance()->canCopyContentObjects($this->get_user(), $workspace))
+                        // {
                         $category_ids[] = $category_id;
                         $category_ids = array_merge($category_ids, $category->get_children_ids());
+                        // }
                     }
 
                     $conditions = array();
@@ -127,10 +146,30 @@ class ExportParameters
 
                 $this->category_content_object_ids = DataManager :: distinct(ContentObject :: class_name(), $parameters);
             }
+
             return $this->category_content_object_ids;
         }
         else
         {
+            $checkedContentObjects = array();
+
+            foreach ($this->content_object_ids as $contentObjectIdentifier)
+            {
+                $contentObject = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $contentObjectIdentifier);
+
+                // if (RightsService :: getInstance()->canCopyContentObject(
+                // $this->get_user(),
+                // $contentObject,
+                // $this->getWorkspace()))
+                // {
+                $checkedContentObjects[] = $contentObjectIdentifier;
+                // }
+
+                $this->content_object_ids = $checkedContentObjects;
+            }
+
             return $this->content_object_ids;
         }
     }
