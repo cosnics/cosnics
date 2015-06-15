@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class WikiPageTableDataProvider extends DataClassTableDataProvider
 {
-    
+
     /*
      * Inherited
      */
@@ -16,10 +16,10 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager :: retrieve_complex_wiki_pages(
-            ComplexContentObjectItem :: class_name(), 
+            ComplexContentObjectItem :: class_name(),
             $parameters);
     }
-    
+
     /*
      * Inherited<
      */
@@ -27,7 +27,7 @@ class WikiPageTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassCountParameters($condition);
         return \Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager :: count_complex_wiki_pages(
-            ComplexContentObjectItem :: class_name(), 
+            ComplexContentObjectItem :: class_name(),
             $parameters);
     }
 }
