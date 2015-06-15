@@ -927,7 +927,7 @@ class Database
      */
     public function get_records_result($sql, $class, $parameters)
     {
-        try
+      try
         {
             return $this->get_connection()->query($sql);
         }
