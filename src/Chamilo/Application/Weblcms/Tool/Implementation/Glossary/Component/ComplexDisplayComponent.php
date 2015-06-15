@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -32,11 +31,11 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     {
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $publication_id);
-
+       
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $publication_id);
-
+        
         if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
@@ -47,9 +46,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
-
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->publication->get_content_object()->package()) . '\Display';
+        $context = $this->publication->get_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(
             $context,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
