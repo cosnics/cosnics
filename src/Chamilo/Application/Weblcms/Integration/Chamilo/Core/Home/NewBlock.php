@@ -25,9 +25,9 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class NewBlock extends Block
 {
-    const TOOL_ANNOUNCEMENT = 'announcement';
-    const TOOL_ASSIGNMENT = 'assignment';
-    const TOOL_DOCUMENT = 'document';
+    const TOOL_ANNOUNCEMENT = 'Announcement';
+    const TOOL_ASSIGNMENT = 'Assignment';
+    const TOOL_DOCUMENT = 'Document';
     const OVERSIZED_SETTING = 'oversized_new_list_threshold';
     const FORCE_OVERSIZED = 'force_oversized_newblocks';
     const DO_FORCE_OVERSIZED = '1';
