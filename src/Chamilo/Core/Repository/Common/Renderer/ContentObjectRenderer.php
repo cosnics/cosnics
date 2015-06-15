@@ -156,7 +156,7 @@ abstract class ContentObjectRenderer implements TableSupport
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Duplicate'),
-                Theme :: getInstance()->getCommonImagePath('Action/Reuse'),
+                Theme :: getInstance()->getCommonImagePath('Action/Copy'),
                 $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
                 ToolbarItem :: DISPLAY_ICON);
         }

@@ -10,6 +10,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class PreviewerComponent extends Manager
 {
@@ -17,6 +19,15 @@ class PreviewerComponent extends Manager
     public function run()
     {
         $content_object = $this->get_root_content_object();
+
+        if (! RightsService :: getInstance()->canViewContentObject(
+            $this->get_user(),
+            $content_object,
+            $this->getWorkspace()))
+        {
+            throw new NotAllowedException();
+        }
+
         $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $content_object->get_id());
 
         if ($content_object)
@@ -48,7 +59,9 @@ class PreviewerComponent extends Manager
             $contentObjectClassname);
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
         $namespace = $contentObjectNamespace . '\Display\Preview';
-        $factory = new ApplicationFactory($namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $namespace,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory;
     }
 }

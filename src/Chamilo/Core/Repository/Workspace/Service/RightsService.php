@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -174,6 +174,23 @@ class RightsService
             $workspaceImplementation);
     }
 
+    public function hasContentObjectOwnerRights(User $user, ContentObject $contentObject)
+    {
+        // Check if the user is a platform administrator
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        // Check if the user is also the owner of the content object
+        if ($this->isContentObjectOwner($user, $contentObject))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -339,14 +356,7 @@ class RightsService
     private function hasRightForContentObject($right, User $user, ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation = null)
     {
-        // Check if the user is a platform administrator
-        if ($user->is_platform_admin())
-        {
-            return true;
-        }
-
-        // Check if the user is also the owner of the content object
-        if ($this->isContentObjectOwner($user, $contentObject))
+        if ($this->hasContentObjectOwnerRights($user, $contentObject))
         {
             return true;
         }
@@ -442,5 +452,31 @@ class RightsService
         }
 
         return static :: $instance;
+    }
+
+    /**
+     * To destroy a content object is to remove it or it's links permanently without an, as of yet, easy way to restore
+     * the previous situation.
+     * As such it should currently be applied to actions (or their derivatives) which only the object's owner can
+     * execute: moving to the recycle bin, unlinking, restoring from the recycle bin, permanent deletion and/or deleting
+     * links with other content objects (outside the context of a display or builder)
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
+     *
+     * @return boolean
+     */
+    public function canDestroyContentObject(User $user, ContentObject $contentObject,
+        WorkspaceInterface $workspaceImplementation = null)
+    {
+        if ($workspaceImplementation && ! $workspaceImplementation instanceof PersonalWorkspace)
+        {
+            return false;
+        }
+        else
+        {
+            return $this->hasContentObjectOwnerRights($user, $contentObject);
+        }
     }
 }
