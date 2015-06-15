@@ -37,19 +37,21 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         else
         {
             $objects = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
-
+            
             $mode = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE);
+                                
             $publish_type = PlatformSetting :: get('display_publication_screen', 'Chamilo\Application\Weblcms');
+                    
             $show_form = (($publish_type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_TYPE_FORM) || ($publish_type ==
                  \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_TYPE_BOTH &&
                  $mode != \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_MODE_QUICK));
-
+             
             $publisher = new ContentObjectPublisher($this, $objects, $show_form);
-
+            
             if ($publisher->ready_to_publish())
             {
-                $success = $publisher->publish();
-
+               $success = $publisher->publish();
+               
                 $message = Translation :: get(
                     ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
                     array('OBJECT' => Translation :: get('Object')),
@@ -79,7 +81,6 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
             else
             {
                 $html = array();
-
                 $html[] = $this->render_header();
                 $html[] = $publisher->toHtml();
                 $html[] = $this->render_footer();

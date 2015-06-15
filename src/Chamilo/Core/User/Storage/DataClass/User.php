@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
+
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataManager;

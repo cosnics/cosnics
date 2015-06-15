@@ -41,4 +41,5 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
             (int) $user_id);
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), $user->get_fullname()));
     }
+    
 }

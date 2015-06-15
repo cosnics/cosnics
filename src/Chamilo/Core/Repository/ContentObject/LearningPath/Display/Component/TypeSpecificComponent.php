@@ -21,8 +21,8 @@ class TypeSpecificComponent extends TabComponent implements ApplicationSupport
     public function build()
     {
         $object_namespace = $this->get_current_node()->get_content_object()->package();
-        $integration_namespace = $object_namespace . '\Integration\\' . __NAMESPACE__;
-
+        $integration_namespace = $object_namespace . '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
+        
         $factory = new ApplicationFactory($integration_namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
