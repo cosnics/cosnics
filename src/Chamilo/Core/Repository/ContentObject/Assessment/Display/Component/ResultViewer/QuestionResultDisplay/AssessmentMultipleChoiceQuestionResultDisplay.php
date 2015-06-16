@@ -20,7 +20,7 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
     public function display_question_result()
     {
         $complex_content_object_question = $this->get_complex_content_object_question();
-        $feedback_options_type = $complex_content_object_question->get_feedback_options();
+        $feedback_options_type = $complex_content_object_question->get_show_answer_feedback();
         $question = $this->get_question();
 
         $html = array();
