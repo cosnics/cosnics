@@ -100,7 +100,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             // define('DATEPICKER_JAVASCRIPT_INCLUDED',1);
             $js = "\n";
             $js .= '<script src="';
-            $js .= Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries\Format\Form\Element', true);
+            $js .= Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries\Format\Resources\Javascript', true);
             $js .= 'TblChange.js" type="text/javascript"></script>';
             $js .= "\n";
         }
