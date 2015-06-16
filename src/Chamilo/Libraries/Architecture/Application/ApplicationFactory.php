@@ -207,6 +207,8 @@ class ApplicationFactory
             $action = $tableAction;
         }
 
+        $this->getRequest()->query->set($actionParameter, $action);
+
         return $action;
     }
 
