@@ -38,7 +38,11 @@ class CourseGroupSubscriptionsForm extends FormValidator
     public function build_basic_form()
     {
         $url = Path :: getInstance()->getBasePath(true) .
-             'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
+             'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course='. $this->parent->get_course_id();
+        
+        
+//         Path :: getInstance()->getBasePath(true) .
+//              'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
 
         $course_group_users = DataManager :: retrieve_course_group_users($this->course_group->get_id());
         $defaults = array();

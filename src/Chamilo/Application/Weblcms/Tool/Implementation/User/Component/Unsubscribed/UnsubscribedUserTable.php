@@ -17,12 +17,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSupport
 {
-    // **************************************************************************
-    // GENERAL CONSTANTS
-    // **************************************************************************
-    const DEFAULT_NAME = 'unsubscribed_user_browser_table';
-    const DEFAULT_ROW_COUNT = 20;
-
+    const TABLE_IDENTIFIER = Manager :: PARAM_OBJECTS;
+    
     public function get_implemented_form_actions()
     {
         if (! Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP))

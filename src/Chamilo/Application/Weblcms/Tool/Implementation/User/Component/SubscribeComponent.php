@@ -35,6 +35,7 @@ class SubscribeComponent extends Manager
         {
             $users = array($users);
         }
+        
         if (isset($course_id))
         {
             if (isset($users) && count($users) > 0)
@@ -99,7 +100,7 @@ class SubscribeComponent extends Manager
                     $success = false;
                     $message = 'PartialUsersNotSubscribedToCourse';
                 }
-
+               
                 $this->redirect(
                     Translation :: get($message),
                     ($success ? false : true),
