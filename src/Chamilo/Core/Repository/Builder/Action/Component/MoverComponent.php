@@ -30,7 +30,7 @@ class MoverComponent extends Manager
         $id = Request :: get(\Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $parent_complex_content_object_item = Request :: get(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        $direction = Request :: get(\Chamilo\Core\Repository\Builder\Action\Manager :: PARAM_DIRECTION);
+        $direction = Request :: get(\Chamilo\Core\Repository\Builder\Manager :: PARAM_DIRECTION);
         $succes = true;
 
         if (isset($id))

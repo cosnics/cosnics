@@ -48,7 +48,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
         $trail = BreadcrumbTrail :: get_instance();
 
         $pid = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-
+        
         if (! $pid)
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(
@@ -56,6 +56,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
         }
 
         $stats_action = Request :: get(self :: PARAM_STAT);
+       
         switch ($stats_action)
         {
             case self :: ACTION_DELETE_LP_ATTEMPT :
@@ -72,7 +73,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $pid);
-
+        
         $root_object = $publication->get_content_object();
 
         $parameters = array(
@@ -81,7 +82,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
         $url = $this->get_url($parameters);
 
         $attempt_id = Request :: get(self :: PARAM_ATTEMPT_ID);
-
+      
         if ($attempt_id)
         {
             $tracker = $this->retrieve_tracker($attempt_id);
@@ -206,13 +207,13 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
             }
-
+            
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Reporting\Viewer\Manager :: context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(LearningPathAttemptsTemplate :: class_name());
-            $component->run();
+            return $component->run();
         }
     }
 
@@ -223,7 +224,6 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
              '=%s';
 
         $menu = new LearningPathTree($root_object_id, $selected_object_id, $url, $lpi_tracker_data);
-
         return $menu;
     }
 
