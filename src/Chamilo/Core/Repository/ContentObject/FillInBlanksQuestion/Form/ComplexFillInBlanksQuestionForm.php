@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\ComplexFillInBlanksQuestion;
 use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 use Chamilo\Libraries\Platform\Translation;
@@ -43,7 +44,7 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
             ComplexFillInBlanksQuestion :: PROPERTY_RANDOM, 
             Translation :: get('RandomizeHotspots'));
         
-        $elements[] = ComplexFillInBlanksQuestion :: build_answer_feedback(
+        $elements[] = ConfigurationForm :: build_answer_feedback(
             $this, 
             array(
                 Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
