@@ -16,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
 /**
  *
@@ -132,7 +134,7 @@ class WorkspaceRepository
         return DataManager :: retrieves(
             Workspace :: class_name(),
             new DataClassRetrievesParameters(
-                $this->getSharedWorkspacesForEntitiesCondition($entities),
+                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
                 $limit,
                 $offset,
                 $orderProperty,
@@ -149,7 +151,7 @@ class WorkspaceRepository
         return DataManager :: count(
             Workspace :: class_name(),
             new DataClassCountParameters(
-                $this->getSharedWorkspacesForEntitiesCondition($entities),
+                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
                 new Joins(array($this->getSharedWorkspacesJoin()))));
     }
 
@@ -158,7 +160,7 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    private function getSharedWorkspacesForEntitiesCondition($entities)
+    private function getSharedWorkspacesForEntitiesWithRightCondition($entities, $right = RightsService :: RIGHT_VIEW)
     {
         $conditions = array();
 
@@ -178,6 +180,14 @@ class WorkspaceRepository
                         WorkspaceEntityRelation :: class_name(),
                         WorkspaceEntityRelation :: PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable($entityType));
+                $entityConditions[] = new EqualityCondition(
+                    new OperationConditionVariable(
+                        new PropertyConditionVariable(
+                            WorkspaceEntityRelation :: class_name(),
+                            WorkspaceEntityRelation :: PROPERTY_RIGHTS),
+                        OperationConditionVariable :: BITWISE_AND,
+                        new StaticConditionVariable($right)),
+                    new StaticConditionVariable($right));
 
                 $conditions[] = new AndCondition($entityConditions);
             }
@@ -274,13 +284,40 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    private function getWorkspaceFavouritesByUserCondition(User $user, $entities)
+    private function getWorkspaceFavouritesByUserCondition(User $user, $entities, $right)
     {
         $orConditions = array();
 
         $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
-        $orConditions[] = $this->getSharedWorkspacesForEntitiesCondition($entities);
+        $orConditions[] = $this->getSharedWorkspacesForEntitiesWithRightCondition($entities, $right);
 
         return new OrCondition($orConditions);
+    }
+
+    public function findWorkspacesForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)
+    {
+        return DataManager :: retrieves(
+            Workspace :: class_name(),
+            new DataClassRetrievesParameters(
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities, $right),
+                $limit,
+                $offset,
+                $orderProperty,
+                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT)))));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @return integer
+     */
+    public function countWorkspacesForUser(User $user, $entities, $right)
+    {
+        return DataManager :: count(
+            Workspace :: class_name(),
+            new DataClassCountParameters(
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities, $right),
+                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT)))));
     }
 }

@@ -131,6 +131,7 @@ class Publisher
         $is_course_admin = $course->is_course_admin($this->parent->get_user());
 
         $form = new PublicationForm(
+            $this->parent->get_user(),
             PublicationForm :: TYPE_CREATE,
             $publications,
             $course,

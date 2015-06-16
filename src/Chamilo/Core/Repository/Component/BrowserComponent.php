@@ -27,6 +27,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: browser.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -49,6 +51,11 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        if (! RightsService :: getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
+        {
+            throw new NotAllowedException();
+        }
+
         $trail = BreadcrumbTrail :: get_instance();
 
         $output = $this->get_content_objects_html();

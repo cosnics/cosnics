@@ -16,6 +16,8 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -32,6 +34,11 @@ class PublisherComponent extends Manager
         if (! $this->getCurrentWorkspace() instanceof Workspace)
         {
             throw new \Exception(Translation :: get('NoValidWorkspace'));
+        }
+
+        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))
+        {
+            throw new NotAllowedException();
         }
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())

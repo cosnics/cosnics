@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: publication_deleter.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -37,8 +38,10 @@ class UnlinkerComponent extends Manager
             {
                 $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
 
-                // TODO: Roles & Rights.
-                if ($object->get_owner_id() == $this->get_user_id())
+                if (RightsService :: getInstance()->canDestroyContentObject(
+                    $this->get_user(),
+                    $object,
+                    $this->getWorkspace()))
                 {
                     $versions = $object->get_content_object_versions();
 

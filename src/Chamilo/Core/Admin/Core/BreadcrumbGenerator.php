@@ -6,7 +6,8 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Admin breadcrumb generator.
@@ -28,21 +29,20 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
         $breadcrumb_trail = $this->get_breadcrumb_trail();
         $component = $this->get_component();
 
-        $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER));
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: package(),
+                Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER));
         $breadcrumb_trail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName')));
 
-        $tab = 'core';
+        $parentNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($component->package());
 
         $redirect = new Redirect(
-            array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, BrowserComponent :: PARAM_TAB => $tab));
+            array(
+                Application :: PARAM_CONTEXT => Manager :: package(),
+                Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER,
+                BrowserComponent :: PARAM_TAB => $parentNamespace));
         $breadcrumb_trail->add(
-            new BreadCrumb(
-                $redirect->getUrl(),
-                Translation :: get((string) StringUtilities :: getInstance()->createString($tab)->upperCamelize())));
-
-        $redirect = new Redirect(
-            array(Manager :: PARAM_ACTION => Manager :: ACTION_ADMIN_BROWSER, BrowserComponent :: PARAM_TAB => $tab));
-        $breadcrumb_trail->add(
-            new BreadCrumb($redirect->getUrl(), Translation :: get('TypeName', null, $component->context())));
+            new BreadCrumb($redirect->getUrl(), Translation :: get('TypeName', null, $component->package())));
     }
 }

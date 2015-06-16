@@ -2,10 +2,9 @@
 namespace Chamilo\Core\Repository\Workspace\Table\Share;
 
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *
@@ -17,15 +16,48 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 class ShareTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
+     */
+    private $workspaceService;
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
-        return DataManager :: retrieves(Workspace :: class_name(), $parameters);
+        return $this->getWorkspaceService()->getWorkspacesForUser(
+            $this->get_component()->get_user(),
+            RightsService :: RIGHT_ADD,
+            $limit,
+            $offset,
+            $orderProperty);
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::count_data()
+     */
     public function count_data($condition)
     {
-        $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(Workspace :: class_name(), $parameters);
+        return $this->getWorkspaceService()->countWorkspacesForUser(
+            $this->get_component()->get_user(),
+            RightsService :: RIGHT_ADD);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
+     */
+    private function getWorkspaceService()
+    {
+        if (! isset($this->workspaceService))
+        {
+            $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
+        }
+
+        return $this->workspaceService;
     }
 }

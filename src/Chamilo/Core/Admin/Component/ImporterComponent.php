@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeImportMenu;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -37,10 +36,12 @@ class ImporterComponent extends Manager
         $breadcrumbtrail->add_help('administration general');
 
         $this->tab = Request :: get(self :: PARAM_TAB);
+
         if (! $this->tab)
         {
-            $this->tab = 'core';
+            $this->tab = 'Chamilo\Core';
         }
+
         $tab_name = Translation :: get(
             (string) StringUtilities :: getInstance()->createString($this->tab)->upperCamelize());
 
@@ -78,19 +79,20 @@ class ImporterComponent extends Manager
 
         foreach ($packages[$this->tab] as $package)
         {
-            $registration = \Chamilo\Configuration\Configuration :: registration($package);
+
+            $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
             if (! $registration instanceof \Chamilo\Configuration\Storage\DataClass\Registration)
             {
                 continue;
             }
 
-            $manager_class = $package . '\Manager';
+            $manager_class = $package->get_context() . '\Manager';
             if (! class_exists($manager_class))
             {
                 continue;
             }
 
-            $package_names[$package] = Translation :: get('TypeName', null, $package);
+            $package_names[$package->get_context()] = Translation :: get('TypeName', null, $package->get_context());
         }
 
         asort($package_names);
@@ -106,7 +108,8 @@ class ImporterComponent extends Manager
 
             $manager_class = $package . '\Integration\Chamilo\Core\Admin\Manager';
 
-            if (class_exists($manager_class) && $manager_class instanceof ActionsSupportInterface)
+            if (class_exists($manager_class) &&
+                 is_subclass_of($manager_class, 'Chamilo\Core\Admin\ImportActionsInterface', true))
             {
                 $links = $manager_class :: get_import_actions();
 

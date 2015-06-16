@@ -78,7 +78,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
             $this->create_tree_root_nodes();
         }
 
-        if ($this->current_node_id)
+        if (isset($this->current_node_id))
         {
             $this->forceCurrentUrl($this->get_node_url($this->current_node_id));
         }
@@ -94,10 +94,10 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
             // node now must become the only first element
             $this->tree = array($root_node);
 
-            if (! $this->current_node_id)
-            {
-                $this->forceCurrentUrl($this->get_node_url(0));
-            }
+//             if (! $this->current_node_id)
+//             {
+//                 $this->forceCurrentUrl($this->get_node_url(0));
+//             }
         }
     }
 
@@ -151,11 +151,13 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
         $tree_item = array();
         $tree_item['title'] = $this->get_root_node_title();
         $tree_item['url'] = $this->get_node_url(0);
+
         if (count($this->tree) > 0)
         {
             $tree_item['children'] = 'collapse';
             $tree_item['sub'] = $this->tree;
         }
+
         $tree_item['class'] = $this->get_root_node_class();
         $tree_item['id'] = 0;
         return $tree_item;
@@ -170,6 +172,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
     public function create_tree_recursive($node_id)
     {
         $node = $this->get_node($node_id);
+
         if (! $node)
         {
             return false;
@@ -187,6 +190,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
         $this->active_tree_node = $tree_item;
 
         $parent = $this->get_node_parent($node);
+
         if ((empty($this->root_ids) && $parent == 0) || in_array($node_id, $this->root_ids))
         {
             $this->create_tree_root_nodes();

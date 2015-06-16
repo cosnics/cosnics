@@ -98,7 +98,11 @@ class ContentObjectPublicationForm extends FormValidator
      * @var boolean
      */
     private $collaborate_possible;
-
+    
+    /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    private $user;
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -300,7 +304,7 @@ class ContentObjectPublicationForm extends FormValidator
         if (count($this->publications) == 1)
         {
             $first_publication = $this->publications[0];
-
+            
             if ($first_publication && RightsService :: getInstance()->canEditContentObject(
                 $this->user,
                 $first_publication->get_content_object()))
@@ -332,7 +336,6 @@ class ContentObjectPublicationForm extends FormValidator
             self :: PARAM_RESET,
             Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -572,9 +575,10 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function handle_form_submit()
     {
+        
         $publications = $this->publications;
         $succes = true;
-
+      
         foreach ($publications as $publication)
         {
             $old_category = $publication->get_category_id();

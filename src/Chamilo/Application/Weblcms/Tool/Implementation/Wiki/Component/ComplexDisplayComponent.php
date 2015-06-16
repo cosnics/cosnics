@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -31,7 +30,6 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $publication_id);
-
         if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
@@ -43,9 +41,11 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
 
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->publication->get_content_object()->package()) . '\Display';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $context = $this->publication->get_content_object()->package() . '\Display';
+
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 

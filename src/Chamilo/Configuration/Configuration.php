@@ -180,7 +180,7 @@ class Configuration
         if (! isset($this->isAvailable))
         {
             $file = $this->getConfigurationPath();
-
+            
             if (is_file($file) && is_readable($file))
             {
                 $this->isAvailable = true;
@@ -190,7 +190,7 @@ class Configuration
                 $this->isAvailable = false;
             }
         }
-
+    
         return $this->isAvailable;
     }
 
@@ -418,6 +418,9 @@ class Configuration
 
         $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
+        $this->set(
+            array('Chamilo\Configuration', 'repository', 'storage_path'),
+            Path :: getInstance()->getStoragePath('repository'));
     }
 
     /**

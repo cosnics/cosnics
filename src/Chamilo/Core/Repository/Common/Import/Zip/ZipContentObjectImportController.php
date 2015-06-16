@@ -297,6 +297,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
     protected function cleanup_filename($filename)
     {
         $utf8 = mb_check_encoding($filename, 'UTF-8');
+
         if (! $utf8)
         {
             $detect_encoding = mb_detect_encoding($filename);

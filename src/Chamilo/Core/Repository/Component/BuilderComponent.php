@@ -14,6 +14,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: complex_builder.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -54,6 +56,14 @@ class BuilderComponent extends Manager implements ApplicationSupport
         try
         {
             $this->content_object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $content_object_id);
+
+            if (! RightsService :: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $this->content_object,
+                $this->getWorkspace()))
+            {
+                throw new NotAllowedException();
+            }
 
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb(

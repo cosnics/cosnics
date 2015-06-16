@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-// use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * $Id: user.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -22,7 +22,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @package user.lib
  */
 /**
- * This class represents a user. User objects have a number of default properties: - user_id: the numeric ID of the
+ * This class represents a user.
+ * User objects have a number of default properties: - user_id: the numeric ID of the
  * user; - lastname: the lastname of the user; - firstname: the firstname of the user; - password: the password for this
  * user; - auth_source: - external_uid: the external authentication system unique id of the user (eg: Shibboleth uid,
  * OpenID uid, ...) - email: the email address of this user; - status: the status of this user: 1 is teacher, 5 is a
@@ -193,7 +194,8 @@ class User extends DataClass
 
     /**
      * Returns the external authentication system unique id for this user (useful for instance with : Shibboleth,
-     * OpenID, LDAP, . ..)
+     * OpenID, LDAP, .
+     * ..)
      *
      * @return String The external unique id
      */
@@ -363,7 +365,8 @@ class User extends DataClass
     }
 
     /**
-     * Sets the password of this user. If Chamilo configuration is set to encrypt the password, this function will also
+     * Sets the password of this user.
+     * If Chamilo configuration is set to encrypt the password, this function will also
      * take care of that.
      *
      * @param $password String the password.
@@ -385,7 +388,8 @@ class User extends DataClass
 
     /**
      * Sets the external authentication system unique id for this user (useful for instance with : Shibboleth, OpenID,
-     * LDAP, . ..)
+     * LDAP, .
+     * ..)
      *
      * @param $external_uid String the external unique id
      */

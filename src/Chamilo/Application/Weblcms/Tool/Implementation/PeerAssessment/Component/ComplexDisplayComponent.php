@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\PeerAssessmentDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -55,8 +54,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         }
 
         // launch
-        $context = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-            $this->get_root_content_object()->package()) . '\Display';
+        $context = $this->get_root_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(
             $context,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));

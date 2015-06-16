@@ -494,14 +494,14 @@ EOT;
      * @param string $name The element name
      * @return HTML_QuickForm_datepicker The element.
      */
-    public function add_datepicker($name, $label, $include_time_picker = true, $attributes = null)
+    public function add_datepicker($name, $label, $include_time_picker = true)
     {
-        $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
+//         $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
         $element = $this->addElement(
             'datepicker',
             $name,
             $label,
-            $attributes,
+            array('form_name' => $this->getAttribute('name'), 'class' => $name),
             $include_time_picker);
         $this->addRule($name, Translation :: get('InvalidDate'), 'date');
         return $element;
@@ -1145,7 +1145,7 @@ EOT;
         {
             $return_value .= Display :: error_message(Translation :: get('FormHasErrorsPleaseComplete'), true);
         }
-
+        
         $return_value .= parent :: toHtml();
         // Add the div which will hold the progress bar
 

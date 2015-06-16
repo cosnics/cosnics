@@ -541,6 +541,7 @@ abstract class Manager extends Application
             {
                 $this->category_menu->forceCurrentUrl($search_url, true);
             }
+
             if ($this->get_action() != self :: ACTION_BROWSE_CONTENT_OBJECTS)
             {
                 $this->category_menu->forceCurrentUrl($this->get_url());
