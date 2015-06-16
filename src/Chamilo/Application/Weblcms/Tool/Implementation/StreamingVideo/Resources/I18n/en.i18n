@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\streaming_video
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Streaming video"
+TypeCategory = "Course Tools"
+StreamingVideoToolBrowserComponent = "Browse streaming videos"
+StreamingVideoToolViewerComponent = "View streaming video"
+StreamingVideoToolIntroductionPublisherComponent = "Browse an introduction"
+StreamingVideoToolPublisherComponent = "Publish streaming video"
+StreamingVideoToolUpdaterComponent = "Update streaming video"
+TypeNameSingle = "Streaming video"
