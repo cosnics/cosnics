@@ -7,6 +7,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\User\Storage\DataClass\Session;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\File\Redirect;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -14,6 +17,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
     private $youtube;
+
+    private $client;
 
     private $session_token;
     const RELEVANCE = 'relevance';
@@ -42,52 +47,53 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // $this->youtube->setMajorProtocolVersion(2);
         $OAUTH2_CLIENT_ID = '494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com';
         $OAUTH2_CLIENT_SECRET = 'V6-lsZFVTSSeeqdLNzaqkyI1';
+        $DEVELOPER_KEY = 'AIzaSyDGreIWaSQroMiWFoYIzLvUMx0ykntyy3s';
 
-        $client = new \Google_Client();
-        $client->setClientId($OAUTH2_CLIENT_ID);
-        $client->setClientSecret($OAUTH2_CLIENT_SECRET);
+        $this->client = new \Google_Client();
+        $this->client->setClientId($OAUTH2_CLIENT_ID);
+        $this->client->setClientSecret($OAUTH2_CLIENT_SECRET);
+        $this->client->setDeveloperKey($DEVELOPER_KEY);
 
-        $this->youtube = new \Google_Service_YouTube($client);
-        var_dump($this->youtube);
+        $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
     public function login()
     {
-        // $session_token = Request :: get('token');
+        $session_token = Request :: get('token');
 
-        // if (! $this->session_token && ! $session_token)
-        // {
-        // $redirect = new Redirect();
-        // $currentUrl = $redirect->getCurrentUrl();
+        if (! $this->session_token && ! $session_token)
+        {
+            $redirect = new Redirect();
+            $currentUrl = $redirect->getCurrentUrl();
 
-        // $scope = 'http://gdata.youtube.com';
-        // $secure = false;
-        // $session = true;
-        // $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
+            // $scope = 'http://gdata.youtube.com';
+            // $secure = false;
+            // $session = true;
+            // $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
 
-        // header('Location: ' . $redirect_url);
-        // exit();
-        // }
-        // elseif ($session_token)
-        // {
-        // $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
+            // header('Location: ' . $redirect_url);
+            exit();
+        }
+        elseif ($session_token)
+        {
+            // $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
 
-        // $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-        // 'session_token',
-        // $this->get_external_repository_instance_id());
-        // $user_setting = new Setting();
-        // $user_setting->set_setting_id($setting->get_id());
-        // $user_setting->set_user_id(Session :: get_user_id());
-        // $user_setting->set_value($session_token);
-        // if ($user_setting->create())
-        // {
-        return true;
-        // }
-        // else
-        // {
-        // return false;
-        // }
-        // }
+            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
+                'session_token',
+                $this->get_external_repository_instance_id());
+            $user_setting = new Setting();
+            $user_setting->set_setting_id($setting->get_id());
+            $user_setting->set_user_id(Session :: get_user_id());
+            // $user_setting->set_value($session_token);
+            if ($user_setting->create())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public static function get_sort_properties()
@@ -357,18 +363,18 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function count_external_repository_objects($condition)
     {
-        $query = $this->youtube->newVideoQuery();
-        $query->setVideoQuery($condition);
+        // $query = $this->youtube->newVideoQuery();
+        // $query->setVideoQuery($condition);
 
-        $videoFeed = $this->get_video_feed($query);
-        if ($videoFeed->getTotalResults()->getText() >= 900)
-        {
-            return 900;
-        }
-        else
-        {
-            return $videoFeed->getTotalResults()->getText();
-        }
+        // $videoFeed = $this->get_video_feed($query);
+        // if ($videoFeed->getTotalResults()->getText() >= 900)
+        // {
+        return 1;
+        // }
+        // else
+        // {
+        // return $videoFeed->getTotalResults()->getText();
+        // }
     }
 
     public function delete_external_repository_object($id)
@@ -380,28 +386,28 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function export_external_repository_object($object)
     {
-        $video_entry = new Zend_Gdata_YouTube_VideoEntry();
-        $file_source = $this->youtube->newMediaFileSource($object->get_full_path());
-        $file_source->setContentType($object->get_mime_type());
-        $file_source->setSlug($object->get_filename());
-        $video_entry->setMediaSource($file_source);
-        $video_entry->setVideoTitle($object->get_title());
-        $video_entry->setVideoDescription(strip_tags($object->get_description()));
-        $video_entry->setVideoCategory('Education');
+        // $video_entry = new Zend_Gdata_YouTube_VideoEntry();
+        // $file_source = $this->youtube->newMediaFileSource($object->get_full_path());
+        // $file_source->setContentType($object->get_mime_type());
+        // $file_source->setSlug($object->get_filename());
+        // $video_entry->setMediaSource($file_source);
+        // $video_entry->setVideoTitle($object->get_title());
+        // $video_entry->setVideoDescription(strip_tags($object->get_description()));
+        // $video_entry->setVideoCategory('Education');
 
-        $upload_url = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
-        try
-        {
-            $new_entry = $this->youtube->insertEntry($video_entry, $upload_url, 'Zend_Gdata_YouTube_VideoEntry');
-        }
-        catch (Zend_Gdata_App_HttpException $httpException)
-        {
-            echo ($httpException->getRawResponseBody());
-        }
-        catch (Zend_Gdata_App_Exception $e)
-        {
-            echo $e->getMessage();
-        }
+        // $upload_url = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
+        // try
+        // {
+        // $new_entry = $this->youtube->insertEntry($video_entry, $upload_url, 'Zend_Gdata_YouTube_VideoEntry');
+        // }
+        // catch (Zend_Gdata_App_HttpException $httpException)
+        // {
+        // echo ($httpException->getRawResponseBody());
+        // }
+        // catch (Zend_Gdata_App_Exception $e)
+        // {
+        // echo $e->getMessage();
+        // }
         return true;
     }
 

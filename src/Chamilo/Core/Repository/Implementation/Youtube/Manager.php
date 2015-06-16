@@ -80,16 +80,16 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $menu_items = array();
 
-        if ($this->get_external_repository()->get_user_setting('session_token'))
-        {
-            $my_videos = array();
-            $my_videos['title'] = Translation :: get('MyVideos');
-            $my_videos['url'] = $this->get_url(
-                array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
-                array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
-            $my_videos['class'] = 'user';
-            $menu_items[] = $my_videos;
-        }
+//         if ($this->get_external_repository()->get_user_setting('session_token'))
+//         {
+//             $my_videos = array();
+//             $my_videos['title'] = Translation :: get('MyVideos');
+//             $my_videos['url'] = $this->get_url(
+//                 array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
+//                 array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
+//             $my_videos['class'] = 'user';
+//             $menu_items[] = $my_videos;
+//         }
 
         $browser = array();
         $browser['title'] = Translation :: get('Public');
@@ -208,30 +208,30 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY);
-        if ($this->get_external_repository()->get_user_setting('session_token'))
-        {
-            $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
-            $actions[] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
-        }
+//         if ($this->get_external_repository()->get_user_setting('session_token'))
+//         {
+//             $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
+//             $actions[] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
+//         }
 
-        $is_platform = $this->get_user()->is_platform_admin();
-        $has_setting = $this->get_external_repository()->has_settings();
-        $has_user_setting = $this->get_external_repository()->has_user_settings();
+//         $is_platform = $this->get_user()->is_platform_admin();
+//         $has_setting = $this->get_external_repository()->has_settings();
+//         $has_user_setting = $this->get_external_repository()->has_user_settings();
 
-        if (! ((! $has_setting || ! $this->get_external_repository()->get_user_setting('session_token')) ||
-             (! $has_user_setting && ! $is_platform)))
-        {
-            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
-        }
+//         if (! ((! $has_setting || ! $this->get_external_repository()->get_user_setting('session_token')) ||
+//              (! $has_user_setting && ! $is_platform)))
+//         {
+//             $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+//         }
 
-        if (! $this->get_external_repository()->get_user_setting('session_token'))
-        {
-            $actions[] = self :: ACTION_LOGIN;
-        }
-        else
-        {
-            $actions[] = self :: ACTION_LOGOUT;
-        }
+//         if (! $this->get_external_repository()->get_user_setting('session_token'))
+//         {
+//             $actions[] = self :: ACTION_LOGIN;
+//         }
+//         else
+//         {
+//             $actions[] = self :: ACTION_LOGOUT;
+//         }
         return $actions;
     }
 
