@@ -3,12 +3,12 @@
 	var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
 	function procesAnswer() {
-
+		
 		var inputElement = $(this);
-		var questionDiv = inputElement.parents('.question.Matrix');
+		var questionDiv = inputElement.parents('.question.Choice');
 		var nodeId = questionDiv.data('node_id');
 		var complexQuestionId = questionDiv.data('complex_question_id');
-
+		
 		if ($(this).attr('checked')) {
 			deleteAnswer(inputElement);
 		} else {
@@ -43,7 +43,7 @@
 
 	$(document).ready(function() {
 
-		$(document).on('change', '.question.Matrix  input', procesAnswer);
+		$(document).on('change', '.question.Choice  input', procesAnswer);
 
 	});
 

@@ -52,5 +52,10 @@ class ComplexChoice extends ComplexContentObjectItem implements PageDisplayItem
         
         return array($answerId);
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }
 ?>

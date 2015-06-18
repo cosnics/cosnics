@@ -60,5 +60,10 @@ class ComplexMatching extends ComplexContentObjectItem implements PageDisplayIte
 
         return $answer_ids;
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }
 ?>

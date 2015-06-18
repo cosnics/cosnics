@@ -1,45 +1,46 @@
-(function($) {
+function procesSurveyVisibility(nodeId){
 
-	var ajaxUri = getPath('WEB_PATH') + 'index.php';
+	var parameters = getSurveyParameters();
+	parameters.node_id=nodeId;
+	parameters.go = "GetVisibility";
+	var respons = {};
+	var respons = $.parseJSON(doAjaxPost(ajaxUri, parameters));
 
-	function procesVisibility(answerElement) {
-
-		var parameters = getParameters();
-		parameters.node_id = answerElement.data('node_id');
-		parameters.go = "GetVisibility";
-		var respons = {};
-		var respons = $.parseJSON(doAjaxPost(ajaxUri, parameters));
-
-		if (respons.properties.question_visibility != null) {
-			$.each(respons.properties.question_visibility, function(node_id,
-					visible) {
-				if (visible) {
-					if ($("div#" + node_id).attr("style")) {
-						$("div#" + node_id).removeAttr("style");
-					}
-				} else {
-
-					if (!$("div#" + node_id).attr("style")) {
-						$("div#" + node_id).hide();
-						deleteAnswers(node_id);
-					}
+	if (respons.properties.question_visibility != null) {
+		$.each(respons.properties.question_visibility, function(nodeId,
+				visible) {
+			if (visible) {
+				if ($("div#" + nodeId).attr("style")) {
+					$("div#" + nodeId).removeAttr("style");
 				}
-			});
-		}
-	}
+			} else {
 
-	function getParameters() {
-
-		var parameters = {};
-		var $params = $('input[type="hidden"]', window.parent.document);
-		$params.each(function() {
-			parameters[$(this).attr('name').replace('param_', '')] = $(this)
-					.attr('value');
+				if (!$("div#" + nodeId).attr("style")) {
+					$("div#" + nodeId).hide();
+					deleteAnswers(nodeId);
+				}
+			}
 		});
-
-		parameters.application = 'Chamilo\\Core\\Repository\\ContentObject\\Survey\\Display';
-		parameters.display_action = "Ajax";
-		return parameters;
 	}
+}
 
-})(jQuery);
+function deleteAnswers(nodeId) {
+	var parameters = getSurveyParameters();
+	parameters.go = "DeleteAnswer";
+	parameters.node_id = nodeId;
+	doAjaxPost(ajaxUri, parameters);
+}
+
+function getSurveyParameters() {
+
+	var parameters = {};
+	var $params = $('input[type="hidden"]', window.parent.document);
+	$params.each(function() {
+		parameters[$(this).attr('name').replace('param_', '')] = $(this).attr(
+				'value');
+	});
+
+	parameters.application = 'Chamilo\\Core\\Repository\\ContentObject\\Survey\\Display';
+	parameters.display_action = "Ajax";
+	return parameters;
+}

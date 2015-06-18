@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 class Display extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay
 {
-
     function process(ComplexContentObjectPathNode $complexContentObjectPathNode, AnswerServiceInterface $answerService)
     {
         $formValidator = $this->get_formvalidator();
@@ -26,5 +25,6 @@ class Display extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display
         $formValidator = $formRendition->initialize();
         $formValidator->setDefaults($answerService->getAnswer($complexContentObjectPathNode->get_id()));
     }
+   
 }
 ?>

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
-use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\ComplexFillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestionAnswer;
 use Chamilo\Libraries\Platform\Translation;

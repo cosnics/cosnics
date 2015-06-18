@@ -44,5 +44,10 @@ class ComplexDescription extends ComplexContentObjectItem implements PageDisplay
     {
         return array();
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }
 ?>

@@ -9,7 +9,6 @@ abstract class Manager extends Application
     
     const PARAM_NODE_ID = 'node_id';
     const PARAM_CONTENT_OBJECT_ID= 'content_object_id';
-    const PARAM_COMPLEX_QUESTION_ID = 'complex_question_id';
     const PARAM_ANSWER_ID = 'answer_id';
     const PARAM_ANSWER_VALUE = 'answer_value';
     const PARAM_QUESTION_VISIBILITY = 'question_visibility';

@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 abstract class PageDisplay
 {
-
     protected $formvalidator;
 
     protected $complex_content_object_path_node;
@@ -89,5 +88,6 @@ abstract class PageDisplay
     public function getAnswerService(){
         return $this->answerService;
     }
+    
 }
 ?>
