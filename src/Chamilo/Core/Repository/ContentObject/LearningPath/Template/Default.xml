@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\LearningPath">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Learning path</translation>
+			<translation language="nl">Leerpad</translation>
+			<translation language="fr">Chemin d'apprentissage</translation>
+			<translation language="de">Lernpfad</translation>
+		</variable>
+	</translations>
+</template>
