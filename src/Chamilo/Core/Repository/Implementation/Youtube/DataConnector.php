@@ -8,8 +8,11 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\User\Storage\DataClass\Session;
-use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -19,8 +22,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     private $youtube;
 
     private $client;
-
-    private $session_token;
     const RELEVANCE = 'relevance';
     const PUBLISHED = 'published';
     const VIEW_COUNT = 'viewCount';
@@ -28,55 +29,32 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        // parent :: __construct($external_repository_instance);
+        parent :: __construct($external_repository_instance);
 
-        // $this->session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
-
-        // Zend_Loader :: loadClass('Zend_Gdata_YouTube');
-        // Zend_Loader :: loadClass('Zend_Gdata_AuthSub');
-
-        // $httpClient = Zend_Gdata_AuthSub :: getHttpClient($this->session_token);
-
-        // $client = '';
-        // $application = PlatformSetting :: get('site_name');
-        // $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-        // 'developer_key',
-        // $this->get_external_repository_instance_id());
-
-        // $this->youtube = new Zend_Gdata_YouTube($httpClient, $application, $client, $key);
-        // $this->youtube->setMajorProtocolVersion(2);
-        $OAUTH2_CLIENT_ID = '494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com';
-        $OAUTH2_CLIENT_SECRET = 'V6-lsZFVTSSeeqdLNzaqkyI1';
-        $DEVELOPER_KEY = 'AIzaSyDGreIWaSQroMiWFoYIzLvUMx0ykntyy3s';
+        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'developer_key',
+            $this->get_external_repository_instance_id());
+        $clientId = '494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com';
+        $clientSecret = 'V6-lsZFVTSSeeqdLNzaqkyI1';
 
         $this->client = new \Google_Client();
-        $this->client->setClientId($OAUTH2_CLIENT_ID);
-        $this->client->setClientSecret($OAUTH2_CLIENT_SECRET);
-        $this->client->setDeveloperKey($DEVELOPER_KEY);
+
+        $this->client->setDeveloperKey($key);
 
         $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
     public function login()
     {
-        $session_token = Request :: get('token');
+        $this->client->setClientId($clientId);
+        $this->client->setClientSecret($clientSecret);
+        // $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
+        $session_token = $this->client->getAccessToken();
 
-        if (! $this->session_token && ! $session_token)
+        if (isset($session_token))
         {
-            $redirect = new Redirect();
-            $currentUrl = $redirect->getCurrentUrl();
 
-            // $scope = 'http://gdata.youtube.com';
-            // $secure = false;
-            // $session = true;
-            // $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
-
-            // header('Location: ' . $redirect_url);
-            exit();
-        }
-        elseif ($session_token)
-        {
-            // $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
+            $this->client->setAccessToken($session_token);
 
             $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
                 'session_token',
@@ -84,7 +62,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting = new Setting();
             $user_setting->set_setting_id($setting->get_id());
             $user_setting->set_user_id(Session :: get_user_id());
-            // $user_setting->set_value($session_token);
+            $user_setting->set_value($session_token);
+
             if ($user_setting->create())
             {
                 return true;
@@ -98,7 +77,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public static function get_sort_properties()
     {
-        return array(self :: RELEVANCE, self :: PUBLISHED, self :: VIEW_COUNT, self :: RATING);
+        // return array(self :: RELEVANCE, self :: PUBLISHED, self :: VIEW_COUNT, self :: RATING);
+        return array();
     }
 
     public function is_editable($id)
@@ -122,6 +102,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_categories()
     {
         $properties = array();
+        $categories = $this->youtube->videoCategories();
 
         // $options[] = array(XML_UNSERIALIZER_OPTION_FORCE_ENUM =>
         // array('atom:category'));
@@ -141,19 +122,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_upload_token($values)
     {
-        $video_entry = new Zend_Gdata_YouTube_VideoEntry();
+        // $video_entry = new Zend_Gdata_YouTube_VideoEntry();
 
-        $video_entry->setVideoTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
-        $video_entry->setVideoCategory($values[ExternalObjectForm :: VIDEO_CATEGORY]);
-        $video_entry->setVideoTags($values[ExternalObjectForm :: VIDEO_TAGS]);
-        $video_entry->setVideoDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
+        // $video_entry->setVideoTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
+        // $video_entry->setVideoCategory($values[ExternalObjectForm :: VIDEO_CATEGORY]);
+        // $video_entry->setVideoTags($values[ExternalObjectForm :: VIDEO_TAGS]);
+        // $video_entry->setVideoDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
 
-        $token_handler_url = 'http://gdata.youtube.com/action/GetUploadToken';
-        $token_array = $this->youtube->getFormUploadToken($video_entry, $token_handler_url);
-        $token_value = $token_array['token'];
-        $post_url = $token_array['url'];
+        // $token_handler_url = 'http://gdata.youtube.com/action/GetUploadToken';
+        // $token_array = $this->youtube->getFormUploadToken($video_entry, $token_handler_url);
+        // $token_value = $token_array['token'];
+        // $post_url = $token_array['url'];
 
-        return $token_array;
+        // return $token_array;
+        return array();
     }
 
     public function get_video_feed($query)
@@ -201,149 +183,103 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $standard_feeds;
     }
 
-    public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
+    public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
-        $query = $this->youtube->newVideoQuery();
-        if (count($order_property) > 0)
+        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('type' => 'video', 'q' => $query));
+
+        foreach ($searchResponse['modelData']['items'] as $response)
         {
-            $query->setOrderBy($order_property[0]->get_property());
-        }
-        $query->setVideoQuery($condition);
-
-        $query->setStartIndex($offset + 1);
-
-        if (($count + $offset) >= 900)
-        {
-            $temp = ($offset + $count) - 900;
-            $query->setMaxResults($count - $temp);
-        }
-        else
-        {
-            $query->setMaxResults($count);
-        }
-
-        $videoFeed = $this->get_video_feed($query);
-
-        $objects = array();
-        foreach ($videoFeed as $videoEntry)
-        {
-            $video_thumbnails = $videoEntry->getVideoThumbnails();
-            if (count($video_thumbnails) > 0)
-            {
-                $thumbnail = $video_thumbnails[0]['url'];
-            }
-            else
-            {
-                $thumbnail = null;
-            }
-
-            $published = $videoEntry->getPublished()->getText();
-            $published_timestamp = strtotime($published);
-
-            $modified = $videoEntry->getUpdated()->getText();
-            $modified_timestamp = strtotime($modified);
-
-            $uploader = $videoEntry->getAuthor();
-            $uploader = $uploader[0];
+            $videosResponse = $this->youtube->videos->listVideos(
+                'snippet, status, contentDetails, statistics',
+                array('id' => $response['id']['videoId']));
 
             $object = new ExternalObject();
-            $object->set_id($videoEntry->getVideoId());
+            $object->set_id($response['id']['videoId']);
             $object->set_external_repository_id($this->get_external_repository_instance_id());
-            $object->set_title($videoEntry->getVideoTitle());
-            $object->set_description(nl2br($videoEntry->getVideoDescription()));
-            $object->set_created($published_timestamp);
-            $object->set_modified($modified_timestamp);
-            $object->set_owner_id($uploader->getName()->getText());
-            $object->set_owner_name($uploader->getName()->getText());
-            $object->set_url($videoEntry->getFlashPlayerUrl());
-            $object->set_duration($videoEntry->getVideoDuration());
-            $object->set_thumbnail($thumbnail);
+            $object->set_title($response['snippet']['title']);
+            $object->set_description($response['snippet']['description']);
+            $object->set_created(strtotime($response['snippet']['publishedAt']));
+            // $object->set_modified($modified_timestamp);
+            // $object->set_owner_id($uploader->getName()->getText());
+            // $object->set_owner_name($uploader->getName()->getText());
+            // $object->set_url($videoResult->getFlashPlayerUrl());
+            $object->set_duration($videosResponse['modelData']['items'][0]['contentDetails']['duration']);
 
-            $object->set_category($videoEntry->getVideoCategory());
-            $object->set_tags($videoEntry->getVideoTags());
+            $object->set_thumbnail($response['snippet']['thumbnails']);
 
-            $control = $videoEntry->getControl();
-            if (isset($control))
-            {
-                $object->set_status($control->getState()->getName());
-            }
-            else
-            {
-                $object->set_status(ExternalObject :: STATUS_AVAILABLE);
-            }
+            $object->set_category($videosResponse['modelData']['items'][0]['snippet']['categoryId']);
+            $object->set_tags($response['etag']);
 
-            $object->set_rights($this->determine_rights($videoEntry));
+            $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
             $objects[] = $object;
         }
 
+        // $object->set_rights($this->determine_rights($videoEntry));
         return new ArrayResultSet($objects);
     }
 
-    public function get_youtube_video_entry($id)
+    public function count_external_repository_objects($query)
     {
-        $parameter = Request :: get(Manager :: PARAM_FEED_TYPE);
-        if ($parameter == Manager :: FEED_TYPE_MYVIDEOS)
+        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query));
+
+        if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
-            return $this->youtube->getFullVideoEntry($id);
+            return 900;
         }
         else
         {
-            return $this->youtube->getVideoEntry($id);
+            return $searchResponse['pageInfo']['totalResults'];
         }
     }
 
+    // public function get_youtube_video_entry($id)
+    // {
+    // $parameter = Request :: get(Manager :: PARAM_FEED_TYPE);
+    // if ($parameter == Manager :: FEED_TYPE_MYVIDEOS)
+    // {
+    // return $this->youtube->getFullVideoEntry($id);
+    // }
+    // else
+    // {
+    // return $this->youtube->getVideoEntry($id);
+    // }
+    // }
     public function retrieve_external_repository_object($id)
     {
-        $videoEntry = $this->get_youtube_video_entry($id);
+        // $videoEntry = $this->get_youtube_video_entry($id);
+        $videosResponse = $this->youtube->videos->listVideos(
+            'snippet, status, contentDetails, statistics',
+            array('id' => $id));
+        $thumbnails = $videosResponse['modelData']['items'][0]['snippet']['thumbnails'];
 
-        $video_thumbnails = $videoEntry->getVideoThumbnails();
-
-        if (count($video_thumbnails) > 0)
+        if (count($thumbnails) > 0)
         {
-            $thumbnail = $video_thumbnails[0]['url'];
+            $thumbnail = $thumbnails['default']['url'];
         }
         else
         {
             $thumbnail = null;
         }
 
-        $author = $videoEntry->getAuthor();
-        $author = $author[0];
-
-        $published = $videoEntry->getPublished()->getText();
-        $published_timestamp = strtotime($published);
-
-        $modified = $videoEntry->getUpdated()->getText();
-        $modified_timestamp = strtotime($modified);
-
         $object = new ExternalObject();
-        $object->set_id($videoEntry->getVideoId());
+        $object->set_id($videosResponse['modelData']['items'][0]['id']);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
-        $object->set_title($videoEntry->getVideoTitle());
-        $object->set_description(nl2br($videoEntry->getVideoDescription()));
-        $object->set_owner_id($author->getName()->getText());
-        $object->set_owner_name($author->getName()->getText());
-        $object->set_created($published_timestamp);
-        $object->set_modified($modified_timestamp);
-        $object->set_url($videoEntry->getFlashPlayerUrl());
-        $object->set_duration($videoEntry->getVideoDuration());
-        $object->set_thumbnail($thumbnail);
+        $object->set_title($videosResponse['modelData']['items'][0]['snippet']['title']);
+        $object->set_description($videosResponse['modelData']['items'][0]['snippet']['description']);
+        // $object->set_owner_id($author->getName()->getText());
+        // $object->set_owner_name($author->getName()->getText());
+        $object->set_created(strtotime());
+        // $object->set_modified($modified_timestamp);
+        // $object->set_url($videoEntry->getFlashPlayerUrl());
+        $object->set_duration($videosResponse['modelData']['items'][0]['contentDetails']['duration']);
+        $object->set_thumbnail($thumbnails);
 
-        $object->set_category($videoEntry->getVideoCategory());
-        $object->set_tags($videoEntry->getVideoTags());
+        $object->set_category($videosResponse['modelData']['items'][0]['snippet']['categoryId']);
+        $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
+        $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
-        $control = $videoEntry->getControl();
-        if (isset($control) && ! is_null($control->getState()))
-        {
-            $object->set_status($control->getState()->getName());
-        }
-        else
-        {
-            $object->set_status(ExternalObject :: STATUS_AVAILABLE);
-        }
-
-        $object->set_rights($this->determine_rights($videoEntry));
+        // $object->set_rights($this->determine_rights());
 
         return $object;
     }
@@ -361,27 +297,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return true;
     }
 
-    public function count_external_repository_objects($condition)
-    {
-        // $query = $this->youtube->newVideoQuery();
-        // $query->setVideoQuery($condition);
-
-        // $videoFeed = $this->get_video_feed($query);
-        // if ($videoFeed->getTotalResults()->getText() >= 900)
-        // {
-        return 1;
-        // }
-        // else
-        // {
-        // return $videoFeed->getTotalResults()->getText();
-        // }
-    }
-
     public function delete_external_repository_object($id)
     {
-        $video_entry = $this->youtube->getFullVideoEntry($id);
-
-        return $this->youtube->delete($video_entry);
+        return $this->youtube->delete($id);
     }
 
     public function export_external_repository_object($object)

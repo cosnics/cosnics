@@ -12,6 +12,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if (Request :: get(Manager :: PARAM_FEED_TYPE) == Manager :: FEED_STANDARD_TYPE)
         {
+
             $this->set_parameter(Manager :: PARAM_FEED_IDENTIFIER, Request :: get(Manager :: PARAM_FEED_IDENTIFIER));
         }
 
