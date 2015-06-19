@@ -18,8 +18,8 @@ class LoginComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 $this->redirect(
-                    Translation :: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES), 
-                    false, 
+                    Translation :: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES),
+                    false,
                     $parameters);
             }
             else
@@ -27,8 +27,8 @@ class LoginComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 $this->redirect(
-                    Translation :: get('LoginFailed', null, Utilities :: COMMON_LIBRARIES), 
-                    true, 
+                    Translation :: get('LoginFailed', null, Utilities :: COMMON_LIBRARIES),
+                    true,
                     $parameters);
             }
         }
@@ -37,8 +37,8 @@ class LoginComponent extends Manager
             $parameters = $this->get_parameters();
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
             $this->redirect(
-                Translation :: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES), 
-                false, 
+                Translation :: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES),
+                false,
                 $parameters);
         }
     }
