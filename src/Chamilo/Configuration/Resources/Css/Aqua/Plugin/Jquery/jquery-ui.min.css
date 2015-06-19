@@ -957,7 +957,7 @@ body .ui-tooltip {
 .ui-state-default, .ui-widget-content .ui-state-default,
 	.ui-widget-header .ui-state-default {
 	border: 1px solid #c5dbec;
-	background: #dfeffc url("images/UiBgGlass85Dfeffc1X400.png") 50%
+	background: #dfeffc url("images/ui-bg_glass_85_dfeffc_1x400.png") 50%
 		50% repeat-x;
 	font-weight: bold;
 	color: #2e6e9e

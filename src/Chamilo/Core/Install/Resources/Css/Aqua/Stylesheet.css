@@ -260,7 +260,7 @@ a.disabled:hover {
 /* next button uses another background image */
 a.next, a.nextPage {
 	background-image:
-		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/bottom.png);
+		url(../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Scrollable/Bottom.png);
 	clear: right;
 }
 
@@ -279,7 +279,7 @@ div.navi a {
 	float: left;
 	margin: 3px;
 	background:
-		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/navigator.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Scrollable/Navigator.png)
 		0 0 no-repeat;
 	cursor: pointer;
 }
@@ -310,13 +310,13 @@ div.navi a.active {
 	height: 16px;
 	background-color: transparent;
 	background:
-		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/left.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Scrollable/Left.png)
 		no-repeat;
 }
 
 .ui-tabs-paging-next {
 	background:
-		url(../../../../../Configuration/Resources/Images/Aqua/plugin/jquery/scrollable/right.png)
+		url(../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Scrollable/Right.png)
 		no-repeat;
 }
 

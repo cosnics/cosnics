@@ -2,9 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Implementation\Rendition\Html;
 
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -141,11 +138,6 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);
-        $formvalidator->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath($namespace, true) . 'MatchingQuestionDisplay.js'));
     }
 
 }

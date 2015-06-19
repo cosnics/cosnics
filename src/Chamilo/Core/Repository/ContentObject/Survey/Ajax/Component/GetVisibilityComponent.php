@@ -16,7 +16,6 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
     {
         $result = new JsonAjaxResult(200);
         $nodeId = $this->getRequest()->request->get(self :: PARAM_NODE_ID);
-        $complexQuestionId = $this->getRequest()->request->get(self :: PARAM_COMPLEX_QUESTION_ID);
         $contentObjectId = $this->getRequest()->request->get(self :: PARAM_CONTENT_OBJECT_ID);
         
         $contentObject = DataManager :: retrieve_by_id(Survey :: class_name(), $contentObjectId);

@@ -19,9 +19,9 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 abstract class ContentObjectRenderer implements TableSupport
 {
-    const TYPE_TABLE = 'table';
-    const TYPE_GALLERY = 'gallery_table';
-    const TYPE_SLIDESHOW = 'slideshow';
+    const TYPE_TABLE = 'Table';
+    const TYPE_GALLERY = 'GalleryTable';
+    const TYPE_SLIDESHOW = 'Slideshow';
 
     /**
      *

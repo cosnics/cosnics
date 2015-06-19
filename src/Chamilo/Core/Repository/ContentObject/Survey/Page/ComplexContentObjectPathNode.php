@@ -69,7 +69,7 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
     {
         $visible = $this->get_complex_content_object_item()->is_visible();
         $siblingAnswers = $this->getSiblingAnswers($answerService);
-
+        
         if (count($siblingAnswers) > 0)
         {
             $configs = $this->get_complex_content_object_item()->get_parent_object()->getConfiguration();
@@ -77,26 +77,26 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
             
             foreach ($siblingAnswers as $complexQuestionId => $answers)
             {
-                if($visibleCheck)
+                if ($visibleCheck)
                 {
                     break;
                 }
                 foreach ($configs as $configuration)
                 {
-                    if($visibleCheck)
+                    if ($visibleCheck)
                     {
                         break;
                     }
                     foreach ($configuration->getToVisibleQuestionIds() as $id)
                     {
-                        if($visibleCheck)
+                        if ($visibleCheck)
                         {
                             break;
                         }
-                        if ($this->get_complex_content_object_item()->get_id() == $id && !$visibleCheck)
+                        if ($this->get_complex_content_object_item()->get_id() == $id && ! $visibleCheck)
                         {
                             $fromQuestionId = $configuration->getComplexQuestionId();
-                            if ($complexQuestionId == $fromQuestionId && !$visibleCheck)
+                            if ($complexQuestionId == $fromQuestionId && ! $visibleCheck)
                             {
                                 $answerMatches = $configuration->getAnswerMatches($answerService->getPrefix());
                                 
@@ -123,11 +123,13 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
                                         }
                                     }
                                     
-                                    if($visibleCheck){
+                                    if ($visibleCheck)
+                                    {
                                         $visible = $visibleCheck;
                                         break;
                                     }
-                                    else {
+                                    else
+                                    {
                                         continue;
                                     }
                                 }
@@ -142,8 +144,10 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
 
     public function getSiblingVisibility(AnswerServiceInterface $answerService)
     {
-        $nodeVisibility = array();
         $nodes = $this->get_siblings();
+        
+        $nodeVisibility = array();
+        $nodeAnswers = array();
         
         foreach ($nodes as $node)
         {
@@ -159,54 +163,61 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
             {
                 $nodeVisibility[$node->get_id()] = false;
             }
+            $nodeAnswers[] = $answerService->getAnswer($node->get_id());
         }
         
-        $nodeAnswer = $answerService->getAnswer($this->get_id());
+        $nodeAnswers[] = $answerService->getAnswer($this->get_id());
         
-        if ($nodeAnswer)
+        foreach ($nodeAnswers as $nodeAnswer)
         {
-            $configs = $this->get_complex_content_object_item()->get_parent_object()->getConfiguration();
-            
-            foreach ($configs as $configuration)
+            if ($nodeAnswer)
             {
-                foreach ($configuration->getToVisibleQuestionIds() as $id)
+                $configs = $this->get_complex_content_object_item()->get_parent_object()->getConfiguration();
+                
+                foreach ($configs as $configuration)
                 {
-                    if ($node->get_complex_content_object_item()->get_id() == $id)
+                    foreach ($configuration->getToVisibleQuestionIds() as $id)
                     {
-                        $answerMatches = $configuration->getAnswerMatches($answerService->getPrefix());
-                        
-                        $visible = false;
-                        if (count($answerMatches) == count($nodeAnswer))
+                        foreach ($nodes as $node)
                         {
-                            foreach ($answerMatches as $key => $value)
+                            if ($node->get_complex_content_object_item()->get_id() == $id)
                             {
-                                if (array_key_exists($key, $nodeAnswer))
+                                $answerMatches = $configuration->getAnswerMatches($answerService->getPrefix());
+                                
+                                $visible = false;
+                                if (count($answerMatches) == count($nodeAnswer))
                                 {
-                                    if ($value == $nodeAnswer[$key])
+                                    foreach ($answerMatches as $key => $value)
                                     {
-                                        $visible = true;
-                                    }
-                                    else
-                                    {
-                                        $visible = false;
-                                        break;
+                                        if (array_key_exists($key, $nodeAnswer))
+                                        {
+                                            if ($value == $nodeAnswer[$key])
+                                            {
+                                                $visible = true;
+                                            }
+                                            else
+                                            {
+                                                $visible = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $visible = false;
+                                            break;
+                                        }
                                     }
                                 }
-                                else
+                                
+                                if ($visible)
                                 {
-                                    $visible = false;
-                                    break;
+                                    $nodeIdMapping = $this->getSiblingNodeIdMapping();
+                                    foreach ($configuration->getToVisibleQuestionIds() as $id)
+                                    {
+                                        $nodeId = $nodeIdMapping[$id];
+                                        $nodeVisibility[$nodeId] = true;
+                                    }
                                 }
-                            }
-                        }
-                        
-                        if ($visible)
-                        {
-                            $nodeIdMapping = $this->getSiblingNodeIdMapping();
-                            foreach ($configuration->getToVisibleQuestionIds() as $id)
-                            {
-                                $nodeId = $nodeIdMapping[$id];
-                                $nodeVisibility[$nodeId] = true;
                             }
                         }
                     }

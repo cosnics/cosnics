@@ -13,22 +13,25 @@ abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Su
         $formvalidator = $this->formvalidator;
         
         $content_object = $this->complex_content_object_path_node->get_content_object();
-        $nodeId = $this->complex_content_object_path_node->get_id();
+        
+        $attributes = $this->complex_content_object_path_node->getDataAttributes();
+        $dataAttributeString = " ";
+        foreach ($attributes as $key => $value){
+            $dataAttributeString = $dataAttributeString.$key.'="'.$value.'" ';
+        }
+       
+        
         $class_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($content_object);
-        $complex_content_object_item = $this->complex_content_object_path_node->get_complex_content_object_item();
-        $complexContentObjectItemId = $complex_content_object_item->get_id();
         
         $visible = $this->complex_content_object_path_node->isVisible($this->getAnswerService());
         
         if (! $visible)
         {
-            $html[] = '<div  class="question ' . $class_name . '" id="' . $nodeId . '" data-node_id="' . $nodeId .
-                 '" data-complex_question_id="' . $complexContentObjectItemId . '" style="display: none;">';
+            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString .'" style="display: none;">';
         }
         else
         {
-            $html[] = '<div  class="question ' . $class_name . '" id="' . $nodeId . '" data-node_id="' . $nodeId .
-                 '" data-complex_question_id="' . $complexContentObjectItemId . '"   >';
+            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString .'>';
         }
         
         $header = implode(PHP_EOL, $html);

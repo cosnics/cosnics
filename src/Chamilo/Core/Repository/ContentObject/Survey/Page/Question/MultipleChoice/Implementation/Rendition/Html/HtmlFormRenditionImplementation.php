@@ -122,6 +122,8 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $questionName = $questionId;
         }
         
+        $attributes = $this->getAttributes();
+        
         foreach ($options as $option)
         {
             $i = $option->get_id();
@@ -130,14 +132,14 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             if ($type == MultipleChoice :: ANSWER_TYPE_RADIO)
             {
                 $option_name = $questionName;
-                $radio_button = $formValidator->createElement('radio', $option_name, null, null, $i);
+                $radio_button = $formValidator->createElement('radio', $option_name, null, null, $i, $attributes);
                 $group[] = $radio_button;
                 $group[] = $formValidator->createElement('static', null, null, $option->get_value());
             }
             elseif ($type == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
             {
                 $option_name = $questionName . '_' . $i;
-                $check_box = $formValidator->createElement('checkbox', $option_name, null, null, null, $i);
+                $check_box = $formValidator->createElement('checkbox', $option_name, null, null, $attributes, $i);
                 $group[] = $check_box;
                 $group[] = $formValidator->createElement('static', null, null, $option->get_value());
             }

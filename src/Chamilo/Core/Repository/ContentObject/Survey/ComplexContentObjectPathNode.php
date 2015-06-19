@@ -8,6 +8,8 @@ namespace Chamilo\Core\Repository\ContentObject\Survey;
  */
 class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode
 {
+    const DATA_NODE_ID = 'data-node_id';
+    
     const PROPERTY_NODE_IN_MENU = 'node_in_menu';
     const PROPERTY_PREVIOUS_PAGE_STEP = 'previous_page_step';
     const PROPERTY_NEXT_PAGE_STEP = 'next_page_step';
@@ -53,4 +55,15 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\ContentObjec
     {
         return $this->set_property(self :: PROPERTY_LAST_PAGE_STEP, $step);
     }
+    
+    function getDataAttributes(){
+        $attributes = array();
+        $attributes[self ::DATA_NODE_ID] = $this->get_id();
+        $complexAttributes = $this->get_complex_content_object_item()->getDataAttributes();
+        if($complexAttributes){
+            $attributes = array_merge($attributes, $complexAttributes);
+        }
+        return $attributes;
+    }
+    
 }

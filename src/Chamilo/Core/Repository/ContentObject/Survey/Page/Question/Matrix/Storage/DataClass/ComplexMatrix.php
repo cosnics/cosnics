@@ -72,4 +72,9 @@ class ComplexMatrix extends ComplexContentObjectItem implements PageDisplayItem
         
         return $answer_ids;
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }

@@ -17,7 +17,6 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
 {
     const FORM_NAME = 'question_content_object_rendition_form';
     
-    const DATA_COMPLEX_QUESTION_ID = 'data-complex_question_id';
     const DATA_NODE_ID = 'data-node_id';
 
     /**
@@ -205,7 +204,6 @@ class HtmlFormRenditionImplementation extends HtmlRenditionImplementation
     
     public function getAttributes(){
         $attributes = array();
-        $attributes[self :: DATA_COMPLEX_QUESTION_ID] = $this->getQuestionId();
         $attributes[self :: DATA_NODE_ID] = $this->getNodeId();
         return $attributes;
     }

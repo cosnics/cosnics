@@ -26,6 +26,8 @@ class ViewerComponent extends TabComponent
     {
         $this->current_step = Request :: get(self :: PARAM_STEP, 1);
         
+        var_dump($_SESSION);
+        
         if ($this->is_form_submitted())
         {
             $action = $this->get_action();
