@@ -3,13 +3,13 @@ namespace Chamilo\Core\Repository\Implementation\Youtube;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
@@ -33,6 +33,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             Request :: set_get(self :: PARAM_FEED_TYPE, self :: FEED_TYPE_GENERAL);
         }
+
         parent :: __construct($application);
         $this->set_parameter(self :: PARAM_FEED_TYPE, Request :: get(self :: PARAM_FEED_TYPE));
     }
@@ -42,7 +43,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function validate_settings($external_repository)
     {
-        $developer_key = Setting :: get('developer_key', $external_repository->get_id());
+        $developer_key = PlatformSetting :: get('developer_key', $external_repository->get_id());
 
         if (! $developer_key)
         {
@@ -82,13 +83,13 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
 //         if ($this->get_external_repository()->get_user_setting('session_token'))
 //         {
-//             $my_videos = array();
-//             $my_videos['title'] = Translation :: get('MyVideos');
-//             $my_videos['url'] = $this->get_url(
-//                 array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
-//                 array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
-//             $my_videos['class'] = 'user';
-//             $menu_items[] = $my_videos;
+            $my_videos = array();
+            $my_videos['title'] = Translation :: get('MyVideos');
+            $my_videos['url'] = $this->get_url(
+                array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
+                array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
+            $my_videos['class'] = 'user';
+            $menu_items[] = $my_videos;
 //         }
 
         $browser = array();
@@ -194,11 +195,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function is_ready_to_be_used()
     {
-        // $action = $this->get_parameter(self ::
-        // PARAM_ACTION);
-        //
-        // return self :: any_object_selected() && ($action == self ::
-        // ACTION_PUBLISHER);
+        $action = $this->get_parameter(self :: PARAM_ACTION);
+
+        return self :: any_object_selected() && ($action == self :: ACTION_PUBLISHER);
         return false;
     }
 
@@ -208,13 +207,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY);
+
 //         if ($this->get_external_repository()->get_user_setting('session_token'))
 //         {
 //             $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
 //             $actions[] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
 //         }
 
-//         $is_platform = $this->get_user()->is_platform_admin();
+        $is_platform = $this->get_user()->is_platform_admin();
 //         $has_setting = $this->get_external_repository()->has_settings();
 //         $has_user_setting = $this->get_external_repository()->has_user_settings();
 
@@ -226,11 +226,11 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
 //         if (! $this->get_external_repository()->get_user_setting('session_token'))
 //         {
-//             $actions[] = self :: ACTION_LOGIN;
+            $actions[] = self :: ACTION_LOGIN;
 //         }
 //         else
 //         {
-//             $actions[] = self :: ACTION_LOGOUT;
+            $actions[] = self :: ACTION_LOGOUT;
 //         }
         return $actions;
     }
