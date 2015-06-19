@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Calendar</name>
+		<code>Calendar</code>
+		<context>Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar</context>
+		<type>Chamilo\Application\Weblcms\Integration</type>
+		<category>core</category>
+		<authors />
+		<version>5.0.0</version>
+		<description />
+		<pre-depends>
+			<dependencies operator="1">
+				<dependency type="registration">
+					<id>Chamilo\Application\Weblcms</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+				<dependency type="registration">
+					<id>Chamilo\Application\Calendar</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+			</dependencies>
+		</pre-depends>
+	</package>
+</packages>
