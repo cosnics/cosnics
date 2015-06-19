@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDis
  */
 class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisplayItem
 {
+    const DATA_DISPLAY_TYPE = 'data-display-type';
     const PROPERTY_VISIBLE = 'visible';
 
     static function get_additional_property_names()
@@ -53,7 +54,8 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
             $answerId = $this->getId();
         }
         
-        if ($this->get_ref_object()->get_display_type() == MultipleChoice :: DISPLAY_TYPE_TABLE  && $this->get_ref_object()->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+        if ($this->get_ref_object()->get_display_type() == MultipleChoice :: DISPLAY_TYPE_TABLE &&
+             $this->get_ref_object()->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
         {
             foreach ($this->get_ref_object()->get_options() as $option)
             {
@@ -66,6 +68,29 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
         }
         
         return $answer_ids;
+    }
+
+    function getDataAttributes()
+    {
+        $attributes = array();
+        $question = $this->get_ref_object();
+        if ($question->get_display_type() == MultipleChoice :: DISPLAY_TYPE_SELECT)
+        {
+            if ($question->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+            {
+                $attributes[self :: DATA_DISPLAY_TYPE] = 'mcspecial';
+            }
+            else
+            {
+                $attributes[self :: DATA_DISPLAY_TYPE] = 'mcnormal';
+            }
+        }
+        else
+        {
+            $attributes[self :: DATA_DISPLAY_TYPE] = 'mcnormal';
+        }
+        
+        return $attributes;
     }
 }
 ?>

@@ -44,17 +44,17 @@ abstract class ContentObjectPublicationListRenderer
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Types
-    const TYPE_LIST = 'list';
-    const TYPE_TABLE = 'table';
-    const TYPE_GALLERY = 'gallery_table';
-    const TYPE_SLIDESHOW = 'slideshow';
-    const TYPE_CALENDAR = 'calendar';
-    const TYPE_MONTH = 'month';
-    const TYPE_MINI_MONTH = 'mini_month_calendar';
-    const TYPE_WEEK = 'week';
-    const TYPE_YEAR = 'year';
-    const TYPE_DAY = 'day';
-    const TOOL_TYPE_ANNOUNCEMENT = 'announcement';
+    const TYPE_LIST = 'List';
+    const TYPE_TABLE = 'Table';
+    const TYPE_GALLERY = 'GalleryTable';
+    const TYPE_SLIDESHOW = 'Slideshow';
+    const TYPE_CALENDAR = 'Calendar';
+    const TYPE_MONTH = 'Month';
+    const TYPE_MINI_MONTH = 'Mini_month_calendar';
+    const TYPE_WEEK = 'Week';
+    const TYPE_YEAR = 'Year';
+    const TYPE_DAY = 'Day';
+    const TOOL_TYPE_ANNOUNCEMENT = 'Announcement';
 
     protected $tool_browser;
 

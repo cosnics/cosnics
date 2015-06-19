@@ -54,5 +54,10 @@ class ComplexRating extends ComplexContentObjectItem implements PageDisplayItem
         }
         return array($answerId);
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }
 ?>

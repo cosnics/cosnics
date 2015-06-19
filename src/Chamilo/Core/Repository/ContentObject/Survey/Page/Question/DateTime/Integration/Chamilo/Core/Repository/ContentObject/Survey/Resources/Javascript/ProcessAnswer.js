@@ -3,93 +3,65 @@
 	var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
 	function procesAnswer() {
-		
-		answerElement = $(this);
 
-		if ($(this).attr('checked')) {
-			deleteAnswer(answerElement);
-		} else {
-			saveAnswer(answerElement);
-		}
+		var selectElement = $(this);
+		var questionDiv = selectElement.parents('.question.DateTime');
+		var nodeId = questionDiv.data('node_id');
+		var complexQuestionId = questionDiv.data('complex_question_id');
+		saveAnswer(nodeId, complexQuestionId, selectElement);
 
-		procesVisibility(answerElement);
+		procesSurveyVisibility(nodeId);
 	}
 
-//	function procesVisibility(answerElement) {
-//
-//		var parameters = getParameters();
-//		parameters.node_id = answerElement.data('node_id');
-//		parameters.go = "GetVisibility";
-//		var respons = {};
-//		var respons = $.parseJSON(doAjaxPost(ajaxUri, parameters));
-//
-//		if (respons.properties.question_visibility != null) {
-//			$.each(respons.properties.question_visibility, function(node_id,
-//					visible) {
-//				if (visible) {
-//					if ($("div#" + node_id).attr("style")) {
-//						$("div#" + node_id).removeAttr("style");
-//					}
-//				} else {
-//
-//					if (!$("div#" + node_id).attr("style")) {
-//						$("div#" + node_id).hide();
-//						deleteAnswers(node_id);
-//					}
-//				}
-//			});
-//		}
-//	}
+	function saveAnswer(nodeId, complexQuestionId, selectElement) {
 
-	function saveAnswer($input, attribute) {
-		$input.attr('checked', 'checked');
-		var parameters = getParameters();
-		parameters.node_id = $input.data('node_id');
-		parameters.complex_question_id = $input.data('complex_question_id');
-		parameters.answer_id = $input.attr('name');
-		parameters.answer_value = $input.attr('value');
+		var parameters = getSurveyParameters();
+		parameters.node_id = nodeId;
+		parameters.complex_question_id = complexQuestionId;
+		var oldOptionElement = selectElement.children('option[selected]');
+		oldOptionElement.removeAttr('selected');
+		var optionElement = selectElement.find(":selected");
+		optionElement.attr('selected', 'selected');
+		var answers = getOtherSelectAnswers(selectElement);
+		
+		var answerId =selectElement.attr('name');
+		var key = getAnswerIdKey(answerId);
+		var answer = optionElement.attr('value');
+		answers[key] = answer;
+		
+		parameters.answer_id= getAnswerIdName(answerId);
+		parameters.answer_value = answers;
 		parameters.go = "SaveAnswer";
 		doAjaxPost(ajaxUri, parameters);
 	}
 
-	function deleteAnswer($input) {
-		$input.removeAttr('checked');
-		var answerId = $input.attr('name');
-		var value = $input.attr('value');
-		var parameters = getParameters();
-		parameters.answer_id = answerId;
-		parameters.answer_value = value;
-		parameters.go = "DeleteAnswer";
-		parameters.node_id = $input.data('node_id');
-		doAjaxPost(ajaxUri, parameters);
+
+	function getOtherSelectAnswers(selectElement) {
+		var answers = {};
+		selectElement.siblings('select').each(function() {
+			var answerId = $(this).attr('name');
+			var key = getAnswerIdKey(answerId);
+			var answer = $(this).find(":selected").attr('value');
+			answers[key] = answer
+
+		});
+		return answers;
 	}
 
-	function deleteAnswers(nodeId) {
-		var question = $("div#" + nodeId);
-		question.find("input").removeAttr('checked');
-		var parameters = getParameters();
-		parameters.go = "DeleteAnswer";
-		parameters.node_id = nodeId;
-		doAjaxPost(ajaxUri, parameters);
+	function getAnswerIdKey(answerId) {
+		var res = answerId.split("[");	
+		var res2 = res[1].split("]");
+		return res2[0];
 	}
 
-//	function getParameters() {
-//
-//		var parameters = {};
-//		var $params = $('input[type="hidden"]', window.parent.document);
-//		$params.each(function() {
-//			parameters[$(this).attr('name').replace('param_', '')] = $(this)
-//					.attr('value');
-//		});
-//
-//		parameters.application = 'Chamilo\\Core\\Repository\\ContentObject\\Survey\\Display';
-//		parameters.display_action = "Ajax";
-//		return parameters;
-//	}
-
+	function getAnswerIdName(answerId) {
+		var res = answerId.split("[");	
+		return res[0];
+	}
+	
 	$(document).ready(function() {
 
-//		$(document).on('change', '.question .matrix input', procesAnswer);
+		$(document).on('change', '.question.DateTime select', procesAnswer);
 
 	});
 

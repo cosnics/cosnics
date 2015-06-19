@@ -52,5 +52,10 @@ class ComplexDateTime extends ComplexContentObjectItem implements PageDisplayIte
         
         return array($answerId);
     }
+    
+    function getDataAttributes()
+    {
+        return null;
+    }
 }
 ?>

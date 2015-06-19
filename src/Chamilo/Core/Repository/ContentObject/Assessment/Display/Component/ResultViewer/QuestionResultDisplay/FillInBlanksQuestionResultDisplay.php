@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
-use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\ComplexFillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestionAnswer;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 
 /**
  * $Id: fill_in_blanks_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -104,8 +104,9 @@ class FillInBlanksQuestionResultDisplay extends QuestionResultDisplay
         $correct = $question->is_correct($index, $answer);
         $best_answer = $question->get_best_answer_for_question($index);
         $complex_content_object_question = $this->get_complex_content_object_question();
-        $feedback_options_type = $complex_content_object_question->get_feedback_options();
-        $all_feedback_options = $feedback_options_type == ComplexFillInBlanksQuestion :: FEEDBACK_OPTIONS_ALL;
+        
+        $feedback_options_type = $complex_content_object_question->get_show_answer_feedback();
+        $all_feedback_options = $feedback_options_type == Configuration :: ANSWER_FEEDBACK_TYPE_ALL;
         
         $is_first_option = true;
         

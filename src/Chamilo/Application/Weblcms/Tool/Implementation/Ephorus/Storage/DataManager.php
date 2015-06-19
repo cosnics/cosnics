@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'weblcms_ephorus';
+    const PREFIX = 'weblcms_ephorus_';
 
     /**
      * Retrieves a request by a given guid
