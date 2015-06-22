@@ -20,6 +20,8 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Hots
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestionAnswer;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestionOption;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -42,6 +44,7 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
         $this->fixAssessmentSelectQuestions();
         $this->fixHotspotQuestions();
         $this->fixOrderingQuestions();
+        $this->fixAssignmentAllowedTypes();
     }
 
     private function fixTemplates()
@@ -267,6 +270,30 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
             $existingQuestion->set_options($newOptions);
 
             DataManager :: update($existingQuestion);
+        }
+    }
+
+    private function fixAssignmentAllowedTypes()
+    {
+        $existingAssignments = DataManager :: retrieves(Assignment :: class_name());
+
+        while ($existingAssignment = $existingAssignments->next_result())
+        {
+            $oldAllowedTypes = $existingAssignment->get_allowed_types();
+            $oldAllowedTypes = explode(',', $oldAllowedTypes);
+
+            $newAllowedTypes = array();
+
+            foreach ($oldAllowedTypes as $oldAllowedType)
+            {
+                $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($oldAllowedType);
+                $newAllowedTypes[] = 'Chamilo\Core\Repository\ContentObject\\' . $packageName . '\Storage\DataClass\\' .
+                     $packageName;
+            }
+
+            $existingAssignment->set_allowed_types(implode(',', $newAllowedTypes));
+
+            DataManager :: update($existingAssignment);
         }
     }
 
