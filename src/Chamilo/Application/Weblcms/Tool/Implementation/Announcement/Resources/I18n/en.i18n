@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\announcement
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Announcement"
+TypeCategory = "Course Tools"
+InstallTypeName = "Announcement Tool"
+AnnouncementToolBrowserComponent = "Browse announcements"
+AnnouncementToolViewerComponent = "View announcement"
+AnnouncementToolPublisherComponent = "Publish announcement"
+AnnouncementToolUpdaterComponent = "Edit announcement"
+AnnouncementToolIntroductionPublisherComponent = "Publish introduction"
+TypeNameSingle = "Announcement"
+SentByEmail = "Sent by email"
