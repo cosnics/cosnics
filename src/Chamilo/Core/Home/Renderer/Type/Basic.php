@@ -109,7 +109,7 @@ class Basic extends Renderer
                  '</a>';
 
             $isUser = $this->get_user() instanceof User;
-            $homeAllowed = ($user_home_allowed || ($this->get_user()->is_platform_admin()) && $general_mode);
+            $homeAllowed = $isUser && ($user_home_allowed || ($this->get_user()->is_platform_admin()) && $general_mode);
             $isAnonymous = $isUser && $this->get_user()->is_anonymous_user();
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
