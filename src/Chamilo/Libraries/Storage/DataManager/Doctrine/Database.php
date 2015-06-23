@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -25,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -798,7 +798,17 @@ class Database
     public function count($class, $parameters)
     {
         $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->addSelect('COUNT(1)');
+
+        if ($parameters->get_property() instanceof ConditionVariable)
+        {
+            $property = ConditionVariableTranslator :: render($parameters->get_property());
+        }
+        else
+        {
+            $property = '1';
+        }
+
+        $query_builder->addSelect('COUNT(' . $property . ')');
         $query_builder->from($this->prepare_table_name($class), $this->get_alias($this->prepare_table_name($class)));
 
         $query_builder = $this->process_parameters($query_builder, $class, $parameters);
@@ -948,10 +958,9 @@ class Database
     {
         $query_builder = $this->connection->createQueryBuilder();
 
-        $hasJoins = $parameters->get_joins() instanceof Joins && $parameters->get_joins()->count() > 0;
         $select = $this->get_alias($this->prepare_table_name($class)) . '.*';
 
-        if ($hasJoins)
+        if ($parameters->get_distinct())
         {
             $select = 'DISTINCT ' . $select;
         }
@@ -1233,36 +1242,6 @@ class Database
                 $distinct_elements[] = $record[0];
             }
             return $distinct_elements;
-        }
-        else
-        {
-            $this->error_handling($statement);
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters $parameters
-     * @return integer
-     */
-    public function count_distinct($class, DataClassCountDistinctParameters $parameters)
-    {
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->addSelect(
-            'COUNT(DISTINCT(' . self :: escape_column_name(
-                $parameters->get_property(),
-                $this->get_alias($class :: get_table_name())) . '))');
-        $query_builder->from($class :: get_table_name(), $this->get_alias($class :: get_table_name()));
-
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-        $statement = $this->get_connection()->query($query_builder->getSQL());
-
-        if (! $statement instanceof \PDOException)
-        {
-            $record = $statement->fetch(\PDO :: FETCH_NUM);
-            return (int) $record[0];
         }
         else
         {

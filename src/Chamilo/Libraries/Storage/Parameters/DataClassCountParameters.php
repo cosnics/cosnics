@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Parameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Exception;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *
@@ -16,6 +17,45 @@ class DataClassCountParameters extends DataClassParameters
 {
 
     /**
+     * The property of the DataClass object to be used as a parameter
+     *
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    private $property;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     */
+    public function __construct($condition = null, Joins $joins = null, $property = array())
+    {
+        parent :: __construct($condition, $joins);
+        $this->property = $property;
+    }
+
+    /**
+     * Get the property of the DataClass object to be used as a parameter
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function get_property()
+    {
+        return $this->property;
+    }
+
+    /**
+     * Set the property of the DataClass object to be used as a parameter
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     */
+    public function set_property($property)
+    {
+        $this->property = $property;
+    }
+
+    /**
      *
      * @param string[] $hash_parts
      * @return string
@@ -25,6 +65,8 @@ class DataClassCountParameters extends DataClassParameters
         if (! $this->get_hash())
         {
             $hash_parts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->hash() : null);
+            $hash_parts[] = ($this->get_property() instanceof ConditionVariable ? $this->get_property()->hash() : null);
+
             $this->set_hash(parent :: hash($hash_parts));
         }
 

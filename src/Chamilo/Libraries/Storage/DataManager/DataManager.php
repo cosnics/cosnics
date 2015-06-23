@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Exception\NoRecordException;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -651,27 +650,6 @@ class DataManager
                 self :: get_instance()->count_grouped($class, $parameters));
         }
         return DataClassCountGroupedCache :: get($class, $parameters);
-    }
-
-    /**
-     * Count the number of distinct values of a specific property of the DataClass in the storage layer
-     *
-     * @param $class string
-     * @param $parameters \libraries\storage\DataClassCountDistinctParameters
-     * @return int
-     */
-    public static function count_distinct($class, $parameters)
-    {
-        if (! $parameters instanceof DataClassCountDistinctParameters)
-        {
-            $parameters = DataClassCountDistinctParameters :: generate($parameters);
-        }
-
-        if (! DataClassCountCache :: exists($class, $parameters))
-        {
-            DataClassCountCache :: add($class, $parameters, self :: get_instance()->count_distinct($class, $parameters));
-        }
-        return DataClassCountCache :: get($class, $parameters);
     }
 
     /**

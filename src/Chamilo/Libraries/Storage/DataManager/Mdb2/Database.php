@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\ResultSet\DataClassResultSet;
 use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -1103,38 +1102,6 @@ class Database
     public function distinct($class, $property, $condition = null)
     {
         return $this->retrieve_distinct($class :: get_table_name(), $property, $condition);
-    }
-
-    /**
-     *
-     * @param $class string
-     * @param $parameters \libraries\storage\DataClassCountDistinctParameters
-     * @return int
-     */
-    public function count_distinct($class, DataClassCountDistinctParameters $parameters)
-    {
-        $table_name = $class :: get_table_name();
-        $column_name = $parameters->get_property();
-        $condition = $parameters->get_condition();
-
-        $query = 'SELECT COUNT(DISTINCT(' . $column_name . ')) FROM ' . $table_name . ' AS ' .
-             $this->get_alias($table_name);
-
-        if (isset($condition))
-        {
-            $query .= ' WHERE ' . ConditionTranslator :: render($condition, $this->get_alias($table_name));
-        }
-
-        $res = $this->query($query);
-        if (MDB2 :: isError($res))
-        {
-            $this->mdb2_error_handling($res);
-            return false;
-        }
-
-        $record = $res->fetchRow(MDB2_FETCHMODE_ORDERED);
-        $res->free();
-        return $record[0];
     }
 
     /**

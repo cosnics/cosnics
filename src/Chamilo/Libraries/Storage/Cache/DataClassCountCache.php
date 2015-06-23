@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Cache;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Exception;
 
@@ -18,15 +17,14 @@ class DataClassCountCache extends DataClassCache
     /**
      *
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters|\Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      * @param integer $count
      * @throws Exception
      * @return boolean
      */
     public static function add($class, $parameters, $count)
     {
-        if (! $parameters instanceof DataClassCountParameters &&
-             ! $parameters instanceof DataClassCountDistinctParameters)
+        if (! $parameters instanceof DataClassCountParameters)
         {
             throw new Exception('Illegal parameters passed to the DataClassCountCache');
         }

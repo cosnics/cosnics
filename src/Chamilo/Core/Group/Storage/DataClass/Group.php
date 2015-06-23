@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -13,6 +12,8 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * $Id: group.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -357,7 +358,12 @@ class Group extends NestedSet
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID),
                     new StaticConditionVariable($this->get_id()));
-                $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID);
+                $parameters = new DataClassCountParameters(
+                    $condition,
+                    array(),
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable :: DISTINCT,
+                        new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_USER_ID)));
             }
             elseif ($include_subgroups && $recursive_subgroups)
             {
@@ -379,7 +385,12 @@ class Group extends NestedSet
                     new StaticConditionVariable($this->get_right_value()));
                 $condition = new AndCondition($conditions);
 
-                $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID, $joins);
+                $parameters = new DataClassCountParameters(
+                    $condition,
+                    $joins,
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable :: DISTINCT,
+                        new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_USER_ID)));
             }
             else
             {
@@ -399,10 +410,15 @@ class Group extends NestedSet
                     new StaticConditionVariable($this->get_id()));
                 $condition = new OrCondition($conditions);
 
-                $parameters = new DataClassCountDistinctParameters($condition, GroupReluser :: PROPERTY_USER_ID, $joins);
+                $parameters = new DataClassCountParameters(
+                    $condition,
+                    $joins,
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable :: DISTINCT,
+                        new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_USER_ID)));
             }
 
-            $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager :: count_distinct(
+            $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager :: count(
                 GroupRelUser :: class_name(),
                 $parameters);
         }

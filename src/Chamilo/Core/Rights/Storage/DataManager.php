@@ -4,7 +4,6 @@ namespace Chamilo\Core\Rights\Storage;
 use Chamilo\Core\Rights\RightsLocationEntityRight;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -17,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -170,8 +171,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins(array($join));
 
-        $parameters = new DataClassCountDistinctParameters($condition, $context_location :: PROPERTY_IDENTIFIER, $joins);
-        return $context_dm :: count_distinct($context_location :: class_name(), $parameters);
+        $parameters = new DataClassCountParameters(
+            $condition,
+            $joins,
+            new FunctionConditionVariable(
+                FunctionConditionVariable :: DISTINCT,
+                new PropertyConditionVariable(
+                    $context_location :: class_name(),
+                    $context_location :: PROPERTY_IDENTIFIER)));
+
+        return $context_dm :: count($context_location :: class_name(), $parameters);
     }
 
     /*
