@@ -856,7 +856,6 @@ class ContentObject extends CompositeDataClass
                 if ($version)
                 { // id changes in create new version, so location needs to be fetched
                   // now
-                    $original_location = $content_object->get_rights_location();
                     $content_object->set_current(ContentObject :: CURRENT_MULTIPLE);
                 }
                 else
@@ -1070,21 +1069,6 @@ class ContentObject extends CompositeDataClass
         }
 
         return parent :: delete();
-    }
-
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     */
-    protected function get_dependencies()
-    {
-        return array(
-            ContentObjectRelTag :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectRelTag :: class_name(),
-                    ContentObjectRelTag :: PROPERTY_CONTENT_OBJECT_ID),
-                new StaticConditionVariable($this->get_id())));
     }
 
     public function delete_links()

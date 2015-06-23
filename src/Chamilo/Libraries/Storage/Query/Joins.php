@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Storage\Query;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Joins
+class Joins implements \Countable
 {
 
     /**
@@ -19,7 +19,7 @@ class Joins
 
     /**
      * Constructor
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Join[] $joins
      */
     public function __construct($joins = array())
@@ -29,7 +29,7 @@ class Joins
 
     /**
      * Gets the joins
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Join[]
      */
     public function get()
@@ -53,14 +53,23 @@ class Joins
     public function hash()
     {
         $hashes = array();
-        
+
         foreach ($this->joins as $join)
         {
             $hashes[] = $join->hash();
         }
-        
+
         sort($hashes);
-        
+
         return md5(serialize($hashes));
+    }
+
+    /**
+     *
+     * @see Countable::count()
+     */
+    public function count()
+    {
+        return count($this->joins);
     }
 }

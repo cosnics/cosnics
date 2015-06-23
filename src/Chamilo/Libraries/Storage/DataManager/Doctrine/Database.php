@@ -927,7 +927,7 @@ class Database
      */
     public function get_records_result($sql, $class, $parameters)
     {
-      try
+        try
         {
             return $this->get_connection()->query($sql);
         }
@@ -948,7 +948,15 @@ class Database
     {
         $query_builder = $this->connection->createQueryBuilder();
 
-        $query_builder->addSelect($this->get_alias($this->prepare_table_name($class)) . '.*');
+        $hasJoins = $parameters->get_joins() instanceof Joins && $parameters->get_joins()->count() > 0;
+        $select = $this->get_alias($this->prepare_table_name($class)) . '.*';
+
+        if ($hasJoins)
+        {
+            $select = 'DISTINCT ' . $select;
+        }
+
+        $query_builder->addSelect($select);
 
         $this->process_composite_data_class_joins($query_builder, $class, $parameters);
 
@@ -1355,15 +1363,13 @@ class Database
         $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object :: get_table_name() . ' WHERE ' .
              $object :: PROPERTY_ID . '=' . $this->quote($object->get_id());
 
-        
-        
         $statement = $this->get_connection()->query($query);
 
         if (! $statement instanceof \PDOException)
         {
             $distinct_elements = array();
             $record = $statement->fetch(\PDO :: FETCH_ASSOC);
-            
+
             $additional_properties = array();
 
             if (is_array($record))
