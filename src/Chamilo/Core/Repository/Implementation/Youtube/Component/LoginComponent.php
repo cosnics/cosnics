@@ -13,6 +13,7 @@ class LoginComponent extends Manager
     {
         if (! Setting :: get('session_token', $this->get_external_repository()->get_id()))
         {
+
             if ($this->get_external_repository_manager_connector()->login())
             {
                 $parameters = $this->get_parameters();
@@ -24,6 +25,7 @@ class LoginComponent extends Manager
             }
             else
             {
+
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 $this->redirect(
@@ -34,6 +36,7 @@ class LoginComponent extends Manager
         }
         else
         {
+
             $parameters = $this->get_parameters();
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
             $this->redirect(
