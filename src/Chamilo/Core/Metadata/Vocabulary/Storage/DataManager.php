@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
@@ -40,9 +40,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     ComparisonCondition :: EQUAL,
                     new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID))));
 
-        return self :: count_distinct(
+        return self :: count(
             User :: class_name(),
-            new DataClassCountDistinctParameters($condition, User :: PROPERTY_ID, $joins));
+            new DataClassCountParameters(
+                $condition,
+                $joins,
+                new FunctionConditionVariable(
+                    FunctionConditionVariable :: DISTINCT,
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID))));
     }
 
     /**

@@ -31,6 +31,12 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
     private $offset;
 
     /**
+     *
+     * @var boolean
+     */
+    private $distinct;
+
+    /**
      * Constructor
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
@@ -39,12 +45,13 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
-    public function __construct($condition = null, $count = null, $offset = null, $order_by = array(), Joins $joins = null)
+    public function __construct($condition = null, $count = null, $offset = null, $order_by = array(), Joins $joins = null, $distinct = false)
     {
         parent :: __construct($condition, $order_by, $joins);
 
         $this->count = $count;
         $this->offset = $offset;
+        $this->distinct = $distinct;
     }
 
     /**
@@ -89,6 +96,24 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
 
     /**
      *
+     * @return boolean
+     */
+    public function get_distinct()
+    {
+        return $this->distinct;
+    }
+
+    /**
+     *
+     * @param boolean $distinct
+     */
+    public function set_distinct($distinct)
+    {
+        $this->distinct = $distinct;
+    }
+
+    /**
+     *
      * @param string[] $hash_parts
      * @return string
      */
@@ -98,6 +123,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
         {
             $hash_parts[] = $this->get_count();
             $hash_parts[] = $this->get_offset();
+            $hash_parts[] = $this->get_distinct();
 
             $this->set_hash(parent :: hash($hash_parts));
         }

@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserF
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 
 /**
  *
@@ -231,7 +232,8 @@ class WorkspaceRepository
                 $limit,
                 $offset,
                 $orderProperty,
-                $this->getWorkspaceFavouritesByUserJoins()));
+                $this->getWorkspaceFavouritesByUserJoins(),
+                true));
     }
 
     /**
@@ -246,7 +248,10 @@ class WorkspaceRepository
             Workspace :: class_name(),
             new DataClassCountParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService :: RIGHT_VIEW),
-                $this->getWorkspaceFavouritesByUserJoins()));
+                $this->getWorkspaceFavouritesByUserJoins(),
+                new FunctionConditionVariable(
+                    FunctionConditionVariable :: DISTINCT,
+                    new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_ID))));
     }
 
     /**
