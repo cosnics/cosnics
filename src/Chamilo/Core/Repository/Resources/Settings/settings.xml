@@ -28,6 +28,11 @@
 			</setting>
 		</category>
 		<category name="quota">
+			<setting name="enable_quota" field="checkbox" default="1">
+				<options type="static">
+					<option name="enable_quota" value="1" />
+				</options>
+			</setting>
 			<setting name="allow_upgrade" field="checkbox" default="0">
 				<options type="static">
 					<option name="allow_upgrade" value="1" />

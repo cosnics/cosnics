@@ -39,7 +39,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                         \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                         (int) $this->get_parameters()->get_user()));
 
-                if ($calculator->get_available_user_disk_quota() < $file->get_size())
+                if (! $calculator->canUpload($file->get_size()))
                 {
                     $this->add_message(Translation :: get('InsufficientDiskQuota'), self :: TYPE_ERROR);
                     return array();
@@ -56,7 +56,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                             (int) $this->get_parameters()->get_user()));
 
-                    if ($calculator->get_available_user_disk_quota() > $file->get_size())
+                    if ($calculator->canUpload($file->get_size()))
                     {
                         $temp_path = Path :: getInstance()->getTemporaryPath() . 'repository/import/file/' .
                              $file->get_name_extension();

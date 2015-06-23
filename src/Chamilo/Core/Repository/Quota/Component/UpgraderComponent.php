@@ -11,27 +11,27 @@ class UpgraderComponent extends Manager
 
     public function run()
     {
-        $quota_step = (int) PlatformSetting :: get('step', __NAMESPACE__);
-        
+        $quota_step = (int) PlatformSetting :: get('step', 'Chamilo\Core\Repository');
+
         $calculator = new Calculator($this->get_user());
-        
-        if ($calculator->upgrade_allowed())
+
+        if ($calculator->upgradeAllowed())
         {
             $user = $this->get_user();
             $user->set_disk_quota($user->get_disk_quota() + $quota_step);
-            
+
             if ($user->update())
             {
                 $this->redirect(
-                    Translation :: get('QuotaUpgraded'), 
-                    false, 
+                    Translation :: get('QuotaUpgraded'),
+                    false,
                     array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
             }
         }
-        
+
         $this->redirect(
-            Translation :: get('QuotaNotUpgraded'), 
-            true, 
+            Translation :: get('QuotaNotUpgraded'),
+            true,
             array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
     }
 }

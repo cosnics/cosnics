@@ -21,7 +21,7 @@ class CreatorComponent extends Manager
     public function run()
     {
         $this->calculator = new Calculator($this->get_user());
-        if (! $this->calculator->request_allowed())
+        if (! $this->calculator->requestAllowed())
         {
             throw new NotAllowedException();
         }

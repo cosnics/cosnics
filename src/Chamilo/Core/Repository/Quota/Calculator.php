@@ -20,14 +20,21 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Configuration\Configuration;
 
 /**
- * This class provides some functionality to manage user disk quota
  *
- * @package repository.quota
+ * @package Chamilo\Core\Repository\Quota
  * @author Bart Mollet
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
- * @author Hans De Bisschop
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Calculator
 {
@@ -38,91 +45,135 @@ class Calculator
     const POLICY_LOWEST = 4;
 
     /**
-     * The user
      *
-     * @var \core\user\User
+     * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $user;
 
     /**
-     * Create a new Calculator
      *
-     * @param $user \core\user\User
+     * @var integer
+     */
+    private $usedUserDiskQuota;
+
+    /**
+     *
+     * @var integer
+     */
+    private $maximumUserDiskQuota;
+
+    /**
+     *
+     * @var integer
+     */
+    private $usedAggregatedUserDiskQuota;
+
+    /**
+     *
+     * @var integer
+     */
+    private $usedDatabaseQuota;
+
+    /**
+     *
+     * @var integer
+     */
+    private $maximumDatabaseQuota;
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $reset
      */
     public function __construct(User $user, $reset = false)
     {
         $this->user = $user;
+
         if ($reset)
         {
-            $this->reset_cache();
+            $this->resetCache();
         }
     }
 
     /**
      * USER DISK QUOTA
      */
-    public function get_used_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getUsedUserDiskQuota()
     {
-        if (is_null($this->used_user_disk_quota))
+        if (is_null($this->usedUserDiskQuota))
         {
-            $this->used_user_disk_quota = \Chamilo\Core\Repository\Storage\DataManager :: get_used_disk_space(
-                $this->user->get_id());
+            $this->usedUserDiskQuota = \Chamilo\Core\Repository\Storage\DataManager :: get_used_disk_space(
+                $this->user->getId());
         }
-        return $this->used_user_disk_quota;
+
+        return $this->usedUserDiskQuota;
     }
 
-    public function get_maximum_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumUserDiskQuota()
     {
-        if (is_null($this->maximum_user_disk_quota))
+        if (is_null($this->maximumUserDiskQuota))
         {
             $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
             $fallback = PlatformSetting :: get('quota_fallback', __NAMESPACE__);
-            $fallback_user = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
+            $fallbackUser = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
 
             switch ($policy)
             {
                 case self :: POLICY_USER :
                     if ($this->user->get_disk_quota() || ! $fallback)
                     {
-                        $this->maximum_user_disk_quota = $this->user->get_disk_quota();
+                        $this->maximumUserDiskQuota = $this->user->get_disk_quota();
                     }
                     else
                     {
-                        $this->maximum_user_disk_quota = ($fallback_user == 0 ? $this->get_group_highest() : $this->get_group_lowest());
+                        $this->maximumUserDiskQuota = ($fallbackUser == 0 ? $this->getGroupHighest() : $this->getGroupLowest());
                     }
                     break;
                 case self :: POLICY_GROUP_HIGHEST :
-                    $group = $this->get_group_highest();
-                    $this->maximum_user_disk_quota = $group || ! $fallback ? $group : $this->user->get_disk_quota();
+                    $group = $this->getGroupHighest();
+                    $this->maximumUserDiskQuota = $group || ! $fallback ? $group : $this->user->get_disk_quota();
                     break;
                 case self :: POLICY_GROUP_LOWEST :
-                    $group = $this->get_group_lowest();
-                    $this->maximum_user_disk_quota = $group || ! $fallback ? $group : $this->user->get_disk_quota();
+                    $group = $this->getGroupLowest();
+                    $this->maximumUserDiskQuota = $group || ! $fallback ? $group : $this->user->get_disk_quota();
                     break;
                 case self :: POLICY_HIGHEST :
-                    $group = $this->get_group_highest();
-                    $this->maximum_user_disk_quota = ($group > $this->user->get_disk_quota() ? $group : $this->user->get_disk_quota());
+                    $group = $this->getGroupHighest();
+                    $this->maximumUserDiskQuota = ($group > $this->user->get_disk_quota() ? $group : $this->user->get_disk_quota());
                     break;
                 case self :: POLICY_LOWEST :
-                    $group = $this->get_group_lowest();
-                    $this->maximum_user_disk_quota = ($group > $this->user->get_disk_quota() || ! $group ? $this->user->get_disk_quota() : $group);
+                    $group = $this->getGroupLowest();
+                    $this->maximumUserDiskQuota = ($group > $this->user->get_disk_quota() || ! $group ? $this->user->get_disk_quota() : $group);
                     break;
                 default :
-                    $this->maximum_user_disk_quota = $this->user->get_disk_quota();
+                    $this->maximumUserDiskQuota = $this->user->get_disk_quota();
                     break;
             }
         }
-        return $this->maximum_user_disk_quota;
+
+        return $this->maximumUserDiskQuota;
     }
 
-    public function get_group_lowest()
+    /**
+     *
+     * @return integer
+     */
+    public function getGroupLowest()
     {
-        $user_group_ids = $this->user->get_groups(true);
+        $userGroupIds = $this->user->get_groups(true);
 
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
-            $user_group_ids);
+            $userGroupIds);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_DISK_QUOTA),
             InequalityCondition :: GREATER_THAN,
@@ -141,14 +192,18 @@ class Calculator
         return $group instanceof Group ? $group->get_disk_quota() : 0;
     }
 
-    public function get_group_highest()
+    /**
+     *
+     * @return integer
+     */
+    public function getGroupHighest()
     {
-        $user_group_ids = $this->user->get_groups(true);
+        $userGroupIds = $this->user->get_groups(true);
 
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
-            $user_group_ids);
+            $userGroupIds);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_DISK_QUOTA),
             InequalityCondition :: GREATER_THAN,
@@ -164,131 +219,187 @@ class Calculator
         return $group instanceof Group ? $group->get_disk_quota() : 0;
     }
 
-    public function get_available_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getAvailableUserDiskQuota()
     {
-        $quota = $this->get_maximum_user_disk_quota() - $this->get_used_user_disk_quota();
-        if ($quota > 0)
-        {
-            return $quota;
-        }
-        else
-        {
-            return 0;
-        }
+        $quota = $this->getMaximumUserDiskQuota() - $this->getUsedUserDiskQuota();
+
+        return $quota > 0 ? $quota : 0;
     }
 
-    public function get_user_disk_quota_percentage()
+    /**
+     *
+     * @param integer $requestedStorageSize
+     * @return boolean
+     */
+    public function canUpload($requestedStorageSize)
     {
-        return 100 * $this->get_used_user_disk_quota() / $this->get_maximum_user_disk_quota();
+        if (! $this->isEnabled())
+        {
+            return true;
+        }
+
+        return $this->getAvailableUserDiskQuota() > $requestedStorageSize;
+    }
+
+    public function isEnabled()
+    {
+        return (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getUserDiskQuotaPercentage()
+    {
+        return 100 * $this->getUsedUserDiskQuota() / $this->getMaximumUserDiskQuota();
     }
 
     /**
      * AGGREGATED USER DISK QUOTA
      */
-    public function get_used_aggregated_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getUsedAggregatedUserDiskQuota()
     {
-        if (is_null($this->used_aggregated_user_disk_quota))
+        if (is_null($this->usedAggregatedUserDiskQuota))
         {
-            $this->used_aggregated_user_disk_quota = \Chamilo\Core\Repository\Storage\DataManager :: get_used_disk_space();
+            $this->usedAggregatedUserDiskQuota = \Chamilo\Core\Repository\Storage\DataManager :: get_used_disk_space();
         }
-        return $this->used_aggregated_user_disk_quota;
+
+        return $this->usedAggregatedUserDiskQuota;
     }
 
-    public function get_maximum_aggregated_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumAggregatedUserDiskQuota()
     {
-        if (is_null($this->maximum_aggregated_user_disk_quota))
+        if (is_null($this->maximumAggregatedUserDiskQuota))
         {
-            $this->maximum_aggregated_user_disk_quota = $this->get_total_user_disk_quota();
+            $this->maximumAggregatedUserDiskQuota = $this->getTotalUserDiskQuota();
         }
-        return $this->maximum_aggregated_user_disk_quota;
+
+        return $this->maximumAggregatedUserDiskQuota;
     }
 
-    public function get_available_aggregated_user_disk_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getAvailableAggregatedUserDiskQuota()
     {
-        $quota = $this->get_maximum_aggregated_user_disk_quota() - $this->get_used_aggregated_user_disk_quota();
-        if ($quota > 0)
-        {
-            return $quota;
-        }
-        else
-        {
-            return 0;
-        }
+        $quota = $this->getMaximumAggregatedUserDiskQuota() - $this->getUsedAggregatedUserDiskQuota();
+
+        return $quota > 0 ? $quota : 0;
     }
 
-    public function get_aggregated_user_disk_quota_percentage()
+    /**
+     *
+     * @return integer
+     */
+    public function getAggregatedUserDiskQuotaPercentage()
     {
-        return 100 * $this->get_used_aggregated_user_disk_quota() / $this->get_maximum_aggregated_user_disk_quota();
+        return 100 * $this->getUsedAggregatedUserDiskQuota() / $this->getMaximumAggregatedUserDiskQuota();
     }
 
     /**
      * RESERVED DISK SPACE
      */
-    public function get_used_reserved_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getUsedReservedDiskSpace()
     {
-        return $this->get_maximum_aggregated_user_disk_quota();
+        return $this->getMaximumAggregatedUserDiskQuota();
     }
 
-    public function get_maximum_reserved_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumReservedDiskSpace()
     {
         return disk_total_space(Path :: getInstance()->getStoragePath());
     }
 
-    public function get_available_reserved_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getAvailableReservedDiskSpace()
     {
-        $quota = $this->get_maximum_reserved_disk_space() - $this->get_used_reserved_disk_space();
-        if ($quota > 0)
-        {
-            return $quota;
-        }
-        else
-        {
-            return 0;
-        }
+        $quota = $this->getMaximumReservedDiskSpace() - $this->getUsedReservedDiskSpace();
+
+        return $quota > 0 ? $quota : 0;
     }
 
-    public function get_reserved_disk_space_percentage()
+    /**
+     *
+     * @return integer
+     */
+    public function getReservedDiskSpacePercentage()
     {
-        return 100 * $this->get_used_reserved_disk_space() / $this->get_maximum_reserved_disk_space();
+        return 100 * $this->getUsedReservedDiskSpace() / $this->getMaximumReservedDiskSpace();
     }
 
     /**
      * ALLOCATED DISK SPACE
      */
-    public function get_used_allocated_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getUsedAllocatedDiskSpace()
     {
-        return $this->get_used_aggregated_user_disk_quota();
+        return $this->getUsedAggregatedUserDiskQuota();
     }
 
-    public function get_maximum_allocated_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumAllocatedDiskSpace()
     {
         return disk_total_space(Path :: getInstance()->getStoragePath());
     }
 
-    public function get_available_allocated_disk_space()
+    /**
+     *
+     * @return integer
+     */
+    public function getAvailableAllocatedDiskSpace()
     {
-        $quota = $this->get_maximum_allocated_disk_space() - $this->get_used_allocated_disk_space();
-        if ($quota > 0)
-        {
-            return $quota;
-        }
-        else
-        {
-            return 0;
-        }
+        $quota = $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
     }
 
-    public function get_allocated_disk_space_percentage()
+    /**
+     *
+     * @return integer
+     */
+    public function getAllocatedDiskSpacePercentage()
     {
-        return 100 * $this->get_used_allocated_disk_space() / $this->get_maximum_allocated_disk_space();
+        return 100 * $this->getUsedAllocatedDiskSpace() / $this->getMaximumAllocatedDiskSpace();
     }
 
     /**
      * DATABASE SPACE
      */
-    public function get_used_database_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getUsedDatabaseQuota()
     {
-        if (is_null($this->used_database_quota))
+        if (is_null($this->usedDatabaseQuota))
         {
             $condition = new AndCondition(
                 new EqualityCondition(
@@ -298,72 +409,88 @@ class Calculator
                     new InCondition(
                         new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
                         \Chamilo\Core\Repository\Storage\DataManager :: get_active_helper_types())));
-            $this->used_database_quota = \Chamilo\Core\Repository\Storage\DataManager :: count_active_content_objects(
+
+            $this->usedDatabaseQuota = \Chamilo\Core\Repository\Storage\DataManager :: count_active_content_objects(
                 ContentObject :: class_name(),
                 $condition);
         }
-        return $this->used_database_quota;
+
+        return $this->usedDatabaseQuota;
     }
 
-    public function get_maximum_database_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumDatabaseQuota()
     {
-        if (is_null($this->maximum_database_quota))
+        if (is_null($this->maximumDatabaseQuota))
         {
-            $this->maximum_database_quota = $this->user->get_database_quota();
+            $this->maximumDatabaseQuota = $this->user->get_database_quota();
         }
-        return $this->maximum_database_quota;
+        return $this->maximumDatabaseQuota;
     }
 
-    public function get_available_database_quota()
+    /**
+     *
+     * @return integer
+     */
+    public function getAvailableDatabaseQuota()
     {
-        $quota = $this->get_maximum_database_quota() - $this->get_used_database_quota();
-        if ($quota > 0)
+        $quota = $this->getMaximumDatabaseQuota() - $this->getUsedDatabaseQuota();
+
+        return $quota > 0 ? $quota : 0;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getUserDatabasePercentage()
+    {
+        return 100 * $this->getUsedDatabaseQuota() / $this->getMaximumDatabaseQuota();
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function upgradeAllowed()
+    {
+        if (! $this->isEnabled())
         {
-            return $quota;
+            return false;
         }
-        else
-        {
-            return 0;
-        }
-    }
 
-    public function get_user_database_percentage()
-    {
-        return 100 * $this->get_used_database_quota() / $this->get_maximum_database_quota();
-    }
+        $quotaStep = (int) PlatformSetting :: get('step', __NAMESPACE__);
+        $allowUpgrade = (boolean) PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
+        $maximumUserDiskSpace = (int) PlatformSetting :: get('maximum_user', __NAMESPACE__);
 
-    public function upgrade_allowed()
-    {
-        $quota_step = (int) PlatformSetting :: get('step', __NAMESPACE__);
-        $allow_upgrade = (boolean) PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
-        $maximum_user_disk_space = (int) PlatformSetting :: get('maximum_user', __NAMESPACE__);
-        $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
-
-        if (! $this->uses_user_disk_quota())
+        if (! $this->usesUserDiskQuota())
         {
             return false;
         }
 
         if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed() &&
-             $this->get_available_allocated_disk_space() > $quota_step)
+             $this->getAvailableAllocatedDiskSpace() > $quotaStep)
         {
             return true;
         }
 
-        if ($allow_upgrade)
+        if ($allowUpgrade)
         {
-            if ($maximum_user_disk_space == 0)
+            if ($maximumUserDiskSpace == 0)
             {
-                if ($this->get_available_allocated_disk_space() > $quota_step)
+                if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
                 {
                     return true;
                 }
             }
             else
             {
-                if ($this->user->get_disk_quota() < $maximum_user_disk_space)
+                if ($this->user->get_disk_quota() < $maximumUserDiskSpace)
                 {
-                    if ($this->get_available_allocated_disk_space() > $quota_step)
+                    if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
                     {
                         return true;
                     }
@@ -374,26 +501,34 @@ class Calculator
         return false;
     }
 
-    public function request_allowed()
+    /**
+     *
+     * @return boolean
+     */
+    public function requestAllowed()
     {
-        $quota_step = (int) PlatformSetting :: get('step', __NAMESPACE__);
-        $allow_request = PlatformSetting :: get('allow_request', __NAMESPACE__);
-        $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
+        if (! $this->isEnabled())
+        {
+            return false;
+        }
 
-        if (! $this->uses_user_disk_quota())
+        $quotaStep = (int) PlatformSetting :: get('step', __NAMESPACE__);
+        $allowRequest = PlatformSetting :: get('allow_request', __NAMESPACE__);
+
+        if (! $this->usesUserDiskQuota())
         {
             return false;
         }
 
         if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed() &&
-             $this->get_available_allocated_disk_space() > $quota_step)
+             $this->getAvailableAllocatedDiskSpace() > $quotaStep)
         {
             return true;
         }
 
-        if ($allow_request)
+        if ($allowRequest)
         {
-            if ($this->get_available_allocated_disk_space() > $quota_step)
+            if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
             {
                 return true;
             }
@@ -402,31 +537,51 @@ class Calculator
         return false;
     }
 
-    public function uses_user_disk_quota()
+    /**
+     *
+     * @return boolean
+     */
+    public function usesUserDiskQuota()
     {
         $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
         $fallback = PlatformSetting :: get('quota_fallback', __NAMESPACE__);
-        $fallback_user = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
+        $fallbackUser = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
 
         switch ($policy)
         {
             case self :: POLICY_USER :
-                return ($this->user->get_disk_quota() || ! $fallback ? true : false);
+                if ($this->user->get_disk_quota() || ! $fallback)
+                {
+                    return true;
+                }
+                else
+                {
+                    if ($fallbackUser == 0)
+                    {
+                        $group = $this->getGroupHighest();
+                        return ($group > $this->user->get_disk_quota() ? false : true);
+                    }
+                    else
+                    {
+                        $group = $this->getGroupLowest();
+                        return $group || ! $fallback ? false : true;
+                    }
+                }
                 break;
             case self :: POLICY_GROUP_HIGHEST :
-                $group = $this->get_group_highest();
+                $group = $this->getGroupHighest();
                 return $group || ! $fallback ? false : true;
                 break;
             case self :: POLICY_GROUP_LOWEST :
-                $group = $this->get_group_lowest();
+                $group = $this->getGroupLowest();
                 return $group || ! $fallback ? false : true;
                 break;
             case self :: POLICY_HIGHEST :
-                $group = $this->get_group_highest();
+                $group = $this->getGroupHighest();
                 return ($group > $this->user->get_disk_quota() ? false : true);
                 break;
             case self :: POLICY_LOWEST :
-                $group = $this->get_group_lowest();
+                $group = $this->getGroupLowest();
                 return ($group > $this->user->get_disk_quota() || ! $group ? true : false);
                 break;
             default :
@@ -442,7 +597,7 @@ class Calculator
      * @param $status string A status message which will be displayed below the bar.
      * @return string HTML representation of the requested bar.
      */
-    public static function get_bar($percent, $status)
+    public static function getBar($percent, $status)
     {
         $html = array();
 
@@ -470,6 +625,7 @@ class Calculator
             {
                 $class = '';
             }
+
             $html[] = '<div class="' . $class . '"></div>';
         }
 
@@ -480,13 +636,13 @@ class Calculator
         return implode(PHP_EOL, $html);
     }
 
-    public function reset_cache()
+    public function resetCache()
     {
         $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
         $cache->delete('total_user_disk_quota');
     }
 
-    public function get_total_user_disk_quota($reset = false)
+    public function getTotalUserDiskQuota($reset = false)
     {
         $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
 
@@ -497,7 +653,7 @@ class Calculator
 
         if ($cache->contains('total_user_disk_quota'))
         {
-            $total_quota = $cache->fetch('total_user_disk_quota');
+            $totalQuota = $cache->fetch('total_user_disk_quota');
         }
         else
         {
@@ -514,26 +670,82 @@ class Calculator
                 $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
 
                 $record = DataManager :: record(User :: class_name(), $parameters);
-                $total_quota = $record['disk_quota'];
+                $totalQuota = $record['disk_quota'];
             }
             else
             {
                 $users = DataManager :: retrieves(User :: class_name());
 
-                $total_quota = 0;
+                $totalQuota = 0;
 
                 while ($user = $users->next_result())
                 {
                     $calculator = new Calculator($user);
-                    $total_quota += $calculator->get_maximum_user_disk_quota();
+                    $totalQuota += $calculator->getMaximumUserDiskQuota();
                 }
 
-                $total_quota;
+                $totalQuota;
             }
 
-            $cache->save('total_user_disk_quota', $total_quota);
+            $cache->save('total_user_disk_quota', $totalQuota);
         }
 
-        return $total_quota;
+        return $totalQuota;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     */
+    public function addUploadWarningToForm(FormValidator $form)
+    {
+        $enableQuota = (boolean) PlatformSetting :: get('enable_quota', \Chamilo\Core\Repository\Manager :: context());
+
+        $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
+        $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
+
+        $maximumServerSize = $postMaxSize < $uploadMaxFilesize ? $uploadMaxFilesize : $postMaxSize;
+
+        if ($enableQuota && $this->getAvailableUserDiskQuota() < $maximumServerSize)
+        {
+            $maximumSize = $this->getAvailableUserDiskQuota();
+
+            $redirect = new Redirect(
+                array(
+                    \Chamilo\Libraries\Architecture\Application\Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
+                    FilterData :: FILTER_CATEGORY => null,
+                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
+            $url = $redirect->getUrl();
+
+            $allowUpgrade = PlatformSetting :: get('allow_upgrade', \Chamilo\Core\Repository\Manager :: context());
+            $allowRequest = PlatformSetting :: get('allow_request', \Chamilo\Core\Repository\Manager :: context());
+
+            $translation = ($allowUpgrade || $allowRequest) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
+
+            $message = Translation :: get(
+                $translation,
+                array(
+                    'SERVER' => Filesystem :: format_file_size($maximumServerSize),
+                    'USER' => Filesystem :: format_file_size($maximumSize),
+                    'URL' => $url));
+
+            if ($maximumSize < 5242880)
+            {
+                $form->add_error_message('max_size', null, $message);
+            }
+            else
+            {
+                $form->add_warning_message('max_size', null, $message);
+            }
+        }
+        else
+        {
+            $maximumSize = $maximumServerSize;
+            $message = Translation :: get(
+                'MaximumFileSizeServer',
+                array('FILESIZE' => Filesystem :: format_file_size($maximumSize)));
+            $form->add_warning_message('max_size', null, $message);
+        }
     }
 }

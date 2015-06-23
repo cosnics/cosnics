@@ -4,12 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Form;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -73,62 +70,12 @@ class ExternalCalendarForm extends ContentObjectForm
             '<div style="padding-left:28px;" id="' . $path_type_local_id . '" class="' .
                  ExternalCalendar :: PROPERTY_PATH_TYPE . '">');
 
-        $post_max_size = Filesystem :: interpret_file_size(ini_get('post_max_size'));
-        $upload_max_filesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
-
-        $maximum_server_size = $post_max_size < $upload_max_filesize ? $upload_max_filesize : $post_max_size;
-
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        if ($calculator->get_available_user_disk_quota() < $maximum_server_size)
-        {
-            $maximum_size = $calculator->get_available_user_disk_quota();
-
-            $redirect = new Redirect(
-                array(
-                    \Chamilo\Libraries\Architecture\Application\Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
-                    \Chamilo\Core\Repository\Manager :: PARAM_CATEGORY_ID => null,
-                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
-            $url = $redirect->getUrl();
-
-            $allow_upgrade = PlatformSetting :: get(
-                'allow_upgrade',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $allow_request = PlatformSetting :: get(
-                'allow_request',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $translation = ($allow_upgrade || $allow_request) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
-
-            $message = Translation :: get(
-                $translation,
-                array(
-                    'SERVER' => Filesystem :: format_file_size($maximum_server_size),
-                    'USER' => Filesystem :: format_file_size($maximum_size),
-                    'URL' => $url));
-
-            if ($maximum_size < 5242880)
-            {
-                $this->add_error_message('max_size', null, $message);
-            }
-            else
-            {
-                $this->add_warning_message('max_size', null, $message);
-            }
-        }
-        else
-        {
-            $maximum_size = $maximum_server_size;
-            $message = Translation :: get(
-                'MaximumFileSizeServer',
-                array('FILESIZE' => Filesystem :: format_file_size($maximum_size)));
-            $this->add_warning_message('max_size', null, $message);
-        }
+        $calculator->addUploadWarningToForm($this);
 
         $this->addElement('file', ExternalCalendar :: PROPERTY_PATH . '[' . ExternalCalendar :: PATH_TYPE_LOCAL . ']');
         $this->addRule(

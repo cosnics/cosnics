@@ -192,7 +192,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_parameters()->get_user()));
 
-        if ($calculator->get_available_user_disk_quota() < $total_file_size)
+        if (! $calculator->canUpload($total_file_size))
         {
             return false;
         }

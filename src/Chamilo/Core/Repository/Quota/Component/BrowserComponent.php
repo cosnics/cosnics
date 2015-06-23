@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -43,18 +42,10 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
-        $html[] = $this->get_action_bar()->as_html();
-
-        $user_quota = array();
-        $user_quota[] = '<h3>' . htmlentities(Translation :: get('UsedDiskSpace')) . '</h3>';
-        $user_quota[] = Calculator :: get_bar(
-            $this->calculator->get_user_disk_quota_percentage(),
-            Filesystem :: format_file_size($this->calculator->get_used_user_disk_quota()) . ' / ' . Filesystem :: format_file_size(
-                $this->calculator->get_maximum_user_disk_quota()));
-        $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
-
-        $user_quota[] = $this->get_statistics();
-        $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
+        if ($this->calculator->isEnabled() || $this->get_user()->is_platform_admin())
+        {
+            $html[] = $this->get_action_bar()->as_html();
+        }
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
@@ -64,47 +55,51 @@ class BrowserComponent extends Manager implements TableSupport
         if ($user_requests > 0 || \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
         {
             $tabs = new DynamicTabsRenderer('quota');
+
             $tabs->add_tab(
                 new DynamicContentTab(
                     'personal',
                     Translation :: get('Personal'),
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Personal'),
-                    implode(PHP_EOL, $user_quota)));
+                    $this->getUserQuota()));
 
-            if ($user_requests > 0)
+            if ($this->calculator->isEnabled())
             {
-                $this->table_type = RequestTable :: TYPE_PERSONAL;
-                $table = new RequestTable($this);
-                $tabs->add_tab(
-                    new DynamicContentTab(
-                        'personal_request',
-                        Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/PersonalRequest'),
-                        $table->as_html()));
+                if ($user_requests > 0)
+                {
+                    $this->table_type = RequestTable :: TYPE_PERSONAL;
+                    $table = new RequestTable($this);
+                    $tabs->add_tab(
+                        new DynamicContentTab(
+                            'personal_request',
+                            Translation :: get('YourRequests'),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/PersonalRequest'),
+                            $table->as_html()));
+                }
             }
 
             if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
             {
                 $platform_quota = array();
                 $platform_quota[] = '<h3>' . htmlentities(Translation :: get('AggregatedUserDiskQuotas')) . '</h3>';
-                $platform_quota[] = Calculator :: get_bar(
-                    $this->calculator->get_aggregated_user_disk_quota_percentage(),
-                    Filesystem :: format_file_size($this->calculator->get_used_aggregated_user_disk_quota()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->get_maximum_aggregated_user_disk_quota()));
+                $platform_quota[] = Calculator :: getBar(
+                    $this->calculator->getAggregatedUserDiskQuotaPercentage(),
+                    Filesystem :: format_file_size($this->calculator->getUsedAggregatedUserDiskQuota()) . ' / ' . Filesystem :: format_file_size(
+                        $this->calculator->getMaximumAggregatedUserDiskQuota()));
                 $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
 
                 $platform_quota[] = '<h3>' . htmlentities(Translation :: get('ReservedDiskSpace')) . '</h3>';
-                $platform_quota[] = Calculator :: get_bar(
-                    $this->calculator->get_reserved_disk_space_percentage(),
-                    Filesystem :: format_file_size($this->calculator->get_used_reserved_disk_space()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->get_maximum_reserved_disk_space()));
+                $platform_quota[] = Calculator :: getBar(
+                    $this->calculator->getReservedDiskSpacePercentage(),
+                    Filesystem :: format_file_size($this->calculator->getUsedReservedDiskSpace()) . ' / ' . Filesystem :: format_file_size(
+                        $this->calculator->getMaximumReservedDiskSpace()));
                 $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
 
                 $platform_quota[] = '<h3>' . htmlentities(Translation :: get('AllocatedDiskSpace')) . '</h3>';
-                $platform_quota[] = Calculator :: get_bar(
-                    $this->calculator->get_allocated_disk_space_percentage(),
-                    Filesystem :: format_file_size($this->calculator->get_used_allocated_disk_space()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->get_maximum_allocated_disk_space()));
+                $platform_quota[] = Calculator :: getBar(
+                    $this->calculator->getAllocatedDiskSpacePercentage(),
+                    Filesystem :: format_file_size($this->calculator->getUsedAllocatedDiskSpace()) . ' / ' . Filesystem :: format_file_size(
+                        $this->calculator->getMaximumAllocatedDiskSpace()));
                 $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
 
                 $tabs->add_tab(
@@ -114,91 +109,101 @@ class BrowserComponent extends Manager implements TableSupport
                         Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'),
                         implode(PHP_EOL, $platform_quota)));
 
-                $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
-                    $this->get_user());
+                if ($this->calculator->isEnabled())
+                {
+                    $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
+                        $this->get_user());
 
-                if (count($target_users) > 0)
-                {
-                    $target_condition = new InCondition(
-                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
-                        $target_users);
-                }
-                else
-                {
-                    $target_condition = new EqualityCondition(
-                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
-                        new StaticConditionVariable(- 1));
-                }
+                    if (count($target_users) > 0)
+                    {
+                        $target_condition = new InCondition(
+                            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                            $target_users);
+                    }
+                    else
+                    {
+                        $target_condition = new EqualityCondition(
+                            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                            new StaticConditionVariable(- 1));
+                    }
 
-                $conditions = array();
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_PENDING));
-                if (! $this->get_user()->is_platform_admin())
-                {
-                    $conditions[] = $target_condition;
-                }
-                $condition = new AndCondition($conditions);
+                    $conditions = array();
+                    $conditions[] = new EqualityCondition(
+                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
+                        new StaticConditionVariable(Request :: DECISION_PENDING));
 
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
-                {
-                    $this->table_type = RequestTable :: TYPE_PENDING;
-                    $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
-                            RequestTable :: TYPE_PENDING,
-                            Translation :: get('PendingRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\Quota',
-                                'Decision/22/' . Request :: DECISION_PENDING),
-                            $table->as_html()));
-                }
+                    if (! $this->get_user()->is_platform_admin())
+                    {
+                        $conditions[] = $target_condition;
+                    }
 
-                $conditions = array();
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_GRANTED));
-                if (! $this->get_user()->is_platform_admin())
-                {
-                    $conditions[] = $target_condition;
-                }
-                $condition = new AndCondition($conditions);
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
-                {
-                    $this->table_type = RequestTable :: TYPE_GRANTED;
-                    $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
-                            RequestTable :: TYPE_GRANTED,
-                            Translation :: get('GrantedRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\Quota',
-                                'Decision/22/' . Request :: DECISION_GRANTED),
-                            $table->as_html()));
-                }
+                    $condition = new AndCondition($conditions);
 
-                $conditions = array();
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_DENIED));
-                if (! $this->get_user()->is_platform_admin())
-                {
-                    $conditions[] = $target_condition;
-                }
-                $condition = new AndCondition($conditions);
+                    if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                    {
+                        $this->table_type = RequestTable :: TYPE_PENDING;
+                        $table = new RequestTable($this);
+                        $tabs->add_tab(
+                            new DynamicContentTab(
+                                RequestTable :: TYPE_PENDING,
+                                Translation :: get('PendingRequests'),
+                                Theme :: getInstance()->getImagePath(
+                                    'Chamilo\Core\Repository\Quota',
+                                    'Decision/22/' . Request :: DECISION_PENDING),
+                                $table->as_html()));
+                    }
 
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
-                {
-                    $this->table_type = RequestTable :: TYPE_DENIED;
-                    $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
-                            RequestTable :: TYPE_DENIED,
-                            Translation :: get('DeniedRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\Quota',
-                                'Decision/22/' . Request :: DECISION_DENIED),
-                            $table->as_html()));
+                    $conditions = array();
+                    $conditions[] = new EqualityCondition(
+                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
+                        new StaticConditionVariable(Request :: DECISION_GRANTED));
+
+                    if (! $this->get_user()->is_platform_admin())
+                    {
+                        $conditions[] = $target_condition;
+                    }
+
+                    $condition = new AndCondition($conditions);
+
+                    if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                    {
+                        $this->table_type = RequestTable :: TYPE_GRANTED;
+                        $table = new RequestTable($this);
+                        $tabs->add_tab(
+                            new DynamicContentTab(
+                                RequestTable :: TYPE_GRANTED,
+                                Translation :: get('GrantedRequests'),
+                                Theme :: getInstance()->getImagePath(
+                                    'Chamilo\Core\Repository\Quota',
+                                    'Decision/22/' . Request :: DECISION_GRANTED),
+                                $table->as_html()));
+                    }
+
+                    $conditions = array();
+                    $conditions[] = new EqualityCondition(
+                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
+                        new StaticConditionVariable(Request :: DECISION_DENIED));
+
+                    if (! $this->get_user()->is_platform_admin())
+                    {
+                        $conditions[] = $target_condition;
+                    }
+
+                    $condition = new AndCondition($conditions);
+
+                    if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                    {
+                        $this->table_type = RequestTable :: TYPE_DENIED;
+                        $table = new RequestTable($this);
+                        $tabs->add_tab(
+                            new DynamicContentTab(
+                                RequestTable :: TYPE_DENIED,
+                                Translation :: get('DeniedRequests'),
+                                Theme :: getInstance()->getImagePath(
+                                    'Chamilo\Core\Repository\Quota',
+                                    'Decision/22/' . Request :: DECISION_DENIED),
+                                $table->as_html()));
+                    }
                 }
             }
         }
@@ -209,7 +214,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
         else
         {
-            $html[] = implode(PHP_EOL, $user_quota);
+            $html[] = $this->getUserQuota();
         }
 
         $html[] = $this->render_footer();
@@ -217,19 +222,33 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
+    public function getUserQuota()
+    {
+        $user_quota = array();
+
+        if ($this->calculator->isEnabled())
+        {
+            $user_quota[] = '<h3>' . htmlentities(Translation :: get('UsedDiskSpace')) . '</h3>';
+            $user_quota[] = Calculator :: getBar(
+                $this->calculator->getUserDiskQuotaPercentage(),
+                Filesystem :: format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' . Filesystem :: format_file_size(
+                    $this->calculator->getMaximumUserDiskQuota()));
+            $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
+        }
+
+        $user_quota[] = $this->get_statistics();
+        $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
+
+        return implode(PHP_EOL, $user_quota);
+    }
+
     public function get_statistics()
     {
         $html = array();
         $html[] = '<h3>' . htmlentities(Translation :: get('RepositoryStatistics')) . '</h3>';
-        /**
-         * Disabled right now since database quota are not enforced anywhere, this is just a visual reference $html[] =
-         * Calculator :: get_bar($this->calculator->get_user_database_percentage(),
-         * $this->calculator->get_used_database_quota() .
-         * ' / ' . $this->calculator->get_maximum_database_quota());
-         */
 
         $properties = array();
-        $properties[Translation :: get('NumberOfContentObjects')] = $this->calculator->get_used_database_quota();
+        $properties[Translation :: get('NumberOfContentObjects')] = $this->calculator->getUsedDatabaseQuota();
 
         $type_counts = array();
         $condition = new EqualityCondition(
@@ -250,11 +269,14 @@ class BrowserComponent extends Manager implements TableSupport
 
         arsort($type_counts);
 
-        $properties[Translation :: get('MostUsedContentObjectType')] = Translation :: get(
-            'TypeName',
-            null,
-            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($most_used)) . ' (' . $type_counts[$most_used] .
-             ')';
+        if ($most_used)
+        {
+            $properties[Translation :: get('MostUsedContentObjectType')] = Translation :: get(
+                'TypeName',
+                null,
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($most_used)) . ' (' .
+                 $type_counts[$most_used] . ')';
+        }
 
         $reference_count = $type_counts[$most_used] / 2;
 
@@ -264,7 +286,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         foreach ($type_counts as $type => $count)
         {
-            if ($count >= $reference_count)
+            if ($count >= $reference_count && $count > 0)
             {
                 $frequent[] = Translation :: get(
                     'TypeName',
@@ -276,7 +298,7 @@ class BrowserComponent extends Manager implements TableSupport
         $properties[Translation :: get('OtherFrequentlyUsedContentObjectTypes')] = implode('<br />', $frequent);
 
         $properties[Translation :: get('AvailableDiskSpace')] = Filesystem :: format_file_size(
-            $this->calculator->get_available_user_disk_quota());
+            $this->calculator->getAvailableUserDiskQuota());
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
@@ -359,10 +381,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
 
-        $allow_upgrade = PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
-        $maximum_user_disk_space = PlatformSetting :: get('maximum_user', __NAMESPACE__);
-
-        if ($this->calculator->upgrade_allowed())
+        if ($this->calculator->upgradeAllowed())
         {
             $action_bar->add_common_action(
                 new ToolbarItem(
@@ -371,7 +390,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
-        if ($this->calculator->request_allowed())
+        if ($this->calculator->requestAllowed())
         {
             $action_bar->add_common_action(
                 new ToolbarItem(
@@ -382,11 +401,14 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($this->get_user()->is_platform_admin())
         {
-            $action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('ConfigureManagementRights'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
+            if ($this->calculator->isEnabled())
+            {
+                $action_bar->add_tool_action(
+                    new ToolbarItem(
+                        Translation :: get('ConfigureManagementRights'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Rights'),
+                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
+            }
 
             $action_bar->add_tool_action(
                 new ToolbarItem(
