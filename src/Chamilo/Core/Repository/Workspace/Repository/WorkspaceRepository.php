@@ -227,7 +227,7 @@ class WorkspaceRepository
         return DataManager :: retrieves(
             Workspace :: class_name(),
             new DataClassRetrievesParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities),
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService :: RIGHT_VIEW),
                 $limit,
                 $offset,
                 $orderProperty,
@@ -245,7 +245,7 @@ class WorkspaceRepository
         return DataManager :: count(
             Workspace :: class_name(),
             new DataClassCountParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities),
+                $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService :: RIGHT_VIEW),
                 $this->getWorkspaceFavouritesByUserJoins()));
     }
 

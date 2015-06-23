@@ -14,6 +14,9 @@ use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
+use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 
 /**
  *
@@ -65,20 +68,35 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
     {
         $toolbar = new Toolbar();
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'),
-                $this->get_component()->get_url(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                        \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE,
-                        Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
-        if (RightsService :: getInstance()->canManageWorkspace(
+        $favouriteService = new FavouriteService(new FavouriteRepository());
+        $favourite = $favouriteService->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
             $this->get_component()->get_user(),
-            $workspace))
+            $workspace->getId());
+
+        if ($favourite instanceof WorkspaceUserFavourite)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('FavouriteNa', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/FavouriteNa'),
+                    null,
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
+                            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id())),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
+
+        if (RightsService :: getInstance()->canManageWorkspace($this->get_component()->get_user(), $workspace))
         {
             $toolbar->add_item(
                 new ToolbarItem(
