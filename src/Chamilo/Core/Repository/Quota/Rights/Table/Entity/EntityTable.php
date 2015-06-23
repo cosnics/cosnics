@@ -15,10 +15,10 @@ class EntityTable extends DataClassTable implements TableFormActionsSupport
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, Manager :: PARAM_ACTION);
+        $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE), 
+                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
         return $actions;
     }

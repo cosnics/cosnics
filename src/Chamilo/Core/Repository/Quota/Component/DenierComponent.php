@@ -229,7 +229,7 @@ class DenierComponent extends Manager
         $allow_upgrade = PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
         $maximum_user_disk_space = PlatformSetting :: get('maximum_user', __NAMESPACE__);
 
-        if ($calculator->upgrade_allowed())
+        if ($calculator->upgradeAllowed())
         {
             $action_bar->add_common_action(
                 new ToolbarItem(
@@ -238,7 +238,7 @@ class DenierComponent extends Manager
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
         }
 
-        if ($calculator->request_allowed())
+        if ($calculator->requestAllowed())
         {
             $action_bar->add_common_action(
                 new ToolbarItem(

@@ -1,13 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Form;
 
-use Chamilo\Core\Repository\ContentObject\File\Filter\FilterData;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -34,62 +32,12 @@ class FileForm extends ContentObjectForm
 
         $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
 
-        $post_max_size = Filesystem :: interpret_file_size(ini_get('post_max_size'));
-        $upload_max_filesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
-
-        $maximum_server_size = $post_max_size < $upload_max_filesize ? $upload_max_filesize : $post_max_size;
-
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        if ($calculator->get_available_user_disk_quota() < $maximum_server_size)
-        {
-            $maximum_size = $calculator->get_available_user_disk_quota();
-
-            $redirect = new Redirect(
-                array(
-                    \Chamilo\Libraries\Architecture\Application\Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
-                    FilterData :: FILTER_CATEGORY => null,
-                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
-            $url = $redirect->getUrl();
-
-            $allow_upgrade = PlatformSetting :: get(
-                'allow_upgrade',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $allow_request = PlatformSetting :: get(
-                'allow_request',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $translation = ($allow_upgrade || $allow_request) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
-
-            $message = Translation :: get(
-                $translation,
-                array(
-                    'SERVER' => Filesystem :: format_file_size($maximum_server_size),
-                    'USER' => Filesystem :: format_file_size($maximum_size),
-                    'URL' => $url));
-
-            if ($maximum_size < 5242880)
-            {
-                $this->add_error_message('max_size', null, $message);
-            }
-            else
-            {
-                $this->add_warning_message('max_size', null, $message);
-            }
-        }
-        else
-        {
-            $maximum_size = $maximum_server_size;
-            $message = Translation :: get(
-                'MaximumFileSizeServer',
-                array('FILESIZE' => Filesystem :: format_file_size($maximum_size)));
-            $this->add_warning_message('max_size', null, $message);
-        }
+        $calculator->addUploadWarningToForm($this);
 
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName')));
         $this->addRule(
@@ -110,65 +58,18 @@ class FileForm extends ContentObjectForm
 
         $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
 
-        $post_max_size = Filesystem :: interpret_file_size(ini_get('post_max_size'));
-        $upload_max_filesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
-
-        $maximum_server_size = $post_max_size < $upload_max_filesize ? $upload_max_filesize : $post_max_size;
-
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        if ($calculator->get_available_user_disk_quota() < $maximum_server_size)
-        {
-            $maximum_size = $calculator->get_available_user_disk_quota();
+        $calculator->addUploadWarningToForm($this);
 
-            $redirect = new Redirect(
-                array(
-                    \Chamilo\Libraries\Architecture\Application\Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_QUOTA,
-                    FilterData :: FILTER_CATEGORY => null,
-                    \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
-            $url = $redirect->getUrl();
+        $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
 
-            $allow_upgrade = PlatformSetting :: get(
-                'allow_upgrade',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $allow_request = PlatformSetting :: get(
-                'allow_request',
-                \Chamilo\Core\Repository\Quota\Manager :: context());
-
-            $translation = ($allow_upgrade || $allow_request) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
-
-            $message = Translation :: get(
-                $translation,
-                array(
-                    'SERVER' => Filesystem :: format_file_size($maximum_server_size),
-                    'USER' => Filesystem :: format_file_size($maximum_size),
-                    'URL' => $url));
-
-            if ($maximum_size < 5242880)
-            {
-                $this->add_error_message('max_size', null, $message);
-            }
-            else
-            {
-                $this->add_warning_message('max_size', null, $message);
-            }
-        }
-        else
-        {
-            $maximum_size = $maximum_server_size;
-            $message = Translation :: get(
-                'MaximumFileSizeServer',
-                array('FILESIZE' => Filesystem :: format_file_size($maximum_size)));
-            $this->add_warning_message('max_size', null, $message);
-        }
         $object = $this->get_content_object();
 
-        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), $post_max_size));
+        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), $postMaxSize));
         $this->addRule(
             'file',
             Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
@@ -232,7 +133,7 @@ class FileForm extends ContentObjectForm
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             (int) $owner_id);
 
-        $quotamanager = new Calculator($owner);
+        $calculator = new Calculator($owner);
 
         if (isset($_FILES['file']) && isset($_FILES['file']['error']) && $_FILES['file']['error'] != 0)
         {
@@ -255,9 +156,8 @@ class FileForm extends ContentObjectForm
         elseif (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
         {
             $size = $_FILES['file']['size'];
-            $available_disk_space = $quotamanager->get_available_user_disk_quota();
 
-            if ($size > $available_disk_space)
+            if (! $calculator->canUpload($size))
             {
                 $errors['upload_or_create'] = Translation :: get(
                     'DiskQuotaExceeded',

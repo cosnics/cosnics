@@ -34,9 +34,9 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case Request :: PROPERTY_DECISION :
                 return $object->get_decision_icon();
             case Translation :: get('UsedDiskSpace') :
-                return Filesystem :: format_file_size($calculator->get_used_user_disk_quota());
+                return Filesystem :: format_file_size($calculator->getUsedUserDiskQuota());
             case Translation :: get('MaximumUsedDiskSpace') :
-                return Filesystem :: format_file_size($calculator->get_maximum_user_disk_quota());
+                return Filesystem :: format_file_size($calculator->getMaximumUserDiskQuota());
         }
         return parent :: render_cell($column, $object);
     }

@@ -32,10 +32,10 @@ class RequestForm extends FormValidator
             $this->addElement('static', null, Translation :: get('User'), $user_details->toHtml());
         }
 
-        $quota_bar = Calculator :: get_bar(
-            $this->calculator->get_user_disk_quota_percentage(),
-            Filesystem :: format_file_size($this->calculator->get_used_user_disk_quota()) . ' / ' .
-                 Filesystem :: format_file_size($this->calculator->get_maximum_user_disk_quota()));
+        $quota_bar = Calculator :: getBar(
+            $this->calculator->getUserDiskQuotaPercentage(),
+            Filesystem :: format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' .
+                 Filesystem :: format_file_size($this->calculator->getMaximumUserDiskQuota()));
         $this->addElement('static', null, Translation :: get('UsedDiskSpace'), $quota_bar);
 
         $this->addElement('text', Request :: PROPERTY_QUOTA, Translation :: get('QuotaStep'), array("size" => "7"));

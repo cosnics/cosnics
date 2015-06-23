@@ -62,10 +62,10 @@ class QuotaViewerComponent extends Manager
         $html[] = $this->display_action_bar();
 
         $html[] = '<h3>' . htmlentities(Translation :: get('UsedDiskSpace')) . '</h3>';
-        $html[] = Calculator :: get_bar(
-            $this->calculator->get_user_disk_quota_percentage(),
-            Filesystem :: format_file_size($this->calculator->get_used_user_disk_quota()) . ' / ' . Filesystem :: format_file_size(
-                $this->calculator->get_maximum_user_disk_quota()));
+        $html[] = Calculator :: getBar(
+            $this->calculator->getUserDiskQuotaPercentage(),
+            Filesystem :: format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' . Filesystem :: format_file_size(
+                $this->calculator->getMaximumUserDiskQuota()));
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
         $html[] = $this->render_footer();

@@ -53,7 +53,7 @@ class GranterComponent extends Manager
                     {
                         $calculator = new Calculator($request->get_user());
 
-                        if ($calculator->get_available_allocated_disk_space() > $request->get_quota())
+                        if ($calculator->getAvailableAllocatedDiskSpace() > $request->get_quota())
                         {
                             $user = $request->get_user();
                             $user->set_disk_quota($user->get_disk_quota() + $request->get_quota());
@@ -151,7 +151,7 @@ class GranterComponent extends Manager
                 'USER' => $recipient->get_fullname(),
                 'PLATFORM' => PlatformSetting :: get('site_name'),
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota()),
-                'QUOTA' => Filesystem :: format_file_size($calculator->get_maximum_user_disk_quota())));
+                'QUOTA' => Filesystem :: format_file_size($calculator->getMaximumUserDiskQuota())));
 
         $mail = Mail :: factory(
             $title,
