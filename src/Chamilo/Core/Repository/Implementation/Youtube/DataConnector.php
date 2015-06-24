@@ -1,16 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Youtube;
 
-use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\User\Storage\DataClass\Session;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -20,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Platform\Session\Session;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
