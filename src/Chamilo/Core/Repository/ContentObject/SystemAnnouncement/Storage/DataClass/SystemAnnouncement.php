@@ -58,26 +58,26 @@ class SystemAnnouncement extends ContentObject implements Versionable
         switch ($icon)
         {
             case self :: ICON_CONFIRMATION :
-                $icon = 'confirmation';
+                $icon = 'Confirmation';
                 break;
             case self :: ICON_ERROR :
-                $icon = 'error';
+                $icon = 'Error';
                 break;
             case self :: ICON_WARNING :
-                $icon = 'warning';
+                $icon = 'Warning';
                 break;
             case self :: ICON_STOP :
-                $icon = 'stop';
+                $icon = 'Stop';
                 break;
             case self :: ICON_QUESTION :
-                $icon = 'question';
+                $icon = 'Question';
                 break;
             case self :: ICON_CONFIG :
-                $icon = 'config';
+                $icon = 'Config';
                 break;
         }
 
-        return $size . '_' . $icon;
+        return $size . $icon;
     }
 
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
