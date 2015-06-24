@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
 
 /**
  * Cell renderer for a direct subscribed course user browser table, or users in a direct subscribed group.
@@ -35,7 +37,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
      *
      * @param $column type
      * @param mixed $user_with_subscription_status User from the advanced join query in weblcms database class that
-     *            includes his subscription status.
+     *        includes his subscription status.
      * @return string
      */
     public function render_cell($column, $user_with_subscription_status)
@@ -216,17 +218,34 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         {
             if ($user_id != $this->get_component()->get_user()->get_id())
             {
-                $parameters = array();
-                $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
-                $view_as_url = $this->get_component()->get_url($parameters);
+                $course_settings_controller = CourseSettingsController :: get_instance();
+                $course_access = $course_settings_controller->get_course_setting(
+                    $this->get_component()->get_course_id(),
+                    CourseSettingsConnector :: COURSE_ACCESS);
 
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('ViewAsUser'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Login'),
-                        $view_as_url,
-                        ToolbarItem :: DISPLAY_ICON));
+                if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+                {
+                    $parameters = array();
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
+                    $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
+                    $view_as_url = $this->get_component()->get_url($parameters);
+
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('ViewAsUser'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                            $view_as_url,
+                            ToolbarItem :: DISPLAY_ICON));
+                }
+                else
+                {
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
+                            Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
+                            null,
+                            ToolbarItem :: DISPLAY_ICON));
+                }
             }
         }
 
