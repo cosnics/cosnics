@@ -15,6 +15,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
 
 /**
  * Cell renderer for an all subscribed course user browser table.
@@ -247,17 +249,34 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
         {
             if ($user_id != $this->get_component()->get_user()->get_id())
             {
-                $parameters = array();
-                $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
-                $view_as_url = $this->get_component()->get_url($parameters);
+                $course_settings_controller = CourseSettingsController :: get_instance();
+                $course_access = $course_settings_controller->get_course_setting(
+                    $this->get_component()->get_course_id(),
+                    CourseSettingsConnector :: COURSE_ACCESS);
 
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('ViewAsUser'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Login'),
-                        $view_as_url,
-                        ToolbarItem :: DISPLAY_ICON));
+                if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+                {
+                    $parameters = array();
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
+                    $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
+                    $view_as_url = $this->get_component()->get_url($parameters);
+
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('ViewAsUser'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                            $view_as_url,
+                            ToolbarItem :: DISPLAY_ICON));
+                }
+                else
+                {
+                    $toolbar->add_item(
+                        new ToolbarItem(
+                            Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
+                            Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
+                            null,
+                            ToolbarItem :: DISPLAY_ICON));
+                }
             }
         }
 

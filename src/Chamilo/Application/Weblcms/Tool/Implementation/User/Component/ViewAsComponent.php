@@ -6,6 +6,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
 
 /**
  * Logs a teacher in/out of the student view.
@@ -17,6 +19,16 @@ class ViewAsComponent extends Manager
 
     public function run()
     {
+        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_access = $course_settings_controller->get_course_setting(
+            $this->get_course_id(),
+            CourseSettingsConnector :: COURSE_ACCESS);
+
+        if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+        {
+            throw new NotAllowedException();
+        }
+
         $view_as_user_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
         if (! isset($view_as_user_id))
         {
