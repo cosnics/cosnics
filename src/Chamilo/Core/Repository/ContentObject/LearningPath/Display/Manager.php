@@ -110,7 +110,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * Get the node linked to the current step
      *
-     * @return \core\repository\common\path\ComplexContentObjectPathNode
+     * @return \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
      */
     public function get_current_node()
     {
@@ -134,5 +134,5 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return array(self :: PARAM_STEP, $this->get_current_step());
     }
-   
+
 }

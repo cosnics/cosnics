@@ -18,6 +18,11 @@ class PrerequisitesBuilderComponent extends TabComponent
 
     public function build()
     {
+        if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        {
+            throw new NotAllowedException();
+        }
+
         $complex_content_object_item = $this->get_current_complex_content_object_item();
 
         $menu_trail = $this->get_complex_content_object_breadcrumbs();
