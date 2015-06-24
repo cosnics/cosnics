@@ -215,8 +215,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         }
 
         $is_platform = $this->get_user()->is_platform_admin();
-        $has_setting = $this->get_external_repository()->has_settings();
-        $has_user_setting = $this->get_external_repository()->has_user_settings();
 
         if ($is_platform)
         {
