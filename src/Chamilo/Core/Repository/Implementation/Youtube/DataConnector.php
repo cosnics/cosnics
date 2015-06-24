@@ -65,7 +65,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $this->client->authenticate($_GET['code']);
             $_SESSION['token'] = $this->client->getAccessToken();
-            header('Location: ' . $redirect);
+            var_dump($_SESSION['token']);
+            header('Location: ' . $redirect->getUrl());
         }
         else
         {
