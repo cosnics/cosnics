@@ -8,11 +8,11 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\User\Storage\DataClass\Session;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Libraries\File\Redirect;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -38,47 +38,58 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             'developer_key',
             $this->get_external_repository_instance_id());
 
-        $client = new \Google_Client();
+        $this->client = new \Google_Client();
 
-        $client->setDeveloperKey($key);
+        $this->client->setDeveloperKey($key);
 
-        $this->youtube = new \Google_Service_YouTube($client);
+        $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
     public function login()
     {
-        $session_token = Request :: get('token');
+        $this->client->setClientId('494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com');
+        $this->client->setClientSecret('V6-lsZFVTSSeeqdLNzaqkyI1');
+        $this->client->setScopes('https://www.googleapis.com/auth/youtube');
+        $redirect = new Redirect();
+        $this->client->setRedirectUri($redirect->getCurrentUrl());
 
-        if (! $this->session_token && ! $session_token)
+        $this->youtube = new \Google_Service_YouTube($this->client);
+
+        if (isset($_GET['code']))
         {
-            $redirect = new Redirect();
-            $currentUrl = $redirect->getCurrentUrl();
-            $client = new \Google_Client();
-            $client->setScopes('https://www.googleapis.com/auth/youtube');
-
-            $this->youtube = new \Google_Service_YouTube($client);
-
+            $this->client->authenticate($_GET['code']);
+            $_SESSION['token'] = $this->client->getAccessToken();
+            header('Location: ' . $redirect);
         }
-        elseif ($session_token)
+        else
         {
-            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                'session_token',
-                $this->get_external_repository_instance_id());
-
-            $user_setting = new Setting();
-            $user_setting->set_setting_id($setting->get_id());
-            $user_setting->set_user_id(Session :: get_user_id());
-            $user_setting->set_value($session_token);
-
-            if ($user_setting->create())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/youtube');
+            header('Location: ' . $url);
+            exit();
         }
+
+        if (isset($_SESSION['token']))
+        {
+            $this->client->setAccessToken($_SESSION['token']);
+        }
+
+        // $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
+        // 'session_token',
+        // $this->get_external_repository_instance_id());
+
+        // $user_setting = new Setting();
+        // $user_setting->set_setting_id($setting->get_id());
+        // $user_setting->set_user_id(Session :: get_user_id());
+        // $user_setting->set_value($session_token);
+
+        // if ($user_setting->create())
+        // {
+        // return true;
+        // }
+        // else
+        // {
+        // return false;
+        // }
     }
 
     public static function get_sort_properties()
@@ -107,23 +118,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_categories()
     {
-        $properties = array();
-
         $categories = $this->youtube->videoCategories('id,snippet');
-
-        // $options[] = array(XML_UNSERIALIZER_OPTION_FORCE_ENUM =>
-        // array('atom:category'));
-        // $array = Utilities ::
-        // extract_xml_file(Zend_Gdata_YouTube_VideoEntry::YOUTUBE_CATEGORY_SCHEMA,
-        // $options);
-        $array = Utilities :: extract_xml_file(Path :: getInstance()->getPluginPath() . 'google/categories.cat');
-
-        $categories = array();
-        foreach ($array['atom:category'] as $category)
-        {
-            $categories[$category['term']] = Translation :: get($category['term']);
-        }
-
         return $categories;
     }
 
@@ -207,8 +202,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_description($response['snippet']['description']);
             $object->set_created(strtotime($response['snippet']['publishedAt']));
             $object->set_modified(strtotime($response['snippet']['publishedAt']));
-            $object->set_owner_id($response['snippet']['channelId']);
-            $object->set_owner_name($response['snippet']['channelTitel']);
+            $object->set_owner_id($videosResponse['modelData']['items'][0]['snippet']['channelId']);
+            $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitle']);
 
             // $object->set_url($videoResult->getFlashPlayerUrl());
 
