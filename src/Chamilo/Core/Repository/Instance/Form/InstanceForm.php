@@ -406,7 +406,8 @@ class InstanceForm extends FormValidator
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param array $defaults Default values for this form's parameters.
@@ -447,8 +448,8 @@ class InstanceForm extends FormValidator
 
     public function parse_settings()
     {
-        $file = Path :: getInstance()->namespaceToFullPath($this->application->get_implementation()) .
-             'Resources\Settings\Settings.xml';
+        $file = Path :: getInstance()->namespaceToFullPath($this->application->get_implementation()) . 'Resources' .
+             DIRECTORY_SEPARATOR . 'Settings' . DIRECTORY_SEPARATOR . 'Settings.xml';
 
         $result = array();
 
