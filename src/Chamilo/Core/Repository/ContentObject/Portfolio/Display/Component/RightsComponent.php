@@ -24,7 +24,6 @@ class RightsComponent extends TabComponent
      */
     public function build()
     {
-
         BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('RightsComponent')));
 
         if ($this->get_parent() instanceof PortfolioComplexRights &&
@@ -116,7 +115,7 @@ class RightsComponent extends TabComponent
         {
             $selected_node = $path->get_node($selected_step);
 
-            if ($this->get_parent()->is_allowed_to_edit_content_object($selected_node->get_parent()))
+            if ($this->get_parent()->is_allowed_to_set_content_object_rights())
             {
                 $available_nodes[] = $selected_node;
             }
