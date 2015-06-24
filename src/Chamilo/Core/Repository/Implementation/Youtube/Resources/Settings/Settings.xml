@@ -7,6 +7,16 @@
 					<validation rule="required" message="ThisFieldIsRequired" />
 				</validations>
 			</setting>
+			<setting name="client_id" field="text">
+				<validations>
+					<validation rule="required" message="ThisFieldIsRequired" />
+				</validations>
+			</setting>
+			<setting name="client_secret" field="text">
+				<validations>
+					<validation rule="required" message="ThisFieldIsRequired" />
+				</validations>
+			</setting>
 			<setting name="session_token" field="text" user_setting="1" />
 		</category>
 	</settings>

@@ -5,8 +5,10 @@ use Chamilo\Core\Repository\Instance\Rights;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -24,7 +26,7 @@ class Instance extends CompositeDataClass
 
     /**
      * Contains a list of already required export types Allow to spare some business logic processing
-     * 
+     *
      * @var array
      */
     private static $already_required_types = array();
@@ -118,7 +120,7 @@ class Instance extends CompositeDataClass
         $extended_property_names[] = self :: PROPERTY_ENABLED;
         $extended_property_names[] = self :: PROPERTY_CREATED;
         $extended_property_names[] = self :: PROPERTY_MODIFIED;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -139,15 +141,15 @@ class Instance extends CompositeDataClass
                 return false;
             }
         }
-        
+
         $succes = Rights :: get_instance()->create_location_in_external_instances_subtree(
-            $this->get_id(), 
+            $this->get_id(),
             Rights :: get_instance()->get_external_instances_subtree_root_id());
         if (! $succes)
         {
             return false;
         }
-        
+
         return true;
     }
 
@@ -160,10 +162,10 @@ class Instance extends CompositeDataClass
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID), 
+                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
                 new StaticConditionVariable($this->get_id()));
             $settings = DataManager :: retrieves(Setting :: class_name(), $condition);
-            
+
             while ($setting = $settings->next_result())
             {
                 if (! $setting->delete())
@@ -172,7 +174,7 @@ class Instance extends CompositeDataClass
                 }
             }
         }
-        
+
         $location = Rights :: get_instance()->get_location_by_identifier_from_external_instances_subtree(
             $this->get_id());
         if ($location)
@@ -182,7 +184,7 @@ class Instance extends CompositeDataClass
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -199,16 +201,30 @@ class Instance extends CompositeDataClass
     public function has_settings()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID), 
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $settings = DataManager :: count(Setting :: class_name(), $condition);
-        
+
         return $settings > 0;
     }
 
     public function get_setting($variable)
     {
         return DataManager :: retrieve_setting_from_variable_name($variable, $this->get_id());
+    }
+
+    public function get_user_setting($user_id, $variable)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
+            new StaticConditionVariable($variable));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id));
+        $condition = new AndCondition($conditions);
+
+        return DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
     }
 }
