@@ -208,30 +208,29 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY);
 
-        // if ($this->get_external_repository()->get_user_setting('session_token'))
-        // {
-        // $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
-        // $actions[] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
-        // }
+        if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
+        {
+            $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
+            $actions[] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
+        }
 
         $is_platform = $this->get_user()->is_platform_admin();
-        // $has_setting = $this->get_external_repository()->has_settings();
-        // $has_user_setting = $this->get_external_repository()->has_user_settings();
+        $has_setting = $this->get_external_repository()->has_settings();
+        $has_user_setting = $this->get_external_repository()->has_user_settings();
 
-        // if (! ((! $has_setting || ! $this->get_external_repository()->get_user_setting('session_token')) ||
-        // (! $has_user_setting && ! $is_platform)))
-        // {
-        // $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
-        // }
+        if ($is_platform)
+        {
+            $actions[] = self :: ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
+        }
 
-        // if (! $this->get_external_repository()->get_user_setting('session_token'))
-        // {
-        $actions[] = self :: ACTION_LOGIN;
-        // }
-        // else
-        // {
-        $actions[] = self :: ACTION_LOGOUT;
-        // }
+        if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
+        {
+            $actions[] = self :: ACTION_LOGIN;
+        }
+        else
+        {
+            $actions[] = self :: ACTION_LOGOUT;
+        }
         return $actions;
     }
 

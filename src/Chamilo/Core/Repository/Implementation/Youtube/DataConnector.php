@@ -14,6 +14,12 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -32,25 +38,44 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         parent :: __construct($external_repository_instance);
 
-        $this->session_token = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'session_token',
-            $this->get_external_repository_instance_id());
         $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
             'developer_key',
             $this->get_external_repository_instance_id());
 
         $this->client = new \Google_Client();
-
         $this->client->setDeveloperKey($key);
+
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
+            new StaticConditionVariable('session_token'));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
+            new StaticConditionVariable(Session :: get_user_id()));
+        $condition = new AndCondition($conditions);
+
+        $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
+        if ($setting instanceof Setting)
+        {
+            $this->client->setAccessToken($setting->get_value());
+        }
 
         $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
     public function login()
     {
-        $this->client->setClientId('494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com');
-        $this->client->setClientSecret('V6-lsZFVTSSeeqdLNzaqkyI1');
+        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_id',
+            $this->get_external_repository_instance_id());
+        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_secret',
+            $this->get_external_repository_instance_id());
+
+        $this->client->setClientId($client_id);
+        $this->client->setClientSecret($client_secret);
         $this->client->setScopes('https://www.googleapis.com/auth/youtube');
+
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: package(),
@@ -61,23 +86,26 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $this->youtube = new \Google_Service_YouTube($this->client);
 
-        if (isset($_GET['code']))
+        $code = Request :: get('code');
+
+        if (isset($code))
         {
-            $this->client->authenticate($_GET['code']);
-            $_SESSION['token'] = $this->client->getAccessToken();
-            var_dump($_SESSION['token']);
-            header('Location: ' . $redirect->getUrl());
+            $this->client->authenticate($code);
+            $token = $this->client->getAccessToken();
+            $this->client->setAccessToken($token);
+
+            $user_setting = new Setting();
+            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_variable('session_token');
+            $user_setting->set_value($token);
+
+            return $user_setting->create();
         }
         else
         {
             $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/youtube');
             header('Location: ' . $url);
             exit();
-        }
-
-        if (isset($_SESSION['token']))
-        {
-            $this->client->setAccessToken($_SESSION['token']);
         }
     }
 
