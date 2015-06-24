@@ -19,7 +19,7 @@ $(function() {
 
         $('.specific_rights_selector').each(function() {
             if ($(this).attr('checked')) {
-                $('.specific_rights_selector_box').show();
+            $('.specific_rights_selector_box').show();
             }
         });
 
@@ -31,7 +31,7 @@ $(function() {
         // all instances of the form if 1 or more elements match.
         // That's better than not working at all, but should be reworked to use
         // the element id's.
-        
+
         $('.entity_option_selected').each(function() {
 
             var entitySelectorBox = $(this).closest('.right').find('.entity_selector_box');

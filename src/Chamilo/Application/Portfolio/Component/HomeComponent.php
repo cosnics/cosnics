@@ -237,6 +237,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+
         $has_right = Rights :: get_instance()->is_allowed(
             Rights :: GIVE_FEEDBACK_RIGHT,
             $this->get_location($node),
@@ -252,6 +253,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+
         $has_right = Rights :: get_instance()->is_allowed(
             Rights :: VIEW_FEEDBACK_RIGHT,
             $this->get_location($node),
@@ -273,11 +275,22 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
             $this->get_location($node),
             $this->get_rights_user_id());
 
-        $contentObjectEditRight = RightsService :: getInstance()->canEditContentObject(
+        $portfolioEditRight = RightsService :: getInstance()->canEditContentObject(
             $this->get_user(),
-            $node->get_content_object());
+            $this->get_root_content_object());
 
-        return $isPublisher || $contextEditRight || $contentObjectEditRight;
+        if ($node instanceof ComplexContentObjectPathNode)
+        {
+            $contentObjectEditRight = RightsService :: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $node->get_content_object());
+        }
+        else
+        {
+            $contentObjectEditRight = false;
+        }
+
+        return $isPublisher || $contextEditRight || $portfolioEditRight || $contentObjectEditRight;
     }
 
     /**
@@ -287,6 +300,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
+
         $has_right = Rights :: get_instance()->is_allowed(
             Rights :: VIEW_RIGHT,
             $this->get_location($node),
