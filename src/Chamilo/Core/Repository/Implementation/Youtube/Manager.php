@@ -26,15 +26,16 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      *
      * @param $application Application
      */
-    public function __construct($application)
+    public function __construct($external_repository,$application)
     {
         if (Request :: get(self :: PARAM_FEED_TYPE) == self :: FEED_TYPE_MYVIDEOS && ! $application->get_external_instance()->get_user_setting(
+            $this->get_user_id(),
             'session_token'))
         {
             Request :: set_get(self :: PARAM_FEED_TYPE, self :: FEED_TYPE_GENERAL);
         }
 
-        parent :: __construct($application);
+        parent :: __construct($external_repository,$application);
         $this->set_parameter(self :: PARAM_FEED_TYPE, Request :: get(self :: PARAM_FEED_TYPE));
     }
 
@@ -81,8 +82,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $menu_items = array();
 
-        // if ($this->get_external_repository()->get_user_setting('session_token'))
-        // {
+        if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
+        {
         $my_videos = array();
         $my_videos['title'] = Translation :: get('MyVideos');
         $my_videos['url'] = $this->get_url(
