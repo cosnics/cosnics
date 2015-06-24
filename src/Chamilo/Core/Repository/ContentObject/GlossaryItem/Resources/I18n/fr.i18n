@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\glossary_item
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Glossaire"
+Title = "Titre"
+Description = "Description"
+Properties = "Propriétés"
+GeneralProperties = "Propriétés générales"
+Word = "Word"
+CategoryTypeName = "Catégorie"
+Definition = "Définition"
