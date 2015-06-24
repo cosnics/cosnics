@@ -13,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -50,8 +51,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->client->setClientId('494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com');
         $this->client->setClientSecret('V6-lsZFVTSSeeqdLNzaqkyI1');
         $this->client->setScopes('https://www.googleapis.com/auth/youtube');
-        $redirect = new Redirect();
-        $this->client->setRedirectUri($redirect->getCurrentUrl());
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: package(),
+                Manager :: PARAM_ACTION => Manager :: ACTION_LOGIN,
+                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()));
+
+        $this->client->setRedirectUri($redirect->getUrl());
 
         $this->youtube = new \Google_Service_YouTube($this->client);
 
@@ -72,24 +78,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $this->client->setAccessToken($_SESSION['token']);
         }
-
-        // $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-        // 'session_token',
-        // $this->get_external_repository_instance_id());
-
-        // $user_setting = new Setting();
-        // $user_setting->set_setting_id($setting->get_id());
-        // $user_setting->set_user_id(Session :: get_user_id());
-        // $user_setting->set_value($session_token);
-
-        // if ($user_setting->create())
-        // {
-        // return true;
-        // }
-        // else
-        // {
-        // return false;
-        // }
     }
 
     public static function get_sort_properties()

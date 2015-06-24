@@ -160,7 +160,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                     // get all videos
                     $search_parameters['query'] = 'test';
                     $videos = $this->vimeo->request('/videos', $search_parameters);
-                    var_dump($videos);
+
                 }
                 break;
         }
@@ -302,7 +302,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $video = $this->vimeo->call('vimeo.videos.getInfo', array('video_id' => $id));
         $video = $video->video[0];
-
+var_dump($video);
         $video = $videos['body']['data'][0];
         $object = new ExternalObject();
 
