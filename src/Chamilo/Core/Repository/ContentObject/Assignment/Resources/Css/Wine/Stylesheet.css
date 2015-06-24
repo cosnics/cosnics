@@ -1,0 +1,13 @@
+.assignment {
+	border: 2px solid #B5CAE7;
+	margin: 5px 5px 5px 5px;
+	padding: 5px 5px 5px 5px;
+}
+
+.submission_toolbar {
+	float: right;
+}
+
+.feedback_toolbar {
+	float: right;
+}
