@@ -21,7 +21,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     private $youtube;
 
-    private $client;
+    private $session_token;
     const RELEVANCE = 'relevance';
     const PUBLISHED = 'published';
     const VIEW_COUNT = 'viewCount';
@@ -31,34 +31,40 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         parent :: __construct($external_repository_instance);
 
+        $this->session_token = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'session_token',
+            $this->get_external_repository_instance_id());
         $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
             'developer_key',
             $this->get_external_repository_instance_id());
-        $clientId = '494383609582-5g8isj1bqil20nqhmt604pkbjrls27ca.apps.googleusercontent.com';
-        $clientSecret = 'V6-lsZFVTSSeeqdLNzaqkyI1';
 
-        $this->client = new \Google_Client();
+        $client = new \Google_Client();
 
-        $this->client->setDeveloperKey($key);
+        $client->setDeveloperKey($key);
 
-        $this->youtube = new \Google_Service_YouTube($this->client);
+        $this->youtube = new \Google_Service_YouTube($client);
     }
 
     public function login()
     {
-        $this->client->setClientId($clientId);
-        $this->client->setClientSecret($clientSecret);
-        // $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
-        $session_token = $this->client->getAccessToken();
+        $session_token = Request :: get('token');
 
-        if (isset($session_token))
+        if (! $this->session_token && ! $session_token)
         {
+            $redirect = new Redirect();
+            $currentUrl = $redirect->getCurrentUrl();
+            $client = new \Google_Client();
+            $client->setScopes('https://www.googleapis.com/auth/youtube');
 
-            $this->client->setAccessToken($session_token);
+            $this->youtube = new \Google_Service_YouTube($client);
 
+        }
+        elseif ($session_token)
+        {
             $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
                 'session_token',
                 $this->get_external_repository_instance_id());
+
             $user_setting = new Setting();
             $user_setting->set_setting_id($setting->get_id());
             $user_setting->set_user_id(Session :: get_user_id());
@@ -102,7 +108,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_categories()
     {
         $properties = array();
-        $categories = $this->youtube->videoCategories();
+
+        $categories = $this->youtube->videoCategories('id,snippet');
 
         // $options[] = array(XML_UNSERIALIZER_OPTION_FORCE_ENUM =>
         // array('atom:category'));
@@ -199,15 +206,36 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_title($response['snippet']['title']);
             $object->set_description($response['snippet']['description']);
             $object->set_created(strtotime($response['snippet']['publishedAt']));
-            // $object->set_modified($modified_timestamp);
-            // $object->set_owner_id($uploader->getName()->getText());
-            // $object->set_owner_name($uploader->getName()->getText());
+            $object->set_modified(strtotime($response['snippet']['publishedAt']));
+            $object->set_owner_id($response['snippet']['channelId']);
+            $object->set_owner_name($response['snippet']['channelTitel']);
+
             // $object->set_url($videoResult->getFlashPlayerUrl());
-            $object->set_duration($videosResponse['modelData']['items'][0]['contentDetails']['duration']);
 
-            $object->set_thumbnail($response['snippet']['thumbnails']);
+            $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
+            $parts_duration = array();
+            preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
 
-            $object->set_category($videosResponse['modelData']['items'][0]['snippet']['categoryId']);
+            $object->set_duration($parts_duration[0][0] * 60 + $parts_duration[0][1]);
+
+            if (count($response['snippet']['thumbnails']) > 0)
+            {
+                $thumbnail = $response['snippet']['thumbnails']['default']['url'];
+            }
+            else
+            {
+                $thumbnail = null;
+            }
+
+            $object->set_thumbnail($thumbnail);
+
+            $videoCategory = $this->youtube->videoCategories->listVideoCategories(
+                'id,snippet',
+                array('id' => $videosResponse['modelData']['items'][0]['snippet']['categoryId']));
+            $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
+
+            $object->set_category($category);
+
             $object->set_tags($response['etag']);
 
             $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
@@ -247,10 +275,29 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     // }
     public function retrieve_external_repository_object($id)
     {
-        // $videoEntry = $this->get_youtube_video_entry($id);
         $videosResponse = $this->youtube->videos->listVideos(
             'snippet, status, contentDetails, statistics',
             array('id' => $id));
+
+        $object = new ExternalObject();
+        $object->set_id($videosResponse['modelData']['items'][0]['id']);
+        $object->set_external_repository_id($this->get_external_repository_instance_id());
+        $object->set_title($videosResponse['modelData']['items'][0]['snippet']['title']);
+        $object->set_description($videosResponse['modelData']['items'][0]['snippet']['description']);
+
+        $object->set_owner_id($videosResponse['modelData']['items'][0]['snippet']['channelId']);
+        $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitel']);
+        $object->set_created(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
+        $object->set_modified(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
+
+        // $object->set_url($videoEntry->getFlashPlayerUrl());
+
+        $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
+        $parts_duration = array();
+        preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
+
+        $object->set_duration($parts_duration[0][0] * 60 + $parts_duration[0][1]);
+
         $thumbnails = $videosResponse['modelData']['items'][0]['snippet']['thumbnails'];
 
         if (count($thumbnails) > 0)
@@ -261,21 +308,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $thumbnail = null;
         }
+        $object->set_thumbnail($thumbnail);
 
-        $object = new ExternalObject();
-        $object->set_id($videosResponse['modelData']['items'][0]['id']);
-        $object->set_external_repository_id($this->get_external_repository_instance_id());
-        $object->set_title($videosResponse['modelData']['items'][0]['snippet']['title']);
-        $object->set_description($videosResponse['modelData']['items'][0]['snippet']['description']);
-        // $object->set_owner_id($author->getName()->getText());
-        // $object->set_owner_name($author->getName()->getText());
-        $object->set_created(strtotime());
-        // $object->set_modified($modified_timestamp);
-        // $object->set_url($videoEntry->getFlashPlayerUrl());
-        $object->set_duration($videosResponse['modelData']['items'][0]['contentDetails']['duration']);
-        $object->set_thumbnail($thumbnails);
+        $videoCategory = $this->youtube->videoCategories->listVideoCategories(
+            'id,snippet',
+            array('id' => $videosResponse['modelData']['items'][0]['snippet']['categoryId']));
+        $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
 
-        $object->set_category($videosResponse['modelData']['items'][0]['snippet']['categoryId']);
+        $object->set_category($category);
         $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
         $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
@@ -286,25 +326,24 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function update_youtube_video($values)
     {
-        $video_entry = $this->youtube->getFullVideoEntry($values[ExternalObject :: PROPERTY_ID]);
-        $video_entry->setVideoTitle($values[ExternalObject :: PROPERTY_TITLE]);
-        $video_entry->setVideoCategory($values[ExternalObject :: PROPERTY_CATEGORY]);
-        $video_entry->setVideoTags($values[ExternalObject :: PROPERTY_TAGS]);
-        $video_entry->setVideoDescription($values[ExternalObject :: PROPERTY_DESCRIPTION]);
+        $video = $this->youtube->videos->listVideos('snippet', array('id' => $values[ExternalObject :: PROPERTY_ID]));
 
-        $edit_link = $video_entry->getEditLink()->getHref();
-        $this->youtube->updateEntry($video_entry, $edit_link);
+        $video->setVideoTitle($values[ExternalObject :: PROPERTY_TITLE]);
+        $video->setVideoCategory($values[ExternalObject :: PROPERTY_CATEGORY]);
+        $video->setVideoTags($values[ExternalObject :: PROPERTY_TAGS]);
+        $video->setVideoDescription($values[ExternalObject :: PROPERTY_DESCRIPTION]);
+
+        $this->youtube->videos->update('snippet', $video);
         return true;
     }
 
     public function delete_external_repository_object($id)
     {
-        return $this->youtube->delete($id);
+        return $this->youtube->videos->delete($id);
     }
 
     public function export_external_repository_object($object)
     {
-        // $video_entry = new Zend_Gdata_YouTube_VideoEntry();
         // $file_source = $this->youtube->newMediaFileSource($object->get_full_path());
         // $file_source->setContentType($object->get_mime_type());
         // $file_source->setSlug($object->get_filename());
