@@ -138,7 +138,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
                         DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
             }
 
-            if (! $this->get_current_node()->get_content_object() instanceof LearningPath)
+            if (! $this->get_current_node()->get_content_object() instanceof LearningPath &&
+                 $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
             {
                 $this->tabs_renderer->add_tab(
                     new DynamicVisualTab(
