@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: youtube_external_repository_manager_form.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package
  *
  *
@@ -37,11 +37,11 @@ class ExternalObjectForm extends FormValidator
     public function __construct($form_type, $action, $application)
     {
         parent :: __construct('youtube_upload', 'post', $action);
-        
+
         $this->application = $application;
-        
+
         $this->form_type = $form_type;
-        
+
         if ($this->form_type == self :: TYPE_EDIT)
         {
             $this->build_editing_form();
@@ -50,7 +50,7 @@ class ExternalObjectForm extends FormValidator
         {
             $this->build_creation_form();
         }
-        
+
         $this->setDefaults();
     }
 
@@ -75,35 +75,35 @@ class ExternalObjectForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement(
-            'text', 
-            ExternalObject :: PROPERTY_TITLE, 
-            Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES), 
+            'text',
+            ExternalObject :: PROPERTY_TITLE,
+            Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES),
             array("size" => "50"));
         $this->addRule(
-            ExternalObject :: PROPERTY_TITLE, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            ExternalObject :: PROPERTY_TITLE,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement(
-            'select', 
-            ExternalObject :: PROPERTY_CATEGORY, 
-            Translation :: get('Category', null, Utilities :: COMMON_LIBRARIES), 
+            'select',
+            ExternalObject :: PROPERTY_CATEGORY,
+            Translation :: get('Category', null, Utilities :: COMMON_LIBRARIES),
             $this->get_youtube_categories());
-        
+
         $this->addElement(
-            'textarea', 
-            ExternalObject :: PROPERTY_TAGS, 
-            Translation :: get('Tags'), 
+            'textarea',
+            ExternalObject :: PROPERTY_TAGS,
+            Translation :: get('Tags'),
             array("rows" => "2", "cols" => "80"));
         $this->addRule(
-            ExternalObject :: PROPERTY_TAGS, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            ExternalObject :: PROPERTY_TAGS,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement(
-            'textarea', 
-            ExternalObject :: PROPERTY_DESCRIPTION, 
-            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES), 
+            'textarea',
+            ExternalObject :: PROPERTY_DESCRIPTION,
+            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES),
             array("rows" => "7", "cols" => "80"));
     }
 
@@ -116,38 +116,38 @@ class ExternalObjectForm extends FormValidator
     public function build_editing_form()
     {
         $this->build_basic_form();
-        
+
         $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_creation_form()
     {
         $this->build_basic_form();
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -155,29 +155,29 @@ class ExternalObjectForm extends FormValidator
     {
         $youtube = $this->application->get_external_repository_manager_connector();
         $values = $this->exportValues();
-        
+
         return $youtube->update_youtube_video($values);
     }
 
     public function get_upload_token()
     {
         $values = $this->exportValues();
-        
+
         $connector = $this->application->get_external_repository_manager_connector();
         return $connector->get_upload_token($values);
     }
 
     /**
      * Sets default values.
-     * 
+     *
      * @param $defaults array Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())
     {
-        // $defaults[self :: VIDEO_TITLE] = $this->video_entry->getVideoTitle();
-        // $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
-        // $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
-        // $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
+//         $defaults[self :: VIDEO_TITLE] = $this->video_entry->getVideoTitle();
+//         $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
+//         $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
+//         $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
         parent :: setDefaults($defaults);
     }
 

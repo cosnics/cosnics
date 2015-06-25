@@ -6,13 +6,15 @@ use Chamilo\Core\Repository\Implementation\Youtube\Form\UploadForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class UploaderComponent extends Manager
+class UploaderComponent extends Manager implements DelegateComponent
 {
 
     public function run()
     {
-        if (! $this->get_external_repository()->get_user_setting('session_token'))
+        if (! $this->get_external_repository()->get_user_setting(Session :: get_user_id(), 'session_token'))
         {
             throw new NotAllowedException();
         }

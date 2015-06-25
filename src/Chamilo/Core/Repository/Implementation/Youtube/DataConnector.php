@@ -92,7 +92,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
 
-            return $user_setting->create();
+            if ($user_setting->create())
+            {
+                $setting = new Setting();
+                $setting->set_user_id(Session :: get_user_id());
+                $setting->set_variable('refresh_token');
+                $setting->set_value($this->client->getRefreshToken());
+
+                return $setting->create();
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
@@ -128,8 +140,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_categories()
     {
-        $categories = $this->youtube->videoCategories('id,snippet');
-        return $categories;
+        $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('id' => 'test'));
+        return $categories['modelData']['items'];
     }
 
     public function get_upload_token($values)
