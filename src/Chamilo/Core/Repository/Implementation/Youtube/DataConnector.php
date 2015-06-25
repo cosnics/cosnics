@@ -140,7 +140,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_categories()
     {
-        $categories = $this->youtube->videoCategories->listVideoCategories('snippet', 'id');
+        $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('id' => 'test'));
 var_dump($categories);
         return $categories;
     }
