@@ -135,8 +135,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function upload_video($values)
     {
-        var_dump($values);
-        $videoPath = "/path/to/file.mp4";
         $snippet = new \Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
         $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
@@ -153,9 +151,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $chunkSizeBytes = 1 * 1024 * 1024;
         $this->client->setDefer(true);
 
-        $insertRequest = $youtube->videos->insert("status,snippet", $video);
+        $insertRequest = $youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
-        $media->setFileSize(filesize($videoPath));
+//         $media->setFileSize(filesize($videoPath));
 
         return $media;
     }
@@ -224,7 +222,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         foreach ($searchResponse['modelData']['items'] as $response)
         {
             $videosResponse = $this->youtube->videos->listVideos(
-                'snippet, status, contentDetails, statistics',
+                'snippet, status, contentDetails',
                 array('id' => $response['id']['videoId']));
 
             $object = new ExternalObject();
@@ -353,7 +351,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function update_youtube_video($values)
     {
-        $video = $this->youtube->videos->listVideos('snippet', array('id' => $values[ExternalObject :: PROPERTY_ID]));
+        $video = $this->youtube->videos->listVideos('snippet,status, contentDetails', array('id' => $values[ExternalObject :: PROPERTY_ID]));
 
         $video->setVideoTitle($values[ExternalObject :: PROPERTY_TITLE]);
         $video->setVideoCategory($values[ExternalObject :: PROPERTY_CATEGORY]);
