@@ -36,26 +36,17 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        echo'111';
         parent :: __construct('youtube_upload', 'post', $action);
 
         $this->application = $application;
 
         $this->form_type = $form_type;
-        echo'222';
-        var_dump($this->form_type == self :: TYPE_CREATE);
-        var_dump(self :: TYPE_EDIT);
-
-
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        if ($this->form_type == self :: TYPE_CREATE)
         {
-            echo'edit';
-            $this->build_editing_form();
+            $this->build_creation_form();
         }
-        elseif ($this->form_type == 1)
+        elseif ($this->form_type == self :: TYPE_EDIT)
         {
-echo'create';
             $this->build_creation_form();
         }
 
