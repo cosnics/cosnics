@@ -218,8 +218,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_owner_id($videosResponse['modelData']['items'][0]['snippet']['channelId']);
             $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitle']);
 
-            // $object->set_url($videoResult->getFlashPlayerUrl());
-
             $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
             $parts_duration = array();
             preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
@@ -244,7 +242,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
             $object->set_category($category);
 
-            $object->set_tags($response['etag']);
+//             $object->set_tags($response['etag']);
 
             $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
@@ -258,7 +256,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function count_external_repository_objects($query)
     {
         $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query));
-
+var_dump($searchResponse);
         if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
             return 900;
@@ -298,8 +296,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_created(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
         $object->set_modified(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
 
-        // $object->set_url($videoEntry->getFlashPlayerUrl());
-
         $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
         $parts_duration = array();
         preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
@@ -324,7 +320,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
 
         $object->set_category($category);
-        $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
+//         $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
         $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
         // $object->set_rights($this->determine_rights());

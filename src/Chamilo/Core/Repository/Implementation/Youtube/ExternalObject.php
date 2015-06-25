@@ -13,7 +13,6 @@ class ExternalObject extends StreamingMediaExternalObject
     const STATUS_FAILED = 'failed';
     const STATUS_PROCESSING = 'processing';
     const STATUS_RESTRICTED = 'restricted';
-    const YOUTUBE_PLAYER_URI = 'http://www.youtube.com/v/%s';
 
     public function get_category()
     {
@@ -78,10 +77,5 @@ class ExternalObject extends StreamingMediaExternalObject
     public static function get_object_type()
     {
         return self :: OBJECT_TYPE;
-    }
-
-    public function get_video_url()
-    {
-        return sprintf(self :: YOUTUBE_PLAYER_URI, $this->get_id());
     }
 }
