@@ -73,7 +73,6 @@ class ExternalObjectForm extends FormValidator
 
     public function build_basic_form()
     {
-        echo('build_basic_form');
         $this->addElement(
             'text',
             ExternalObject :: PROPERTY_TITLE,
@@ -136,7 +135,7 @@ class ExternalObjectForm extends FormValidator
     public function build_creation_form()
     {
         $this->build_basic_form();
-        echo('build_creation_form');
+
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
