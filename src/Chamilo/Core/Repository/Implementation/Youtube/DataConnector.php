@@ -242,7 +242,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
             $object->set_category($category);
 
-//             $object->set_tags($response['etag']);
+            // $object->set_tags($response['etag']);
 
             $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
@@ -256,7 +256,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function count_external_repository_objects($query)
     {
         $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query, 'maxResults' => 9));
-var_dump($searchResponse['items']);
+        var_dump($searchResponse['pageInfo']);
+        var_dump($searchResponse['items']);
         if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
             return 900;
@@ -320,7 +321,7 @@ var_dump($searchResponse['items']);
         $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
 
         $object->set_category($category);
-//         $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
+        // $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
         $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
         // $object->set_rights($this->determine_rights());
