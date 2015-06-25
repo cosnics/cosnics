@@ -1,0 +1,859 @@
+Warning: This development build of composer is over 30 days old. It is recommended to update it by running "C:\ProgramData\ComposerSetup\bin\composer.phar self-update" to get the latest version.
+class Composer\Package\RootPackage#297 (49) {
+  protected $minimumStability =>
+  string(6) "stable"
+  protected $preferStable =>
+  bool(false)
+  protected $stabilityFlags =>
+  array(4) {
+    'behat/mink-extension' =>
+    int(20)
+    'behat/mink-goutte-driver' =>
+    int(20)
+    'fabpot/goutte' =>
+    int(20)
+    'composer/composer' =>
+    int(20)
+  }
+  protected $references =>
+  array(0) {
+  }
+  protected $aliases =>
+  array(0) {
+  }
+  protected $repositories =>
+  array(3) {
+    [0] =>
+    array(2) {
+      'type' =>
+      string(4) "pear"
+      'url' =>
+      string(19) "http://pear.php.net"
+    }
+    [1] =>
+    array(2) {
+      'type' =>
+      string(3) "git"
+      'url' =>
+      string(39) "https://github.com/mptre/php-soundcloud"
+    }
+    'packagist' =>
+    array(3) {
+      'type' =>
+      string(8) "composer"
+      'url' =>
+      string(22) "https?://packagist.org"
+      'allow_ssl_downgrade' =>
+      bool(true)
+    }
+  }
+  protected $license =>
+  array(1) {
+    [0] =>
+    string(7) "GPL-3.0"
+  }
+  protected $keywords =>
+  array(2) {
+    [0] =>
+    string(3) "ELO"
+    [1] =>
+    string(4) "LCMS"
+  }
+  protected $authors =>
+  NULL
+  protected $description =>
+  string(20) "Chamilo LCMS Connect"
+  protected $homepage =>
+  NULL
+  protected $scripts =>
+  array(4) {
+    'pre-install-cmd' =>
+    array(1) {
+      [0] =>
+      string(66) "Chamilo\Libraries\Format\Utilities\BuildUtilities::processComposer"
+    }
+    'pre-update-cmd' =>
+    array(1) {
+      [0] =>
+      string(66) "Chamilo\Libraries\Format\Utilities\BuildUtilities::processComposer"
+    }
+    'post-update-cmd' =>
+    array(1) {
+      [0] =>
+      string(67) "Chamilo\Libraries\Format\Utilities\BuildUtilities::processResources"
+    }
+    'post-install-cmd' =>
+    array(1) {
+      [0] =>
+      string(67) "Chamilo\Libraries\Format\Utilities\BuildUtilities::processResources"
+    }
+  }
+  protected $support =>
+  array(3) {
+    'forum' =>
+    string(34) "http://lcms.chamilo.org/phpbbforum"
+    'source' =>
+    string(46) "https://bitbucket.org/chamilo/lcms-connect/src"
+    'issues' =>
+    string(49) "https://support.chamilo.org/projects/lcms-backlog"
+  }
+  protected $abandoned =>
+  bool(false)
+  protected $type =>
+  string(7) "library"
+  protected $targetDir =>
+  NULL
+  protected $installationSource =>
+  NULL
+  protected $sourceType =>
+  NULL
+  protected $sourceUrl =>
+  NULL
+  protected $sourceReference =>
+  NULL
+  protected $sourceMirrors =>
+  NULL
+  protected $distType =>
+  NULL
+  protected $distUrl =>
+  NULL
+  protected $distReference =>
+  NULL
+  protected $distSha1Checksum =>
+  NULL
+  protected $distMirrors =>
+  NULL
+  protected $version =>
+  string(11) "9999999-dev"
+  protected $prettyVersion =>
+  string(11) "dev-default"
+  protected $releaseDate =>
+  NULL
+  protected $extra =>
+  array(1) {
+    'install-path' =>
+    string(0) ""
+  }
+  protected $binaries =>
+  array(0) {
+  }
+  protected $dev =>
+  bool(true)
+  protected $stability =>
+  string(3) "dev"
+  protected $notificationUrl =>
+  NULL
+  protected $requires =>
+  array(37) {
+    'symfony/http-foundation' =>
+    class Composer\Package\Link#293 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(23) "symfony/http-foundation"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#294 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "2.3.*"
+    }
+    'doctrine/dbal' =>
+    class Composer\Package\Link#288 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(13) "doctrine/dbal"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#287 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "2.4.*"
+    }
+    'doctrine/cache' =>
+    class Composer\Package\Link#281 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(14) "doctrine/cache"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#284 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "1.4.*"
+    }
+    'phpunit/phpunit' =>
+    class Composer\Package\Link#276 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(15) "phpunit/phpunit"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#275 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "4.4.*"
+    }
+    'php' =>
+    class Composer\Package\Link#111 (5) {
+      protected $source =>
+      string(16) "chamilo/calendar"
+      protected $target =>
+      string(3) "php"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#316 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(7) ">=5.4.0"
+    }
+    'phpoffice/phpexcel' =>
+    class Composer\Package\Link#1602 (5) {
+      protected $source =>
+      string(26) "chamilo/application-survey"
+      protected $target =>
+      string(18) "phpoffice/phpexcel"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1601 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "=1.8.0"
+    }
+    'fergusean/nusoap' =>
+    class Composer\Package\Link#1603 (5) {
+      protected $source =>
+      string(32) "chamilo/app-weblcms-tool-ephorus"
+      protected $target =>
+      string(16) "fergusean/nusoap"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#304 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'szymach/c-pchart' =>
+    class Composer\Package\Link#1610 (5) {
+      protected $source =>
+      string(22) "chamilo/core-reporting"
+      protected $target =>
+      string(16) "szymach/c-pchart"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#1609 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(3) "1.*"
+    }
+    'phpspec/php-diff' =>
+    class Composer\Package\Link#1612 (5) {
+      protected $source =>
+      string(23) "chamilo/core-repository"
+      protected $target =>
+      string(16) "phpspec/php-diff"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1611 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(7) "=v1.0.2"
+    }
+    'sabre/vobject' =>
+    class Composer\Package\Link#1614 (5) {
+      protected $source =>
+      string(25) "chamilo/co-calendar-event"
+      protected $target =>
+      string(13) "sabre/vobject"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#1613 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "~3.2.0"
+    }
+    'fastfeed/fastfeed' =>
+    class Composer\Package\Link#1598 (5) {
+      protected $source =>
+      string(19) "chamilo/co-rss-feed"
+      protected $target =>
+      string(17) "fastfeed/fastfeed"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1615 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(7) ">=0.4.0"
+    }
+    'zend/gdata' =>
+    class Composer\Package\Link#305 (5) {
+      protected $source =>
+      string(28) "chamilo/ext-repo-google-docs"
+      protected $target =>
+      string(10) "zend/gdata"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#1604 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(3) "1.*"
+    }
+    'google/apiclient' =>
+    class Composer\Package\Link#1622 (5) {
+      protected $source =>
+      string(28) "chamilo/ext-repo-google-docs"
+      protected $target =>
+      string(16) "google/apiclient"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1621 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "1.1.2"
+    }
+    'jasig/phpcas' =>
+    class Composer\Package\Link#1624 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(12) "jasig/phpcas"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1623 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "=1.3.3"
+    }
+    'pclzip/pclzip' =>
+    class Composer\Package\Link#1626 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(13) "pclzip/pclzip"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1625 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(5) "2.8.2"
+    }
+    'phpmailer/phpmailer' =>
+    class Composer\Package\Link#1619 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(19) "phpmailer/phpmailer"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1597 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(7) "=v5.2.8"
+    }
+    'kriswallsmith/assetic' =>
+    class Composer\Package\Link#1630 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(21) "kriswallsmith/assetic"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1629 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(7) "=v1.1.2"
+    }
+    'natxet/cssmin' =>
+    class Composer\Package\Link#1632 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(13) "natxet/cssmin"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1631 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "=3.0.2"
+    }
+    'mrclay/minify' =>
+    class Composer\Package\Link#1634 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(13) "mrclay/minify"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1633 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "=2.2.0"
+    }
+    'danielstjules/stringy' =>
+    class Composer\Package\Link#1638 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(21) "danielstjules/stringy"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#1637 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(3) "1.*"
+    }
+    'ensepar/html2pdf' =>
+    class Composer\Package\Link#1640 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(16) "ensepar/html2pdf"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#1639 (3) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(6) "=1.0.1"
+    }
+    'pear-pear.php.net/html_common' =>
+    class Composer\Package\Link#1644 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(29) "pear-pear.php.net/html_common"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1643 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/html_menu' =>
+    class Composer\Package\Link#1646 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(27) "pear-pear.php.net/html_menu"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1645 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/html_table' =>
+    class Composer\Package\Link#1648 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(28) "pear-pear.php.net/html_table"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1647 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/html_quickform' =>
+    class Composer\Package\Link#1650 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(32) "pear-pear.php.net/html_quickform"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1649 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/html_quickform_controller' =>
+    class Composer\Package\Link#1652 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(43) "pear-pear.php.net/html_quickform_controller"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1651 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/html_quickform_advmultiselect' =>
+    class Composer\Package\Link#1654 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(47) "pear-pear.php.net/html_quickform_advmultiselect"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1653 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/pear' =>
+    class Composer\Package\Link#1656 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(22) "pear-pear.php.net/pear"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1655 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/xml_serializer' =>
+    class Composer\Package\Link#1658 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(32) "pear-pear.php.net/xml_serializer"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1657 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/pager' =>
+    class Composer\Package\Link#1660 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(23) "pear-pear.php.net/pager"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1659 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/net_url2' =>
+    class Composer\Package\Link#1662 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(26) "pear-pear.php.net/net_url2"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1661 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/net_url' =>
+    class Composer\Package\Link#1664 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(25) "pear-pear.php.net/net_url"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1663 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/net_socket' =>
+    class Composer\Package\Link#1666 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(28) "pear-pear.php.net/net_socket"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1665 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/http_request' =>
+    class Composer\Package\Link#1668 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(30) "pear-pear.php.net/http_request"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1667 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/http_request2' =>
+    class Composer\Package\Link#1670 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(31) "pear-pear.php.net/http_request2"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1669 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/mdb2' =>
+    class Composer\Package\Link#1672 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(22) "pear-pear.php.net/mdb2"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1671 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'pear-pear.php.net/mdb2_driver_mysqli' =>
+    class Composer\Package\Link#1674 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(36) "pear-pear.php.net/mdb2_driver_mysqli"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#1673 (1) {
+        ...
+      }
+      protected $description =>
+      string(8) "requires"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+  }
+  protected $conflicts =>
+  array(0) {
+  }
+  protected $provides =>
+  array(0) {
+  }
+  protected $replaces =>
+  array(0) {
+  }
+  protected $devRequires =>
+  array(7) {
+    'behat/behat' =>
+    class Composer\Package\Link#279 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(11) "behat/behat"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#280 (1) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'behat/mink' =>
+    class Composer\Package\Link#277 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(10) "behat/mink"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#278 (1) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(1) "*"
+    }
+    'behat/mink-extension' =>
+    class Composer\Package\Link#270 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(20) "behat/mink-extension"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#269 (3) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(10) "dev-master"
+    }
+    'behat/mink-goutte-driver' =>
+    class Composer\Package\Link#273 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(24) "behat/mink-goutte-driver"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#274 (3) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(10) "dev-master"
+    }
+    'fabpot/goutte' =>
+    class Composer\Package\Link#271 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(13) "fabpot/goutte"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\VersionConstraint#272 (3) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(10) "dev-master"
+    }
+    'composer/composer' =>
+    class Composer\Package\Link#241 (5) {
+      protected $source =>
+      string(20) "chamilo/lcms-connect"
+      protected $target =>
+      string(17) "composer/composer"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\EmptyConstraint#268 (1) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(5) "*@dev"
+    }
+    'fabpot/php-cs-fixer' =>
+    class Composer\Package\Link#1678 (5) {
+      protected $source =>
+      string(17) "chamilo/libraries"
+      protected $target =>
+      string(19) "fabpot/php-cs-fixer"
+      protected $constraint =>
+      class Composer\Package\LinkConstraint\MultiConstraint#1677 (3) {
+        ...
+      }
+      protected $description =>
+      string(26) "requires (for development)"
+      protected $prettyConstraint =>
+      string(3) "1.*"
+    }
+  }
+  protected $suggests =>
+  array(0) {
+  }
+  protected $autoload =>
+  array(1) {
+    'psr-4' =>
+    array(2) {
+      'Chamilo\' =>
+      string(12) "src/Chamilo/"
+      'Ehb\' =>
+      string(8) "src/Ehb/"
+    }
+  }
+  protected $devAutoload =>
+  array(0) {
+  }
+  protected $includePaths =>
+  array(0) {
+  }
+  protected $archiveExcludes =>
+  array(0) {
+  }
+  public $id =>
+  int(-1)
+  protected $name =>
+  string(20) "chamilo/lcms-connect"
+  protected $prettyName =>
+  string(20) "chamilo/lcms-connect"
+  protected $repository =>
+  NULL
+  protected $transportOptions =>
+  array(0) {
+  }
+}
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Writing lock file
+Generating autoload files
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? 
