@@ -87,13 +87,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $token = $this->client->getAccessToken();
             $this->client->setAccessToken($token);
 
-            if (!$token)
-            {
-                $refresh_token = $this->client->getRefreshToken();
-                $this->client->refreshToken($refresh_token);
-            }
-
-
             $user_setting = new Setting();
             $user_setting->set_user_id(Session :: get_user_id());
             $user_setting->set_variable('session_token');
