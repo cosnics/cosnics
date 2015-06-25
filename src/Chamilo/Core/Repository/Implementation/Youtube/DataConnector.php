@@ -65,7 +65,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
         if ($setting instanceof Setting)
         {
-            $this->client->setRefreshToken($setting->get_value());
+            $this->client->RefreshToken($setting->get_value());
         }
 
         $this->youtube = new \Google_Service_YouTube($this->client);
