@@ -28,8 +28,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        if (Request :: get(self :: PARAM_FEED_TYPE) == self :: FEED_TYPE_MYVIDEOS &&
-             ! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
+        if (Request :: get(self :: PARAM_FEED_TYPE) == self :: FEED_TYPE_MYVIDEOS)
         {
             Request :: set_get(self :: PARAM_FEED_TYPE, self :: FEED_TYPE_GENERAL);
         }
