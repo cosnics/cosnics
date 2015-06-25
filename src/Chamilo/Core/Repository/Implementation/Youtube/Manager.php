@@ -26,7 +26,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      *
      * @param $application Application
      */
-    public function __construct($external_repository,$application)
+    public function __construct($external_repository, $application)
     {
         if (Request :: get(self :: PARAM_FEED_TYPE) == self :: FEED_TYPE_MYVIDEOS && ! $application->get_external_instance()->get_user_setting(
             $this->get_user_id(),
@@ -35,7 +35,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             Request :: set_get(self :: PARAM_FEED_TYPE, self :: FEED_TYPE_GENERAL);
         }
 
-        parent :: __construct($external_repository,$application);
+        parent :: __construct($external_repository, $application);
         $this->set_parameter(self :: PARAM_FEED_TYPE, Request :: get(self :: PARAM_FEED_TYPE));
     }
 
@@ -84,14 +84,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-        $my_videos = array();
-        $my_videos['title'] = Translation :: get('MyVideos');
-        $my_videos['url'] = $this->get_url(
-            array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
-            array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
-        $my_videos['class'] = 'user';
-        $menu_items[] = $my_videos;
-        // }
+            $my_videos = array();
+            $my_videos['title'] = Translation :: get('MyVideos');
+            $my_videos['url'] = $this->get_url(
+                array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
+                array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
+            $my_videos['class'] = 'user';
+            $menu_items[] = $my_videos;
+        }
 
         $browser = array();
         $browser['title'] = Translation :: get('Public');
