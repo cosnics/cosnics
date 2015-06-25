@@ -10,11 +10,11 @@ class UploadForm extends FormValidator
 
     private $token;
 
-    public function __construct($action, $token)
+    public function __construct()
     {
-        parent :: __construct('youtube_upload', 'post', $action);
-        
-        $this->token = $token;
+//         parent :: __construct('youtube_upload', 'post', $action);
+
+//         $this->token = $token;
         $this->build_upload_form();
     }
 
@@ -22,18 +22,18 @@ class UploadForm extends FormValidator
     {
         $this->addElement('hidden', 'token', $this->token);
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 }
