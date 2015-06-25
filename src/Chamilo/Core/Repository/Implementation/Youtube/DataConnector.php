@@ -201,7 +201,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
         $searchResponse = $this->youtube->search->listSearch('id,snippet', array('type' => 'video', 'q' => $query));
-
+var_dump($searchResponse);
         foreach ($searchResponse['modelData']['items'] as $response)
         {
             $videosResponse = $this->youtube->videos->listVideos(
@@ -256,8 +256,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function count_external_repository_objects($query)
     {
         $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query, 'maxResults' => 9));
-        var_dump($searchResponse['pageInfo']);
-        var_dump($searchResponse['items']);
         if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
             return 900;
