@@ -28,9 +28,9 @@ class ExternalObjectForm extends FormValidator
 
     private $application;
 
-    private $video_entry;
-
     private $form_type;
+
+    private $video;
 
     private $external_repository_object;
 
@@ -48,6 +48,7 @@ class ExternalObjectForm extends FormValidator
         }
         elseif ($this->form_type == self :: TYPE_CREATE)
         {
+            echo('daar');
             $this->build_creation_form();
         }
 
@@ -174,15 +175,15 @@ class ExternalObjectForm extends FormValidator
      */
     public function setDefaults($defaults = array ())
     {
-//         $defaults[self :: VIDEO_TITLE] = $this->video_entry->getVideoTitle();
-//         $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
-//         $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
-//         $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
+        // $defaults[self :: VIDEO_TITLE] = $this->video->getVideoTitle();
+        // $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
+        // $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
+        // $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
         parent :: setDefaults($defaults);
     }
 
-    public function get_entry_video()
+    public function get_video()
     {
-        return $this->entry_video;
+        return $this->video;
     }
 }
