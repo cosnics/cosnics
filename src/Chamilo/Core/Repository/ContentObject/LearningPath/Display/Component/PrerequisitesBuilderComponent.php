@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: prerequisites_builder.class.php 200 2009-11-13 12:30:04Z kariboe $
