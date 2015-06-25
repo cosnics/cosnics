@@ -200,8 +200,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
-        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('type' => 'video', 'q' => $query));
-var_dump($searchResponse);
+        if (($count + $offset) >= 900)
+        {
+            $temp = ($offset + $count) - 900;
+            $max_result = $count - $temp;
+        }
+        else
+        {
+            $max_result = $count;
+        }
+
+        $searchResponse = $this->youtube->search->listSearch(
+            'id,snippet',
+            array('type' => 'video', 'q' => $query, 'maxResults' => $max_result));
+
         foreach ($searchResponse['modelData']['items'] as $response)
         {
             $videosResponse = $this->youtube->videos->listVideos(
@@ -212,7 +224,7 @@ var_dump($searchResponse);
             $object->set_id($response['id']['videoId']);
             $object->set_external_repository_id($this->get_external_repository_instance_id());
             $object->set_title($response['snippet']['title']);
-            $object->set_description($response['snippet']['description']);
+            $object->set_description(nl2br($response['snippet']['description']));
             $object->set_created(strtotime($response['snippet']['publishedAt']));
             $object->set_modified(strtotime($response['snippet']['publishedAt']));
             $object->set_owner_id($videosResponse['modelData']['items'][0]['snippet']['channelId']);
@@ -227,6 +239,7 @@ var_dump($searchResponse);
             if (count($response['snippet']['thumbnails']) > 0)
             {
                 $thumbnail = $response['snippet']['thumbnails']['default']['url'];
+                $object->set_url($response['snippet']['thumbnails']['default']['url']);
             }
             else
             {
@@ -242,7 +255,7 @@ var_dump($searchResponse);
 
             $object->set_category($category);
 
-            // $object->set_tags($response['etag']);
+            $object->set_tags($videosResponse['modelData']['items'][0]['snippet']['tags']);
 
             $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
@@ -255,14 +268,17 @@ var_dump($searchResponse);
 
     public function count_external_repository_objects($query)
     {
-        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query, 'maxResults' => 9));
+        $searchResponse = $this->youtube->search->listSearch(
+            'id,snippet',
+            array('type' => 'video', 'q' => $query, 'maxResults' => 50));
+
         if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
             return 900;
         }
         else
         {
-            return $searchResponse['pageInfo']['resultsPerPage'];
+            return $searchResponse['pageInfo']['totalResults'];
         }
     }
 
@@ -280,18 +296,16 @@ var_dump($searchResponse);
     // }
     public function retrieve_external_repository_object($id)
     {
-        $videosResponse = $this->youtube->videos->listVideos(
-            'snippet, status, contentDetails, statistics',
-            array('id' => $id));
+        $videosResponse = $this->youtube->videos->listVideos('snippet, status, contentDetails', array('id' => $id));
 
         $object = new ExternalObject();
         $object->set_id($videosResponse['modelData']['items'][0]['id']);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_title($videosResponse['modelData']['items'][0]['snippet']['title']);
-        $object->set_description($videosResponse['modelData']['items'][0]['snippet']['description']);
+        $object->set_description(nl2br($videosResponse['modelData']['items'][0]['snippet']['description']));
 
         $object->set_owner_id($videosResponse['modelData']['items'][0]['snippet']['channelId']);
-        $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitel']);
+        $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitle']);
         $object->set_created(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
         $object->set_modified(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
 
@@ -306,6 +320,7 @@ var_dump($searchResponse);
         if (count($thumbnails) > 0)
         {
             $thumbnail = $thumbnails['default']['url'];
+            $object->set_url($thumbnails['default']['url']);
         }
         else
         {
@@ -319,10 +334,12 @@ var_dump($searchResponse);
         $category = $videoCategory['modelData']['items'][0]['snippet']['title'];
 
         $object->set_category($category);
-        // $object->set_tags($videosResponse['modelData']['items'][0]['etag']);
+
+        $object->set_tags($videosResponse['modelData']['items'][0]['snippet']['tags']);
+
         $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
-        // $object->set_rights($this->determine_rights());
+        $object->set_rights($this->determine_rights());
 
         return $object;
     }
@@ -375,8 +392,8 @@ var_dump($searchResponse);
     {
         $rights = array();
         $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = ($video_entry->getEditLink() !== null ? true : false);
-        $rights[ExternalObject :: RIGHT_DELETE] = ($video_entry->getEditLink() !== null ? true : false);
+        // $rights[ExternalObject :: RIGHT_EDIT] = ($video_entry->getEditLink() !== null ? true : false);
+        // $rights[ExternalObject :: RIGHT_DELETE] = ($video_entry->getEditLink() !== null ? true : false);
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
         return $rights;
     }
