@@ -43,7 +43,7 @@ class ExternalObjectForm extends FormValidator
 
         $this->form_type = $form_type;
         echo'222';
-        var_dump($this->form_type);
+        var_dump($this->form_type == self :: TYPE_CREATE);
         var_dump(self :: TYPE_EDIT);
 
 
@@ -53,7 +53,7 @@ class ExternalObjectForm extends FormValidator
             echo'edit';
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == 1)
         {
 echo'create';
             $this->build_creation_form();
