@@ -9,10 +9,12 @@ class ExternalObject extends StreamingMediaExternalObject
     const OBJECT_TYPE = 'youtube';
     const PROPERTY_CATEGORY = 'category';
     const PROPERTY_TAGS = 'tags';
-    const STATUS_REJECTED = 'rejected';
+    const STATUS_DELETED = 'deleted';
     const STATUS_FAILED = 'failed';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_RESTRICTED = 'restricted';
+    const STATUS_PROCESSED = 'processed';
+    const STATUS_UPLOADED = 'uploaded';
+    const STATUS_REJECTED = 'rejected';
+    const YOUTUBE_PLAYER_URI = 'http://www.youtube.com/v/%s';
 
     public function get_category()
     {
@@ -57,17 +59,17 @@ class ExternalObject extends StreamingMediaExternalObject
             case self :: STATUS_REJECTED :
                 return Translation :: get('Rejected');
                 break;
-            case self :: STATUS_PROCESSING :
-                return Translation :: get('Processing');
+            case self :: STATUS_PROCESSED :
+                return Translation :: get('Processed');
                 break;
             case self :: STATUS_FAILED :
                 return Translation :: get('Failed');
                 break;
-            case self :: STATUS_AVAILABLE :
-                return Translation :: get('Available');
+            case self :: STATUS_UPLOADED :
+                return Translation :: get('Uploaded');
                 break;
-            case self :: STATUS_RESTRICTED :
-                return Translation :: get('Restricted');
+            case self :: STATUS_DELETED :
+                return Translation :: get('Deleted');
                 break;
             default :
                 return Translation :: get('Unknown');
@@ -77,5 +79,10 @@ class ExternalObject extends StreamingMediaExternalObject
     public static function get_object_type()
     {
         return self :: OBJECT_TYPE;
+    }
+
+    public function get_video_url()
+    {
+        return sprintf(self :: YOUTUBE_PLAYER_URI, $this->get_id());
     }
 }
