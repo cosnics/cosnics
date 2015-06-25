@@ -20,6 +20,7 @@ class UploaderComponent extends Manager implements DelegateComponent
         }
         else
         {
+            echo'hier';
             $form = new ExternalObjectForm(ExternalObjectForm :: TYPE_CREATE, $this->get_url(), $this);
 
             if ($form->validate())
