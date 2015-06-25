@@ -24,38 +24,41 @@ class UploaderComponent extends Manager implements DelegateComponent
 
             if ($form->validate())
             {
-                $upload_token = $form->upload_video();
+                $upload_video = $form->upload_video();
+                var_dump($upload_video);
 
-                if ($upload_token)
-                {
-                    $parameters = $this->get_parameters();
-                    $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                    $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
-                    $redirect = new Redirect($parameters);
+//                 if ($upload_token)
+//                 {
+//                     $parameters = $this->get_parameters();
+//                     $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+//                     $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
-                    $next_url = $upload_token['url'] . '?nexturl=' . urlencode($redirect->getUrl());
-                    $form = new UploadForm($next_url, $upload_token['token']);
+//                     $redirect = new Redirect($parameters);
 
-                    $html = array();
 
-                    $html[] = $this->render_header();
-                    $html[] = $form->toHtml();
-                    $html[] = $this->render_footer();
+//                     $next_url = $upload_token['url'] . '?nexturl=' . urlencode($redirect->getUrl());
+//                     $form = new UploadForm($next_url, $upload_token['token']);
 
-                    return implode(PHP_EOL, $html);
-                }
-            }
-            else
-            {
-                $html = array();
+//                     $html = array();
 
-                $html[] = $this->render_header();
-                $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+//                     $html[] = $this->render_header();
+//                     $html[] = $form->toHtml();
+//                     $html[] = $this->render_footer();
 
-                return implode(PHP_EOL, $html);
-            }
-        }
+//                     return implode(PHP_EOL, $html);
+//                 }
+//             }
+//             else
+//             {
+//                 $html = array();
+
+//                 $html[] = $this->render_header();
+//                 $html[] = $form->toHtml();
+//                 $html[] = $this->render_footer();
+
+//                 return implode(PHP_EOL, $html);
+//             }
+//         }
     }
 }
