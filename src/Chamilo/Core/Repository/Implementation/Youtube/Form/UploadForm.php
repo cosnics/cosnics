@@ -10,11 +10,10 @@ class UploadForm extends FormValidator
 
     private $token;
 
-    public function __construct()
+    public function __construct($action)
     {
-//         parent :: __construct('youtube_upload', 'post', $action);
+        parent :: __construct('youtube_upload', 'post', $action);
 
-//         $this->token = $token;
         $this->build_upload_form();
     }
 
