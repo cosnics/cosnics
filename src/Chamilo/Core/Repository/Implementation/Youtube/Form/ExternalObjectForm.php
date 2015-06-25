@@ -44,6 +44,10 @@ class ExternalObjectForm extends FormValidator
         $this->form_type = $form_type;
         echo'222';
         var_dump($this->form_type);
+        var_dump(self :: TYPE_EDIT);
+
+
+
         if ($this->form_type == self :: TYPE_EDIT)
         {
             echo'edit';
