@@ -159,12 +159,12 @@ class ExternalObjectForm extends FormValidator
         return $youtube->update_youtube_video($values);
     }
 
-    public function get_upload_token()
+    public function upload_video()
     {
         $values = $this->exportValues();
 
         $connector = $this->application->get_external_repository_manager_connector();
-        return $connector->get_upload_token($values);
+        return $connector->upload_video($values);
     }
 
     /**
