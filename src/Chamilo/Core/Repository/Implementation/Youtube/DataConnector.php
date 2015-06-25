@@ -255,7 +255,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function count_external_repository_objects($query)
     {
-        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query));
+        $searchResponse = $this->youtube->search->listSearch('id,snippet', array('q' => $query, 'maxResults' => 9));
 var_dump($searchResponse);
         if ($searchResponse['pageInfo']['totalResults'] >= 900)
         {
@@ -263,7 +263,7 @@ var_dump($searchResponse);
         }
         else
         {
-            return $searchResponse['pageInfo']['totalResults'];
+            return $searchResponse['pageInfo']['resultsPerPage'];
         }
     }
 
