@@ -53,21 +53,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $this->client->setAccessToken($setting->get_value());
         }
 
-//         $conditions = array();
-//         $conditions[] = new EqualityCondition(
-//             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
-//             new StaticConditionVariable('refresh_token'));
-//         $conditions[] = new EqualityCondition(
-//             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
-//             new StaticConditionVariable(Session :: get_user_id()));
-//         $condition = new AndCondition($conditions);
-
-//         $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
-//         if ($setting instanceof Setting)
-//         {
-//             $this->client->RefreshToken($setting->get_value());
-//         }
-
         $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
@@ -110,25 +95,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
 
-            if ($user_setting->create())
-            {
-                if ($this->client->getRefreshToken())
-                {
-                    $setting = new Setting();
-                    $setting->set_user_id(Session :: get_user_id());
-                    $setting->set_variable('refresh_token');
-                    $setting->set_value($this->client->getRefreshToken());
-
-                    return $setting->create();
-                }
-                else {
-                    return true;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return $user_setting->create();
         }
         else
         {
