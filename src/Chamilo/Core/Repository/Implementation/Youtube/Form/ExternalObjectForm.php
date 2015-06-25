@@ -174,10 +174,10 @@ class ExternalObjectForm extends FormValidator
      */
     public function setDefaults($defaults = array ())
     {
-        $defaults[self :: VIDEO_TITLE] = $this->video_entry->getVideoTitle();
-        $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
-        $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
-        $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
+//         $defaults[self :: VIDEO_TITLE] = $this->video_entry->getVideoTitle();
+//         $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
+//         $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
+//         $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
         parent :: setDefaults($defaults);
     }
 
