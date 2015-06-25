@@ -27,17 +27,14 @@ class UploaderComponent extends Manager implements DelegateComponent
                 $upload_video = $form->upload_video();
                 var_dump($upload_video);
 
-                // if ($upload_token)
-                // {
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
                 $redirect = new Redirect($parameters);
 
-                // $next_url = $upload_token['url'] . '?nexturl=' . urlencode($redirect->getUrl());
-                // $form = new UploadForm($next_url, $upload_token['token']);
-                $form = new UploadForm();
+                $next_url = urlencode($redirect->getUrl());
+                $form = new UploadForm($next_url);
                 $html = array();
 
                 $html[] = $this->render_header();
@@ -45,16 +42,6 @@ class UploaderComponent extends Manager implements DelegateComponent
                 $html[] = $this->render_footer();
                 return implode(PHP_EOL, $html);
             }
-//             else
-//             {
-//                 $html = array();
-
-//                 $html[] = $this->render_header();
-//                 $html[] = $form->toHtml();
-//                 $html[] = $this->render_footer();
-
-//                 return implode(PHP_EOL, $html);
-//             }
         }
     }
 }
