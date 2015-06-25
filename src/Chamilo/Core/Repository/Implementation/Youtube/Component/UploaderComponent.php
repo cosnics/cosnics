@@ -24,7 +24,7 @@ class UploaderComponent extends Manager implements DelegateComponent
 
             if ($form->validate())
             {
-                $upload_token = $form->get_upload_token();
+                $upload_token = $form->upload_video();
 
                 if ($upload_token)
                 {

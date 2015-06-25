@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -132,22 +133,31 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $categories['modelData']['items'];
     }
 
-    public function get_upload_token($values)
+    public function upload_video($values)
     {
-        // $video_entry = new Zend_Gdata_YouTube_VideoEntry();
+        var_dump($values);
+        $videoPath = "/path/to/file.mp4";
+        $snippet = new \Google_Service_YouTube_VideoSnippet();
+        $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
+        $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
+        $snippet->setTags($values[ExternalObjectForm :: VIDEO_TAGS]);
+        $snippet->setCategoryId($values[ExternalObjectForm :: VIDEO_CATEGORY]);
 
-        // $video_entry->setVideoTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
-        // $video_entry->setVideoCategory($values[ExternalObjectForm :: VIDEO_CATEGORY]);
-        // $video_entry->setVideoTags($values[ExternalObjectForm :: VIDEO_TAGS]);
-        // $video_entry->setVideoDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
+        $status = new \Google_Service_YouTube_VideoStatus();
+        $status->privacyStatus = "public";
 
-        // $token_handler_url = 'http://gdata.youtube.com/action/GetUploadToken';
-        // $token_array = $this->youtube->getFormUploadToken($video_entry, $token_handler_url);
-        // $token_value = $token_array['token'];
-        // $post_url = $token_array['url'];
+        $video = new \Google_Service_YouTube_Video();
+        $video->setSnippet($snippet);
+        $video->setStatus($status);
 
-        // return $token_array;
-        return array();
+        $chunkSizeBytes = 1 * 1024 * 1024;
+        $this->client->setDefer(true);
+
+        $insertRequest = $youtube->videos->insert("status,snippet", $video);
+        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
+        $media->setFileSize(filesize($videoPath));
+
+        return $media;
     }
 
     public function get_video_feed($query)
