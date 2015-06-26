@@ -166,50 +166,21 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $media;
     }
 
-    public function get_video_feed($query)
+    public function get_feeds()
     {
-        $feed = Request :: get(Manager :: PARAM_FEED_TYPE);
-        switch ($feed)
-        {
-            case Manager :: FEED_TYPE_GENERAL :
-                return @ $this->youtube->getVideoFeed($query->getQueryUrl(2));
-                break;
-            case Manager :: FEED_TYPE_MYVIDEOS :
-                return $this->youtube->getUserUploads('default', $query->getQueryUrl(2));
-                break;
-            case Manager :: FEED_STANDARD_TYPE :
-                $identifier = Request :: get(Manager :: PARAM_FEED_IDENTIFIER);
-                if (! $identifier || ! in_array($identifier, $this->get_standard_feeds()))
-                {
-                    $identifier = 'most_viewed';
-                }
-                $new_query = $this->youtube->newVideoQuery(
-                    'http://gdata.youtube.com/feeds/api/standardfeeds/' . $identifier);
-                $new_query->setOrderBy($query->getOrderBy());
-                $new_query->setVideoQuery($query->getVideoQuery());
-                $new_query->setStartIndex($query->getStartIndex());
-                $new_query->setMaxResults($query->getMaxResults());
-                return @ $this->youtube->getVideoFeed($new_query->getQueryUrl(2));
-            default :
-                // return $this->youtube->getUserUploads('default',
-                // $query->getQueryUrl(2));
-                return @ $this->youtube->getVideoFeed($query->getQueryUrl(2));
+        $channelsResponse = $youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
+        foreach ($channelsResponse['items'] as $channel) {
+            $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
+            $playlistItemsResponse = $youtube->playlistItems->listPlaylistItems('snippet', array(
+                'playlistId' => $uploadsListId,
+                'maxResults' => 50
+            ));
+            foreach ($playlistItemsResponse['items'] as $playlistItem) {
+                $feeds [] = $playlistItem['snippet']['title'];
         }
-    }
-
-    public function get_standard_feeds()
-    {
-        $standard_feeds = array();
-        $standard_feeds[] = 'most_viewed';
-        $standard_feeds[] = 'top_rated';
-        $standard_feeds[] = 'recently_featured';
-        $standard_feeds[] = 'watch_on_mobile';
-        $standard_feeds[] = 'most_discussed';
-        $standard_feeds[] = 'top_favorite';
-        $standard_feeds[] = 'most_responded';
-        $standard_feeds[] = 'most_recent';
-        return $standard_feeds;
-    }
+          }
+          return $feeds;
+}
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
@@ -295,18 +266,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
     }
 
-    // public function get_youtube_video_entry($id)
-    // {
-    // $parameter = Request :: get(Manager :: PARAM_FEED_TYPE);
-    // if ($parameter == Manager :: FEED_TYPE_MYVIDEOS)
-    // {
-    // return $this->youtube->getFullVideoEntry($id);
-    // }
-    // else
-    // {
-    // return $this->youtube->getVideoEntry($id);
-    // }
-    // }
     public function retrieve_external_repository_object($id)
     {
         $videosResponse = $this->youtube->videos->listVideos('snippet, status, contentDetails', array('id' => $id));
