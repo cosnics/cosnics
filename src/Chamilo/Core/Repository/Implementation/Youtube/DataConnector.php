@@ -130,7 +130,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_categories()
     {
         $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('id' => 'test'));
-        var_dump($categories['modelData']['items']);
         return $categories['modelData']['items'];
     }
 
@@ -155,7 +154,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
-var_dump($media);
+
         return $media;
     }
 
@@ -352,7 +351,9 @@ var_dump($media);
 
     public function update_youtube_video($values)
     {
-        $video = $this->youtube->videos->listVideos('snippet,status, contentDetails', array('id' => $values[ExternalObject :: PROPERTY_ID]));
+        $video = $this->youtube->videos->listVideos(
+            'snippet,status, contentDetails',
+            array('id' => $values[ExternalObject :: PROPERTY_ID]));
 
         $video->setVideoTitle($values[ExternalObject :: PROPERTY_TITLE]);
         $video->setVideoCategory($values[ExternalObject :: PROPERTY_CATEGORY]);
