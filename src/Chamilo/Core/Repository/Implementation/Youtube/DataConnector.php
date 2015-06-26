@@ -176,11 +176,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 'maxResults' => 50
             ));
             foreach ($playlistItemsResponse['items'] as $playlistItem) {
-                $feeds [] = $playlistItem['snippet']['title'];
+                $feeds[] = $playlistItem['snippet']['title'];
+            }
         }
-          }
-          return $feeds;
-}
+        return $feeds;
+    }
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
@@ -194,9 +194,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $max_result = $count;
         }
 
+        $pageNumber = ($offset / $count) + 1;
+        $pageToken = PageTokenGenerator::getInstance()->getToken($count, $pageNumber);
+
         $searchResponse = $this->youtube->search->listSearch(
             'id,snippet',
-            array('type' => 'video', 'q' => $query, 'maxResults' => $max_result));
+            array('type' => 'video', 'q' => $query, 'maxResults' => $max_result, 'pageToken' => $pageToken));
 
         foreach ($searchResponse['modelData']['items'] as $response)
         {
