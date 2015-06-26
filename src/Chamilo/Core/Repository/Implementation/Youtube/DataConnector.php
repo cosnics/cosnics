@@ -168,7 +168,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
-        $playlistItemsResponse = $this->youtube->playlists->listPlaylists('snippet', array('mine' => true));
+        $playlistItemsResponse = $this->youtube->playlists->listPlaylists('snippet', array());
         var_dump($playlistItemsResponse);
 
         return $feeds;
