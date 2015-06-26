@@ -21,10 +21,9 @@ class UploaderComponent extends Manager implements DelegateComponent
         else
         {
             $form = new ExternalObjectForm(ExternalObjectForm :: TYPE_CREATE, $this->get_url(), $this);
-var_dump($form);
-var_dump($form->validate());
-            if ($form->validate())
-            {
+
+//             if ($form->validate())
+//             {
 
                 // $upload_video = $form->upload_video();
 
@@ -43,6 +42,6 @@ var_dump($form->validate());
                 $html[] = $this->render_footer();
                 return implode(PHP_EOL, $html);
             }
-        }
+//         }
     }
 }
