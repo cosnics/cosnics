@@ -168,18 +168,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
-        $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
-        foreach ($channelsResponse['items'] as $channel) {
-            $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
-            $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems('snippet', array(
-                'playlistId' => $uploadsListId,
-                'maxResults' => 50
-            ));
-            foreach ($playlistItemsResponse['items'] as $playlistItem) {
-                $feeds[] = $playlistItem['snippet']['title'];
-            }
-        }
-        return $feeds;
+        $playlistItemsResponse = $this->youtube->playlists->listPlaylists('snippet', array('mime' => true));
+           var_dump($playlistItemsResponse);
+
+
+return $feeds;
     }
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
