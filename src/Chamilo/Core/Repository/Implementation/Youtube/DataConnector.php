@@ -168,20 +168,27 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
-        $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
-        foreach ($channelsResponse['items'] as $channel)
+        if ($this->session_token)
         {
-            $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
 
-            $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
-                'snippet',
-                array('playlistId' => $uploadsListId, 'maxResults' => 50));
+            $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
+            foreach ($channelsResponse['items'] as $channel)
+            {
+                $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
 
-            var_dump($playlistItemsResponse);
-//             foreach ($playlistItemsResponse['items'] as $playlistItem)
-//             {
-//                 var_dump($playlistItem['snippet']['title']);
-//             }
+                $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
+                    'snippet',
+                    array('playlistId' => $uploadsListId, 'maxResults' => 50));
+                foreach ($playlistItemsResponse['items'] as $playlistItem)
+                {
+                    $list[] = $playlistItem['snippet']['title'];
+                }
+            }
+            return $list;
+        }
+        else
+        {
+            return array();
         }
     }
 
