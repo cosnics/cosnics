@@ -136,7 +136,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function upload_video($values)
     {
-        var_dump($values);
         $snippet = new \Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
         $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
