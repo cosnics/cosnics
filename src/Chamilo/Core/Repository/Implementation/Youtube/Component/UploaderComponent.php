@@ -25,7 +25,7 @@ class UploaderComponent extends Manager implements DelegateComponent
 //             if ($form->validate())
 //             {
 
-                // $upload_video = $form->upload_video();
+                $upload_video = $form->upload_video();
 
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
