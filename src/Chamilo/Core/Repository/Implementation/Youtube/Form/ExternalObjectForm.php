@@ -43,13 +43,12 @@ class ExternalObjectForm extends FormValidator
         $this->form_type = $form_type;
         if ($this->form_type == self :: TYPE_CREATE)
         {
-            $this->build_creation_form();
+            $this->build_uploading_form();
         }
         elseif ($this->form_type == self :: TYPE_EDIT)
         {
-            $this->build_creation_form();
+            $this->build_edit_form();
         }
-        $this->build_upload_form();
 
         $this->setDefaults();
     }
@@ -156,14 +155,17 @@ class ExternalObjectForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function build_creation_form()
+    public function build_uploading_form()
     {
         $this->build_basic_form();
+
+//         $this->addElement('hidden', 'token', $this->token);
+        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
 
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
             'style_reset_button',
