@@ -166,7 +166,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $media;
     }
 
-    public function get_feeds()
+    public function get_video_feeds()
     {
         $channelsResponse = $youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
         foreach ($channelsResponse['items'] as $channel) {
