@@ -166,13 +166,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $media;
     }
 
-    public function get_video_feeds()
-    {
-        $playlistItemsResponse = $this->youtube->playlists->listPlaylists('snippet', array());
-        var_dump($playlistItemsResponse);
+//     public function get_video_feeds()
+//     {
+//         $playlistItemsResponse = $this->youtube->playlists->listPlaylists('snippet', array());
+//         var_dump($playlistItemsResponse);
 
-        return $feeds;
-    }
+//         return $feeds;
+//     }
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
