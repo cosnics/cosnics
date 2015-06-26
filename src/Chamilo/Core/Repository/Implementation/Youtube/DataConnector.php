@@ -133,12 +133,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $list_categories = array();
         foreach ($categories['modelData']['items'] as $category)
         {
-            var_dump((int)$category['id']);
-            var_dump( $category['snippet']['title']);
             $list_categories[(int)$category['id']] = $category['snippet']['title'];
         }
-        var_dump($list_categories);
-//         $list_categories = asort($list_categories);
+       var_dump(asort($list_categories));
+
+
+
         return $list_categories;
     }
 
