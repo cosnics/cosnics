@@ -49,9 +49,32 @@ class ExternalObjectForm extends FormValidator
         {
             $this->build_creation_form();
         }
+        $this->build_upload_form();
 
         $this->setDefaults();
     }
+
+
+
+    public function build_upload_form()
+    {
+        $this->addElement('hidden', 'token', $this->token);
+        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
+
+        $buttons[] = $this->createElement(
+            'style_submit_button',
+            'submit',
+            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive'));
+        $buttons[] = $this->createElement(
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
 
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
