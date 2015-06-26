@@ -133,13 +133,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $list_categories = array();
         foreach ($categories['modelData']['items'] as $category)
         {
-            $list_categories[(int)$category['id']] = $category['snippet']['title'];
+            $list_categories[(int) $category['id']] = $category['snippet']['title'];
         }
-       var_dump(asort($list_categories));
 
+        asort($sort_types);
 
-
-        return $list_categories;
+        return $sort_types;
     }
 
     public function upload_video($values, $_video_file)
