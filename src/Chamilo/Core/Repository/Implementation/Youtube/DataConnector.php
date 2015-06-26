@@ -131,8 +131,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $categories = $this->youtube->videoCategories->listVideoCategories('snippet', array('regionCode' => 'BE'));
         $list_categories = array();
+        var_dump($categories['modelData']['items']);
         foreach ($categories['modelData']['items'] as $category)
         {
+            var_dump($category);
             $list_categories[(int)$category['id']] = $category['snippet']['title'];
         }
         $list_categories = asort($list_categories);
