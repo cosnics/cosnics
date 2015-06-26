@@ -53,28 +53,6 @@ class ExternalObjectForm extends FormValidator
         $this->setDefaults();
     }
 
-
-
-    public function build_upload_form()
-    {
-        $this->addElement('hidden', 'token', $this->token);
-        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
-
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive'));
-        $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
@@ -129,10 +107,28 @@ class ExternalObjectForm extends FormValidator
             array("rows" => "7", "cols" => "80"));
     }
 
+    public function build_upload_form()
+    {
+        $this->addElement('file', ExternalObject :: PROPERTY_FILE, sprintf(Translation :: get('FileName'), '2Gb'));
+
+        $buttons[] = $this->createElement(
+            'style_submit_button',
+            'submit',
+            Translation :: get('Upload', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive'));
+        $buttons[] = $this->createElement(
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
     public function get_youtube_categories()
     {
-        $connector = DataConnector :: get_instance($this->application->get_external_repository());
-        return $connector->retrieve_categories();
+        $youtube = $this->application->get_external_repository_manager_connector();
+        return $youtube->retrieve_categories();
     }
 
     public function build_editing_form()
@@ -159,7 +155,7 @@ class ExternalObjectForm extends FormValidator
     {
         $this->build_basic_form();
 
-//         $this->addElement('hidden', 'token', $this->token);
+        // $this->addElement('hidden', 'token', $this->token);
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
 
         $buttons[] = $this->createElement(
@@ -186,9 +182,7 @@ class ExternalObjectForm extends FormValidator
 
     public function upload_video()
     {
-
         $values = $this->exportValues();
-        var_dump($values);
         $connector = $this->application->get_external_repository_manager_connector();
         return $connector->upload_video($values);
     }
