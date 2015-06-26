@@ -130,13 +130,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_categories()
     {
         $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('id' => 'test'));
-        var_dump($categories);
+        var_dump($categories['modelData']['items']);
         return $categories['modelData']['items'];
     }
 
     public function upload_video($values)
     {
-        echo'uploadVideo';
+        var_dump($values);
         $snippet = new \Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
         $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
