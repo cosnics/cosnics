@@ -182,10 +182,9 @@ class ExternalObjectForm extends FormValidator
 
     public function upload_video()
     {
-        var_dump($_FILES['file']);
         $values = $this->exportValues();
         $connector = $this->application->get_external_repository_manager_connector();
-        return $connector->upload_video($values);
+        return $connector->upload_video($values, $_FILES['file']);
     }
 
     /**

@@ -134,7 +134,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $categories['modelData']['items'];
     }
 
-    public function upload_video($values)
+    public function upload_video($values, $_video_file)
     {
         $snippet = new \Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
@@ -154,7 +154,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
-//         $media->setFileSize(filesize($videoPath));
+        $media->setFileSize(filesize($_video_file['tmp_name']));
 
         return $media;
     }
