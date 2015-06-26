@@ -41,7 +41,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             if ($form->validate())
             {
-                $success = $form->update_video_entry();
+                $success = $form->update_video();
 
                 $parameters = $this->get_parameters();
                 $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_EXTERNAL_REPOSITORY;
