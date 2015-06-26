@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
-use Chamilo\Core\Repository\Implementation\Youtube\Form\UploadForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -33,8 +32,6 @@ class UploaderComponent extends Manager implements DelegateComponent
 
                 $redirect = new Redirect($parameters);
 
-                // $next_url = urlencode($redirect->getUrl());
-                // $form = new UploadForm($next_url);
                 $html = array();
 
                 $html[] = $this->render_header();
