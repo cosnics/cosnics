@@ -155,7 +155,6 @@ class ExternalObjectForm extends FormValidator
     {
         $this->build_basic_form();
 
-        // $this->addElement('hidden', 'token', $this->token);
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
 
         $buttons[] = $this->createElement(

@@ -155,7 +155,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
-
+var_dump($media);
         return $media;
     }
 
