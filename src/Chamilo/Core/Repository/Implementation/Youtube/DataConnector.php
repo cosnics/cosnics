@@ -137,6 +137,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             var_dump( $category['snippet']['title']);
             $list_categories[(int)$category['id']] = $category['snippet']['title'];
         }
+        var_dump($list_categories);
         $list_categories = asort($list_categories);
         return $list_categories;
     }
