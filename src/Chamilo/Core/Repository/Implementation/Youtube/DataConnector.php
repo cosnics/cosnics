@@ -173,7 +173,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
 
-            $playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+            $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
                 'snippet',
                 array('playlistId' => $uploadsListId, 'maxResults' => 50));
 
