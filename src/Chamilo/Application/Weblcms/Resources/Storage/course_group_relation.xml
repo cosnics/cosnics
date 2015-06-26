@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_group_relation">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="course_id" type="integer" notnull="1" />
+		<property name="group_id" type="integer" unsigned="1" default="0" />
+		<property name="status" type="integer" length="1" default="5" notnull="1" />
+	</properties>
+	<index name="course_id">
+		<indexproperty name="course_id" />
+	</index>
+	<index name="group_id">
+		<indexproperty name="group_id" />
+	</index>
+</object>
