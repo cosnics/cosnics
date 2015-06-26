@@ -147,7 +147,7 @@ class ExternalObjectForm extends FormValidator
     {
         $this->build_basic_form();
 
-        $this->addElement('file', self::FILE, sprintf(Translation :: get('FileName'), '2Gb'));
+        $this->addElement('file', self :: FILE, sprintf(Translation :: get('FileName'), '2Gb'));
 
         $buttons[] = $this->createElement(
             'style_submit_button',
@@ -163,7 +163,7 @@ class ExternalObjectForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function update_video_entry()
+    public function update_video()
     {
         return $this->application->get_external_repository_manager_connector()->update_youtube_video(
             $this->exportValues());
@@ -173,7 +173,7 @@ class ExternalObjectForm extends FormValidator
     {
         if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
         {
-            return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
+            return $this->application->get_external_repository_manager_connector()->upload_video(
                 $this->exportValues(),
                 $_FILES[self :: FILE]);
         }
