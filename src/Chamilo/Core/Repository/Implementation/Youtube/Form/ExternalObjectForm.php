@@ -61,6 +61,7 @@ class ExternalObjectForm extends FormValidator
         $defaults[ExternalObject :: PROPERTY_DESCRIPTION] = $external_repository_object->get_description();
         $defaults[ExternalObject :: PROPERTY_CATEGORY] = $external_repository_object->get_category();
         $defaults[ExternalObject :: PROPERTY_TAGS] = $this->get_tags();
+
         parent :: setDefaults($defaults);
     }
 
