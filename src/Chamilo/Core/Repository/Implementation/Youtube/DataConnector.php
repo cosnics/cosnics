@@ -177,7 +177,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 'snippet',
                 array('playlistId' => $uploadsListId, 'maxResults' => 50));
 
-            var_dump($$playlistItemsResponse);
+            var_dump($playlistItemsResponse);
 //             foreach ($playlistItemsResponse['items'] as $playlistItem)
 //             {
 //                 var_dump($playlistItem['snippet']['title']);
