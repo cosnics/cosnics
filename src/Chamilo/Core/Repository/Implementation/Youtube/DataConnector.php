@@ -135,7 +135,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $list_categories[(int)$category['id']] = $category['snippet']['title'];
         }
-        return $list_categories;
+        return sort($list_categories, SORT_STRING);
     }
 
     public function upload_video($values, $_video_file)
