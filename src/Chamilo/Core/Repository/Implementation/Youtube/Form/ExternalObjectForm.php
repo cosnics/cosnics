@@ -1,20 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Youtube\Form;
 
-use Chamilo\Core\Repository\Implementation\Youtube\DataConnector;
-use Chamilo\Core\Repository\Implementation\Youtube\ExternalObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Implementation\Youtube\ExternalObject;
 
-/**
- * $Id: youtube_external_repository_manager_form.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
- * @package
- *
- *
- *
- */
 class ExternalObjectForm extends FormValidator
 {
     const TYPE_CREATE = 1;
@@ -25,12 +17,11 @@ class ExternalObjectForm extends FormValidator
     const VIDEO_CATEGORY = 'category';
     const VIDEO_TAGS = 'tags';
     const VIDEO_DESCRIPTION = 'description';
+    const FILE = 'file';
 
     private $application;
 
     private $form_type;
-
-    private $video;
 
     private $external_repository_object;
 
@@ -41,6 +32,7 @@ class ExternalObjectForm extends FormValidator
         $this->application = $application;
 
         $this->form_type = $form_type;
+
         if ($this->form_type == self :: TYPE_CREATE)
         {
             $this->build_uploading_form();
@@ -56,7 +48,7 @@ class ExternalObjectForm extends FormValidator
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-        $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
+
         $defaults[ExternalObject :: PROPERTY_TITLE] = $external_repository_object->get_title();
         $defaults[ExternalObject :: PROPERTY_DESCRIPTION] = $external_repository_object->get_description();
         $defaults[ExternalObject :: PROPERTY_CATEGORY] = $external_repository_object->get_category();
@@ -155,7 +147,7 @@ class ExternalObjectForm extends FormValidator
     {
         $this->build_basic_form();
 
-        $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), '2Gb'));
+        $this->addElement('file', self::FILE, sprintf(Translation :: get('FileName'), '2Gb'));
 
         $buttons[] = $this->createElement(
             'style_submit_button',
@@ -173,35 +165,21 @@ class ExternalObjectForm extends FormValidator
 
     public function update_video_entry()
     {
-        $youtube = $this->application->get_external_repository_manager_connector();
-        $values = $this->exportValues();
-
-        return $youtube->update_youtube_video($values);
+        return $this->application->get_external_repository_manager_connector()->update_youtube_video(
+            $this->exportValues());
     }
 
     public function upload_video()
     {
-        $values = $this->exportValues();
-        $connector = $this->application->get_external_repository_manager_connector();
-        return $connector->upload_video($values, $_FILES['file']);
-    }
-
-    /**
-     * Sets default values.
-     *
-     * @param $defaults array Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = array ())
-    {
-        // $defaults[self :: VIDEO_TITLE] = $this->video->getVideoTitle();
-        // $defaults[self :: VIDEO_CATEGORY] = $this->video_entry->getVideoCategory();
-        // $defaults[self :: VIDEO_TAGS] = $this->video_entry->getVideoTags();
-        // $defaults[self :: VIDEO_DESCRIPTION] = $this->video_entry->getVideoDescription();
-        parent :: setDefaults($defaults);
-    }
-
-    public function get_video()
-    {
-        return $this->video;
+        if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
+        {
+            return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
+                $this->exportValues(),
+                $_FILES[self :: FILE]);
+        }
+        else
+        {
+            return false;
+        }
     }
 }

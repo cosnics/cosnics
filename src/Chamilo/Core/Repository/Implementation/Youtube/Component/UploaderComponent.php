@@ -7,6 +7,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class UploaderComponent extends Manager implements DelegateComponent
 {
@@ -21,22 +24,44 @@ class UploaderComponent extends Manager implements DelegateComponent
         {
             $form = new ExternalObjectForm(ExternalObjectForm :: TYPE_CREATE, $this->get_url(), $this);
 
-            // if ($form->validate())
-            // {
+            if ($form->validate())
+            {
+                $id = $form->upload_video();
+                if ($id)
+                {
+                    $parameters = $this->get_parameters();
+                    $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+                    $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+                    $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
-            $form->upload_video();
+                    $redirect = new Redirect($parameters);
+                    $redirect->toUrl();
+                }
+                else
+                {
+                    Request :: set_get(
+                        Application :: PARAM_ERROR_MESSAGE,
+                        Translation :: get('SlideshareUploadProblem'));
 
-            $parameters = $this->get_parameters();
-            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
+                    $html = array();
 
-            $redirect = new Redirect($parameters);
+                    $html[] = $this->render_header();
+                    $html[] = $form->toHtml();
+                    $html[] = $this->render_footer();
 
-            $html = array();
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-            return implode(PHP_EOL, $html);
+                    return implode(PHP_EOL, $html);
+                }
+            }
+            else
+            {
+                $html = array();
+
+                $html[] = $this->render_header();
+                $html[] = $form->toHtml();
+                $html[] = $this->render_footer();
+
+                return implode(PHP_EOL, $html);
+            }
         }
     }
 }
