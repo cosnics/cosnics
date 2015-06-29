@@ -83,7 +83,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $my_videos = array();
-            $my_videos['title'] = Translation :: get('MyVideos');
+            $my_videos['title'] = Translation :: get('MyChannel');
             $my_videos['url'] = $this->get_url(
                 array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MYVIDEOS),
                 array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
@@ -98,93 +98,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
         $browser['class'] = 'home';
         $menu_items[] = $browser;
-
-        // $standard_feeds = array();
-        // $standard_feeds['title'] = Translation :: get('StandardFeeds');
-        // $standard_feeds['url'] = $this->get_url(
-        // array(self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, self :: PARAM_FEED_IDENTIFIER));
-        // $standard_feeds['class'] = 'category';
-
-        // $standard_feed_items = array();
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('MostViewed');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE, self :: PARAM_FEED_IDENTIFIER => 'most_viewed'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('TopRated');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE, self :: PARAM_FEED_IDENTIFIER => 'top_rated'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-        // $standard_feeds['sub'] = $standard_feed_items;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('RecentlyFeatured');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(
-        // self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE,
-        // self :: PARAM_FEED_IDENTIFIER => 'recently_featured'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('WatchOnMobile');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(
-        // self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE,
-        // self :: PARAM_FEED_IDENTIFIER => 'watch_on_mobile'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('MostDiscussed');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(
-        // self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE,
-        // self :: PARAM_FEED_IDENTIFIER => 'most_discussed'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('TopFavorites');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(
-        // self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE,
-        // self :: PARAM_FEED_IDENTIFIER => 'top_favorites'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('MostResponded');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(
-        // self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE,
-        // self :: PARAM_FEED_IDENTIFIER => 'most_responded'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-        // $standard_feed_item = array();
-        // $standard_feed_item['title'] = Translation :: get('MostRecent');
-        // $standard_feed_item['url'] = $this->get_url(
-        // array(self :: PARAM_FEED_TYPE => self :: FEED_STANDARD_TYPE, self :: PARAM_FEED_IDENTIFIER => 'most_recent'),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
-        // $standard_feed_item['class'] = 'feed';
-        // $standard_feed_items[] = $standard_feed_item;
-
-        // $standard_feeds['sub'] = $standard_feed_items;
-
-        // $menu_items[] = $standard_feeds;
 
         $feeds = $this->get_external_repository_manager_connector()->get_video_feeds();
 
