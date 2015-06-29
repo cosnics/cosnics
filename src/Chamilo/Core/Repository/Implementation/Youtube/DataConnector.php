@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\PlayList;
+use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\ExternalObject;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -211,7 +212,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $playlist->set_description('test descr');
         $playlist->set_date(date("Y-m-d H:i:s"));
 
-        $this->create_playlist($playlist, $media);
+        $this->create_playlist($playlist, $video);
 
         return $media;
     }
