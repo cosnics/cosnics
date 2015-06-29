@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc;
+namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

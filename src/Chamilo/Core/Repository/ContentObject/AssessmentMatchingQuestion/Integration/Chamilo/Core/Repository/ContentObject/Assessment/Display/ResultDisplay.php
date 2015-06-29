@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integ
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestion;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -50,7 +50,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             'Y',
             'Z');
 
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -72,9 +72,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($this->get_question()->get_display() == AssessmentMatchingQuestion :: DISPLAY_LIST)
             {
 
-                $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
-                    $match);
+                $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $match);
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
             else
@@ -121,9 +119,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $label = $i + 1;
             $html[] = '<td>' . $label . '. </td>';
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
-                $option->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             if ($configuration->show_correction() || $configuration->show_solution())
@@ -166,7 +162,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $valid_answer))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
+                    $this->getViewerApplication(),
                     $option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }

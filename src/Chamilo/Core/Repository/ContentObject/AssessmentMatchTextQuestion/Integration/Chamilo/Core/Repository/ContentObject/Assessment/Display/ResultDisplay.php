@@ -3,9 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Inte
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -29,7 +29,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $user_answer[0],
             $this->get_question()->get_ignore_case(),
             $this->get_question()->get_use_wildcards());
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
 
@@ -109,7 +109,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if (! is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
+                    $this->getViewerApplication(),
                     $answer_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -157,7 +157,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_assessment_result_processor()->get_assessment_viewer(),
+                        $this->getViewerApplication(),
                         $best_option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }

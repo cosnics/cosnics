@@ -3,9 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integra
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -23,7 +23,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
     {
         $answers = $this->get_answers();
         $correct_answer = $answers[0] == $this->get_question()->get_correct();
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -81,7 +81,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $correct_answer))
         {
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
+                $this->getViewerApplication(),
                 $this->get_question()->get_feedback());
 
             $html[] = '<div class="splitter">';
