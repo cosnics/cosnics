@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -56,13 +57,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
         {
-            $this->redirect(
-                Translation :: get("NotAllowed", null, Utilities :: COMMON_LIBRARIES),
-                true,
-                array(),
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
+            throw new NotAllowedException();
         }
 
         $object = $this->publication->get_content_object();
@@ -85,7 +80,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         {
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Feedback\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $result = $factory->run();
         }
         else
@@ -243,7 +238,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      */
     public function is_allowed_to_view_feedback()
     {
-        return $this->is_allowed(2, $this->publication);
+        return $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication);
     }
 
     /*
@@ -251,7 +246,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      */
     public function is_allowed_to_create_feedback()
     {
-        return $this->is_allowed(3, $this->publication);
+        return $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication);
     }
 
     /*
