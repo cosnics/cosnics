@@ -4,16 +4,14 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Res
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
  * @package repository.lib.complex_display.assessment.component.result_viewer
  */
-abstract class QuestionResultDisplay
+class QuestionResultDisplay
 {
 
     private $complex_content_object_question;
@@ -111,7 +109,7 @@ abstract class QuestionResultDisplay
             $this->score,
             $this->hints);
 
-        $this->form->addElement('html', $display->as_html());
+        $this->form->addElement('html', $display->get_question_result());
 
         if ($this->add_borders())
         {
@@ -124,11 +122,6 @@ abstract class QuestionResultDisplay
         $this->display_feedback();
 
         $this->form->addElement('html', $this->render_footer());
-    }
-
-    public function display_question_result()
-    {
-        return $this->get_score() . '<br />';
     }
 
     public function render_header()
@@ -270,33 +263,5 @@ abstract class QuestionResultDisplay
     public function add_borders()
     {
         return false;
-    }
-
-    public static function factory($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers,
-        $score, $hints, $feedback, $can_change)
-    {
-        $class = $complex_content_object_question->get_ref_object()->get_type();
-        $type = $class :: get_type_name();
-
-        $class = __NAMESPACE__ . '\QuestionResultDisplay\\' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ResultDisplay';
-
-        if (! class_exists($class))
-        {
-            throw new ClassNotExistException($class);
-        }
-
-        $question_result_display = new $class(
-            $results_viewer,
-            $form,
-            $complex_content_object_question,
-            $question_nr,
-            $answers,
-            $score,
-            $hints,
-            $feedback,
-            $can_change);
-
-        return $question_result_display;
     }
 }

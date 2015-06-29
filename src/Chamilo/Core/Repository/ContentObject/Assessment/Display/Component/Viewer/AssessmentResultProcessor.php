@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\AssessmentViewerComponent;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\ScoreCalculator;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Translation;
 
