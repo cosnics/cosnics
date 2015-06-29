@@ -195,6 +195,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
 
+        $status = false;
+        $handle = fopen($_video_file['tmp_name'], "rb");
+        while (! $status && ! feof($handle))
+        {
+            $chunk = fread($handle, $chunkSizeBytes);
+            $status = $media->nextChunk($chunk);
+        }
+
+        fclose($handle);
+        $this->client->setDefer(false);
+
         $playlist = new PlayList();
         $playlist->set_title('test');
         $playlist->set_description('test descr');
@@ -217,11 +228,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
                     'snippet',
                     array('playlistId' => $uploadsListId, 'maxResults' => 50));
-                var_dump($playlistItemsResponse);
                 foreach ($playlistItemsResponse['items'] as $playlistItem)
                 {
-
-                    var_dump($playlistItem);
                     $list[] = $playlistItem['snippet']['title'];
                 }
             }
