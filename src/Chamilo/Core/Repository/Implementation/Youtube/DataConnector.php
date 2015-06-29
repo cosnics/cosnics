@@ -168,6 +168,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
+        echo('hier');
         if ($this->session_token)
         {
             $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
@@ -178,7 +179,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
                     'snippet',
                     array('playlistId' => $uploadsListId, 'maxResults' => 50));
-
+var_dump($playlistItemsResponse);
                 foreach ($playlistItemsResponse['items'] as $playlistItem)
                 {
 
