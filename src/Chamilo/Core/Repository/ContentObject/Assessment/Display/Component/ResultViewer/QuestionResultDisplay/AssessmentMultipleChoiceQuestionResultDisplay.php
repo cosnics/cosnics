@@ -3,11 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Res
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestion;
-use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestionOption;
-use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\ComplexAssessmentMultipleChoiceQuestion;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 
 /**
  * $Id: assessment_multiple_choice_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -20,8 +19,8 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
     public function display_question_result()
     {
         $complex_content_object_question = $this->get_complex_content_object_question();
-        $feedback_options_type = $complex_content_object_question->get_show_answer_feedback();
         $question = $this->get_question();
+        $configuration = $this->get_results_viewer()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -30,8 +29,7 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
         $html[] = '<th class="checkbox_answer"></th>';
         $html[] = '<th>' . Translation :: get('Answer') . '</th>';
 
-        if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && $question->has_feedback() &&
-             ! $this->can_change())
+        if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
@@ -50,35 +48,50 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
 
             if ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO)
             {
-                if (in_array($i, $answers))
+                $is_given_answer = in_array($i, $answers);
+
+                if ($is_given_answer)
                 {
                     $selected = ' checked ';
 
-                    if ($option->is_correct())
+                    if ($configuration->show_correction() || $configuration->show_solution())
                     {
-                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                            'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                             Translation :: get('Correct') . '" style="" />';
+                        if ($option->is_correct())
+                        {
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                                __NAMESPACE__,
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                                 Translation :: get('Correct') . '" style="" />';
+                        }
+                        else
+                        {
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
+                                 '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
+                                 '" />';
+                        }
                     }
                     else
                     {
-                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                            'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                             Translation :: get('Wrong') . '" />';
+                        $result = '';
                     }
                 }
                 else
                 {
                     $selected = '';
 
-                    if ($option->is_correct())
+                    if ($configuration->show_solution())
                     {
-                        $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                            'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                             Translation :: get('Correct') . '" />';
+                        if ($option->is_correct())
+                        {
+                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
+                                __NAMESPACE__,
+                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                                 Translation :: get('Correct') . '" />';
+                        }
+                        else
+                        {
+                            $result = '';
+                        }
                     }
                     else
                     {
@@ -92,10 +105,10 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
             }
             else
             {
-                $was_checked = array_key_exists($i + 1, $answers);
+                $is_given_answer = array_key_exists($i + 1, $answers);
                 $is_correct = $option->is_correct();
 
-                if ($was_checked)
+                if ($is_given_answer)
                 {
                     $selected = ' checked ';
                 }
@@ -104,19 +117,23 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
                     $selected = '';
                 }
 
-                if ($is_correct)
+                if (($is_given_answer && $configuration->show_correction()) || $configuration->show_solution())
                 {
-                    $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                         Translation :: get('Correct') . '" style="" />';
+                    if ($is_correct)
+                    {
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
+                             '" alt="' . Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                             '" style="" />';
+                    }
+                    else
+                    {
+                        $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') .
+                             '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                    }
                 }
                 else
                 {
-                    $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                        'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                        'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                         Translation :: get('Wrong') . '" />';
+                    $result = '';
                 }
 
                 $html[] = '<td><input type="checkbox" name="yourchoice' . $i . '" disabled' . $selected . '/>' . $result .
@@ -126,66 +143,21 @@ class AssessmentMultipleChoiceQuestionResultDisplay extends QuestionResultDispla
             $object_renderer = new ContentObjectResourceRenderer($this->get_results_viewer(), $option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
-            if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() &&
-                 ($option->has_feedback() || $question->has_feedback()) && ! $this->can_change())
+            if (AnswerFeedbackDisplay :: allowed(
+                $configuration,
+                $this->get_complex_content_object_question(),
+                $is_given_answer,
+                $option->is_correct()))
             {
-                if ($feedback_options_type == ComplexAssessmentMultipleChoiceQuestion :: FEEDBACK_OPTIONS_ALL)
-                {
-                    $feedback_options = true;
-                }
-                elseif ($feedback_options_type == ComplexAssessmentMultipleChoiceQuestion :: FEEDBACK_OPTIONS_SELECTED &&
-                     in_array($i, $answers) && $type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO)
-                {
-                    $feedback_options = true;
-                }
-                elseif ($feedback_options_type == ComplexAssessmentMultipleChoiceQuestion :: FEEDBACK_OPTIONS_SELECTED &&
-                     array_key_exists($i + 1, $answers) &&
-                     $type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX)
-                {
-                    $feedback_options = true;
-                }
-                else
-                {
-                    $feedback_options = false;
-                }
+                $object_renderer = new ContentObjectResourceRenderer(
+                    $this->get_results_viewer(),
+                    $option->get_feedback());
 
-                if (AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX)
-                {
-                    $correct_options = array();
-
-                    foreach ($options as $key => $correct_option)
-                    {
-                        if ($correct_option->is_correct())
-                        {
-                            $correct_options[] = $key + 1;
-                        }
-                    }
-                }
-
-                $no_difference = (count(array_diff($answers, $correct_options)) == 0) &&
-                     (count(array_diff($correct_options, $answers)) == 0);
-
-                $valid_answer = ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO &&
-                     $options[$answers[0]] instanceof AssessmentMultipleChoiceQuestionOption &&
-                     $options[$answers[0]]->is_correct()) || ($type ==
-                     AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX && $no_difference);
-
-                $feedback_answer = ($this->get_complex_content_object_question()->get_feedback_answer() &&
-                     ! $valid_answer) || ! $this->get_complex_content_object_question()->get_feedback_answer();
-
-                if ($feedback_options && $feedback_answer)
-                {
-
-                    $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_results_viewer(),
-                        $option->get_feedback());
-
-                    $html[] = '<td>' . $object_renderer->run() . '</td>';
-                }
-                else
-                {
-                    $html[] = '<td></td>';
-                }
+                $html[] = '<td>' . $object_renderer->run() . '</td>';
+            }
+            elseif ($configuration->show_answer_feedback())
+            {
+                $html[] = '<td></td>';
             }
 
             $html[] = '</tr>';

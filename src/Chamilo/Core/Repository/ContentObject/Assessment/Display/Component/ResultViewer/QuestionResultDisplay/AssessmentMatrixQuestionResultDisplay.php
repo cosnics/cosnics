@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataC
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 
 /**
  * $Id: assessment_matrix_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -21,6 +22,7 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
         $options = $this->get_question()->get_options();
         $matches = $this->get_question()->get_matches();
         $type = $this->get_question()->get_matrix_type();
+        $configuration = $this->get_results_viewer()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -33,7 +35,7 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
             $html[] = '<th style="text-transform: none; font-size: small;">' . $match . '</th>';
         }
 
-        if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+        if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
@@ -58,30 +60,42 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                     {
                         $selected = " checked ";
 
-                        if ($option->get_matches() == $j)
+                        if ($configuration->show_correction() || $configuration->show_solution())
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                                 Translation :: get('Correct') . '" />';
+                            if ($option->get_matches() == $j)
+                            {
+                                $result = '<img src="' .
+                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" />';
+                            }
+                            else
+                            {
+                                $result = '<img src="' .
+                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                            }
                         }
                         else
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' .
-                                 Translation :: get('Wrong') . '" />';
+                            $result = '';
                         }
                     }
                     else
                     {
                         $selected = '';
-                        if ($option->get_matches() == $j)
+
+                        if ($configuration->show_solution())
                         {
-                            $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                                'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                                 Translation :: get('Correct') . '" />';
+                            if ($option->get_matches() == $j)
+                            {
+                                $result = '<img src="' . Theme :: getInstance()->getImagePath('AnswerCorrect') .
+                                     '" alt="' . Translation :: get('Correct') . '" title="' .
+                                     Translation :: get('Correct') . '" />';
+                            }
+                            else
+                            {
+                                $result = '';
+                            }
                         }
                         else
                         {
@@ -100,22 +114,44 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                     {
                         $selected = " checked ";
 
-                        if (in_array($j, $option->get_matches()))
+                        if ($configuration->show_correction() || $configuration->show_solution())
                         {
-                            $result = Theme :: getInstance()->getCommonImage('Action/Confirm');
+                            if (in_array($j, $option->get_matches()))
+                            {
+                                $result = '<img src="' .
+                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                                     '" style="" />';
+                            }
+                            else
+                            {
+                                $result = '<img src="' .
+                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                            }
                         }
                         else
                         {
-                            $result = Theme :: getInstance()->getCommonImage('Action/Delete');
+                            $result = '';
                         }
                     }
                     else
                     {
                         $selected = '';
 
-                        if (in_array($j, $option->get_matches()))
+                        if ($configuration->show_solution())
                         {
-                            $result = Theme :: getInstance()->getCommonImage('Action/Metadata');
+                            if (in_array($j, $option->get_matches()))
+                            {
+                                $result = '<img src="' .
+                                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') .
+                                     '" style="" />';
+                            }
+                            else
+                            {
+                                $result = '';
+                            }
                         }
                         else
                         {
@@ -131,27 +167,25 @@ class AssessmentMatrixQuestionResultDisplay extends QuestionResultDisplay
                 $html[] = '</td>';
             }
 
-            if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+            if ($configuration->show_answer_feedback())
             {
                 $valid_answer = ($type == AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO &&
                      $answers[$i] == $option->get_matches()) || ($type ==
                      AssessmentMatrixQuestion :: MATRIX_TYPE_CHECKBOX &&
                      count(array_diff(array_keys($answers[$i]), $option->get_matches())) == 0);
 
-                if (($this->get_complex_content_object_question()->get_feedback_answer() && ! $valid_answer) ||
-                     ! $this->get_complex_content_object_question()->get_feedback_answer())
+                if (AnswerFeedbackDisplay :: allowed(
+                    $configuration,
+                    $this->get_complex_content_object_question(),
+                    true,
+                    $valid_answer))
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
                         $this->get_results_viewer(),
                         $option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }
-                else
-                {
-                    $html[] = '<td></td>';
-                }
             }
-
             $html[] = '</tr>';
         }
 

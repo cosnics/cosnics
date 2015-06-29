@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 
 /**
  * $Id: ordering_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -16,14 +17,22 @@ class OrderingQuestionResultDisplay extends QuestionResultDisplay
 
     public function display_question_result()
     {
+        $configuration = $this->get_results_viewer()->get_configuration();
+
+        $html = array();
         $html[] = '<table class="data_table take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('UserOrder') . '</th>';
-        $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('CorrectOrder') . '</th>';
+        $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('YourOrder') . '</th>';
+
+        if ($configuration->show_solution())
+        {
+            $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('CorrectOrder') . '</th>';
+        }
+
         $html[] = '<th>' . Translation :: get('Answer') . '</th>';
 
-        if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+        if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
@@ -41,19 +50,25 @@ class OrderingQuestionResultDisplay extends QuestionResultDisplay
 
             $correct_answer = $user_answers[$i + 1] == $answer->get_order();
 
-            if ($correct_answer)
+            if ($configuration->show_correction() || $configuration->show_solution())
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                    'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                     Translation :: get('Correct') . '" style="" />';
+                if ($correct_answer)
+                {
+                    $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                        __NAMESPACE__,
+                        'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
+                         Translation :: get('Correct') . '" style="" />';
+                }
+                else
+                {
+                    $result = ' <img style="vertical-align: middle;" src="' .
+                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                         Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                }
             }
             else
             {
-                $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                    'AnswerWrong') . '" alt="' . Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') .
-                     '" />';
+                $result = '';
             }
 
             if ($user_answers[$i + 1] == - 1)
@@ -64,26 +79,26 @@ class OrderingQuestionResultDisplay extends QuestionResultDisplay
             {
                 $html[] = '<td style="text-align: center;">' . $user_answers[$i + 1] . $result . '</td>';
             }
-            $html[] = '<td style="text-align: center;">' . $answer->get_order() . '</td>';
+
+            if ($configuration->show_solution())
+            {
+                $html[] = '<td style="text-align: center;">' . $answer->get_order() . '</td>';
+            }
 
             $object_renderer = new ContentObjectResourceRenderer($this->get_results_viewer(), $answer->get_value());
 
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
-            if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+            if (AnswerFeedbackDisplay :: allowed(
+                $configuration,
+                $this->get_complex_content_object_question(),
+                true,
+                $correct_answer))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
                     $this->get_results_viewer(),
                     $answer->get_feedback());
-
-                if (! $correct_answer)
-                {
-                    $html[] = '<td>' . $object_renderer->run() . '</td>';
-                }
-                else
-                {
-                    $html[] = '<td></td>';
-                }
+                $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
 
             $html[] = '</tr>';

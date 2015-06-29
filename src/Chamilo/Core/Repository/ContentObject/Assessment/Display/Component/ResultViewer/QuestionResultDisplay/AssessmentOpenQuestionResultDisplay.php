@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataCla
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 
 /**
  * $Id: assessment_open_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -20,6 +21,7 @@ class AssessmentOpenQuestionResultDisplay extends QuestionResultDisplay
         $question = $this->get_question();
         $type = $question->get_question_type();
         $answers = $this->get_answers();
+        $configuration = $this->get_results_viewer()->get_configuration();
 
         $html = array();
 
@@ -41,7 +43,7 @@ class AssessmentOpenQuestionResultDisplay extends QuestionResultDisplay
         $html[] = Translation :: get('Feedback');
         $html[] = '</div>';
 
-        if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+        if (AnswerFeedbackDisplay :: allowed($configuration, $this->get_complex_content_object_question(), true, true))
         {
             $object_renderer = new ContentObjectResourceRenderer($this->get_results_viewer(), $question->get_feedback());
 

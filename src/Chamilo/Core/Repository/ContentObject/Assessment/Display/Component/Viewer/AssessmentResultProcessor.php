@@ -95,7 +95,7 @@ class AssessmentResultProcessor
             if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
             {
                 $display = AssessmentQuestionResultDisplay :: factory(
-                    $this,
+                    $this->get_assessment_viewer(),
                     $question_cloi,
                     $question_number,
                     $answers,
@@ -214,7 +214,7 @@ class AssessmentResultProcessor
             }
 
             $display = AssessmentQuestionResultDisplay :: factory(
-                $this,
+                $this->get_assessment_viewer(),
                 $complex_question,
                 $question_number,
                 $answer,

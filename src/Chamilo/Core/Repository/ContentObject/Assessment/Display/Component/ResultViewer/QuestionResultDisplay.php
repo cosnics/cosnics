@@ -6,6 +6,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -102,7 +103,15 @@ abstract class QuestionResultDisplay
             $this->form->addElement('html', implode(PHP_EOL, $header));
         }
 
-        $this->form->addElement('html', $this->display_question_result());
+        $display = AssessmentQuestionResultDisplay :: factory(
+            $this->results_viewer,
+            $this->complex_content_object_question,
+            $this->question_nr,
+            $this->answers,
+            $this->score,
+            $this->hints);
+
+        $this->form->addElement('html', $display->as_html());
 
         if ($this->add_borders())
         {

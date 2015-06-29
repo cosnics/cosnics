@@ -26,7 +26,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $options = $this->get_question()->get_options();
         $matches = $this->get_question()->get_matches();
         $type = $this->get_question()->get_matrix_type();
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -52,9 +52,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         {
             $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
-                $option->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             foreach ($matches as $j => $match)
@@ -187,7 +185,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $valid_answer))
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_assessment_result_processor()->get_assessment_viewer(),
+                        $this->getViewerApplication(),
                         $option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }
