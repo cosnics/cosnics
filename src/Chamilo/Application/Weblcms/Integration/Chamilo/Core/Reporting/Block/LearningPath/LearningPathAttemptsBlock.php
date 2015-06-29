@@ -27,7 +27,8 @@ class LearningPathAttemptsBlock extends ToolBlock
             array(Translation :: get('Name'), Translation :: get('Progress'), Translation :: get('Details')));
 
         $pid = $this->get_parent()->get_publication_id();
-        $course_id = $this->get_course_id();
+        $course_id = $this->get_parent()->get_parent()->get_parent()->get_parameter(
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
         $tool = $this->get_tool();
 
         $users_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_users(

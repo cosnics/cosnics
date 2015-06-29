@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\Lear
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
@@ -40,7 +39,8 @@ class LearningPathBlock extends CourseBlock
                 Translation :: get('LearningPathDetails')));
 
         $course_id = $this->get_course_id();
-        $tool = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name(), true);
+        $tool = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
+            \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: package());
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
         $count = 1;
@@ -86,6 +86,7 @@ class LearningPathBlock extends CourseBlock
             $params = $this->get_parent()->get_parameters();
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptsTemplate :: class_name();
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $pub[ContentObjectPublication :: PROPERTY_ID];
+            $params[\Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID] = null;
             $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $img . '</a>';
 
             $params = array();
