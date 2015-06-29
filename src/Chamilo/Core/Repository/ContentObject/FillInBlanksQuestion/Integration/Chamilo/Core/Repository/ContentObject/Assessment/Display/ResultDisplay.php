@@ -35,7 +35,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
     public function get_question_result()
     {
         $answers = $this->get_answers();
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $answer_text = $this->get_question()->get_answer_text();
         $answer_text = nl2br($answer_text);
@@ -117,9 +117,9 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $correct = $question->is_correct($index, $answer);
         $best_answer = $question->get_best_answer_for_question($index);
         $complex_content_object_question = $this->get_complex_content_object_question();
-        $feedback_options_type = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $feedback_options_type = $this->getViewerApplication()->get_configuration();
         $all_feedback_options = $feedback_options_type == Configuration :: ANSWER_FEEDBACK_TYPE_ALL;
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $is_first_option = true;
 
