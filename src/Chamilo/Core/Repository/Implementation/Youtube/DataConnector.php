@@ -168,9 +168,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
-        echo('hier');
+
         if ($this->session_token)
         {
+            echo('daar');
             $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
             foreach ($channelsResponse['items'] as $channel)
             {
