@@ -117,10 +117,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $youTubePlaylist->setSnippet($playlistSnippet);
         $youTubePlaylist->setStatus($playlistStatus);
 
-        var_dump($playlistSnippet);
-        var_dump($playlistStatus);
-        var_dump($youTubePlaylist);
-
         $playlistResponse = $this->youtube->playlists->insert('snippet,status', $youTubePlaylist);
         $playlistId = $playlistResponse['id'];
 
@@ -198,13 +194,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
-        var_dump($media);
 
         $playlist = new PlayList();
         $playlist->set_title('test');
         $playlist->set_description('test descr');
         $playlist->set_date(date("Y-m-d H:i:s"));
-         $this->create_playlist($playlist, $media);
+
+        $this->create_playlist($playlist, $media);
 
         return $media;
     }
