@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\AssessmentViewerComponent;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\ScoreCalculator;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -95,7 +94,7 @@ class AssessmentResultProcessor
             if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
             {
                 $display = AssessmentQuestionResultDisplay :: factory(
-                    $this,
+                    $this->get_assessment_viewer(),
                     $question_cloi,
                     $question_number,
                     $answers,
@@ -214,7 +213,7 @@ class AssessmentResultProcessor
             }
 
             $display = AssessmentQuestionResultDisplay :: factory(
-                $this,
+                $this->get_assessment_viewer(),
                 $complex_question,
                 $question_number,
                 $answer,

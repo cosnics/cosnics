@@ -3,9 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Integration\Cha
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -21,7 +21,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
     public function get_question_result()
     {
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
         $html[] = '<table class="data_table take_assessment">';
@@ -89,9 +89,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td style="text-align: center;">' . $answer->get_order() . '</td>';
             }
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
-                $answer->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_value());
 
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
@@ -102,7 +100,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $correct_answer))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
+                    $this->getViewerApplication(),
                     $answer->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }

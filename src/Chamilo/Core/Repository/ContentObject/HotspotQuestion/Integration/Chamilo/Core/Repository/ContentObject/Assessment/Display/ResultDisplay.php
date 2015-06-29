@@ -3,12 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Cham
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -27,7 +27,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $question = $this->get_question();
         $question_id = $this->get_complex_content_object_question()->get_id();
         $answers = $question->get_answers();
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
         $html = array();
 
         $image_object = $question->get_image_object();
@@ -93,9 +93,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     'answer_wrong')) . '</td>';
             }
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
-                $answer->get_answer());
+            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_answer());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             if (AnswerFeedbackDisplay :: allowed(
@@ -105,7 +103,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $valid_answer))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
+                    $this->getViewerApplication(),
                     $answer->get_comment());
 
                 $html[] = '<td>' . $object_renderer->run() . '</td>';

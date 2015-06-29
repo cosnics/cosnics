@@ -1,12 +1,13 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc;
+namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentResultProcessor;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -20,7 +21,7 @@ abstract class AssessmentQuestionResultDisplay
      *
      * @var AssessmentResultProcessor
      */
-    private $assessment_result_processor;
+    private $viewerApplication;
 
     private $complex_content_object_question;
 
@@ -34,10 +35,10 @@ abstract class AssessmentQuestionResultDisplay
 
     private $hints;
 
-    public function __construct(AssessmentResultProcessor $assessment_result_processor, $complex_content_object_question,
-        $question_nr, $answers, $score, $hints)
+    public function __construct(Application $viewerApplication, $complex_content_object_question, $question_nr, $answers,
+        $score, $hints)
     {
-        $this->assessment_result_processor = $assessment_result_processor;
+        $this->viewerApplication = $viewerApplication;
         $this->complex_content_object_question = $complex_content_object_question;
         $this->question_nr = $question_nr;
         $this->question = $complex_content_object_question->get_ref_object();
@@ -46,9 +47,9 @@ abstract class AssessmentQuestionResultDisplay
         $this->hints = $hints;
     }
 
-    public function get_assessment_result_processor()
+    public function getViewerApplication()
     {
-        return $this->assessment_result_processor;
+        return $this->viewerApplication;
     }
 
     public function get_complex_content_object_question()
@@ -137,7 +138,7 @@ abstract class AssessmentQuestionResultDisplay
                 'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . $label . '" />&nbsp;&nbsp;';
         }
 
-        if ($this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration()->show_score())
+        if ($this->getViewerApplication()->get_configuration()->show_score())
         {
             $html[] = $this->get_score() . ' / ' . $this->get_complex_content_object_question()->get_weight();
         }
@@ -180,23 +181,20 @@ abstract class AssessmentQuestionResultDisplay
         return false;
     }
 
-    public static function factory(AssessmentResultProcessor $assessment_result_processor,
-        $complex_content_object_question, $question_nr, $answers, $score, $hints)
+    public static function factory(Application $viewerApplication, $complex_content_object_question, $question_nr,
+        $answers, $score, $hints)
     {
-        $type = $complex_content_object_question->get_ref_object()->get_type();
+        $class = $complex_content_object_question->get_ref_object()->package() . '\Integration\\' .
+             Assessment :: package() . '\Display\ResultDisplay';
 
-        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) .
-        '\ResultDisplay';
-        
-//         $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' . __NAMESPACE__ .
-//              '\ResultDisplay';
         $question_result_display = new $class(
-            $assessment_result_processor,
+            $viewerApplication,
             $complex_content_object_question,
             $question_nr,
             $answers,
             $score,
             $hints);
+
         return $question_result_display;
     }
 }

@@ -72,7 +72,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $total_score += $score;
             $total_weight += $question_cloi->get_weight();
 
-            $display = QuestionResultDisplay :: factory(
+            $display = new QuestionResultDisplay(
                 $this,
                 $form,
                 $question_cloi,
@@ -82,6 +82,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
                 $result['hint'],
                 $feedback,
                 $this->get_parent()->can_change_answer_data());
+
             $display->render();
 
             $question_number ++;

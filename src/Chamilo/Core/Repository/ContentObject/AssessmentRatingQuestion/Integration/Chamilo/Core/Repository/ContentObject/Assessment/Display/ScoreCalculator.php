@@ -6,7 +6,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integra
  * 
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.score_calculator
  */
-class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\ScoreCalculator
+class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator
 {
 
     public function calculate_score()
