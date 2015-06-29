@@ -168,7 +168,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function get_video_feeds()
     {
-
+var_dump($this->client->getAccessToken());
         if ($this->session_token)
         {
             echo('daar');
