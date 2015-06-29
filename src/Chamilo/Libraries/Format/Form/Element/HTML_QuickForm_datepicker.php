@@ -93,15 +93,14 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function getElementJS()
     {
-       
         $js = '';
         // if(!defined('DATEPICKER_JAVASCRIPT_INCLUDED'))
         {
             // define('DATEPICKER_JAVASCRIPT_INCLUDED',1);
             $js = "\n";
             $js .= '<script src="';
-            $js .= Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries\Format\Resources\Javascript', true);
-            $js .= 'TblChange.js" type="text/javascript"></script>';
+            $js .= Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js';
+            $js .= '" type="text/javascript"></script>';
             $js .= "\n";
         }
 
