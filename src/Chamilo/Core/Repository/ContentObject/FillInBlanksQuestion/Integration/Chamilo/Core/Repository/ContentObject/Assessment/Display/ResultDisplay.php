@@ -2,11 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\AssessmentQuestionResultDisplay;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestionAnswer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  *
@@ -207,6 +207,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     // Best answer
                     $html[] = '<tr class="' . ($row_count % 2 == 0 ? 'row_even' : 'row_odd') . '">';
+                    $html[] = '<td></td>';
 
                     $show_answer = $best_answer->get_value();
                     $show_answer = empty($show_answer) ? Translation :: get('NoAnswer') : $best_answer->get_value();
@@ -226,6 +227,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         $comment = $best_answer->has_comment() ? $best_answer->get_comment() : '-';
 
                         $html[] = '<td>' . $comment . '</td>';
+                    }
+
+                    if ($configuration->show_score())
+                    {
+                        $html[] = '<td></td>';
                     }
 
                     $html[] = '</tr>';
@@ -286,6 +292,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     // Best answer
                     $html[] = '<tr class="' . ($row_count % 2 == 0 ? 'row_even' : 'row_odd') . '">';
+                    $html[] = '<td></td>';
 
                     $show_answer = $best_answer->get_value();
                     $show_answer = empty($show_answer) ? Translation :: get('NoAnswer') : $best_answer->get_value();
@@ -305,6 +312,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         $comment = $best_answer->has_comment() ? $best_answer->get_comment() : '-';
 
                         $html[] = '<td>' . $comment . '</td>';
+                    }
+
+                    if ($configuration->show_score())
+                    {
+                        $html[] = '<td></td>';
                     }
 
                     $html[] = '</tr>';

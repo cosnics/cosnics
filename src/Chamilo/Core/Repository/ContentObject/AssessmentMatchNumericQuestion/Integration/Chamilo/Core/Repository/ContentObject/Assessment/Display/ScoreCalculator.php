@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Wizard\Inc\ScoreCalculator;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\ScoreCalculator;
 
 /**
  *
