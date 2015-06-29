@@ -1,0 +1,16 @@
+@CHARSET "ISO-8859-1";
+
+@import url('plugin/jquery/jquery.css');
+
+@import url('common_general.css');
+
+@import url('common_form.css');
+
+@import url('common_menu.css');
+
+@import url('common_table.css');
+
+@import url('common_tabs.css');
+
+@import url('common_tree.css');
+

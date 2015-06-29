@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\PhysicalLocation">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Physical location</translation>
+			<translation language="nl">Geografische ligging</translation>
+			<translation language="fr">L'emplacement physique</translation>
+			<translation language="de">Physischer Standort</translation>
+		</variable>
+	</translations>
+</template>
