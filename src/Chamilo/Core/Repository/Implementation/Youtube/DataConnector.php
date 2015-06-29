@@ -117,6 +117,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $youTubePlaylist->setSnippet($playlistSnippet);
         $youTubePlaylist->setStatus($playlistStatus);
 
+        var_dump($playlistSnippet);
+        var_dump($playlistStatus);
+        var_dump($youTubePlaylist);
+
         $playlistResponse = $this->youtube->playlists->insert('snippet,status', $youTubePlaylist);
         $playlistId = $playlistResponse['id'];
 
