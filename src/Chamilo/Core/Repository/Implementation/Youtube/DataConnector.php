@@ -117,7 +117,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $youTubePlaylist->setSnippet($playlistSnippet);
         $youTubePlaylist->setStatus($playlistStatus);
 
-        $playlistResponse = $youtube->playlists->insert('snippet,status', $youTubePlaylist, array());
+        $playlistResponse = $this->youtube->playlists->insert('snippet,status', $youTubePlaylist, array());
         $playlistId = $playlistResponse['id'];
 
         $resourceId = new \Google_Service_YouTube_ResourceId();
@@ -131,7 +131,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $playlistItem = new \Google_Service_YouTube_PlaylistItem();
         $playlistItem->setSnippet($playlistItemSnippet);
-        $playlistItemResponse = $youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
+        $playlistItemResponse = $this->youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
         return $playlistItemResponse;
     }
 
