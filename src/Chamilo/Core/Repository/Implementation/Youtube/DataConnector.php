@@ -183,7 +183,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $snippet->setCategoryId($values[ExternalObjectForm :: VIDEO_CATEGORY]);
 
         $status = new \Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "public";
+        $status->privacyStatus = "private";
 
         $video = new \Google_Service_YouTube_Video();
         $video->setSnippet($snippet);
@@ -195,7 +195,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
-
         $status = false;
         $handle = fopen($_video_file['tmp_name'], "rb");
         while (! $status && ! feof($handle))
