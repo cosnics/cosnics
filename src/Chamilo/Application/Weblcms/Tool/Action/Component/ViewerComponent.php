@@ -24,7 +24,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
@@ -160,21 +159,6 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     public function add_actionbar_item($item)
     {
         $this->action_bar->add_common_action($item);
-    }
-
-    public function can_create_feedback()
-    {
-        return $this->feedback_allowed;
-    }
-
-    public function can_update_feedback($feedback)
-    {
-        return $this->feedback_allowed;
-    }
-
-    public function can_delete_feedback($feedback)
-    {
-        return $this->feedback_allowed;
     }
 
     public function set_action_bar($action_bar)

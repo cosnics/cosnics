@@ -24,36 +24,4 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
-
-    /**
-     * Determine if the feedback can be updated
-     *
-     * @param \core\repository\content_object\portfolio\feedback\Feedback $feedback
-     * @return boolean
-     */
-    public function can_update_feedback($feedback)
-    {
-        if (method_exists($this->get_parent(), 'can_update_feedback'))
-        {
-            return $this->get_parent()->can_update_feedback($feedback);
-        }
-
-        return true;
-    }
-
-    /**
-     * Determine if the feedback can be deleted
-     *
-     * @param \core\repository\content_object\portfolio\feedback\Feedback $feedback
-     * @return boolean
-     */
-    public function can_delete_feedback($feedback)
-    {
-        if (method_exists($this->get_parent(), 'can_delete_feedback'))
-        {
-            return $this->get_parent()->can_delete_feedback($feedback);
-        }
-
-        return true;
-    }
 }
