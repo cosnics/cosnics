@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
+use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\PlayList;
 
 // YoutubeKey :
 // AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
@@ -103,6 +104,37 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
     }
 
+    public function create_playlist(PlayList $playlist, $video)
+    {
+        $playlistSnippet = new \Google_Service_YouTube_PlaylistSnippet();
+        $playlistSnippet->setTitle($playlist->get_title() . $playlist->get_date());
+        $playlistSnippet->setDescription($playlist->get_description());
+
+        $playlistStatus = new \Google_Service_YouTube_PlaylistStatus();
+        $playlistStatus->setPrivacyStatus('private');
+
+        $youTubePlaylist = new \Google_Service_YouTube_Playlist();
+        $youTubePlaylist->setSnippet($playlistSnippet);
+        $youTubePlaylist->setStatus($playlistStatus);
+
+        $playlistResponse = $youtube->playlists->insert('snippet,status', $youTubePlaylist, array());
+        $playlistId = $playlistResponse['id'];
+
+        $resourceId = new \Google_Service_YouTube_ResourceId();
+        $resourceId->setVideoId($video->get_id());
+        $resourceId->setKind('youtube#video');
+
+        $playlistItemSnippet = new \Google_Service_YouTube_PlaylistItemSnippet();
+        $playlistItemSnippet->setTitle('First video in the test playlist');
+        $playlistItemSnippet->setPlaylistId($playlistId);
+        $playlistItemSnippet->setResourceId($resourceId);
+
+        $playlistItem = new \Google_Service_YouTube_PlaylistItem();
+        $playlistItem->setSnippet($playlistItemSnippet);
+        $playlistItemResponse = $youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
+        return $playlistItemResponse;
+    }
+
     public static function get_sort_properties()
     {
         // return array(self :: RELEVANCE, self :: PUBLISHED, self :: VIEW_COUNT, self :: RATING);
@@ -162,24 +194,43 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
         $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
+        var_dump($media);
+
+        $playlist = new PlayList();
+        $playlist->set_title('test');
+        $playlist->set_description('test descr');
+        $playlist->set_date(date("Y-m-d H:i:s"));
+         $this->create_playlist($playlist, $media);
 
         return $media;
     }
 
     public function get_video_feeds()
     {
-        $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
-        foreach ($channelsResponse['items'] as $channel) {
-            $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
-            $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems('snippet', array(
-                'playlistId' => $uploadsListId,
-                'maxResults' => 50
-            ));
-            foreach ($playlistItemsResponse['items'] as $playlistItem) {
-                $feeds[] = $playlistItem['snippet']['title'];
+        if ($this->client->getAccessToken())
+        {
+            $channelsResponse = $this->youtube->channels->listChannels('contentDetails', array('mine' => 'true'));
+            foreach ($channelsResponse['items'] as $channel)
+            {
+                $uploadsListId = $channel['contentDetails']['relatedPlaylists']['uploads'];
+
+                $playlistItemsResponse = $this->youtube->playlistItems->listPlaylistItems(
+                    'snippet',
+                    array('playlistId' => $uploadsListId, 'maxResults' => 50));
+                var_dump($playlistItemsResponse);
+                foreach ($playlistItemsResponse['items'] as $playlistItem)
+                {
+
+                    var_dump($playlistItem);
+                    $list[] = $playlistItem['snippet']['title'];
+                }
             }
+            return $list;
         }
-        return $feeds;
+        else
+        {
+            return array();
+        }
     }
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
@@ -195,7 +246,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
 
         $pageNumber = ($offset / $count) + 1;
-        $pageToken = PageTokenGenerator::getInstance()->getToken($count, $pageNumber);
+        $pageToken = PageTokenGenerator :: getInstance()->getToken($count, $pageNumber);
 
         $searchResponse = $this->youtube->search->listSearch(
             'id,snippet',

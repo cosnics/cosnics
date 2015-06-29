@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Implementation\Youtube;
+namespace Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass;
 
 use Chamilo\Core\Repository\External\General\Streaming\StreamingMediaExternalObject;
 use Chamilo\Libraries\Platform\Translation;
