@@ -3,8 +3,6 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -16,7 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AccountComponent extends ProfileComponent implements NoContextComponent
+class AccountComponent extends ProfileComponent
 {
 
     /**
@@ -30,8 +28,6 @@ class AccountComponent extends ProfileComponent implements NoContextComponent
      */
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->remove(1);
-
         // not allowed for anonymous user
         if ($this->get_user()->is_anonymous_user())
         {

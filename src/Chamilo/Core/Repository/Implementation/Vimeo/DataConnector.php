@@ -303,7 +303,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $video = $this->vimeo->call('vimeo.videos.getInfo', array('video_id' => $id));
         $video = $video->video[0];
 
-        $video = $videos['body']['data'][0];
         $object = new ExternalObject();
 
         $object->set_external_repository_id($this->get_external_repository_instance_id());

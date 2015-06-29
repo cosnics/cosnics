@@ -56,7 +56,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     public function generate_breadcrumbs()
     {
         $component = $this->component;
-        $context = $component->context();
+        $context = $component->package();
 
         if (! $component instanceof NoContextComponent)
         {
@@ -65,7 +65,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
             $component->add_additional_breadcrumbs($this->breadcrumb_trail);
         }
 
-        if (! $component instanceof DelegateComponent && ! $component instanceof NoContextComponent)
+        if (! $component instanceof DelegateComponent)
         {
             $this->breadcrumb_trail->add_help(
                 $context,
@@ -81,7 +81,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     protected function generate_package_breadcrumb()
     {
         $component = $this->component;
-        $context = $component->context();
+        $context = $component->package();
 
         $filter_parameters = $component->get_additional_parameters();
         $filter_parameters[] = $component :: PARAM_ACTION;
@@ -95,16 +95,10 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      */
     protected function generate_component_breadcrumb()
     {
-        $component = $this->component;
-        $context = $component->context();
+        $variable = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_class($this->component));
 
         $this->breadcrumb_trail->add(
-            new Breadcrumb(
-                $component->get_url(),
-                Translation :: get(
-                    ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_class($component)),
-                    null,
-                    $context)));
+            new Breadcrumb($this->component->get_url(), Translation :: get($variable, null, $this->component->package())));
     }
 
     /**
