@@ -105,7 +105,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
     }
 
-    public function create_playlist(PlayList $playlist, $video)
+    public function create_playlist(PlayList $playlist/*, $video*/)
     {
         $playlistSnippet = new \Google_Service_YouTube_PlaylistSnippet();
         $playlistSnippet->setTitle($playlist->get_title() . $playlist->get_date());
@@ -122,7 +122,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $playlistId = $playlistResponse['id'];
 
         $resourceId = new \Google_Service_YouTube_ResourceId();
-        $resourceId->setVideoId($video->get_id());
+        $resourceId->setVideoId('SZj6rAYkYOg');
         $resourceId->setKind('youtube#video');
 
         $playlistItemSnippet = new \Google_Service_YouTube_PlaylistItemSnippet();
@@ -212,7 +212,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $playlist->set_description('test descr');
         $playlist->set_date(date("Y-m-d H:i:s"));
 
-        $this->create_playlist($playlist, $video);
+        $this->create_playlist($playlist);
 
         return $media;
     }
