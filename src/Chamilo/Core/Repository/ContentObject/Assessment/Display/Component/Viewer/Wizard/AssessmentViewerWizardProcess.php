@@ -141,7 +141,7 @@ class AssessmentViewerWizardProcess extends HTML_QuickForm_Action
 
             $score_calculator = ScoreCalculator :: factory($question, $answers, $question_cloi->get_weight());
             $score = $score_calculator->calculate_score();
-
+exit;
             $display = AssessmentQuestionResultDisplay :: factory(
                 $question_cloi,
                 $question_number,

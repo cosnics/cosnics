@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 
 /**
  * $Id: hotspot_question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -22,12 +23,13 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
         $question = $this->get_question();
         $question_id = $this->get_complex_content_object_question()->get_id();
         $answers = $question->get_answers();
+        $configuration = $this->get_results_viewer()->get_configuration();
+        $html = array();
 
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
 
         $html[] = '<div style="border: 1px solid #B5CAE7; border-top: none; padding: 10px;">';
-
         $html[] = '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
              $question_id . '" class="hotspot_image" style="width: ' . $dimensions[0] . 'px; height: ' . $dimensions[1] .
              'px; background-image: url(' . $image_object->get_url() . ')"></div></div>';
@@ -37,7 +39,6 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'HotspotQuestionResultDisplay.js');
-
         $html[] = '<div class="clear"></div></div>';
 
         $user_answers = $this->get_answers();
@@ -58,12 +59,19 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th class="list"></th>';
-        $html[] = '<th class="list"></th>';
+
+        if ($configuration->show_correction() || $configuration->show_solution())
+        {
+            $html[] = '<th class="list"></th>';
+        }
+
         $html[] = '<th>' . Translation :: get('Answer') . '</th>';
-        if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+
+        if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
+
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
@@ -74,28 +82,27 @@ class HotspotQuestionResultDisplay extends QuestionResultDisplay
 
             $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
             $html[] = '<td><div class="colour_box" style="background-color: ' . $colors[$i] . ';"></div></td>';
-            $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('answer_correct') : Theme :: getInstance()->getImage(
-                'answer_wrong')) . '</td>';
+
+            if ($configuration->show_correction() || $configuration->show_solution())
+            {
+                $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('answer_correct') : Theme :: getInstance()->getImage(
+                    'answer_wrong')) . '</td>';
+            }
 
             $object_renderer = new ContentObjectResourceRenderer($this->get_results_viewer(), $answer->get_answer());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
-            if ($this->get_results_viewer()->get_configuration()->show_answer_feedback() && ! $this->can_change())
+            if (AnswerFeedbackDisplay :: allowed(
+                $configuration,
+                $this->get_complex_content_object_question(),
+                true,
+                $valid_answer))
             {
-                if (($this->get_complex_content_object_question()->get_feedback_answer() && ! $valid_answer) ||
-                     ! $this->get_complex_content_object_question()->get_feedback_answer())
-                {
-                    $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_results_viewer(),
-                        $answer->get_comment());
+                $object_renderer = new ContentObjectResourceRenderer($this->get_results_viewer(), $answer->get_comment());
 
-                    $html[] = '<td>' . $object_renderer->run() . '</td>';
-                }
-                else
-                {
-                    $html[] = '<td></td>';
-                }
+                $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
+
             $html[] = '<input type="hidden" name="coordinates_' . $this->get_complex_content_object_question()->get_id() .
                  '_' . $i . '" value="' . $answer->get_hotspot_coordinates() . '" />';
             $html[] = '</tr>';

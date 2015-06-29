@@ -25,7 +25,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $question = $this->get_question();
         $type = $question->get_question_type();
         $answers = $this->get_answers();
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
 
@@ -50,7 +50,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         if (AnswerFeedbackDisplay :: allowed($configuration, $this->get_complex_content_object_question(), true, true))
         {
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_assessment_result_processor()->get_assessment_viewer(),
+                $this->getViewerApplication(),
                 $question->get_feedback());
 
             $html[] = $object_renderer->run();

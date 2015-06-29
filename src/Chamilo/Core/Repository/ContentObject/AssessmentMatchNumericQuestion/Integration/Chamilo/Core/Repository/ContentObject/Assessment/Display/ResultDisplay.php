@@ -26,7 +26,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $valid_answer = $this->get_score() > 0;
         $user_answer = $this->get_answers();
         $answer_option = $this->get_question()->get_option($user_answer[0], $this->get_question()->get_tolerance_type());
-        $configuration = $this->get_assessment_result_processor()->get_assessment_viewer()->get_configuration();
+        $configuration = $this->getViewerApplication()->get_configuration();
 
         $html = array();
 
@@ -102,7 +102,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if (! is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_assessment_result_processor()->get_assessment_viewer(),
+                    $this->getViewerApplication(),
                     $answer_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -149,7 +149,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->get_assessment_result_processor()->get_assessment_viewer(),
+                        $this->getViewerApplication(),
                         $best_option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }
