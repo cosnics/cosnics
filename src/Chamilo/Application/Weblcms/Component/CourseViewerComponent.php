@@ -65,7 +65,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         {
             throw new NotAllowedException();
         }
-        
+
         if (is_null($this->get_course()))
         {
             throw new \Exception(Translation :: get('SelectedCourseNotValid'));
@@ -80,10 +80,10 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $tool = 'Home';
         }
 
-        $category = Request :: get(self :: PARAM_CATEGORY);
-        
+        $category = Request :: get(self :: PARAM_CATEGORY, 0);
+
         $this->course_tool_registration = DataManager :: retrieve_course_tool_by_name($tool);
-        
+
         if (! $this->course_tool_registration)
         {
             throw new \Exception(Translation :: get('SelectedCourseToolNotValid'));
@@ -92,14 +92,6 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         if ($tool != 'course_group')
         {
             $this->set_parameter('course_group', null);
-        }
-
-        if ($tool != 'home')
-        {
-            $breadcrumbtrail->add(
-                new Breadcrumb(
-                    $this->get_url(),
-                    Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool)));
         }
 
         Event :: trigger(

@@ -318,9 +318,11 @@ abstract class Manager extends Application
         {
             $tool = $this->get_parameter(self :: PARAM_TOOL);
         }
+
         if (is_null($category_id))
         {
             $category_id = $this->get_parameter(self :: PARAM_CATEGORY);
+
             if (is_null($category_id))
             {
                 $category_id = 0;
