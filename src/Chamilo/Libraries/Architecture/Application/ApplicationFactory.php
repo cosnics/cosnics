@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -108,11 +107,7 @@ class ApplicationFactory
         $action = $this->getAction($actionParameter);
         $component = $this->createComponent($action);
 
-        if (! $component instanceof NoContextComponent)
-        {
-            $breadcrumbGenerator = $component->get_breadcrumb_generator();
-            $breadcrumbGenerator->generate_breadcrumbs();
-        }
+        $component->get_breadcrumb_generator()->generate_breadcrumbs();
 
         return $component;
     }

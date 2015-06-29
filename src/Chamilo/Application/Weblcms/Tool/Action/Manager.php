@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 
 /**
  * $Id: tool_component.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -19,7 +20,7 @@ use Exception;
  * @author Sven Vanpoucke
  * @author Hans De Bisschop ==============================================================================
  */
-abstract class Manager extends Application
+abstract class Manager extends Application implements NoContextComponent
 {
     const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION;
     const ACTION_VIEW = 'Viewer';
