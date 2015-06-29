@@ -7,6 +7,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  * $Id: fill_in_blanks_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -15,6 +17,11 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class FillInBlanksQuestionForm extends ContentObjectForm
 {
+    // Tabs
+    const TAB_BLANKS = 'Blanks';
+    const TAB_EXAMPLE = 'Example';
+
+    // Fields
     const FIELD_OPTION_VARIATION = 'field_option_variation';
     const FIELD_OPTION_SIZE = 'field_option_size';
     const UNIFORM_INPUT_TYPE = 'uniform_input_type';
@@ -25,20 +32,58 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     const DEFAULT_FIELD_OPTION_SIZE = 15;
     const DEFAULT_UNIFORM_TYPE = self :: UNIFORM_FIXED_ANSWER;
 
-    protected function build_creation_form()
+    /**
+     * Prepare all the different tabs
+     */
+    public function prepareTabs()
     {
-        parent :: build_creation_form();
-        $this->build_fill_in_the_blanks_form();
+        $this->addDefaultTab();
+
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_BLANKS,
+                Translation :: get(self :: TAB_BLANKS),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
+                    'Tab/' . self :: TAB_BLANKS),
+                'buildBlanksForm'));
+
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                self :: TAB_EXAMPLE,
+                Translation :: get(self :: TAB_EXAMPLE),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
+                    'Tab/' . self :: TAB_EXAMPLE),
+                'buildExampleForm'));
+
+        $this->addMetadataTabs();
     }
 
-    protected function build_editing_form()
+    public function buildBlanksForm()
     {
-        parent :: build_editing_form();
-        $this->build_fill_in_the_blanks_form();
-    }
+        // ANSWERS
+        $this->addElement('category', Translation :: get('Excercise'));
 
-    private function build_fill_in_the_blanks_form()
-    {
+        $this->add_information_message(null, null, Translation :: get('FillInTheBlanksInfo'));
+        $this->addElement(
+            'textarea',
+            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
+            Translation :: get('QuestionText'),
+            'rows="10" class="answer"');
+        $this->addRule(
+            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'required');
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
+                    true) . 'FillInTheBlanks.js'));
+        $this->add_options($this->get_content_object());
+        $this->addElement('category');
+
         // ANSWER TYPE
         $this->addElement('category', Translation :: get('AnswerType'));
         $type_options = array();
@@ -138,31 +183,13 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $this->addGroup($field_size_options, null, Translation :: get('FieldSize'), '');
         $this->addElement('html', '</div>');
         $this->addElement('category');
+    }
 
-        $this->add_example_box();
-
-        // ANSWERS
-        $this->addElement('category', Translation :: get('Excercise'));
-
-        // $this->addElement('html', '<div class="normal-message">' . Translation :: get('FillInTheblanksInfo') .
-        // '</div>');
-        $this->addElement(
-            'textarea',
-            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
-            Translation :: get('QuestionText'),
-            'rows="10" class="answer"');
-        $this->addRule(
-            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-            'required');
+    public function buildExampleForm()
+    {
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
-                    true) . 'FillInBlanksQuestion.js'));
-        $this->add_options($this->get_content_object());
-        $this->addElement('category');
+            '<div>' . Translation :: get('InstructionsText', null, FillInBlanksQuestion :: package()) . '</div>');
     }
 
     public function setDefaults($defaults = array())
@@ -302,7 +329,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $style = (count($answers) == 0) ? 'style="display: none;"' : '';
 
         $html = array();
-        $html[] = '<div id="answers_table" class="row" ' . $style . '">';
+        $html[] = '<div id="answers_table" class="row" ' . $style . '>';
         $html[] = '<div class="label">';
         $html[] = Translation :: get('Answers');
         $html[] = '</div>';
