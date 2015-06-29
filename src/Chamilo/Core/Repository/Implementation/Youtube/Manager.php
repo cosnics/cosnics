@@ -61,7 +61,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     /**
      *
-     * @param \core\repository\external\ExternalObject $object
+     * @param \core\repository\external\ExternalObject\Storage\DataClass $object
      * @return string
      */
     public function get_external_repository_object_viewing_url($object)
