@@ -388,7 +388,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function export_external_repository_object($object)
     {
-        var_dump($object);
         $videoPath = $object->get_full_path();
         $snippet = new \Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($object->get_title());

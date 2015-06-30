@@ -34,22 +34,9 @@ class ExternalObject extends StreamingMediaExternalObject
         return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
     }
 
-    public function get_tags_string($include_links = true)
+    public function get_tags_string()
     {
-        $tags = array();
-        foreach ($this->get_tags() as $tag)
-        {
-            if ($include_links)
-            {
-                $tags[] = '<a href="http://www.vimeo.com/tag:' . $tag->normalized . '">' . $tag->_content . '</a>';
-            }
-            else
-            {
-                $tags[] = $tag->_content;
-            }
-        }
-        
-        return implode(', ', $tags);
+        return implode(', ', $this->get_tags());
     }
 
     public static function get_object_type()

@@ -5,6 +5,11 @@ use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Vimeo\Vimeo;
+use Chamilo\Core\Repository\Implementation\Youtube\PageTokenGenerator;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  * Consumer Key: Consumer Secret:
@@ -108,16 +113,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
 
-        $offset = (($offset - ($offset % $count)) / $count) + 1;
-        $attributes = 'description,upload_date,modified_date,owner';
+//         $offset = (($offset - ($offset % $count)) / $count) + 1;
+        $pageNumber = ($offset / $count) + 1;
 
-        $search_parameters = array();
-        $search_parameters['per_page'] = $count;
-        $search_parameters['page'] = $offset;
+        $pageToken = PageTokenGenerator :: getInstance()->getToken($count, $pageNumber);
 
         if ($order_property)
         {
-
             $order_direction = $this->convert_order_property($order_property);
 
             if ($order_direction)
@@ -135,17 +137,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                     $search_parameters['query'] = $condition;
                     $search_parameters['user_id'] = $this->get_user_info()->id;
 
-                    $videos = $this->vimeo->call('vimeo.videos.search', $search_parameters);
+                    $videos = $this->vimeo->request('/videos', $search_parameters);
                 }
                 else
                 {
-                    $videos = $this->vimeo->call('vimeo.videos.getAll');
+                    $videos = $this->vimeo->request('/videos');
                 }
                 break;
             case Manager :: FEED_TYPE_GENERAL :
                 $search_parameters['query'] = $condition ? $condition : 'chamilo';
 
-                $videos = $this->vimeo->call('vimeo.videos.search', $search_parameters);
+                $videos = $this->vimeo->request('/videos', $search_parameters);
                 break;
             default :
                 if ($condition)
@@ -153,14 +155,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                     $search_parameters['query'] = $condition;
                     $search_parameters['user_id'] = $this->get_user_info()->id;
 
-                    $videos = $this->vimeo->call('vimeo.videos.search', $search_parameters);
+                    $videos = $this->vimeo->request('/videos', $search_parameters);
                 }
                 else
                 {
                     // get all videos
                     $search_parameters['query'] = 'test';
                     $videos = $this->vimeo->request('/videos', $search_parameters);
-
                 }
                 break;
         }
@@ -172,7 +173,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (! isset($this->user))
         {
             $token = $this->vimeo->getToken();
-            $response = $this->vimeo->call('vimeo.people.getInfo', array('user_id' => $token[0]));
+            $response = $this->vimeo->request('/users', array('user_id' => $token[0]));
             $this->user = $response->person;
         }
         return $this->user;
@@ -189,30 +190,34 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_objects($condition = null, $order_property, $offset, $count)
     {
         $videos = $this->retrieve_videos($condition, $order_property, $offset, $count);
+
         $videos_id = array();
         foreach ($videos['body']['data'] as $video)
         {
-            $video = $video_info->video[0];
             $object = new ExternalObject();
             $object->set_external_repository_id($this->get_external_repository_instance_id());
-            $object->set_id($videos['body']['data'][0]['uri']);
-            $object->set_title($videos['body']['data'][0]['name']);
-            $object->set_description($videos['body']['data'][0]['description']);
-            $object->set_created(strtotime($videos['body']['data'][0]['created_time']));
-            $object->set_modified(strtotime($videos['body']['data'][0]['modified_time']));
-            $object->set_duration($videos['body']['data'][0]['duration']);
-            $object->set_owner_id($videos['body']['data'][0]['user']['name']);
-            $object->set_urls($videos['body']['data'][0]['link']);
-            foreach ($videos['body']['data'][0]['tags'] as $tag)
+
+            $video_id = explode('/videos/', $video['uri']);
+            $object->set_id($video_id[1]);
+            $object->set_title($video['name']);
+            $object->set_description(nl2br($video['description']));
+            $object->set_created(strtotime($video['created_time']));
+            $object->set_modified(strtotime($video['modified_time']));
+            $object->set_duration($video['duration']);
+            $video_user = explode('/users/', $video['user']['uri']);
+            $object->set_owner_id($video_user[1]);
+            $object->set_owner_name($video['user']['name']);
+            $object->set_urls($video['link']);
+
+            foreach ($video['tags'] as $tag)
             {
                 $tags[] = $tag['name'];
             }
             $object->set_tags($tags);
             $object->set_type('video');
+            $object->set_thumbnail($video['pictures']['sizes'][1]['link']);
 
-            // $object->set_thumbnail($video->thumbnails->thumbnail[1]->_content);
-
-            // $object->set_rights($this->determine_rights($video));
+            $object->set_rights($this->determine_rights($video));
             $objects[] = $object;
         }
         return new ArrayResultSet($objects);
@@ -226,7 +231,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function count_external_repository_objects($condition)
     {
         $videos = $this->retrieve_videos($condition, null, 1, 1);
-        return $videos->videos->total;
+        return $videos->videos['body']['total'];
     }
 
     /**
@@ -300,29 +305,35 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_external_repository_object($id)
     {
-        $video = $this->vimeo->call('vimeo.videos.getInfo', array('video_id' => $id));
-        $video = $video->video[0];
+
+        $video = $this->vimeo->request('/videos', array('query' => $id));
+        var_dump($video);
+        $video = $video['body']['data'][0];
 
         $object = new ExternalObject();
 
         $object->set_external_repository_id($this->get_external_repository_instance_id());
-        $object->set_id($video['body']['data'][0]['uri']);
-        $object->set_title($video['body']['data'][0]['name']);
-        $object->set_description($video['body']['data'][0]['description']);
-        $object->set_created(strtotime($video['body']['data'][0]['created_time']));
-        $object->set_modified(strtotime($video['body']['data'][0]['modified_time']));
-        $object->set_duration($video['body']['data'][0]['duration']);
-        $object->set_owner_id($video['body']['data'][0]['user']['name']);
-        $object->set_urls($video['body']['data'][0]['link']);
-        foreach ($video['body']['data'][0]['tags'] as $tag)
+        $video_id = explode('/videos/', $video['uri']);
+        $object->set_id($video_id[1]);
+        $object->set_title($video['name']);
+        $object->set_description(nl2br($video['description']));
+        $object->set_created(strtotime($video['created_time']));
+        $object->set_modified(strtotime($video['modified_time']));
+        $object->set_duration($video['duration']);
+        $video_user = explode('/users/', $video['user']['uri']);
+        $object->set_owner_id($video_user[1]);
+        $object->set_owner_name($video['user']['name']);
+        $object->set_urls($video['link']);
+
+        foreach ($video['tags'] as $tag)
         {
             $tags[] = $tag['name'];
         }
         $object->set_tags($tags);
 
-        // $object->set_thumbnail($video->thumbnails->thumbnail[2]->_content);
+        $object->set_thumbnail($video['pictures']['sizes'][4]['link']);
 
-        // $object->set_rights($this->determine_rights($video));
+        $object->set_rights($this->determine_rights($video));
 
         return $object;
     }
