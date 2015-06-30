@@ -36,7 +36,7 @@ class UploaderComponent extends Manager implements DelegateComponent
                     $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
                     $redirect = new Redirect($parameters);
-                    var_dump($redirect);
+
                     $redirect->toUrl();
                 }
                 else
