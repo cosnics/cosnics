@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\User\Integration\Chamilo\Core\Tracking">
+	<event name="login">
+		<tracker name="login_logout" />
+		<tracker name="browser" />
+		<tracker name="country" />
+		<tracker name="operating_system" />
+		<tracker name="provider" />
+		<tracker name="referrer" />
+	</event>
+	<event name="logout">
+		<tracker name="login_logout" />
+	</event>
+	<event name="create">
+		<tracker name="change" />
+	</event>
+	<event name="update">
+		<tracker name="change" />
+	</event>
+	<event name="delete">
+		<tracker name="change" />
+	</event>
+	<event name="register">
+		<tracker name="change" />
+	</event>
+	<event name="import">
+		<tracker name="change" />
+	</event>
+	<event name="export">
+		<tracker name="change" />
+	</event>
+	<event name="reset_password">
+		<tracker name="change" />
+	</event>
+	<event name="quota">
+		<tracker name="change" />
+	</event>
+	<event name="enter">
+		<tracker name="visit" />
+	</event>
+	<event name="leave">
+		<tracker name="visit" />
+	</event>
+</package>
