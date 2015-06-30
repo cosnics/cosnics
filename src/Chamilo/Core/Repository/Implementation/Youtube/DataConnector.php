@@ -17,18 +17,12 @@ use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\PlayList;
 use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\ExternalObject;
 
-// YoutubeKey :
-// AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
     private $youtube;
 
     private $session_token;
-    const RELEVANCE = 'relevance';
-    const PUBLISHED = 'published';
-    const VIEW_COUNT = 'viewCount';
-    const RATING = 'rating';
 
     public function __construct($external_repository_instance)
     {
@@ -134,12 +128,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $playlistItem->setSnippet($playlistItemSnippet);
         $playlistItemResponse = $this->youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
         return $playlistItemResponse;
-    }
-
-    public static function get_sort_properties()
-    {
-        // return array(self :: RELEVANCE, self :: PUBLISHED, self :: VIEW_COUNT, self :: RATING);
-        return array();
     }
 
     public function is_editable($id)
