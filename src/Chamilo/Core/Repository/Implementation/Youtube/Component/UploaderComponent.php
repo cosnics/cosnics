@@ -27,6 +27,7 @@ class UploaderComponent extends Manager implements DelegateComponent
             if ($form->validate())
             {
                 $id = $form->upload_video();
+
                 if ($id)
                 {
                     $parameters = $this->get_parameters();
@@ -35,13 +36,12 @@ class UploaderComponent extends Manager implements DelegateComponent
                     $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MYVIDEOS;
 
                     $redirect = new Redirect($parameters);
+                    var_dump($redirect);
                     $redirect->toUrl();
                 }
                 else
                 {
-                    Request :: set_get(
-                        Application :: PARAM_ERROR_MESSAGE,
-                        Translation :: get('SlideshareUploadProblem'));
+                    Request :: set_get(Application :: PARAM_ERROR_MESSAGE, Translation :: get('YoutubeUploadProblem'));
 
                     $html = array();
 
