@@ -35,7 +35,7 @@ class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements No
 
         foreach ($contentObjectTypes as $contentObjectType)
         {
-            $relativeEditorPath = 'HtmlEditor/Ckeditor/' . $theme . '.css';
+            $relativeEditorPath = 'HtmlEditor/Ckeditor/' . $theme . '/Stylesheet.css';
             $namespace = $classnameUtilities->getNamespaceFromClassname($contentObjectType);
             $namespace = $classnameUtilities->getNamespaceParent($namespace, 2);
 
