@@ -1,0 +1,135 @@
+@CHARSET "ISO-8859-1";
+
+.navbar ul li a img.item-icon-account {
+	max-height: 32px;
+	max-width: 32px;
+	margin: -6px -9px -4px -9px;
+	padding: 0px;
+}
+
+.navbar ul li div.item-account {
+	display: none;
+	width: 200px;
+	height: 100px;
+	overflow: hidden;
+	background-color: #262F52;
+	background-color: #2f3a66;
+	clear: both;
+	white-space: normal;
+	position: fixed;
+	right: 0px;
+	top: 32px;
+	padding: 16px;
+	color: #8eadd8;
+}
+
+.navbar ul li:hover div.item-account {
+	display: block;
+}
+
+div.item-account div.item-account-photo {
+	display: inline-block;
+	width: 64px;
+	height: 64px;
+	margin-right: 8px;
+	float: left;
+}
+
+div.item-account div.item-account-photo a {
+	height: auto;
+	line-height: normal;
+	padding: 0px;
+	margin: 0px;
+}
+
+div.item-account div.item-account-photo img {
+	max-width: 64px;
+	max-height: 64px;
+	z-index: 10;
+}
+
+div.item-account div.item-account-photo div.item-account-photo-edit {
+	width: 64px;
+	height: 16px;
+	line-height: 16px;
+	position: relative;
+	top: -16px;
+	font-size: 10px;
+	padding: 4px 0x;
+	color: white;
+	z-index: 100;
+	background-color: rgba(38, 47, 82, 0.5);
+	text-align: center;
+	display: none;
+}
+
+div.item-account div.item-account-photo div.item-account-photo-edit a {
+	margin: 0px;
+	padding: 0px;
+	color: white;
+}
+
+div.item-account div.item-account-photo:hover div.item-account-photo-edit
+	{
+	display: block;
+}
+
+div.item-account div.item-account-data {
+	display: inline-block;
+	width: 128px;
+	white-space: normal;
+	float: left;
+}
+
+span.item-account-data-name, span.item-account-data-email, span.item-account-data-my-account
+	{
+	display: block;
+}
+
+span.item-account-data-name {
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+}
+
+span.item-account-data-email {
+	font-size: 13px;
+}
+
+span.item-account-data-my-account {
+	margin-top: 8px;
+}
+
+span.item-account-data-my-account a {
+	margin: 0px !important;
+	padding: 0px !important;
+	font-size: 11px;
+	display: inline !important;
+}
+
+div.item-account div.item-account-logout {
+	border-top: 1px dotted #dcdcdc;
+	padding: 8px 16px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	width: 200px;
+	text-align: center;
+	color: white;
+	line-height: 16px;
+	background-color: #2f3a66;
+	background-color: #262F52;
+}
+
+div.item-account div.item-account-logout a {
+	height: auto;
+	line-height: normal;
+	padding: 0px;
+}
+
+div.item-account div.item-account-logout img, span.item-account-data-my-account img
+	{
+	vertical-align: middle;
+	margin-right: 5px;
+}
