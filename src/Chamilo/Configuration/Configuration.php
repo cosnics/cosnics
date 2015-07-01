@@ -180,7 +180,7 @@ class Configuration
         if (! isset($this->isAvailable))
         {
             $file = $this->getConfigurationPath();
-            
+
             if (is_file($file) && is_readable($file))
             {
                 $this->isAvailable = true;
@@ -190,7 +190,7 @@ class Configuration
                 $this->isAvailable = false;
             }
         }
-    
+
         return $this->isAvailable;
     }
 
@@ -418,9 +418,26 @@ class Configuration
 
         $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
+
         $this->set(
-            array('Chamilo\Configuration', 'repository', 'storage_path'),
+            array('Chamilo\Configuration', 'storage', 'archive'),
+            Path :: getInstance()->getStoragePath('archive'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'cache'), Path :: getInstance()->getStoragePath('cache'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'garbage'),
+            Path :: getInstance()->getStoragePath('garbage'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'hotpotatoes'),
+            Path :: getInstance()->getStoragePath('hotpotatoes'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'logs'), Path :: getInstance()->getStoragePath('logs'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'repository'),
             Path :: getInstance()->getStoragePath('repository'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'scorm'), Path :: getInstance()->getStoragePath('scorm'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'temp'), Path :: getInstance()->getStoragePath('temp'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'userpictures'),
+            Path :: getInstance()->getStoragePath('userpictures'));
     }
 
     /**

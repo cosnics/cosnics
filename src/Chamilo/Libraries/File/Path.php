@@ -113,17 +113,12 @@ class Path
      * @param boolean $web
      * @return string
      */
-    public function getStoragePath($namespace = null, $web = false)
+    public function getStoragePath($namespace = null)
     {
-        // if ($web)
-        // {
-        // throw new \Exception('Storage is not directly accessible');
-        // }
-        $basePath = realpath($this->getBasePath($web) . '../files/');
+        $basePath = realpath($this->getBasePath() . '../files/');
 
-        return $this->cache[self :: STORAGE][(string) $namespace][(string) $web] = $basePath .
-             ($web ? '/' : DIRECTORY_SEPARATOR) .
-             ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+        return $this->cache[self :: STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
+             ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
 
     public function getPublicStoragePath($namespace = null, $web = false)
@@ -165,12 +160,13 @@ class Path
      * @param boolean $web
      * @return string
      */
-    public function getTemporaryPath($namespace = null, $web = false)
+    public function getTemporaryPath($namespace = null)
     {
-        $namespace = ($namespace ? 'temp\\' . $namespace : 'temp');
-        return $this->cache[self :: TEMPORARY][(string) $namespace][(string) $web] = $this->getStoragePath(
-            $namespace,
-            $web);
+        $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
+        return $this->cache[self :: TEMPORARY][(string) $completeNamespace] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'temp') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -179,12 +175,13 @@ class Path
      * @param boolean $web
      * @return string
      */
-    public function getCachePath($namespace = null, $web = false)
+    public function getCachePath($namespace = null)
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
-        return $this->cache[self :: CACHE][(string) $completeNamespace][(string) $web] = $this->getStoragePath(
-            'cache',
-            $web) . ($web ? '/' : DIRECTORY_SEPARATOR) . md5($namespace) . ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->cache[self :: CACHE][(string) $completeNamespace] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'cache') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -192,19 +189,24 @@ class Path
      * @param boolean $web
      * @return string
      */
-    public function getLogPath($web = false)
+    public function getLogPath()
     {
-        return $this->cache[self :: LOG][(string) $web] = $this->getStoragePath('log', $web);
+        return $this->cache[self :: LOG] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'logs');
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      */
-    public function getArchivePath($web = false)
+    public function getArchivePath()
     {
-        return $this->cache[self :: ARCHIVE][(string) $web] = $this->getStoragePath('archive', $web);
+        return $this->cache[self :: ARCHIVE] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'archive');
     }
 
     /**
@@ -216,8 +218,8 @@ class Path
     {
         return $this->cache[self :: REPOSITORY] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
-            'repository',
-            'storage_path');
+            'storage',
+            'repository');
     }
 
     /**
