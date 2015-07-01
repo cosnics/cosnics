@@ -28,7 +28,23 @@ class Configuration
 
     private $base_url = 'http://localhost/chamilo/web';
 
-    private $storage_path;
+    private $archive_path;
+
+    private $cache_path;
+
+    private $garbage_path;
+
+    private $hotpotatoes_path;
+
+    private $logs_path;
+
+    private $repository_path;
+
+    private $scorm_path;
+
+    private $temp_path;
+
+    private $userpictures_path;
 
     private $url_append = '/chamilo/web';
 
@@ -77,7 +93,15 @@ class Configuration
 
         $values['platform_language'] = $this->get_platform_language();
         $values['platform_url'] = $this->get_base_url();
-        $values['storage_path'] = $this->get_storage_path();
+        $values['archive_path'] = $this->get_archive_path();
+        $values['cache_path'] = $this->get_cache_path();
+        $values['garbage_path'] = $this->get_garbage_path();
+        $values['hotpotatoes_path'] = $this->get_hotpotatoes_path();
+        $values['logs_path'] = $this->get_logs_path();
+        $values['repository_path'] = $this->get_repository_path();
+        $values['scorm_path'] = $this->get_scorm_path();
+        $values['temp_path'] = $this->get_temp_path();
+        $values['userpictures_path'] = $this->get_userpictures_path();
         $values['url_append'] = $this->get_url_append();
 
         $values['admin_email'] = $this->get_admin_email();
@@ -150,10 +174,27 @@ class Configuration
             $this->set_platform_language($values['platform_language']);
         if (isset($values['platform_url']))
             $this->set_base_url($values['platform_url']);
-        if (isset($values['storage_path']))
-            $this->set_storage_path($values['storage_path']);
         if (isset($values['url_append']))
             $this->set_url_append($values['url_append']);
+
+        if (isset($values['archive_path']))
+            $this->set_archive_path($values['archive_path']);
+        if (isset($values['cache_path']))
+            $this->set_cache_path($values['cache_path']);
+        if (isset($values['garbage_path']))
+            $this->set_garbage_path($values['garbage_path']);
+        if (isset($values['hotpotatoes_path']))
+            $this->set_hotpotatoes_path($values['hotpotatoes_path']);
+        if (isset($values['logs_path']))
+            $this->set_logs_path($values['logs_path']);
+        if (isset($values['repository_path']))
+            $this->set_repository_path($values['repository_path']);
+        if (isset($values['scorm_path']))
+            $this->set_scorm_path($values['scorm_path']);
+        if (isset($values['temp_path']))
+            $this->set_temp_path($values['temp_path']);
+        if (isset($values['userpictures_path']))
+            $this->set_userpictures_path($values['userpictures_path']);
 
         if (isset($values['admin_email']))
             $this->set_admin_email($values['admin_email']);
@@ -290,14 +331,94 @@ class Configuration
         $this->base_url = $base_url;
     }
 
-    public function get_storage_path()
+    public function get_archive_path()
     {
-        return $this->storage_path;
+        return $this->archive_path;
     }
 
-    public function set_storage_path($storage_path)
+    public function set_archive_path($archive_path)
     {
-        $this->storage_path = $storage_path;
+        $this->archive_path = $archive_path;
+    }
+
+    public function get_cache_path()
+    {
+        return $this->cache_path;
+    }
+
+    public function set_cache_path($cache_path)
+    {
+        $this->cache_path = $cache_path;
+    }
+
+    public function get_garbage_path()
+    {
+        return $this->garbage_path;
+    }
+
+    public function set_garbage_path($garbage_path)
+    {
+        $this->garbage_path = $garbage_path;
+    }
+
+    public function get_hotpotatoes_path()
+    {
+        return $this->hotpotatoes_path;
+    }
+
+    public function set_hotpotatoes_path($hotpotatoes_path)
+    {
+        $this->hotpotatoes_path = $hotpotatoes_path;
+    }
+
+    public function get_logs_path()
+    {
+        return $this->logs_path;
+    }
+
+    public function set_logs_path($logs_path)
+    {
+        $this->logs_path = $logs_path;
+    }
+
+    public function get_repository_path()
+    {
+        return $this->repository_path;
+    }
+
+    public function set_repository_path($repository_path)
+    {
+        $this->repository_path = $repository_path;
+    }
+
+    public function get_scorm_path()
+    {
+        return $this->scorm_path;
+    }
+
+    public function set_scorm_path($scorm_path)
+    {
+        $this->scorm_path = $scorm_path;
+    }
+
+    public function get_temp_path()
+    {
+        return $this->temp_path;
+    }
+
+    public function set_temp_path($temp_path)
+    {
+        $this->temp_path = $temp_path;
+    }
+
+    public function get_userpictures_path()
+    {
+        return $this->userpictures_path;
+    }
+
+    public function set_userpictures_path($userpictures_path)
+    {
+        $this->userpictures_path = $userpictures_path;
     }
 
     public function get_admin_email()

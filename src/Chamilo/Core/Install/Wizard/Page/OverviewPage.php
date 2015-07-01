@@ -37,7 +37,6 @@ class OverviewPage extends InstallWizardPage
         $this->addElement('category', Translation :: get('GeneralProperties'));
         $this->addElement('static', 'platform_language', Translation :: get('MainLang'));
         $this->addElement('static', 'platform_url', Translation :: get('ChamiloURL'));
-        $this->addElement('static', 'storage_path', Translation :: get('StoragePath'));
         $this->addElement('static', 'server_type', Translation :: get('ServerType'));
         $this->addElement('category');
 
@@ -59,6 +58,18 @@ class OverviewPage extends InstallWizardPage
         $this->addElement('category', Translation :: get('Security'));
         $this->addElement('static', 'self_reg', Translation :: get('AllowSelfReg'));
         $this->addElement('static', 'hashing_algorithm', Translation :: get('HashingAlgorithm'));
+        $this->addElement('category');
+
+        $this->addElement('category', Translation :: get('Storage'));
+        $this->addElement('static', 'archive_path', Translation :: get('ArchivePath'));
+        $this->addElement('static', 'cache_path', Translation :: get('CachePath'));
+        $this->addElement('static', 'garbage_path', Translation :: get('GarbagePath'));
+        $this->addElement('static', 'hotpotatoes_path', Translation :: get('HotpotatoesPath'));
+        $this->addElement('static', 'logs_path', Translation :: get('LogsPath'));
+        $this->addElement('static', 'repository_path', Translation :: get('RepositoryPath'));
+        $this->addElement('static', 'scorm_path', Translation :: get('ScormPath'));
+        $this->addElement('static', 'temp_path', Translation :: get('TempPath'));
+        $this->addElement('static', 'userpictures_path', Translation :: get('UserpicturesPath'));
         $this->addElement('category');
 
         $buttons = array();
@@ -106,10 +117,20 @@ class OverviewPage extends InstallWizardPage
 
         $defaults['selected_packages'] = implode(', ', $selected_packages);
 
+        // Storage settings
+        $defaults['archive_path'] = $this->controller->exportValue('page_settings', 'archive_path');
+        $defaults['cache_path'] = $this->controller->exportValue('page_settings', 'cache_path');
+        $defaults['garbage_path'] = $this->controller->exportValue('page_settings', 'garbage_path');
+        $defaults['hotpotatoes_path'] = $this->controller->exportValue('page_settings', 'hotpotatoes_path');
+        $defaults['logs_path'] = $this->controller->exportValue('page_settings', 'logs_path');
+        $defaults['repository_path'] = $this->controller->exportValue('page_settings', 'repository_path');
+        $defaults['scorm_path'] = $this->controller->exportValue('page_settings', 'scorm_path');
+        $defaults['temp_path'] = $this->controller->exportValue('page_settings', 'temp_path');
+        $defaults['userpictures_path'] = $this->controller->exportValue('page_settings', 'userpictures_path');
+
         // Platform settings
         $defaults['platform_language'] = $this->controller->exportValue('page_language', 'install_language');
         $defaults['platform_url'] = $this->controller->exportValue('page_settings', 'platform_url');
-        $defaults['storage_path'] = $this->controller->exportValue('page_settings', 'storage_path');
         $defaults['admin_email'] = $this->controller->exportValue('page_settings', 'admin_email');
         $defaults['admin_surname'] = $this->controller->exportValue('page_settings', 'admin_surname');
         $defaults['admin_firstname'] = $this->controller->exportValue('page_settings', 'admin_firstname');
