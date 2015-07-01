@@ -166,7 +166,7 @@ class Path
         return $this->cache[self :: TEMPORARY][(string) $completeNamespace] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'temp') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
+            'temp_path') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -181,7 +181,7 @@ class Path
         return $this->cache[self :: CACHE][(string) $completeNamespace] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'cache') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
+            'cache_path') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -194,7 +194,7 @@ class Path
         return $this->cache[self :: LOG] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'logs');
+            'logs_path');
     }
 
     /**
@@ -206,7 +206,7 @@ class Path
         return $this->cache[self :: ARCHIVE] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'archive');
+            'archive_path');
     }
 
     /**
@@ -219,7 +219,7 @@ class Path
         return $this->cache[self :: REPOSITORY] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'repository');
+            'repository_path');
     }
 
     /**
@@ -229,7 +229,10 @@ class Path
      */
     public function getProfilePicturePath($web = false)
     {
-        return $this->cache[self :: PROFILE_PICTURE][(string) $web] = $this->getStoragePath('userpictures', $web);
+        return $this->cache[self :: REPOSITORY] = Configuration :: get_instance()->get(
+            'Chamilo\Configuration',
+            'storage',
+            'userpictures_path');
     }
 
     /**
