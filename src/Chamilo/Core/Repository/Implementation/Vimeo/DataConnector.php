@@ -75,20 +75,26 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $search_parameters['per_page'] = $count;
         $search_parameters['page'] = $offset;
 
-        if ($order_property)
-        {
-            $order_direction = $this->convert_order_property($order_property);
+        // if ($order_property)
+        // {
+        // $order_direction = $this->convert_order_property($order_property);
 
-            if ($order_direction)
-            {
-                $search_parameters['sort'] = $order_direction;
-            }
-        }
+        // if ($order_direction)
+        // {
+        // $search_parameters['sort'] = $order_direction;
+        // }
+        // }
         // videos for the current user.
         switch ($feed_type)
         {
             case Manager :: FEED_TYPE_MY_PHOTOS :
-                $videos = $this->vimeo->request('/me/videos');
+                if ($condition)
+                {
+                    $search_parameters['query'] = $condition;
+                }
+
+                $videos = $this->vimeo->request('/me/videos', $search_parameters);
+
                 break;
             case Manager :: FEED_TYPE_GENERAL :
                 $search_parameters['query'] = $condition ? $condition : 'chamilo';
@@ -99,15 +105,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 if ($condition)
                 {
                     $search_parameters['query'] = $condition;
-
-                    $videos = $this->vimeo->request('/me/videos', $search_parameters);
                 }
                 else
                 {
                     // get all videos
                     $search_parameters['query'] = 'test';
-                    $videos = $this->vimeo->request('/videos', $search_parameters);
                 }
+                $videos = $this->vimeo->request('/videos', $search_parameters);
+
                 break;
         }
         return $videos;
@@ -142,12 +147,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_owner_id($video_user[1]);
             $object->set_owner_name($video['user']['name']);
             $object->set_urls($video['link']);
-
-            foreach ($video['tags'] as $tag)
-            {
-                $tags[] = $tag['name'];
-            }
-            $object->set_tags($tags);
+            $object->set_tags($video['tags']);
             $object->set_type('video');
             $object->set_thumbnail($video['pictures']['sizes'][1]['link']);
 
@@ -240,6 +240,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_object($id)
     {
         $video = $this->vimeo->request('/videos/' . $id);
+
         $video = $video['body'];
 
         $object = new ExternalObject();
@@ -257,12 +258,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_owner_name($video['user']['name']);
         $object->set_urls($video['link']);
 
-        foreach ($video['tags'] as $tag)
-        {
-            $tags[] = $tag['name'];
-        }
-        $object->set_tags($tags);
-
+        $object->set_tags($video['tags']);
         $object->set_thumbnail($video['pictures']['sizes'][4]['link']);
 
         $object->set_rights($this->determine_rights($video));
@@ -279,36 +275,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $response = $this->vimeo->request(
             '/videos/' . $values['id'],
-            array('description' => $values['description']),
+            array('description' => $values['description'], 'name' => $values['title']),
             'PATCH');
-        if (! $response->stat == 'ok')
+
+        foreach (explode(' ', $values['tags']) as $tag)
         {
-            return false;
+            $array_tags[] = $tag;
         }
-        else
-        {
-            $response = $this->vimeo->request('/videos/' . $values['id'], array('title' => $values['title']), 'PATCH');
-            if (! $response->stat == 'ok')
-            {
-                return false;
-            }
-            else
-            {
-                $response = $this->vimeo->request('/videos/' . $values['id']);
-                if ($response->stat == 'ok')
-                {
-                    $response = $this->vimeo->request(
-                        '/videos/' . $values['id'],
-                        array('tags' => $values['tags']),
-                        'PUT');
-                    if (! $response->stat == 'ok')
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
+
+        $response = $this->vimeo->request(
+            '/videos/' . $values['id'] . '/tags/',
+            array('tags' => json_encode($array_tags)),
+            'PUT');
+        return true;
     }
 
     /**
@@ -319,42 +298,24 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function create_external_repository_object($values, $video_path)
     {
+        var_dump($video_path);
         $video_id = $this->vimeo->upload($video_path);
-        explode('/videos/', $video_id);
-        $video_id = $video_id[1];
+        var_dump($video_id);
+        $video_explode = explode('/videos/', $video_id);
+        $video_id = $video_explode[1];
+
         $response = $this->vimeo->request(
             '/videos/' . $video_id,
-            array('description' => $values['description']),
+            array('description' => $values['description'], 'name' => $values['title']),
             'PATCH');
-        if (! $response->stat == 'ok')
-        {
-            return false;
-        }
-        else
-        {
-            $response = $this->vimeo->request('/videos/' . $video_id, array('name' => $values['title']), 'PATCH');
-            if (! $response->stat == 'ok')
-            {
-                return false;
-            }
-            else
-            {
-                $response = $this->vimeo->request('/videos/' . $video_id);
-                if ($response->stat == 'ok')
-                {
-                    $response = $this->vimeo->request(
-                        '/videos/' . $values['id'],
-                        array('tags' => $values['tags']),
-                        'PUT');
-                    if (! $response->stat == 'ok')
-                    {
-                        return false;
-                    }
-                }
+        $tags = $values['tags'];
+        $tags = explode(' ', $tags);
 
-                return true;
-            }
+        foreach ($tags as $tag)
+        {
+            $response = $this->vimeo->request('/videos/' . $video_id . '/tags/', array('tags' => $tag), 'PUT');
         }
+        return true;
     }
 
     /**
@@ -368,23 +329,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $response = $this->vimeo->request(
             '/videos/' . $video_id,
-            array('description' => $content_object->get_description()),
+            array('description' => $content_object->get_description(), 'name' => $content_object->get_title()),
             'PATCH');
-        if (! $response->stat == 'ok')
-        {
-            return false;
-        }
-        else
-        {
-            $response = $this->vimeo->request(
-                '/videos/' . $video_id,
-                array('name' => $content_object->get_title()),
-                PATCH);
-            if (! $response->stat == 'ok')
-            {
-                return false;
-            }
-        }
+
         return true;
     }
 
