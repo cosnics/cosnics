@@ -103,10 +103,6 @@ class Configuration
                 }
                 else
                 {
-                    print_r(var_dump($values));
-                    print_r(var_dump($key));
-                    
-                    aaa();
                     echo 'The requested variable is not available in an unconfigured environment (' .
                          implode(' > ', $keys) . ')';
                     exit();
