@@ -247,6 +247,8 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
             if ($serverType == 'test')
             {
                 phpCAS :: setNoCasServerValidation();
+                phpCAS :: setExtraCurlOption(CURLOPT_SSL_VERIFYPEER, false);
+                phpCAS :: setExtraCurlOption(CURLOPT_SSL_VERIFYHOST, false);
             }
 
             // force CAS authentication
