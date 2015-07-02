@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Hans De Bisschop
  * @package admin.settings $Id: settings_admin_connector.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
  */
-class Connector
+class SettingsConnector
 {
 
     public static function get_languages()
