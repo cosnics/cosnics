@@ -160,26 +160,26 @@
 			</setting>
 		</category>
 		<category name="authentication">
-			<setting name="enable_external_authentication" field="checkbox">
+			<setting name="enableExternalAuthentication" field="checkbox">
 				<options type="static">
-					<option name="enable_external_authentication" value="1" />
+					<option name="enableExternalAuthentication" value="1" />
 				</options>
 			</setting>
 		</category>
 		<category name="external_authentication">
-			<setting name="enable_ldap_authentication" field="checkbox">
+			<setting name="enableLdapAuthentication" field="checkbox">
 				<options type="static">
-					<option name="enable_ldap_authentication" value="1" />
+					<option name="enableLdapAuthentication" value="1" />
 				</options>
 			</setting>
-			<setting name="enable_security_token_authentication" field="checkbox">
+			<setting name="enableSecurityTokenAuthentication" field="checkbox">
 				<options type="static">
-					<option name="enable_security_token_authentication" value="1" />
+					<option name="enableSecurityTokenAuthentication" value="1" />
 				</options>
 			</setting>
-			<setting name="enable_cas_authentication" field="checkbox">
+			<setting name="enableCasAuthentication" field="checkbox">
 				<options type="static">
-					<option name="enable_cas_authentication" value="1" />
+					<option name="enableCasAuthentication" value="1" />
 				</options>
 			</setting>
 		</category>

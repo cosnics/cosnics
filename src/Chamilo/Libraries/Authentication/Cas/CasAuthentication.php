@@ -214,9 +214,7 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
     {
         if (! $this->is_configured())
         {
-            Display :: error_message(Translation :: get('CheckCASConfiguration'));
-
-            // exit();
+            throw new \Exception(Translation :: get('CheckCASConfiguration'));
         }
         else
         {
@@ -243,7 +241,13 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
             $crt_path = $settings['certificate'];
             phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
             phpCAS :: setCasServerCACert($crt_path);
-            // phpCAS :: setNoCasServerValidation();
+
+            $serverType = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type');
+
+            if ($serverType == 'test')
+            {
+                phpCAS :: setNoCasServerValidation();
+            }
 
             // force CAS authentication
             phpCAS :: forceAuthentication();
