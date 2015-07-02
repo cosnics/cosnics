@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\announcement
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Ankündigingen"
+InstallTypeName = ""
+AnnouncementToolBrowserComponent = "Ankündigingen durchsuchen"
+AnnouncementToolViewerComponent = "Ankündiging ansehen"
+AnnouncementToolPublisherComponent = "Ankündiging veröffentlichen"
+AnnouncementToolUpdaterComponent = "Ankündiging bearbeiten"
+AnnouncementToolIntroductionPublisherComponent = "Vorstellung veröffentlichen"
