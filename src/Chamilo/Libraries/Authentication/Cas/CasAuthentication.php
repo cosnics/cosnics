@@ -240,7 +240,6 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
             // SSL validation for the CAS server
             $crt_path = $settings['certificate'];
             phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
-            phpCAS :: setCasServerCACert($crt_path);
 
             $serverType = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type');
 
@@ -249,6 +248,10 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
                 phpCAS :: setNoCasServerValidation();
                 phpCAS :: setExtraCurlOption(CURLOPT_SSL_VERIFYPEER, false);
                 phpCAS :: setExtraCurlOption(CURLOPT_SSL_VERIFYHOST, false);
+            }
+            else
+            {
+                phpCAS :: setCasServerCACert($crt_path);
             }
 
             // force CAS authentication
