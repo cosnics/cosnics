@@ -47,11 +47,13 @@
   "require-dev" : {
     "behat/behat" : "*",
     "behat/mink" : "*",
-    "behat/mink-extension" : "dev-master",
-    "behat/mink-goutte-driver" : "dev-master",
-    "fabpot/goutte" : "dev-master",
+    "behat/mink-extension" : "*",
+    "behat/mink-goutte-driver" : "*",
+    "fabpot/goutte" : "*",
     "composer/composer": "*@dev"
   },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
   "keywords" : [ "ELO", "LCMS" ],
   "support" : {
     "forum" : "http://lcms.chamilo.org/phpbbforum",
