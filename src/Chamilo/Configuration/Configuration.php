@@ -422,22 +422,22 @@ class Configuration
         $this->set(
             array('Chamilo\Configuration', 'storage', 'archive'),
             Path :: getInstance()->getStoragePath('archive'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'cache'), Path :: getInstance()->getStoragePath('cache'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'cache_path'), Path :: getInstance()->getStoragePath('cache'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'garbage'),
-            Path :: getInstance()->getStoragePath('garbage'));
+            Path :: getInstance()->getStoragePath('garbage_path'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'hotpotatoes'),
+            array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'),
             Path :: getInstance()->getStoragePath('hotpotatoes'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'logs'), Path :: getInstance()->getStoragePath('logs'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'logs_path'), Path :: getInstance()->getStoragePath('logs'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'repository'),
+            array('Chamilo\Configuration', 'storage', 'repository_path'),
             Path :: getInstance()->getStoragePath('repository'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'scorm'), Path :: getInstance()->getStoragePath('scorm'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'temp'), Path :: getInstance()->getStoragePath('temp'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'scorm_path'), Path :: getInstance()->getStoragePath('scorm'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'temp_path'), Path :: getInstance()->getStoragePath('temp'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'userpictures'),
-            Path :: getInstance()->getStoragePath('userpictures'));
+            Path :: getInstance()->getStoragePath('userpictures_path'));
     }
 
     /**
