@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Application\CasUser\Component;
+namespace Chamilo\Application\CasStorage\Component;
 
-use Chamilo\Application\CasUser\Storage\DataClass\AccountRequest;
-use Chamilo\Application\CasUser\Manager;
-use Chamilo\Application\CasUser\Table\Request\RequestTable;
+use Chamilo\Application\CasStorage\Storage\DataClass\AccountRequest;
+use Chamilo\Application\CasStorage\Manager;
+use Chamilo\Application\CasStorage\Table\Request\RequestTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $this->action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('RequestAccount'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Request'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Request'),
                     $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_CREATE))));
 
             if ($this->get_user()->is_platform_admin())
@@ -104,17 +104,17 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageAccounts'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/ManageAccounts'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/ManageAccounts'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_ACCOUNT))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ManageServices'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/ManageServices'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/ManageServices'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_SERVICE))));
                 $this->action_bar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('ConfigureManagementRights'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Rights'),
+                        Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Rights'),
                         $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_RIGHTS))));
             }
         }

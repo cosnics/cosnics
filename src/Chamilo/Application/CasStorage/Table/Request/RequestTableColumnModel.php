@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Table\Request;
+namespace Chamilo\Application\CasStorage\Table\Request;
 
-use Chamilo\Application\CasUser\Storage\DataClass\AccountRequest;
+use Chamilo\Application\CasStorage\Storage\DataClass\AccountRequest;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;

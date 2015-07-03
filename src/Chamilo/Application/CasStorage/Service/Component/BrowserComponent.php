@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Component;
+namespace Chamilo\Application\CasStorage\Service\Component;
 
-use Chamilo\Application\CasUser\Service\Storage\DataClass\Service;
-use Chamilo\Application\CasUser\Service\Manager;
-use Chamilo\Application\CasUser\Service\Table\Service\ServiceTable;
+use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
+use Chamilo\Application\CasStorage\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Table\Service\ServiceTable;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;

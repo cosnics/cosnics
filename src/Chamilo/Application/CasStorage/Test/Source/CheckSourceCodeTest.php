@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Test\Source;
+namespace Chamilo\Application\CasStorage\Test\Source;
 
 /**
  * This test case checks the php syntax for the php files of this package

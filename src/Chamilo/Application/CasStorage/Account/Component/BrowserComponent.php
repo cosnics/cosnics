@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Component;
+namespace Chamilo\Application\CasStorage\Account\Component;
 
-use Chamilo\Application\CasUser\Account\Storage\DataClass\Account;
-use Chamilo\Application\CasUser\Account\Manager;
-use Chamilo\Application\CasUser\Account\Table\Account\AccountTable;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
+use Chamilo\Application\CasStorage\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Table\Account\AccountTable;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;

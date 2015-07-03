@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Storage;
+namespace Chamilo\Application\CasStorage\Account\Storage;
 
 class Database extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Database
 

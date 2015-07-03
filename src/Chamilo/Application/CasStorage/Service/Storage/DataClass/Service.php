@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Storage\DataClass;
+namespace Chamilo\Application\CasStorage\Service\Storage\DataClass;
 
-use Chamilo\Application\CasUser\Service\Storage\DataManager;
+use Chamilo\Application\CasStorage\Service\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -167,10 +167,10 @@ class Service extends DataClass
         switch ($this->get_enabled())
         {
             case self :: STATUS_ENABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/Enabled');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Enabled');
                 break;
             case self :: STATUS_DISABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Enabled/Disabled');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Disabled');
                 break;
         }
 

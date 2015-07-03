@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Table\Account;
+namespace Chamilo\Application\CasStorage\Account\Table\Account;
 
-use Chamilo\Application\CasUser\Account\Storage\DataClass\Account;
-use Chamilo\Application\CasUser\Account\Storage\DataManager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
+use Chamilo\Application\CasStorage\Account\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 

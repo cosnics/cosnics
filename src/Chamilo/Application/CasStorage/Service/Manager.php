@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Application\CasUser\Service;
+namespace Chamilo\Application\CasStorage\Service;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
- * @package Chamilo\Application\CasUser\Service
+ * @package Chamilo\Application\CasStorage\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

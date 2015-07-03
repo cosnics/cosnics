@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Storage;
+namespace Chamilo\Application\CasStorage\Account\Storage;
 
 /**
  *
@@ -14,7 +14,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (! isset(self :: $instance))
         {
-            self :: $instance = new \Chamilo\Application\CasUser\Account\Storage\Database();
+            self :: $instance = new \Chamilo\Application\CasStorage\Account\Storage\Database();
         }
         return self :: $instance;
     }

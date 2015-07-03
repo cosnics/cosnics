@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Component;
+namespace Chamilo\Application\CasStorage\Service\Component;
 
 /**
  *
@@ -8,9 +8,9 @@ namespace Chamilo\Application\CasUser\Service\Component;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Application\CasUser\Account\Storage\DataClass\Account;
-use Chamilo\Application\CasUser\Service\Manager;
-use Chamilo\Application\CasUser\Service\Storage\DataManager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
+use Chamilo\Application\CasStorage\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Storage\DataManager;
 
 class DeactivaterComponent extends Manager
 {

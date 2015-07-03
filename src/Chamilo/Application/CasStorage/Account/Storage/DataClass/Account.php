@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Storage\DataClass;
+namespace Chamilo\Application\CasStorage\Account\Storage\DataClass;
 
-use Chamilo\Application\CasUser\Account\Storage\DataManager;
+use Chamilo\Application\CasStorage\Account\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -178,12 +178,12 @@ class Account extends DataClass
         {
             case self :: STATUS_ENABLED :
                 $path = Theme :: getInstance()->getImagePath(
-                    'Chamilo\Application\CasUser\Account',
+                    'Chamilo\Application\CasStorage\Account',
                     self :: PROPERTY_STATUS . '/enabled');
                 break;
             case self :: STATUS_DISABLED :
                 $path = Theme :: getInstance()->getImagePath(
-                    'Chamilo\Application\CasUser\Account',
+                    'Chamilo\Application\CasStorage\Account',
                     self :: PROPERTY_STATUS . '/disabled');
                 break;
         }

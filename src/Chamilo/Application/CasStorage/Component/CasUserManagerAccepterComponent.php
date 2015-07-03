@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Component;
+namespace Chamilo\Application\CasStorage\Component;
 
 /**
  *
@@ -8,9 +8,9 @@ namespace Chamilo\Application\CasUser\Component;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\CasUser\Storage\DataClass\AccountRequest;
-use Chamilo\Application\CasUser\Storage\DataManager;
-use Chamilo\Application\CasUser\Manager;
+use Chamilo\Application\CasStorage\Storage\DataClass\AccountRequest;
+use Chamilo\Application\CasStorage\Storage\DataManager;
+use Chamilo\Application\CasStorage\Manager;
 
 class CasUserManagerAccepterComponent extends Manager
 {
@@ -34,7 +34,7 @@ class CasUserManagerAccepterComponent extends Manager
             {
                 $account_request = DataManager :: retrieve(AccountRequest :: class_name(), (int) $id);
 
-                if (! \Chamilo\Application\CasUser\Account\Storage\DataManager :: generate_account_from_request(
+                if (! \Chamilo\Application\CasStorage\Account\Storage\DataManager :: generate_account_from_request(
                     $account_request))
                 {
                     $failures ++;
