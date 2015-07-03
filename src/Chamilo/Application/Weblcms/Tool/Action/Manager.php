@@ -26,7 +26,6 @@ abstract class Manager extends Application implements NoContextComponent
     const ACTION_VIEW = 'Viewer';
     const ACTION_BROWSE = 'Browser';
     const ACTION_PUBLISH = 'Publisher';
-    const ACTION_UPDATE = 'Updater';
     const ACTION_DELETE = 'Deleter';
     const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
     const ACTION_MOVE = 'Mover';

@@ -31,7 +31,6 @@ class PublicationUpdaterComponent extends Manager
 
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication))
         {
-
             $content_object = $publication->get_content_object();
 
             BreadcrumbTrail :: get_instance()->add(
