@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\link
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Link"
+Properties = "Eigenschappen"
+URL = "URI"
+ShowInIframe = "Toon in frame"
+Linker = "Linker"
+Title = "Titel"
+Description = "Beschrijving"
+ShowInIFrame = "Toon in frame"
+DeleteSelected = "Verwijder geselecteerde"
+LinkToolBrowserComponent = "Doorblader links"
+LinkToolIntroductionPublisherComponent = "Publiceer introductie"
+LinkToolMoverComponent = "Verplaats link"
+LinkToolPublisherComponent = "Publiceer link"
+LinkToolUpdaterComponent = "Update link"
+LinkToolViewerComponent = "Bekijk link"
