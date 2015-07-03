@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Vimeo\Vimeo;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Consumer Key: Consumer Secret:
@@ -257,8 +258,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_owner_id($video_user[1]);
         $object->set_owner_name($video['user']['name']);
         $object->set_urls($video['link']);
-
-        $object->set_tags($video['tags']);
+        foreach ($video['tags'] as $tag)
+        {
+            $array_tags[] = $tag['tag'];
+        }
+        $object->set_tags($array_tags);
         $object->set_thumbnail($video['pictures']['sizes'][4]['link']);
 
         $object->set_rights($this->determine_rights($video));
@@ -278,16 +282,22 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             array('description' => $values['description'], 'name' => $values['title']),
             'PATCH');
 
-        foreach (explode(' ', $values['tags']) as $tag)
+        foreach (explode(', ', $values['tags']) as $tag)
         {
             $array_tags[] = $tag;
         }
+        $array_tags = (json_encode($array_tags));
 
-        $response = $this->vimeo->request(
-            '/videos/' . $values['id'] . '/tags/',
-            array('tags' => json_encode($array_tags)),
-            'PUT');
-        return true;
+        $response = $this->vimeo->request('/videos/' . $values['id'] . '/tags/', array('tags' => $array_tags), 'PUT');
+
+        if ($response['status'] == 200)
+        {
+            return true;
+        }
+        if ($response['status'] == 400)
+        {
+            return error_log(Translation :: get('InvalidTypeForTags'));
+        }
     }
 
     /**
@@ -298,9 +308,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function create_external_repository_object($values, $video_path)
     {
-        var_dump($video_path);
         $video_id = $this->vimeo->upload($video_path);
-        var_dump($video_id);
         $video_explode = explode('/videos/', $video_id);
         $video_id = $video_explode[1];
 
@@ -308,14 +316,39 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             '/videos/' . $video_id,
             array('description' => $values['description'], 'name' => $values['title']),
             'PATCH');
-        $tags = $values['tags'];
-        $tags = explode(' ', $tags);
 
-        foreach ($tags as $tag)
+        if ($response['status'] == 200)
         {
-            $response = $this->vimeo->request('/videos/' . $video_id . '/tags/', array('tags' => $tag), 'PUT');
+            $tags = $values['tags'];
+
+            $tags = explode(', ', $tags);
+
+            foreach ($tags as $tag)
+            {
+                $tags[] = $tag;
+            }
+            $tags = json_encode($tags);
+
+            $response = $this->vimeo->request(
+                '/videos/' . $video_id . '/tags/',
+                array('body' => json_encode($tags)),
+                'PUT');
+
+            // if ($response['status'] == 200)
+            // {
+            // return true;
+            // }
+            // elseif ($response['status'] == 400)
+            // {
+            // error_log(Translation :: get('InvalidTypeForTags'));
+            // return false;
+            // }
+            return true;
         }
-        return true;
+        else
+        {
+            return false;
+        }
     }
 
     /**
