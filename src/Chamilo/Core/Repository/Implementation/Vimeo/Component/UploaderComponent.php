@@ -18,6 +18,7 @@ class UploaderComponent extends Manager
         if ($form->validate())
         {
             $id = $form->upload_photo();
+
             if ($id)
             {
                 $parameters = $this->get_parameters();
