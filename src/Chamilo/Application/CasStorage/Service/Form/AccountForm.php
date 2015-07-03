@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Form;
+namespace Chamilo\Application\CasStorage\Service\Form;
 
-use Chamilo\Application\CasUser\Account\Storage\DataClass\Account;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;

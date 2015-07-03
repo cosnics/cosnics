@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Application\CasUser\Table\Request;
+namespace Chamilo\Application\CasStorage\Table\Request;
 
-use Chamilo\Application\CasUser\Storage\DataClass\AccountRequest;
-use Chamilo\Application\CasUser\Manager;
+use Chamilo\Application\CasStorage\Storage\DataClass\AccountRequest;
+use Chamilo\Application\CasStorage\Manager;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -57,7 +57,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Accept'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Accept'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACCEPT,
@@ -69,7 +69,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('AcceptNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/AcceptNa'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/AcceptNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }
@@ -79,7 +79,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/Reject'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/Reject'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_REJECT,
@@ -91,7 +91,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('RejectNotAvailable', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Action/RejectNa'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Action/RejectNa'),
                     null,
                     ToolbarItem :: DISPLAY_ICON));
         }

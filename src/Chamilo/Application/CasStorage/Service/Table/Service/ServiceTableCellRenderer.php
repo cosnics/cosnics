@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Table\Service;
+namespace Chamilo\Application\CasStorage\Service\Table\Service;
 
-use Chamilo\Application\CasUser\Service\Storage\DataClass\Service;
-use Chamilo\Application\CasUser\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
+use Chamilo\Application\CasStorage\Service\Manager;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -52,7 +52,7 @@ class ServiceTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/Deactivate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Action/Deactivate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
@@ -64,7 +64,7 @@ class ServiceTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Service', 'Action/Activate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Action/Activate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,

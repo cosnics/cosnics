@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Account;
+namespace Chamilo\Application\CasStorage\Account;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 

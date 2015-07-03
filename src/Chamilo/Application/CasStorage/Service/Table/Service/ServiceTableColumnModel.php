@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Table\Service;
+namespace Chamilo\Application\CasStorage\Service\Table\Service;
 
-use Chamilo\Application\CasUser\Service\Storage\DataClass\Service;
+use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;

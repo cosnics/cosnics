@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Storage\DataClass;
+namespace Chamilo\Application\CasStorage\Storage\DataClass;
 
-use Chamilo\Application\CasUser\Storage\DataManager;
+use Chamilo\Application\CasStorage\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -164,13 +164,13 @@ class AccountRequest extends DataClass
         switch ($this->get_status())
         {
             case self :: STATUS_ACCEPTED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Status/Accepted');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Status/Accepted');
                 break;
             case self :: STATUS_PENDING :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Status/Pending');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Status/Pending');
                 break;
             case self :: STATUS_REJECTED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser', 'Status/Rejected');
+                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage', 'Status/Rejected');
                 break;
         }
 

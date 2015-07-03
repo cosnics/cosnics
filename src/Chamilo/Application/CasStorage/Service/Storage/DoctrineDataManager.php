@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Storage;
+namespace Chamilo\Application\CasStorage\Service\Storage;
 
-use Chamilo\Application\CasUser\Service\Storage\Connection\DoctrineConnection;
+use Chamilo\Application\CasStorage\Service\Storage\Connection\DoctrineConnection;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 class DoctrineDataManager extends Database

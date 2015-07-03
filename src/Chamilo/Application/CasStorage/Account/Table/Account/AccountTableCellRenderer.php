@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Application\CasUser\Account\Table\Account;
+namespace Chamilo\Application\CasStorage\Account\Table\Account;
 
-use Chamilo\Application\CasUser\Account\Storage\DataClass\Account;
-use Chamilo\Application\CasUser\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
+use Chamilo\Application\CasStorage\Account\Manager;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -52,7 +52,7 @@ class AccountTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Deactivate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Account', 'Action/Deactivate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Deactivate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DEACTIVATE,
@@ -64,7 +64,7 @@ class AccountTableCellRenderer extends DataClassTableCellRenderer implements Tab
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation :: get('Activate', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasUser\Account', 'Action/Activate'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Account', 'Action/Activate'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_ACTIVATE,

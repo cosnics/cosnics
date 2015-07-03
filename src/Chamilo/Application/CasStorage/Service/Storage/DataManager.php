@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Storage;
+namespace Chamilo\Application\CasStorage\Service\Storage;
 
 /**
  *

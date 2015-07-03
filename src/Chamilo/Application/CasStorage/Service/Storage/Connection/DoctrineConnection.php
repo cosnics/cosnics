@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Storage\Connection;
+namespace Chamilo\Application\CasStorage\Service\Storage\Connection;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -36,15 +36,15 @@ class DoctrineConnection extends \Chamilo\Libraries\Storage\DataManager\Doctrine
         
         if (is_null($connection))
         {
-            $cas_dbms = PlatformSetting :: get('dbms', \Chamilo\Application\CasUser\Account\Manager :: context());
-            $cas_user = PlatformSetting :: get('user', \Chamilo\Application\CasUser\Account\Manager :: context());
+            $cas_dbms = PlatformSetting :: get('dbms', \Chamilo\Application\CasStorage\Account\Manager :: context());
+            $cas_user = PlatformSetting :: get('user', \Chamilo\Application\CasStorage\Account\Manager :: context());
             $cas_password = PlatformSetting :: get(
                 'password', 
-                \Chamilo\Application\CasUser\Account\Manager :: context());
-            $cas_host = PlatformSetting :: get('host', \Chamilo\Application\CasUser\Account\Manager :: context());
+                \Chamilo\Application\CasStorage\Account\Manager :: context());
+            $cas_host = PlatformSetting :: get('host', \Chamilo\Application\CasStorage\Account\Manager :: context());
             $cas_database = PlatformSetting :: get(
                 'database', 
-                \Chamilo\Application\CasUser\Account\Manager :: context());
+                \Chamilo\Application\CasStorage\Account\Manager :: context());
             
             $data_source_name = DataSourceName :: factory(
                 'doctrine', 

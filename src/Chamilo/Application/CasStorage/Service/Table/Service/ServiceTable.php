@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\CasUser\Service\Table\Service;
+namespace Chamilo\Application\CasStorage\Service\Table\Service;
 
-use Chamilo\Application\CasUser\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
