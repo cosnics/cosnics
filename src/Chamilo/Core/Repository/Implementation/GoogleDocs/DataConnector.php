@@ -13,6 +13,7 @@ use Zend_Gdata_AuthSub;
 use Zend_Gdata_Docs;
 use Zend_Gdata_Docs_Query;
 use Zend_Loader;
+use Chamilo\Libraries\File\Path;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -22,6 +23,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      * @var Zend_Gdata_Docs
      */
     private $google_docs;
+
+    private $client;
     const RELEVANCE = 'relevance';
     const PUBLISHED = 'published';
     const VIEW_COUNT = 'viewCount';
@@ -52,13 +55,54 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             'session_token',
             $this->get_external_repository_instance_id());
 
-        Zend_Loader :: loadClass('Zend_Gdata_Docs');
-        Zend_Loader :: loadClass('Zend_Gdata_Docs_Query');
-        Zend_Loader :: loadClass('Zend_Gdata_AuthSub');
+        $this->client = new \Google_Client();
+        $this->client->setApplicationName('Drive API Quickstart');
+        $this->client->setScopes(implode(' ', array(\Google_Service_Drive :: DRIVE_METADATA_READONLY)));
+        $this->client->setAuthConfigFile(
+            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__ . '/client_secret.json'));
+        $this->client->setAccessType('offline');
 
-        $httpClient = Zend_Gdata_AuthSub :: getHttpClient($this->session_token);
-        $application = PlatformSetting :: get('site_name');
-        $this->google_docs = new Zend_Gdata_Docs($httpClient, $application);
+        $credentialsPath = $this->expandHomeDirectory('~/.credentials/drive-api-quickstart.json');
+        if (file_exists($credentialsPath))
+        {
+            $accessToken = file_get_contents($credentialsPath);
+        }
+        else
+        {
+            // Request authorization from the user.
+            $authUrl =  $this->client->createAuthUrl();
+            printf("Open the following link in your browser:\n%s\n", $authUrl);
+            print 'Enter verification code: ';
+            $authCode = trim(fgets(STDIN));
+
+            // Exchange authorization code for an access token.
+            $accessToken =  $this->client->authenticate($authCode);
+
+            // Store the credentials to disk.
+            if (! file_exists(dirname($credentialsPath)))
+            {
+                mkdir(dirname($credentialsPath), 0700, true);
+            }
+            file_put_contents($credentialsPath, $accessToken);
+            printf("Credentials saved to %s\n", $credentialsPath);
+        }
+        $this->client->setAccessToken($accessToken);
+
+        // Refresh the token if it's expired.
+        if ($this->client->isAccessTokenExpired())
+        {
+            $this->client->refreshToken( $this->client->getRefreshToken());
+            file_put_contents($credentialsPath, $this->client->getAccessToken());
+        }
+        $service = new \Google_Service_Drive($this->client);
+    }
+
+    function expandHomeDirectory($path) {
+        $homeDirectory = getenv('HOME');
+        if (empty($homeDirectory)) {
+            $homeDirectory = getenv("HOMEDRIVE") . getenv("HOMEPATH");
+        }
+        return str_replace('~', realpath($homeDirectory), $path);
     }
 
     public function login()
