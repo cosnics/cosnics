@@ -121,7 +121,6 @@ class ExternalObjectForm extends FormValidator
     {
         if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
         {
-            echo 'hier';
             return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
                 $this->exportValues(),
                 $_FILES[self :: FILE]['tmp_name']);
