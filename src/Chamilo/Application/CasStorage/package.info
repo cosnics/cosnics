@@ -2,8 +2,8 @@
 <packages>
 	<package>
 		<name>CAS External Users</name>
-		<code>cas_user</code>
-		<context>Chamilo\Application\CasUser</context>
+		<code>CasStorage</code>
+		<context>Chamilo\Application\CasStorage</context>
 		<section>Chamilo\Application</section>
 		<category>education</category>
 		<type>Chamilo\Application</type>

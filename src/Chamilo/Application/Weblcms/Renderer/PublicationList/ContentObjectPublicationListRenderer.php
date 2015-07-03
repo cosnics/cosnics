@@ -770,11 +770,17 @@ abstract class ContentObjectPublicationListRenderer
                     $this->get_complex_display_url($publication_id),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        $has_edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication);
 
-        // TODO: check repository rights subcondition to try and hide the icon
-        // when viewing as another user
-        if ($content_object->get_owner_id() == $this->get_user_id())
+        $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
+        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+
+        $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
+        $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
+            $this->get_user(),
+            $this->tool_browser->get_application()->get_course(),
+            $publication);
+
+        if ($canEditContentObject || $canEditPublicationContentObject)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -786,6 +792,8 @@ abstract class ContentObjectPublicationListRenderer
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
         }
+
+        $has_edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication);
 
         if ($has_edit_right)
         {

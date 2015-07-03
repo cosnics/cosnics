@@ -35,7 +35,6 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * This class represents a form to allow a user to publish a learning object.
@@ -58,7 +57,6 @@ class ContentObjectPublicationForm extends FormValidator
     // Rights
     const PROPERTY_INHERIT = 'inherit';
     const PROPERTY_RIGHT_OPTION = 'right_option';
-    const PROPERTY_COLLABORATE = 'collaborate';
     const INHERIT_TRUE = 0;
     const INHERIT_FALSE = 1;
     const RIGHT_OPTION_ALL = 0;
@@ -98,13 +96,15 @@ class ContentObjectPublicationForm extends FormValidator
      * @var boolean
      */
     private $collaborate_possible;
-    
+
     /**
+     *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $user;
 
     /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $form_type
      * @param ContentObjectPublication[] $publications
@@ -123,14 +123,16 @@ class ContentObjectPublicationForm extends FormValidator
         }
         else
         {
+            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
+
             // set collaborate right for course admins if we are owner of each
             // content object to share
             $owner = true;
             foreach ($publications as $publication)
             {
-                $owner_id = $publication->get_content_object()->get_owner_id();
-                $owner &= ($owner_id == Session :: get_user_id());
+                $owner &= $repositoryRightsService->isContentObjectOwner($user, $publication->get_content_object());
             }
+
             if ($owner)
             {
                 $this->collaborate_possible = true;
@@ -203,18 +205,18 @@ class ContentObjectPublicationForm extends FormValidator
             {
                 $defaults = array_merge($defaults, $right_defaults);
             }
-        }
 
-        $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
+            $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
 
-        if ($this->collaborate_possible && ! $force_collaborate)
-        {
-            $defaults[self :: PROPERTY_COLLABORATE] = 0;
-        }
-        else
-        {
-            // when hide sharing is active content object is automatically shared with course admins
-            $defaults[self :: PROPERTY_COLLABORATE] = 1;
+            if ($this->collaborate_possible && ! $force_collaborate)
+            {
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = $first_publication->get_allow_collaboration();
+            }
+            else
+            {
+                // when hide sharing is active content object is automatically shared with course admins
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = 1;
+            }
         }
 
         parent :: setDefaults($defaults);
@@ -304,16 +306,23 @@ class ContentObjectPublicationForm extends FormValidator
         if (count($this->publications) == 1)
         {
             $first_publication = $this->publications[0];
-            
-            if ($first_publication && RightsService :: getInstance()->canEditContentObject(
-                $this->user,
-                $first_publication->get_content_object()))
-            {
-                $contentObject = $first_publication->get_content_object();
+            $contentObject = $first_publication->get_content_object();
 
+            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
+            $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+
+            $canEditContentObject = $repositoryRightsService->canEditContentObject($this->user, $contentObject);
+            $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
+                $this->user,
+                $this->course,
+                $first_publication->get_default_properties());
+
+            if ($first_publication)
+            {
                 if ($contentObject instanceof ComplexContentObjectSupport && ! $first_publication->is_identified())
                 {
-                    if (\Chamilo\Core\Repository\Builder\Manager :: exists($contentObject->package()))
+                    if (\Chamilo\Core\Repository\Builder\Manager :: exists($contentObject->package()) &&
+                         ($canEditContentObject || $canEditPublicationContentObject))
                     {
                         $buttons[] = $this->createElement(
                             'style_submit_button',
@@ -336,6 +345,7 @@ class ContentObjectPublicationForm extends FormValidator
             self :: PARAM_RESET,
             Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -350,19 +360,6 @@ class ContentObjectPublicationForm extends FormValidator
             'checkbox',
             ContentObjectPublication :: PROPERTY_EMAIL_SENT,
             Translation :: get('SendByEMail'));
-
-        $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
-
-        // collaborate right for course admins if we are owner of each content
-        // object to share
-        if ($this->collaborate_possible && ! $force_collaborate)
-        {
-            $this->addElement('checkbox', self :: PROPERTY_COLLABORATE, Translation :: get('CourseAdminCollaborate'));
-        }
-        else
-        {
-            $this->addElement('hidden', self :: PROPERTY_COLLABORATE, Translation :: get('CourseAdminCollaborate'));
-        }
     }
 
     /**
@@ -439,6 +436,25 @@ class ContentObjectPublicationForm extends FormValidator
             'checkbox',
             ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
             Translation :: get('ShowOnHomepage'));
+
+        $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
+
+        // collaborate right for course admins if we are owner of each content
+        // object to share
+        if ($this->collaborate_possible && ! $force_collaborate)
+        {
+            $this->addElement(
+                'checkbox',
+                ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION,
+                Translation :: get('CourseAdminCollaborate'));
+        }
+        else
+        {
+            $this->addElement(
+                'hidden',
+                ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION,
+                Translation :: get('CourseAdminCollaborate'));
+        }
     }
 
     private $categories;
@@ -575,10 +591,9 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function handle_form_submit()
     {
-        
         $publications = $this->publications;
         $succes = true;
-      
+
         foreach ($publications as $publication)
         {
             $old_category = $publication->get_category_id();
@@ -594,12 +609,6 @@ class ContentObjectPublicationForm extends FormValidator
                     $succes &= $publication->update();
                     $this->set_publication_rights($publication, ($publication->get_category_id() != $old_category));
                     break;
-            }
-
-            // add collabate right for course admins
-            if ($this->exportValue(self :: PROPERTY_COLLABORATE))
-            {
-                $this->collaborate_content_object_with_course_admins($publication->get_content_object());
             }
 
             // always mail publication last! we need the publication id and
@@ -650,6 +659,7 @@ class ContentObjectPublicationForm extends FormValidator
         $publication->set_modified_date(time());
         $publication->set_hidden($values[ContentObjectPublication :: PROPERTY_HIDDEN] ? 1 : 0);
         $publication->set_show_on_homepage($values[ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE] ? 1 : 0);
+        $publication->set_allow_collaboration($values[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] ? 1 : 0);
     }
 
     /**
@@ -748,45 +758,6 @@ class ContentObjectPublicationForm extends FormValidator
                     }
             }
         }
-    }
-
-    /**
-     * Sets collaboration right for course admins for the given publication
-     *
-     * @param $publication ContentObjectPublication
-     */
-    public function collaborate_content_object_with_course_admins(ContentObject $content_object)
-    {
-        $succes = false;
-
-        if ($content_object && ($content_object->get_owner_id() == Session :: get_user_id()))
-        {
-            $succes = true;
-
-            // prepare data
-            $admin_users = $this->course->get_course_admin_users()->as_array();
-            $admin_groups = $this->course->get_course_admin_groups()->as_array();
-
-            // loop users
-            foreach ($admin_users as $admin_user)
-            {
-                // exclude myself
-                if ($admin_user[User :: PROPERTY_ID] != Session :: get_user_id())
-                {
-                    // TODO: WORKSPACES - Share with the user via a workspace?
-                    $succes = true;
-                }
-            }
-
-            // loop groups
-            foreach ($admin_groups as $admin_group)
-            {
-                // TODO: WORKSPACES - Share with the group via a workspace?
-                $succes = true;
-            }
-        }
-
-        return $succes;
     }
 
     /**
