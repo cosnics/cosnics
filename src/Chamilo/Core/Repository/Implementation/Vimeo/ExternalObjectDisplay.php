@@ -18,7 +18,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     public function get_display_properties()
     {
         $properties = parent :: get_display_properties();
-        $properties[Translation :: get('Tags')] = $this->get_object()->get_tags();
+        $properties[Translation :: get('Tags')] = $this->get_object()->get_tags_string();
 
         return $properties;
     }
