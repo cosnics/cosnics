@@ -167,9 +167,7 @@ class CourseSettingsConnector
     public static function get_breadcrumb_title_for_course(Course $course)
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
-        $breadcrumb_setting = $course_settings_controller->get_course_setting(
-            $course->get_id(),
-            self :: BREADCRUMB_LAYOUT);
+        $breadcrumb_setting = $course_settings_controller->get_course_setting($course, self :: BREADCRUMB_LAYOUT);
 
         switch ($breadcrumb_setting)
         {

@@ -628,8 +628,14 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         {
             case SubmitterUserSubmissionsTable :: class_name() :
                 $conditions = array();
-                $conditions[] = $this->get_search_condition();
+
+                if ($this->action_bar->get_query() != '')
+                {
+                    $conditions[] = $this->get_search_condition();
+                }
+
                 $conditions[] = $this->get_own_table_conditions();
+
                 return new AndCondition($conditions);
         }
 

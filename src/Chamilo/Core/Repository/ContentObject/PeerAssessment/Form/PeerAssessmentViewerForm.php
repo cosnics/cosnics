@@ -68,7 +68,7 @@ class PeerAssessmentViewerForm extends FormValidator
     {
         // there should be users and indicators, otherwise don't render
         $params = array(
-            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: ACTION_VIEW_USER_ATTEMPT_STATUS);
+            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager :: ACTION_VIEW_USER_ATTEMPT_STATUS);
 
         if (count($this->indicators) === 0 && $assessment_type != PeerAssessment :: TYPE_FEEDBACK)
             $this->viewer->redirect(Translation :: get('NoIndicators'), 1, $params);

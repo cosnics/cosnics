@@ -124,7 +124,7 @@ class BrowserComponent extends Manager
         $course_settings_controller = CourseSettingsController :: get_instance();
 
         if ($course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
         {
             $content[] = $this->get_parent()->display_introduction_text($this->introduction_text);
@@ -406,7 +406,7 @@ class BrowserComponent extends Manager
         $course_settings_controller = CourseSettingsController :: get_instance();
 
         if (! $this->introduction_text && $this->is_course_admin && $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
         {
             $action_bar->add_common_action(

@@ -292,11 +292,19 @@ class WorkspaceRepository
     private function getWorkspaceFavouritesByUserCondition(User $user, $entities, $right)
     {
         $orConditions = array();
+        $andConditions = array();
 
         $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
         $orConditions[] = $this->getSharedWorkspacesForEntitiesWithRightCondition($entities, $right);
 
-        return new OrCondition($orConditions);
+        $andConditions[] = new OrCondition($orConditions);
+        $andConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceUserFavourite :: class_name(),
+                WorkspaceUserFavourite :: PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId()));
+
+        return new AndCondition($andConditions);
     }
 
     public function findWorkspacesForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)

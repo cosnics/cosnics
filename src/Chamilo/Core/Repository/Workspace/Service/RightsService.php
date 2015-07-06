@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 
 /**
  *
@@ -51,16 +52,23 @@ class RightsService
 
     /**
      *
+     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
+     */
+    private $workspaceService;
+
+    /**
+     *
      * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
      * @param \Chamilo\Core\Repository\Workspace\Service\EntityRelationService $entityRelationService
      * @param \Chamilo\Core\Repository\Workspace\Service\EntityService $entityService
      */
     public function __construct(ContentObjectRelationService $contentObjectRelationService,
-        EntityRelationService $entityRelationService, EntityService $entityService)
+        EntityRelationService $entityRelationService, EntityService $entityService, WorkspaceService $workspaceService)
     {
         $this->contentObjectRelationService = $contentObjectRelationService;
         $this->entityRelationService = $entityRelationService;
         $this->entityService = $entityService;
+        $this->workspaceService = $workspaceService;
     }
 
     /**
@@ -115,6 +123,24 @@ class RightsService
     public function setEntityService($entityService)
     {
         $this->entityService = $entityService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
+     */
+    public function getWorkspaceService()
+    {
+        return $this->workspaceService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceService $workspaceService
+     */
+    public function setWorkspaceService($workspaceService)
+    {
+        $this->workspaceService = $workspaceService;
     }
 
     /**
@@ -381,6 +407,7 @@ class RightsService
         else
         {
             $contentObjectWorkspaces = $this->getContentObjectRelationService()->getWorkspacesForContentObject(
+                $this->getWorkspaceService(),
                 $contentObject);
 
             while ($contentObjectWorkspace = $contentObjectWorkspaces->next_result())
@@ -447,8 +474,13 @@ class RightsService
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $entityRelationService = new EntityRelationService(new EntityRelationRepository());
             $entityService = new EntityService();
+            $workspaceService = new WorkspaceService(new WorkspaceRepository());
 
-            self :: $instance = new static($contentObjectRelationService, $entityRelationService, $entityService);
+            self :: $instance = new static(
+                $contentObjectRelationService,
+                $entityRelationService,
+                $entityService,
+                $workspaceService);
         }
 
         return static :: $instance;
