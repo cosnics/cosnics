@@ -54,108 +54,106 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_menu_items()
     {
-        if ($this->get_external_repository()->get_user_setting('session_token'))
-        {
-            $menu_items = array();
+        // if ($this->get_external_repository()->get_user_setting('session_token'))
+        // {
+        $menu_items = array();
 
-            $line = array();
-            $line['title'] = '';
-            $line['class'] = 'divider';
+        $line = array();
+        $line['title'] = '';
+        $line['class'] = 'divider';
 
-            // Basic list of all documents
-            $all_items = array();
-            $all_items['title'] = Translation :: get('AllItems');
-            $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
-            $all_items['class'] = 'home';
+        // Basic list of all documents
+        $all_items = array();
+        $all_items['title'] = Translation :: get('AllItems');
+        $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
+        $all_items['class'] = 'home';
 
-            // Special lists of documents
-            $owned = array();
-            $owned['title'] = Translation :: get('OwnedByMe');
-            $owned['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_OWNED));
-            $owned['class'] = 'user';
+        // Special lists of documents
+        $owned = array();
+        $owned['title'] = Translation :: get('OwnedByMe');
+        $owned['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_OWNED));
+        $owned['class'] = 'user';
 
-            $viewed = array();
-            $viewed['title'] = Translation :: get('OpenedByMe');
-            $viewed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_VIEWED));
-            $viewed['class'] = 'userview';
+        $viewed = array();
+        $viewed['title'] = Translation :: get('OpenedByMe');
+        $viewed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_VIEWED));
+        $viewed['class'] = 'userview';
 
-            $shared = array();
-            $shared['title'] = Translation :: get('SharedWithMe');
-            $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
-            $shared['class'] = 'external_repository';
+        $shared = array();
+        $shared['title'] = Translation :: get('SharedWithMe');
+        $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
+        $shared['class'] = 'external_repository';
 
-            $starred = array();
-            $starred['title'] = Translation :: get('Starred');
-            $starred['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_STARRED));
-            $starred['class'] = 'template';
+        $starred = array();
+        $starred['title'] = Translation :: get('Starred');
+        $starred['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_STARRED));
+        $starred['class'] = 'template';
 
-            $hidden = array();
-            $hidden['title'] = Translation :: get('Hidden');
-            $hidden['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_HIDDEN));
-            $hidden['class'] = 'hidden';
+        $hidden = array();
+        $hidden['title'] = Translation :: get('Hidden');
+        $hidden['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_HIDDEN));
+        $hidden['class'] = 'hidden';
 
-            $trashed = array();
-            $trashed['title'] = Translation :: get('Trash');
-            $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
-            $trashed['class'] = 'trash';
+        $trashed = array();
+        $trashed['title'] = Translation :: get('Trash');
+        $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
+        $trashed['class'] = 'trash';
 
-            // Document types
-            $types = array();
-            $types['title'] = Translation :: get('DocumentTypes');
-            $types['url'] = '#';
-            $types['class'] = 'category';
-            $types['sub'] = array();
+        // Document types
+        $types = array();
+        $types['title'] = Translation :: get('DocumentTypes');
+        $types['url'] = '#';
+        $types['class'] = 'category';
+        $types['sub'] = array();
 
-            $pdfs = array();
-            $pdfs['title'] = Translation :: get('PDFs');
-            $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
-            $pdfs['class'] = 'google_docs_pdf';
-            $types['sub'][] = $pdfs;
+        $pdfs = array();
+        $pdfs['title'] = Translation :: get('PDFs');
+        $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
+        $pdfs['class'] = 'google_docs_pdf';
+        $types['sub'][] = $pdfs;
 
-            $documents = array();
-            $documents['title'] = Translation :: get('Documents');
-            $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
-            $documents['class'] = 'google_docs_document';
-            $types['sub'][] = $documents;
+        $documents = array();
+        $documents['title'] = Translation :: get('Documents');
+        $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
+        $documents['class'] = 'google_docs_document';
+        $types['sub'][] = $documents;
 
-            $presentations = array();
-            $presentations['title'] = Translation :: get('Presentations');
-            $presentations['url'] = $this->get_url(
-                array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_PRESENTATIONS));
-            $presentations['class'] = 'google_docs_presentation';
-            $types['sub'][] = $presentations;
+        $presentations = array();
+        $presentations['title'] = Translation :: get('Presentations');
+        $presentations['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_PRESENTATIONS));
+        $presentations['class'] = 'google_docs_presentation';
+        $types['sub'][] = $presentations;
 
-            $spreadsheets = array();
-            $spreadsheets['title'] = Translation :: get('Spreadsheets');
-            $spreadsheets['url'] = $this->get_url(
-                array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SPREADSHEETS));
-            $spreadsheets['class'] = 'google_docs_spreadsheet';
-            $types['sub'][] = $spreadsheets;
+        $spreadsheets = array();
+        $spreadsheets['title'] = Translation :: get('Spreadsheets');
+        $spreadsheets['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SPREADSHEETS));
+        $spreadsheets['class'] = 'google_docs_spreadsheet';
+        $types['sub'][] = $spreadsheets;
 
-            $menu_items[] = $all_items;
-            $menu_items[] = $line;
+        $menu_items[] = $all_items;
+        $menu_items[] = $line;
 
-            $menu_items[] = $owned;
-            $menu_items[] = $viewed;
-            $menu_items[] = $shared;
-            $menu_items[] = $starred;
-            $menu_items[] = $hidden;
-            $menu_items[] = $trashed;
-            $menu_items[] = $types;
+        $menu_items[] = $owned;
+        $menu_items[] = $viewed;
+        $menu_items[] = $shared;
+        $menu_items[] = $starred;
+        $menu_items[] = $hidden;
+        $menu_items[] = $trashed;
+        $menu_items[] = $types;
 
-            // User defined folders
-            $menu_items[] = $line;
-            $folders = $this->get_external_repository_manager_connector()->retrieve_folders(
-                $this->get_url(array(self :: PARAM_FOLDER => '__PLACEHOLDER__')));
-            $menu_items = array_merge($menu_items, $folders);
+        // User defined folders
+        // $menu_items[] = $line;
+        // $folders = $this->get_external_repository_manager_connector()->retrieve_folders(
+        // $this->get_url(array(self :: PARAM_FOLDER => '__PLACEHOLDER__')));
+        // $menu_items = array_merge($menu_items, $folders);
 
-            return $menu_items;
-        }
+        return $menu_items;
+        // }
 
-        else
-        {
-            return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
-        }
+        // else
+        // {
+        // return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
+        // }
     }
 
     /*
