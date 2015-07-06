@@ -426,7 +426,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         return $feedback;
     }
 
-    public function save_feedback($user_id, $attempt_id, array $feedback)
+    public function save_feedback($user_id, $attempt_id, $feedback)
     {
         // get the current attempt status from the user
         $status = $this->get_user_attempt_status($user_id, $attempt_id);
