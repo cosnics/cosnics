@@ -56,6 +56,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_DISPLAY_ORDER_INDEX = 'display_order';
     const PROPERTY_EMAIL_SENT = 'email_sent';
     const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
+    const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
     const TYPE_FILE = 'file';
     // added tos upport mailing within content object
     private $target_course_groups;
@@ -91,7 +92,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 self :: PROPERTY_MODIFIED_DATE,
                 self :: PROPERTY_DISPLAY_ORDER_INDEX,
                 self :: PROPERTY_EMAIL_SENT,
-                self :: PROPERTY_SHOW_ON_HOMEPAGE));
+                self :: PROPERTY_SHOW_ON_HOMEPAGE,
+                self :: PROPERTY_ALLOW_COLLABORATION));
     }
 
     /**
@@ -448,6 +450,16 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     public function set_show_on_homepage($show_on_homepage)
     {
         $this->set_default_property(self :: PROPERTY_SHOW_ON_HOMEPAGE, $show_on_homepage);
+    }
+
+    public function get_allow_collaboration()
+    {
+        return $this->get_default_property(self :: PROPERTY_ALLOW_COLLABORATION);
+    }
+
+    public function set_allow_collaboration($allow_collaboration)
+    {
+        $this->set_default_property(self :: PROPERTY_ALLOW_COLLABORATION, $allow_collaboration);
     }
 
     /**

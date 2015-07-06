@@ -80,7 +80,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $html[] = $this->render_header();
 
         $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 
         if ($intro_text_allowed)

@@ -37,7 +37,8 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 Translation :: get('Title'),
                 Translation :: get('Progress'),
                 Translation :: get('LearningPathDetails')));
-        $course_id = $this->get_course_id();
+        $course_id = $this->get_parent()->get_parent()->get_parent()->get_parameter(
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
         $user_id = $this->get_user_id();
 
         $conditions = array();
@@ -58,14 +59,19 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             $learning_paths[$attempt->get_learning_path_id()] = $attempt;
         }
 
+        // TODO: Using the content object name for the tool name is a bad idea ... a better solution should be found and
+        // implemented
+        $toolName = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name());
+
         $params = array();
         $params[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
-        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = LearningPath :: get_type_name();
+        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $toolName;
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
 
         $params_detail = $this->get_parent()->get_parameters();
+        $params_detail[\Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID] = null;
         $params_detail[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptProgressTemplate :: class_name();
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
@@ -75,8 +81,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_TOOL),
-            new StaticConditionVariable(
-                ClassnameUtilities :: getInstance()->getClassNameFromNamespace(LearningPath :: class_name(), true)));
+            new StaticConditionVariable($toolName));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
@@ -115,9 +120,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $redirect = new Redirect($params);
-            $link = $redirect->getUrl();
-
-            $url = '<a href="' . $link . '">' . $learning_path->get_title() . '</a>';
+            $url = '<a href="' . $redirect->getUrl() . '">' . $learning_path->get_title() . '</a>';
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation :: get('Title'), $url);

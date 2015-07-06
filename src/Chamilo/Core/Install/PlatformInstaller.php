@@ -219,7 +219,15 @@ class PlatformInstaller
         $configuration['database']['host'] = $this->installer_config->get_db_host();
         $configuration['database']['name'] = $this->installer_config->get_db_name();
         $configuration['debug']['show_errors'] = false;
-        $configuration['repository']['storage_path'] = $this->installer_config->get_storage_path();
+        $configuration['storage']['archive_path'] = $this->installer_config->get_archive_path();
+        $configuration['storage']['cache_path'] = $this->installer_config->get_cache_path();
+        $configuration['storage']['garbage_path'] = $this->installer_config->get_garbage_path();
+        $configuration['storage']['hotpotatoes_path'] = $this->installer_config->get_hotpotatoes_path();
+        $configuration['storage']['logs_path'] = $this->installer_config->get_logs_path();
+        $configuration['storage']['repository_path'] = $this->installer_config->get_repository_path();
+        $configuration['storage']['scorm_path'] = $this->installer_config->get_scorm_path();
+        $configuration['storage']['temp_path'] = $this->installer_config->get_temp_path();
+        $configuration['storage']['userpictures_path'] = $this->installer_config->get_userpictures_path();
 
         $content = array();
 
@@ -307,31 +315,27 @@ class PlatformInstaller
 
         $html[] = $this->observers->before_filesystem_prepared();
 
-        $filesPath = Path :: getInstance()->getStoragePath();
+        $values = $this->installer_config->as_values_array();
 
         $directories = array(
-            'archive',
-            'cache',
-            'garbage',
-            'repository',
-            'temp',
-            'userpictures',
-            'scorm',
-            'logs',
-            'hotpotatoes');
+            $values['archive_path'],
+            $values['cache_path'],
+            $values['garbage_path'],
+            $values['repository_path'],
+            $values['temp_path'],
+            $values['userpictures_path'],
+            $values['scorm_path'],
+            $values['logs_path'],
+            $values['hotpotatoes_path']);
 
         foreach ($directories as $directory)
         {
-            $path = $filesPath . $directory;
-
-            // if (file_exists($path) && is_dir($path))
-            // {
-            // Filesystem :: remove($path);
-            // }
-
-            if (! Filesystem :: create_dir($path))
+            if (! file_exists($directory))
             {
-                throw new \Exception(Translation :: get('FoldersCreatedFailed'));
+                if (! Filesystem :: create_dir($directory))
+                {
+                    throw new \Exception(Translation :: get('FoldersCreatedFailed'));
+                }
             }
         }
 

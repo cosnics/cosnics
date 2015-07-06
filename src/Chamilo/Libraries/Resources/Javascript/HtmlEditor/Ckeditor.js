@@ -128,7 +128,7 @@ CKEDITOR.editorConfig = function(config) {
 			web_path
 					+ 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/release/ckeditor/contents.css',
 			web_path
-					+ 'index.php?application=Chamilo\Libraries\Ajax&go=ckeditor_css&theme='
+					+ 'index.php?application=Chamilo\\Libraries\\Ajax&go=CkeditorCss&theme='
 					+ getTheme() ];
 
 	config.disableNativeSpellChecker = false;

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Vie
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 
 /**
  * $Id: question_display.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -189,7 +190,7 @@ abstract class QuestionDisplay
         $type = $question->get_type();
 
         $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
-             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) . '\Display';
+             Assessment :: package() . '\Display\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);
         return $question_display;
     }

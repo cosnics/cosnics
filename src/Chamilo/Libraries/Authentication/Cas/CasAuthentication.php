@@ -5,7 +5,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport;
 use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -214,9 +213,7 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
     {
         if (! $this->is_configured())
         {
-            Display :: error_message(Translation :: get('CheckCASConfiguration'));
-
-            // exit();
+            throw new \Exception(Translation :: get('CheckCASConfiguration'));
         }
         else
         {
@@ -240,10 +237,8 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
             self :: $has_already_been_called = true;
 
             // SSL validation for the CAS server
-            $crt_path = $settings['certificate'];
             phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
-            phpCAS :: setCasServerCACert($crt_path);
-            // phpCAS :: setNoCasServerValidation();
+            phpCAS :: setCasServerCACert($settings['certificate']);
 
             // force CAS authentication
             phpCAS :: forceAuthentication();

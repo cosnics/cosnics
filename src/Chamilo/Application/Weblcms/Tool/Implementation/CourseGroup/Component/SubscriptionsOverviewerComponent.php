@@ -66,7 +66,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         $course_settings_controller = CourseSettingsController :: get_instance();
 
         if ($course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
         {
             $html[] = $this->display_introduction_text($this->get_introduction_text());
