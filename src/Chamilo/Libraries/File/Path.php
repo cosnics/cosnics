@@ -166,7 +166,7 @@ class Path
         return $this->cache[self :: TEMPORARY][(string) $completeNamespace] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'temp_path') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
+            'temp_path') . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -181,7 +181,7 @@ class Path
         return $this->cache[self :: CACHE][(string) $completeNamespace] = Configuration :: get_instance()->get(
             'Chamilo\Configuration',
             'storage',
-            'cache_path') . DIRECTORY_SEPARATOR . md5($namespace) . DIRECTORY_SEPARATOR;
+            'cache_path') . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
