@@ -33,6 +33,6 @@ class SubmitterUserSubmissionsTableDataProvider extends DataClassTableDataProvid
 
     public function count_data($condition)
     {
-        return $this->retrieve_data()->size();
+        return $this->retrieve_data($condition)->size();
     }
 }
