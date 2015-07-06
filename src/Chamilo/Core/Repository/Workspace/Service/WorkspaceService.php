@@ -289,7 +289,7 @@ class WorkspaceService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspaceFavouritesByUser(EntityService $entityService, User $user, $limit, $offset,
+    public function getWorkspaceFavouritesByUser(EntityService $entityService, User $user, $limit = null, $offset = null,
         $orderProperty = null)
     {
         if (is_null($orderProperty))

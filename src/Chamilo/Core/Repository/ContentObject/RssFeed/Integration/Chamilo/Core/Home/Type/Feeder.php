@@ -2,24 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\RenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
 {
-
-    /**
-     * Returns the list of type names that this block can map to.
-     *
-     * @return array
-     */
-    public static function get_supported_types()
-    {
-        $result = array();
-        $result[] = RssFeed :: get_type_name();
-        return $result;
-    }
 
     public function __construct($parent, $block_info, $configuration)
     {
@@ -43,6 +30,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $html = array();
         $feed = RenditionImplementation :: parse_file($content_object->get_url());
+
         if ($feed)
         {
             $target = $this->get_link_target();
@@ -55,7 +43,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
             $count_valid = 0;
 
-            foreach ($feed['items'] as $item)
+            foreach ($feed as $item)
             {
                 if (! $item['link'] || ! $item['title'])
                 {
