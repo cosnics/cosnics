@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\glossary
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Glossary"
+TypeCategory = "Course Tools"
+GlossaryToolBrowserComponent = "Browse glossaries"
+GlossaryToolViewerComponent = "View glossary"
+GlossaryToolEvaluateComponent = "Evaluate"
+GlossaryToolIntroductionPublisherComponent = "Publish introduction"
+GlossaryToolMoverComponent = "Move glossary"
+GlossaryToolPublisherComponent = "Publish glossary"
+GlossaryToolUpdaterComponent = "Edit glossary"
+CreateItem = "Create item"
+TypeNameSingle = "Glossary"
