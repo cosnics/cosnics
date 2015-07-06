@@ -76,7 +76,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
-            $this->course->get_id(),
+            $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
 
         $this->number_of_columns = ($course_tool_layout % 2 == 0) ? 3 : 2;
@@ -92,7 +92,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
-            $this->course->get_id(),
+            $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
 
         $visible_tools = $this->get_visible_tools();
@@ -244,13 +244,13 @@ class FixedLocationToolListRenderer extends ToolListRenderer
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
-            $this->course->get_id(),
+            $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
 
         if ($course_tool_layout > 2)
         {
             $tool_visible = $course_settings_controller->get_course_setting(
-                $this->course->get_id(),
+                $this->course,
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 
@@ -453,7 +453,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name());
 
             $tool_visible = $course_settings_controller->get_course_setting(
-                $this->course->get_id(),
+                $this->course,
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 

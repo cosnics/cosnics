@@ -372,7 +372,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 $course_admin = $course->is_course_admin($this->get_user());
 
                 $course_visible = $course_settings_controller->get_course_setting(
-                    $course->get_id(),
+                    $course,
                     CourseSettingsConnector :: VISIBILITY);
 
                 if ($course_admin || $course_visible)
@@ -383,7 +383,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $url = $this->get_course_url($course);
 
                     $course_access = $course_settings_controller->get_course_setting(
-                        $course_id,
+                        $course,
                         CourseSettingsConnector :: COURSE_ACCESS);
 
                     $course_closed = $course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED;
@@ -410,14 +410,14 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $text = array();
 
                     if ($course_settings_controller->get_course_setting(
-                        $course_id,
+                        $course,
                         CourseSettingsConnector :: SHOW_COURSE_CODE))
                     {
                         $text[] = $course->get_visual_code();
                     }
 
                     if ($course_settings_controller->get_course_setting(
-                        $course_id,
+                        $course,
                         CourseSettingsConnector :: SHOW_COURSE_TITULAR))
                     {
                         $text[] = \Chamilo\Core\User\Storage\DataManager :: get_fullname_from_user(
@@ -426,11 +426,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     }
 
                     if ($course_settings_controller->get_course_setting(
-                        $course_id,
+                        $course,
                         CourseSettingsConnector :: SHOW_COURSE_LANGUAGE))
                     {
                         $language = $course_settings_controller->get_course_setting(
-                            $course_id,
+                            $course,
                             CourseSettingsConnector :: LANGUAGE);
 
                         if ($language != 'platform_language')
