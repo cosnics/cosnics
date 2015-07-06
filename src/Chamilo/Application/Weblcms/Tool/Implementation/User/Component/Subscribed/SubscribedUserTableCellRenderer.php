@@ -220,7 +220,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             {
                 $course_settings_controller = CourseSettingsController :: get_instance();
                 $course_access = $course_settings_controller->get_course_setting(
-                    $this->get_component()->get_course_id(),
+                    $this->get_component()->get_course(),
                     CourseSettingsConnector :: COURSE_ACCESS);
 
                 if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)

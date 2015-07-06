@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * This class describes the default cell renderer for the unsubscribed course table
@@ -99,6 +100,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
     {
         $user = $this->retrieve_user();
         $course_id = $course[Course :: PROPERTY_ID];
+        $courseObject = DataManager :: retrieve_by_id(Course :: class_name(), $course_id);
 
         if ($this->is_teacher($course_id))
         {
@@ -108,7 +110,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
         {
             $course_settings_controller = CourseSettingsController :: get_instance();
             $course_access = $course_settings_controller->get_course_setting(
-                $course_id,
+                $courseObject,
                 CourseSettingsConnector :: COURSE_ACCESS);
 
             if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
@@ -118,7 +120,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
             else
             {
                 $open_course_access_type = $course_settings_controller->get_course_setting(
-                    $course_id,
+                    $courseObject,
                     CourseSettingsConnector :: OPEN_COURSE_ACCESS_TYPE);
 
                 $is_subscribed = CourseDataManager :: is_subscribed($course_id, $user);

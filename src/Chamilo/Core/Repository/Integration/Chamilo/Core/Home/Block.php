@@ -75,6 +75,7 @@ class Block extends \Chamilo\Core\Home\BlockRendition
     public function get_object()
     {
         $object_id = $this->get_object_id();
+
         if ($object_id == 0)
         {
             return null;

@@ -226,7 +226,7 @@ class MenuToolListRenderer extends ToolListRenderer
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
         $menu_style = $course_settings_controller->get_course_setting(
-            $this->get_parent()->get_course()->get_id(),
+            $this->get_parent()->get_course(),
             CourseSettingsConnector :: MENU_LAYOUT);
 
         $properties = array();

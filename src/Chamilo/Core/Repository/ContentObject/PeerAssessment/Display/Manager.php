@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const PARAM_PUBLICATION = \Chamilo\Core\Repository\Manager :: PARAM_PUBLICATION_ID;
+    const PARAM_PUBLICATION = \Chamilo\Core\Repository\Publication\Manager :: PARAM_PUBLICATION_ID;
     const PARAM_ATTEMPT = 'attempt';
     const PARAM_GROUP = 'group';
     const PARAM_INDICATOR = 'indicator';
@@ -389,7 +389,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_parent()->get_context_group($context_group_id);
     }
 
-    public function save_feedback($user_id, $attempt_id, array $feedback)
+    public function save_feedback($user_id, $attempt_id, $feedback)
     {
         return $this->get_parent()->save_feedback($user_id, $attempt_id, $feedback);
     }

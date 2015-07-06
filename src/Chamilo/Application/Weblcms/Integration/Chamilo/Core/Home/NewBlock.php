@@ -58,7 +58,7 @@ class NewBlock extends Block
             $this->courses[$course->get_id()] = $course;
 
             if ($course_settings_controller->get_course_setting(
-                $course->get_id(),
+                $course,
                 \Chamilo\Application\Weblcms\CourseSettingsConnector :: VISIBILITY) == 1)
             {
                 $condition = $this->get_publication_conditions($course, $tool);
