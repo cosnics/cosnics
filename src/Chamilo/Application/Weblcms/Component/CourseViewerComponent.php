@@ -194,7 +194,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                      ' ' . $user->get_lastname() . ' <a href="' .
                      $this->get_url(
                         array(
-                            self :: PARAM_TOOL => 'user',  // replace,
+                            self :: PARAM_TOOL => 'User',  // replace,
                                                           // seriously
                             self :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager :: ACTION_VIEW_AS)) .
                      '">' . Translation :: get('Back') . '</a></div>';
@@ -293,7 +293,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         $tool = Request :: get(self :: PARAM_TOOL);
         $tool_action = Request :: get(self :: PARAM_TOOL_ACTION);
 
-        if ($this->is_teacher() || ($tool == 'user' &&
+        if ($this->is_teacher() || ($tool == 'User' &&
              $tool_action == \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager :: ACTION_VIEW_AS))
         {
             $allowed = true;
