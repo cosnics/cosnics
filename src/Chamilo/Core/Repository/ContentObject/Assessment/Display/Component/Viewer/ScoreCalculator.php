@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 
 /**
  * $Id: score_calculator.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -66,11 +67,7 @@ abstract class ScoreCalculator
         $type = $question->get_type();
 
         $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
-             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4) . '\ScoreCalculator';
-
-        // $class = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type) . '\integration\\' .
-        // __NAMESPACE__ .
-        // '\ScoreCalculator';
+             Assessment :: package() . '\Display\ScoreCalculator';
 
         $score_calculator = new $class($question, $answer, $weight);
         return $score_calculator;
