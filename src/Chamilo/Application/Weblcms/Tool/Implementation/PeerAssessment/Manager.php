@@ -13,7 +13,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager as RepositoryDataManager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -24,6 +23,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This tool allows a user to publish peer assessments in a course.
@@ -218,9 +219,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_group_feed_path()
     {
-        return Path :: getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms', true) .
-             'XmlFeeds/xml_course_user_group_feed.php?course=' .
-             Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE) . '&show_groups=1';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager :: context(),
+                \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => 'XmlCourseUserGroupFeed',
+                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => Request :: get(
+                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE), 'show_groups' => 1));
+        return $redirect->getUrl();
     }
 
     /**
