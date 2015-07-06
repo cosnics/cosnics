@@ -278,20 +278,18 @@ class CourseSettingsController
      * @param $tool_id int - [OPTIONAL]
      * @return string | null
      */
-    public function get_course_setting($course_id, $setting_name, $tool_id = 0)
+    public function get_course_setting($course, $setting_name, $tool_id = 0)
     {
-        $value = $this->get_setting_for_object(self :: SETTING_TYPE_COURSE, $setting_name, $course_id, $tool_id);
+        if (! $course instanceof Course)
+        {
+            return $this->get_default_setting($setting_name, $tool_id);
+        }
+
+        $value = $this->get_setting_for_object(self :: SETTING_TYPE_COURSE, $setting_name, $course->get_id(), $tool_id);
+
         if (! is_null($value))
         {
             return $value;
-        }
-
-        $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_by_id(
-            Course :: class_name(),
-            $course_id);
-        if (! $course)
-        {
-            return $this->get_default_setting($setting_name, $tool_id);
         }
 
         return $this->get_course_type_setting($course->get_course_type_id(), $setting_name, $tool_id);

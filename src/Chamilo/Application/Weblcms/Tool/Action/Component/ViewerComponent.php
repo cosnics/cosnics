@@ -72,7 +72,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         $course_settings_controller = CourseSettingsController :: get_instance();
         $this->feedback_allowed = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: ALLOW_FEEDBACK);
 
         if ($this->feedback_allowed)

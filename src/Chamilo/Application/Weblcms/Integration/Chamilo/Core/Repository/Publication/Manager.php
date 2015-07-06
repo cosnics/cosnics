@@ -146,7 +146,7 @@ class Manager implements PublicationInterface
                 foreach ($possible_courses as $course)
                 {
                     if ($course_settings_controller->get_course_setting(
-                        $course->get_id(),
+                        $course,
                         CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
                         $tool_id) && $course_management_rights->is_allowed(
                         CourseManagementRights :: PUBLISH_FROM_REPOSITORY_RIGHT,
