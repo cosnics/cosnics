@@ -2,82 +2,74 @@
 namespace Chamilo\Application\Survey\Component;
 
 use Chamilo\Application\Survey\Manager;
-use Chamilo\Application\Survey\Rights\Rights;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Application\Survey\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Application\Survey\Service\RightsService;
 
+/**
+ *
+ * @package Chamilo\Application\Survey\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class DeleterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * Executes this controller
      */
-    function run()
+    public function run()
     {
-        $ids = Request :: get(self :: PARAM_PUBLICATION_ID);
-        $failures = 0;
-        
-        if (! empty($ids))
+        $publicationIdentifiers = $this->getRequest()->query->get(self :: PARAM_PUBLICATION_ID);
+
+        try
         {
-            if (! is_array($ids))
+            if (empty($publicationIdentifiers))
             {
-                $ids = array($ids);
+                throw new NoObjectSelectedException(Translation :: get('Publication'));
             }
-            
-            foreach ($ids as $id)
+
+            if (! is_array($publicationIdentifiers))
             {
-                
-                $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
-                
-                if (! Rights :: get_instance()->is_right_granted(
-                    Rights :: RIGHT_DELETE,
-                    $survey_publication->get_id()))
+                $publicationIdentifiers = array($publicationIdentifiers);
+            }
+
+            $publicationService = new PublicationService(new PublicationRepository());
+            $rightsService = RightsService :: getInstance();
+
+            foreach ($publicationIdentifiers as $publicationIdentifier)
+            {
+                $publication = $publicationService->getPublicationByIdentifier($publicationIdentifier);
+
+                if ($rightsService->hasPublicationCreatorRights($this->get_user(), $publication))
                 {
-                    $failures ++;
-                }
-                else
-                {
-                    if (! $survey_publication->delete())
+                    if (! $publicationService->deletePublication($publication))
                     {
-                        $failures ++;
+                        throw new \Exception(
+                            Translation :: get(
+                                'ObjectNotDeleted',
+                                array('OBJECT' => Translation :: get('Publication')),
+                                Utilities :: COMMON_LIBRARIES));
                     }
                 }
             }
-            
-            if ($failures)
-            {
-                if (count($ids) == 1)
-                {
-                    $message = 'SelectedPublicationDeleted';
-                }
-                else
-                {
-                    $message = 'SelectedPublicationDeleted';
-                }
-            }
-            else
-            {
-                if (count($ids) == 1)
-                {
-                    $message = 'SelectedPublicationsDeleted';
-                }
-                else
-                {
-                    $message = 'SelectedPublicationsDeleted';
-                }
-            }
-            
-            $this->redirect(
-                Translation :: get($message), 
-                ($failures ? true : false), 
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+
+            $success = true;
+            $message = Translation :: get(
+                'ObjectDeleted',
+                array('OBJECT' => Translation :: get('Publication')),
+                Utilities :: COMMON_LIBRARIES);
         }
-        else
+        catch (\Exception $ex)
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoPublicationsSelected')));
+            $success = false;
+            $message = $ex->getMessage();
         }
+
+        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
     }
 }
-?>

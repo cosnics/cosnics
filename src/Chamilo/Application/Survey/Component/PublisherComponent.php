@@ -1,132 +1,118 @@
 <?php
 namespace Chamilo\Application\Survey\Component;
 
-use Chamilo\Application\Survey\Form\PublicationForm;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Application\Survey\Manager;
-use Chamilo\Application\Survey\Rights\Rights;
-use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Application\Survey\Storage\DataClass\PublicationContentObjectRelation;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Application\Survey\Service\ContentObjectRelationService;
+use Chamilo\Application\Survey\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Survey\Service\RightsService;
 
-class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+/**
+ *
+ * @package Chamilo\Application\Survey\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class PublisherComponent extends Manager
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
-    function run()
+    public function run()
     {
-        if (! Rights :: get_instance()->publication_is_allowed())
+        if (! $this->getCurrentPublication() instanceof Publication)
+        {
+            throw new \Exception(Translation :: get('NoValidPublication'));
+        }
+
+        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentPublication()))
         {
             throw new NotAllowedException();
         }
 
-        $html[] = $this->render_header();
-
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
+            $this->getRequest()->query->set(
+                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION,
+                \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER);
+
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            return $factory->run();
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+
+            $component = $factory->getComponent();
+            $component->set_excluded_objects($this->getExcludedObjects());
+            $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER));
+            return $component->run();
         }
         else
         {
+            $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
 
-            $html = array();
-            $html[] = $this->render_header();
-
-            $object_ids = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
-            if (! is_array($object_ids))
+            foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
-                $object_ids = array($object_ids);
+                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+                $contentObjectRelationService->createContentObjectRelation(
+                    $this->getCurrentPublication()->getId(),
+                    $selectedContentObjectIdentifier,
+                    0);
             }
 
-            if (count($object_ids) > 0)
-            {
-                $condition = new InCondition(
-                    new PropertyConditionVariable(Survey :: class_name(), Survey :: PROPERTY_ID),
-                    $object_ids);
-                $parameters = new DataClassRetrievesParameters($condition);
-
-                $content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-                    Survey :: class_name(),
-                    $parameters);
-
-                $html[] = '<div class="content_object padding_10">';
-                $html[] = '<div class="title">' . Translation :: get('SelectedSurvey') . '</div>';
-                $html[] = '<div class="description">';
-                $html[] = '<ul class="attachments_list">';
-                $title = '';
-                while ($content_object = $content_objects->next_result())
-                {
-                    $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath('Chamilo\Application\Survey') .
-                         'survey-22.png" alt="' .
-                         htmlentities(
-                            Translation :: get(ContentObject :: type_to_class($content_object->get_type()) . 'TypeName')) .
-                         '"/> ' . $content_object->get_title() . '</li>';
-                    $title = $content_object->get_title();
-                }
-
-                $html[] = '</ul>';
-                $html[] = '</div>';
-                $html[] = '</div>';
-            }
-
-            $parameters = $this->get_parameters();
-            $parameters[\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID] = $object_ids;
-            $parameters[\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Viewer\Manager :: ACTION_PUBLISHER;
-
-            $form = new PublicationForm(
-                PublicationForm :: TYPE_CREATE,
-                $object_ids,
-                $this->get_user(),
-                $this->get_url($parameters),
-                null,
-                $title);
-            if ($form->validate())
-            {
-                $succes = $form->create_publications();
-
-                if (! $succes)
-                {
-                    $message = Translation :: get('SurveyNotPublished');
-                }
-                else
-                {
-                    $message = Translation :: get('SurveyPublished');
-                }
-
-                $this->redirect(
-                    $message,
-                    (! $succes ? true : false),
-                    array(
-                        Application :: PARAM_ACTION => self :: ACTION_BROWSE,
-                        BrowserComponent :: PARAM_TABLE_TYPE => BrowserComponent :: TAB_MY_PUBLICATIONS));
-            }
-            else
-
-            {
-
-                $html[] = $form->toHtml();
-                $html[] = '<div style="clear: both;"></div>';
-                $html[] = $this->render_footer();
-                return implode(PHP_EOL, $html);
-            }
+            $this->redirect(
+                Translation :: get('ContentObjectsAddedToPublication'),
+                false,
+                array(
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS,
+                    self :: PARAM_ACTION => null));
         }
     }
 
-    function get_allowed_content_object_types()
+    /**
+     *
+     * @return string[]
+     */
+    public function get_allowed_content_object_types()
     {
-        return array(Survey :: CLASS_NAME);
+        $registrations = Configuration :: registrations_by_type('Chamilo\Core\Repository\ContentObject');
+
+        foreach ($registrations as $registration)
+        {
+            $namespace = $registration->get_context();
+            $types[] = $namespace . '\Storage\DataClass\\' .
+                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+        }
+
+        return $types;
+    }
+
+    public function getExcludedObjects()
+    {
+        $publication = $this->get_application()->getPublication();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                PublicationContentObjectRelation :: class_name(),
+                PublicationContentObjectRelation :: PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($publication->getId()));
+
+        return DataManager :: distinct(
+            PublicationContentObjectRelation :: class_name(),
+            new DataClassDistinctParameters($condition, PublicationContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
+    }
+
+    public function getCurrentPublication()
+    {
+        return $this->get_application()->getPublication();
     }
 }
-?>

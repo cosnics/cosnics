@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -33,12 +34,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     RightsLocationEntityRight :: class_name(),
                     RightsLocationEntityRight :: PROPERTY_LOCATION_ID)));
         $joins[] = $join;
-
-        // $condition = new AndCondition($condition,
-        // new EqualityCondition(
-        // new PropertyConditionVariable(Publication :: class_name(),
-        // Publication :: PROPERTY_CONTENT_OBJECT_ID),
-        // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID)));
 
         $joins = new Joins($joins);
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, $joins);
@@ -64,12 +59,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     RightsLocationEntityRight :: class_name(),
                     RightsLocationEntityRight :: PROPERTY_LOCATION_ID)));
         $joins[] = $join;
-
-        // $condition = new AndCondition(
-        // new EqualityCondition(
-        // new PropertyConditionVariable(Publication :: class_name(),
-        // Publication :: PROPERTY_CONTENT_OBJECT_ID),
-        // new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID)));
 
         $joins = new Joins($joins);
         $parameters = new DataClassCountParameters(

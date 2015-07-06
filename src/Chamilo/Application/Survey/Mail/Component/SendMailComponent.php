@@ -55,10 +55,10 @@ class SendMailComponent extends Manager
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         $this->type = Request :: get(Manager :: PARAM_TYPE);
 
-        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
-        {
-            throw new NotAllowedException();
-        }
+//         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
+//         {
+//             throw new NotAllowedException();
+//         }
 
         switch ($this->type)
         {

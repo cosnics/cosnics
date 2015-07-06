@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Component\Viewer\Form;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Form\ViewerForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
 use Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode;
@@ -25,8 +24,6 @@ class ViewerComponent extends TabComponent
     function build()
     {
         $this->current_step = Request :: get(self :: PARAM_STEP, 1);
-        
-        var_dump($_SESSION);
         
         if ($this->is_form_submitted())
         {
@@ -60,7 +57,7 @@ class ViewerComponent extends TabComponent
         {
 //             var_dump($_SESSION);
             
-            $form = new Form($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
+            $form = new ViewerForm($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
             
             $html = array();
             $html[] = $this->render_header();
@@ -86,7 +83,7 @@ class ViewerComponent extends TabComponent
 
     private function is_form_submitted()
     {
-        return ! is_null(Request :: post('_qf__' . Form :: FORM_NAME));
+        return ! is_null(Request :: post('_qf__' . ViewerForm :: FORM_NAME));
     }
 
     public function get_action()
@@ -110,7 +107,8 @@ class ViewerComponent extends TabComponent
         $answerServiceContext = $this->getApplicationConfiguration()->getAnswerService()->getServiceContext();
         
         $paramaters[AnswerServiceInterface::PARAM_SERVICE_CONTEXT] = $answerServiceContext;
-        $paramaters[Manager :: PARAM_STEP] = $this->get_current_step();
+        $paramaters[self :: PARAM_STEP] = $this->get_current_step();
+        $paramaters[\Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object_id();
         
         foreach ($paramaters as $name => $value)
         {

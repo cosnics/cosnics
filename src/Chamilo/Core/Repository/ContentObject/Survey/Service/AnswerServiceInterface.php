@@ -11,22 +11,22 @@ interface AnswerServiceInterface
     const PARAM_SERVICE_CONTEXT = 'answerServiceContext';
     
     /**
-     * @param int $questionId
+     * @param int $nodeId
      * @return mixed $answer
      */
-    public function getAnswer($questionId);
+    public function getAnswer($nodeId);
     
     /**
-     * @param int $questionId
+     * @param int $nodeId
      * @param mixed $answer
      */
-    public function saveAnswer($questionId, $answer);
+    public function saveAnswer($nodeId, $answer);
     
     /**
-     * @param int $questionId
+     * @param int $nodeId
      * @return boolean $succes
      */
-    public function deleteAnswer($questionId);
+    public function deleteAnswer($nodeId);
     
     /**
      * @return string

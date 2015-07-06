@@ -15,27 +15,27 @@ use Chamilo\Libraries\Platform\Translation;
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
-    public function extra()
-    {
-        if (! Rights :: get_instance()->create_application_root())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('ApplicationRootLocationCreated'));
-        }
+//     public function extra()
+//     {
+//         if (! Rights :: get_instance()->create_application_root())
+//         {
+//             return false;
+//         }
+//         else
+//         {
+//             $this->add_message(self :: TYPE_NORMAL, Translation :: get('ApplicationRootLocationCreated'));
+//         }
         
-        if (! Rights :: get_instance()->create_publication_root())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self :: TYPE_NORMAL, Translation :: get('PublicationRootLocationCreated'));
-        }
+//         if (! Rights :: get_instance()->create_publication_root())
+//         {
+//             return false;
+//         }
+//         else
+//         {
+//             $this->add_message(self :: TYPE_NORMAL, Translation :: get('PublicationRootLocationCreated'));
+//         }
     
-        return true;
-    }
+//         return true;
+//     }
     
 }

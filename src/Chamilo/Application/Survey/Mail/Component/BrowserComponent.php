@@ -42,10 +42,10 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_MAILS_TO_PARTICIPANTS);
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         
-        if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-        {
-            throw new NotAllowedException();
-        }
+//         if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+//         {
+//             throw new NotAllowedException();
+//         }
         
         $this->action_bar = $this->get_action_bar();
         
@@ -139,8 +139,8 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         
         $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
         
-        if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-        {
+//         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+//         {
             $action_bar->add_common_action(
                 new ToolbarItem(
                     Translation :: get('SendMailToParticipants'), 
@@ -159,7 +159,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
                     $this->get_send_mail_url($this->publication_id, Mail :: REPORTING_TYPE), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        }
+//         }
         
         if ($this->get_user()->is_platform_admin())
         {

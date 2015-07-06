@@ -56,7 +56,7 @@ class PublicationForm extends FormValidator
             'text',
             Publication :: PROPERTY_TITLE,
             Translation :: get('PublicationTitle'),
-            array('size' => 100, 'value' => $this->publication->get_title()));
+            array('size' => 100, 'value' => $this->publication->getTitle()));
         $this->addRule(Publication :: PROPERTY_TITLE, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->add_forever_or_timewindow(Translation :: get('PublicationPeriod'));
     }
@@ -103,9 +103,9 @@ class PublicationForm extends FormValidator
         }
 
         $publication = $this->publication;
-        $publication->set_from_date($from);
-        $publication->set_title($values[Publication :: PROPERTY_TITLE]);
-        $publication->set_to_date($to);
+        $publication->setFromDate($from);
+        $publication->setTitle($values[Publication :: PROPERTY_TITLE]);
+        $publication->setToDate($to);
 
         if ($publication->update())
         {
@@ -138,12 +138,12 @@ class PublicationForm extends FormValidator
         foreach ($ids as $id)
         {
             $publication = new Publication();
-            $publication->set_content_object_id($id);
-            $publication->set_publisher($this->user->get_id());
-            $publication->set_title($values[Publication :: PROPERTY_TITLE]);
-            $publication->set_published(time());
-            $publication->set_from_date($from);
-            $publication->set_to_date($to);
+            $publication->setContentObjectId($id);
+            $publication->setPublisherId($this->user->get_id());
+            $publication->setTitle($values[Publication :: PROPERTY_TITLE]);
+            $publication->setPublished(time());
+            $publication->setFromDate($from);
+            $publication->setToDate($to);
 
             if (! $publication->create())
             {
@@ -171,15 +171,15 @@ class PublicationForm extends FormValidator
         else
         {
 
-            if ($this->publication->get_from_date() == 0)
+            if ($this->publication->getFromDate() == 0)
             {
                 $defaults[self :: PARAM_FOREVER] = 1;
             }
             else
             {
                 $defaults[self :: PARAM_FOREVER] = 0;
-                $defaults[self :: PARAM_FROM_DATE] = $this->publication->get_from_date();
-                $defaults[self :: PARAM_TO_DATE] = $this->publication->get_to_date();
+                $defaults[self :: PARAM_FROM_DATE] = $this->publication->getFromDate();
+                $defaults[self :: PARAM_TO_DATE] = $this->publication->getToDate();
             }
         }
         parent :: setDefaults($defaults);

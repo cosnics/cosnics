@@ -776,7 +776,7 @@ class ExcelMedianExporterComponent extends Manager
         {
             $sv = array();
             $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
-            $survey = $survey_publication->get_publication_object();
+            $survey = $survey_publication->getContentObject();
             $this->surveys[] = $survey;
             $survey_title = $survey->get_title();
             $survey_description = $survey->get_description();

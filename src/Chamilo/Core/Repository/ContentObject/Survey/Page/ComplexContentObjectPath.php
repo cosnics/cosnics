@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 
 /**
  *
@@ -45,5 +46,38 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
         }
         
         return $properties;
+    }
+    
+    /**
+     *
+     * @param AnswerServiceInterface $answerService
+     * @return number
+     */
+    public function getProgress(AnswerServiceInterface $answerService)
+    {
+        $nodes = $this->get_nodes();
+    
+        $questionCount = 0;
+        $answerCount = 0;
+        foreach ($nodes as $node)
+        {
+            if ($node->isQuestion())
+            {
+                if($node->isVisible($answerService))
+                {
+                    $questionCount ++;
+                    $answer = $answerService->getAnswer($node->get_id());
+                    if($answer){
+                        $answerCount++;
+                    }
+                }
+            }
+        }
+        
+        $progress = 0;
+        if($questionCount > 0){
+            $progress = round($answerCount/$questionCount*100, 2);
+        }
+        return $progress;
     }
 }
