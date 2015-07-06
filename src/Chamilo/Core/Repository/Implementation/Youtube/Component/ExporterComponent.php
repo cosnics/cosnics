@@ -6,13 +6,14 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Session\Session;
 
 class ExporterComponent extends Manager implements DelegateComponent
 {
 
     public function run()
     {
-        if (! $this->get_external_repository()->get_user_setting('session_token'))
+        if (! $this->get_external_repository()->get_user_setting(Session :: get_user_id(), 'session_token'))
         {
             throw new NotAllowedException();
         }

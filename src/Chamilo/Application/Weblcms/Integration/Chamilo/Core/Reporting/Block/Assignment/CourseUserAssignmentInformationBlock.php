@@ -57,22 +57,23 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE), 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE),
             new StaticConditionVariable(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER));
 
         $condition = new AndCondition($conditions);
-        
+
         $submissions = DataManager :: retrieves(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
-        
+
         $feedback_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback();
         $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
         $pub_submissions = array();
+
         foreach ($submissions as $key => $submission)
         {
             $pub_submissions[$submission->get_publication_id()]['count'] ++;
@@ -91,13 +92,15 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_TOOL),
-            new StaticConditionVariable(Assignment :: get_type_name()));
+            new StaticConditionVariable('Assignment'));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
+            new StaticConditionVariable(
+                $this->get_parent()->get_parent()->get_parent()->get_parameter(
+                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE)));
         $condition = new AndCondition($conditions);
         $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
             $condition);
@@ -105,7 +108,8 @@ class CourseUserAssignmentInformationBlock extends ToolBlock
         $params = array();
         $params[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $this->get_course_id();
+        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $this->get_parent()->get_parent()->get_parent()->get_parameter(
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = Assignment :: get_type_name();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS;
 

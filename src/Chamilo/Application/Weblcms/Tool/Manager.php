@@ -165,7 +165,9 @@ abstract class Manager extends Application
             throw new Exception(Translation :: get('ToolTypeDoesNotExist', array('type' => $namespace)));
         }
 
-        $factory = new ApplicationFactory($namespace, new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application));
+        $factory = new ApplicationFactory(
+            $namespace,
+            new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application));
         return $factory->run();
     }
 
@@ -260,12 +262,12 @@ abstract class Manager extends Application
         while ($tool = $course_tools->next_result())
         {
             $tool_active = $course_settings_controller->get_course_setting(
-                $this->get_course_id(),
+                $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
                 $tool->get_id());
 
             $tool_visible = $course_settings_controller->get_course_setting(
-                $this->get_course_id(),
+                $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 
@@ -287,7 +289,7 @@ abstract class Manager extends Application
         $course_settings_controller = CourseSettingsController :: get_instance();
 
         $menu_layout = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: MENU_LAYOUT);
 
         if ($menu_layout != CourseSettingsConnector :: MENU_LAYOUT_OFF && count($tools) > 0)
@@ -305,11 +307,11 @@ abstract class Manager extends Application
         }
 
         $tool_shortcut = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: TOOL_SHORTCUT_MENU);
 
         $introduction_text_allowed = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 
         if (($this->get_tool_id() == 'home' && $introduction_text_allowed && ! $this->get_introduction_text()) ||
@@ -547,7 +549,7 @@ abstract class Manager extends Application
             $course_settings_controller = CourseSettingsController :: get_instance();
 
             $module_visible = $course_settings_controller->get_course_setting(
-                $this->get_course_id(),
+                $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool_registration->get_id());
 
@@ -927,7 +929,7 @@ abstract class Manager extends Application
     {
         $factory = new ApplicationFactory(
             \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-          new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

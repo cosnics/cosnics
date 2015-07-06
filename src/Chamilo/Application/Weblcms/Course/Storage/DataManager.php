@@ -947,27 +947,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Returns the condition for the get course user relation by course and user
      *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      * @param int $course_id
      * @param int $user_id
      *
@@ -1004,31 +983,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Checks whether or not the given user is teacher of the given course by platform_group subscription
      *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      * @param int $course_id
      * @param User $user
      *
-     * @return mixed
+     * @return boolean
      */
     public static function is_teacher_by_platform_group_subscription($course_id, User $user)
     {
@@ -1238,27 +1196,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Returns the joins for the groups that are directly subscribed to a course
      *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      * @return Joins
      */
     protected static function get_course_rel_group_joins()
@@ -1275,27 +1212,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * Returns the condition for the get course user relation by course and user
-     *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      *
      * @param int $course_id
      * @param int $group_id

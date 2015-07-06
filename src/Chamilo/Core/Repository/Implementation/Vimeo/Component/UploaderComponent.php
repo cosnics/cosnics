@@ -22,7 +22,8 @@ class UploaderComponent extends Manager
             if ($id)
             {
                 $parameters = $this->get_parameters();
-                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_EXTERNAL_REPOSITORY;
+                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+                $parameters[Manager :: PARAM_FEED_TYPE] = Manager :: FEED_TYPE_MY_PHOTOS;
                 $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
 
                 $redirect = new Redirect($parameters);

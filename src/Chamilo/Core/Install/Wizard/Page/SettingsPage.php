@@ -36,7 +36,6 @@ class SettingsPage extends InstallWizardPage
             Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
         $this->addRule('platform_url', 'AddTrailingSlash', 'regex', '/^.*\/$/');
-        $this->addElement('text', 'storage_path', Translation :: get("StoragePath"), array('size' => '40'));
 
         $serverTypes = array();
         $serverTypes[] = $this->createElement(
@@ -128,6 +127,18 @@ class SettingsPage extends InstallWizardPage
             Hashing :: get_available_types());
         $this->addElement('category');
 
+        $this->addElement('category', Translation :: get('Storage'));
+        $this->addElement('text', 'archive_path', Translation :: get("ArchivePath"), array('size' => '40'));
+        $this->addElement('text', 'cache_path', Translation :: get("CachePath"), array('size' => '40'));
+        $this->addElement('text', 'garbage_path', Translation :: get("GarbagePath"), array('size' => '40'));
+        $this->addElement('text', 'hotpotatoes_path', Translation :: get("HotpotatoesPath"), array('size' => '40'));
+        $this->addElement('text', 'logs_path', Translation :: get("LogsPath"), array('size' => '40'));
+        $this->addElement('text', 'repository_path', Translation :: get("RepositoryPath"), array('size' => '40'));
+        $this->addElement('text', 'scorm_path', Translation :: get("ScormPath"), array('size' => '40'));
+        $this->addElement('text', 'temp_path', Translation :: get("TempPath"), array('size' => '40'));
+        $this->addElement('text', 'userpictures_path', Translation :: get("UserPicturesPath"), array('size' => '40'));
+        $this->addElement('category');
+
         $buttons = array();
         $buttons[] = $this->createElement(
             'style_submit_button',
@@ -150,7 +161,6 @@ class SettingsPage extends InstallWizardPage
         $defaults['platform_language'] = $this->controller->exportValue('page_language', 'install_language');
         $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
         $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
-        $defaults['storage_path'] = Path :: getInstance()->getStoragePath('repository');
         $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
         $email_parts = explode('@', $defaults['admin_email']);
         if ($email_parts[1] == 'localhost')
@@ -167,6 +177,18 @@ class SettingsPage extends InstallWizardPage
         $defaults['encrypt_password'] = 1;
         $defaults['hashing_algorithm'] = 'Sha1';
         $defaults['server_type'] = 'production';
+
+        // Storage paths
+        $defaults['archive_path'] = Path :: getInstance()->getStoragePath('archive');
+        $defaults['cache_path'] = Path :: getInstance()->getStoragePath('cache');
+        $defaults['garbage_path'] = Path :: getInstance()->getStoragePath('garbage');
+        $defaults['hotpotatoes_path'] = Path :: getInstance()->getStoragePath('hotpotatoes');
+        $defaults['logs_path'] = Path :: getInstance()->getStoragePath('logs');
+        $defaults['repository_path'] = Path :: getInstance()->getStoragePath('repository');
+        $defaults['scorm_path'] = Path :: getInstance()->getStoragePath('scorm');
+        $defaults['temp_path'] = Path :: getInstance()->getStoragePath('temp');
+        $defaults['userpictures_path'] = Path :: getInstance()->getStoragePath('userpictures');
+
         $this->setDefaults($defaults);
     }
 

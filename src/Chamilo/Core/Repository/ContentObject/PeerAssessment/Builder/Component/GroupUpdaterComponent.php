@@ -45,9 +45,11 @@ class GroupUpdaterComponent extends Manager
                 $group->validate_parameters($form->exportValues());
                 $group->set_publication_id($publication_id);
                 $group->save();
+
                 $form->update_group_memberships();
 
                 $enroll_errors = $form->get_enroll_errors();
+
                 $message = ! is_null($enroll_errors) ? $enroll_errors : null;
 
                 // redirect back to the group overview page

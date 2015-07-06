@@ -194,7 +194,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                      ' ' . $user->get_lastname() . ' <a href="' .
                      $this->get_url(
                         array(
-                            self :: PARAM_TOOL => 'user',  // replace,
+                            self :: PARAM_TOOL => 'User',  // replace,
                                                           // seriously
                             self :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager :: ACTION_VIEW_AS)) .
                      '">' . Translation :: get('Back') . '</a></div>';
@@ -227,7 +227,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
         $theme_setting = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: THEME);
 
         if ($theme_setting)
@@ -243,7 +243,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
         $language = $course_settings_controller->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSettingsConnector :: LANGUAGE);
 
         // set user selected language or general platform language
@@ -293,7 +293,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         $tool = Request :: get(self :: PARAM_TOOL);
         $tool_action = Request :: get(self :: PARAM_TOOL_ACTION);
 
-        if ($this->is_teacher() || ($tool == 'user' &&
+        if ($this->is_teacher() || ($tool == 'User' &&
              $tool_action == \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager :: ACTION_VIEW_AS))
         {
             $allowed = true;
@@ -302,7 +302,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         {
             $course_settings_controller = CourseSettingsController :: get_instance();
             $course_access = $course_settings_controller->get_course_setting(
-                $this->get_course_id(),
+                $this->get_course(),
                 CourseSettingsConnector :: COURSE_ACCESS);
 
             if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
@@ -312,7 +312,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             else
             {
                 $open_course_access_type = $course_settings_controller->get_course_setting(
-                    $this->get_course_id(),
+                    $this->get_course(),
                     CourseSettingsConnector :: OPEN_COURSE_ACCESS_TYPE);
 
                 $is_subscribed = CourseDataManager :: is_subscribed($this->get_course(), $this->get_user());
@@ -357,7 +357,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     public function is_tool_accessible()
     {
         return CourseSettingsController :: get_instance()->get_course_setting(
-            $this->get_course_id(),
+            $this->get_course(),
             CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
             $this->get_tool_registration()->get_id());
     }

@@ -17,18 +17,12 @@ use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\PlayList;
 use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\ExternalObject;
 
-// YoutubeKey :
-// AI39si4OLUsiI2mK0_k8HxqOtv0ctON-PzekhP_56JDkdph6wZ9tW2XqzDD7iVYY0GXKdMKlPSJyYZotNQGleVfRPDZih41Tug
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
     private $youtube;
 
     private $session_token;
-    const RELEVANCE = 'relevance';
-    const PUBLISHED = 'published';
-    const VIEW_COUNT = 'viewCount';
-    const RATING = 'rating';
 
     public function __construct($external_repository_instance)
     {
@@ -134,12 +128,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $playlistItem->setSnippet($playlistItemSnippet);
         $playlistItemResponse = $this->youtube->playlistItems->insert('snippet,contentDetails', $playlistItem, array());
         return $playlistItemResponse;
-    }
-
-    public static function get_sort_properties()
-    {
-        // return array(self :: RELEVANCE, self :: PUBLISHED, self :: VIEW_COUNT, self :: RATING);
-        return array();
     }
 
     public function is_editable($id)
@@ -400,14 +388,35 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function export_external_repository_object($object)
     {
-        // $file_source = $this->youtube->newMediaFileSource($object->get_full_path());
-        // $file_source->setContentType($object->get_mime_type());
-        // $file_source->setSlug($object->get_filename());
-        // $video_entry->setMediaSource($file_source);
-        // $video_entry->setVideoTitle($object->get_title());
-        // $video_entry->setVideoDescription(strip_tags($object->get_description()));
-        // $video_entry->setVideoCategory('Education');
+        $videoPath = $object->get_full_path();
+        $snippet = new \Google_Service_YouTube_VideoSnippet();
+        $snippet->setTitle($object->get_title());
+        $snippet->setDescription(strip_tags($object->get_description()));
+        $snippet->setTags(array("tag1", "tag2"));
 
+        $snippet->setCategoryId('Education');
+        $status = new \Google_Service_YouTube_VideoStatus();
+        $status->privacyStatus = "public";
+
+        $video = new \Google_Service_YouTube_Video();
+        $video->setSnippet($snippet);
+        $video->setStatus($status);
+        $chunkSizeBytes = 1 * 1024 * 1024;
+        $this->client->setDefer(true);
+        $insertRequest = $this->youtube->videos->insert("status,snippet", $video);
+
+        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
+        $media->setFileSize(filesize($videoPath));
+        $status = false;
+        $handle = fopen($videoPath, "rb");
+        while (! $status && ! feof($handle))
+        {
+            $chunk = fread($handle, $chunkSizeBytes);
+            $status = $media->nextChunk($chunk);
+        }
+        fclose($handle);
+
+        $this->client->setDefer(false);
         // $upload_url = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
         // try
         // {

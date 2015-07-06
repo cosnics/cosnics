@@ -166,11 +166,11 @@ class CourseListRenderer
                 $id = $course->get_id();
 
                 $course_access = $course_settings_controller->get_course_setting(
-                    $id,
+                    $course,
                     CourseSettingsConnector :: COURSE_ACCESS);
 
                 $course_visible = $course_settings_controller->get_course_setting(
-                    $id,
+                    $course,
                     CourseSettingsConnector :: VISIBILITY);
 
                 if (($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED || ! $course_visible) &&
@@ -222,11 +222,11 @@ class CourseListRenderer
         foreach ($this->tools as $tool)
         {
             $active = $course_settings_controller->get_course_setting(
-                $course->get_id(),
+                $course,
                 CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
                 $tool->get_id());
             $visible = $course_settings_controller->get_course_setting(
-                $course->get_id(),
+                $course,
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 

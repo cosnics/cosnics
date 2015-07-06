@@ -164,6 +164,7 @@ class PeerAssessmentGroupForm extends FormValidator
     {
         if (! is_null($this->group_id) && ! $this->viewer->group_has_scores($this->group_id))
         {
+
             $group_users_arr = $this->viewer->get_group_users($this->group_id);
             $group_users = array();
 
@@ -173,7 +174,7 @@ class PeerAssessmentGroupForm extends FormValidator
             }
 
             $values = $this->exportValue(
-                \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: PARAM_GROUP_USERS);
+                \Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager :: PARAM_GROUP_USERS);
 
             foreach ($values as $type => $elements)
             {
