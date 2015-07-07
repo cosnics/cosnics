@@ -1,23 +1,29 @@
 <?php
 namespace Chamilo\Application\Survey\Component;
 
-use Chamilo\Application\Survey\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ExporterComponent extends Manager implements DelegateComponent
+/**
+ *
+ * @package Chamilo\Application\Survey\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class ExporterComponent extends TabComponent
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
-    function run()
+    public function build()
     {
         $factory = new ApplicationFactory(
             \Chamilo\Application\Survey\Export\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
+
+    public function get_additional_parameters()
+    {
+        return array(self :: PARAM_PUBLICATION_ID);
+    }
 }
-?>

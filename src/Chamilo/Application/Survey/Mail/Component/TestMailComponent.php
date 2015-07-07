@@ -3,10 +3,8 @@ namespace Chamilo\Application\Survey\Mail\Component;
 
 use Chamilo\Application\Survey\Mail\Form\MailTestForm;
 use Chamilo\Application\Survey\Mail\Manager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Mail\Mail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class TestMailComponent extends Manager
 {
@@ -29,10 +27,10 @@ class TestMailComponent extends Manager
     {
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         
-        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
-        {
-            throw new NotAllowedException();
-        }
+//         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
+//         {
+//             throw new NotAllowedException();
+//         }
         
         $form = new MailTestForm(
             $this, 

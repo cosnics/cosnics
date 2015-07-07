@@ -4,12 +4,12 @@ namespace Chamilo\Application\Survey\Export\Component;
 use Chamilo\Application\Survey\Export\Form\ExportTemplateForm;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class EditorComponent extends Manager
 {
@@ -22,10 +22,7 @@ class EditorComponent extends Manager
         $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         $id = Request :: get(self :: PARAM_EXPORT_TEMPLATE_ID);
         
-        if (Rights :: is_allowed_in_surveys_subtree(
-            Rights :: RIGHT_ADD_EXPORT_TEMPLATE, 
-            $publication_id, 
-            Rights :: TYPE_PUBLICATION))
+        if (RightsService :: getInstance())
         {
             
             $template = DataManager :: retrieve_export_template_by_id($id);

@@ -10,7 +10,6 @@ use Chamilo\Application\Survey\Export\Table\TemplateTable\ExportTemplateTable;
 use Chamilo\Application\Survey\Export\Table\TrackerTable\ExportTable;
 use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
 use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -30,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $this->publication_id = Request :: get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
 
-        if (! Rights :: is_right_granted(Rights :: RIGHT_EXPORT_RESULT, $this->publication_id))
+        if (! RightsService :: getInstance())
         {
             throw new NotAllowedException();
         }
@@ -81,7 +81,7 @@ class BrowserComponent extends Manager implements TableSupport
                 Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'),
                 $table->as_html()));
 
-        if (Rights :: is_right_granted(Rights :: RIGHT_ADD_EXPORT_TEMPLATE, $this->publication_id))
+        if (RightsService :: getInstance())
         {
             $table = new ExportRegistrationTable($this);
             $tabs->add_tab(
