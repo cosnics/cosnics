@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 /**
  *
  * @package application\weblcms\integration\libraries\calendar\event
@@ -16,6 +17,24 @@ class Event extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calen
      * @var int
      */
     private $course_id;
+
+    /**
+     *
+     * @param integer $id
+     * @param integer $startDate
+     * @param integer $endDate
+     * @param string $url
+     * @param string $title
+     * @param string $content
+     * @param string $source
+     * @param string $context
+     * @param integer $courseId
+     */
+    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules, $url, $title, $content, $source, $context, $courseId)
+    {
+        parent :: __construct($id, $startDate, $endDate, $recurrenceRules, $url, $title, $content, $source, $context);
+        $this->course_id = $courseId;
+    }
 
     /**
      *

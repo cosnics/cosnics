@@ -3,13 +3,13 @@ namespace Chamilo\Libraries\Calendar\Event;
 
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
- * 
+ *
  * @package application\personal_calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Event
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     /**
      *
@@ -22,6 +22,12 @@ class Event
      * @var int
      */
     private $end_date;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     */
+    private $recurrenceRules;
 
     /**
      *
@@ -58,6 +64,31 @@ class Event
      * @var int
      */
     private $id;
+
+    /**
+     *
+     * @param integer $id
+     * @param integer $startDate
+     * @param integer $endDate
+     * @param string $url
+     * @param string $title
+     * @param string $content
+     * @param string $source
+     * @param string $context
+     */
+    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules, $url, $title, $content,
+        $source, $context)
+    {
+        $this->id = $id;
+        $this->start_date = $startDate;
+        $this->end_date = $endDate;
+        $this->recurrenceRules = $recurrenceRules;
+        $this->url = $url;
+        $this->title = $title;
+        $this->content = $content;
+        $this->source = $source;
+        $this->context = $context;
+    }
 
     /**
      *
