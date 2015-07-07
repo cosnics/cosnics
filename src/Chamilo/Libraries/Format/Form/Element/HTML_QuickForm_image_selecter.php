@@ -1,5 +1,4 @@
 <?php
-use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -39,7 +38,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
     private $defaults;
 
     public function HTML_QuickForm_image_selecter($elementName, $elementLabel, $search_url,
-        $locale = array ('Display' => 'Display'), $default = array (), $options = array())
+        $locale = array ('Display' => 'Display'), $default = array (), $options = array('rescale_image' => true, 'allow_change'=> false))
     {
         HTML_QuickForm_group :: HTML_QuickForm_group($elementName, $elementLabel);
         $this->_type = 'image_selecter';
@@ -208,17 +207,20 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
             if ($rescale_image)
             {
-                $dimensions = ImageManipulation :: rescale(
-                    $dimensions[ImageManipulation :: DIMENSION_WIDTH],
-                    $dimensions[ImageManipulation :: DIMENSION_HEIGHT],
-                    500,
+                $scaledDimensions = Utilities :: scaleDimensions(
+                    600,
                     450,
-                    ImageManipulation :: SCALE_INSIDE);
+                    array('width' => $dimensions[0], 'height' => $dimensions[1]));
+            }
+            else
+            {
+                $scaledDimensions = array('thumbnailWidth' => $dimensions[0], 'thumbnailHeight' => $dimensions[1]);
             }
 
-            $html[] = '<div id="selected_image" style="width: ' . $dimensions[ImageManipulation :: DIMENSION_WIDTH] .
-                 'px; height: ' . $dimensions[ImageManipulation :: DIMENSION_HEIGHT] . 'px; background-image: url(' .
-                 $image_object->get_url() . ');"></div>';
+            $html[] = '<div id="selected_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
+                 $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] .
+                 'px ' . $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
+                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) . ')"></div>';
         }
         else
         {
@@ -238,7 +240,8 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Uploadify/jquery.uploadify.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                 'Plugin/Uploadify/jquery.uploadify.min.js');
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js');
         $html[] = '<script type="text/javascript">';

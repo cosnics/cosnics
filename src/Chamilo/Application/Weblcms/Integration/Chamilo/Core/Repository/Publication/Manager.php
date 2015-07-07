@@ -185,12 +185,11 @@ class Manager implements PublicationInterface
         $publication->set_publication_date(time());
         $publication->set_modified_date(time());
 
-        $publication->set_hidden($options[ContentObjectPublication :: PROPERTY_HIDDEN]);
+        $isHidden = $options[ContentObjectPublication :: PROPERTY_HIDDEN] ? 1 : 0;
+        $publication->set_hidden($isHidden);
 
-        if (is_null($publication->is_hidden()))
-        {
-            $publication->set_hidden(0);
-        }
+        $allowCollaboration = $options[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] ? 1 : 0;
+        $publication->set_allow_collaboration($allowCollaboration);
 
         if ($options['forever'] == 0)
         {
@@ -209,6 +208,7 @@ class Manager implements PublicationInterface
         {
             $publication_extension = new $possible_publication_class();
             $publication_extension->set_publication_id($publication->get_id());
+
             if (! $publication_extension->create())
             {
                 return false;
@@ -238,6 +238,11 @@ class Manager implements PublicationInterface
             'PublicationPeriod',
             \Chamilo\Core\Repository\Publication\Manager :: WIZARD_OPTION . '[' . $registration->get_id() . ']',
             true);
+        $form->addElement(
+            'checkbox',
+            \Chamilo\Core\Repository\Publication\Manager :: WIZARD_OPTION . '[' . $registration->get_id() . '][' .
+                 ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION . ']',
+                Translation :: get('CourseAdminCollaborate', null, \Chamilo\Application\Weblcms\Manager :: context()));
 
         $defaults[\Chamilo\Core\Repository\Publication\Manager :: WIZARD_OPTION][$registration->get_id()]['forever'] = 1;
         $form->setDefaults($defaults);

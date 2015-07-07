@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
@@ -70,11 +69,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             while (false !== ($authentication_method = $authentication_directory->read()))
             {
-                $authentication_method_name = (string) StringUtilities :: getInstance()->createString(
-                    $authentication_method)->underscored();
-
-                $is_directory = is_dir($authentication_dir->path . '/' . $authentication_method);
-                $is_enabled = PlatformSetting :: get('enable_' . $authentication_method_name . '_authentication');
+                $is_directory = is_dir($authentication_directory->path . '/' . $authentication_method);
+                $is_enabled = PlatformSetting :: get('enable' . $authentication_method . 'Authentication');
 
                 if ($is_directory && $is_enabled)
                 {

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class XmlSearchFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
@@ -22,8 +22,7 @@ class XmlSearchFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $query_condition = Utilities :: query_to_condition(
             Request :: post('queryString'),
-            new ConditionProperty(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE)));
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
 
         if (isset($query_condition))
         {
@@ -42,7 +41,9 @@ class XmlSearchFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $condition = new AndCondition($conditions);
 
-        $objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $condition);
+        $objects = DataManager :: retrieve_active_content_objects(
+            ContentObject :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($lo = $objects->next_result())
         {

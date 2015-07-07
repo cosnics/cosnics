@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Implementation\Renditi
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -40,11 +41,16 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         if (! is_null($image))
         {
             $dimensions = getimagesize($image->get_full_path());
-            $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' . $dimensions[0] .
-                 'px; height: ' . $dimensions[1] . 'px; background-image: url(' . $image->get_url() . ')"></div></div>';
+            $scaledDimensions = Utilities :: scaleDimensions(
+                600,
+                450,
+                array('width' => $dimensions[0], 'height' => $dimensions[1]));
 
-            // $html[] = '<img class="hotspot_image_display" src="' . $image->get_url() . '" alt="' .
-            // $image->get_title() . '" title="' . $image->get_title() . '" />';
+            $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
+                 $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
+                 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
+                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
+                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image->get_id()) . ')"></div></div>';
         }
         else
         {

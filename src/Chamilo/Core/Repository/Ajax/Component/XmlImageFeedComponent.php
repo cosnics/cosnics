@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -28,8 +27,8 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $query_condition = Utilities :: query_to_condition(
             Request :: get('query'),
-            new ConditionProperty(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE)));
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+
         if (isset($query_condition))
         {
             $conditions[] = $query_condition;
@@ -37,7 +36,7 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         $owner_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session :: get_user_id()));
+            new StaticConditionVariable($this->get_user_id()));
 
         $conditions[] = $owner_condition;
 
@@ -72,9 +71,11 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
             new DataClassRetrievesParameters($condition));
 
         $objects_by_cat = array();
+
         while ($lo = $objects->next_result())
         {
             $cid = $lo->get_parent_id();
+
             if (is_array($objects_by_cat[$cid]))
             {
                 array_push($objects_by_cat[$cid], $lo);
@@ -113,7 +114,6 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="iso-8859-1"?>', "\n", '<tree>', "\n";
-
         if (isset($tree))
         {
             $this->dump_tree($tree, $objects_by_cat);
@@ -125,10 +125,12 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function get_tree($index, $flat_tree)
     {
         $tree = array();
+
         foreach ($flat_tree[$index] as $child)
         {
             $tree[] = array('obj' => $child, 'sub' => $this->get_tree($child->get_id(), $flat_tree));
         }
+
         return $tree;
     }
 
@@ -138,13 +140,16 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             return;
         }
+
         foreach ($tree as $node)
         {
             if (! $this->contains_results($node, $objects))
             {
                 continue;
             }
+
             $id = $node['obj']->get_id();
+
             if ($node['obj'] instanceof RepositoryCategory)
             {
                 $title = $node['obj']->get_name();
@@ -154,16 +159,20 @@ class XmlImageFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 $title = $node['obj']->get_title();
             }
 
-            echo '<node id="category_', $id, '" classes="category unlinked" title="', htmlentities($title), '">', "\n";
-            $this->dump_tree($node['sub'], $objects);
+            echo '<node id="category_', $id, '" classes="category unlinked"
+	title="', htmlentities($title), '">', "\n";
+
             foreach ($objects[$id] as $lo)
             {
                 $id = $lo->get_id();
                 $value = Utilities :: content_object_for_element_finder($lo);
-                echo '<leaf id="lo_' . $id . '" classes="' . $value['classes'] . '" title="' .
-                     htmlentities($value['title']) . '" description="' . htmlentities($value['description']) . '"/>' .
-                     "\n";
+
+                echo '<leaf id="lo_' . $id . '"
+	classes="' . $value['classes'] . '"
+	title="' . htmlentities($value['title']) . '"
+	description="' . htmlentities($value['description']) . '" />' . "\n";
             }
+
             echo '</node>', "\n";
         }
     }
