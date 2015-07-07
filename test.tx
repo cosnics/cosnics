@@ -1,2 +1,0 @@
-Warning: This development build of composer is over 30 days old. It is recommended to update it by running "C:\ProgramData\ComposerSetup\bin\composer.phar self-update" to get the latest version.
-Script Chamilo\Libraries\Format\Utilities\BuildUtilities::processComposer handling the pre-update-cmd event terminated with an exception
