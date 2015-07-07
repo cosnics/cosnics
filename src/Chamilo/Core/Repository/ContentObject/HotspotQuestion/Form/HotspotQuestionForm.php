@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: hotspot_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -74,8 +76,11 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clear"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
-             'xml_feeds/xml_image_feed.php';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => 'Chamilo\Core\Repository\Ajax',
+                Application :: PARAM_ACTION => 'XmlImageFeed'));
+
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -90,7 +95,7 @@ class HotspotQuestionForm extends ContentObjectForm
             'image_selecter',
             'image',
             Translation :: get('SelectImage'),
-            $url,
+            $redirect->getUrl(),
             $locale,
             array(),
             $image_selecter_options);
