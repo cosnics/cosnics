@@ -1,12 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
-// use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
+    const ANSWER_SERVICE_KEY = 'answerService';
+    
     const ACTION_ACTIVITY = 'Activity';
     const ACTION_MOVE = 'Mover';
     const ACTION_SORT = 'Sorter';
@@ -25,7 +27,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_AJAX_CONTEXT = 'ajax_context';
     const PARAM_CONFIGURATION_ID = 'config_id';
     const PARAM_COMPLEX_QUESTION_ITEM_ID = 'complex_question_item_id';
-    
+        
     // Sorting
     const SORT_UP = 'Up';
     const SORT_DOWN = 'Down';
@@ -33,6 +35,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
+    
     /**
      *
      * @var int
@@ -41,16 +44,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-//         if (! $applicationConfiguration->getApplication() instanceof SurveyDisplaySupport)
-//         {
-//             throw new \Exception(
-//                 get_class($applicationConfiguration->getApplication()) .
-//                      ' uses the SurveyDisplaySupport, please implement the SurveyDisplaySupport interface');
-//         }
-        
-//         var_dump("hallo");
-//         exit;
-        
+        if($applicationConfiguration->get(self :: ANSWER_SERVICE_KEY) == null){
+            $answerServiceFactory = new AnswerServiceFactory('Chamilo\Core\Repository\ContentObject\Survey');
+            $answerService = $answerServiceFactory->getAnswerService();
+            $applicationConfiguration->set(self :: ANSWER_SERVICE_KEY, $answerService);
+        }
         parent :: __construct($applicationConfiguration);
     }
 
@@ -113,6 +111,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
             $this->get_current_step());
+    }
+    
+    public function get_complex_content_object_path()
+    {
+       return $this->get_parent()->get_root_content_object()->get_complex_content_object_path();
     }
 }
 ?>

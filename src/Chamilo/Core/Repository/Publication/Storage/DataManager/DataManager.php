@@ -115,12 +115,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository');
         $info = 0;
-
         foreach ($registrations as $registration)
         {
             $manager_class = $registration->get_context() . '\Manager';
+            $manager_class = $registration->get_context() . '\Publication\Manager';
             $info += $manager_class :: count_publication_attributes($attributes_type, $identifier, $condition);
         }
 
@@ -136,11 +137,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_content_object_publications($object)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
+            'Chamilo\Core\Repository');
 
         foreach ($registrations as $registration)
         {
-            $manager_class = $registration->get_context() . '\Manager';
+            $manager_class = $registration->get_context() . '\Publication\Manager';
             $result = $manager_class :: delete_content_object_publications($object->get_id());
 
             if (! $result)
@@ -154,7 +156,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_content_object_publication($application, $publication_id)
     {
-        $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
+        $manager_class = $application . '\Manager';
         return $manager_class :: delete_content_object_publication($publication_id);
     }
 

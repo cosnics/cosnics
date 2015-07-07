@@ -196,7 +196,7 @@ class MailJobManager
         $message[] = '<br/><br/>';
         $message[] = Translation :: get('Description') . ': ';
         $message[] = '<br/>';
-        $message[] = $publication->get_publication_object()->get_description();
+        $message[] = $publication->getContentObject()->get_description();
         $message[] = '<br/><br/>';
         $message[] = '<a href=' . $url . '>' . $click_message . '</a>';
 

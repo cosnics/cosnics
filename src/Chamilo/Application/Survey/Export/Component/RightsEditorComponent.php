@@ -3,13 +3,13 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class RightsEditorComponent extends Manager implements DelegateComponent
 {
@@ -40,9 +40,8 @@ class RightsEditorComponent extends Manager implements DelegateComponent
             if ($this->get_user()->is_platform_admin() || $template->get_owner_id() == $this->get_user_id())
             {
                 $publication_id = $template->get_publication_id();
-                $locations[] = Rights :: get_location_by_identifier_from_surveys_subtree(
-                    $template_id, 
-                    Rights :: TYPE_EXPORT_TEMPLATE);
+                $locations[] = RightsService :: getInstance();
+                   
             }
         }
         
@@ -65,7 +64,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
 
     function get_available_rights()
     {
-        return Rights :: get_available_rights_for_export_templates();
+        return RightsService :: getInstance();
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
