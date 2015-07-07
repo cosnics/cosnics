@@ -1,23 +1,25 @@
 <?php
 namespace Chamilo\Application\Survey\Component;
 
-use Chamilo\Application\Survey\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ApplicationRightsComponent extends Manager implements DelegateComponent
+/**
+ *
+ * @package Chamilo\Application\Survey\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class ApplicationRightsComponent extends TabComponent
 {
 
-    public function run()
+    public function build()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Survey\Rights\Application\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        
-//         $component = $factory->getComponent();
-//         $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
-        
+            \Chamilo\Application\Survey\Rights\Manager :: context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
+
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Configuration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 
 /**
  *
@@ -30,6 +31,7 @@ class SurveyConfiguration extends ApplicationConfiguration
     {
         parent :: __construct($request, $user, $application);
         $this->answerServiceContext = $answerServiceContext;
+        $this->set(Manager :: ANSWER_SERVICE_KEY, $this->getAnswerService());
     }
 
     /**
@@ -49,6 +51,5 @@ class SurveyConfiguration extends ApplicationConfiguration
             
         }
         return $answerServiceFactory->getAnswerService();
-        return $this->answerService;
     }
 }

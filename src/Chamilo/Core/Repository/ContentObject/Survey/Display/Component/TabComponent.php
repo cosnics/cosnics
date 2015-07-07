@@ -17,6 +17,9 @@ use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode;
+use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -332,7 +335,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                     new DynamicVisualTab(
                         self :: ACTION_CREATE_CONFIGURATION,
                         Translation :: getInstance()->getTranslation('ConfigurationCreatorComponent'),
-                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_MANAGER),
+                        Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/Configurer'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_CREATE_CONFIGURATION,
@@ -368,18 +371,23 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
-        $html = array();
-
+        
         $html[] = parent :: render_header();
         $html[] = '<div style="width: 17%; float: left;">';
-        $html[] = '<br />';
-        $html[] = '<div class="clear"></div>';
         $html[] = '<div style="width: 100%; overflow: auto;">';
-        $html[] = $this->menu->render_as_tree() . '<br /><br />';
+        $html[] = $this->menu->render_as_tree();
+        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="survey-progress">';
+        $html[] = $this->getProgressBar();
+        $html[] = '</div>';
+        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="survey-navigation">';
+        $html[] = $this->get_navigation_bar();
+        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div style="width: 81%; float: right; padding-left: 10px; min-height: 500px;">';
-
+        
         $html[] = $this->get_tabs_renderer()->renderHeader();
 
         return implode(PHP_EOL, $html);
@@ -410,4 +418,104 @@ abstract class TabComponent extends Manager implements DelegateComponent
     {
         return $this->tabs_renderer;
     }
+    
+    /**
+     * Renders the progress bar for the learning path
+     *
+     * @return array() HTML code of the progress bar
+     */
+    private function getProgressBar()
+    {
+        $progress = $this->get_complex_content_object_path()->getProgress($this->getApplicationConfiguration()->getAnswerService());
+        return $this->renderProgressBar($progress);
+    }
+    
+    /**
+     *
+     * @param integer $percent
+     * @param integer $step
+     * @return string
+     */
+    private function renderProgressBar($percent, $step = 2)
+    {
+       $done = (int) ($percent / $step);
+        $rest = (int) (100.0 / $step) - $done;
+        return '<div class="progress_information"><div class="progress_bar">' . str_repeat(
+            '<div class="done"></div>',
+            $done) . str_repeat('<div class=""></div>', $rest) . '</div><div class="progress_status">' . round(
+                $percent,
+                2) . ' %</div></div>';
+    }
+    
+    /**
+     * Retrieves the navigation menu for the learning path
+     *
+     * @param $total_steps int
+     * @param $current_step int
+     * @param $current_content_object ContentObject
+     */
+    private function get_navigation_bar()
+    {
+        $current_node = $this->get_current_node();
+    
+//         if ($this->get_action() != self :: ACTION_REPORTING || $this->is_current_step_set())
+//         {
+            $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+    
+            $previous_node = $current_node->get_previous();
+    
+            if ($previous_node instanceof ComplexContentObjectPathNode)
+            {
+                $previous_url = $this->get_url(
+                    array(
+                        self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                        self :: PARAM_STEP => $previous_node->get_id()));
+    
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('Previous'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Prev'),
+                        $previous_url,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+            else
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('PreviousNA'),
+                        Theme :: getInstance()->getCommonImagePath('Action/PrevNa'),
+                        null,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+    
+            $next_node = $current_node->get_next();
+    
+            if ($next_node instanceof ComplexContentObjectPathNode)
+            {
+                $next_url = $this->get_url(
+                    array(
+                        self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                        self :: PARAM_STEP => $next_node->get_id()));
+    
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('Previous'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Next'),
+                        $next_url,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+            else
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('PreviousNA'),
+                        Theme :: getInstance()->getCommonImagePath('Action/NextNa'),
+                        null,
+                        ToolbarItem :: DISPLAY_ICON));
+            }
+    
+            return $toolbar->as_html();
+        }
+//     }
+    
 }

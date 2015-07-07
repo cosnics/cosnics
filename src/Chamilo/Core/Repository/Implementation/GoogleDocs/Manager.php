@@ -62,84 +62,75 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $line['title'] = '';
         $line['class'] = 'divider';
 
-        // Basic list of all documents
-        $all_items = array();
-        $all_items['title'] = Translation :: get('AllItems');
-        $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
-        $all_items['class'] = 'home';
+        // // Basic list of all documents
+        // $all_items = array();
+        // $all_items['title'] = Translation :: get('AllItems');
+        // $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
+        // $all_items['class'] = 'home';
 
         // Special lists of documents
         $owned = array();
-        $owned['title'] = Translation :: get('OwnedByMe');
+        $owned['title'] = Translation :: get('Me');
         $owned['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_OWNED));
         $owned['class'] = 'user';
-
-        $viewed = array();
-        $viewed['title'] = Translation :: get('OpenedByMe');
-        $viewed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_VIEWED));
-        $viewed['class'] = 'userview';
+        $menu_items[] = $owned;
 
         $shared = array();
         $shared['title'] = Translation :: get('SharedWithMe');
         $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
         $shared['class'] = 'external_repository';
+        $menu_items[] = $shared;
 
-        $starred = array();
-        $starred['title'] = Translation :: get('Starred');
-        $starred['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_STARRED));
-        $starred['class'] = 'template';
+        $recent = array();
+        $recent['title'] = Translation :: get('Recent');
+        $recent['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_RECENT));
+        $recent['class'] = 'recent';
+        $menu_items[] = $recent;
 
-        $hidden = array();
-        $hidden['title'] = Translation :: get('Hidden');
-        $hidden['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_HIDDEN));
-        $hidden['class'] = 'hidden';
+        $followed = array();
+        $followed['title'] = Translation :: get('Followed');
+        $followed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FOLLOWED));
+        $followed['class'] = 'followed';
+        $menu_items[] = $followed;
 
         $trashed = array();
         $trashed['title'] = Translation :: get('Trash');
         $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
         $trashed['class'] = 'trash';
-
-        // Document types
-        $types = array();
-        $types['title'] = Translation :: get('DocumentTypes');
-        $types['url'] = '#';
-        $types['class'] = 'category';
-        $types['sub'] = array();
-
-        $pdfs = array();
-        $pdfs['title'] = Translation :: get('PDFs');
-        $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
-        $pdfs['class'] = 'google_docs_pdf';
-        $types['sub'][] = $pdfs;
-
-        $documents = array();
-        $documents['title'] = Translation :: get('Documents');
-        $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
-        $documents['class'] = 'google_docs_document';
-        $types['sub'][] = $documents;
-
-        $presentations = array();
-        $presentations['title'] = Translation :: get('Presentations');
-        $presentations['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_PRESENTATIONS));
-        $presentations['class'] = 'google_docs_presentation';
-        $types['sub'][] = $presentations;
-
-        $spreadsheets = array();
-        $spreadsheets['title'] = Translation :: get('Spreadsheets');
-        $spreadsheets['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SPREADSHEETS));
-        $spreadsheets['class'] = 'google_docs_spreadsheet';
-        $types['sub'][] = $spreadsheets;
-
-        $menu_items[] = $all_items;
-        $menu_items[] = $line;
-
-        $menu_items[] = $owned;
-        $menu_items[] = $viewed;
-        $menu_items[] = $shared;
-        $menu_items[] = $starred;
-        $menu_items[] = $hidden;
         $menu_items[] = $trashed;
-        $menu_items[] = $types;
+
+        // // Document types
+        // $types = array();
+        // $types['title'] = Translation :: get('DocumentTypes');
+        // $types['url'] = '#';
+        // $types['class'] = 'category';
+        // $types['sub'] = array();
+
+        // $pdfs = array();
+        // $pdfs['title'] = Translation :: get('PDFs');
+        // $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
+        // $pdfs['class'] = 'google_docs_pdf';
+        // $types['sub'][] = $pdfs;
+
+        // $documents = array();
+        // $documents['title'] = Translation :: get('Documents');
+        // $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
+        // $documents['class'] = 'google_docs_document';
+        // $types['sub'][] = $documents;
+
+        // $presentations = array();
+        // $presentations['title'] = Translation :: get('Presentations');
+        // $presentations['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
+        // DOCUMENTS_PRESENTATIONS));
+        // $presentations['class'] = 'google_docs_presentation';
+        // $types['sub'][] = $presentations;
+
+        // $spreadsheets = array();
+        // $spreadsheets['title'] = Translation :: get('Spreadsheets');
+        // $spreadsheets['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
+        // DOCUMENTS_SPREADSHEETS));
+        // $spreadsheets['class'] = 'google_docs_spreadsheet';
+        // $types['sub'][] = $spreadsheets;
 
         // User defined folders
         // $menu_items[] = $line;

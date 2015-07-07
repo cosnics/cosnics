@@ -1,27 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Zend_Gdata_App_Extension_Link;
-use Zend_Gdata_AuthSub;
-use Zend_Gdata_Docs;
-use Zend_Gdata_Docs_Query;
-use Zend_Loader;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
-    /**
-     *
-     * @var Zend_Gdata_Docs
-     */
     private $service;
 
     private $client;
@@ -32,16 +17,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     const FOLDERS_MINE = 1;
     const FOLDERS_SHARED = 2;
     const DOCUMENTS_OWNED = 'mine';
-    const DOCUMENTS_VIEWED = 'viewed';
     const DOCUMENTS_SHARED = '-mine';
-    const DOCUMENTS_STARRED = 'starred';
-    const DOCUMENTS_HIDDEN = 'hidden';
+    const DOCUMENTS_RECENT = 'recent';
+    const DOCUMENTS_FOLLOWED = 'followed';
     const DOCUMENTS_TRASH = 'trashed';
-    const DOCUMENTS_FILES = 'pdf';
-    const DOCUMENTS_DOCUMENTS = 'document';
-    const DOCUMENTS_PRESENTATIONS = 'presentation';
-    const DOCUMENTS_SPREADSHEETS = 'spreadsheet';
-    const DOCUMENTS_DRAWINGS = 'drawings';
+    // const DOCUMENTS_FILES = 'pdf';
+    // const DOCUMENTS_DOCUMENTS = 'document';
+    // const DOCUMENTS_PRESENTATIONS = 'presentation';
+    // const DOCUMENTS_SPREADSHEETS = 'spreadsheet';
+    // const DOCUMENTS_DRAWINGS = 'drawings';
 
     /**
      *
@@ -154,19 +138,39 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_object($id)
     {
         $file = $this->service->files->get($id);
-
+        // var_dump($file);
         $object = new ExternalObject();
-        // $object->set_id($resource_id[1]);
-        // $object->set_external_repository_id($this->get_external_repository_instance_id());
-        // $object->set_title($file->getTitle());
-        // $object->set_created($published_timestamp);
-        // $object->set_type($resource_id[0]);
-        // $object->set_viewed($last_viewed_timestamp);
-        // $object->set_modified($modified_timestamp);
-        // $object->set_owner_id($author->getEmail()->getText());
-        // $object->set_modifier_id($modifier->getEmail()->getText());
-        // $object->set_content($this->determine_content_url($object));
-        // $object->set_rights($this->determine_rights());
+        $object->set_id($file->id);
+        $object->set_description($file->description);
+        $object->set_external_repository_id($this->get_external_repository_instance_id());
+        $object->set_title($file->title);
+        $object->set_created(strtotime($file->createdDate));
+
+        $mime_type = explode('application/vnd.google-apps.', $file->mimeType);
+        if ($mime_type[0] == '')
+        {
+            $object->set_type($mime_type[1]);
+        }
+        else
+        {
+            $object->set_type($mime_type[0]);
+        }
+
+        $object->set_viewed(strtotime($file->lastViewedByMeDate));
+        $object->set_modified(strtotime($file->modifiedDate));
+        $object->set_owner_id($file->owners[0]['emailAddress']);
+        $object->set_owner_name($file->owners[0]['displayName']);
+        $object->set_modifier_id($file->lastModifyingUser['emailAddress']);
+
+        $object->set_content($this->determine_content_url($object));
+
+        $rights = array();
+        $rights[ExternalObject :: RIGHT_USE] = $file->copyable;
+        $rights[ExternalObject :: RIGHT_EDIT] = $file->editable;
+        $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file->copyable;
+        $rights[ExternalObject :: RIGHT_DELETE] = $file->editable;
+        $object->set_rights($rights);
+
         // $object->set_acl($this->get_document_acl($resource_id[1]));
 
         return $object;
@@ -178,6 +182,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function delete_external_repository_object($id)
     {
+        $this->service->files->delete($id);
     }
 
     /**
@@ -302,14 +307,25 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         foreach ($files_items as $file_item)
         {
+            // var_dump($file_item);
             $object = new ExternalObject();
             $object->set_id($file_item['id']);
             $object->set_external_repository_id($this->get_external_repository_instance_id());
             $object->set_title($file_item['title']);
-            $object->set_created($file_item['createdDate']);
-            $object->set_type($file_item['mimeType']);
-            $object->set_viewed($file_item['lastViewedByMeDate']);
-            $object->set_modified($file_item['modifiedDate']);
+            $object->set_created(strtotime($file_item['createdDate']));
+
+            $mime_type = explode('application/vnd.google-apps.', $file_item['mimeType']);
+            if ($mime_type[0] == '')
+            {
+                $object->set_type($mime_type[1]);
+            }
+            else
+            {
+                $object->set_type($mime_type[0]);
+            }
+
+            $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
+            $object->set_modified(strtotime($file_item['modifiedDate']));
             $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             $object->set_owner_name($file_item['owners'][0]['displayName']);
 
@@ -323,13 +339,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             }
 
-            // $object->set_content($this->determine_content_url($object));
-            $object->set_rights($this->determine_rights());
+            $rights = array();
+            $rights[ExternalObject :: RIGHT_USE] = $file_item['copyable'];
+            $rights[ExternalObject :: RIGHT_EDIT] = $file_item['editable'];
+            $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file_item['copyable'];
+            $rights[ExternalObject :: RIGHT_DELETE] = $file_item['editable'];
+            $object->set_rights($rights);
+
+            $object->set_content($this->determine_content_url($object));
+
             // $object->set_acl($this->get_document_acl($resource_id[1]));
             $objects[] = $object;
         }
 
-        // return new ArrayResultSet($objects);
+        return new ArrayResultSet($objects);
     }
 
     private function get_document_acl($document_id)
@@ -376,6 +399,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function determine_content_url($object)
     {
+        var_dump($object->get_type());
         switch ($object->get_type())
         {
             case 'document' :
@@ -389,6 +413,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             case 'spreadsheet' :
                 $url = 'https://spreadsheets.google.com/feeds/download/' . $object->get_type() . 's/Export?key=' .
                      $object->get_id();
+                break;
+            case 'pdf' :
+                break;
+
+            case 'octet-stream' :
+                break;
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :
+                break;
+            case 'video/mp4' :
+                break;
+            case 'image/jpeg' :
                 break;
             default :
                 // Get the document's content link entry.
@@ -491,26 +526,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     // }
     // return $items;
     // }
-    public function determine_rights()
+    public function download_external_repository_object($url)
     {
-        $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DELETE] = false;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
-        return $rights;
+        // $session_token = $this->google_docs->getHttpClient()->getAuthSubToken();
+        // $opts = array(
+        // 'http' => array(
+        // 'method' => 'GET',
+        // 'header' => "GData-Version: 3.0\r\n" . "Authorization: AuthSub token=\"$session_token\"\r\n"));
+
+        // return file_get_contents($url, false, stream_context_create($opts));
     }
 
-    // public function download_external_repository_object($url)
-    // {
-    // $session_token = $this->google_docs->getHttpClient()->getAuthSubToken();
-    // $opts = array(
-    // 'http' => array(
-    // 'method' => 'GET',
-    // 'header' => "GData-Version: 3.0\r\n" . "Authorization: AuthSub token=\"$session_token\"\r\n"));
-
-    // return file_get_contents($url, false, stream_context_create($opts));
-    // }
     public function create_external_repository_object($file)
     {
         $resource = $this->google_docs->UploadFile(
