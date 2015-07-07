@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -33,10 +34,18 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
 
+        $scaledDimensions = Utilities :: scaleDimensions(
+            600,
+            450,
+            array('width' => $dimensions[0], 'height' => $dimensions[1]));
+
         $html[] = '<div style="border: 1px solid #B5CAE7; border-top: none; padding: 10px;">';
         $html[] = '<div id="hotspot_container_' . $question_id . '" class="hotspot_container"><div id="hotspot_image_' .
-             $question_id . '" class="hotspot_image" style="width: ' . $dimensions[0] . 'px; height: ' . $dimensions[1] .
-             'px; background-image: url(' . $image_object->get_url() . ')"></div></div>';
+             $question_id . '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] .
+             'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
+             $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
+             'px;background-image: url(' .
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) . ')"></div></div>';
         $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js') . '"></script>';
@@ -89,8 +98,8 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
             if ($configuration->show_correction() || $configuration->show_solution())
             {
-                $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('answer_correct') : Theme :: getInstance()->getImage(
-                    'answer_wrong')) . '</td>';
+                $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('AnswerCorrect') : Theme :: getInstance()->getImage(
+                    'AnswerWwrong')) . '</td>';
             }
 
             $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_answer());
