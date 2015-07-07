@@ -1,0 +1,57 @@
+<?php
+namespace application\weblcms\tool\implementation\user;
+
+use libraries\file\Filesystem;
+use libraries\utilities\Utilities;
+
+/**
+ * This class represents the data manager for this package
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @package application.weblcms.tool.assignment
+ */
+class DataManager extends \libraries\storage\DataManager
+{
+    const PREFIX = 'weblcms_';
+
+    /**
+     * **************************************************************************************************************
+     * Inherited Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Gets the type of DataManager to be instantiated
+     *
+     * @return string
+     */
+    public static function get_type()
+    {
+        return 'doctrine';
+    }
+
+    public static function get_connector_toolbar_items($user_id)
+    {
+        $toolbar_items = array();
+
+        $path = dirname(__FILE__) . '/../../connector/';
+        $files = Filesystem :: get_directory_content($path, Filesystem :: LIST_FILES, false);
+        $toolbar_items = array();
+        foreach ($files as $file)
+        {
+
+            $file_class = split('.class.php', $file);
+            require_once $path . $file;
+            $class = __NAMESPACE__ . '\\' . Utilities :: underscores_to_camelcase($file_class[0]);
+
+            $connector = new $class();
+
+            if ($connector->is_active())
+            {
+                $toolbar_items = array_merge($toolbar_items, $connector->get_toolbar_items($user_id));
+            }
+        }
+
+        return $toolbar_items;
+    }
+}

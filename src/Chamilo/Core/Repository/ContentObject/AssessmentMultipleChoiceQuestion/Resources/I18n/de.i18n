@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_multiple_choice_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Auswahlfrage"
+SwitchToCheckboxes = "Mehrere Antworten zulässig"
+SwitchToRadioButtons = "Nur eine Antwort zulässig"
+AddMultipleChoiceOption = "Eine Option hinzufügen"
+Answer = "Antwort"
+Feedback = "Feedback"
+Score = "Punktzahl"
+Correct = "Richtig"
+SelectAtLeastOneCorrectAnswer = "Wählen Sie mindestens eine richtige Antwort aus"
+SelectACorrectAnswer = "Wählen Sie die richtige Antwort aus"
+Weight = "Gewicht"
+Options = "Optionen"
+Title = "Titel"
+Description = "Beschreibung"
+Hint = ""
