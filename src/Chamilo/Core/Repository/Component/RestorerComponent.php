@@ -105,7 +105,7 @@ class RestorerComponent extends Manager
                 else
                 {
                     $message = Translation :: get(
-                        'ObjectsRestored',
+                        'ObjectNotRestored',
                         array('OBJECTS' => Translation :: get('ContentObjects')),
                         Utilities :: COMMON_LIBRARIES);
                 }
