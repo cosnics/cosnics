@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Survey\Service;
 
 use Chamilo\Application\Survey\Repository\PublicationRepository;
-use Chamilo\Application\Survey\PersonalPublication;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Core\Rights\Entity\UserEntity;
@@ -97,16 +96,6 @@ class PublicationService
         {
             return $this->getPersonalPublicationForUser($user);
         }
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Chamilo\Application\Survey\PersonalPublication
-     */
-    public function getPersonalPublicationForUser(User $user)
-    {
-        return new PersonalPublication($user);
     }
 
     /**

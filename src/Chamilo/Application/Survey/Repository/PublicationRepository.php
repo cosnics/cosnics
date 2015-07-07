@@ -292,11 +292,19 @@ class PublicationRepository
     private function getPublicationFavouritesByUserCondition(User $user, $entities, $right)
     {
         $orConditions = array();
+        $andConditions = array();
 
         $orConditions[] = $this->getPublicationsByCreatorCondition($user);
         $orConditions[] = $this->getSharedPublicationsForEntitiesWithRightCondition($entities, $right);
-
-        return new OrCondition($orConditions);
+        
+        $andConditions[] = new OrCondition($orConditions);
+        $andConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                PublicationUserFavourite :: class_name(),
+                PublicationUserFavourite :: PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId()));
+        
+        return new AndCondition($andConditions);
     }
 
     public function findPublicationsForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)

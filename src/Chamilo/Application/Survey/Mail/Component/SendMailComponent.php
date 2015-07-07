@@ -7,7 +7,6 @@ use Chamilo\Application\Survey\Mail\Manager;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail;
 use Chamilo\Application\Survey\Mail\Storage\DataManager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -21,9 +20,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Survey\Service\RightsService;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -63,9 +62,8 @@ class SendMailComponent extends Manager
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
-                $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: PARTICIPATE_RIGHT,
-                    $this->publication_id);
+                $target_entities = RightsService :: get_instance();
+                   
 
                 if (is_array(($target_entities[UserEntity :: ENTITY_TYPE])))
                 {
@@ -128,15 +126,13 @@ class SendMailComponent extends Manager
                 $not_started_count = $invitee_count - $started_count - $finished_count;
 
                 $users = array();
-                $users[Rights :: PARTICIPATE_RIGHT_NAME] = $invitee_count;
+                $users[RightsService :: RIGHT_TAKE] = $invitee_count;
                 $users[Participant :: STATUS_STARTED] = $started_count;
                 $users[Participant :: STATUS_NOTSTARTED] = $not_started_count;
                 $users[Participant :: STATUS_FINISHED] = $finished_count;
                 break;
             case Mail :: EXPORT_TYPE :
-                $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: RIGHT_EXPORT_RESULT,
-                    $this->publication_id);
+                $target_entities = RightsService :: get_instance();
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
@@ -148,13 +144,11 @@ class SendMailComponent extends Manager
                 $this->invitees = array_merge($target_entities[UserEntity :: ENTITY_TYPE], $group_user_ids);
                 $invitee_count = count(array_unique($this->invitees));
                 $users = array();
-                $users[Rights :: EXPORT_RESULT_RIGHT_NAME] = $invitee_count;
+                $users[RightsService :: RIGHT_REPORT] = $invitee_count;
                 //
                 break;
             case Mail :: REPORTING_TYPE :
-                $target_entities = Rights :: get_instance()->get_publication_targets_entities(
-                    Rights :: RIGHT_REPORTING,
-                    $this->publication_id);
+                $target_entities = RightsService :: get_instance();
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
@@ -166,7 +160,7 @@ class SendMailComponent extends Manager
                 $this->invitees = array_merge($target_entities[UserEntity :: ENTITY_TYPE], $group_user_ids);
                 $invitee_count = count(array_unique($this->invitees));
                 $users = array();
-                $users[Rights :: REPORTING_RIGHT_NAME] = $invitee_count;
+                $users[RightsService :: RIGHT_REPORT] = $invitee_count;
                 break;
         }
 
@@ -252,7 +246,7 @@ class SendMailComponent extends Manager
                     $user_ids = array_merge($user_ids, $this->finished);
                 }
 
-                $invitees = $values[Rights :: PARTICIPATE_RIGHT_NAME];
+                $invitees = $values[RightsService :: RIGHT_TAKE];
 
                 if ($invitees == 1)
                 {
@@ -276,7 +270,7 @@ class SendMailComponent extends Manager
                     $this->invitees = array_intersect($this->invitees, $user_ids);
                 }
 
-                $invitees = $values[Rights :: EXPORT_RESULT_RIGHT_NAME];
+                $invitees = $values[RightsService :: RIGHT_REPORT];
 
                 if ($invitees == 1)
                 {
@@ -291,7 +285,7 @@ class SendMailComponent extends Manager
                     $this->invitees = array_intersect($this->invitees, $user_ids);
                 }
 
-                $invitees = $values[Rights :: REPORTING_RIGHT_NAME];
+                $invitees = $values[RightsService :: RIGHT_REPORT];
                 if ($invitees == 1)
                 {
                     $mail_user_ids = array_merge($mail_user_ids, $this->invitees);

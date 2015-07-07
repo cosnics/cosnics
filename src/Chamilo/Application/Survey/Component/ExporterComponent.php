@@ -11,13 +11,13 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MailComponent extends TabComponent
+class ExporterComponent extends TabComponent
 {
 
     public function build()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Survey\Mail\Manager :: context(),
+            \Chamilo\Application\Survey\Export\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

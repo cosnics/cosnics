@@ -184,19 +184,17 @@ class Manager implements PublicationInterface
         $attributes = new \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes();
 
         $attributes->set_id($record[Publication :: PROPERTY_ID]);
-        $attributes->setPublisherId($record[Publication :: PROPERTY_PUBLISHER_ID]);
+        $attributes->set_publisher_id($record[Publication :: PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication :: PROPERTY_PUBLISHED]);
         $attributes->set_application(__NAMESPACE__);
 
         $attributes->set_location(Translation :: get('TypeName'));
 
-        $url = 'index.php?application=survey&amp;go=' . \Chamilo\Application\Survey\Manager :: ACTION_HOME .
-             '&amp;' . \Chamilo\Application\Survey\Manager :: PARAM_USER_ID . '=' .
-             $record[Publication :: PROPERTY_PUBLISHER_ID];
+        $url = 'index.php?application=survey&amp;go=' . \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PERSONAL; 
 
         $attributes->set_url($url);
         $attributes->set_title($record[ContentObject :: PROPERTY_TITLE]);
-        $attributes->setContentObjectId($record[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->set_content_object_id($record[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
 
         return $attributes;
     }
@@ -221,7 +219,7 @@ class Manager implements PublicationInterface
             default :
                 return 0;
         }
-
+        
         if ($condition instanceof Condition)
         {
             $condition = new AndCondition(array($condition, $publication_condition));

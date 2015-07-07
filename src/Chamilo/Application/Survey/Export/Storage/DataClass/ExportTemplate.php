@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Survey\Export\Storage\DataClass;
 
 use Chamilo\Application\Survey\Export\Storage\DataManager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ExportTemplate extends DataClass
@@ -15,45 +14,6 @@ class ExportTemplate extends DataClass
     const PROPERTY_EXPORT_REGISTRATION_ID = 'export_registration_id';
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
-
-    public function create()
-    {
-        $succes = parent :: create();
-        if ($succes)
-        {
-            $parent_location = Rights :: get_surveys_subtree_root_id();
-            $location = Rights :: create_location_in_surveys_subtree(
-                $this->get_id(), 
-                $this->get_id(), 
-                $parent_location, 
-                Rights :: TYPE_EXPORT_TEMPLATE, 
-                true);
-            
-            $rights = Rights :: get_available_rights_for_export_templates();
-            foreach ($rights as $right)
-            {
-                Rights :: set_user_right_location_value($right, $this->get_owner_id(), $location->get_id(), 1);
-            }
-        }
-        
-        return $succes;
-    }
-
-    public function delete()
-    {
-        $location = Rights :: get_location_by_identifier_from_surveys_subtree(
-            $this->get_id(), 
-            Rights :: TYPE_EXPORT_TEMPLATE);
-        if ($location)
-        {
-            if (! $location->remove())
-            {
-                return false;
-            }
-        }
-        $succes = parent :: delete();
-        return $succes;
-    }
 
     /**
      * Get the default properties

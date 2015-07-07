@@ -3,11 +3,11 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class ExportDeleterComponent extends Manager
 {
@@ -28,10 +28,7 @@ class ExportDeleterComponent extends Manager
                 $ids = array($ids);
             }
             
-            if (Rights :: is_allowed_in_surveys_subtree(
-                Rights :: RIGHT_EXPORT_RESULT, 
-                $publication_id, 
-                Rights :: TYPE_PUBLICATION))
+            if (RightsService :: getInstance())
             {
                 foreach ($ids as $id)
                 {
