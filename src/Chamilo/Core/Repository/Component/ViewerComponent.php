@@ -397,24 +397,24 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             if ($rightsService->canEditContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
             {
                 $revert_url = $this->get_content_object_revert_url($contentObject, 'version');
-                $actionBar->add_item(
+                $actionBar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('Action/Revert'),
                         $revert_url,
-                        ToolbarItem :: DISPLAY_ICON));
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
             // Delete
             if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
             {
                 $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
-                $actionBar->add_tool_item(
+                $actionBar->add_tool_action(
                     new ToolbarItem(
                         Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('Action/Remove'),
                         $deleteUrl,
-                        ToolbarItem :: DISPLAY_ICON));
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
         }
 
