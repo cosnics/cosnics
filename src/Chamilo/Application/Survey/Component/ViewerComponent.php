@@ -8,11 +8,12 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Application\Survey\Storage\DataManager;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ViewerComponent extends Manager implements DelegateComponent, SurveyDisplaySupport
 {
@@ -25,21 +26,36 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
 
     function run()
     {
-        $this->publicationId = $this->getApplicationConfiguration()->getRequest()->get(self :: PARAM_PUBLICATION_ID);
-             
-        $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->publicationId);
+        $this->publicationId = $this->getRequest()->query->get(self :: PARAM_PUBLICATION_ID);
         
-        $this->contentObject = $this->publication->getContentObject();
+        if (! $this->publicationId)
+        {
+            throw new NoObjectSelectedException(Translation :: get('Publication'));
+        }
         
-        $surveyConfiguration = new SurveyConfiguration(
-            $this->getRequest(), 
-            $this->get_user(), 
-            $this, 
-            '\Chamilo\Application\Survey');
-        $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(), 
-            $surveyConfiguration);
-        return $factory->run();
+        $publicationService = new PublicationService(new PublicationRepository());
+        $this->publication = $publicationService->getPublicationByIdentifier($this->publicationId);
+        
+        $rightsService = RightsService :: getInstance();
+        
+        if ($rightsService->canTakeSurvey($this->get_user(), $this->publication))
+        {
+            $this->contentObject = $this->publication->getContentObject();
+            
+            $surveyConfiguration = new SurveyConfiguration(
+                $this->getRequest(), 
+                $this->get_user(), 
+                $this, 
+                '\Chamilo\Application\Survey');
+            $factory = new ApplicationFactory(
+                \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(), 
+                $surveyConfiguration);
+            return $factory->run();
+        }
+        else
+        {
+            throw new NotAllowedException();
+        }
     }
 
     function get_tree_menu_url()
@@ -47,8 +63,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
         return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
              \Chamilo\Application\Survey\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
              \Chamilo\Application\Survey\Manager :: ACTION_VIEW . '&' .
-             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID . '=' .
-             $this->publicationId . '&' .
+             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID . '=' . $this->publicationId . '&' .
              \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: PARAM_STEP . '=%s';
     }
 
@@ -134,7 +149,7 @@ class ViewerComponent extends Manager implements DelegateComponent, SurveyDispla
     {
         return true;
     }
-    
+
     public function get_additional_parameters()
     {
         return array(self :: PARAM_PUBLICATION_ID);

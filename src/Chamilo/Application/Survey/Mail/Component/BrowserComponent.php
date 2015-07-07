@@ -4,7 +4,6 @@ namespace Chamilo\Application\Survey\Mail\Component;
 use Chamilo\Application\Survey\Mail\Manager;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
 use Chamilo\Application\Survey\Mail\Table\MailTable\MailTable;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -18,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class BrowserComponent extends Manager implements DelegateComponent, TableSupport

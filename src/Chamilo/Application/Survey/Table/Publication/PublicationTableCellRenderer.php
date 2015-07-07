@@ -40,13 +40,16 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 return $publication->getPublisher()->get_fullname();
             case Publication :: PROPERTY_PUBLISHED :
                 return DatetimeUtilities :: format_locale_date(
-                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
+                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES), 
                     $publication->getPublished());
             case Publication :: PROPERTY_TITLE :
-                return '<a href="' . $this->getPublicationUrl($publication) . '">' .
-                     parent :: render_cell($column, $publication) . '</a>';
+                if (RightsService :: getInstance()->canTakeSurvey($this->get_component()->get_user(), $publication))
+                {
+                    return '<a href="' . $this->getPublicationUrl($publication) . '">' .
+                         parent :: render_cell($column, $publication) . '</a>';
+                }
         }
-
+        
         return parent :: render_cell($column, $publication);
     }
 
@@ -67,45 +70,45 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
     public function getToolbar($publication)
     {
         $toolbar = new Toolbar();
-
+        
         $favouriteService = new FavouriteService(new FavouriteRepository());
         $favourite = $favouriteService->getPublicationUserFavouriteByUserAndPublicationIdentifier(
-            $this->get_component()->get_user(),
+            $this->get_component()->get_user(), 
             $publication->getId());
-
+        
         if ($favourite instanceof PublicationUserFavourite)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('FavouriteNa', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/FavouriteNa'),
-                    null,
+                    Translation :: get('FavouriteNa', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/FavouriteNa'), 
+                    null, 
                     ToolbarItem :: DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'),
+                    Translation :: get('Favourite', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getImagePath(Manager :: context(), 'Action/Favourite'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                            \Chamilo\Application\Survey\Favourite\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager :: ACTION_CREATE,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE, 
+                            \Chamilo\Application\Survey\Favourite\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager :: ACTION_CREATE, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
         }
-
+        
         if (RightsService :: getInstance()->canTakeSurvey($this->get_component()->get_user(), $publication))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Take', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Take'),
+                    Translation :: get('Take', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Take'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_TAKE,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_TAKE, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
         }
         
@@ -113,27 +116,25 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Mail', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Mail'),
+                    Translation :: get('Mail', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Mail'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_MAIL,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_MAIL, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
-        
-             
         }
         
         if (RightsService :: getInstance()->canViewAndExportResults($this->get_component()->get_user(), $publication))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Report', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
+                    Translation :: get('Report', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Reporting'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_REPORT,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_REPORT, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
         }
         
@@ -141,36 +142,36 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
             
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
+                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
                     ToolbarItem :: DISPLAY_ICON));
             
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())),
-                    ToolbarItem :: DISPLAY_ICON,
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
+                            Manager :: PARAM_PUBLICATION_ID => $publication->get_id())), 
+                    ToolbarItem :: DISPLAY_ICON, 
                     true));
         }
-
+        
         return $toolbar;
     }
 
@@ -183,9 +184,10 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Survey\Manager :: package(),
-                \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_VIEW, \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => $publication->getId()));
-
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Survey\Manager :: package(), 
+                \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_VIEW, 
+                \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => $publication->getId()));
+        
         return $redirect->getUrl();
     }
 }

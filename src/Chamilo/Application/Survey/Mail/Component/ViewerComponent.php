@@ -6,7 +6,6 @@ use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail;
 use Chamilo\Application\Survey\Mail\Storage\DataManager;
 use Chamilo\Application\Survey\Mail\Table\MailRecipientTable\MailRecipientTable;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
@@ -21,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ViewerComponent extends Manager implements TableSupport
 {
@@ -266,13 +264,13 @@ class ViewerComponent extends Manager implements TableSupport
         
         $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
         
-        if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-        {
-        }
+//         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+//         {
+//         }
         
-        if ($this->get_user()->is_platform_admin())
-        {
-        }
+//         if ($this->get_user()->is_platform_admin())
+//         {
+//         }
         return $action_bar;
     }
 

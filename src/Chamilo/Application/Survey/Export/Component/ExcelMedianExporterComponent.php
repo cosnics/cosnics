@@ -3,7 +3,6 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class ExcelMedianExporterComponent extends Manager
 {
@@ -787,7 +787,7 @@ class ExcelMedianExporterComponent extends Manager
                 true,
                 '');
             $surveys[$id] = $sv;
-            $user_ids = Rights :: get_allowed_users(Rights :: RIGHT_PARTICIPATE, $id, Rights :: TYPE_PUBLICATION);
+            $user_ids = RightsService :: getInstance();
             $total_users_ids = array_merge($user_ids, $total_users_ids);
         }
 

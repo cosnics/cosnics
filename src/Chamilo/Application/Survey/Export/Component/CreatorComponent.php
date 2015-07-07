@@ -4,13 +4,13 @@ namespace Chamilo\Application\Survey\Export\Component;
 use Chamilo\Application\Survey\Export\Form\ExportTemplateForm;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\ExportTemplate;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Survey\Service\RightsService;
 
 class CreatorComponent extends Manager
 {
@@ -23,10 +23,7 @@ class CreatorComponent extends Manager
         $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         $id = Request :: get(self :: PARAM_EXPORT_REGISTRATION_ID);
         
-        if (Rights :: is_allowed_in_surveys_subtree(
-            Rights :: RIGHT_ADD_EXPORT_TEMPLATE, 
-            $publication_id, 
-            Rights :: TYPE_PUBLICATION))
+        if (RightsService :: getInstance())
         {
             
             $export_template = new ExportTemplate();

@@ -2,13 +2,13 @@
 namespace Chamilo\Application\Survey\Mail\Form;
 
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
-use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Survey\Service\RightsService;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -92,13 +92,13 @@ class MailForm extends FormValidator
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
-                $invitees = (count($users[Rights :: PARTICIPATE_RIGHT_NAME]) > 1) ? Translation :: get('Invitees') : Translation :: get(
+                $invitees = (count($users[RightsService :: RIGHT_TAKE]) > 1) ? Translation :: get('Invitees') : Translation :: get(
                     'Invitee');
                 $this->addElement(
                     'checkbox', 
-                    Rights :: PARTICIPATE_RIGHT_NAME, 
+                    RightsService :: RIGHT_TAKE, 
                     Translation :: get('AllInvitees'), 
-                    ' ' . $users[Rights :: PARTICIPATE_RIGHT_NAME] . ' ' . $invitees);
+                    ' ' . $users[RightsService :: RIGHT_TAKE] . ' ' . $invitees);
                 $not_started = (count($users[Participant :: STATUS_NOTSTARTED]) > 1) ? Translation :: get('Invitees') : Translation :: get(
                     'Invitee');
                 $this->addElement(
@@ -122,23 +122,23 @@ class MailForm extends FormValidator
                     ' ' . $users[Participant :: STATUS_FINISHED] . ' ' . $finished);
                 break;
             case Mail :: EXPORT_TYPE :
-                $exporters = (count($users[Rights :: EXPORT_RESULT_RIGHT_NAME]) > 1) ? Translation :: get('Exporters') : Translation :: get(
+                $exporters = (count($users[RightsService :: RIGHT_REPORT]) > 1) ? Translation :: get('Exporters') : Translation :: get(
                     'Exporter');
                 $this->addElement(
                     'checkbox', 
-                    Rights :: EXPORT_RESULT_RIGHT_NAME, 
+                    RightsService :: RIGHT_REPORT, 
                     Translation :: get('SurveyExporters'), 
-                    ' ' . $users[Rights :: EXPORT_RESULT_RIGHT_NAME] . ' ' . $exporters);
+                    ' ' . $users[RightsService :: RIGHT_REPORT] . ' ' . $exporters);
                 break;
             
             case Mail :: REPORTING_TYPE :
-                $rapporteurs = (count($users[Rights :: REPORTING_RIGHT_NAME]) > 1) ? Translation :: get('Rapporteurs') : Translation :: get(
+                $rapporteurs = (count($users[RightsService :: RIGHT_REPORT]) > 1) ? Translation :: get('Rapporteurs') : Translation :: get(
                     'Rapporteur');
                 $this->addElement(
                     'checkbox', 
-                    Rights :: REPORTING_RIGHT_NAME, 
+                    RightsService :: RIGHT_REPORT, 
                     Translation :: get('SurveyRapporters'), 
-                    ' ' . $users[Rights :: REPORTING_RIGHT_NAME] . ' ' . $rapporteurs);
+                    ' ' . $users[RightsService :: RIGHT_REPORT] . ' ' . $rapporteurs);
                 break;
         }
         
