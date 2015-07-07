@@ -19,9 +19,6 @@ $(function() {
                 'go' : 'UploadImage'
             },
             onUploadSuccess : function(file, data, response) {
-            
-            console.log(data);
-            
                 var ajaxResult = eval('(' + data + ')');
 
                 $('#attachments_search_field').val(ajaxResult.properties.title);

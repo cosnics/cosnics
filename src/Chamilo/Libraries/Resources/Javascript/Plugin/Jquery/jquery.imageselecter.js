@@ -260,14 +260,14 @@
 
                 // Initialize the uploadify plugin
                 $('#' + settings.name + '_uploadify').uploadify({
-                    'swf' : getPath('WEB_PATH') + '/configuration/plugin/jquery/uploadify/uploadify.swf',
+                    'swf' : getPath('WEB_PATH') + 'Chamilo/Libraries/Resources/Javascript/Plugin/Uploadify/uploadify.swf',
                     'uploader' : getPath('WEB_PATH') + 'index.php',
                     'auto' : true,
                     'progressData' : 'percentage',
                     'formData' : {
                         'user_id' : getMemory('_uid'),
                         'application' : 'Chamilo\\Core\\Repository\\Ajax',
-                        'go' : 'upload_image'
+                        'go' : 'UploadImage'
                     },
                     onUploadSuccess : function(file, data, response) {
                         var ajaxResult = eval('(' + data + ')');
