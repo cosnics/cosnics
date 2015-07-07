@@ -203,12 +203,14 @@ abstract class ContentObjectForm extends FormValidator
 
     public function addDefaultTab()
     {
+        $typeName = $this->get_content_object()->get_template_registration()->get_template()->translate('TypeName');
+        $typeLogo = Theme :: getInstance()->getImagePath(
+            $this->get_content_object()->package(),
+            'Logo/' . ($this->get_content_object()->get_template_registration_id() ? 'Template/' .
+                 $this->get_content_object()->get_template_registration()->get_name() . '/' : '') . '22');
+
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
-                self :: TAB_CONTENT_OBJECT,
-                Translation :: get('TypeName', null, $this->get_content_object()->package()),
-                Theme :: getInstance()->getImagePath($this->get_content_object()->package(), 'Logo/22'),
-                'build_general_form'));
+            new DynamicFormTab(self :: TAB_CONTENT_OBJECT, $typeName, $typeLogo, 'build_general_form'));
     }
 
     public function addMetadataTabs()

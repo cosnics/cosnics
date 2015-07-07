@@ -94,12 +94,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $row = 0;
             $this->make_table($this->get_table_data($from, $this->total_number_of_items), $table, $row);
             $html[] = '<div>' . $table->toHtml() . '</div>';
-            $html[] = $this->pager;
-            $nav = $this->get_navigation_html();
-            $html[] = $nav;
+            $html[] = $this->get_navigation_html();
         }
 
-        return implode($html);
+        return implode(PHP_EOL, $html);
     }
 
     /**

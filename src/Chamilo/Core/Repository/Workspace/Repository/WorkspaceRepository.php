@@ -285,19 +285,31 @@ class WorkspaceRepository
 
     /**
      *
-     * @param User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer[] $entities
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    private function getWorkspaceFavouritesByUserCondition(User $user, $entities, $right)
+    private function getWorkspaceByUserCondition(User $user, $entities, $right)
     {
         $orConditions = array();
-        $andConditions = array();
 
         $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
         $orConditions[] = $this->getSharedWorkspacesForEntitiesWithRightCondition($entities, $right);
 
-        $andConditions[] = new OrCondition($orConditions);
+        return new OrCondition($orConditions);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    private function getWorkspaceFavouritesByUserCondition(User $user, $entities, $right)
+    {
+        $andConditions = array();
+
+        $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
         $andConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceUserFavourite :: class_name(),
@@ -307,12 +319,22 @@ class WorkspaceRepository
         return new AndCondition($andConditions);
     }
 
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @param integer $right
+     * @param integer $limit
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
     public function findWorkspacesForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)
     {
         return DataManager :: retrieves(
             Workspace :: class_name(),
             new DataClassRetrievesParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities, $right),
+                $this->getWorkspaceByUserCondition($user, $entities, $right),
                 $limit,
                 $offset,
                 $orderProperty,
@@ -330,7 +352,7 @@ class WorkspaceRepository
         return DataManager :: count(
             Workspace :: class_name(),
             new DataClassCountParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities, $right),
+                $this->getWorkspaceByUserCondition($user, $entities, $right),
                 new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT)))));
     }
 }

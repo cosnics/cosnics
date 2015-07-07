@@ -7,6 +7,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: hotspot_question.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -64,11 +65,19 @@ class Display extends QuestionDisplay
         $image_html = array();
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
+
+        $scaledDimensions = Utilities :: scaleDimensions(
+            600,
+            450,
+            array('width' => $dimensions[0], 'height' => $dimensions[1]));
+
         $image_html[] = '<div class="description_hotspot">';
         $image_html[] = '<div id="hotspot_container_' . $question_id .
              '" class="hotspot_container"><div id="hotspot_image_' . $question_id .
-             '" class="hotspot_image" style="width: ' . $dimensions[0] . 'px; height: ' . $dimensions[1] .
-             'px; background-image: url(' . $image_object->get_url() . ')"></div></div>';
+             '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
+             $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
+             $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) . ')"></div></div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '<div id="hotspot_marking_' . $question_id . '" class="hotspot_marking">';
         $image_html[] = '<div class="colour_box_label">' . Translation :: get('CurrentlyMarking') . '</div>';

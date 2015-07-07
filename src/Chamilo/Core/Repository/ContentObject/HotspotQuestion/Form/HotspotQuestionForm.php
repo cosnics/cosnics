@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: hotspot_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -74,8 +76,11 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clear"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
-             'xml_feeds/xml_image_feed.php';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => 'Chamilo\Core\Repository\Ajax',
+                Application :: PARAM_ACTION => 'XmlImageFeed'));
+
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -83,14 +88,14 @@ class HotspotQuestionForm extends ContentObjectForm
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
 
         $image_selecter_options = array();
-        $image_selecter_options['rescale_image'] = false;
+        $image_selecter_options['rescale_image'] = true;
         $image_selecter_options['allow_change'] = false;
 
         $this->addElement(
             'image_selecter',
             'image',
             Translation :: get('SelectImage'),
-            $url,
+            $redirect->getUrl(),
             $locale,
             array(),
             $image_selecter_options);
@@ -127,8 +132,11 @@ class HotspotQuestionForm extends ContentObjectForm
         $html[] = '<div class="clear"></div>';
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) .
-             'xml_feeds/xml_image_feed.php';
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => 'Chamilo\Core\Repository\Ajax',
+                Application :: PARAM_ACTION => 'XmlImageFeed'));
+
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -136,14 +144,14 @@ class HotspotQuestionForm extends ContentObjectForm
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
 
         $image_selecter_options = array();
-        $image_selecter_options['rescale_image'] = false;
+        $image_selecter_options['rescale_image'] = true;
         $image_selecter_options['allow_change'] = false;
 
         $this->addElement(
             'image_selecter',
             'image',
             Translation :: get('SelectImage'),
-            $url,
+            $redirect->getUrl(),
             $locale,
             array(),
             $image_selecter_options);
@@ -282,8 +290,17 @@ class HotspotQuestionForm extends ContentObjectForm
                 $image_id);
 
             $dimensions = getimagesize($image_object->get_full_path());
-            $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' . $dimensions[0] .
-                 'px; height: ' . $dimensions[1] . 'px; background-image: url(' . $image_object->get_url() .
+
+            $scaledDimensions = Utilities :: scaleDimensions(
+                600,
+                450,
+                array('width' => $dimensions[0], 'height' => $dimensions[1]));
+
+            $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
+                 $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
+                 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
+                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
+                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) .
                  ')"></div></div>';
         }
         else

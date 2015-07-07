@@ -30,7 +30,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        + $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         if (! empty($ids))
         {
             if (! is_array($ids))
@@ -58,15 +58,6 @@ class DeleterComponent extends Manager
                             $object,
                             'version'))
                         {
-                            $versions = $object->get_content_object_versions(false);
-                            $number_of_versions = sizeof($versions);
-                            if ($number_of_versions > 0)
-                            {
-                                $latest = $versions[0];
-                                $latest->set_current(
-                                    $number_of_versions > 1 ? ContentObject :: CURRENT_MULTIPLE : ContentObject :: CURRENT_SINGLE);
-                                $latest->update();
-                            }
                             if (! $object->delete(true))
                             {
                                 $failures ++;
