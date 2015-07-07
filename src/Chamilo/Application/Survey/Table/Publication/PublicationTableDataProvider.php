@@ -1,25 +1,37 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Publication;
 
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Application\Survey\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Application\Survey\Repository\PublicationRepository;
 
+/**
+ *
+ * @package Chamilo\Application\Survey\Table\Publication
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class PublicationTableDataProvider extends DataClassTableDataProvider
 {
 
-    function retrieve_data($condition, $offset, $count, $order_property = null)
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager :: retrieves(Publication :: class_name(), $parameters);
+        $publicationService = new PublicationService(new PublicationRepository());
+        return $publicationService->getAllPublications($limit, $offset, $orderProperty);
     }
 
-    function count_data($condition)
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
+     */
+    public function count_data($condition)
     {
-        $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(Publication :: class_name(), $parameters);
+        $publicationService = new PublicationService(new PublicationRepository());
+        return $publicationService->countAllPublications();
     }
 }
-?>

@@ -10,6 +10,8 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
  */
 class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode
 {
+    const DATA_NODE_ID = 'data-node_id';
+    
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_QUESTION_NR = 'question_nr';
     const PROPERTY_IS_QUESTION = 'is_question';
@@ -41,12 +43,12 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
         return $this->get_property(self :: PROPERTY_QUESTION_NR);
     }
 
-    function set_is_question($question)
+    function setIsQuestion($question)
     {
         return $this->set_property(self :: PROPERTY_IS_QUESTION, $question);
     }
 
-    function is_question()
+    function isQuestion()
     {
         return $this->get_property(self :: PROPERTY_IS_QUESTION);
     }
@@ -266,4 +268,15 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
         
         return $nodeAnswers;
     }
+    
+    function getDataAttributes(){
+        $attributes = array();
+        $attributes[self ::DATA_NODE_ID] = $this->get_id();
+        $complexAttributes = $this->get_complex_content_object_item()->getDataAttributes();
+        if($complexAttributes){
+            $attributes = array_merge($attributes, $complexAttributes);
+        }
+        return $attributes;
+    }
+    
 }

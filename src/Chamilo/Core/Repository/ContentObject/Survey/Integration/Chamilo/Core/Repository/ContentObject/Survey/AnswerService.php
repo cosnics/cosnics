@@ -7,9 +7,9 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
 class AnswerService implements AnswerServiceInterface
 {
     const TEMPORARY_STORAGE = 'surveyTempSessionStorage';
-    const PARAM_QUESTION_ID = 'questionId';
+//     const PARAM_QUESTION_ID = 'questionId';
 
-    public function saveAnswer($questionId, $answer)
+    public function saveAnswer($nodeId, $answer)
     {
         if (! Session :: retrieve(self :: TEMPORARY_STORAGE))
         {
@@ -17,11 +17,11 @@ class AnswerService implements AnswerServiceInterface
         }
         
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        $answers[$questionId] = $answer;
+        $answers[$nodeId] = $answer;
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
     }
 
-    public function getAnswer($questionId)
+    public function getAnswer($nodeId)
     {
         if (! Session :: retrieve(self :: TEMPORARY_STORAGE))
         {
@@ -29,7 +29,7 @@ class AnswerService implements AnswerServiceInterface
         }
         
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        $answer = $answers[$questionId];
+        $answer = $answers[$nodeId];
         
         if ($answer)
         {
@@ -41,10 +41,10 @@ class AnswerService implements AnswerServiceInterface
         }
     }
     
-    public function deleteAnswer($questionId)
+    public function deleteAnswer($nodeId)
     {
         $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
-        unset($answers[$questionId]);
+        unset($answers[$nodeId]);
         Session :: register(self :: TEMPORARY_STORAGE, $answers);
     }
     

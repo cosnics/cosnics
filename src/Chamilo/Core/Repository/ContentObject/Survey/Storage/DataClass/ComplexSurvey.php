@@ -38,5 +38,10 @@ class ComplexSurvey extends ComplexContentObjectItem implements SurveyDisplayIte
         $this->set_visible(! $this->get_visible());
     }
     
+    function getDataAttributes()
+    {
+        return null;
+    }
+    
 }
 ?>
