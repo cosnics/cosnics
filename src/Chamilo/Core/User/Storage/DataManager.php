@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
