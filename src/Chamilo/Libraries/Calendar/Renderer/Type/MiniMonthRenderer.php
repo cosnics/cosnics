@@ -73,8 +73,6 @@ class MiniMonthRenderer extends TableRenderer
     {
         $calendar = $this->get_calendar();
 
-        $html = array();
-
         $start_time = $calendar->get_start_time();
         $end_time = $calendar->get_end_time();
 
@@ -105,6 +103,7 @@ class MiniMonthRenderer extends TableRenderer
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
+
             $table_date = $next_table_date;
         }
 
@@ -117,7 +116,7 @@ class MiniMonthRenderer extends TableRenderer
         }
 
         $calendar->add_navigation_links($this->get_application()->get_url($parameters));
-        $html[] = $calendar->render();
-        return implode(PHP_EOL, $html);
+
+        return $calendar->render();
     }
 }

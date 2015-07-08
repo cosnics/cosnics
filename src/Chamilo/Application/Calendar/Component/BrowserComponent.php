@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
 
 /**
  *
@@ -187,7 +188,21 @@ class BrowserComponent extends Manager implements DelegateComponent,
     public function get_calendar_renderer_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time,
         $end_time)
     {
-        return DataManager :: get_events($renderer, $start_time, $end_time);
+        $events = DataManager :: get_events($renderer, $start_time, $end_time);
+        $recurringEvents = array();
+
+        foreach ($events as $event)
+        {
+            $recurrenceCalculator = new RecurrenceCalculator($event, $start_time, $end_time);
+            $parsedEvents = $recurrenceCalculator->getEvents();
+
+            foreach ($parsedEvents as $parsedEvent)
+            {
+                $recurringEvents[] = $parsedEvent;
+            }
+        }
+
+        return $recurringEvents;
     }
 
     /**

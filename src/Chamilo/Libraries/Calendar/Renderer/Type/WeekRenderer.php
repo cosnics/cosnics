@@ -34,7 +34,6 @@ class WeekRenderer extends TableRenderer
         $to_date = strtotime('-1 Second', strtotime('Next Week', $from_date));
 
         $events = $this->get_events($this, $from_date, $to_date);
-        $html = array();
 
         $start_time = $calendar->get_start_time();
         $end_time = $to_date; // $calendar->get_end_time(); //The end date of a
@@ -62,6 +61,7 @@ class WeekRenderer extends TableRenderer
                         $event,
                         $table_date,
                         $calendar->get_hour_step());
+
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
@@ -70,6 +70,8 @@ class WeekRenderer extends TableRenderer
 
         $calendar->add_calendar_navigation(
             $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+
+        $html = array();
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
         return implode(PHP_EOL, $html);
