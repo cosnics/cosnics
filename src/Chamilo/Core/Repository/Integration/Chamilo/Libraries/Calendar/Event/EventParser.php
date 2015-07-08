@@ -160,7 +160,7 @@ abstract class EventParser
 
     /**
      *
-     * @return \application\personal_calendar\Event
+     * @return \Chamilo\Libraries\Calendar\Event\Event
      */
     public function get_event_instance()
     {

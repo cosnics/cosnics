@@ -1,6 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
+/**
+ *
+ * @package Chamilo\Libraries\Calendar\Event
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class RecurrenceRules
 {
     const FREQUENCY_NONE = 0;
@@ -63,7 +70,8 @@ class RecurrenceRules
      * @param integer[] $byMonthDay
      * @param integer[] $byMonth
      */
-    public function __construct($frequency = self :: FREQUENCY_NONE, $until, $count, $interval, $byDay = array(), $byMonthDay = array(), $byMonth = array())
+    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(),
+        $byMonth = array())
     {
         $this->frequency = $frequency;
         $this->until = $until;
@@ -198,5 +206,24 @@ class RecurrenceRules
     public function setByMonth($byMonth)
     {
         $this->byMonth = $byMonth;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isIndefinate()
+    {
+        $repeatTo = $this->getUntil();
+        return ($repeatTo == 0 || is_null($repeatTo));
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasRecurrence()
+    {
+        return $this->getFrequency() != self :: FREQUENCY_NONE;
     }
 }

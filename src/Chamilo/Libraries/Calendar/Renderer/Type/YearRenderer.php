@@ -65,6 +65,7 @@ class YearRenderer extends TableRenderer
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
+
             $table_date = $next_table_date;
         }
 

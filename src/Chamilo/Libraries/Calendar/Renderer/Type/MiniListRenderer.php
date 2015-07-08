@@ -38,6 +38,7 @@ class MiniListRenderer extends Renderer
         $to_time = strtotime('tomorrow +7 days -1 second', time());
         $events = $this->get_events($this, $from_time, $to_time);
         $html[] = $this->render_events($events, 'Soon', $from_time, $to_time);
+
         $html[] = $this->build_legend();
 
         return implode(PHP_EOL, $html);

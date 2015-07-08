@@ -76,7 +76,7 @@ class Event
      * @param string $source
      * @param string $context
      */
-    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules, $url, $title, $content,
+    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content,
         $source, $context)
     {
         $this->id = $id;
@@ -124,6 +124,24 @@ class Event
     public function get_end_date()
     {
         return $this->end_date;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     */
+    public function getRecurrenceRules()
+    {
+        return $this->recurrenceRules;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
+     */
+    public function setRecurrenceRules($recurrenceRules)
+    {
+        $this->recurrenceRules = $recurrenceRules;
     }
 
     /**
