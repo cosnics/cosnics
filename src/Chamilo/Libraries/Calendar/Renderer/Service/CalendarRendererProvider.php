@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Service;
 
 use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -135,16 +134,6 @@ abstract class CalendarRendererProvider implements
      */
     abstract public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
         $endTime);
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
-     */
-    public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
-    {
-        $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
-        return $redirect->getUrl();
-    }
 
     /**
      *
