@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Translation;
@@ -21,7 +20,7 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface,
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
     \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport,
     \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
 {
@@ -37,6 +36,12 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $dataUser;
+
+    /**
+     *
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    private $viewingUser;
 
     /**
      *
@@ -58,8 +63,8 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser, User $viewingUser,
-        $displayParameters, $visibilityContext)
+    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser,
+        User $viewingUser, $displayParameters, $visibilityContext)
     {
         $this->dataProviderRepository = $dataProviderRepository;
         $this->dataUser = $dataUser;
@@ -240,34 +245,11 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getEvents()
-     */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
-    {
-        $events = $this->aggregateEvents($renderer, $startTime, $endTime);
-        $recurringEvents = array();
-
-        foreach ($events as $event)
-        {
-            $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
-            $parsedEvents = $recurrenceCalculator->getEvents();
-
-            foreach ($parsedEvents as $parsedEvent)
-            {
-                $recurringEvents[] = $parsedEvent;
-            }
-        }
-
-        return $recurringEvents;
-    }
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param integer $startTime
      * @param integer $endTime
      */
-    private function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
+    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
     {
         $events = array();
 
