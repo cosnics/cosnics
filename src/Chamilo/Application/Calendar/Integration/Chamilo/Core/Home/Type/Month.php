@@ -4,6 +4,8 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 
 /**
  *
@@ -17,12 +19,15 @@ class Month extends Block
 
     public function display_content()
     {
-        $html = array();
+        $dataProvider = new CalendarRendererProvider(
+            new CalendarRendererProviderRepository(),
+            $this->get_user(),
+            $this->get_user(),
+            array(),
+            \Chamilo\Application\Calendar\Ajax\Manager :: context());
 
         $time = Request :: get('time') ? intval(Request :: get('time')) : time();
-        $minimonthcalendar = new MiniMonthRenderer($this, $time, $this->get_link_target());
-        $html[] = $minimonthcalendar->render();
-
-        return implode(PHP_EOL, $html);
+        $minimonthcalendar = new MiniMonthRenderer($dataProvider, $time, $this->get_link_target());
+        return $minimonthcalendar->render();
     }
 }
