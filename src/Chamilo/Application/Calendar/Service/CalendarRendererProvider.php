@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Application\Calendar\Repository\DataProviderRepository;
+use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 
 /**
  *
@@ -28,7 +28,7 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
 
     /**
      *
-     * @var \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository
+     * @var \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
      */
     private $dataProviderRepository;
 
@@ -52,13 +52,13 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
 
     /**
      *
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository $dataProviderRepository
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(DataProviderRepository $dataProviderRepository, User $dataUser, User $viewingUser,
+    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser, User $viewingUser,
         $displayParameters, $visibilityContext)
     {
         $this->dataProviderRepository = $dataProviderRepository;
@@ -70,18 +70,18 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
      */
-    public function getDataProviderRepository()
+    public function getCalendarRendererProviderRepository()
     {
         return $this->dataProviderRepository;
     }
 
     /**
      *
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository $dataProviderRepository
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      */
-    public function setDataProviderRepository(DataProviderRepository $dataProviderRepository)
+    public function setCalendarRendererProviderRepository(CalendarRendererProviderRepository $dataProviderRepository)
     {
         $this->dataProviderRepository = $dataProviderRepository;
     }
@@ -173,7 +173,7 @@ class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\I
      */
     public function isSourceVisible($source, $userIdentifier)
     {
-        $visibility = $this->getDataProviderRepository()->findVisibilityBySourceAndUserIdentifier(
+        $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
             $source,
             $userIdentifier);
         return ! $visibility instanceof Visibility;
