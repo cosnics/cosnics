@@ -26,15 +26,6 @@ interface CalendarRendererProviderInterface
 
     /**
      *
-     * @param string[] $parameters
-     * @param string[] $filter
-     * @param boolean $encode_entities
-     * @return string
-     */
-    public function getUrl($parameters = array(), $filter = array(), $encode_entities = false);
-
-    /**
-     *
      * @return string[]
      */
     public function getDisplayParameters();
