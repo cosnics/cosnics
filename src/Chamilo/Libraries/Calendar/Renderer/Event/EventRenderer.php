@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event;
 
-
-
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
@@ -43,7 +41,7 @@ abstract class EventRenderer
 
     /**
      *
-     * @return \libraries\calendar\renderer\Renderer
+     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
     public function get_renderer()
     {
@@ -92,8 +90,8 @@ abstract class EventRenderer
      */
     static public function factory(Renderer $renderer, Event $event)
     {
-        $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) . '\Renderer\Event\Type\Event' .
-             $renderer :: class_name(false);
+        $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) .
+             '\Renderer\Event\Type\Event' . $renderer :: class_name(false);
         return new $event_renderer_class_name($renderer, $event);
     }
 }

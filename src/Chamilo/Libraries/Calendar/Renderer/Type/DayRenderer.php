@@ -5,11 +5,14 @@ use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DayRenderer extends TableRenderer
 {
@@ -25,7 +28,7 @@ class DayRenderer extends TableRenderer
 
     /**
      *
-     * @see \application\personal_calendar\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {
@@ -65,8 +68,11 @@ class DayRenderer extends TableRenderer
             $table_date = $next_table_date;
         }
 
-        $calendar->add_calendar_navigation(
-            $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();

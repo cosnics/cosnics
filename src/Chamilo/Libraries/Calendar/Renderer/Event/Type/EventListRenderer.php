@@ -105,7 +105,7 @@ class EventListRenderer extends EventRenderer
                 html_entity_decode($this->get_event()->get_url()),
                 ToolbarItem :: DISPLAY_ICON));
 
-        if ($this->get_renderer()->get_application() instanceof ActionSupport)
+        if ($this->get_renderer()->getDataProvider()->supportsActions())
         {
             foreach ($this->get_renderer()->get_actions($this->get_event()) as $action)
             {

@@ -37,13 +37,6 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
      */
     public function run()
     {
-        $user_id = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
-
-        if (! $user_id)
-        {
-            JsonAjaxResult :: not_allowed();
-        }
-
         $source = $this->getPostDataValue(self :: PARAM_SOURCE);
         $context = ClassnameUtilities :: getNamespaceParent(static :: context(), 2) . '\Storage\DataClass';
         $visibility_class = $context . '\Visibility';
@@ -51,7 +44,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibility_class, Visibility :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+            new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibility_class, Visibility :: PROPERTY_SOURCE),
             new StaticConditionVariable($source));
@@ -83,7 +76,7 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
             $data = $this->getPostDataValue(self :: PARAM_DATA);
 
             $visibility = new $visibility_class();
-            $visibility->set_user_id($user_id);
+            $visibility->set_user_id($this->get_user_id());
             $visibility->set_source($source);
             $this->set_visibility($visibility, $data);
 

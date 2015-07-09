@@ -5,12 +5,15 @@ use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MiniDayRenderer extends TableRenderer
 {
@@ -35,21 +38,21 @@ class MiniDayRenderer extends TableRenderer
 
     /**
      *
-     * @param CalendarRenderer $application
+     * @param CalendarDataProviderInterface $dataProvider
      * @param int $display_time
      * @param int $hour_step
      * @param int $start_hour
      * @param int $end_hour
      * @param string $link_target
      */
-    public function __construct(CalendarRenderer $application, $display_time, $hour_step = 1, $start_hour = 0,
-        $end_hour = 24, $link_target = '')
+    public function __construct(CalendarDataProviderInterface $dataProvider, $display_time, $hour_step = 1,
+        $start_hour = 0, $end_hour = 24, $link_target = '')
     {
         $this->hour_step = $hour_step;
         $this->start_hour = $start_hour;
         $this->end_hour = $end_hour;
 
-        parent :: __construct($application, $display_time, $link_target);
+        parent :: __construct($dataProvider, $display_time, $link_target);
     }
 
     /**
@@ -162,8 +165,11 @@ class MiniDayRenderer extends TableRenderer
             $table_date = $next_table_date;
         }
 
-        $calendar->add_calendar_navigation(
-            $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();

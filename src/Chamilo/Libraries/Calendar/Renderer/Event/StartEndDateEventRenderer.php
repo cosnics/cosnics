@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event;
 
-
-
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
@@ -65,8 +63,8 @@ abstract class StartEndDateEventRenderer extends StartDateEventRenderer
      */
     static public function factory(Renderer $renderer, Event $event, $start_date, $end_date)
     {
-        $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) . '\Renderer\Event\Event' .
-             $renderer :: class_name(false);
+        $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) .
+             '\Renderer\Event\Type\Event' . $renderer :: class_name(false);
         return new $event_renderer_class_name($renderer, $event, $start_date, $end_date);
     }
 }

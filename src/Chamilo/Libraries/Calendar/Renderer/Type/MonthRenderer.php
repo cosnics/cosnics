@@ -5,10 +5,11 @@ use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -60,8 +61,11 @@ class MonthRenderer extends TableRenderer
             $table_date = $next_table_date;
         }
 
-        $calendar->add_calendar_navigation(
-            $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();
