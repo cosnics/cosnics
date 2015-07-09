@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Service;
+namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
@@ -9,19 +9,19 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Application\Calendar\Repository\DataProviderRepository;
 
 /**
  *
- * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
+ * @package Chamilo\Application\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataProvider implements \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface,
+class CalendarRendererProvider implements \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface,
     \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport,
     \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
 {
@@ -240,7 +240,7 @@ class DataProvider implements \Chamilo\Libraries\Calendar\Renderer\Interfaces\Ca
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface::getEvents()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getEvents()
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
     {
@@ -291,7 +291,7 @@ class DataProvider implements \Chamilo\Libraries\Calendar\Renderer\Interfaces\Ca
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface::getUrl()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
     {

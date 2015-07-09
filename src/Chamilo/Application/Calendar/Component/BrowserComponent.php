@@ -12,8 +12,8 @@ use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Service\DataProvider;
-use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository;
+use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 
 /**
  *
@@ -71,8 +71,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
             Renderer :: PARAM_TIME => $this->getCurrentRendererTime());
 
-        $dataProvider = new DataProvider(
-            new DataProviderRepository(),
+        $dataProvider = new CalendarRendererProvider(
+            new CalendarRendererProviderRepository(),
             $this->get_user(),
             $this->get_user(),
             $displayParameters,

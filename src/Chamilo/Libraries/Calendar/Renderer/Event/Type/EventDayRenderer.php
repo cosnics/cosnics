@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
+
 /**
  *
  * @package libraries\calendar\renderer
@@ -25,7 +26,7 @@ class EventDayRenderer extends HourStepEventRenderer
 
         $event_classes = 'event';
 
-        if (! $this->get_renderer()->is_source_visible($this->get_event()->get_source()))
+        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
         {
             $event_classes .= ' event-hidden';
         }

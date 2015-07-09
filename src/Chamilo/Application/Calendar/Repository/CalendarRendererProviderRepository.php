@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository;
+namespace Chamilo\Application\Calendar\Repository;
 
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -11,12 +11,12 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
- * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository
+ * @package Chamilo\Application\Calendar\Repository$DataProviderRepository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataProviderRepository
+class CalendarRendererProviderRepository
 {
 
     /**

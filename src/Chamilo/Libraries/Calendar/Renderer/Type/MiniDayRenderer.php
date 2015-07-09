@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -38,14 +38,14 @@ class MiniDayRenderer extends TableRenderer
 
     /**
      *
-     * @param CalendarDataProviderInterface $dataProvider
+     * @param CalendarRendererProviderInterface $dataProvider
      * @param int $display_time
      * @param int $hour_step
      * @param int $start_hour
      * @param int $end_hour
      * @param string $link_target
      */
-    public function __construct(CalendarDataProviderInterface $dataProvider, $display_time, $hour_step = 1,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $hour_step = 1,
         $start_hour = 0, $end_hour = 24, $link_target = '')
     {
         $this->hour_step = $hour_step;

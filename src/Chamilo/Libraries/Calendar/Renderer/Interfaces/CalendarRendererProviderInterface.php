@@ -11,7 +11,7 @@ use Chamilo\Libraries\Calendar\Renderer\Renderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-interface CalendarDataProviderInterface
+interface CalendarRendererProviderInterface
 {
 
     /**
