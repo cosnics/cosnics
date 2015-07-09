@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -29,12 +29,12 @@ class MiniMonthRenderer extends TableRenderer
 
     /**
      *
-     * @param CalendarDataProviderInterface $dataProvider
+     * @param CalendarRendererProviderInterface $dataProvider
      * @param int $display_time
      * @param string $link_target
      * @param int $mark_period
      */
-    public function __construct(CalendarDataProviderInterface $dataProvider, $display_time, $link_target = '',
+    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $link_target = '',
         $mark_period = null)
     {
         $this->mark_period = $mark_period;

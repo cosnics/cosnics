@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -70,15 +69,15 @@ abstract class Renderer
 
     /**
      *
-     * @param CalendarDataProviderInterface $dataProvider
+     * @param CalendarRendererProviderInterface $dataProvider
      * @param int $display_time
      * @param string $link_target
      */
-    public function __construct(CalendarDataProviderInterface $dataProvider, $display_time, $link_target = '')
+    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $link_target = '')
     {
-        if (! $dataProvider instanceof CalendarDataProviderInterface)
+        if (! $dataProvider instanceof CalendarRendererProviderInterface)
         {
-            throw new \Exception('Please implement the CalendarDataProviderInterface in ' . get_class($dataProvider));
+            throw new \Exception('Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider));
         }
 
         $this->dataProvider = $dataProvider;
@@ -116,7 +115,7 @@ abstract class Renderer
 
     /**
      *
-     * @return CalendarDataProviderInterface
+     * @return CalendarRendererProviderInterface
      */
     public function getDataProvider()
     {
@@ -182,7 +181,7 @@ abstract class Renderer
 
             foreach ($this->legend as $key_id => $key)
             {
-                $event_classes = $this->get_color_classes($key, ! $this->is_source_visible($key));
+                $event_classes = $this->get_color_classes($key, ! $this->isSourceVisible($key));
 
                 $result[] = '<div class="event">';
                 $result[] = '<div data-source="' . $key . '" class="' . $event_classes . '">';
@@ -192,7 +191,7 @@ abstract class Renderer
                 $result[] = '</div>';
                 $result[] = '</div>';
 
-                if ($this->is_source_visible($key))
+                if ($this->isSourceVisible($key))
                 {
                     $visible_sources ++;
                 }
@@ -257,10 +256,14 @@ abstract class Renderer
      * @param string $source
      * @return boolean
      */
-    public function is_source_visible($source)
+    public function isSourceVisible($source)
     {
-        return ($this->getDataProvider()->supportsVisibility() && $this->getDataProvider()->isSourceVisible($source)) ||
-             (! $this->getDataProvider()->supportsVisibility());
+        if ($this->getDataProvider()->supportsVisibility())
+        {
+            return $this->getDataProvider()->isSourceVisible($source);
+        }
+
+        return true;
     }
 
     /**

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
 
 /**
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -33,7 +33,7 @@ class EventMiniMonthRenderer extends StartDateEventRenderer
             $event_classes .= ' event_fade';
         }
 
-        if (! $this->get_renderer()->is_source_visible($this->get_event()->get_source()))
+        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
         {
             $event_classes .= ' event-hidden';
         }

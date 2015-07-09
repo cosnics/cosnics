@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\File\Redirect;
@@ -40,7 +40,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * Renderer to display events in a week calendar
  */
 class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements
-    DelegateComponent, CalendarDataProviderInterface, ActionSupport
+    DelegateComponent, CalendarRendererProviderInterface, ActionSupport
 {
 
     /**
@@ -78,6 +78,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
     {
         $publications = $this->get_publications();
         $events = array();
+
         foreach ($publications as $publication)
         {
             if (method_exists(
@@ -399,7 +400,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
     /**
      *
      * @deprecated Provided for legacy-code
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface::getUrl()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
     {

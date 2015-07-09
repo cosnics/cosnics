@@ -2,17 +2,10 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\StartEndDateEventRenderer;
-// use libraries\platform\translation\Translation;
-// use libraries\format\theme\Theme;
-// use libraries\utilities\Utilities;
-// use libraries\utilities\DatetimeUtilities;
-// use libraries\format\structure\Toolbar;
-// use libraries\format\structure\ToolbarItem;
-// use libraries\calendar\event\ActionSupport;
 
 /**
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home;
 
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 
-class Block extends \Chamilo\Core\Home\BlockRendition implements CalendarDataProviderInterface
+class Block extends \Chamilo\Core\Home\BlockRendition implements CalendarRendererProviderInterface
 {
 
     /**
      *
-     * @see \libraries\calendar\renderer\CalendarDataProviderInterface::get_calendar_renderer_events()
+     * @see \libraries\calendar\renderer\CalendarRendererProviderInterface::get_calendar_renderer_events()
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time, $end_time)
     {
@@ -17,7 +17,7 @@ class Block extends \Chamilo\Core\Home\BlockRendition implements CalendarDataPro
 
     /**
      *
-     * @see \libraries\calendar\renderer\CalendarDataProviderInterface::is_calendar_renderer_source_visible()
+     * @see \libraries\calendar\renderer\CalendarRendererProviderInterface::is_calendar_renderer_source_visible()
      */
     public function isSourceVisible($source)
     {
@@ -27,7 +27,7 @@ class Block extends \Chamilo\Core\Home\BlockRendition implements CalendarDataPro
     /**
      *
      * @deprecated Provided for legacy-code
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface::getUrl()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
     {
