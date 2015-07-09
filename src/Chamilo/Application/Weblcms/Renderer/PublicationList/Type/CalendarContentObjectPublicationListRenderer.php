@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\File\Redirect;
@@ -40,7 +40,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * Renderer to display events in a week calendar
  */
 class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements
-    DelegateComponent, CalendarRenderer, ActionSupport
+    DelegateComponent, CalendarDataProviderInterface, ActionSupport
 {
 
     /**
@@ -74,8 +74,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         return Request :: get(Renderer :: PARAM_TYPE);
     }
 
-    public function get_calendar_renderer_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time,
-        $end_time)
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time, $end_time)
     {
         $publications = $this->get_publications();
         $events = array();
@@ -374,7 +373,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
     /*
      * (non-PHPdoc) @see \libraries\calendar\event\ActionSupport::get_calendar_event_actions()
      */
-    public function get_calendar_event_actions($event)
+    public function getEventActions($event)
     {
         $actions = array();
 
@@ -395,5 +394,15 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         }
 
         return $actions;
+    }
+
+    /**
+     *
+     * @deprecated Provided for legacy-code
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface::getUrl()
+     */
+    public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
+    {
+        return $this->get_url($parameters, $filter, $encode_entities);
     }
 }

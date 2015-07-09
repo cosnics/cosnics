@@ -5,21 +5,23 @@ use Chamilo\Libraries\Calendar\Renderer\Renderer;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class TableRenderer extends Renderer
 {
 
     /**
      *
-     * @var \libraries\calendar\table\Calendar
+     * @var \Chamilo\Libraries\Calendar\Table\Calendar
      */
     private $calendar;
 
     /**
      *
-     * @return \libraries\calendar\table\Calendar
+     * @return \Chamilo\Libraries\Calendar\Table\Calendar
      */
     public function get_calendar()
     {

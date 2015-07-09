@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Renderer\Event;
+namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -8,12 +8,12 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\calendar\integration\libraries\calendar\event
+ * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventListRenderer extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Renderer\Event\EventListRenderer
+class EventListRenderer extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer
 {
 
     /**

@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
-use Chamilo\Application\Calendar\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -13,27 +11,16 @@ use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
+use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Service\DataProvider;
+use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\DataProviderRepository;
 
 /**
  *
  * @package application\calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements DelegateComponent,
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer,
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport,
-    \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
@@ -46,26 +33,26 @@ class BrowserComponent extends Manager implements DelegateComponent,
      *
      * @var int
      */
-    private $current_time;
+    private $currentTime;
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
-        $this->form = new JumpForm($this->get_url(), $this->get_current_renderer_time());
+        $this->form = new JumpForm($this->get_url(), $this->getCurrentRendererTime());
         if ($this->form->validate())
         {
-            $this->current_time = $this->form->get_time();
+            $this->currentTime = $this->form->get_time();
         }
 
         $html = array();
 
         $html[] = $this->render_header();
         $html[] = '<a name="top"></a>';
-        $html[] = $this->get_action_bar()->as_html();
+        $html[] = $this->getActionBar()->as_html();
         $html[] = '<div id="action_bar_browser">';
-        $html[] = $this->get_calendar_html();
+        $html[] = $this->getCalendarHtml();
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
@@ -76,18 +63,31 @@ class BrowserComponent extends Manager implements DelegateComponent,
      *
      * @return string
      */
-    public function get_calendar_html()
+    public function getCalendarHtml()
     {
+        $displayParameters = array(
+            self :: PARAM_CONTEXT => self :: package(),
+            self :: PARAM_ACTION => self :: ACTION_BROWSE,
+            Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
+            Renderer :: PARAM_TIME => $this->getCurrentRendererTime());
+
+        $dataProvider = new DataProvider(
+            new DataProviderRepository(),
+            $this->get_user(),
+            $this->get_user(),
+            $displayParameters,
+            \Chamilo\Application\Calendar\Ajax\Manager :: context());
+
         $mini_month_renderer = new MiniMonthRenderer(
-            $this,
-            $this->get_current_renderer_time(),
+            $dataProvider,
+            $this->getCurrentRendererTime(),
             null,
-            $this->get_mini_month_mark_period());
+            $this->getMiniMonthMarkPeriod());
 
         $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
-            $this->get_current_renderer_type(),
-            $this,
-            $this->get_current_renderer_time());
+            $this->getCurrentRendererType(),
+            $dataProvider,
+            $this->getCurrentRendererTime());
 
         $html = array();
 
@@ -106,11 +106,11 @@ class BrowserComponent extends Manager implements DelegateComponent,
      *
      * @return \libraries\format\ActionBarRenderer
      */
-    public function get_action_bar()
+    public function getActionBar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
 
-        foreach ($this->get_extension_actions() as $extension_action)
+        foreach ($this->getExtensionActions() as $extension_action)
         {
             $action_bar->add_common_action($extension_action);
         }
@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent,
         $today_url = $this->get_url(
             array(
                 Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                Renderer :: PARAM_TYPE => $this->get_current_renderer_type(),
+                Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
                 Renderer :: PARAM_TIME => time()));
 
         $renderer_types = array(
@@ -137,7 +137,7 @@ class BrowserComponent extends Manager implements DelegateComponent,
             Renderer :: TYPE_WEEK,
             Renderer :: TYPE_DAY,
             Renderer :: TYPE_YEAR);
-        $renderer_type_items = Renderer :: get_renderer_toolbar_items($renderer_types, $type_url, $today_url);
+        $renderer_type_items = Renderer :: getToolbarItems($renderer_types, $type_url, $today_url);
 
         foreach ($renderer_type_items as $renderer_type_item)
         {
@@ -147,7 +147,11 @@ class BrowserComponent extends Manager implements DelegateComponent,
         return $action_bar;
     }
 
-    public function get_extension_actions()
+    /**
+     *
+     * @return string[]
+     */
+    public function getExtensionActions()
     {
         $extension_registrations = Configuration :: registrations_by_type(
             \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
@@ -165,7 +169,7 @@ class BrowserComponent extends Manager implements DelegateComponent,
 
     /**
      *
-     * @see \libraries\architecture\application\Application::add_additional_breadcrumbs()
+     * @see \Chamilo\Libraries\Architecture\Application\Application::add_additional_breadcrumbs()
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
@@ -174,7 +178,7 @@ class BrowserComponent extends Manager implements DelegateComponent,
 
     /**
      *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
      */
     public function get_additional_parameters()
     {
@@ -183,89 +187,9 @@ class BrowserComponent extends Manager implements DelegateComponent,
 
     /**
      *
-     * @see \libraries\calendar\renderer\CalendarRenderer::get_calendar_renderer_events()
-     */
-    public function get_calendar_renderer_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time,
-        $end_time)
-    {
-        $events = DataManager :: get_events($renderer, $start_time, $end_time);
-        $recurringEvents = array();
-
-        foreach ($events as $event)
-        {
-            $recurrenceCalculator = new RecurrenceCalculator($event, $start_time, $end_time);
-            $parsedEvents = $recurrenceCalculator->getEvents();
-
-            foreach ($parsedEvents as $parsedEvent)
-            {
-                $recurringEvents[] = $parsedEvent;
-            }
-        }
-
-        return $recurringEvents;
-    }
-
-    /**
-     *
-     * @see \libraries\calendar\renderer\CalendarRenderer::is_calendar_renderer_source_visible()
-     */
-    public function is_calendar_renderer_source_visible($source)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user()->get_id()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_SOURCE),
-            new StaticConditionVariable($source));
-        $condition = new AndCondition($conditions);
-
-        $visibility = DataManager :: retrieve(Visibility :: class_name(), new DataClassRetrieveParameters($condition));
-
-        return ! $visibility instanceof Visibility;
-    }
-
-    /**
-     *
-     * @see \libraries\calendar\renderer\VisibilitySupport::get_calendar_renderer_visibility_data()
-     */
-    public function get_calendar_renderer_visibility_data()
-    {
-        return array();
-    }
-
-    /**
-     *
-     * @see \libraries\calendar\event\ActionSupport::get_calendar_event_actions()
-     */
-    public function get_calendar_event_actions($event)
-    {
-        $actions = array();
-
-        if ($event->get_context() == __NAMESPACE__)
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_publication_editing_url($event->get_id()),
-                ToolbarItem :: DISPLAY_ICON);
-
-            $actions[] = new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_publication_deleting_url($event->get_id()),
-                ToolbarItem :: DISPLAY_ICON,
-                true);
-        }
-
-        return $actions;
-    }
-
-    /**
-     *
      * @return string
      */
-    public function get_current_renderer_type()
+    public function getCurrentRendererType()
     {
         return Request :: get(Renderer :: PARAM_TYPE, Renderer :: TYPE_MONTH);
     }
@@ -274,19 +198,19 @@ class BrowserComponent extends Manager implements DelegateComponent,
      *
      * @return int
      */
-    public function get_current_renderer_time()
+    public function getCurrentRendererTime()
     {
-        if (! isset($this->current_time))
+        if (! isset($this->currentTime))
         {
-            $this->current_time = Request :: get(Renderer :: PARAM_TIME, time());
+            $this->currentTime = Request :: get(Renderer :: PARAM_TIME, time());
         }
 
-        return $this->current_time;
+        return $this->currentTime;
     }
 
-    public function get_mini_month_mark_period()
+    public function getMiniMonthMarkPeriod()
     {
-        switch ($this->get_current_renderer_type())
+        switch ($this->getCurrentRendererType())
         {
             case Renderer :: TYPE_DAY :
                 return MiniMonthCalendar :: PERIOD_DAY;

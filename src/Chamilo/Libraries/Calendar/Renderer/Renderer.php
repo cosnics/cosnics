@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarDataProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage;
@@ -27,7 +27,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 abstract class Renderer
 {
-    use\Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Parameters
     const PARAM_TIME = 'time';
@@ -49,7 +49,7 @@ abstract class Renderer
      *
      * @var Application
      */
-    private $application;
+    private $dataProvider;
 
     /**
      * The time of the moment to render
@@ -70,18 +70,18 @@ abstract class Renderer
 
     /**
      *
-     * @param CalendarRenderer $application
+     * @param CalendarDataProviderInterface $dataProvider
      * @param int $display_time
      * @param string $link_target
      */
-    public function __construct(CalendarRenderer $application, $display_time, $link_target = '')
+    public function __construct(CalendarDataProviderInterface $dataProvider, $display_time, $link_target = '')
     {
-        if (! $application instanceof CalendarRenderer)
+        if (! $dataProvider instanceof CalendarDataProviderInterface)
         {
-            throw new \Exception('Please implement the CalendarRendererSupport interface in ' . get_class($application));
+            throw new \Exception('Please implement the CalendarDataProviderInterface in ' . get_class($dataProvider));
         }
 
-        $this->application = $application;
+        $this->dataProvider = $dataProvider;
         $this->display_time = $display_time;
         $this->link_target = $link_target;
         $this->legend = array();
@@ -116,11 +116,11 @@ abstract class Renderer
 
     /**
      *
-     * @return Application
+     * @return CalendarDataProviderInterface
      */
-    public function get_application()
+    public function getDataProvider()
     {
-        return $this->application;
+        return $this->dataProvider;
     }
 
     /**
@@ -162,7 +162,8 @@ abstract class Renderer
     }
 
     /**
-     * Builds a color-based legend for the calendar to help users to see which applications and locations are the origin
+     * Builds a color-based legend for the calendar to help users to see which dataProviders and locations are the
+     * origin
      * of the the published events
      *
      * @return string
@@ -201,27 +202,27 @@ abstract class Renderer
             $result[] = '<div class="clear"><</div>';
             $result[] = '</fieldset>';
 
-            if ($this->implements_visibility())
+            if ($this->getDataProvider()->supportsVisibility())
             {
                 $ajax_visibility_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $this->get_application()->context()) . '\Ajax\Component\CalendarEventVisibilityComponent';
+                    $this->getDataProvider()->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
 
                 if (! class_exists($ajax_visibility_class_name))
                 {
                     throw new \Exception(
                         'Please add an ajax Class CalendarEventVisibilityComponent to your implementing context\'s Ajax subpackage (' .
-                             $this->get_application()->context() .
+                             $this->getDataProvider()->getVisibilityContext() .
                              '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');
                 }
 
                 $result[] = '<script type="text/javascript">';
 
                 $calendarVisibilityContext = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $this->get_application()->context()) . '\Ajax';
+                    $this->getDataProvider()->getVisibilityContext()) . '\Ajax';
 
                 $result[] = 'var calendarVisibilityContext = ' . json_encode($calendarVisibilityContext) . ';';
-                $result[] = 'var calendarVisibilityData = ' .
-                     json_encode($this->get_application()->get_calendar_renderer_visibility_data()) . ';';
+                $result[] = 'var calendarVisibilityData = ' . json_encode($this->getDataProvider()->getVisibilityData()) .
+                     ';';
                 $result[] = '</script>';
 
                 $result[] = ResourceManager :: get_instance()->get_resource_html(
@@ -247,7 +248,7 @@ abstract class Renderer
      */
     public function get_user()
     {
-        return $this->application->get_user();
+        return $this->dataProvider->getDataUser();
     }
 
     /**
@@ -258,19 +259,8 @@ abstract class Renderer
      */
     public function is_source_visible($source)
     {
-        return ($this->get_application() instanceof VisibilitySupport &&
-             $this->get_application()->is_calendar_renderer_source_visible($source)) ||
-             (! $this->get_application() instanceof VisibilitySupport);
-    }
-
-    /**
-     * Does the Application support visibility toggling
-     *
-     * @return boolean
-     */
-    public function implements_visibility()
-    {
-        return $this->get_application() instanceof VisibilitySupport;
+        return ($this->getDataProvider()->supportsVisibility() && $this->getDataProvider()->isSourceVisible($source)) ||
+             (! $this->getDataProvider()->supportsVisibility());
     }
 
     /**
@@ -283,7 +273,7 @@ abstract class Renderer
      */
     public function get_events(Renderer $renderer, $start_time, $end_time)
     {
-        return $this->get_application()->get_calendar_renderer_events($renderer, $start_time, $end_time);
+        return $this->getDataProvider()->getEvents($renderer, $start_time, $end_time);
     }
 
     /**
@@ -294,12 +284,12 @@ abstract class Renderer
      */
     public function get_actions(Event $event)
     {
-        if (! $this->get_application() instanceof ActionSupport)
+        if (! $this->getDataProvider() instanceof ActionSupport)
         {
             return array();
         }
 
-        return $this->get_application()->get_calendar_event_actions($event);
+        return $this->getDataProvider()->getEventActions($event);
     }
 
     /**
@@ -324,7 +314,7 @@ abstract class Renderer
      * @param string $url
      * @return \libraries\format\ToolbarItem[]
      */
-    public static function get_renderer_toolbar_items($types, $type_url, $today_url)
+    public static function getToolbarItems($types, $type_url, $today_url)
     {
         $items = array();
 

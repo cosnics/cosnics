@@ -56,7 +56,8 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar. This is always a monday.
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday.
      *
      * @return int
      */
@@ -71,7 +72,8 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar. This is always a sunday.
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday.
      *
      * @return int
      */
@@ -155,6 +157,8 @@ class WeekCalendar extends Calendar
                 {
                     $this->updateCellAttributes($row, $day + 1, 'class="disabled_month"');
                 }
+
+                $this->setCellContents($row, $day + 1, '');
             }
         }
 
@@ -183,6 +187,7 @@ class WeekCalendar extends Calendar
         foreach ($events as $time => $items)
         {
             $row = (date('H', $time) / $this->hour_step) - $start;
+
             if ($row > $end - $start - 1)
             {
                 continue;
@@ -194,6 +199,7 @@ class WeekCalendar extends Calendar
             {
                 $column = 7;
             }
+
             foreach ($items as $index => $item)
             {
                 $cell_content = $this->getCellContents($row, $column);
@@ -239,7 +245,8 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     * Sets the daynames. If you don't use this function, the long daynames will be displayed
+     * Sets the daynames.
+     * If you don't use this function, the long daynames will be displayed
      *
      * @param array $daynames An array of 7 elements with keys 0 -> 6 containing the titles to display.
      */

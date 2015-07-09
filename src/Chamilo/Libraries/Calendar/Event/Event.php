@@ -4,8 +4,10 @@ namespace Chamilo\Libraries\Calendar\Event;
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Event
 {

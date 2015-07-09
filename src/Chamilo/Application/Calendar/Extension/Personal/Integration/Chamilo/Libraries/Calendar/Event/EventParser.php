@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Li
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -143,7 +144,7 @@ class EventParser
 
         foreach ($parser->get_events() as &$parsed_event)
         {
-            if ($publisher != $this->getRenderer()->get_application()->get_user_id())
+            if ($publisher != $this->getRenderer()->getDataProvider()->getViewingUser()->getId())
             {
                 $parsed_event->set_title($parsed_event->get_title() . ' [' . $publishingUser->get_fullname() . ']');
             }
@@ -155,7 +156,9 @@ class EventParser
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: context();
             $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_VIEW;
             $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID] = $this->getPublication()->get_id();
-            $parsed_event->set_url($this->getRenderer()->get_application()->get_url($parameters));
+
+            $redirect = new Redirect($parameters);
+            $parsed_event->set_url($redirect->getUrl());
 
             $events[] = $parsed_event;
         }
