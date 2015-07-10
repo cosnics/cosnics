@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="publication_group">
+	<properties>
+		<property name="publication_id" type="integer" unsigned="1" notnull="1" />
+		<property name="group_id" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="id" type="primary">
+		<indexproperty name="publication_id" />
+		<indexproperty name="group_id" />
+	</index>
+</object>
