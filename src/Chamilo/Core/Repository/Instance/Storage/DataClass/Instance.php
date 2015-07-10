@@ -223,6 +223,9 @@ class Instance extends CompositeDataClass
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
             new StaticConditionVariable($user_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
+            new StaticConditionVariable($this->get_id()));
         $condition = new AndCondition($conditions);
 
         return DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));

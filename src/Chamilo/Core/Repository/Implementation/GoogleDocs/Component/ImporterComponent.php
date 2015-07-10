@@ -20,13 +20,13 @@ class ImporterComponent extends Manager
     {
         if ($external_object->is_importable())
         {
+
             $export_format = Request :: get(Manager :: PARAM_EXPORT_FORMAT);
 
             if (! in_array($export_format, $external_object->get_export_types()))
             {
                 $export_format = 'pdf';
             }
-
             $document = ContentObject :: factory(File :: class_name());
             $document->set_title($external_object->get_title());
 
@@ -45,8 +45,10 @@ class ImporterComponent extends Manager
                 Filesystem :: create_safe_name($external_object->get_title()) . '.' . $export_format);
 
             $document->set_in_memory_file($external_object->get_content_data($export_format));
-            // $document->set_in_memory_file($this->get_external_repository_manager_connector()->download_external_repository_object($external_object,
-            // $export_format));
+            $document->set_in_memory_file(
+                $this->get_external_repository_manager_connector()->download_external_repository_object(
+                    $external_object,
+                    $export_format));
 
             if ($document->create())
             {

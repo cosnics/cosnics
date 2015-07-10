@@ -2,7 +2,17 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -31,53 +41,91 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      *
      * @param $external_repository_instance ExternalRepository
      */
+    // public function __construct($external_repository_instance)
+    // {
+    // parent :: __construct($external_repository_instance);
+
+    // $this->session_token = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+    // 'session_token',
+    // $this->get_external_repository_instance_id());
+
+    // $this->client = new \Google_Client();
+    // $this->client->setApplicationName('Drive API Quickstart');
+    // $this->client->setScopes(implode(' ', array(\Google_Service_Drive :: DRIVE_METADATA_READONLY)));
+    // $this->client->setAuthConfigFile('C:\wamp\www\corec5june\client_secret.json');
+    // // $this->client->setAccessType('offline');
+
+    // $credentialsPath = $this->expandHomeDirectory('~/.credentials/drive-api-quickstart.json');
+    // if (file_exists($credentialsPath))
+    // {
+    // $accessToken = file_get_contents($credentialsPath);
+    // }
+    // else
+    // {
+    // // Request authorization from the user.
+    // $authUrl = $this->client->createAuthUrl();
+    // printf("Open the following link in your browser:\n%s\n", $authUrl);
+    // print 'Enter verification code: ';
+
+    // // $authCode = trim(fgets(STDIN));
+    // $authCode = '4/pAPFcdHSMFcfb9zIQDm9cfNR0OiqcJ20tEuYoju6q-g';
+    // // Exchange authorization code for an access token.
+    // $accessToken = $this->client->authenticate($authCode);
+
+    // $token = $this->client->getAccessToken();
+    // $this->client->setAccessToken($token);
+
+    // $user_setting = new Setting();
+    // $user_setting->set_user_id(Session :: get_user_id());
+    // $user_setting->set_variable('session_token');
+    // $user_setting->set_value($token);
+
+    // return $user_setting->create();
+
+    // // Store the credentials to disk.
+    // if (! file_exists(dirname($credentialsPath)))
+    // {
+    // mkdir(dirname($credentialsPath), 0700, true);
+    // }
+    // file_put_contents($credentialsPath, $accessToken);
+    // printf("Credentials saved to %s\n", $credentialsPath);
+    // }
+    // $this->client->setAccessToken($accessToken);
+
+    // // Refresh the token if it's expired.
+    // if ($this->client->isAccessTokenExpired())
+    // {
+    // $this->client->refreshToken($this->client->getRefreshToken());
+    // file_put_contents($credentialsPath, $this->client->getAccessToken());
+    // }
+    // $this->service = new \Google_Service_Drive($this->client);
+    // }
     public function __construct($external_repository_instance)
     {
         parent :: __construct($external_repository_instance);
 
-        $this->session_token = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'session_token',
+        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'developer_key',
             $this->get_external_repository_instance_id());
 
         $this->client = new \Google_Client();
-        $this->client->setApplicationName('Drive API Quickstart');
-        $this->client->setScopes(implode(' ', array(\Google_Service_Drive :: DRIVE_METADATA_READONLY)));
-        $this->client->setAuthConfigFile('C:\wamp\www\corec5june\client_secret.json');
-        $this->client->setAccessType('offline');
+        $this->client->setDeveloperKey($key);
 
-        $credentialsPath = $this->expandHomeDirectory('~/.credentials/drive-api-quickstart.json');
-        if (file_exists($credentialsPath))
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
+            new StaticConditionVariable('session_token'));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
+            new StaticConditionVariable(Session :: get_user_id()));
+        $condition = new AndCondition($conditions);
+
+        $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
+        if ($setting instanceof Setting)
         {
-            $accessToken = file_get_contents($credentialsPath);
+            $this->client->setAccessToken($setting->get_value());
         }
-        else
-        {
-            // Request authorization from the user.
-            $authUrl = $this->client->createAuthUrl();
-            printf("Open the following link in your browser:\n%s\n", $authUrl);
-            print 'Enter verification code: ';
 
-            // $authCode = trim(fgets(STDIN));
-            $authCode = '4/WxQZJm_mG1-63PFMFNRMz9uF7oz0vgl-DculJbpC598';
-            // Exchange authorization code for an access token.
-            $accessToken = $this->client->authenticate($authCode);
-
-            // Store the credentials to disk.
-            if (! file_exists(dirname($credentialsPath)))
-            {
-                mkdir(dirname($credentialsPath), 0700, true);
-            }
-            file_put_contents($credentialsPath, $accessToken);
-            printf("Credentials saved to %s\n", $credentialsPath);
-        }
-        $this->client->setAccessToken($accessToken);
-
-        // Refresh the token if it's expired.
-        if ($this->client->isAccessTokenExpired())
-        {
-            $this->client->refreshToken($this->client->getRefreshToken());
-            file_put_contents($credentialsPath, $this->client->getAccessToken());
-        }
         $this->service = new \Google_Service_Drive($this->client);
     }
 
@@ -93,43 +141,75 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     // public function login()
     // {
-    // $session_token = Request :: get('token');
+    // $this->service = new \Google_Client();
+    // $code = Request :: get('code');
 
-    // if (! $this->session_token && ! $session_token)
+    // if (isset($code))
     // {
-    // $redirect = new Redirect();
-    // $next_url = $redirect->getCurrentUrl();
+    // $this->client->authenticate($code);
+    // $token = $this->client->getAccessToken();
+    // $this->client->setAccessToken($token);
 
-    // $scope = 'https://docs.google.com/feeds/ https://spreadsheets.google.com/feeds/
-    // https://docs.googleusercontent.com';
-    // $secure = false;
-    // $session = true;
-    // $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($next_url, $scope, $secure, $session);
-
-    // header('Location: ' . $redirect_url);
-    // exit();
-    // }
-    // elseif ($session_token)
-    // {
-    // $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($session_token);
-
-    // $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-    // 'session_token',
-    // $this->get_external_repository_instance_id());
     // $user_setting = new Setting();
-    // $user_setting->set_setting_id($setting->get_id());
     // $user_setting->set_user_id(Session :: get_user_id());
-    // $user_setting->set_value($session_token);
-    // if ($user_setting->create())
-    // {
-    // return true;
+    // $user_setting->set_variable('session_token');
+    // $user_setting->set_value($token);
+
+    // return $user_setting->create();
     // }
     // else
     // {
-    // return false;
+    // $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/drive');
+    // header('Location: ' . $url);
+    // exit();
     // }
     // }
-    // }
+    public function login()
+    {
+        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_id',
+            $this->get_external_repository_instance_id());
+        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_secret',
+            $this->get_external_repository_instance_id());
+
+        $this->client->setClientId($client_id);
+        $this->client->setClientSecret($client_secret);
+        $this->client->setScopes('https://www.googleapis.com/auth/drive');
+
+        $redirect = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => Manager :: package(),
+                Manager :: PARAM_ACTION => Manager :: ACTION_LOGIN,
+                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()));
+
+        $this->client->setRedirectUri($redirect->getUrl());
+
+        $this->service = new \Google_Service_Drive($this->client);
+
+        $code = Request :: get('code');
+
+        if (isset($code))
+        {
+            $this->client->authenticate($code);
+            $token = $this->client->getAccessToken();
+            $this->client->setAccessToken($token);
+
+            $user_setting = new Setting();
+            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_variable('session_token');
+            $user_setting->set_value($token);
+            $user_setting->set_external_id($this->get_external_repository_instance_id());
+
+            return $user_setting->create();
+        }
+        else
+        {
+            $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/drive');
+            header('Location: ' . $url);
+            exit();
+        }
+    }
 
     /**
      *
@@ -156,14 +236,25 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_type($mime_type[0]);
         }
 
-        $object->set_viewed(strtotime($file->lastViewedByMeDate));
+        if ($file->lastViewedByMeDate != null)
+        {
+            $object->set_viewed(strtotime($file->lastViewedByMeDate));
+        }
+        elseif ($file->modifiedDate != null)
+        {
+            $object->set_viewed(strtotime($file->modifiedDate));
+        }
+        else
+        {
+            $object->set_viewed(strtotime($file->createdDate));
+        }
+
         $object->set_modified(strtotime($file->modifiedDate));
         $object->set_owner_id($file->owners[0]['emailAddress']);
         $object->set_owner_name($file->owners[0]['displayName']);
         $object->set_modifier_id($file->lastModifyingUser['emailAddress']);
 
-        $object->set_content($this->determine_content_url($object));
-
+        $object->set_content($file->selfLink);
         $rights = array();
         $rights[ExternalObject :: RIGHT_USE] = $file->copyable;
         $rights[ExternalObject :: RIGHT_EDIT] = $file->editable;
@@ -220,16 +311,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $files = $this->service->files->listFiles($condition);
         $files_items = $files['modelData']['items'];
-        $objects = array();
-
-        $count_files = 0;
-        foreach ($files_items as $file_item)
-        {
-            $count_files = $count_files ++;
-        }
-
-        return $count_files;
-        // return $this->get_documents_feed($condition, array(), 1, 1)->getTotalResults()->getText();
+        return count($files_items);
     }
 
     private function get_special_folder_names()
@@ -324,7 +406,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $object->set_type($mime_type[0]);
             }
 
-            $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
+            if ($file_item['lastViewedByMeDate'] != null)
+            {
+                $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
+            }
+            elseif ($file->modifiedDate != null)
+            {
+                $object->set_viewed(strtotime($file_item['modifiedDate']));
+            }
+            else
+            {
+                $object->set_viewed(strtotime($file_item['createdDate']));
+            }
+
             $object->set_modified(strtotime($file_item['modifiedDate']));
             $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             $object->set_owner_name($file_item['owners'][0]['displayName']);
@@ -346,92 +440,27 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $rights[ExternalObject :: RIGHT_DELETE] = $file_item['editable'];
             $object->set_rights($rights);
 
-            $object->set_content($this->determine_content_url($object));
-
-            // $object->set_acl($this->get_document_acl($resource_id[1]));
+            $object->set_content($file_item['selfLink']);
+            $object->set_preview($file_item['embedLink']);
             $objects[] = $object;
         }
 
         return new ArrayResultSet($objects);
     }
 
-    private function get_document_acl($document_id)
+    private function insert_into_folder($object_id, $parent_id)
     {
-        $acl_feed = $this->google_docs->getDocumentAclFeed($document_id);
-        $document_acl = new ExternalObjectAcl();
-
-        foreach ($acl_feed->entries as $acl)
-        {
-            $scope = $acl->getScope();
-            $role = $acl->getRole();
-            $key = $acl->getWithKey();
-
-            if ($scope->getType() == 'default')
-            {
-                if (! is_null($key))
-                {
-                    $document_acl->set_public($key->getRole()->getValue(), $key->getKey());
-                }
-                else
-                {
-                    $document_acl->set_public($role->getValue());
-                }
-            }
-            elseif ($scope->getType() == 'user')
-            {
-                if ($role->getValue() == ExternalObjectAcl :: ACL_OWNER)
-                {
-                    $document_acl->set_owner($scope->getValue());
-                }
-                elseif ($role->getValue() == ExternalObjectAcl :: ACL_READER)
-                {
-                    $document_acl->add_viewer($scope->getValue());
-                }
-                elseif ($role->getValue() == ExternalObjectAcl :: ACL_WRITER)
-                {
-                    $document_acl->add_collaborator($scope->getValue());
-                }
-            }
-        }
-
-        return $document_acl;
-    }
-
-    public function determine_content_url($object)
-    {
-        var_dump($object->get_type());
-        switch ($object->get_type())
-        {
-            case 'document' :
-                $url = 'https://docs.google.com/feeds/download/' . $object->get_type() . 's/export/Export?id=' .
-                     $object->get_id();
-                break;
-            case 'presentation' :
-                $url = 'https://docs.google.com/feeds/download/' . $object->get_type() . 's/Export?id=' .
-                     $object->get_id();
-                break;
-            case 'spreadsheet' :
-                $url = 'https://spreadsheets.google.com/feeds/download/' . $object->get_type() . 's/Export?key=' .
-                     $object->get_id();
-                break;
-            case 'pdf' :
-                break;
-
-            case 'octet-stream' :
-                break;
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :
-                break;
-            case 'video/mp4' :
-                break;
-            case 'image/jpeg' :
-                break;
-            default :
-                // Get the document's content link entry.
-                // return array('pdf');
-                break;
-        }
-
-        return $url;
+        // $newParent = new \Google_Service_Drive_ParentReference();
+        // $newParent->setId($parent_id);
+        // $this->service->parents->insert($object_id, $newParent);
+        // $children = $this->service->children->listChildren($parent_id, array());
+        // foreach ($children->getItems() as $child)
+        // {
+        // print 'File Id: ' . $child->getId();
+        // }
+        // $newChild = new \Google_Service_Drive_ChildReference();
+        // $newChild->setId($object_id);
+        // return $this->service->children->insert($parent_id, $newChild);
     }
 
     // /**
@@ -535,19 +564,60 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // 'header' => "GData-Version: 3.0\r\n" . "Authorization: AuthSub token=\"$session_token\"\r\n"));
 
         // return file_get_contents($url, false, stream_context_create($opts));
+        return file_get_contents($url);
     }
 
     public function create_external_repository_object($file)
     {
-        $resource = $this->google_docs->UploadFile(
-            $file['tmp_name'],
-            substr($file['name'], 0, strripos($file['name'], '.')),
-            $file['type']);
-        return $resource->getResourceId()->getId();
+        $service->files->insert($file);
+
+        return $file->getId();
     }
 
-    // public function create_external_repository_folder($folder, $parent)
-    // {
-    // return $this->google_docs->createFolder($folder, $parent);
-    // }
+    public function create_external_repository_folder($folder, $parent)
+    {
+        return $this->google_docs->createFolder($folder, $parent);
+    }
+
+    private function get_document_acl($document_id)
+    {
+        $acl_feed = $this->google_docs->getDocumentAclFeed($document_id);
+        $document_acl = new ExternalObjectAcl();
+
+        foreach ($acl_feed->entries as $acl)
+        {
+            $scope = $acl->getScope();
+            $role = $acl->getRole();
+            $key = $acl->getWithKey();
+
+            if ($scope->getType() == 'default')
+            {
+                if (! is_null($key))
+                {
+                    $document_acl->set_public($key->getRole()->getValue(), $key->getKey());
+                }
+                else
+                {
+                    $document_acl->set_public($role->getValue());
+                }
+            }
+            elseif ($scope->getType() == 'user')
+            {
+                if ($role->getValue() == ExternalObjectAcl :: ACL_OWNER)
+                {
+                    $document_acl->set_owner($scope->getValue());
+                }
+                elseif ($role->getValue() == ExternalObjectAcl :: ACL_READER)
+                {
+                    $document_acl->add_viewer($scope->getValue());
+                }
+                elseif ($role->getValue() == ExternalObjectAcl :: ACL_WRITER)
+                {
+                    $document_acl->add_collaborator($scope->getValue());
+                }
+            }
+        }
+
+        return $document_acl;
+    }
 }

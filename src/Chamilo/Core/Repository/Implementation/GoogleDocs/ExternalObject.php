@@ -10,6 +10,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_CONTENT = 'content';
     const PROPERTY_MODIFIER_ID = 'modifier_id';
     const PROPERTY_ACL = 'acl';
+    const PROPERTY_PREVIEW = 'preview';
 
     public static function get_default_property_names()
     {
@@ -55,6 +56,16 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function set_acl($acl)
     {
         return $this->set_default_property(self :: PROPERTY_ACL, $acl);
+    }
+
+    public function get_preview()
+    {
+        return $this->get_default_property(self :: PROPERTY_PREVIEW);
+    }
+
+    public function set_preview($preview)
+    {
+        return $this->set_default_property(self :: PROPERTY_PREVIEW, $preview);
     }
 
     public static function get_object_type()
