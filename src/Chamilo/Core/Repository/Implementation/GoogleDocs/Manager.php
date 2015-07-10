@@ -54,97 +54,96 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_menu_items()
     {
-        // if ($this->get_external_repository()->get_user_setting('session_token'))
-        // {
-        $menu_items = array();
+        if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
+        {
+            $menu_items = array();
 
-        $line = array();
-        $line['title'] = '';
-        $line['class'] = 'divider';
+            $line = array();
+            $line['title'] = '';
+            $line['class'] = 'divider';
 
-        // // Basic list of all documents
-        // $all_items = array();
-        // $all_items['title'] = Translation :: get('AllItems');
-        // $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
-        // $all_items['class'] = 'home';
+            // // Basic list of all documents
+            // $all_items = array();
+            // $all_items['title'] = Translation :: get('AllItems');
+            // $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
+            // $all_items['class'] = 'home';
 
-        // Special lists of documents
-        $owned = array();
-        $owned['title'] = Translation :: get('Me');
-        $owned['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_OWNED));
-        $owned['class'] = 'user';
-        $menu_items[] = $owned;
+            // Special lists of documents
+            $owned = array();
+            $owned['title'] = Translation :: get('Me');
+            $owned['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_OWNED));
+            $owned['class'] = 'user';
+            $menu_items[] = $owned;
 
-        $shared = array();
-        $shared['title'] = Translation :: get('SharedWithMe');
-        $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
-        $shared['class'] = 'external_repository';
-        $menu_items[] = $shared;
+            $shared = array();
+            $shared['title'] = Translation :: get('SharedWithMe');
+            $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
+            $shared['class'] = 'external_repository';
+            $menu_items[] = $shared;
 
-        $recent = array();
-        $recent['title'] = Translation :: get('Recent');
-        $recent['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_RECENT));
-        $recent['class'] = 'recent';
-        $menu_items[] = $recent;
+            $recent = array();
+            $recent['title'] = Translation :: get('Recent');
+            $recent['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_RECENT));
+            $recent['class'] = 'recent';
+            $menu_items[] = $recent;
 
-        $followed = array();
-        $followed['title'] = Translation :: get('Followed');
-        $followed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FOLLOWED));
-        $followed['class'] = 'followed';
-        $menu_items[] = $followed;
+            $followed = array();
+            $followed['title'] = Translation :: get('Followed');
+            $followed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FOLLOWED));
+            $followed['class'] = 'followed';
+            $menu_items[] = $followed;
 
-        $trashed = array();
-        $trashed['title'] = Translation :: get('Trash');
-        $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
-        $trashed['class'] = 'trash';
-        $menu_items[] = $trashed;
+            $trashed = array();
+            $trashed['title'] = Translation :: get('Trash');
+            $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
+            $trashed['class'] = 'trash';
+            $menu_items[] = $trashed;
 
-        // // Document types
-        // $types = array();
-        // $types['title'] = Translation :: get('DocumentTypes');
-        // $types['url'] = '#';
-        // $types['class'] = 'category';
-        // $types['sub'] = array();
+            // // Document types
+            // $types = array();
+            // $types['title'] = Translation :: get('DocumentTypes');
+            // $types['url'] = '#';
+            // $types['class'] = 'category';
+            // $types['sub'] = array();
 
-        // $pdfs = array();
-        // $pdfs['title'] = Translation :: get('PDFs');
-        // $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
-        // $pdfs['class'] = 'google_docs_pdf';
-        // $types['sub'][] = $pdfs;
+            // $pdfs = array();
+            // $pdfs['title'] = Translation :: get('PDFs');
+            // $pdfs['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FILES));
+            // $pdfs['class'] = 'google_docs_pdf';
+            // $types['sub'][] = $pdfs;
 
-        // $documents = array();
-        // $documents['title'] = Translation :: get('Documents');
-        // $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
-        // $documents['class'] = 'google_docs_document';
-        // $types['sub'][] = $documents;
+            // $documents = array();
+            // $documents['title'] = Translation :: get('Documents');
+            // $documents['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_DOCUMENTS));
+            // $documents['class'] = 'google_docs_document';
+            // $types['sub'][] = $documents;
 
-        // $presentations = array();
-        // $presentations['title'] = Translation :: get('Presentations');
-        // $presentations['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
-        // DOCUMENTS_PRESENTATIONS));
-        // $presentations['class'] = 'google_docs_presentation';
-        // $types['sub'][] = $presentations;
+            // $presentations = array();
+            // $presentations['title'] = Translation :: get('Presentations');
+            // $presentations['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
+            // DOCUMENTS_PRESENTATIONS));
+            // $presentations['class'] = 'google_docs_presentation';
+            // $types['sub'][] = $presentations;
 
-        // $spreadsheets = array();
-        // $spreadsheets['title'] = Translation :: get('Spreadsheets');
-        // $spreadsheets['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
-        // DOCUMENTS_SPREADSHEETS));
-        // $spreadsheets['class'] = 'google_docs_spreadsheet';
-        // $types['sub'][] = $spreadsheets;
+            // $spreadsheets = array();
+            // $spreadsheets['title'] = Translation :: get('Spreadsheets');
+            // $spreadsheets['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector ::
+            // DOCUMENTS_SPREADSHEETS));
+            // $spreadsheets['class'] = 'google_docs_spreadsheet';
+            // $types['sub'][] = $spreadsheets;
 
-        // User defined folders
-        // $menu_items[] = $line;
-        // $folders = $this->get_external_repository_manager_connector()->retrieve_folders(
-        // $this->get_url(array(self :: PARAM_FOLDER => '__PLACEHOLDER__')));
-        // $menu_items = array_merge($menu_items, $folders);
+            // User defined folders
+            // $menu_items[] = $line;
+            // $folders = $this->get_external_repository_manager_connector()->retrieve_folders(
+            // $this->get_url(array(self :: PARAM_FOLDER => '__PLACEHOLDER__')));
+            // $menu_items = array_merge($menu_items, $folders);
 
-        return $menu_items;
-        // }
-
-        // else
-        // {
-        // return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
-        // }
+            return $menu_items;
+        }
+        else
+        {
+            return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
+        }
     }
 
     /*
@@ -162,12 +161,12 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY);
-        if ($this->get_external_repository()->get_user_setting('session_token'))
+        if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
         }
 
-        if (! $this->get_external_repository()->get_user_setting('session_token'))
+        if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $actions[] = self :: ACTION_LOGIN;
         }

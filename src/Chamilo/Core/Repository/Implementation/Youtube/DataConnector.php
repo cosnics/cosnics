@@ -88,6 +88,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_user_id(Session :: get_user_id());
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
+            $user_setting->set_external_id($this->get_external_repository_instance_id());
+
 
             return $user_setting->create();
         }
