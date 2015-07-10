@@ -6,12 +6,15 @@ use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MiniMonthRenderer extends TableRenderer
 {
@@ -26,16 +29,17 @@ class MiniMonthRenderer extends TableRenderer
 
     /**
      *
-     * @param CalendarRenderer $application
+     * @param CalendarRendererProviderInterface $dataProvider
      * @param int $display_time
      * @param string $link_target
      * @param int $mark_period
      */
-    public function __construct(CalendarRenderer $application, $display_time, $link_target = '', $mark_period = null)
+    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $link_target = '',
+        $mark_period = null)
     {
         $this->mark_period = $mark_period;
 
-        parent :: __construct($application, $display_time, $link_target);
+        parent :: __construct($dataProvider, $display_time, $link_target);
     }
 
     /**
@@ -73,8 +77,6 @@ class MiniMonthRenderer extends TableRenderer
     {
         $calendar = $this->get_calendar();
 
-        $html = array();
-
         $start_time = $calendar->get_start_time();
         $end_time = $calendar->get_end_time();
 
@@ -105,19 +107,22 @@ class MiniMonthRenderer extends TableRenderer
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
+
             $table_date = $next_table_date;
         }
 
-        $parameters = array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER);
-        $calendar->add_calendar_navigation($this->get_application()->get_url($parameters));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
+        $calendar->add_navigation_links($redirect->getUrl());
 
         if (! is_null($this->get_mark_period()))
         {
             $calendar->mark_period($this->get_mark_period());
         }
 
-        $calendar->add_navigation_links($this->get_application()->get_url($parameters));
-        $html[] = $calendar->render();
-        return implode(PHP_EOL, $html);
+        return $calendar->render();
     }
 }

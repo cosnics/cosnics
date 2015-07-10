@@ -63,7 +63,7 @@ abstract class HourStepEventRenderer extends StartDateEventRenderer
     static public function factory(Renderer $renderer, Event $event, $start_date, $hour_step)
     {
         $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) .
-             '\Renderer\Event\Event' . $renderer :: class_name(false);
+             '\Renderer\Event\Type\Event' . $renderer :: class_name(false);
         return new $event_renderer_class_name($renderer, $event, $start_date, $hour_step);
     }
 }

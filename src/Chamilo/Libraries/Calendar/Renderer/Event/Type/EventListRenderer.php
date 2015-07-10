@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -105,7 +104,7 @@ class EventListRenderer extends EventRenderer
                 html_entity_decode($this->get_event()->get_url()),
                 ToolbarItem :: DISPLAY_ICON));
 
-        if ($this->get_renderer()->get_application() instanceof ActionSupport)
+        if ($this->get_renderer()->getDataProvider()->supportsActions())
         {
             foreach ($this->get_renderer()->get_actions($this->get_event()) as $action)
             {

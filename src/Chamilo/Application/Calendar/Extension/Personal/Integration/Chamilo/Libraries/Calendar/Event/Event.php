@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Li
 
 /**
  *
- * @package application\calendar\integration\libraries\calendar\event
+ * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

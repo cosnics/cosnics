@@ -62,7 +62,7 @@ abstract class StartDateEventRenderer extends EventRenderer
     static public function factory(Renderer $renderer, Event $event, $start_date)
     {
         $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) .
-             '\Renderer\Event\Event' . $renderer :: class_name(false);
+             '\Renderer\Event\Type\Event' . $renderer :: class_name(false);
         return new $event_renderer_class_name($renderer, $event, $start_date);
     }
 }

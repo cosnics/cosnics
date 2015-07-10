@@ -5,10 +5,11 @@ use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -33,8 +34,6 @@ class MonthRenderer extends TableRenderer
     {
         $calendar = $this->get_calendar();
 
-        $html = array();
-
         $start_time = $calendar->get_start_time();
         $end_time = $calendar->get_end_time();
 
@@ -58,11 +57,17 @@ class MonthRenderer extends TableRenderer
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
+
             $table_date = $next_table_date;
         }
 
-        $calendar->add_calendar_navigation(
-            $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
+
+        $html = array();
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
         return implode(PHP_EOL, $html);

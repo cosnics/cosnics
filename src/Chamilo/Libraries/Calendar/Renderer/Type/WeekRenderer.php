@@ -5,18 +5,21 @@ use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type$WeekRenderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WeekRenderer extends TableRenderer
 {
 
     /**
      *
-     * @return \libraries\calendar\table\WeekCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\WeekCalendar
      */
     public function initialize_calendar()
     {
@@ -25,7 +28,7 @@ class WeekRenderer extends TableRenderer
 
     /**
      *
-     * @see \application\personal_calendar\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {
@@ -34,7 +37,6 @@ class WeekRenderer extends TableRenderer
         $to_date = strtotime('-1 Second', strtotime('Next Week', $from_date));
 
         $events = $this->get_events($this, $from_date, $to_date);
-        $html = array();
 
         $start_time = $calendar->get_start_time();
         $end_time = $to_date; // $calendar->get_end_time(); //The end date of a
@@ -62,14 +64,20 @@ class WeekRenderer extends TableRenderer
                         $event,
                         $table_date,
                         $calendar->get_hour_step());
+
                     $calendar->add_event($table_date, $event_renderer->run());
                 }
             }
             $table_date = $next_table_date;
         }
 
-        $calendar->add_calendar_navigation(
-            $this->get_application()->get_url(array(self :: PARAM_TIME => Calendar :: TIME_PLACEHOLDER)));
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        $calendar->add_calendar_navigation($redirect->getUrl());
+
+        $html = array();
         $html[] = $calendar->render();
         $html[] = $this->build_legend();
         return implode(PHP_EOL, $html);

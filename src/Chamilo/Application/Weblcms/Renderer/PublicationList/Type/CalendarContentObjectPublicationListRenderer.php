@@ -2,20 +2,13 @@
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -27,20 +20,13 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 
-/**
- * $Id: week_calendar_content_object_publication_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
- * @package application.lib.weblcms.browser.list_renderer
- */
-/**
- * Interval between sections in the week view of the calendar.
- */
 /**
  * Renderer to display events in a week calendar
  */
 class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements
-    DelegateComponent, CalendarRenderer, ActionSupport
+    DelegateComponent
 {
 
     /**
@@ -74,57 +60,6 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         return Request :: get(Renderer :: PARAM_TYPE);
     }
 
-    public function get_calendar_renderer_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $start_time,
-        $end_time)
-    {
-        $publications = $this->get_publications();
-        $events = array();
-        foreach ($publications as $publication)
-        {
-            if (method_exists(
-                $this->get_tool_browser()->get_parent(),
-                'convert_content_object_publication_to_calendar_event'))
-            {
-                $object = $this->get_tool_browser()->get_parent()->convert_content_object_publication_to_calendar_event(
-                    $publication,
-                    $start_time,
-                    $end_time);
-            }
-            else
-            {
-                $object = $this->get_content_object_from_publication($publication);
-            }
-
-            $parser = EventParser :: factory($object, $start_time, $end_time, Event :: class_name());
-            $parsed_events = $parser->get_events();
-
-            foreach ($parsed_events as &$parsed_event)
-            {
-                $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-                $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-                $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE] = ContentObjectPublicationListRenderer :: TYPE_CALENDAR;
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $publication[ContentObjectPublication :: PROPERTY_TOOL];
-                $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication[ContentObjectPublication :: PROPERTY_ID];
-
-                $redirect = new Redirect($parameters);
-                $link = $redirect->getUrl();
-
-                $parsed_event->set_url($link);
-                $parsed_event->set_source(
-                    Translation :: get('TypeName', null, $this->get_tool_browser()->get_parent()->context()));
-                $parsed_event->set_id($publication[ContentObjectPublication :: PROPERTY_ID]);
-                $parsed_event->set_context(\Chamilo\Application\Weblcms\Manager :: context());
-                $parsed_event->set_course_id($publication[ContentObjectPublication :: PROPERTY_COURSE_ID]);
-                $result[] = $parsed_event;
-            }
-        }
-
-        return $result;
-    }
-
     /**
      *
      * @return int
@@ -150,7 +85,11 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
     public function as_html()
     {
-        $mini_month_calendar = new MiniMonthRenderer($this, $this->get_current_renderer_time());
+        $displayParameters = $this->get_tool_browser()->get_parameters();
+
+        $dataProvider = new CalendarRendererProvider($this, $this->get_user(), $this->get_user(), $displayParameters);
+
+        $mini_month_calendar = new MiniMonthRenderer($dataProvider, $this->get_current_renderer_time());
 
         $this->form = new JumpForm($this->get_url(), $this->get_current_renderer_time());
 
@@ -175,32 +114,32 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_DAY :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_DAY,
-                    $this,
+                    $dataProvider,
                     $this->get_current_renderer_time());
 
                 break;
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_WEEK :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_WEEK,
-                    $this,
+                    $dataProvider,
                     $this->get_current_renderer_time());
                 break;
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH,
-                    $this,
+                    $dataProvider,
                     $this->get_current_renderer_time());
                 break;
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_YEAR :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_YEAR,
-                    $this,
+                    $dataProvider,
                     $this->get_current_renderer_time());
                 break;
             default :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH,
-                    $this,
+                    $dataProvider,
                     $this->get_current_renderer_time());
                 break;
         }
@@ -369,31 +308,5 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         return '<a href="' . $feedback_url . '">' . date('d/m/y H:i:s -', $event->get_start_date()) . ' ' .
              $event->get_title() . '</a><br />';
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\calendar\event\ActionSupport::get_calendar_event_actions()
-     */
-    public function get_calendar_event_actions($event)
-    {
-        $actions = array();
-
-        if ($event->get_context() == __NAMESPACE__)
-        {
-            $actions[] = new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_publication_editing_url($event->get_id()),
-                ToolbarItem :: DISPLAY_ICON);
-
-            $actions[] = new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_publication_deleting_url($event->get_id()),
-                ToolbarItem :: DISPLAY_ICON,
-                true);
-        }
-
-        return $actions;
     }
 }

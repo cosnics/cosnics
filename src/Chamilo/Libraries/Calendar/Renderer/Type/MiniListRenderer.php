@@ -7,15 +7,17 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
- * @package application\personal_calendar
+ * @package Chamilo\Libraries\Calendar\Renderer\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MiniListRenderer extends Renderer
 {
 
     /**
      *
-     * @see \application\personal_calendar\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {
@@ -38,6 +40,7 @@ class MiniListRenderer extends Renderer
         $to_time = strtotime('tomorrow +7 days -1 second', time());
         $events = $this->get_events($this, $from_time, $to_time);
         $html[] = $this->render_events($events, 'Soon', $from_time, $to_time);
+
         $html[] = $this->build_legend();
 
         return implode(PHP_EOL, $html);
