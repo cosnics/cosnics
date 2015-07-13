@@ -23,30 +23,34 @@ class MiniListRenderer extends Renderer
     {
         $html = array();
 
+        $html[] = '<div class="calendar-container">';
+
         // Today's events, from the current time until midnight
         $from_time = time();
         $to_time = strtotime('tomorrow -1 second', time());
         $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Today', $from_time, $to_time);
+        $html[] = $this->renderEvents($events, 'Today', $from_time, $to_time);
 
         // Tomorrow's events, from midnight tomorrow until midnight the day after tomorrow
         $from_time = strtotime('tomorrow', time());
         $to_time = strtotime('tomorrow +1 day -1 second', time());
         $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Tomorrow', $from_time, $to_time);
+        $html[] = $this->renderEvents($events, 'Tomorrow', $from_time, $to_time);
 
         // Events that will happen soon, from midnight the day after tomorrow untill next week midnight
         $from_time = strtotime('tomorrow +1 day', time());
         $to_time = strtotime('tomorrow +7 days -1 second', time());
         $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Soon', $from_time, $to_time);
+        $html[] = $this->renderEvents($events, 'Soon', $from_time, $to_time);
 
-        $html[] = $this->build_legend();
+        $html[] = '</div>';
+
+        $html[] = $this->getLegend()->render();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function render_events($events, $type, $from_time, $to_time)
+    public function renderEvents($events, $type, $from_time, $to_time)
     {
         $output = array();
 
