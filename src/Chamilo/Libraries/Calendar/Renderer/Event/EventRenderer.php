@@ -75,6 +75,18 @@ abstract class EventRenderer
         $this->event = $event;
     }
 
+    public function getEventClasses()
+    {
+        $eventClasses = 'event';
+
+        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
+        {
+            $eventClasses .= ' event-hidden';
+        }
+
+        return $eventClasses;
+    }
+
     /**
      * Gets an html representation of an event for the renderer
      *

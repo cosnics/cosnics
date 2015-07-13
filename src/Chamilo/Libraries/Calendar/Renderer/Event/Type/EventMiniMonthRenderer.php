@@ -26,19 +26,14 @@ class EventMiniMonthRenderer extends StartDateEventRenderer
         $from_date = strtotime(date('Y-m-1', $this->get_renderer()->get_time()));
         $to_date = strtotime('-1 Second', strtotime('Next Month', $from_date));
 
-        $event_classes = 'event';
+        $eventClasses = $this->getEventClasses();
 
         if (($start_date < $from_date || $start_date > $to_date))
         {
-            $event_classes .= ' event_fade';
+            $eventClasses .= ' event_fade';
         }
 
-        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
-        {
-            $event_classes .= ' event-hidden';
-        }
-
-        $html[] = '<div class="' . $event_classes . '" style="display: none;">';
+        $html[] = '<div class="' . $eventClasses . '" style="display: none;">';
         $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
             $this->get_event()->get_source(),
             (($start_date < $from_date || $start_date > $to_date) ? true : false)) . '">';

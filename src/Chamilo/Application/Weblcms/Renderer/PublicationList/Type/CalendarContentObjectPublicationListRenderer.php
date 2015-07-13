@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  * Renderer to display events in a week calendar
@@ -89,7 +90,9 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $dataProvider = new CalendarRendererProvider($this, $this->get_user(), $this->get_user(), $displayParameters);
 
-        $mini_month_calendar = new MiniMonthRenderer($dataProvider, $this->get_current_renderer_time());
+        $calendarLegend = new Legend($dataProvider);
+
+        $mini_month_calendar = new MiniMonthRenderer($dataProvider, $calendarLegend, $this->get_current_renderer_time());
 
         $this->form = new JumpForm($this->get_url(), $this->get_current_renderer_time());
 
@@ -115,6 +118,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_DAY,
                     $dataProvider,
+                    $calendarLegend,
                     $this->get_current_renderer_time());
 
                 break;
@@ -122,24 +126,28 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_WEEK,
                     $dataProvider,
+                    $calendarLegend,
                     $this->get_current_renderer_time());
                 break;
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH,
                     $dataProvider,
+                    $calendarLegend,
                     $this->get_current_renderer_time());
                 break;
             case \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_YEAR :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_YEAR,
                     $dataProvider,
+                    $calendarLegend,
                     $this->get_current_renderer_time());
                 break;
             default :
                 $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
                     \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH,
                     $dataProvider,
+                    $calendarLegend,
                     $this->get_current_renderer_time());
                 break;
         }

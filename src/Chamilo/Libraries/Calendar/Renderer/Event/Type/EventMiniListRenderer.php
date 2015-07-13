@@ -23,7 +23,7 @@ class EventMiniListRenderer extends StartEndDateEventRenderer
         $start_date = $this->get_event()->get_start_date();
         $end_date = $this->get_event()->get_end_date();
 
-        $html[] = '<div class="event">';
+        $html[] = '<div class="' . $this->getEventClasses() . '">';
         $html[] = '<div class="' . $this->get_renderer()->get_color_classes($this->get_event()->get_source()) . '">';
 
         if ($start_date >= $this->get_start_date() && $start_date <= $this->get_end_date() &&

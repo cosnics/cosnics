@@ -24,15 +24,9 @@ class EventDayRenderer extends HourStepEventRenderer
         $start_date = $this->get_event()->get_start_date();
         $end_date = $this->get_event()->get_end_date();
 
-        $event_classes = 'event';
-
-        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
-        {
-            $event_classes .= ' event-hidden';
-        }
-
-        $html[] = '<div class="' . $event_classes . '">';
-        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses($this->get_event()->get_source()) . '">';
+        $html[] = '<div class="' . $this->getEventClasses() . '">';
+        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
+            $this->get_event()->get_source()) . '">';
 
         if ($start_date >= $this->get_start_date() && $start_date <= $table_end_date &&
              ($start_date != $this->get_start_date() || $end_date < $table_end_date))
