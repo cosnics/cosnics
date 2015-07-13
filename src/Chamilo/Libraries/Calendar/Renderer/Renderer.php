@@ -1,20 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Abstract calendar renderer base class
@@ -46,7 +40,7 @@ abstract class Renderer
 
     /**
      *
-     * @var Application
+     * @var CalendarRendererProviderInterface
      */
     private $dataProvider;
 
@@ -57,7 +51,7 @@ abstract class Renderer
 
     /**
      *
-     * @var string[]
+     * @var \Chamilo\Libraries\Calendar\Renderer\Legend
      */
     private $legend;
 
@@ -70,10 +64,12 @@ abstract class Renderer
     /**
      *
      * @param CalendarRendererProviderInterface $dataProvider
-     * @param int $display_time
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     * @param integer $display_time
      * @param string $link_target
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $link_target = '')
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $display_time,
+        $link_target = '')
     {
         if (! $dataProvider instanceof CalendarRendererProviderInterface)
         {
@@ -81,9 +77,9 @@ abstract class Renderer
         }
 
         $this->dataProvider = $dataProvider;
+        $this->legend = $legend;
         $this->display_time = $display_time;
         $this->link_target = $link_target;
-        $this->legend = array();
     }
 
     /**
@@ -123,123 +119,29 @@ abstract class Renderer
     }
 
     /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
+     */
+    public function getLegend()
+    {
+        return $this->legend;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     */
+    public function setLegend(Legend $legend)
+    {
+        $this->legend = $legend;
+    }
+
+    /**
      * Render the calendar
      *
      * @return string
      */
     abstract public function render();
-
-    /**
-     * Retrieves a color
-     *
-     * @param string $key
-     * @param boolean $fade
-     * @return string
-     */
-    public function get_color_classes($key = null, $fade = false)
-    {
-        if (is_null($key))
-        {
-            $key = Translation :: get('MyAgenda');
-        }
-
-        if (! in_array($key, $this->legend))
-        {
-            $this->legend[] = $key;
-        }
-
-        $key_id = array_search($key, $this->legend);
-
-        if ($fade)
-        {
-            return 'event-source-identifier event-source-identifier-' . $key_id . ' event-source-identifier-faded ';
-        }
-        else
-        {
-            return 'event-source-identifier event-source-identifier-' . $key_id;
-        }
-    }
-
-    /**
-     * Builds a color-based legend for the calendar to help users to see which dataProviders and locations are the
-     * origin
-     * of the the published events
-     *
-     * @return string
-     */
-    public function build_legend()
-    {
-        $result = array();
-
-        if (count($this->legend) > 0)
-        {
-            $visible_sources = 0;
-
-            $result[] = '<fieldset class="event-legend-container" name="test">';
-            $result[] = '<legend class="event-legend-label">' . Translation :: get('Legend') . '</legend>';
-            $result[] = '<div class="event-legend">';
-
-            foreach ($this->legend as $key_id => $key)
-            {
-                $event_classes = $this->get_color_classes($key, ! $this->isSourceVisible($key));
-
-                $result[] = '<div class="event">';
-                $result[] = '<div data-source="' . $key . '" class="' . $event_classes . '">';
-
-                $result[] = $key;
-
-                $result[] = '</div>';
-                $result[] = '</div>';
-
-                if ($this->isSourceVisible($key))
-                {
-                    $visible_sources ++;
-                }
-            }
-
-            $result[] = '</div>';
-            $result[] = '<div class="clear"><</div>';
-            $result[] = '</fieldset>';
-
-            if ($this->getDataProvider()->supportsVisibility())
-            {
-                $ajax_visibility_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $this->getDataProvider()->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
-
-                if (! class_exists($ajax_visibility_class_name))
-                {
-                    throw new \Exception(
-                        'Please add an ajax Class CalendarEventVisibilityComponent to your implementing context\'s Ajax subpackage (' .
-                             $this->getDataProvider()->getVisibilityContext() .
-                             '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');
-                }
-
-                $result[] = '<script type="text/javascript">';
-
-                $calendarVisibilityContext = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $this->getDataProvider()->getVisibilityContext()) . '\Ajax';
-
-                $result[] = 'var calendarVisibilityContext = ' . json_encode($calendarVisibilityContext) . ';';
-                $result[] = 'var calendarVisibilityData = ' . json_encode($this->getDataProvider()->getVisibilityData()) .
-                     ';';
-                $result[] = '</script>';
-
-                $result[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
-            }
-
-            if (count($this->legend) > 0 && $visible_sources == 0)
-            {
-                $messages = Session :: retrieve(Application :: PARAM_MESSAGES);
-                $messages[Application :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
-                $messages[Application :: PARAM_MESSAGE][] = Translation :: get('AllEventSourcesHidden');
-
-                Session :: register(Application :: PARAM_MESSAGES, $messages);
-            }
-        }
-
-        return implode(PHP_EOL, $result);
-    }
 
     /**
      *
@@ -254,13 +156,14 @@ abstract class Renderer
      * Check whether the given source is visible for the user
      *
      * @param string $source
+     * @param integer $userIdentifier
      * @return boolean
      */
-    public function isSourceVisible($source)
+    public function isSourceVisible($source, $userIdentifier)
     {
         if ($this->getDataProvider()->supportsVisibility())
         {
-            return $this->getDataProvider()->isSourceVisible($source);
+            return $this->getDataProvider()->isSourceVisible($source, $userIdentifier);
         }
 
         return true;

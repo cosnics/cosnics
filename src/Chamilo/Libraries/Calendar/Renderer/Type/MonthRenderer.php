@@ -69,7 +69,7 @@ class MonthRenderer extends TableRenderer
 
         $html = array();
         $html[] = $calendar->render();
-        $html[] = $this->build_legend();
+        $html[] = $this->getLegend()->render();
         return implode(PHP_EOL, $html);
     }
 }
