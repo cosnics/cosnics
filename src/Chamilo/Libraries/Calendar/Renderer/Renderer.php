@@ -200,22 +200,6 @@ abstract class Renderer
 
     /**
      *
-     * @return Renderer
-     */
-    public static function factory()
-    {
-        $arguments = func_get_args();
-        $type = array_shift($arguments);
-
-        $class_name = static :: context() . '\Type\\' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize() . static :: class_name(false);
-
-        $class = new \ReflectionClass($class_name);
-        return $class->newInstanceArgs($arguments);
-    }
-
-    /**
-     *
      * @param string[] $types
      * @param string $url
      * @return \libraries\format\ToolbarItem[]
