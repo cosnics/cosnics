@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  *
- * @package libraries\calendar\event
+ * @package Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -20,7 +20,7 @@ abstract class Visibility extends DataClass
 
     /**
      *
-     * @var \core\user\User
+     * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $user;
 
@@ -34,10 +34,6 @@ abstract class Visibility extends DataClass
         return parent :: get_default_property_names(array(self :: PROPERTY_USER_ID, self :: PROPERTY_SOURCE));
     }
 
-    /**
-     *
-     * @return \libraries\storage\data_manager\DataManager
-     */
     public function get_data_manager()
     {
     }
@@ -46,7 +42,7 @@ abstract class Visibility extends DataClass
      *
      * @return int
      */
-    public function get_user_id()
+    public function getUserId()
     {
         return $this->get_default_property(self :: PROPERTY_USER_ID);
     }
@@ -55,7 +51,7 @@ abstract class Visibility extends DataClass
      *
      * @return string
      */
-    public function get_source()
+    public function getSource()
     {
         return $this->get_default_property(self :: PROPERTY_SOURCE);
     }
@@ -64,7 +60,7 @@ abstract class Visibility extends DataClass
      *
      * @param int $id
      */
-    public function set_user_id($id)
+    public function setUserId($id)
     {
         $this->set_default_property(self :: PROPERTY_USER_ID, $id);
     }
@@ -73,22 +69,22 @@ abstract class Visibility extends DataClass
      *
      * @param string $source
      */
-    public function set_source($source)
+    public function setSource($source)
     {
         $this->set_default_property(self :: PROPERTY_SOURCE, $source);
     }
 
     /**
      *
-     * @return \core\user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function get_user()
+    public function getUser()
     {
         if (isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                (int) $this->get_user_id());
+                (int) $this->getUserId());
         }
 
         return $this->user;

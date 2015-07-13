@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -27,12 +27,12 @@ class ListRenderer extends Renderer
         $html[] = '<div class="calendar-container">';
 
         // Upcoming events: range from now until 6 months in the future
-        $upcoming_events = $this->get_events($this, time(), strtotime('+6 Months', time()));
-        $html[] = $this->renderEvents($upcoming_events, 'UpcomingEvents');
+        $upcomingEvents = $this->getEvents($this, time(), strtotime('+6 Months', time()));
+        $html[] = $this->renderEvents($upcomingEvents, 'UpcomingEvents');
 
         // Recent events: range from one months ago until now
-        $recent_events = $this->get_events($this, strtotime('-2 Months', time()), time());
-        $html[] = $this->renderEvents($recent_events, 'RecentEvents');
+        $recentEvents = $this->getEvents($this, strtotime('-2 Months', time()), time());
+        $html[] = $this->renderEvents($recentEvents, 'RecentEvents');
 
         $html[] = '</div>';
 
@@ -50,17 +50,17 @@ class ListRenderer extends Renderer
         if (count($events) > 0)
         {
 
-            $html_events = array();
+            $htmlEvents = array();
 
             foreach ($events as $index => $event)
             {
-                $event_renderer = EventRenderer :: factory($this, $event);
-                $html_events[$event->get_start_date()][] = $event_renderer->run();
+                $eventRendererFactory = new EventRendererFactory($this, $event);
+                $htmlEvents[$event->getStartDate()][] = $eventRendererFactory->render();
             }
 
-            ksort($html_events);
+            ksort($htmlEvents);
 
-            foreach ($html_events as $time => $content)
+            foreach ($htmlEvents as $time => $content)
             {
                 $output[] = implode(PHP_EOL, $content);
             }

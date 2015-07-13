@@ -23,24 +23,24 @@ abstract class TableRenderer extends Renderer
      *
      * @return \Chamilo\Libraries\Calendar\Table\Calendar
      */
-    public function get_calendar()
+    public function getCalendar()
     {
         if (! isset($this->calendar))
         {
-            $this->calendar = $this->initialize_calendar();
+            $this->calendar = $this->initializeCalendar();
         }
 
         return $this->calendar;
     }
 
-    public function set_calendar(\Chamilo\Libraries\Calendar\Table\Calendar $calendar)
+    public function setCalendar(\Chamilo\Libraries\Calendar\Table\Calendar $calendar)
     {
         $this->calendar = $calendar;
     }
 
     /**
      *
-     * @return \libraries\calendar\table\Calendar
+     * @return \Chamilo\Libraries\Calendar\Table\Calendar
      */
-    abstract public function initialize_calendar();
+    abstract public function initializeCalendar();
 }

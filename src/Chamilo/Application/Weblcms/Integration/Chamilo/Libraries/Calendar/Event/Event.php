@@ -17,7 +17,7 @@ class Event extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calen
      *
      * @var int
      */
-    private $course_id;
+    private $courseId;
 
     /**
      *
@@ -35,24 +35,24 @@ class Event extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calen
         $source, $context, $courseId)
     {
         parent :: __construct($id, $startDate, $endDate, $recurrenceRules, $url, $title, $content, $source, $context);
-        $this->course_id = $courseId;
+        $this->courseId = $courseId;
     }
 
     /**
      *
      * @return int
      */
-    public function get_course_id()
+    public function getCourseId()
     {
-        return $this->course_id;
+        return $this->courseId;
     }
 
     /**
      *
-     * @param int $course_id
+     * @param int $courseId
      */
-    public function set_course_id($course_id)
+    public function setCourseId($courseId)
     {
-        $this->course_id = $course_id;
+        $this->courseId = $courseId;
     }
 }

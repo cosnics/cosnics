@@ -7,13 +7,11 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * Abstract calendar renderer base class
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -32,8 +30,8 @@ abstract class Renderer
     // Types
     const TYPE_DAY = 'Day';
     const TYPE_LIST = 'List';
-    const TYPE_MINI_DAY = 'Mini_day';
-    const TYPE_MINI_MONTH = 'Mini_month';
+    const TYPE_MINI_DAY = 'MiniDay';
+    const TYPE_MINI_MONTH = 'MiniMonth';
     const TYPE_MONTH = 'Month';
     const TYPE_WEEK = 'Week';
     const TYPE_YEAR = 'Year';
@@ -47,7 +45,7 @@ abstract class Renderer
     /**
      * The time of the moment to render
      */
-    private $display_time;
+    private $displayTime;
 
     /**
      *
@@ -59,7 +57,7 @@ abstract class Renderer
      *
      * @var string
      */
-    private $link_target;
+    private $linkTarget;
 
     /**
      *
@@ -68,8 +66,8 @@ abstract class Renderer
      * @param integer $display_time
      * @param string $link_target
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $display_time,
-        $link_target = '')
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+        $linkTarget = '')
     {
         if (! $dataProvider instanceof CalendarRendererProviderInterface)
         {
@@ -78,35 +76,35 @@ abstract class Renderer
 
         $this->dataProvider = $dataProvider;
         $this->legend = $legend;
-        $this->display_time = $display_time;
-        $this->link_target = $link_target;
+        $this->displayTime = $displayTime;
+        $this->linkTarget = $linkTarget;
     }
 
     /**
      *
      * @return string
      */
-    public function get_link_target()
+    public function getLinkTarget()
     {
-        return $this->link_target;
+        return $this->linkTarget;
     }
 
     /**
      *
      * @param string $value
      */
-    public function set_link_target($link_target)
+    public function setLinkTarget($linkTarget)
     {
-        $this->link_target = $link_target;
+        $this->linkTarget = $linkTarget;
     }
 
     /**
      *
-     * @return int
+     * @return integer
      */
-    public function get_time()
+    public function getDisplayTime()
     {
-        return $this->display_time;
+        return $this->displayTime;
     }
 
     /**
@@ -144,15 +142,6 @@ abstract class Renderer
     abstract public function render();
 
     /**
-     *
-     * @return \core\user\User
-     */
-    public function get_user()
-    {
-        return $this->dataProvider->getDataUser();
-    }
-
-    /**
      * Check whether the given source is visible for the user
      *
      * @param string $source
@@ -173,13 +162,13 @@ abstract class Renderer
      * Get the events between $start_time and $end_time which should be displayed in the calendar
      *
      * @param Renderer $renderer
-     * @param int $start_time
-     * @param int $end_time
+     * @param int $startTime
+     * @param int $endTime
      * @return Event[]
      */
-    public function get_events(Renderer $renderer, $start_time, $end_time)
+    public function getEvents(Renderer $renderer, $startTime, $endTime)
     {
-        return $this->getDataProvider()->getEvents($renderer, $start_time, $end_time);
+        return $this->getDataProvider()->getEvents($renderer, $startTime, $endTime);
     }
 
     /**
@@ -188,7 +177,7 @@ abstract class Renderer
      * @param Event $event
      * @return \libraries\format\ToolbarItem[]
      */
-    public function get_actions(Event $event)
+    public function getActions(Event $event)
     {
         if (! $this->getDataProvider() instanceof ActionSupport)
         {
@@ -202,26 +191,24 @@ abstract class Renderer
      *
      * @param string[] $types
      * @param string $url
-     * @return \libraries\format\ToolbarItem[]
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public static function getToolbarItems($types, $type_url, $today_url)
+    public static function getToolbarItems($types, $typeUrl, $todayUrl)
     {
         $items = array();
 
         foreach ($types as $type)
         {
-            $type_name = (string) StringUtilities :: getInstance()->createString($type)->upperCamelize();
-
             $items[] = new ToolbarItem(
-                Translation :: get($type_name . 'View', null, Utilities :: COMMON_LIBRARIES),
+                Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Type/' . $type),
-                str_replace(self :: MARKER_TYPE, $type, $type_url));
+                str_replace(self :: MARKER_TYPE, $type, $typeUrl));
         }
 
         $items[] = new ToolbarItem(
             Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Today'),
-            $today_url);
+            $todayUrl);
 
         return $items;
     }

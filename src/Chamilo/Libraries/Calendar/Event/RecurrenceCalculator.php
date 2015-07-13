@@ -112,15 +112,15 @@ class RecurrenceCalculator
             $vCalendar = new VObject\Component\VCalendar();
 
             $startDateTime = new \DateTime();
-            $startDateTime->setTimestamp($event->get_start_date());
+            $startDateTime->setTimestamp($event->getStartDate());
 
             $endDateTime = new \DateTime();
-            $endDateTime->setTimestamp($event->get_end_date());
+            $endDateTime->setTimestamp($event->getEndDate());
 
             $vEvent = $vCalendar->add('VEVENT');
 
-            $vEvent->add('SUMMARY', $event->get_title());
-            $vEvent->add('DESCRIPTION', $event->get_content());
+            $vEvent->add('SUMMARY', $event->getTitle());
+            $vEvent->add('DESCRIPTION', $event->getContent());
             $vEvent->add('DTSTART', $startDateTime);
             $vEvent->add('DTEND', $endDateTime);
 
@@ -145,8 +145,8 @@ class RecurrenceCalculator
                 $repeatEvent = clone $event;
 
                 $repeatEvent->setRecurrenceRules(new RecurrenceRules());
-                $repeatEvent->set_start_date($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
-                $repeatEvent->set_end_date($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
+                $repeatEvent->setStartDate($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
+                $repeatEvent->setEndDate($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
 
                 $events[] = $repeatEvent;
             }
@@ -171,8 +171,8 @@ class RecurrenceCalculator
      */
     private function isVisible(Event $event, $fromTime, $endTime)
     {
-        return ($event->get_start_date() >= $fromTime && $event->get_start_date() <= $endTime) ||
-             ($event->get_end_date() >= $fromTime && $event->get_end_date() <= $endTime) ||
-             ($event->get_start_date() < $fromTime && $event->get_end_date() > $endTime);
+        return ($event->getStartDate() >= $fromTime && $event->getStartDate() <= $endTime) ||
+             ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
+             ($event->getStartDate() < $fromTime && $event->getEndDate() > $endTime);
     }
 }

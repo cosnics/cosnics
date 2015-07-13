@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Ren
 
 /**
  *
- * @package application\weblcms\integration\libraries\calendar\event
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

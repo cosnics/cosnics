@@ -24,23 +24,32 @@ class EventListRenderer extends EventRenderer
      *
      * @return string
      */
-    public function run()
+    public function render()
     {
         $html = array();
 
         $html[] = '<div class="' . $this->getEventClasses() . '">';
-        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
-            $this->get_event()->get_source()) . '">';
+        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
+             '">';
         $html[] = $this->getActions();
         $html[] = '<h4>';
-        $html[] = htmlentities($this->get_event()->get_title());
+        $html[] = htmlentities($this->getEvent()->getTitle());
         $html[] = $this->getRange();
         $html[] = '</h4>';
-        $html[] = $this->get_event()->get_content();
+        $html[] = $this->getContent();
         $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer::getContent()
+     */
+    public function getContent()
+    {
+        return $this->getEvent()->getContent();
     }
 
     /**
@@ -51,22 +60,21 @@ class EventListRenderer extends EventRenderer
     {
         $html = array();
 
-        $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
+        $dateFormat = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
 
-        if ($this->get_event()->get_end_date() != '')
+        if ($this->getEvent()->getEndDate() != '')
         {
-            $html[] = '<div class="calendar-event-range">' .
-                 htmlentities(
-                    Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                     DatetimeUtilities :: format_locale_date($date_format, $this->get_event()->get_start_date()) . ' ' .
+            $html[] = '<div class="calendar-event-range">' . htmlentities(
+                Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+                     DatetimeUtilities :: format_locale_date($dateFormat, $this->getEvent()->getStartDate()) . ' ' .
                      Translation :: get('Until', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                     DatetimeUtilities :: format_locale_date($date_format, $this->get_event()->get_end_date())) . '</div>';
+                     DatetimeUtilities :: format_locale_date($dateFormat, $this->getEvent()->getEndDate())) . '</div>';
         }
         else
         {
             $html[] = '<div class="calendar-event-range">' . DatetimeUtilities :: format_locale_date(
-                $date_format,
-                $this->get_event()->get_start_date()) . '</div>';
+                $dateFormat,
+                $this->getEvent()->getStartDate()) . '</div>';
         }
 
         return implode(PHP_EOL, $html);
@@ -82,12 +90,12 @@ class EventListRenderer extends EventRenderer
             new ToolbarItem(
                 Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                html_entity_decode($this->get_event()->get_url()),
+                html_entity_decode($this->getEvent()->getUrl()),
                 ToolbarItem :: DISPLAY_ICON));
 
-        if ($this->get_renderer()->getDataProvider()->supportsActions())
+        if ($this->getRenderer()->getDataProvider()->supportsActions())
         {
-            foreach ($this->get_renderer()->get_actions($this->get_event()) as $action)
+            foreach ($this->getRenderer()->getActions($this->getEvent()) as $action)
             {
                 $toolbar->add_item($action);
             }

@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 
 /**
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -17,69 +16,94 @@ abstract class EventRenderer
 
     /**
      *
-     * @var \libraries\calendar\renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
     private $renderer;
 
     /**
      *
-     * @var \libraries\calendar\event\Event $event
+     * @var \Chamilo\Libraries\Calendar\Event\Event
      */
     private $event;
 
     /**
      *
-     * @param \libraries\calendar\renderer\Renderer $renderer
-     * @param \libraries\calendar\event\Event $event
-     * @param int $table_date
+     * @var \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
      */
-    public function __construct(Renderer $renderer, Event $event)
+    private $configuration;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
+     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
+     */
+    public function __construct(Renderer $renderer, Event $event, Configuration $configuration = null)
     {
         $this->renderer = $renderer;
         $this->event = $event;
+        $this->configuration = $configuration ?  : new Configuration();
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
-    public function get_renderer()
+    public function getRenderer()
     {
         return $this->renderer;
     }
 
     /**
      *
-     * @param \libraries\calendar\renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
-    public function set_renderer($renderer)
+    public function setRenderer(Renderer $renderer)
     {
         $this->renderer = $renderer;
     }
 
     /**
      *
-     * @return \libraries\calendar\event\Event
+     * @return \Chamilo\Libraries\Calendar\Event\Event
      */
-    public function get_event()
+    public function getEvent()
     {
         return $this->event;
     }
 
     /**
      *
-     * @param \libraries\calendar\event\Event $event
+     * @param \Chamilo\Libraries\Calendar\Event\Event $event
      */
-    public function set_event($event)
+    public function setEvent($event)
     {
         $this->event = $event;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Event\Configuration $configuration
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
     }
 
     public function getEventClasses()
     {
         $eventClasses = 'event';
 
-        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
+        if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
             $eventClasses .= ' event-hidden';
         }
@@ -92,18 +116,5 @@ abstract class EventRenderer
      *
      * @return string
      */
-    abstract public function run();
-
-    /**
-     *
-     * @param Renderer $renderer
-     * @param Event $event
-     * @return EventRenderer
-     */
-    static public function factory(Renderer $renderer, Event $event)
-    {
-        $event_renderer_class_name = ClassnameUtilities :: getInstance()->getNamespaceParent($event :: context()) .
-             '\Renderer\Event\Type\Event' . $renderer :: class_name(false);
-        return new $event_renderer_class_name($renderer, $event);
-    }
+    abstract public function render();
 }
