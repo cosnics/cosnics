@@ -174,20 +174,30 @@ class Legend
 
             foreach ($this->getSources() as $source)
             {
-                $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
+                if ($this->getDataProvider()->supportsVisibility())
+                {
+                    $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
+                    $sourceClasses = $this->getSourceClasses($source, ! $isSourceVisible);
+                }
+                else
+                {
+                    $sourceClasses = $this->getSourceClasses($source);
+                }
 
                 $result[] = '<div class="event">';
-                $result[] = '<div data-source="' . $source . '" class="' .
-                     $this->getSourceClasses($source, ! $isSourceVisible) . '">';
+                $result[] = '<div data-source="' . $source . '" class="' . $sourceClasses . '">';
 
                 $result[] = $source;
 
                 $result[] = '</div>';
                 $result[] = '</div>';
 
-                if ($isSourceVisible)
+                if ($this->getDataProvider()->supportsVisibility())
                 {
-                    $visibleSources ++;
+                    if ($isSourceVisible)
+                    {
+                        $visibleSources ++;
+                    }
                 }
             }
 
