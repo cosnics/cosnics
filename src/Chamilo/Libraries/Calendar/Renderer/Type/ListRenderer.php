@@ -24,18 +24,24 @@ class ListRenderer extends Renderer
     {
         $html = array();
 
+        $html[] = '<div class="calendar-container">';
+
         // Upcoming events: range from now until 6 months in the future
         $upcoming_events = $this->get_events($this, time(), strtotime('+6 Months', time()));
-        $html[] = $this->render_events($upcoming_events, 'UpcomingEvents');
+        $html[] = $this->renderEvents($upcoming_events, 'UpcomingEvents');
 
         // Recent events: range from one months ago until now
         $recent_events = $this->get_events($this, strtotime('-2 Months', time()), time());
-        $html[] = $this->render_events($recent_events, 'RecentEvents');
+        $html[] = $this->renderEvents($recent_events, 'RecentEvents');
+
+        $html[] = '</div>';
+
+        $html[] = $this->getLegend()->render();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function render_events($events, $type)
+    private function renderEvents($events, $type)
     {
         $output = array();
 

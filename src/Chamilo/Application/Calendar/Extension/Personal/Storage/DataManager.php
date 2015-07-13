@@ -36,7 +36,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         foreach ($registrations as $registration)
         {
-            var_dump($registration);
             $context = $registration->get_context();
             $class_name = $context . '\Manager';
 

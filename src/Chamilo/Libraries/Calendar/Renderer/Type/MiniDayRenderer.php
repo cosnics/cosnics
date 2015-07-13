@@ -7,6 +7,7 @@ use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  *
@@ -45,14 +46,14 @@ class MiniDayRenderer extends TableRenderer
      * @param int $end_hour
      * @param string $link_target
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $hour_step = 1,
-        $start_hour = 0, $end_hour = 24, $link_target = '')
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $display_time,
+        $link_target = '', $hour_step = 1, $start_hour = 0, $end_hour = 24)
     {
         $this->hour_step = $hour_step;
         $this->start_hour = $start_hour;
         $this->end_hour = $end_hour;
 
-        parent :: __construct($dataProvider, $display_time, $link_target);
+        parent :: __construct($dataProvider, $legend, $display_time, $link_target);
     }
 
     /**
@@ -173,7 +174,7 @@ class MiniDayRenderer extends TableRenderer
 
         $html = array();
         $html[] = $calendar->render();
-        $html[] = $this->build_legend();
+        $html[] = $this->getLegend()->render();
         return implode(PHP_EOL, $html);
     }
 }

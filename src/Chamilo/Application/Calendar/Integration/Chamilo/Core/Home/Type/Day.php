@@ -36,10 +36,10 @@ class Day extends Block
         $minidaycalendar = new MiniDayRenderer(
             $dataProvider,
             $time,
+            $this->get_link_target(),
             $hour_step,
             $time_start,
-            $time_end,
-            $this->get_link_target());
+            $time_end);
 
         return $minidaycalendar->render();
     }

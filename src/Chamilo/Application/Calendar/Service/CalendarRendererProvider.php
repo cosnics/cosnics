@@ -176,8 +176,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
      */
-    public function isSourceVisible($source, $userIdentifier)
+    public function isSourceVisible($source, $userIdentifier = null)
     {
+        if (is_null($userIdentifier))
+        {
+            $userIdentifier = $this->getViewingUser()->getId();
+        }
+
         $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
             $source,
             $userIdentifier);
