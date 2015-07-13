@@ -19,7 +19,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $to_date
      * @return Event[]
      */
-    public static function get_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $from_date, $to_date)
+    public static function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $from_date, $to_date)
     {
         $events = array();
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(Manager :: context());
@@ -32,7 +32,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             if (class_exists($class_name))
             {
                 $implementor = new $class_name();
-                $events = array_merge($events, $implementor->get_events($renderer, $from_date, $to_date));
+                $events = array_merge($events, $implementor->getEvents($renderer, $from_date, $to_date));
             }
         }
 

@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
- * @package core\repository\calendar
+ * @package Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -15,17 +15,25 @@ class Event extends \Chamilo\Libraries\Calendar\Event\Event implements ContentOb
 
     /**
      *
-     * @var ContentObject
+     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    private $content_object;
+    private $contentObject;
 
-    public function get_content_object()
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\ContentObjectSupport::getContentObject()
+     */
+    public function getContentObject()
     {
-        return $this->content_object;
+        return $this->contentObject;
     }
 
-    public function set_content_object(ContentObject $content_object)
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\ContentObjectSupport::setContentObject()
+     */
+    public function setContentObject(ContentObject $contentObject)
     {
-        $this->content_object = $content_object;
+        $this->contentObject = $contentObject;
     }
 }

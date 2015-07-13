@@ -142,15 +142,15 @@ class EventParser
             $this->getToDate(),
             Event :: class_name());
 
-        foreach ($parser->get_events() as &$parsed_event)
+        foreach ($parser->getEvents() as &$parsedEvent)
         {
             if ($publisher != $this->getRenderer()->getDataProvider()->getViewingUser()->getId())
             {
-                $parsed_event->set_title($parsed_event->get_title() . ' [' . $publishingUser->get_fullname() . ']');
+                $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }
 
-            $parsed_event->set_id($this->getPublication()->get_id());
-            $parsed_event->set_context(\Chamilo\Application\Calendar\Extension\Personal\Manager :: context());
+            $parsedEvent->setId($this->getPublication()->get_id());
+            $parsedEvent->setContext(\Chamilo\Application\Calendar\Extension\Personal\Manager :: context());
 
             $parameters = array();
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: context();
@@ -158,9 +158,9 @@ class EventParser
             $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID] = $this->getPublication()->get_id();
 
             $redirect = new Redirect($parameters);
-            $parsed_event->set_url($redirect->getUrl());
+            $parsedEvent->setUrl($redirect->getUrl());
 
-            $events[] = $parsed_event;
+            $events[] = $parsedEvent;
         }
 
         return $events;

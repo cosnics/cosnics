@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMonthRenderer extends StartDateEventRenderer
+class EventMonthRenderer extends EventRenderer
 {
 
     /**
@@ -18,46 +18,49 @@ class EventMonthRenderer extends StartDateEventRenderer
      *
      * @return string
      */
-    public function run()
+    public function render()
     {
-        $start_date = $this->get_event()->get_start_date();
-        $end_date = $this->get_event()->get_end_date();
+        $configuration = $this->getConfiguration();
 
-        $from_date = strtotime(date('Y-m-1', $this->get_renderer()->get_time()));
-        $to_date = strtotime('-1 Second', strtotime('Next Month', $from_date));
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
+
+        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
+        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
 
         $eventClasses = $this->getEventClasses();
 
-        if (($start_date < $from_date || $start_date > $to_date))
+        if (($startDate < $fromDate || $startDate > $toDate))
         {
             $eventClasses .= ' event_fade';
         }
 
         $html[] = '<div class="' . $eventClasses . '">';
-        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
-            $this->get_event()->get_source(),
-            (($start_date < $from_date || $start_date > $to_date) ? true : false)) . '">';
+        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses(
+            $this->getEvent()->getSource(),
+            (($startDate < $fromDate || $startDate > $toDate) ? true : false)) . '">';
 
-        if ($start_date >= $this->get_start_date() && $start_date <= strtotime('+1 Day', $this->get_start_date()) &&
-             $start_date != $this->get_start_date())
+        if ($startDate >= $configuration->getStartDate() &&
+             $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
+             $startDate != $configuration->getStartDate())
         {
-            $html[] = date('H:i', $start_date);
+            $html[] = date('H:i', $startDate);
         }
-        elseif ($start_date < $this->get_start_date())
+        elseif ($startDate < $configuration->getStartDate())
         {
             $html[] = '&larr;';
         }
 
-        $html[] = '<a href="' . $this->get_event()->get_url() . '">';
-        $html[] = htmlspecialchars($this->get_event()->get_title());
+        $html[] = '<a href="' . $this->getEvent()->getUrl() . '">';
+        $html[] = htmlspecialchars($this->getEvent()->getTitle());
         $html[] = '</a>';
 
-        if ($start_date != $end_date && $end_date < strtotime('+1 Day', $this->get_start_date()) &&
-             $start_date < $this->get_start_date())
+        if ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
+             $startDate < $configuration->getStartDate())
         {
-            $html[] = date('H:i', $end_date);
+            $html[] = date('H:i', $endDate);
         }
-        elseif ($start_date != $end_date && $end_date > strtotime('+1 Day', $this->get_start_date()))
+        elseif ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()))
         {
             $html[] = '&rarr;';
         }

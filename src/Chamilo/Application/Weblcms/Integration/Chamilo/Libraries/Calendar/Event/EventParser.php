@@ -119,7 +119,7 @@ class EventParser
             $this->getToDate(),
             Event :: class_name());
 
-        foreach ($parser->get_events() as &$parsedEvent)
+        foreach ($parser->getEvents() as &$parsedEvent)
         {
             $parameters = array();
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
@@ -133,13 +133,13 @@ class EventParser
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
 
-            $parsedEvent->set_url($link);
-            $parsedEvent->set_source(
+            $parsedEvent->setUrl($link);
+            $parsedEvent->setSource(
                 Translation :: get('Course', null, \Chamilo\Application\Weblcms\Manager :: context()) . ' - ' .
                      $course->get_title());
-            $parsedEvent->set_id($this->getPublication()->get_id());
-            $parsedEvent->set_context(\Chamilo\Application\Weblcms\Manager :: context());
-            $parsedEvent->set_course_id($this->getPublication()->get_course_id());
+            $parsedEvent->setId($this->getPublication()->get_id());
+            $parsedEvent->setContext(\Chamilo\Application\Weblcms\Manager :: context());
+            $parsedEvent->setCourseId($this->getPublication()->get_course_id());
 
             $result[] = $parsedEvent;
         }

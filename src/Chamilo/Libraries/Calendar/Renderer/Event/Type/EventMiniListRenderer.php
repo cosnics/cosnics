@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\StartEndDateEventRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\StartEndDateEventRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMiniListRenderer extends StartEndDateEventRenderer
+class EventMiniListRenderer extends EventRenderer
 {
 
     /**
@@ -18,39 +18,42 @@ class EventMiniListRenderer extends StartEndDateEventRenderer
      *
      * @return string
      */
-    public function run()
+    public function render()
     {
-        $start_date = $this->get_event()->get_start_date();
-        $end_date = $this->get_event()->get_end_date();
+        $configuration = $this->getConfiguration();
+
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
 
         $html[] = '<div class="' . $this->getEventClasses() . '">';
-        $html[] = '<div class="' . $this->get_renderer()->get_color_classes($this->get_event()->get_source()) . '">';
+        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
+             '">';
 
-        if ($start_date >= $this->get_start_date() && $start_date <= $this->get_end_date() &&
-             $start_date != $this->get_start_date())
+        if ($startDate >= $configuration->getStartDate() && $startDate <= $configuration->getEndDate() &&
+             $startDate != $configuration->getStartDate())
         {
-            $html[] = date('H:i', $start_date);
+            $html[] = date('H:i', $startDate);
         }
-        elseif ($start_date < $this->get_start_date())
+        elseif ($startDate < $configuration->getStartDate())
         {
             $html[] = '&larr;';
         }
 
-        $html[] = '<a href="' . $this->get_event()->get_url() . '">';
-        $html[] = htmlspecialchars($this->get_event()->get_title());
+        $html[] = '<a href="' . $this->getEvent()->getUrl() . '">';
+        $html[] = htmlspecialchars($this->getEvent()->getTitle());
         $html[] = '</a>';
 
-        if ($start_date != $end_date && $end_date < $this->get_end_date() && $start_date < $this->get_start_date())
+        if ($startDate != $endDate && $endDate < $configuration->getEndDate() &&
+             $startDate < $configuration->getStartDate())
         {
-            $html[] = date('H:i', $end_date);
+            $html[] = date('H:i', $endDate);
         }
-        elseif ($start_date != $end_date && $end_date > $this->get_end_date())
+        elseif ($startDate != $endDate && $endDate > $configuration->getEndDate())
         {
             $html[] = '&rarr;';
         }
 
         $html[] = '</div>';
-
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

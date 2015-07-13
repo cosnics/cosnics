@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -19,11 +19,11 @@ class DayRenderer extends TableRenderer
 
     /**
      *
-     * @return \libraries\calendar\table\DayCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
      */
-    public function initialize_calendar()
+    public function initializeCalendar()
     {
-        return new DayCalendar($this->get_time());
+        return new DayCalendar($this->getDisplayTime());
     }
 
     /**
@@ -32,47 +32,47 @@ class DayRenderer extends TableRenderer
      */
     public function render()
     {
-        $calendar = $this->get_calendar();
-        $from_date = strtotime(date('Y-m-d 00:00:00', $this->get_time()));
-        $to_date = strtotime(date('Y-m-d 23:59:59', $this->get_time()));
+        $calendar = $this->getCalendar();
+        $fromDate = strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
+        $toDate = strtotime(date('Y-m-d 23:59:59', $this->getDisplayTime()));
 
-        $events = $this->get_events($this, $from_date, $to_date);
+        $events = $this->getEvents($this, $fromDate, $toDate);
 
-        $start_time = $calendar->get_start_time();
-        $end_time = $calendar->get_end_time();
-        $table_date = $start_time;
+        $startTime = $calendar->getStartTime();
+        $endTime = $calendar->getEndTime();
+        $tableDate = $startTime;
 
-        while ($table_date <= $end_time)
+        while ($tableDate <= $endTime)
         {
-            $next_table_date = strtotime('+' . $calendar->get_hour_step() . ' Hours', $table_date);
+            $nextTableDate = strtotime('+' . $calendar->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
-                $start_date = $event->get_start_date();
-                $end_date = $event->get_end_date();
+                $startDate = $event->getStartDate();
+                $endDate = $event->getEndDate();
 
-                if ($table_date < $start_date && $start_date < $next_table_date ||
-                     $table_date < $end_date && $end_date <= $next_table_date ||
-                     $start_date <= $table_date && $next_table_date <= $end_date)
+                if ($tableDate < $startDate && $startDate < $nextTableDate ||
+                     $tableDate < $endDate && $endDate <= $nextTableDate ||
+                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $event_renderer = HourStepEventRenderer :: factory(
-                        $this,
-                        $event,
-                        $table_date,
-                        $calendar->get_hour_step());
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+                    $configuration->setHourStep($calendar->getHourStep());
 
-                    $calendar->add_event($table_date, $event_renderer->run());
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
-            $table_date = $next_table_date;
+            $tableDate = $nextTableDate;
         }
 
         $parameters = $this->getDataProvider()->getDisplayParameters();
         $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
-        $calendar->add_calendar_navigation($redirect->getUrl());
+        $calendar->addCalendarNavigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();

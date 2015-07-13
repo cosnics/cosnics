@@ -39,19 +39,19 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
     {
         $source = $this->getPostDataValue(self :: PARAM_SOURCE);
         $context = ClassnameUtilities :: getNamespaceParent(static :: context(), 2) . '\Storage\DataClass';
-        $visibility_class = $context . '\Visibility';
+        $visibilityClass = $context . '\Visibility';
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($visibility_class, Visibility :: PROPERTY_USER_ID),
+            new PropertyConditionVariable($visibilityClass, Visibility :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($visibility_class, Visibility :: PROPERTY_SOURCE),
+            new PropertyConditionVariable($visibilityClass, Visibility :: PROPERTY_SOURCE),
             new StaticConditionVariable($source));
         $condition = new AndCondition($conditions);
 
         // Retrieve the visibility object from storage
-        $visibility = $this->retrieve_visibility($condition);
+        $visibility = $this->retrieveVisibility($condition);
 
         $result = new JsonAjaxResult();
 
@@ -75,10 +75,10 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
         {
             $data = $this->getPostDataValue(self :: PARAM_DATA);
 
-            $visibility = new $visibility_class();
-            $visibility->set_user_id($this->get_user_id());
-            $visibility->set_source($source);
-            $this->set_visibility($visibility, $data);
+            $visibility = new $visibilityClass();
+            $visibility->setUserId($this->get_user_id());
+            $visibility->setSource($source);
+            $this->setVisibility($visibility, $data);
 
             if ($visibility->create())
             {
@@ -100,16 +100,15 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
 
     /**
      *
-     * @param Condition $condition
-     * @return \libraries\calendar\event\Visibility
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return \Chamilo\Libraries\Calendar\Event\Visibility
      */
-    abstract function retrieve_visibility(Condition $condition);
+    abstract function retrieveVisibility(Condition $condition);
 
     /**
      *
-     * @param \libraries\calendar\event\Visibility $visibility
+     * @param \Chamilo\Libraries\Calendar\Event\Visibility $visibility
      * @param string[] $data
-     * @return \libraries\calendar\event\Visibility
      */
-    abstract function set_visibility($visibility, $data = array());
+    abstract function setVisibility(Visibility $visibility = null, $data = array());
 }

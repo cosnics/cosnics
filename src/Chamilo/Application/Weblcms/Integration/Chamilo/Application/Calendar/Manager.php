@@ -26,11 +26,11 @@ class Manager implements CalendarInterface
 
     /**
      *
-     * @see \Chamilo\Application\Calendar\CalendarInterface::get_events()
+     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function get_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
-        $condition = $this->get_conditions($renderer->get_user());
+        $condition = $this->getConditions($renderer->getDataProvider()->getDataUser());
         $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublication :: class_name(),
             $condition);
@@ -60,7 +60,7 @@ class Manager implements CalendarInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    public function get_conditions($user)
+    public function getConditions($user)
     {
         $user_courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
         $course_ids = array();

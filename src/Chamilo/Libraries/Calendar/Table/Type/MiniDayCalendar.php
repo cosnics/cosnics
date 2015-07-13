@@ -1,16 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
-
-
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * A tabular representation of a mini day calendar
  *
- * @package libraries\calendar\table
+ * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,38 +15,43 @@ use Chamilo\Libraries\Utilities\Utilities;
 class MiniDayCalendar extends DayCalendar
 {
 
-    public function __construct($display_time, $hour_step = '1')
+    /**
+     *
+     * @param integer $displayTime
+     * @param integer $hourStep
+     */
+    public function __construct($displayTime, $hourStep = '1')
     {
-        parent :: __construct($display_time, $hour_step);
+        parent :: __construct($displayTime, $hourStep);
         $this->updateAttributes('class="calendar_table mini_calendar"');
     }
 
-    public function get_start_hour()
+    public function getStartHour()
     {
-        $working_start = LocalSetting :: get('working_hours_start');
+        $workingStart = LocalSetting :: get('working_hours_start');
         $hide = LocalSetting :: get('hide_none_working_hours');
-        $start_hour = 0;
+        $startHour = 0;
 
         if ($hide)
         {
-            $start_hour = $working_start;
+            $startHour = $workingStart;
         }
 
-        return $start_hour;
+        return $startHour;
     }
 
-    public function get_end_hour()
+    public function getEndHour()
     {
-        $working_end = LocalSetting :: get('working_hours_end');
+        $workingEnd = LocalSetting :: get('working_hours_end');
         $hide = LocalSetting :: get('hide_none_working_hours');
-        $end_hour = 24;
+        $endHour = 24;
 
         if ($hide)
         {
-            $end_hour = $working_end;
+            $endHour = $workingEnd;
         }
 
-        return $end_hour;
+        return $endHour;
     }
 
     /**
@@ -57,9 +59,9 @@ class MiniDayCalendar extends DayCalendar
      *
      * @return int
      */
-    public function get_start_time()
+    public function getStartTime()
     {
-        return strtotime(date('Y-m-d ' . $this->get_start_hour() . ':00:00', $this->get_display_time()));
+        return strtotime(date('Y-m-d ' . $this->getStartHour() . ':00:00', $this->getDisplayTime()));
     }
 
     /**
@@ -67,53 +69,55 @@ class MiniDayCalendar extends DayCalendar
      *
      * @return int
      */
-    public function get_end_time()
+    public function getEndTime()
     {
-        return strtotime(date('Y-m-d ' . ($this->get_end_hour() - 1) . ':59:59', $this->get_display_time()));
+        return strtotime(date('Y-m-d ' . ($this->getEndHour() - 1) . ':59:59', $this->getDisplayTime()));
     }
 
-    protected function build_table()
+    protected function buildTable()
     {
-        $year_day = date('z', $this->get_display_time()) + 1;
-        $year_week = date('W', $this->get_display_time());
+        $yearDay = date('z', $this->getDisplayTime()) + 1;
+        $yearWeek = date('W', $this->getDisplayTime());
 
         $header = $this->getHeader();
         $header->addRow(
             array(
-                Translation :: get('Day', null, Utilities :: COMMON_LIBRARIES) . ' ' . $year_day . ', ' .
-                     Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $year_week));
+                Translation :: get('Day', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearDay . ', ' .
+                     Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearWeek));
         $header->setRowType(0, 'th');
 
-        $start_hour = $this->get_start_hour();
-        $end_hour = $this->get_end_hour();
+        $startHour = $this->getStartHour();
+        $endHour = $this->getEndHour();
 
-        for ($hour = $start_hour; $hour < $end_hour; $hour += $this->get_hour_step())
+        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
         {
-            $row_id = ($hour / $this->get_hour_step()) - $start_hour;
+            $rowId = ($hour / $this->getHourStep()) - $startHour;
 
-            $table_start_date = mktime(
+            $tableStartDate = mktime(
                 $hour,
                 0,
                 0,
-                date('m', $this->get_display_time()),
-                date('d', $this->get_display_time()),
-                date('Y', $this->get_display_time()));
-            $table_end_date = strtotime('+' . $this->get_hour_step() . ' hours', $table_start_date);
-            $cell_contents = $hour . 'u - ' . ($hour + $this->get_hour_step()) . 'u <br />';
-            $this->setCellContents($row_id, 0, $cell_contents);
+                date('m', $this->getDisplayTime()),
+                date('d', $this->getDisplayTime()),
+                date('Y', $this->getDisplayTime()));
+
+            $tableEndDate = strtotime('+' . $this->getHourStep() . ' hours', $tableStartDate);
+            $cellContents = $hour . 'u - ' . ($hour + $this->getHourStep()) . 'u <br />';
+            $this->setCellContents($rowId, 0, $cellContents);
 
             // Highlight current hour
-            if (date('Y-m-d') == date('Y-m-d', $this->get_display_time()))
+            if (date('Y-m-d') == date('Y-m-d', $this->getDisplayTime()))
             {
-                if (date('H') >= $hour && date('H') < $hour + $this->get_hour_step())
+                if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
                 {
-                    $this->updateCellAttributes($row_id, 0, 'class="highlight"');
+                    $this->updateCellAttributes($rowId, 0, 'class="highlight"');
                 }
             }
+
             // Is current table hour during working hours?
             if ($hour < 8 || $hour > 18)
             {
-                $this->updateCellAttributes($row_id, 0, 'class="disabled_month"');
+                $this->updateCellAttributes($rowId, 0, 'class="disabled_month"');
             }
         }
     }
@@ -126,36 +130,41 @@ class MiniDayCalendar extends DayCalendar
     public function toHtml()
     {
         $html = parent :: toHtml();
-        $html = str_replace('class="calendar_navigation"', 'class="calendar_navigation mini_calendar"', $html);
-        return $html;
+        return str_replace('class="calendar_navigation"', 'class="calendar_navigation mini_calendar"', $html);
     }
 
     /**
      * Adds the events to the calendar
      */
-    private function add_events()
+    private function addEvents()
     {
-        $events = $this->get_events_to_show();
+        $events = $this->getEventsToShow();
+
         foreach ($events as $time => $items)
         {
-            if ($time >= $this->get_end_time())
+            if ($time >= $this->getEndTime())
             {
                 continue;
             }
 
-            $row = (date('H', $time) / $this->get_hour_step()) - ($this->get_start_hour() / $this->get_hour_step());
+            $row = (date('H', $time) / $this->getHourStep()) - ($this->getStartHour() / $this->getHourStep());
+
             foreach ($items as $index => $item)
             {
-                $cell_content = $this->getCellContents($row, 0);
-                $cell_content .= $item;
-                $this->setCellContents($row, 0, $cell_content);
+                $cellContent = $this->getCellContents($row, 0);
+                $cellContent .= $item;
+                $this->setCellContents($row, 0, $cellContent);
             }
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Table\Type\DayCalendar::render()
+     */
     public function render()
     {
-        $this->add_events();
+        $this->addEvents();
         return $this->toHtml();
     }
 }

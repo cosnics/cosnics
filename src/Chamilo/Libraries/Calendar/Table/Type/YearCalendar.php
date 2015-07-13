@@ -22,78 +22,79 @@ class YearCalendar extends Calendar
     /**
      * The navigation links
      */
-    private $navigation_html = '';
+    private $navigationHtml = '';
 
-    private $month_tables = array();
+    private $monthTables = array();
 
     /**
      * Creates a new month calendar
      *
-     * @param int $display_time A time in the month to be displayed
+     * @param int $displayTime A time in the month to be displayed
      */
-    public function __construct($display_time)
+    public function __construct($displayTime)
     {
-        parent :: __construct($display_time);
+        parent :: __construct($displayTime);
         $this->setAttributes(array('class' => 'year_calendar_table'));
-        $this->build_tables();
-        $this->events_to_show = array();
+        $this->buildTables();
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar. This is always a monday. If the current month
+     * Gets the first date which will be displayed by this calendar.
+     * This is always a monday. If the current month
      * doesn't start on a monday, the last monday of previous month is returned.
      *
      * @return int
      */
-    public function get_start_time()
+    public function getStartTime()
     {
-        $first_day = mktime(0, 0, 0, 1, 1, date('Y', $this->get_display_time()));
+        $firstDay = mktime(0, 0, 0, 1, 1, date('Y', $this->getDisplayTime()));
         $setting = PlatformSetting :: get('first_day_of_week');
 
         if ($setting == 'sunday')
         {
-            $first_day = strtotime('Next Sunday', strtotime('-1 Week', $first_day));
+            $firstDay = strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
         }
         else
         {
-            $first_day = strtotime('Next Monday', strtotime('-1 Week', $first_day));
+            $firstDay = strtotime('Next Monday', strtotime('-1 Week', $firstDay));
         }
 
-        return $first_day;
+        return $firstDay;
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar. This is always a sunday. Of the current month doesn't
+     * Gets the end date which will be displayed by this calendar.
+     * This is always a sunday. Of the current month doesn't
      * end on a sunday, the first sunday of next month is returned.
      *
      * @return int
      */
-    public function get_end_time()
+    public function getEndTime()
     {
-        $last_day = mktime(23, 59, 59, 12, 31, date('Y', $this->get_display_time()));
+        $lastDay = mktime(23, 59, 59, 12, 31, date('Y', $this->getDisplayTime()));
         $setting = PlatformSetting :: get('first_day_of_week');
 
         if ($setting == 'sunday')
         {
-            if (date('N', $last_day) != 6)
+            if (date('N', $lastDay) != 6)
             {
-                $last_day = strtotime('Next Saturday 23 hours 59 minutes 59 seconds', $last_day);
+                $lastDay = strtotime('Next Saturday 23 hours 59 minutes 59 seconds', $lastDay);
             }
         }
         else
         {
-            if (date('N', $last_day) != 7)
+            if (date('N', $lastDay) != 7)
             {
-                $last_day = strtotime('Next Sunday 23 hours 59 minutes 59 seconds', $last_day);
+                $lastDay = strtotime('Next Sunday 23 hours 59 minutes 59 seconds', $lastDay);
             }
         }
 
-        return $last_day;
+        return $lastDay;
     }
 
-    public function build_tables()
+    public function buildTables()
     {
-        $date_parts = getdate($this->get_display_time());
+        $date_parts = getdate($this->getDisplayTime());
 
         for ($month = 1; $month <= 12; $month ++)
         {
@@ -112,8 +113,8 @@ class YearCalendar extends Calendar
                 0,
                 Translation :: get(date('F', $time) . 'Long', null, Utilities :: COMMON_LIBRARIES)/* . ' ' . date('Y', $time)*/);
 
-            $this->month_tables[$month] = new MiniMonthCalendar($time);
-            $this->month_tables[$month]->set_navigation_html($navigation->toHtml());
+            $this->monthTables[$month] = new MiniMonthCalendar($time);
+            $this->monthTables[$month]->setNavigationHtml($navigation->toHtml());
         }
     }
 
@@ -122,10 +123,10 @@ class YearCalendar extends Calendar
      *
      * @param string $url_format The *TIME* in this string will be replaced by a timestamp
      */
-    public function add_calendar_navigation($url_format)
+    public function addCalendarNavigation($url_format)
     {
-        $prev = strtotime('-1 Year', $this->get_display_time());
-        $next = strtotime('+1 Year', $this->get_display_time());
+        $prev = strtotime('-1 Year', $this->getDisplayTime());
+        $next = strtotime('+1 Year', $this->getDisplayTime());
         $navigation = new HTML_Table('class="calendar_navigation"');
         $navigation->updateCellAttributes(0, 0, 'style="text-align: left;"');
         $navigation->updateCellAttributes(0, 1, 'style="text-align: center;"');
@@ -136,14 +137,14 @@ class YearCalendar extends Calendar
             '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $url_format)) .
                  '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Prev')) .
                  '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
-        $navigation->setCellContents(0, 1, date('Y', $this->get_display_time()));
+        $navigation->setCellContents(0, 1, date('Y', $this->getDisplayTime()));
         $navigation->setCellContents(
             0,
             2,
             ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $url_format)) .
                  '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Next')) .
                  '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
-        $this->navigation_html = $navigation->toHtml();
+        $this->navigationHtml = $navigation->toHtml();
     }
 
     /**
@@ -154,7 +155,7 @@ class YearCalendar extends Calendar
     public function toHtml()
     {
         $html = array();
-        $html[] = $this->navigation_html;
+        $html[] = $this->navigationHtml;
 
         for ($month = 1; $month <= 12; $month ++)
         {
@@ -169,7 +170,7 @@ class YearCalendar extends Calendar
                 $column,
                 array(
                     'style' => 'vertical-align: top; padding: 0px ' . $padding_right . ' ' . $padding_bottom . ' 0px;'));
-            $this->setCellContents($row, $column, $this->month_tables[$month]->render());
+            $this->setCellContents($row, $column, $this->monthTables[$month]->render());
         }
 
         $html[] = parent :: toHtml();
@@ -181,21 +182,21 @@ class YearCalendar extends Calendar
         return $this->toHtml();
     }
 
-    public function contains_events_for_time($time)
+    public function containsEventsForTime($time)
     {
         $month = date('n', $time);
-        return $this->month_tables[$month]->contains_events_for_time($time);
+        return $this->monthTables[$month]->containsEventsForTime($time);
     }
 
-    public function add_event($time, $content)
+    public function addEvent($time, $content)
     {
         $month = date('n', $time);
-        // $this->month_tables[$month]->add_event($time, $content);
-        foreach ($this->month_tables as $month_table)
+
+        foreach ($this->monthTables as $month_table)
         {
-            if ($time >= $month_table->get_start_time() && $time <= $month_table->get_end_time())
+            if ($time >= $month_table->getStartTime() && $time <= $month_table->getEndTime())
             {
-                $month_table->add_event($time, $content);
+                $month_table->addEvent($time, $content);
             }
         }
     }

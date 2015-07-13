@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMiniDayRenderer extends HourStepEventRenderer
+class EventMiniDayRenderer extends EventRenderer
 {
 
     /**
@@ -18,41 +18,43 @@ class EventMiniDayRenderer extends HourStepEventRenderer
      *
      * @return string
      */
-    public function run()
+    public function render()
     {
-        $table_end_date = strtotime('+' . $this->get_hour_step() . ' Hours', $this->get_start_date());
-        $start_date = $this->get_event()->get_start_date();
-        $end_date = $this->get_event()->get_end_date();
+        $configuration = $this->getConfiguration();
+
+        $tableEndDate = strtotime('+' . $configuration->getHourStep() . ' Hours', $configuration->getStartDate());
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
 
         $html[] = '<div class="' . $this->getEventClasses() . '">';
-        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
-            $this->get_event()->get_source()) . '">';
+        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
+             '">';
 
-        if ($start_date >= $this->get_start_date() && $start_date <= $table_end_date &&
-             ($start_date != $this->get_start_date() || $end_date < $table_end_date))
+        if ($startDate >= $configuration->getStartDate() && $startDate <= $tableEndDate &&
+             ($startDate != $configuration->getStartDate() || $endDate < $tableEndDate))
         {
-            $html[] = date('H:i', $start_date);
+            $html[] = date('H:i', $startDate);
         }
-        elseif ($start_date < $this->get_start_date())
+        elseif ($startDate < $configuration->getStartDate())
         {
 
             $html[] = '&uarr;';
         }
 
-        $target = $this->get_renderer()->get_link_target();
+        $target = $this->getRenderer()->getLinkTarget();
         $target = $target ? ' target="' . $target . '" ' : '';
 
-        $html[] = '<a href="' . $this->get_event()->get_url() . '"' . $target . '>';
-        $html[] = htmlspecialchars($this->get_event()->get_title());
+        $html[] = '<a href="' . $this->getEvent()->getUrl() . '"' . $target . '>';
+        $html[] = htmlspecialchars($this->getEvent()->getTitle());
         $html[] = '</a>';
 
-        if ($start_date != $end_date)
+        if ($startDate != $endDate)
         {
-            if ($end_date < $table_end_date && $start_date < $this->get_start_date())
+            if ($endDate < $tableEndDate && $startDate < $configuration->getStartDate())
             {
-                $html[] = date('H:i', $end_date);
+                $html[] = date('H:i', $endDate);
             }
-            elseif ($end_date > $table_end_date)
+            elseif ($endDate > $tableEndDate)
             {
                 $html[] = '&darr;';
             }

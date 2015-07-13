@@ -15,15 +15,21 @@ class Event
 
     /**
      *
-     * @var int
+     * @var integer
      */
-    private $start_date;
+    private $id;
 
     /**
      *
-     * @var int
+     * @var integer
      */
-    private $end_date;
+    private $startDate;
+
+    /**
+     *
+     * @var integer
+     */
+    private $endDate;
 
     /**
      *
@@ -63,12 +69,6 @@ class Event
 
     /**
      *
-     * @var int
-     */
-    private $id;
-
-    /**
-     *
      * @param integer $id
      * @param integer $startDate
      * @param integer $endDate
@@ -82,8 +82,8 @@ class Event
         $source, $context)
     {
         $this->id = $id;
-        $this->start_date = $startDate;
-        $this->end_date = $endDate;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
         $this->recurrenceRules = $recurrenceRules;
         $this->url = $url;
         $this->title = $title;
@@ -96,7 +96,7 @@ class Event
      *
      * @param int $id
      */
-    public function set_id($id)
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -105,7 +105,7 @@ class Event
      *
      * @return int
      */
-    public function get_id()
+    public function getId()
     {
         return $this->id;
     }
@@ -114,18 +114,18 @@ class Event
      *
      * @return int
      */
-    public function get_start_date()
+    public function getStartDate()
     {
-        return $this->start_date;
+        return $this->startDate;
     }
 
     /**
      *
      * @return int
      */
-    public function get_end_date()
+    public function getEndDate()
     {
-        return $this->end_date;
+        return $this->endDate;
     }
 
     /**
@@ -150,7 +150,7 @@ class Event
      *
      * @return string
      */
-    public function get_url()
+    public function getUrl()
     {
         return $this->url;
     }
@@ -159,7 +159,7 @@ class Event
      *
      * @return string
      */
-    public function get_title()
+    public function getTitle()
     {
         return $this->title;
     }
@@ -168,7 +168,7 @@ class Event
      *
      * @return string
      */
-    public function get_content()
+    public function getContent()
     {
         return $this->content;
     }
@@ -177,7 +177,7 @@ class Event
      *
      * @return string
      */
-    public function get_source()
+    public function getSource()
     {
         return $this->source;
     }
@@ -186,34 +186,34 @@ class Event
      *
      * @return string
      */
-    public function get_context()
+    public function getContext()
     {
         return $this->context;
     }
 
     /**
      *
-     * @param int $start_date
+     * @param int $startDate
      */
-    public function set_start_date($start_date)
+    public function setStartDate($startDate)
     {
-        $this->start_date = $start_date;
+        $this->startDate = $startDate;
     }
 
     /**
      *
-     * @param int $end_date
+     * @param int $endDate
      */
-    public function set_end_date($end_date)
+    public function setEndDate($endDate)
     {
-        $this->end_date = $end_date;
+        $this->endDate = $endDate;
     }
 
     /**
      *
      * @param string $url
      */
-    public function set_url($url)
+    public function setUrl($url)
     {
         $this->url = $url;
     }
@@ -222,7 +222,7 @@ class Event
      *
      * @param string $title
      */
-    public function set_title($title)
+    public function setTitle($title)
     {
         $this->title = $title;
     }
@@ -231,7 +231,7 @@ class Event
      *
      * @param string $content
      */
-    public function set_content($content)
+    public function setContent($content)
     {
         $this->content = $content;
     }
@@ -240,7 +240,7 @@ class Event
      *
      * @param string $source
      */
-    public function set_source($source)
+    public function setSource($source)
     {
         $this->source = $source;
     }
@@ -249,7 +249,7 @@ class Event
      *
      * @param string $context
      */
-    public function set_context($context)
+    public function setContext($context)
     {
         $this->context = $context;
     }
