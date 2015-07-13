@@ -28,11 +28,23 @@ class EventListRenderer extends EventRenderer
     {
         $html = array();
 
-        $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath($this->get_event()->get_context(), 'Logo/22') . ');">';
-        $html[] = '<div class="title">' . htmlentities($this->get_event()->get_title()) . '</div>';
-        $html[] = $this->get_description();
-        $html[] = $this->get_actions();
+        $event_classes = 'event';
+
+        if (! $this->get_renderer()->isSourceVisible($this->get_event()->get_source()))
+        {
+            $event_classes .= ' event-hidden';
+        }
+
+        $html[] = '<div class="' . $event_classes . '">';
+        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
+            $this->get_event()->get_source()) . '">';
+        $html[] = $this->getActions();
+        $html[] = '<h4>';
+        $html[] = htmlentities($this->get_event()->get_title());
+        $html[] = $this->getRange();
+        $html[] = '</h4>';
+        $html[] = $this->get_event()->get_content();
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -42,22 +54,7 @@ class EventListRenderer extends EventRenderer
      *
      * @return string
      */
-    public function get_description()
-    {
-        $html = array();
-        $html[] = '<div class="description">';
-        $html[] = $this->get_range();
-        $html[] = $this->get_content();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_range()
+    public function getRange()
     {
         $html = array();
 
@@ -65,7 +62,7 @@ class EventListRenderer extends EventRenderer
 
         if ($this->get_event()->get_end_date() != '')
         {
-            $html[] = '<div class="calendar_event_range">' .
+            $html[] = '<div class="calendar-event-range">' .
                  htmlentities(
                     Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
                      DatetimeUtilities :: format_locale_date($date_format, $this->get_event()->get_start_date()) . ' ' .
@@ -74,7 +71,7 @@ class EventListRenderer extends EventRenderer
         }
         else
         {
-            $html[] = '<div class="calendar_event_range">' . DatetimeUtilities :: format_locale_date(
+            $html[] = '<div class="calendar-event-range">' . DatetimeUtilities :: format_locale_date(
                 $date_format,
                 $this->get_event()->get_start_date()) . '</div>';
         }
@@ -82,16 +79,7 @@ class EventListRenderer extends EventRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_content()
-    {
-        return $this->get_event()->get_content();
-    }
-
-    public function get_actions()
+    public function getActions()
     {
         $html = array();
 
@@ -112,7 +100,7 @@ class EventListRenderer extends EventRenderer
             }
         }
 
-        $html[] = '<div style="float: right;">';
+        $html[] = '<div style="float: right; margin-top: 2px;">';
         $html[] = $toolbar->as_html();
         $html[] = '</div>';
 

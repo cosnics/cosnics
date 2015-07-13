@@ -39,7 +39,7 @@ class EventMonthRenderer extends StartDateEventRenderer
         }
 
         $html[] = '<div class="' . $event_classes . '">';
-        $html[] = '<div class="' . $this->get_renderer()->get_color_classes(
+        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses(
             $this->get_event()->get_source(),
             (($start_date < $from_date || $start_date > $to_date) ? true : false)) . '">';
 

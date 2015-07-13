@@ -18,7 +18,7 @@ interface VisibilitySupport
      * @param string $source
      * @return boolean
      */
-    public function isSourceVisible($source, $userIdentifier);
+    public function isSourceVisible($source, $userIdentifier = null);
 
     /**
      * Return the additional Application data needed for the storage of the Visibility instance

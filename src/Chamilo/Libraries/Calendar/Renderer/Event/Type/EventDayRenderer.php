@@ -32,7 +32,7 @@ class EventDayRenderer extends HourStepEventRenderer
         }
 
         $html[] = '<div class="' . $event_classes . '">';
-        $html[] = '<div class="' . $this->get_renderer()->get_color_classes($this->get_event()->get_source()) . '">';
+        $html[] = '<div class="' . $this->get_renderer()->getLegend()->getSourceClasses($this->get_event()->get_source()) . '">';
 
         if ($start_date >= $this->get_start_date() && $start_date <= $table_end_date &&
              ($start_date != $this->get_start_date() || $end_date < $table_end_date))

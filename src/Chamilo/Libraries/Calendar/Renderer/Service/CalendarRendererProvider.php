@@ -5,6 +5,7 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -141,7 +142,25 @@ abstract class CalendarRendererProvider implements
      */
     public function supportsVisibility()
     {
-        return $this instanceof VisibilitySupport;
+        if ($this instanceof VisibilitySupport)
+        {
+            $ajaxVisibilityClassName = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                $this->getVisibilityContext()) . '\Ajax\Component\CalendarEventVisibilityComponent';
+
+            if (! class_exists($ajaxVisibilityClassName))
+            {
+                throw new \Exception(
+                    'Please add an ajax Class CalendarEventVisibilityComponent to your implementing context\'s Ajax subpackage (' .
+                         $this->getVisibilityContext() .
+                         '). This class should extend the abstract \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent class.');
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
