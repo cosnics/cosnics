@@ -52,7 +52,7 @@ class RendererFactory
      * @param string $linkTarget
      */
     public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend,
-        $displayTime, $linkTarget)
+        $displayTime, $linkTarget = '')
     {
         $this->rendererType = $rendererType;
         $this->dataProvider = $dataProvider;
