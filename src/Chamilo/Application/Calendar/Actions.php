@@ -1,38 +1,45 @@
 <?php
 namespace Chamilo\Application\Calendar;
 
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 
+/**
+ *
+ * @package Chamilo\Application\Calendar
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 abstract class Actions
 {
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
      */
-    private $application;
+    private $dynamicVisualTabsRenderer;
 
     /**
      *
-     * @param \libraries\architecture\application\Application $application
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer $dynamicVisualTabsRenderer
      */
-    public function __construct(Application $application)
+    public function __construct(DynamicVisualTabsRenderer $dynamicVisualTabsRenderer)
     {
-        $this->application = $application;
+        $this->dynamicVisualTabsRenderer = $dynamicVisualTabsRenderer;
     }
 
     /**
      *
      * @return \libraries\architecture\application\Application
      */
-    public function get_application()
+    public function getDynamicVisualTabsRenderer()
     {
-        return $this->application;
+        return $this->dynamicVisualTabsRenderer;
     }
 
     /**
      *
-     * @return \libraries\format\ToolbarItem[]
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
      */
     public function get()
     {
