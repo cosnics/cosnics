@@ -59,7 +59,7 @@ class Configuration
     /**
      * Returns the instance of this class.
      *
-     * @return \Chamilo\Configuration The instance.
+     * @return \Chamilo\Configuration\Configuration The instance.
      */
     public static function get_instance()
     {

@@ -3,10 +3,10 @@ namespace Chamilo\Application\Calendar\Extension\Personal;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 
 class Actions extends \Chamilo\Application\Calendar\Actions
 {
@@ -17,7 +17,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
      */
     public function get()
     {
-        $actions = array();
+        $tabs = array();
 
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
@@ -26,10 +26,15 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $redirect = new Redirect($parameters);
         $link = $redirect->getUrl();
 
-        $actions[] = new ToolbarItem(
+        $tabs[] = new DynamicVisualTab(
+            'Publish',
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-            $link);
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Publish'),
+            $link,
+            false,
+            false,
+            DynamicVisualTab :: POSITION_RIGHT,
+            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
 
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
@@ -38,11 +43,16 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $redirect = new Redirect($parameters);
         $link = $redirect->getUrl();
 
-        $actions[] = new ToolbarItem(
+        $tabs[] = new DynamicVisualTab(
+            'ImportIcal',
             Translation :: get('ImportIcal'),
-            Theme :: getInstance()->getCommonImagePath('Action/Import'),
-            $link);
+            Theme :: getInstance()->getFileExtension('ics', Theme :: ICON_SMALL),
+            $link,
+            false,
+            false,
+            DynamicVisualTab :: POSITION_RIGHT,
+            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
 
-        return $actions;
+        return $tabs;
     }
 }

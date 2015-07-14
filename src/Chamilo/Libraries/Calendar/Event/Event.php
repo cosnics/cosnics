@@ -84,7 +84,7 @@ class Event
         $this->id = $id;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->recurrenceRules = $recurrenceRules;
+        $this->recurrenceRules = $recurrenceRules?:new RecurrenceRules();
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;
