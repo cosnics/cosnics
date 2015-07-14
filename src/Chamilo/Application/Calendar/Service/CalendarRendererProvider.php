@@ -176,8 +176,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::isSourceVisible()
      */
-    public function isSourceVisible($source, $userIdentifier)
+    public function isSourceVisible($source, $userIdentifier = null)
     {
+        if (is_null($userIdentifier))
+        {
+            $userIdentifier = $this->getViewingUser()->getId();
+        }
+
         $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
             $source,
             $userIdentifier);
@@ -192,18 +197,18 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $actions = array();
 
-        if ($event->get_context() == \Chamilo\Application\Calendar\Extension\Personal\Manager :: context())
+        if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager :: context())
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->getPublicationEditingUrl($event->get_id()),
+                $this->getPublicationEditingUrl($event->getId()),
                 ToolbarItem :: DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->getPublicationDeletingUrl($event->get_id()),
+                $this->getPublicationDeletingUrl($event->getId()),
                 ToolbarItem :: DISPLAY_ICON,
                 true);
         }
@@ -264,7 +269,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             if (class_exists($class_name))
             {
                 $implementor = new $class_name();
-                $events = array_merge($events, $implementor->get_events($renderer, $startTime, $endTime));
+                $events = array_merge($events, $implementor->getEvents($renderer, $startTime, $endTime));
             }
         }
 

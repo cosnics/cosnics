@@ -44,23 +44,23 @@ class JumpForm extends FormValidator
         $this->renderer = $this->defaultRenderer();
         $this->time = is_null($time) ? intval($time) : $time;
 
-        $this->build_form();
+        $this->buildForm();
         $this->accept($this->renderer);
     }
 
     /**
      * Build the simple search form.
      */
-    private function build_form()
+    private function buildForm()
     {
         $this->renderer->setFormTemplate(
             '<form {attributes}><div class="jump_form">{content}</div><div class="clear">&nbsp;</div></form>');
         $this->renderer->setElementTemplate('<div class="row"><div class="formw">{element}</div></div>');
 
         $this->addElement('static', null, null, Translation :: get('JumpTo', null, Utilities :: COMMON_LIBRARIES));
-        $this->addElement('select', self :: JUMP_DAY, null, $this->get_days(), array('class' => 'postback'));
-        $this->addElement('select', self :: JUMP_MONTH, null, $this->get_months(), array('class' => 'postback'));
-        $this->addElement('select', self :: JUMP_YEAR, null, $this->get_years(), array('class' => 'postback'));
+        $this->addElement('select', self :: JUMP_DAY, null, $this->getDays(), array('class' => 'postback'));
+        $this->addElement('select', self :: JUMP_MONTH, null, $this->getMonths(), array('class' => 'postback'));
+        $this->addElement('select', self :: JUMP_YEAR, null, $this->getYears(), array('class' => 'postback'));
         $this->addElement('style_submit_button', 'submit', Translation :: get('Jump'), array('class' => 'normal'));
         $this->addElement(
             'html',
@@ -90,7 +90,7 @@ class JumpForm extends FormValidator
      *
      * @return int
      */
-    public function get_time()
+    public function getTime()
     {
         $values = $this->exportValues();
         return mktime(0, 0, 0, $values[self :: JUMP_MONTH], $values[self :: JUMP_DAY], $values[self :: JUMP_YEAR]);
@@ -100,12 +100,12 @@ class JumpForm extends FormValidator
      *
      * @return int[]
      */
-    public function get_days()
+    public function getDays()
     {
-        $number_days = date('t', $this->time);
+        $numberDays = date('t', $this->time);
         $days = array();
 
-        for ($i = 1; $i <= $number_days; $i ++)
+        for ($i = 1; $i <= $numberDays; $i ++)
         {
             $days[$i] = $i;
         }
@@ -117,9 +117,9 @@ class JumpForm extends FormValidator
      *
      * @return string[]
      */
-    public function get_months()
+    public function getMonths()
     {
-        $month_names = array(
+        $monthNames = array(
             Translation :: get("JanuaryLong", null, Utilities :: COMMON_LIBRARIES),
             Translation :: get("FebruaryLong", null, Utilities :: COMMON_LIBRARIES),
             Translation :: get("MarchLong", null, Utilities :: COMMON_LIBRARIES),
@@ -134,7 +134,7 @@ class JumpForm extends FormValidator
             Translation :: get("DecemberLong", null, Utilities :: COMMON_LIBRARIES));
         $months = array();
 
-        foreach ($month_names as $key => $month)
+        foreach ($monthNames as $key => $month)
         {
             $months[$key + 1] = $month;
         }
@@ -146,7 +146,7 @@ class JumpForm extends FormValidator
      *
      * @return int[]
      */
-    public function get_years()
+    public function getYears()
     {
         $year = date('Y', $this->time);
         $years = array();

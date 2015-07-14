@@ -6,6 +6,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\MiniDayRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  *
@@ -32,14 +33,17 @@ class Day extends Block
             array(),
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
 
+        $calendarLegend = new Legend($dataProvider);
+
         $time = Request :: get('time') ? intval(Request :: get('time')) : time();
         $minidaycalendar = new MiniDayRenderer(
             $dataProvider,
+            $calendarLegend,
             $time,
+            $this->get_link_target(),
             $hour_step,
             $time_start,
-            $time_end,
-            $this->get_link_target());
+            $time_end);
 
         return $minidaycalendar->render();
     }

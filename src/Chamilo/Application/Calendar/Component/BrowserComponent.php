@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\RendererFactory;
 
 /**
  *
@@ -78,15 +80,19 @@ class BrowserComponent extends Manager implements DelegateComponent
             $displayParameters,
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
 
+        $calendarLegend = new Legend($dataProvider);
+
         $mini_month_renderer = new MiniMonthRenderer(
             $dataProvider,
+            $calendarLegend,
             $this->getCurrentRendererTime(),
             null,
             $this->getMiniMonthMarkPeriod());
 
-        $renderer = \Chamilo\Libraries\Calendar\Renderer\Renderer :: factory(
+        $rendererFactory = new RendererFactory(
             $this->getCurrentRendererType(),
             $dataProvider,
+            $calendarLegend,
             $this->getCurrentRendererTime());
 
         $html = array();
@@ -96,7 +102,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->form->toHtml();
         $html[] = '</div>';
         $html[] = '<div class="normal_calendar">';
-        $html[] = $renderer->render();
+        $html[] = $rendererFactory->render();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

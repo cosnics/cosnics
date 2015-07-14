@@ -11,11 +11,11 @@ interface CalendarInterface
 
     /**
      * Gets the events published in the implementing context
-     * 
-     * @param Renderer $renderer
-     * @param int $from_date
-     * @param int $to_date
-     * @return \application\personal_calendar\Event[]
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param integer $fromDate
+     * @param integer $toDate
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function get_events(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $from_date, $to_date);
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate);
 }

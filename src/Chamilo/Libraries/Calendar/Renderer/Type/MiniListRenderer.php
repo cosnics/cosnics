@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\StartEndDateEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -23,30 +23,41 @@ class MiniListRenderer extends Renderer
     {
         $html = array();
 
+        $html[] = '<div class="calendar-container">';
+
         // Today's events, from the current time until midnight
-        $from_time = time();
-        $to_time = strtotime('tomorrow -1 second', time());
-        $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Today', $from_time, $to_time);
+        $fromTime = time();
+        $toTime = strtotime('tomorrow -1 second', time());
+        $events = $this->getEvents($this, $fromTime, $toTime);
+        $html[] = $this->renderEvents($events, 'Today', $fromTime, $toTime);
 
         // Tomorrow's events, from midnight tomorrow until midnight the day after tomorrow
-        $from_time = strtotime('tomorrow', time());
-        $to_time = strtotime('tomorrow +1 day -1 second', time());
-        $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Tomorrow', $from_time, $to_time);
+        $fromTime = strtotime('tomorrow', time());
+        $toTime = strtotime('tomorrow +1 day -1 second', time());
+        $events = $this->getEvents($this, $fromTime, $toTime);
+        $html[] = $this->renderEvents($events, 'Tomorrow', $fromTime, $toTime);
 
         // Events that will happen soon, from midnight the day after tomorrow untill next week midnight
-        $from_time = strtotime('tomorrow +1 day', time());
-        $to_time = strtotime('tomorrow +7 days -1 second', time());
-        $events = $this->get_events($this, $from_time, $to_time);
-        $html[] = $this->render_events($events, 'Soon', $from_time, $to_time);
+        $fromTime = strtotime('tomorrow +1 day', time());
+        $toTime = strtotime('tomorrow +7 days -1 second', time());
+        $events = $this->getEvents($this, $fromTime, $toTime);
+        $html[] = $this->renderEvents($events, 'Soon', $fromTime, $toTime);
 
-        $html[] = $this->build_legend();
+        $html[] = '</div>';
+
+        $html[] = $this->getLegend()->render();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function render_events($events, $type, $from_time, $to_time)
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
+     * @param string $type
+     * @param integer $fromTime
+     * @param integer $toTime
+     */
+    public function renderEvents($events, $type, $fromTime, $toTime)
     {
         $output = array();
 
@@ -54,17 +65,22 @@ class MiniListRenderer extends Renderer
         {
             $output[] = '<h4>' . Translation :: get($type) . '</h4>';
 
-            $html_events = array();
+            $htmlEvents = array();
 
             foreach ($events as $index => $event)
             {
-                $event_renderer = StartEndDateEventRenderer :: factory($this, $event, $from_time, $to_time);
-                $html_events[$event->get_start_date()][] = $event_renderer->run();
+                $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                $configuration->setStartDate($fromTime);
+                $configuration->setEndDate($toTime);
+
+                $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+
+                $htmlEvents[$event->getStartDate()][] = $eventRendererFactory->render();
             }
 
-            ksort($html_events);
+            ksort($htmlEvents);
 
-            foreach ($html_events as $time => $content)
+            foreach ($htmlEvents as $time => $content)
             {
                 $output[] = implode(PHP_EOL, $content);
             }

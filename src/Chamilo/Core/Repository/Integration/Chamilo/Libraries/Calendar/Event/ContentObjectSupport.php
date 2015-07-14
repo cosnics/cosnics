@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
- * @package core\repository\calendar
+ * @package Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -15,13 +15,13 @@ interface ContentObjectSupport
 
     /**
      *
-     * @return ContentObject
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    public function get_content_object();
+    public function getContentObject();
 
     /**
      *
-     * @param ContentObject $content_object
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      */
-    public function set_content_object(ContentObject $content_object);
+    public function setContentObject(ContentObject $contentObject);
 }

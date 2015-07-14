@@ -18,8 +18,8 @@ interface CalendarRendererProviderInterface
      * Get the events between $start_time and $end_time which should be displayed in the calendar
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param int $start_time
-     * @param int $end_time
+     * @param int $startTime
+     * @param int $endTime
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents(Renderer $renderer, $startTime, $endTime);
@@ -41,4 +41,16 @@ interface CalendarRendererProviderInterface
      * @return boolean
      */
     public function supportsActions();
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getDataUser();
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getViewingUser();
 }

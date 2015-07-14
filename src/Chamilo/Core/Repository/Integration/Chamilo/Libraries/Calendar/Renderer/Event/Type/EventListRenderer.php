@@ -21,14 +21,14 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer::get_content()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer::getContent()
      */
-    public function get_content()
+    public function getContent()
     {
         $html = array();
 
-        $html[] = $this->get_event()->get_content();
-        $html[] = $this->render_attachments();
+        $html[] = $this->getEvent()->getContent();
+        $html[] = $this->renderAttachments();
 
         return implode(PHP_EOL, $html);
     }
@@ -38,11 +38,11 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
      * @param Event $event
      * @return string
      */
-    public function render_attachments()
+    public function renderAttachments()
     {
-        if ($this->get_event() instanceof ContentObjectSupport)
+        if ($this->getEvent() instanceof ContentObjectSupport)
         {
-            $object = $this->get_event()->get_content_object();
+            $object = $this->getEvent()->getContentObject();
 
             if ($object instanceof AttachmentSupport)
             {
@@ -53,15 +53,13 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                     Utilities :: order_content_objects_by_title($attachments);
 
                     $html[] = '<div class="attachments" style="margin-top: 1em;">';
-                    $html[] = '<div class="attachments_title">' .
-                         htmlentities(
-                            Translation :: get('Attachments', null, \Chamilo\Core\Repository\Manager :: context())) .
-                         '</div>';
+                    $html[] = '<div class="attachments_title">' . htmlentities(
+                        Translation :: get('Attachments', null, \Chamilo\Core\Repository\Manager :: context())) . '</div>';
                     $html[] = '<ul class="attachments_list">';
 
                     foreach ($attachments as $attachment)
                     {
-                        $url = $this->get_attachment_link($this->get_event(), $attachment);
+                        $url = $this->getAttachmentLink($this->getEvent(), $attachment);
 
                         $render = array();
 
@@ -98,5 +96,5 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
         }
     }
 
-    abstract function get_attachment_link(Event $event, ContentObject $attachment);
+    abstract function getAttachmentLink(Event $event, ContentObject $attachment);
 }

@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\HourStepEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -22,158 +23,159 @@ class MiniDayRenderer extends TableRenderer
      *
      * @var int
      */
-    private $hour_step;
+    private $hourStep;
 
     /**
      *
      * @var int
      */
-    private $start_hour;
+    private $startHour;
 
     /**
      *
      * @var int
      */
-    private $end_hour;
+    private $endHour;
 
     /**
      *
-     * @param CalendarRendererProviderInterface $dataProvider
-     * @param int $display_time
-     * @param int $hour_step
-     * @param int $start_hour
-     * @param int $end_hour
-     * @param string $link_target
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     * @param int $displayTime
+     * @param string $linkTarget
+     * @param int $hourStep
+     * @param int $startHour
+     * @param int $endHour
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $hour_step = 1,
-        $start_hour = 0, $end_hour = 24, $link_target = '')
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24)
     {
-        $this->hour_step = $hour_step;
-        $this->start_hour = $start_hour;
-        $this->end_hour = $end_hour;
+        $this->hourStep = $hourStep;
+        $this->startHour = $startHour;
+        $this->endHour = $endHour;
 
-        parent :: __construct($dataProvider, $display_time, $link_target);
+        parent :: __construct($dataProvider, $legend, $displayTime, $linkTarget);
     }
 
     /**
      *
      * @return int
      */
-    public function get_hour_step()
+    public function getHourStep()
     {
-        return $this->hour_step;
+        return $this->hourStep;
     }
 
     /**
      *
-     * @param int $hour_step
+     * @param int $hourStep
      */
-    public function set_hour_step($hour_step)
+    public function setHourStep($hourStep)
     {
-        $this->hour_step = $hour_step;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_start_hour()
-    {
-        return $this->start_hour;
-    }
-
-    /**
-     *
-     * @param int $start_hour
-     */
-    public function set_start_hour($start_hour)
-    {
-        $this->start_hour = $start_hour;
+        $this->hourStep = $hourStep;
     }
 
     /**
      *
      * @return int
      */
-    public function get_end_hour()
+    public function getStartHour()
     {
-        return $this->end_hour;
+        return $this->startHour;
     }
 
     /**
      *
-     * @param int $end_hour
+     * @param int $startHour
      */
-    public function set_end_hour($end_hour)
+    public function setStartHour($startHour)
     {
-        $this->end_hour = $end_hour;
+        $this->startHour = $startHour;
     }
 
     /**
      *
-     * @return \libraries\calendar\table\MiniDayCalendar
+     * @return int
      */
-    public function initialize_calendar()
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     *
+     * @param int $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar
+     */
+    public function initializeCalendar()
     {
         return new MiniDayCalendar(
-            $this->get_time(),
-            $this->get_hour_step(),
-            $this->get_start_hour(),
-            $this->get_end_hour());
+            $this->getDisplayTime(),
+            $this->getHourStep(),
+            $this->getStartHour(),
+            $this->getEndHour());
     }
 
     /**
      *
-     * @see \libraries\calendar\renderer\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {
-        $calendar = $this->get_calendar();
+        $calendar = $this->getCalendar();
 
-        $from_date = $calendar->get_start_time();
-        $to_date = $calendar->get_end_time();
+        $fromDate = $calendar->getStartTime();
+        $toDate = $calendar->getEndTime();
 
-        $events = $this->get_events($this, $from_date, $to_date);
+        $events = $this->getEvents($this, $fromDate, $toDate);
 
-        $start_time = $calendar->get_start_time();
-        $end_time = $calendar->get_end_time();
-        $table_date = $start_time;
+        $startTime = $calendar->getStartTime();
+        $endTime = $calendar->getEndTime();
+        $tableDate = $startTime;
 
-        while ($table_date <= $end_time)
+        while ($tableDate <= $endTime)
         {
-            $next_table_date = strtotime('+' . $calendar->get_hour_step() . ' Hours', $table_date);
+            $nextTableDate = strtotime('+' . $calendar->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
-                $start_date = $event->get_start_date();
-                $end_date = $event->get_end_date();
+                $startDate = $event->getStartDate();
+                $endDate = $event->getEndDate();
 
-                if ($table_date < $start_date && $start_date < $next_table_date ||
-                     $table_date < $end_date && $end_date < $next_table_date ||
-                     $start_date <= $table_date && $next_table_date <= $end_date)
+                if ($tableDate < $startDate && $startDate < $nextTableDate ||
+                     $tableDate < $endDate && $endDate < $nextTableDate ||
+                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $event_renderer = HourStepEventRenderer :: factory(
-                        $this,
-                        $event,
-                        $table_date,
-                        $calendar->get_hour_step());
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+                    $configuration->setHourStep($calendar->getHourStep());
 
-                    $calendar->add_event($table_date, $event_renderer->run());
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
-            $table_date = $next_table_date;
+            $tableDate = $nextTableDate;
         }
 
         $parameters = $this->getDataProvider()->getDisplayParameters();
         $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
-        $calendar->add_calendar_navigation($redirect->getUrl());
+        $calendar->addCalendarNavigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();
-        $html[] = $this->build_legend();
+        $html[] = $this->getLegend()->render();
         return implode(PHP_EOL, $html);
     }
 }

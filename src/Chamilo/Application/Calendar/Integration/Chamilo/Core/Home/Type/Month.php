@@ -6,6 +6,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  *
@@ -26,8 +27,10 @@ class Month extends Block
             array(),
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
 
+        $calendarLegend = new Legend($dataProvider);
+
         $time = Request :: get('time') ? intval(Request :: get('time')) : time();
-        $minimonthcalendar = new MiniMonthRenderer($dataProvider, $time, $this->get_link_target());
+        $minimonthcalendar = new MiniMonthRenderer($dataProvider, $calendarLegend, $time, $this->get_link_target());
         return $minimonthcalendar->render();
     }
 }

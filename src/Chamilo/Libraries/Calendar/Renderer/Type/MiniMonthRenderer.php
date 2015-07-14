@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -23,104 +24,108 @@ class MiniMonthRenderer extends TableRenderer
      * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
      * MiniMonthCalendar :: PERIOD_DAY;
      *
-     * @var int
+     * @var integer
      */
-    private $mark_period;
+    private $markPeriod;
 
     /**
      *
-     * @param CalendarRendererProviderInterface $dataProvider
-     * @param int $display_time
-     * @param string $link_target
-     * @param int $mark_period
+     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param int $displayTime
+     * @param string $linkTarget
+     * @param int $markPeriod
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, $display_time, $link_target = '',
-        $mark_period = null)
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+        $linkTarget = '', $markPeriod = null)
     {
-        $this->mark_period = $mark_period;
+        $this->markPeriod = $markPeriod;
 
-        parent :: __construct($dataProvider, $display_time, $link_target);
+        parent :: __construct($dataProvider, $legend, $displayTime, $linkTarget);
     }
 
     /**
      *
-     * @return int
+     * @return integer
      */
-    public function get_mark_period()
+    public function getMarkPeriod()
     {
-        return $this->mark_period;
+        return $this->markPeriod;
     }
 
     /**
      *
-     * @param int $mark_period
+     * @param integer $markPeriod
      */
-    public function set_mark_period($mark_period)
+    public function setMarkPeriod($markPeriod)
     {
-        $this->mark_period = $mark_period;
+        $this->markPeriod = $markPeriod;
     }
 
     /**
      *
-     * @return \libraries\calendar\table\MiniMonthCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar
      */
-    public function initialize_calendar()
+    public function initializeCalendar()
     {
-        return new MiniMonthCalendar($this->get_time());
+        return new MiniMonthCalendar($this->getDisplayTime());
     }
 
     /**
      *
-     * @see \libraries\calendar\renderer\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
     public function render()
     {
-        $calendar = $this->get_calendar();
+        $calendar = $this->getCalendar();
 
-        $start_time = $calendar->get_start_time();
-        $end_time = $calendar->get_end_time();
+        $startTime = $calendar->getStartTime();
+        $endTime = $calendar->getEndTime();
 
-        $events = $this->get_events($this, $start_time, $end_time);
-        $table_date = $start_time;
+        $events = $this->getEvents($this, $startTime, $endTime);
+        $tableDate = $startTime;
 
-        while ($table_date <= $end_time)
+        while ($tableDate <= $endTime)
         {
-            $next_table_date = strtotime('+1 Day', $table_date);
+            $nextTableDate = strtotime('+1 Day', $tableDate);
 
             foreach ($events as $index => $event)
             {
-                $start_date = $event->get_start_date();
-                $end_date = $event->get_end_date();
+                $startDate = $event->getStartDate();
+                $endDate = $event->getEndDate();
 
-                if ($table_date < $start_date && $start_date < $next_table_date ||
-                     $table_date < $end_date && $end_date <= $next_table_date ||
-                     $start_date <= $table_date && $next_table_date <= $end_date)
+                if ($tableDate < $startDate && $startDate < $nextTableDate ||
+                     $tableDate < $endDate && $endDate <= $nextTableDate ||
+                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    if (! $calendar->contains_events_for_time($table_date))
+                    if (! $calendar->containsEventsForTime($tableDate))
                     {
                         $marker = '<br /><div class="event_marker" style="width: 14px; height: 15px;"><img src="' . htmlspecialchars(
                             Theme :: getInstance()->getCommonImagePath('Action/Marker')) . '"/></div>';
-                        $calendar->add_event($table_date, $marker);
+                        $calendar->addEvent($tableDate, $marker);
                     }
 
-                    $event_renderer = StartDateEventRenderer :: factory($this, $event, $table_date);
-                    $calendar->add_event($table_date, $event_renderer->run());
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
-            $table_date = $next_table_date;
+            $tableDate = $nextTableDate;
         }
 
         $parameters = $this->getDataProvider()->getDisplayParameters();
         $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
-        $calendar->add_calendar_navigation($redirect->getUrl());
-        $calendar->add_navigation_links($redirect->getUrl());
+        $calendar->addCalendarNavigation($redirect->getUrl());
+        $calendar->addNavigationLinks($redirect->getUrl());
 
-        if (! is_null($this->get_mark_period()))
+        if (! is_null($this->getMarkPeriod()))
         {
-            $calendar->mark_period($this->get_mark_period());
+            $calendar->markPeriod($this->getMarkPeriod());
         }
 
         return $calendar->render();

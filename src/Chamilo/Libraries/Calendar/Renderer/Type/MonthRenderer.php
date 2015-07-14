@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\StartDateEventRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
@@ -19,11 +19,11 @@ class MonthRenderer extends TableRenderer
 
     /**
      *
-     * @return \libraries\calendar\table\MonthCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
      */
-    public function initialize_calendar()
+    public function initializeCalendar()
     {
-        return new MonthCalendar($this->get_time());
+        return new MonthCalendar($this->getDisplayTime());
     }
 
     /**
@@ -32,44 +32,48 @@ class MonthRenderer extends TableRenderer
      */
     public function render()
     {
-        $calendar = $this->get_calendar();
+        $calendar = $this->getCalendar();
 
-        $start_time = $calendar->get_start_time();
-        $end_time = $calendar->get_end_time();
+        $startTime = $calendar->getStartTime();
+        $endTime = $calendar->getEndTime();
 
-        $events = $this->get_events($this, $start_time, $end_time);
-        $table_date = $start_time;
+        $events = $this->getEvents($this, $startTime, $endTime);
+        $tableDate = $startTime;
 
-        while ($table_date <= $end_time)
+        while ($tableDate <= $endTime)
         {
-            $next_table_date = strtotime('+1 Day', $table_date);
+            $nextTableDate = strtotime('+1 Day', $tableDate);
 
             foreach ($events as $index => $event)
             {
-                $start_date = $event->get_start_date();
-                $end_date = $event->get_end_date();
+                $startDate = $event->getStartDate();
+                $endDate = $event->getEndDate();
 
-                if ($table_date < $start_date && $start_date < $next_table_date ||
-                     $table_date < $end_date && $end_date <= $next_table_date ||
-                     $start_date <= $table_date && $next_table_date <= $end_date)
+                if ($tableDate < $startDate && $startDate < $nextTableDate ||
+                     $tableDate < $endDate && $endDate <= $nextTableDate ||
+                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $event_renderer = StartDateEventRenderer :: factory($this, $event, $table_date);
-                    $calendar->add_event($table_date, $event_renderer->run());
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
-            $table_date = $next_table_date;
+            $tableDate = $nextTableDate;
         }
 
         $parameters = $this->getDataProvider()->getDisplayParameters();
         $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
-        $calendar->add_calendar_navigation($redirect->getUrl());
+        $calendar->addCalendarNavigation($redirect->getUrl());
 
         $html = array();
         $html[] = $calendar->render();
-        $html[] = $this->build_legend();
+        $html[] = $this->getLegend()->render();
         return implode(PHP_EOL, $html);
     }
 }
