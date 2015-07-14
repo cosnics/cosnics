@@ -16,6 +16,7 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\RendererFactory;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 
 /**
  *
@@ -53,12 +54,74 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->render_header();
         $html[] = '<a name="top"></a>';
         $html[] = $this->getActionBar()->as_html();
-        $html[] = '<div id="action_bar_browser">';
-        $html[] = $this->getCalendarHtml();
-        $html[] = '</div>';
+
+        $html[] = $this->getTabs()->render();
+
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getTabs()
+    {
+        $tabs = new DynamicVisualTabsRenderer('calendar');
+
+        $this->addTypeTabs($tabs);
+        $this->addExtensionTabs($tabs);
+
+        $tabs->set_content($this->getCalendarHtml());
+
+        return $tabs;
+    }
+
+    public function addTypeTabs(DynamicVisualTabsRenderer $tabs)
+    {
+        $typeUrl = $this->get_url(
+            array(
+                Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
+                Renderer :: PARAM_TYPE => Renderer :: MARKER_TYPE));
+        $todayUrl = $this->get_url(
+            array(
+                Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
+                Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
+                Renderer :: PARAM_TIME => time()));
+
+        $rendererTypes = array(
+            Renderer :: TYPE_MONTH,
+            Renderer :: TYPE_WEEK,
+            Renderer :: TYPE_DAY,
+            Renderer :: TYPE_YEAR,
+            Renderer :: TYPE_LIST);
+
+        $rendererTypeTabs = Renderer :: getTabs($rendererTypes, $typeUrl, $todayUrl);
+
+        foreach ($rendererTypeTabs as $rendererTypeTab)
+        {
+            $rendererTypeTab->set_selected($this->getCurrentRendererType() == $rendererTypeTab->get_id());
+
+            $tabs->add_tab($rendererTypeTab);
+        }
+    }
+
+    private function addExtensionTabs(DynamicVisualTabsRenderer $tabs)
+    {
+        $extensionRegistrations = Configuration :: registrations_by_type(
+            \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
+        $actions = array();
+
+        foreach ($extensionRegistrations as $extensionRegistration)
+        {
+            $actionRendererClass = $extensionRegistration->get_context() . '\Actions';
+            $actionRenderer = new $actionRendererClass($tabs);
+            $extensionTabs = $actionRenderer->get();
+
+            foreach ($extensionTabs as $extensionTab)
+            {
+                $tabs->add_tab($extensionTab);
+            }
+        }
+
+        return $actions;
     }
 
     /**
@@ -116,39 +179,16 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
 
-        foreach ($this->getExtensionActions() as $extension_action)
-        {
-            $action_bar->add_common_action($extension_action);
-        }
+        // foreach ($this->getExtensionActions() as $extension_action)
+        // {
+        // $action_bar->add_common_action($extension_action);
+        // }
 
         // TODO: implement abstraction here to allow extension-specific actions
-        if ($this->get_parameter(Manager :: PARAM_VIEW) == 'list')
-        {
-            $action_bar->set_search_url($this->get_url());
-        }
-
-        $type_url = $this->get_url(
-            array(
-                Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                Renderer :: PARAM_TYPE => Renderer :: MARKER_TYPE));
-        $today_url = $this->get_url(
-            array(
-                Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
-                Renderer :: PARAM_TIME => time()));
-
-        $renderer_types = array(
-            Renderer :: TYPE_LIST,
-            Renderer :: TYPE_MONTH,
-            Renderer :: TYPE_WEEK,
-            Renderer :: TYPE_DAY,
-            Renderer :: TYPE_YEAR);
-        $renderer_type_items = Renderer :: getToolbarItems($renderer_types, $type_url, $today_url);
-
-        foreach ($renderer_type_items as $renderer_type_item)
-        {
-            $action_bar->add_tool_action($renderer_type_item);
-        }
+        // if ($this->get_parameter(Renderer :: PARAM_TYPE) == 'List')
+        // {
+        // $action_bar->set_search_url($this->get_url());
+        // }
 
         return $action_bar;
     }
@@ -167,7 +207,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $action_renderer_class = $extension_registration->get_context() . '\Actions';
             $action_renderer = new $action_renderer_class($this);
-            $actions = $actions + $action_renderer->get();
+            $actions = array_merge($actions, $action_renderer->get());
         }
 
         return $actions;

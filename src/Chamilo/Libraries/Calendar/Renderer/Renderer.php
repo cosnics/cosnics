@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 
 /**
  *
@@ -211,6 +212,42 @@ abstract class Renderer
             $todayUrl);
 
         return $items;
+    }
+
+    /**
+     *
+     * @param string[] $types
+     * @param string $url
+     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
+     */
+    public static function getTabs($types, $typeUrl, $todayUrl)
+    {
+        $tabs = array();
+
+        foreach ($types as $type)
+        {
+            $tabs[] = new DynamicVisualTab(
+                $type,
+                Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Tab/Type/' . $type),
+                str_replace(self :: MARKER_TYPE, $type, $typeUrl),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_LEFT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+        }
+
+        $tabs[] = new DynamicVisualTab(
+            'today',
+            Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Tab/Today'),
+            $todayUrl,
+            false,
+            false,
+            DynamicVisualTab :: POSITION_LEFT,
+            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+
+        return $tabs;
     }
 
     /**
