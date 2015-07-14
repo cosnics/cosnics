@@ -86,6 +86,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
         /**
          * Include a fake tree root (for which there is no record in the database)
          */
+
         if ($this->include_fake_root)
         {
             $root_node = $this->create_tree_fake_root_node();
@@ -94,10 +95,10 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
             // node now must become the only first element
             $this->tree = array($root_node);
 
-//             if (! $this->current_node_id)
-//             {
-//                 $this->forceCurrentUrl($this->get_node_url(0));
-//             }
+            // if (! $this->current_node_id)
+            // {
+            // $this->forceCurrentUrl($this->get_node_url(0));
+            // }
         }
     }
 
@@ -111,7 +112,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
 
         if (empty($root_ids))
         {
-            $this->tree = $this->retrieve_child_tree_items(0);
+            $this->tree = $this->retrieve_child_tree_items($this->get_root_node_id());
         }
         else
         {
@@ -150,7 +151,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
     {
         $tree_item = array();
         $tree_item['title'] = $this->get_root_node_title();
-        $tree_item['url'] = $this->get_node_url(0);
+        $tree_item['url'] = $this->get_node_url($this->get_root_node_id());
 
         if (count($this->tree) > 0)
         {
@@ -159,8 +160,13 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
         }
 
         $tree_item['class'] = $this->get_root_node_class();
-        $tree_item['id'] = 0;
+        $tree_item['id'] = $this->get_root_node_id();
         return $tree_item;
+    }
+
+    public function get_root_node_id()
+    {
+        return 0;
     }
 
     /**

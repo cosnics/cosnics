@@ -48,16 +48,6 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return $this->set_default_property(self :: PROPERTY_MODIFIER_ID, $modifier_id);
     }
 
-    public function get_acl()
-    {
-        return $this->get_default_property(self :: PROPERTY_ACL);
-    }
-
-    public function set_acl($acl)
-    {
-        return $this->set_default_property(self :: PROPERTY_ACL, $acl);
-    }
-
     public function get_preview()
     {
         return $this->get_default_property(self :: PROPERTY_PREVIEW);

@@ -19,18 +19,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     private $action_bar;
 
-    private $menu;
-
-    public function get_menu()
-    {
-        return $this->menu;
-    }
-
-    public function set_menu($menu)
-    {
-        $this->menu = $menu;
-    }
-
     public function render_menu()
     {
         $extra = $this->get_menu_items();
@@ -50,21 +38,21 @@ class BrowserComponent extends Manager implements DelegateComponent
             $search_url = null;
         }
 
-        $this->menu = new Menu(
+        $menu = new Menu(
             Request :: get(\Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID),
             $this->get_parent(),
             $extra);
 
         if ($search_url)
         {
-            $this->menu->forceCurrentUrl($search_url);
+            $menu->forceCurrentUrl($search_url);
         }
 
         $html = array();
-        if ($this->menu->count_menu_items() > 0)
+        if ($menu->count_menu_items() > 0)
         {
             $html[] = '<div style=" width: 20%; overflow: auto; float: left;">';
-            $html[] = $this->menu->render_as_tree();
+            $html[] = $menu->render_as_tree();
             $html[] = '</div>';
         }
         return implode(PHP_EOL, $html);
@@ -88,16 +76,24 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($this->get_menu() == null)
         {
-            $html[] = $this->render_menu();
+            $menu = $this->render_menu();
         }
-        if ($this->menu->count_menu_items() > 0)
+        else
         {
+            $menu = array();
+            $menu[] = '<div style=" width: 20%; overflow: auto; float: left;">';
+            $menu[] = $this->get_menu()->render_as_tree();
+            $menu[] = '</div>';
+            $menu = implode(PHP_EOL, $menu);
+        }
+        if ($menu)
+        {
+            $html[] = $menu;
             $html[] = '<div style=" width: 80%; overflow: auto; float: left;">';
         }
-
         $html[] = Renderer :: factory($this->get_parent()->get_renderer(), $this)->as_html();
 
-        if ($this->menu->count_menu_items() > 0)
+        if ($menu)
         {
             $html[] = '</div>';
         }
@@ -142,7 +138,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                             (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() . 'View',
                             null,
                             Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('View/' . (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize()),
+                        Theme :: getInstance()->getCommonImagePath(
+                            'View/' . (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize()),
                         $this->get_url(array(\Chamilo\Core\Repository\External\Manager :: PARAM_RENDERER => $renderer)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }

@@ -102,6 +102,11 @@ abstract class Manager extends Application
         return $this->get_parent()->get_menu_items();
     }
 
+    public function get_menu()
+    {
+        return $this->get_parent()->get_menu();
+    }
+
     public function get_repository_type()
     {
         return $this->get_parent()->get_repository_type();

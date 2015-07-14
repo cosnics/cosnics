@@ -341,6 +341,11 @@ abstract class Manager extends Application implements NoContextComponent
      */
     abstract public function get_menu_items();
 
+
+    public function get_menu( )
+    {
+        return null;
+    }
     /**
      *
      * @param \core\repository\external\ExternalObject $object
