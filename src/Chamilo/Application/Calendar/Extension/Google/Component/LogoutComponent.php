@@ -15,23 +15,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LoginComponent extends Manager implements DelegateComponent
+class LogoutComponent extends Manager implements DelegateComponent
 {
 
     public function run()
     {
         $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
-        $result = $googleCalendarService->login(
-            $this->getRequest()->query->get(GoogleCalendarService :: PARAM_AUTHORIZATION_CODE));
+        $isSuccessful = $googleCalendarService->logout();
 
-        if ($result)
-        {
-            $nextAction = new Redirect(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Google\Manager :: context(),
-                    \Chamilo\Application\Calendar\Extension\Google\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Google\Manager :: ACTION_VISIBILITY));
-
-            $nextAction->toUrl();
-        }
+        $nextAction = new Redirect(
+            array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
+        $nextAction->toUrl();
     }
 }

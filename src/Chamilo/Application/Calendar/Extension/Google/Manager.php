@@ -16,6 +16,7 @@ abstract class Manager extends Application
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_LOGIN = 'Login';
+    const ACTION_LOGOUT = 'Logout';
     const ACTION_VISIBILITY = 'Visibility';
 
     // Default action

@@ -34,7 +34,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
             $tabs[] = new DynamicVisualTab(
                 'GoogleCalendarLogin',
                 Translation :: get('GoogleCalendarLogin'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Login'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGIN),
                 $link,
                 false,
                 false,
@@ -45,6 +45,23 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         {
             $parameters = array();
             $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
+            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_LOGOUT;
+
+            $redirect = new Redirect($parameters);
+            $link = $redirect->getUrl();
+
+            $tabs[] = new DynamicVisualTab(
+                'GoogleCalendarLogout',
+                Translation :: get('GoogleCalendarLogout'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGOUT),
+                $link,
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+
+            $parameters = array();
+            $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VISIBILITY;
 
             $redirect = new Redirect($parameters);
@@ -53,7 +70,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
             $tabs[] = new DynamicVisualTab(
                 'GoogleCalendarVisibility',
                 Translation :: get('GoogleCalendarVisibility'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Visibility'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_VISIBILITY),
                 $link,
                 false,
                 false,
