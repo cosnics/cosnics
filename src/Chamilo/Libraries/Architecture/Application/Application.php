@@ -433,6 +433,7 @@ abstract class Application
      * Gets the user id of this personal calendars owner
      *
      * @return int
+     * @deprecated Use getUser()->getId() now
      */
     public function get_user_id()
     {
@@ -447,9 +448,19 @@ abstract class Application
     /**
      * Gets the user.
      *
-     * @return \core\user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @deprecated Use getUser() now
      */
     public function get_user()
+    {
+        return $this->getUser();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getUser()
     {
         return $this->getApplicationConfiguration()->getUser();
     }

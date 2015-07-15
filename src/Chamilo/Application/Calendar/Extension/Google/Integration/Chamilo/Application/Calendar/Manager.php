@@ -3,10 +3,10 @@ namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Appl
 
 use Chamilo\Application\Calendar\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+// use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
+use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Utilities\UUID;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -24,44 +24,39 @@ class Manager implements CalendarInterface
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
-        return array();
+        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
+        $googleCalendarEvents = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
+            'roderidder@gmail.com',
+            1435536000,
+            1438560000);
 
-        $result = $this->retrieveEvents();
+        $events = array();
 
-        var_dump($result);
-        exit();
+        foreach ($googleCalendarEvents as $googleCalendarEvent)
+        {
 
-        $eventTest = new Event(
-            UUID :: v4(),
-            time(),
-            time() + 100000,
-            null,
-            null,
-            'Google Drive Event',
-            null,
-            'Google Drive',
-            __NAMESPACE__);
+            $startDate = new \DateTime(
+                $googleCalendarEvent->getStart()->getDateTime() ?  : $googleCalendarEvent->getStart()->getDate(),
+                $googleCalendarEvent->getStart()->getTimeZone() ? new \DateTimeZone(
+                    $googleCalendarEvent->getStart()->getTimeZone()) : null);
+            $endDate = new \DateTime(
+                $googleCalendarEvent->getEnd()->getDateTime() ?  : $googleCalendarEvent->getEnd()->getDate(),
+                $googleCalendarEvent->getEnd()->getTimeZone() ? new \DateTimeZone(
+                    $googleCalendarEvent->getEnd()->getTimeZone()) : null);
 
-        return array($eventTest);
-    }
+            $events[] = new Event(
+                $googleCalendarEvent->getICalUID(),
+                $startDate->getTimestamp(),
+                $endDate->getTimestamp(),
+                null,
+                null,
+                $googleCalendarEvent->getSummary(),
+                null,
+                'Google Calendar',
+                __NAMESPACE__);
+        }
 
-    public function retrieveEvents()
-    {
-        $configuration = Configuration :: get_instance();
-        $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
-
-        $googleClient = new \Google_Client();
-        $googleClient->setDeveloperKey($configuration->get_setting(array($configurationContext, 'developer_key')));
-
-        $calendarClient = new \Google_Service_Calendar($googleClient);
-
-        $googleClient->setClientId($configuration->get_setting(array($configurationContext, 'client_id')));
-        $googleClient->setClientSecret($configuration->get_setting(array($configurationContext, 'client_secret')));
-        $googleClient->setScopes('https://www.googleapis.com/auth/calendar.readonly');
-
-        $googleClient->setAccessToken(LocalSetting :: get('token', $configurationContext));
-
-        return $calendarClient->calendarList->listCalendarList(array('minAccessRole' => 'owner'));
+        return $events;
     }
 
     /**

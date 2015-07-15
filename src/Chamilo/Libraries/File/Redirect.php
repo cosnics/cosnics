@@ -188,7 +188,7 @@ class Redirect
      *
      * @param string $url
      */
-    private function writeHeader($url)
+    public function writeHeader($url)
     {
         if (headers_sent($filename, $line))
         {

@@ -3,12 +3,13 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Application\Calendar\Extension\Google\Storage\DataClass\Visibility;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Application\Calendar\Extension\Google\Service\VisibilityService;
+use Chamilo\Application\Calendar\Extension\Google\Repository\VisibilityRepository;
+use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
+use Chamilo\Application\Calendar\Extension\Google\Form\VisibilityForm;
+use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -22,23 +23,24 @@ class VisibilityComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $form = $this->getForm();
+        $visibilityService = new VisibilityService(new VisibilityRepository());
+        $form = $this->getForm($visibilityService);
 
         if ($form->validate())
         {
             $values = $form->exportValues();
+            $result = $visibilityService->setVisibilities(
+                $this->get_user(),
+                $values[VisibilityService :: PROPERTY_VISIBLE]);
 
-            foreach ($values['visible'] as $visibleCalendarId => $value)
-            {
-                $visibility = new Visibility();
-                $visibility->setCalendarId($visibleCalendarId);
-                $visibility->setVisibility(1);
-                $visibility->create();
-            }
+            // $this->redirect(
+            // $result->getMessage(),
+            // $result->hasFailed(),
+            // array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
 
-            $redirect = new Redirect(
+            $nextAction = new Redirect(
                 array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));
-            $redirect->toUrl();
+            $nextAction->toUrl();
         }
         else
         {
@@ -55,38 +57,13 @@ class VisibilityComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @return \Google_Service_Calendar_CalendarListEntry
+     * @param \Chamilo\Application\Calendar\Extension\Google\Service\VisibilityService $visibilityService
+     * @return \Chamilo\Application\Calendar\Extension\Google\Form\VisibilityForm
      */
-    private function getCalendarList()
+    private function getForm(VisibilityService $visibilityService)
     {
-        $configuration = Configuration :: get_instance();
-        $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
+        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
 
-        $googleClient = new \Google_Client();
-        $googleClient->setDeveloperKey($configuration->get_setting(array($configurationContext, 'developer_key')));
-
-        $calendarClient = new \Google_Service_Calendar($googleClient);
-
-        $googleClient->setClientId($configuration->get_setting(array($configurationContext, 'client_id')));
-        $googleClient->setClientSecret($configuration->get_setting(array($configurationContext, 'client_secret')));
-        $googleClient->setScopes('https://www.googleapis.com/auth/calendar.readonly');
-
-        $googleClient->setAccessToken(LocalSetting :: get('token', $configurationContext));
-
-        return $calendarClient->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
-    }
-
-    private function getForm()
-    {
-        $form = new FormValidator('visibility', 'post', $this->get_url());
-
-        foreach ($this->getCalendarList() as $calendarListEntry)
-        {
-            $form->addElement('checkbox', 'visible[' . $calendarListEntry->id . ']', $calendarListEntry->summary);
-        }
-
-        $form->addSaveResetButtons();
-
-        return $form;
+        return new VisibilityForm($this->get_url(), $this->get_user(), $visibilityService, $googleCalendarService);
     }
 }
