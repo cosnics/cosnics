@@ -124,9 +124,9 @@ class RecurrenceCalculator
             $vEvent->add('DTSTART', $startDateTime);
             $vEvent->add('DTEND', $endDateTime);
 
-            $vObjectRecurrenceRules = new VObjectRecurrenceRules(new IcalRecurrenceRules($event->getRecurrenceRules()));
+            $vObjectRecurrenceRules = new VObjectRecurrenceRulesFormatter();
 
-            $vEvent->add('RRULE', $vObjectRecurrenceRules->get());
+            $vEvent->add('RRULE', $vObjectRecurrenceRules->format(($event->getRecurrenceRules())));
             $vEvent->add('UID', uniqid());
 
             $fromDateTime = new \DateTime();
