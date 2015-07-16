@@ -8,50 +8,16 @@ namespace Chamilo\Libraries\Calendar\Event;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class IcalRecurrenceRules
+class IcalRecurrenceRulesFormatter
 {
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\RecurrenceRules
-     */
-    private $recurrenceRules;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
-     */
-    public function __construct(RecurrenceRules $recurrenceRules)
-    {
-        $this->recurrenceRules = $recurrenceRules;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
-     */
-    public function getRecurrenceRules()
-    {
-        return $this->recurrenceRules;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
-     */
-    public function setRecurrenceRules($recurrenceRules)
-    {
-        $this->recurrenceRules = $recurrenceRules;
-    }
-
-    /**
-     *
      * @return string[]
      */
-    public function get()
+    public function format(RecurrenceRules $recurrenceRules)
     {
-        $recurrenceRules = $this->getRecurrenceRules();
-
         $iCalRules = array();
 
         switch ($recurrenceRules->getFrequency())
@@ -100,7 +66,7 @@ class IcalRecurrenceRules
 
         if ($recurrenceRules->getByDay())
         {
-            $iCalRules['BYDAY'] = $this->getByDayParts();
+            $iCalRules['BYDAY'] = $this->getByDayParts($recurrenceRules->getByDay());
         }
 
         if ($recurrenceRules->getByMonthDay())
@@ -118,21 +84,10 @@ class IcalRecurrenceRules
 
     /**
      *
-     * @return boolean
-     */
-    private function isIndefinate()
-    {
-        $repeatTo = $this->getUntil();
-        return ($repeatTo == 0 || is_null($repeatTo));
-    }
-
-    /**
-     *
      * @return string[]
      */
-    private function getByDayParts()
+    private function getByDayParts($byDays)
     {
-        $byDays = $this->getRecurrenceRules()->getByDay();
         $parts = array();
 
         foreach ($byDays as $byDay)
