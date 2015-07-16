@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->form = new JumpForm($this->get_url(), $this->getCurrentRendererTime());
         if ($this->form->validate())
         {
-            $this->currentTime = $this->form->get_time();
+            $this->currentTime = $this->form->getTime();
         }
 
         $html = array();
