@@ -195,10 +195,7 @@ class GoogleCalendarRepository
             $refreshToken = $this->googleClient->getRefreshToken();
             $this->googleClient->refreshToken($refreshToken);
 
-            LocalSetting :: create_local_setting(
-                'token',
-                $this->getAccessToken(),
-                \Chamilo\Application\Calendar\Extension\Google\Manager :: context());
+            $this->saveAccessToken($this->googleClient->getAccessToken());
         }
 
         return $this->googleClient;
@@ -287,6 +284,7 @@ class GoogleCalendarRepository
     }
 
     /**
+     *
      * @param string $calendarIdentifier
      * @param integer $fromDate
      * @param integer $toDate
