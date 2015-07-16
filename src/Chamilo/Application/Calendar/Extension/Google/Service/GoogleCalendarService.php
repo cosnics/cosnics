@@ -109,4 +109,13 @@ class GoogleCalendarService
     {
         return new CalendarProperties($summary, $description, $timeZone);
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isAuthenticated()
+    {
+        return $this->getGoogleCalendarRepository()->hasAccessToken();
+    }
 }

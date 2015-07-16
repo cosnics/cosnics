@@ -24,30 +24,34 @@ class Manager implements CalendarInterface
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
-        $visibilityService = new VisibilityService(new VisibilityRepository());
         $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
-
-        $activeVisibilities = $visibilityService->getActiveVisibilitiesForUser(
-            $renderer->getDataProvider()->getDataUser());
-
         $events = array();
 
-        while ($activeVisibility = $activeVisibilities->next_result())
+        if ($googleCalendarService->isAuthenticated())
         {
-            $eventResultSet = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
-                $activeVisibility->getCalendarId(),
-                $fromDate,
-                $toDate);
 
-            while ($googleCalenderEvent = $eventResultSet->next_result())
+            $visibilityService = new VisibilityService(new VisibilityRepository());
+
+            $activeVisibilities = $visibilityService->getActiveVisibilitiesForUser(
+                $renderer->getDataProvider()->getDataUser());
+
+            while ($activeVisibility = $activeVisibilities->next_result())
             {
-                $eventParser = new EventParser(
-                    $renderer,
-                    $eventResultSet->getCalendarProperties(),
-                    $googleCalenderEvent,
+                $eventResultSet = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
+                    $activeVisibility->getCalendarId(),
                     $fromDate,
                     $toDate);
-                $events = array_merge($events, $eventParser->getEvents());
+
+                while ($googleCalenderEvent = $eventResultSet->next_result())
+                {
+                    $eventParser = new EventParser(
+                        $renderer,
+                        $eventResultSet->getCalendarProperties(),
+                        $googleCalenderEvent,
+                        $fromDate,
+                        $toDate);
+                    $events = array_merge($events, $eventParser->getEvents());
+                }
             }
         }
 
