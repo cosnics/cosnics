@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
+use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
+use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
 
 /**
  *
@@ -79,13 +81,32 @@ class GoogleCalendarService
      * @param string $calendarIdentifier
      * @param integer $fromDate
      * @param integer $toDate
-     * @return \Google_Service_Calendar_Event[]
+     * @return \Chamilo\Application\Calendar\Extension\Google\EventResultSet
      */
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        return $this->getGoogleCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+        $googleCalendarEvents = $this->getGoogleCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
             $calendarIdentifier,
             $fromDate,
-            $toDate)->getItems();
+            $toDate);
+
+        return new EventResultSet(
+            $this->getCalendarProperties(
+                $googleCalendarEvents->getSummary(),
+                $googleCalendarEvents->getDescription(),
+                $googleCalendarEvents->getTimeZone()),
+            $googleCalendarEvents->getItems());
+    }
+
+    /**
+     *
+     * @param string $summary
+     * @param string $description
+     * @param string $timeZone
+     * @return \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
+     */
+    private function getCalendarProperties($summary, $description, $timeZone)
+    {
+        return new CalendarProperties($summary, $description, $timeZone);
     }
 }

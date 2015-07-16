@@ -24,13 +24,25 @@ class VisibilityRepository
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $isVisible
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findUserVisibilities(User $user)
+    public function findVisibilitiesForUser(User $user, $isVisible = null)
     {
-        $condition = new EqualityCondition(
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
+
+        if (! is_null($isVisible))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_VISIBILITY),
+                new StaticConditionVariable((integer) $isVisible));
+        }
+
+        $condition = new AndCondition($conditions);
 
         return DataManager :: retrieves(Visibility :: class_name(), new DataClassRetrievesParameters($condition));
     }
@@ -41,7 +53,7 @@ class VisibilityRepository
      * @param string $calendarIdentifier
      * @return \Chamilo\Application\Calendar\Extension\Google\Storage\DataClass\Visibility
      */
-    public function findVisibilityByUserIdentifierAndCalendarIdentifier(User $user, $calendarIdentifier)
+    public function findVisibilityByUserAndCalendarIdentifier(User $user, $calendarIdentifier)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(

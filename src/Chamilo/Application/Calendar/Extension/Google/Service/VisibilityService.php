@@ -53,11 +53,32 @@ class VisibilityService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param boolean $isVisible
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function getUserVisibilities(User $user)
+    public function getVisibilitiesForUser(User $user, $isVisible = null)
     {
-        return $this->getVisibilityRepository()->findUserVisibilities($user);
+        return $this->getVisibilityRepository()->findVisibilitiesForUser($user, $isVisible);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function getActiveVisibilitiesForUser(User $user)
+    {
+        return $this->getVisibilitiesForUser($user, true);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function getInactiveVisibilitiesForUser(User $user)
+    {
+        return $this->getVisibilitiesForUser($user, false);
     }
 
     /**
@@ -123,7 +144,7 @@ class VisibilityService
      */
     public function setVisibility(User $user, $calendarIdentifier, $isVisible = true)
     {
-        $visibility = $this->getVisibilityByUserIdentifierAndCalendarIdentifier($user, $calendarIdentifier);
+        $visibility = $this->getVisibilityByUserAndCalendarIdentifier($user, $calendarIdentifier);
 
         if ($visibility instanceof Visibility)
         {
@@ -166,10 +187,8 @@ class VisibilityService
      * @param string $calendarIdentifier
      * @return \Chamilo\Application\Calendar\Extension\Google\Storage\DataClass\Visibility
      */
-    public function getVisibilityByUserIdentifierAndCalendarIdentifier(User $user, $calendarIdentifier)
+    public function getVisibilityByUserAndCalendarIdentifier(User $user, $calendarIdentifier)
     {
-        return $this->getVisibilityRepository()->findVisibilityByUserIdentifierAndCalendarIdentifier(
-            $user,
-            $calendarIdentifier);
+        return $this->getVisibilityRepository()->findVisibilityByUserAndCalendarIdentifier($user, $calendarIdentifier);
     }
 }

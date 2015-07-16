@@ -130,7 +130,7 @@ class VisibilityForm extends FormValidator
     private function setValues()
     {
         $defaultValues = array();
-        $calendarVisibilities = $this->getVisibilityService()->getUserVisibilities($this->getUser());
+        $calendarVisibilities = $this->getVisibilityService()->getVisibilitiesForUser($this->getUser());
 
         while ($calendarVisibility = $calendarVisibilities->next_result())
         {
