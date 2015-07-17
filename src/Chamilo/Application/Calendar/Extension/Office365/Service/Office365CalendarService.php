@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Extension\Office365\Service;
 
 use Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository;
-use Chamilo\Application\Calendar\Extension\Office365\CalendarProperties;
 
 /**
  *
@@ -88,13 +87,10 @@ class Office365CalendarService
 
     /**
      *
-     * @param string $summary
-     * @param string $description
-     * @param string $timeZone
-     * @return \Chamilo\Application\Calendar\Extension\Office365\CalendarProperties
+     * @return boolean
      */
-    private function getCalendarProperties($summary, $description, $timeZone)
+    public function isAuthenticated()
     {
-        return new CalendarProperties($summary, $description, $timeZone);
+        return $this->getOffice365CalendarRepository()->hasAccessToken();
     }
 }

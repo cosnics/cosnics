@@ -4,9 +4,8 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Repository;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-// use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-// use Chamilo\Libraries\File\Redirect;
-// use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -40,6 +39,18 @@ class Office365CalendarRepository
      *
      * @var string
      */
+    private $tenantId;
+
+    /**
+     *
+     * @var string
+     */
+    private $tenantName;
+
+    /**
+     *
+     * @var string
+     */
     private $accessToken;
 
     /**
@@ -59,13 +70,17 @@ class Office365CalendarRepository
      * @param string $developerKey
      * @param string $clientId
      * @param string $clientSecret
+     * @param string $tenantId
+     * @param string $tenantName
      * @param string $accessToken
      */
-    public function __construct($developerKey, $clientId, $clientSecret, $accessToken = null)
+    public function __construct($developerKey, $clientId, $clientSecret, $tenantId, $tenantName, $accessToken = null)
     {
         $this->developerKey = $developerKey;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->tenantId = $tenantId;
+        $this->tenantName = $tenantName;
         $this->accessToken = $accessToken;
     }
 
@@ -89,9 +104,11 @@ class Office365CalendarRepository
             $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
+            $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
+            $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
             $accessToken = LocalSetting :: get('token', $configurationContext);
 
-            self :: $instance = new static();
+            self :: $instance = new static($developerKey, $clientId, $clientSecret, $tenantId, $accessToken);
         }
 
         return static :: $instance;
@@ -155,6 +172,42 @@ class Office365CalendarRepository
      *
      * @return string
      */
+    public function getTenantId()
+    {
+        return $this->tenantId;
+    }
+
+    /**
+     *
+     * @param string $tenantId
+     */
+    public function setTenantId($tenantId)
+    {
+        $this->tenantId = $tenantId;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTenantName()
+    {
+        return $this->tenantName;
+    }
+
+    /**
+     *
+     * @param string $tenantName
+     */
+    public function setTenantName($tenantName)
+    {
+        $this->tenantName = $tenantName;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getAccessToken()
     {
         return $this->accessToken;
@@ -171,25 +224,48 @@ class Office365CalendarRepository
 
     /**
      *
+     * @param string $accessToken
+     * @return boolean
+     */
+    public function saveAccessToken($accessToken)
+    {
+        return LocalSetting :: create_local_setting(
+            'token',
+            $accessToken,
+            \Chamilo\Application\Calendar\Extension\Google\Manager :: context());
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasAccessToken()
+    {
+        return ! empty($this->getAccessToken());
+    }
+
+    /**
+     *
      * @return \Office365_Client
      */
     public function getOffice365Client()
     {
-        // if (! isset($this->office365Client))
-        // {
-        // $this->office365Client = new \Office365_Client();
-        // $this->office365Client->setDeveloperKey($this->getDeveloperKey());
+        // Calendar.Read
+        if (! isset($this->office365Client))
+        {
+            $this->office365Client = new \GuzzleHttp\Client();
+            // $this->office365Client->setDeveloperKey($this->getDeveloperKey());
 
-        // $this->office365Client->setClientId($this->getClientId());
-        // $this->office365Client->setClientSecret($this->getClientSecret());
-        // $this->office365Client->setScopes('https://www.office365apis.com/auth/calendar.readonly');
-        // $this->office365Client->setAccessType('offline');
+            // $this->office365Client->setClientId($this->getClientId());
+            // $this->office365Client->setClientSecret($this->getClientSecret());
+            // $this->office365Client->setScopes('https://www.office365apis.com/auth/calendar.readonly');
+            // $this->office365Client->setAccessType('offline');
 
-        // if ($this->hasAccessToken())
-        // {
-        // $this->office365Client->setAccessToken($this->getAccessToken());
-        // }
-        // }
+            // if ($this->hasAccessToken())
+            // {
+            // $this->office365Client->setAccessToken($this->getAccessToken());
+            // }
+        }
 
         // if ($this->hasAccessToken() && $this->office365Client->isAccessTokenExpired())
         // {
@@ -202,36 +278,44 @@ class Office365CalendarRepository
         // \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
         // }
 
-        // return $this->office365Client;
+        return $this->office365Client;
     }
 
     public function login($authenticationCode = null)
     {
-        // if ($this->hasAccessToken())
-        // {
-        return true;
-        // }
+        if ($this->hasAccessToken())
+        {
+            return true;
+        }
 
-        // $office365Client = $this->getOffice365Client();
+        $office365Client = $this->getOffice365Client();
 
-        // $redirect = new Redirect(
-        // array(
-        // Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager :: context(),
-        // \Chamilo\Application\Calendar\Extension\Office365\Manager :: PARAM_ACTION =>
-        // \Chamilo\Application\Calendar\Extension\Office365\Manager :: ACTION_LOGIN));
+        if (isset($authenticationCode))
+        {
+            $office365Client->authenticate($authenticationCode);
+            return $this->saveAccessToken($office365Client->getAccessToken());
+        }
+        else
+        {
+            $replyUri = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager :: context(),
+                    \Chamilo\Application\Calendar\Extension\Office365\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager :: ACTION_LOGIN));
 
-        // $office365Client->setRedirectUri($redirect->getUrl());
+            $redirect = new Redirect();
+            $redirect->writeHeader($this->createAuthUrl($this->getClientId(), $replyUri));
+        }
+    }
 
-        // if (isset($authenticationCode))
-        // {
-        // $office365Client->authenticate($authenticationCode);
-        // return $this->saveAccessToken($office365Client->getAccessToken());
-        // }
-        // else
-        // {
-        // $redirect = new Redirect();
-        // $redirect->writeHeader($office365Client->createAuthUrl());
-        // }
+    private function createAuthUrl($clientId, Redirect $replyUri)
+    {
+        $params = array(
+            'response_type' => 'code',
+            'redirect_uri' => $replyUri->getUrl(),
+            'client_id' => $this->getClientId());
+
+        return 'https://login.microsoftonline.com/' . $this->getTenantId() . '/oauth2/authorize' . "?" .
+             http_build_query($params, '', '&');
     }
 
     public function logout()
