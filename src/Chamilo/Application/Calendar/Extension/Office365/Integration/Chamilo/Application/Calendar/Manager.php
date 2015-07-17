@@ -23,19 +23,17 @@ class Manager implements CalendarInterface
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
         $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
-
         $events = array();
 
-        $eventResultSet = $office365CalendarService->getEventsBetweenDates($fromDate, $toDate);
-
-        while ($office365CalenderEvent = $eventResultSet->next_result())
+        if ($office365CalendarService->isAuthenticated())
         {
-            $eventParser = new EventParser(
-                $renderer,
-                $office365CalenderEvent,
-                $fromDate,
-                $toDate);
-            $events = array_merge($events, $eventParser->getEvents());
+            $eventResultSet = $office365CalendarService->getEventsBetweenDates($fromDate, $toDate);
+
+            while ($office365CalenderEvent = $eventResultSet->next_result())
+            {
+                $eventParser = new EventParser($renderer, $office365CalenderEvent, $fromDate, $toDate);
+                $events = array_merge($events, $eventParser->getEvents());
+            }
         }
 
         return $events;
