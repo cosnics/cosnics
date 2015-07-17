@@ -292,6 +292,8 @@ class Office365CalendarRepository
 
         if (isset($authenticationCode))
         {
+            throw new \Exception('Office 365 authentication not implemented yet.');
+            exit;
             $office365Client->authenticate($authenticationCode);
             return $this->saveAccessToken($office365Client->getAccessToken());
         }

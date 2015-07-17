@@ -18,7 +18,6 @@ class Actions extends \Chamilo\Application\Calendar\Actions
     public function get()
     {
         $tabs = array();
-        return $tabs;
 
         $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager :: context();
         $accessToken = LocalSetting :: get('token', $configurationContext);
