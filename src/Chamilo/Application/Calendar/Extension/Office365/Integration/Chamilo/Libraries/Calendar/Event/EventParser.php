@@ -141,8 +141,14 @@ class EventParser
 
         $event = new Event(
             $office365CalendarEvent->Id,
-            $this->getTimestamp($office365CalendarEvent->Start, $office365CalendarEvent->StartTimeZone),
-            $this->getTimestamp($office365CalendarEvent->End, $office365CalendarEvent->EndTimeZone),
+            $this->getTimestamp(
+                $office365CalendarEvent->Start,
+                $office365CalendarEvent->StartTimeZone,
+                $office365CalendarEvent->IsAllDay),
+            $this->getTimestamp(
+                $office365CalendarEvent->End,
+                $office365CalendarEvent->EndTimeZone,
+                $office365CalendarEvent->IsAllDay),
             $this->getRecurrence($office365CalendarEvent->Recurrence),
             $url,
             $office365CalendarEvent->Subject,
@@ -160,15 +166,22 @@ class EventParser
      * @param string $eventDateTime
      * @param string $eventTimeZone
      */
-    private function getTimestamp($eventDateTime, $eventTimeZone)
+    private function getTimestamp($eventDateTime, $eventTimeZone, $isAllDay)
     {
-        $dateTime = new \DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone));
+        $dateTime = new \DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone, $isAllDay));
+
+        if ($isAllDay)
+        {
+            return mktime(0, 0, 0, $dateTime->format('n'), $dateTime->format('j'), $dateTime->format('Y'));
+        }
+
         return $dateTime->getTimestamp();
     }
 
     /**
      *
      * @param string $eventTimeZone
+     * @param boolean $isAllDay
      * @return \DateTimeZone|NULL
      */
     private function determineTimeZone($eventTimeZone)
@@ -230,7 +243,11 @@ class EventParser
 
             if (count($recurrence->Pattern->DaysOfWeek) > 0)
             {
-                $recurrenceRules->setByDay($this->getByDay($recurrence->Pattern->DaysOfWeek));
+                $recurrenceRules->setByDay(
+                    $this->getByDay(
+                        $recurrence->Pattern->Type,
+                        $recurrence->Pattern->Index,
+                        $recurrence->Pattern->DaysOfWeek));
             }
         }
 
@@ -242,16 +259,53 @@ class EventParser
      * @param string[] $daysOfWeek
      * @return string[]
      */
-    private function getByDay($daysOfWeek)
+    private function getByDay($patternType, $patternIndex, $patternDaysOfWeek)
     {
         $byDay = array();
 
-        foreach ($daysOfWeek as $dayOfWeek)
+        $prefix = $this->getNumericIndex($patternType, $patternIndex);
+
+        foreach ($patternDaysOfWeek as $dayOfWeek)
         {
-            $byDay[] = substr(strtoupper($dayOfWeek), 0, 2);
+            $byDay[] = $prefix . substr(strtoupper($dayOfWeek), 0, 2);
         }
 
         return $byDay;
+    }
+
+    /**
+     *
+     * @param string $patternType
+     * @param unknown $patternIndex
+     * @return string
+     */
+    private function getNumericIndex($patternType, $patternIndex)
+    {
+        if (! in_array($patternType, array('RelativeMonthly', 'RelativeYearly')))
+        {
+            return '';
+        }
+
+        switch ($patternIndex)
+        {
+            case 'First' :
+                return '1';
+                break;
+            case 'Second' :
+                return '2';
+                break;
+            case 'Third' :
+                return '3';
+                break;
+            case 'Fourth' :
+                return '4';
+                break;
+            case 'Last' :
+                return '-1';
+                break;
+            default :
+                return '';
+        }
     }
 
     /**
