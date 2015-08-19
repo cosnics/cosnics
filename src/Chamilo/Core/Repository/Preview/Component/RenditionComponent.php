@@ -30,8 +30,7 @@ class RenditionComponent extends Manager
             ContentObjectRendition :: VIEW_DESCRIPTION,
             ContentObjectRendition :: VIEW_SHORT,
             ContentObjectRendition :: VIEW_INLINE,
-            ContentObjectRendition :: VIEW_FORM
-        );
+            ContentObjectRendition :: VIEW_FORM);
 
         foreach ($views as $view)
         {
@@ -39,7 +38,9 @@ class RenditionComponent extends Manager
                 new DynamicVisualTab(
                     $view,
                     Translation :: get('View' . StringUtilities :: getInstance()->createString($view)->upperCamelize()),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Preview', 'View/' . StringUtilities :: getInstance()->createString($view)->upperCamelize()),
+                    Theme :: getInstance()->getImagePath(
+                        'Chamilo\Core\Repository\Preview',
+                        'View/' . StringUtilities :: getInstance()->createString($view)->upperCamelize()),
                     $this->get_url(array(self :: PARAM_FORMAT => $this->get_format(), self :: PARAM_VIEW => $view)),
                     $this->get_view() == $view));
         }
@@ -78,5 +79,13 @@ class RenditionComponent extends Manager
     public function get_view()
     {
         return Request :: get(self :: PARAM_VIEW, ContentObjectRendition :: VIEW_FULL);
+    }
+
+    public function get_content_object_display_attachment_url($attachment)
+    {
+        $parameters = $this->get_parameters();
+        $parameters[self :: PARAM_CONTENT_OBJECT_ID] = $attachment->get_id();
+
+        return $this->get_url($parameters);
     }
 }
