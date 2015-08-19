@@ -5,6 +5,9 @@ use Chamilo\Application\Calendar\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Office365\Service\Office365CalendarService;
 use Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 
 /**
  *
@@ -27,12 +30,22 @@ class Manager implements CalendarInterface
 
         if ($office365CalendarService->isAuthenticated())
         {
-            $eventResultSet = $office365CalendarService->getEventsBetweenDates($fromDate, $toDate);
+            $availabilityService = new AvailabilityService(new AvailabilityRepository());
+            $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
 
-            while ($office365CalenderEvent = $eventResultSet->next_result())
+            $activeAvailabilities = $availabilityService->getActiveAvailabilitiesForUserAndCalendarType(
+                $renderer->getDataProvider()->getDataUser(),
+                $package);
+
+            while ($activeAvailability = $activeAvailabilities->next_result())
             {
-                $eventParser = new EventParser($renderer, $office365CalenderEvent, $fromDate, $toDate);
-                $events = array_merge($events, $eventParser->getEvents());
+                $eventResultSet = $office365CalendarService->getEventsBetweenDates($fromDate, $toDate);
+
+                while ($office365CalenderEvent = $eventResultSet->next_result())
+                {
+                    $eventParser = new EventParser($renderer, $office365CalenderEvent, $fromDate, $toDate);
+                    $events = array_merge($events, $eventParser->getEvents());
+                }
             }
         }
 
