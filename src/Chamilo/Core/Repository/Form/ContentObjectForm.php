@@ -764,8 +764,7 @@ EOT;
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
@@ -952,25 +951,6 @@ EOT;
         {
             $old_parent_id = $object->get_parent_id();
             $this->set_category_from_values($object, $values);
-
-            if ($old_parent_id != $object->get_parent_id())
-            {
-                if ($object->move_allowed($object->get_parent_id()))
-                {
-                    $move = true;
-                }
-                else
-                {
-                    $object->set_parent_id($old_parent_id);
-
-                    /*
-                     * TODO: Make this more meaningful, e.g. by returning error constants instead of booleans, like
-                     * ContentObjectForm :: SUCCESS (not implemented).
-                     */
-
-                    return self :: RESULT_ERROR;
-                }
-            }
         }
 
         if (isset($values['version']) && $values['version'] == 1)
@@ -990,11 +970,6 @@ EOT;
         else
         {
             $result = $object->update();
-
-            if ($move)
-            {
-                $object->move($object->get_parent_id());
-            }
         }
 
         if ($object->has_errors())
