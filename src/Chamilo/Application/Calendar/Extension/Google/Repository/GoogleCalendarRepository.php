@@ -3,9 +3,10 @@ namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Application\Calendar\Extension\Google\Manager;
 
 /**
  *
@@ -275,12 +276,26 @@ class GoogleCalendarRepository
 
     /**
      *
-     * @return \Google_Service_Calendar_CalendarListEntry[]
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function findOwnedCalendars()
     {
-        return new ArrayResultSet(
-            $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems());
+        $calendarItems = $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
+        $availableCalendars = array();
+
+        foreach ($calendarItems as $calendarItem)
+        {
+            $availableCalendar = new AvailableCalendar();
+
+            $availableCalendar->setType(Manager :: package());
+            $availableCalendar->setIdentifier($calendarItem->id);
+            $availableCalendar->setName($calendarItem->summary);
+            $availableCalendar->setDescription($calendarItem->description);
+
+            $availableCalendars[] = $availableCalendar;
+        }
+
+        return $availableCalendars;
     }
 
     /**

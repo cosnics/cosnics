@@ -5,8 +5,9 @@ use Chamilo\Application\Calendar\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
-use Chamilo\Application\Calendar\Extension\Google\Service\VisibilityService;
-use Chamilo\Application\Calendar\Extension\Google\Repository\VisibilityRepository;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -29,13 +30,14 @@ class Manager implements CalendarInterface
 
         if ($googleCalendarService->isAuthenticated())
         {
+            $availabilityService = new AvailabilityService(new AvailabilityRepository());
+            $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
 
-            $visibilityService = new VisibilityService(new VisibilityRepository());
+            $activeAvailabilities = $availabilityService->getActiveAvailabilitiesForUserAndCalendarType(
+                $renderer->getDataProvider()->getDataUser(),
+                $package);
 
-            $activeVisibilities = $visibilityService->getActiveVisibilitiesForUser(
-                $renderer->getDataProvider()->getDataUser());
-
-            while ($activeVisibility = $activeVisibilities->next_result())
+            while ($activeVisibility = $activeAvailabilities->next_result())
             {
                 $eventResultSet = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
                     $activeVisibility->getCalendarId(),
@@ -56,5 +58,15 @@ class Manager implements CalendarInterface
         }
 
         return $events;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getCalendars()
+    {
+        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
+        return $googleCalendarService->getOwnedCalendars();
     }
 }

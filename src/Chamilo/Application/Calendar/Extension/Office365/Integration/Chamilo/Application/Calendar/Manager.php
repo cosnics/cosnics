@@ -38,4 +38,14 @@ class Manager implements CalendarInterface
 
         return $events;
     }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getCalendars()
+    {
+        $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
+        return $office365CalendarService->getOwnedCalendars();
+    }
 }

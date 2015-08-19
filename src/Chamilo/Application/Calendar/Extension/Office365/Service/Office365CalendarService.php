@@ -49,7 +49,7 @@ class Office365CalendarService
 
     /**
      *
-     * @return Office365_Service_Calendar_CalendarListEntry[]
+     * @return \stdClass[]
      */
     public function getOwnedCalendars()
     {

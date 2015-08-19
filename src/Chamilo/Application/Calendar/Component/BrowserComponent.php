@@ -9,7 +9,6 @@ use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
@@ -17,11 +16,18 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\RendererFactory;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package application\calendar
+ * @package Chamilo\Application\Calendar\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -44,6 +50,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->form = new JumpForm($this->get_url(), $this->getCurrentRendererTime());
+
         if ($this->form->validate())
         {
             $this->currentTime = $this->form->getTime();
@@ -52,11 +59,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = '<a name="top"></a>';
-        $html[] = $this->getActionBar()->as_html();
-
         $html[] = $this->getTabs()->render();
-
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -67,6 +70,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tabs = new DynamicVisualTabsRenderer('calendar');
 
         $this->addTypeTabs($tabs);
+        $this->addGeneralTabs($tabs);
         $this->addExtensionTabs($tabs);
 
         $tabs->set_content($this->getCalendarHtml());
@@ -74,7 +78,34 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $tabs;
     }
 
-    public function addTypeTabs(DynamicVisualTabsRenderer $tabs)
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer $tabs
+     */
+    private function addGeneralTabs(DynamicVisualTabsRenderer $tabs)
+    {
+        $availabilityUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => Manager :: ACTION_AVAILABILITY));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'availability',
+                Translation :: get('Availability', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Availability'),
+                $availabilityUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer $tabs
+     */
+    private function addTypeTabs(DynamicVisualTabsRenderer $tabs)
     {
         $typeUrl = $this->get_url(
             array(
@@ -103,6 +134,10 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer $tabs
+     */
     private function addExtensionTabs(DynamicVisualTabsRenderer $tabs)
     {
         $extensionRegistrations = Configuration :: registrations_by_type(
@@ -169,48 +204,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return \libraries\format\ActionBarRenderer
-     */
-    public function getActionBar()
-    {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        // foreach ($this->getExtensionActions() as $extension_action)
-        // {
-        // $action_bar->add_common_action($extension_action);
-        // }
-
-        // TODO: implement abstraction here to allow extension-specific actions
-        // if ($this->get_parameter(Renderer :: PARAM_TYPE) == 'List')
-        // {
-        // $action_bar->set_search_url($this->get_url());
-        // }
-
-        return $action_bar;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getExtensionActions()
-    {
-        $extension_registrations = Configuration :: registrations_by_type(
-            \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
-        $actions = array();
-
-        foreach ($extension_registrations as $extension_registration)
-        {
-            $action_renderer_class = $extension_registration->get_context() . '\Actions';
-            $action_renderer = new $action_renderer_class($this);
-            $actions = array_merge($actions, $action_renderer->get());
-        }
-
-        return $actions;
     }
 
     /**

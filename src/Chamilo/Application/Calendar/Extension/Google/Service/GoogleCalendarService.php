@@ -51,7 +51,7 @@ class GoogleCalendarService
 
     /**
      *
-     * @return Google_Service_Calendar_CalendarListEntry[]
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function getOwnedCalendars()
     {

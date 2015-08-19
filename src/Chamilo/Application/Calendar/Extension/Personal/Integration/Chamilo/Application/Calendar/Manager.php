@@ -15,6 +15,13 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -32,8 +39,33 @@ class Manager implements CalendarInterface
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
-        $userEvents = $this->getUserEvents($renderer, $fromDate, $toDate);
-        $sharedEvents = $this->getSharedEvents($renderer, $fromDate, $toDate);
+        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+        $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+
+        if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
+            $renderer->getDataProvider()->getDataUser(),
+            $package,
+            'personal'))
+        {
+            $userEvents = $this->getUserEvents($renderer, $fromDate, $toDate);
+        }
+        else
+        {
+            $userEvents = array();
+        }
+
+        if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
+            $renderer->getDataProvider()->getDataUser(),
+            $package,
+            'shared'))
+        {
+            $sharedEvents = $this->getSharedEvents($renderer, $fromDate, $toDate);
+        }
+        else
+        {
+            $sharedEvents = array();
+        }
+
         return array_merge($userEvents, $sharedEvents);
     }
 
@@ -110,5 +142,32 @@ class Manager implements CalendarInterface
         }
 
         return $events;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getCalendars()
+    {
+        $calendars = array();
+
+        $personalCalendar = new AvailableCalendar();
+        $personalCalendar->setType(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4));
+        $personalCalendar->setIdentifier('personal');
+        $personalCalendar->setName(Translation :: get('PersonalCalendarName'));
+        $personalCalendar->setDescription(Translation :: get('PersonalCalendarDescription'));
+
+        $calendars[] = $personalCalendar;
+
+        $personalCalendar = new AvailableCalendar();
+        $personalCalendar->setType(ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4));
+        $personalCalendar->setIdentifier('shared');
+        $personalCalendar->setName(Translation :: get('SharedCalendarName'));
+        $personalCalendar->setDescription(Translation :: get('SharedCalendarDescription'));
+
+        $calendars[] = $personalCalendar;
+
+        return $calendars;
     }
 }

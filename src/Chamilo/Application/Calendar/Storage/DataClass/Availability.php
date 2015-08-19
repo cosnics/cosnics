@@ -1,24 +1,25 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Google\Storage\DataClass;
+namespace Chamilo\Application\Calendar\Storage\DataClass;
 
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Application\Calendar\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * A content object publication in the personal calendar application
  *
- * @package application\calendar$Publication
+ * @package Chamilo\Application\Calendar\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Visibility extends DataClass
+class Availability extends DataClass
 {
     const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_USER_ID = 'user_id';
+    const PROPERTY_CALENDAR_TYPE = 'calendar_type';
     const PROPERTY_CALENDAR_ID = 'calendar_id';
-    const PROPERTY_VISIBILITY = 'visibility';
+    const PROPERTY_AVAILABILITY = 'availability';
 
     /**
      *
@@ -27,7 +28,11 @@ class Visibility extends DataClass
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
-            array(self :: PROPERTY_USER_ID, self :: PROPERTY_CALENDAR_ID, self :: PROPERTY_VISIBILITY));
+            array(
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_CALENDAR_TYPE,
+                self :: PROPERTY_CALENDAR_ID,
+                self :: PROPERTY_AVAILABILITY));
     }
 
     public function get_data_manager()
@@ -57,6 +62,24 @@ class Visibility extends DataClass
      *
      * @return string
      */
+    public function getCalendarType()
+    {
+        return $this->get_default_property(self :: PROPERTY_CALENDAR_TYPE);
+    }
+
+    /**
+     *
+     * @param string $calendarType
+     */
+    public function setCalendarType($calendarType)
+    {
+        $this->set_default_property(self :: PROPERTY_CALENDAR_TYPE, $calendarType);
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getCalendarId()
     {
         return $this->get_default_property(self :: PROPERTY_CALENDAR_ID);
@@ -75,17 +98,17 @@ class Visibility extends DataClass
      *
      * @return integer
      */
-    public function getVisibility()
+    public function getAvailability()
     {
-        return $this->get_default_property(self :: PROPERTY_VISIBILITY);
+        return $this->get_default_property(self :: PROPERTY_AVAILABILITY);
     }
 
     /**
      *
-     * @param integer $visibility
+     * @param integer $availability
      */
-    public function setVisibility($visibility)
+    public function setAvailability($availability)
     {
-        $this->set_default_property(self :: PROPERTY_VISIBILITY, $visibility);
+        $this->set_default_property(self :: PROPERTY_AVAILABILITY, $availability);
     }
 }

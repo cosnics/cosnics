@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = Chamilo\Application\Calendar\Extension\Google
+; Package = Chamilo\Application\Calendar\Extension\Office365
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Google Calendar"
-GoogleSourceName = "Google Calendar - {CALENDAR}"
+TypeName = "Office 365"
+Office365SourceName = "Office 365 - {CALENDAR}"

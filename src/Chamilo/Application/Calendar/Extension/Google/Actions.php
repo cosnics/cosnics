@@ -59,23 +59,6 @@ class Actions extends \Chamilo\Application\Calendar\Actions
                 false,
                 DynamicVisualTab :: POSITION_RIGHT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
-
-            $parameters = array();
-            $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VISIBILITY;
-
-            $redirect = new Redirect($parameters);
-            $link = $redirect->getUrl();
-
-            $tabs[] = new DynamicVisualTab(
-                'GoogleCalendarVisibility',
-                Translation :: get('GoogleCalendarVisibility'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_VISIBILITY),
-                $link,
-                false,
-                false,
-                DynamicVisualTab :: POSITION_RIGHT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
         }
 
         return $tabs;

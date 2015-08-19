@@ -6,6 +6,8 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Application\Calendar\Extension\Office365\Manager;
 
 /**
  *
@@ -16,6 +18,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class Office365CalendarRepository
 {
+    const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/';
+    const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v1.0';
 
     /**
      *
@@ -51,7 +55,7 @@ class Office365CalendarRepository
      *
      * @var string
      */
-    private $accessToken;
+    private $token;
 
     /**
      *
@@ -72,16 +76,15 @@ class Office365CalendarRepository
      * @param string $clientSecret
      * @param string $tenantId
      * @param string $tenantName
-     * @param string $accessToken
+     * @param string $token
      */
-    public function __construct($developerKey, $clientId, $clientSecret, $tenantId, $tenantName, $accessToken = null)
+    public function __construct($clientId, $clientSecret, $tenantId, $tenantName, $token = null)
     {
-        $this->developerKey = $developerKey;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->tenantId = $tenantId;
         $this->tenantName = $tenantName;
-        $this->accessToken = $accessToken;
+        $this->token = $token;
     }
 
     /**
@@ -101,35 +104,16 @@ class Office365CalendarRepository
             $configuration = Configuration :: get_instance();
             $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager :: context();
 
-            $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
             $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
             $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
-            $accessToken = LocalSetting :: get('token', $configurationContext);
+            $token = unserialize(LocalSetting :: get('token', $configurationContext));
 
-            self :: $instance = new static($developerKey, $clientId, $clientSecret, $tenantId, $accessToken);
+            self :: $instance = new static($clientId, $clientSecret, $tenantId, $token);
         }
 
         return static :: $instance;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDeveloperKey()
-    {
-        return $this->developerKey;
-    }
-
-    /**
-     *
-     * @param string $developerKey
-     */
-    public function setDeveloperKey($developerKey)
-    {
-        $this->developerKey = $developerKey;
     }
 
     /**
@@ -208,31 +192,61 @@ class Office365CalendarRepository
      *
      * @return string
      */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     *
+     * @param string $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        $token = $this->getToken();
+        return $token['access_token'];
     }
 
     /**
      *
-     * @param string $accessToken
+     * @return string
      */
-    public function setAccessToken($accessToken)
+    public function getRefreshToken()
     {
-        $this->accessToken = $accessToken;
+        $token = $this->getToken();
+        return $token['refresh_token'];
     }
 
     /**
      *
-     * @param string $accessToken
+     * @return integer
+     */
+    public function getTokenExpirationTime()
+    {
+        $token = $this->getToken();
+        return $token['expires_on'];
+    }
+
+    /**
+     *
+     * @param string $token
      * @return boolean
      */
-    public function saveAccessToken($accessToken)
+    public function saveToken($token)
     {
         return LocalSetting :: create_local_setting(
             'token',
-            $accessToken,
-            \Chamilo\Application\Calendar\Extension\Google\Manager :: context());
+            $token,
+            \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
     }
 
     /**
@@ -246,39 +260,59 @@ class Office365CalendarRepository
 
     /**
      *
-     * @return \Office365_Client
+     * @return \GuzzleHttp\Client
      */
-    public function getOffice365Client()
+    public function getGuzzleHttpClient()
     {
-        // Calendar.Read
         if (! isset($this->office365Client))
         {
-            $this->office365Client = new \GuzzleHttp\Client();
-            // $this->office365Client->setDeveloperKey($this->getDeveloperKey());
-
-            // $this->office365Client->setClientId($this->getClientId());
-            // $this->office365Client->setClientSecret($this->getClientSecret());
-            // $this->office365Client->setScopes('https://www.office365apis.com/auth/calendar.readonly');
-            // $this->office365Client->setAccessType('offline');
-
-            // if ($this->hasAccessToken())
-            // {
-            // $this->office365Client->setAccessToken($this->getAccessToken());
-            // }
+            $this->office365Client = new \GuzzleHttp\Client(['base_url' => self :: CALENDAR_BASE_URL]);
         }
 
-        // if ($this->hasAccessToken() && $this->office365Client->isAccessTokenExpired())
-        // {
-        // $refreshToken = $this->office365Client->getRefreshToken();
-        // $this->office365Client->refreshToken($refreshToken);
-
-        // LocalSetting :: create_local_setting(
-        // 'token',
-        // $this->getAccessToken(),
-        // \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
-        // }
+        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
+        {
+            $token = $this->refreshToken();
+            $this->saveToken($token);
+        }
 
         return $this->office365Client;
+    }
+
+    private function refreshToken()
+    {
+        $client = $this->getGuzzleHttpClient();
+
+        $request = $client->createRequest('POST', self :: AUTHENTICATION_BASE_URL . 'token');
+        $postBody = $request->getBody();
+
+        $replyUri = new Redirect($this->getReplyParameters());
+
+        $postBody->setField('grant_type', 'refresh_token');
+        $postBody->setField('client_id', $this->getClientId());
+        $postBody->setField('scope', $this->getClientScope());
+        $postBody->setField('refresh_token', $this->getRefreshToken());
+        $postBody->setField('client_secret', $this->getClientSecret());
+
+        try
+        {
+            $response = $client->send($request);
+            var_dump($response);
+            exit();
+        }
+        catch (\Exception $exception)
+        {
+            var_dump($exception);
+            exit();
+        }
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    private function isAccessTokenExpired()
+    {
+        return $this->getTokenExpirationTime() < time();
     }
 
     public function login($authenticationCode = null)
@@ -288,25 +322,68 @@ class Office365CalendarRepository
             return true;
         }
 
-        $office365Client = $this->getOffice365Client();
+        $office365Client = $this->getGuzzleHttpClient();
 
         if (isset($authenticationCode))
         {
-            throw new \Exception('Office 365 authentication not implemented yet.');
-            exit;
-            $office365Client->authenticate($authenticationCode);
-            return $this->saveAccessToken($office365Client->getAccessToken());
+            $token = $this->requestAccessToken($authenticationCode);
+            return $this->saveToken($token);
         }
         else
         {
-            $replyUri = new Redirect(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager :: context(),
-                    \Chamilo\Application\Calendar\Extension\Office365\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager :: ACTION_LOGIN));
+            $replyUri = new Redirect($this->getReplyParameters());
 
             $redirect = new Redirect();
             $redirect->writeHeader($this->createAuthUrl($this->getClientId(), $replyUri));
         }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    private function getClientScope()
+    {
+        return 'https://outlook.office.com/Calendars.Read';
+    }
+
+    private function requestAccessToken($authenticationCode)
+    {
+        $client = $this->getGuzzleHttpClient();
+
+        $request = $client->createRequest('POST', self :: AUTHENTICATION_BASE_URL . 'token');
+        $postBody = $request->getBody();
+
+        $replyUri = new Redirect($this->getReplyParameters());
+
+        $postBody->setField('grant_type', 'authorization_code');
+        $postBody->setField('client_id', $this->getClientId());
+        $postBody->setField('scope', $this->getClientScope());
+        $postBody->setField('code', $authenticationCode);
+        $postBody->setField('client_secret', $this->getClientSecret());
+
+        try
+        {
+            $response = $client->send($request);
+            var_dump($response);
+            exit();
+        }
+        catch (\Exception $exception)
+        {
+            var_dump($exception);
+            exit();
+        }
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    private function getReplyParameters()
+    {
+        return array(
+            Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Office365\Manager :: context(),
+            \Chamilo\Application\Calendar\Extension\Office365\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager :: ACTION_LOGIN);
     }
 
     private function createAuthUrl($clientId, Redirect $replyUri)
@@ -314,32 +391,49 @@ class Office365CalendarRepository
         $params = array(
             'response_type' => 'code',
             'redirect_uri' => $replyUri->getUrl(),
-            'client_id' => $this->getClientId());
+            'state' => base64_encode(serialize($this->getReplyParameters())),
+            'client_id' => $this->getClientId(),
+            'response_mode' => 'query',
+            'prompt' => 'login',
+            'scope' => $this->getClientScope());
 
-        return 'https://login.microsoftonline.com/' . $this->getTenantId() . '/oauth2/authorize' . "?" .
-             http_build_query($params, '', '&');
+        return self :: AUTHENTICATION_BASE_URL . 'authorize' . "?" . http_build_query($params, '', '&');
     }
 
     public function logout()
     {
-        // if ($this->getOffice365Client()->revokeToken())
-        // {
-        // $this->saveAccessToken(null);
-        // }
+        $this->saveAccessToken(null);
     }
 
     /**
      *
-     * @return \Office365_Service_Calendar
+     * @return \stdClass[]
      */
-    public function getCalendarClient()
+    public function findOwnedCalendars()
     {
-        // if (! isset($this->calendarClient))
-        // {
-        // $this->calendarClient = new \Office365_Service_Calendar($this->getOffice365Client());
-        // }
+        $availableCalendars = array();
 
-        // return $this->calendarClient;
+        $samplePath = 'G:/calendarListSample.json';
+
+        if (file_exists($samplePath))
+        {
+            $result = file_get_contents($samplePath);
+            $result = json_decode($result);
+            $calendarItems = $result->value;
+
+            foreach ($calendarItems as $calendarItem)
+            {
+                $availableCalendar = new AvailableCalendar();
+
+                $availableCalendar->setType(Manager :: package());
+                $availableCalendar->setIdentifier($calendarItem->Id);
+                $availableCalendar->setName($calendarItem->Name);
+
+                $availableCalendars[] = $availableCalendar;
+            }
+        }
+
+        return $availableCalendars;
     }
 
     /**
@@ -354,7 +448,7 @@ class Office365CalendarRepository
 
         if (file_exists($samplePath))
         {
-            $result = file_get_contents('G:/calendarSample.json');
+            $result = file_get_contents($samplePath);
             $result = json_decode($result);
             $result = $result->value;
         }

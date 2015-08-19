@@ -98,4 +98,13 @@ class Manager implements CalendarInterface
             \Chamilo\Core\Repository\Storage\DataManager :: get_instance());
         return new AndCondition($conditions);
     }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getCalendars()
+    {
+        return array();
+    }
 }

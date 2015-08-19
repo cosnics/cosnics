@@ -37,6 +37,9 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
  */
 class Kernel
 {
+    const PARAM_CODE = 'code';
+    const PARAM_SESSION_STATE = 'session_state';
+    const PARAM_STATE = 'state';
 
     /**
      *
@@ -486,6 +489,29 @@ class Kernel
     }
 
     /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Kernel
+     */
+    public function handleOAuth2()
+    {
+        $state = $this->getRequest()->query->get(self :: PARAM_STATE);
+        $code = $this->getRequest()->query->get(self :: PARAM_CODE);
+        $sessionState = $this->getRequest()->query->get(self :: PARAM_SESSION_STATE);
+
+        if ($state && $code && $sessionState)
+        {
+            $stateParameters = (array) unserialize(base64_decode($state));
+            $stateParameters[self :: PARAM_CODE] = $code;
+            $stateParameters[self :: PARAM_SESSION_STATE] = $sessionState;
+
+            $redirect = new Redirect($stateParameters);
+            $redirect->toUrl();
+        }
+
+        return $this;
+    }
+
+    /**
      * Launch the kernel, executing some common checks, building the application component and executing it
      */
     public function launch()
@@ -499,7 +525,7 @@ class Kernel
             }
             else
             {
-                $this->checkUpgrade()->checkMaintenance()->setup()->loadUser()->displayTerms()->traceVisit()->buildApplication()->checkAuthentication()->runApplication();
+                $this->checkUpgrade()->checkMaintenance()->setup()->loadUser()->displayTerms()->traceVisit()->handleOAuth2()->buildApplication()->checkAuthentication()->runApplication();
             }
         }
         catch (\Exception $exception)
