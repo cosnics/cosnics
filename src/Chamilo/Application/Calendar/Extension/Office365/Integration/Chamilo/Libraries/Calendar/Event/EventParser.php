@@ -5,6 +5,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\L
 // use Chamilo\Libraries\Platform\Translation;
 // use Chamilo\Libraries\Calendar\Event\RecurrenceRulesIcalParser;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -153,7 +154,7 @@ class EventParser
             $url,
             $office365CalendarEvent->Subject,
             $office365CalendarEvent->Body->Content,
-            'Office 365',
+            $this->getSource('CALENDAR NAME GOES HERE'),
             \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
 
         $event->setOffice365CalendarEvent($office365CalendarEvent);
@@ -201,6 +202,19 @@ class EventParser
         {
             return null;
         }
+    }
+
+    /**
+     *
+     * @param string $calendarName
+     * @return string
+     */
+    private function getSource($calendarName)
+    {
+        return Translation :: get(
+            'Office365SourceName',
+            array('CALENDAR' => $calendarName),
+            \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
     }
 
     /**

@@ -37,10 +37,10 @@ class Manager implements CalendarInterface
                 $renderer->getDataProvider()->getDataUser(),
                 $package);
 
-            while ($activeVisibility = $activeAvailabilities->next_result())
+            while ($activeAvailability = $activeAvailabilities->next_result())
             {
                 $eventResultSet = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
-                    $activeVisibility->getCalendarId(),
+                    $activeAvailability->getCalendarId(),
                     $fromDate,
                     $toDate);
 

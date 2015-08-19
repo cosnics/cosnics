@@ -20,8 +20,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
