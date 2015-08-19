@@ -898,7 +898,7 @@ class ContentObject extends CompositeDataClass
                     while ($object = $objects->next_result())
                     {
                         $object->set_current(ContentObject :: CURRENT_OLD);
-                        $object->update();
+                        $object->update(false);
                     }
                 }
 
