@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
  * Class to render the glossary as a table
- * 
+ *
  * @package repository\content_object\glossary
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -16,7 +16,7 @@ class TableGlossaryRenderer extends GlossaryRenderer implements TableSupport
 
     /**
      * Renders the glossary
-     * 
+     *
      * @return string
      */
     public function render()
@@ -24,14 +24,14 @@ class TableGlossaryRenderer extends GlossaryRenderer implements TableSupport
         $table = new GlossaryViewerTable($this);
         return $table->as_html();
     }
-    
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_parameters()
      */
     public function get_parameters()
     {
     }
-    
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
      */

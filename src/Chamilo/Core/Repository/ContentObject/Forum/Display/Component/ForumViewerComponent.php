@@ -316,14 +316,15 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 case 1 :
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'Sticky/Read');
+                        'Sticky/Read',
+                        'gif');
                     $hover = 'Sticky';
 
                     break;
                 case 2 :
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'ImportantRead');
+                        'ImportantRead', 'gif');
                     $hover = 'Important';
                     break;
             }
@@ -566,9 +567,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         Translation :: get(
                             'Subscribe',
                             null,
-                            ContentObject :: get_content_object_type_namespace('forum_topic')),
+                            ContentObject :: get_content_object_type_namespace('ForumTopic')),
                         Theme :: getInstance()->getImagePath(
-                            ContentObject :: get_content_object_type_namespace('forum'),
+                            'Chamilo\Core\Repository\ContentObject\Forum\Display',
                             'Action/Mail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,
@@ -585,9 +586,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         Translation :: get(
                             'UnSubscribe',
                             null,
-                            ContentObject :: get_content_object_type_namespace('forum_topic')),
+                            ContentObject :: get_content_object_type_namespace('ForumTopic')),
                         Theme :: getInstance()->getImagePath(
-                            ContentObject :: get_content_object_type_namespace('forum'),
+                            'Chamilo\Core\Repository\ContentObject\Forum\Display',
                             'Action/Unmail'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON,

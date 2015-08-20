@@ -32,7 +32,9 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
                 return $this->glossary_item->get_title();
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return $this->glossary_item->get_description();
+
         }
+        return parent :: render_cell($column, $glossary_item);
     }
 
     public function get_actions($glossary_item)
