@@ -111,7 +111,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         $this->get_url(
                             array(
                                 self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
-                                self :: PARAM_ACTION => self :: ACTION_CREATE_GLOSSARY_ITEM)),
+                                self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 

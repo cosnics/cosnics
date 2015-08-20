@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 
-class ViewComponent extends \Chamilo\Core\Repository\Display\Preview implements WikiDisplaySupport
+class ViewerComponent extends \Chamilo\Core\Repository\Display\Preview implements WikiDisplaySupport
 {
 
     public function run()
