@@ -281,6 +281,7 @@ class GoogleCalendarRepository
     public function findOwnedCalendars()
     {
         $calendarItems = $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
+
         $availableCalendars = array();
 
         foreach ($calendarItems as $calendarItem)

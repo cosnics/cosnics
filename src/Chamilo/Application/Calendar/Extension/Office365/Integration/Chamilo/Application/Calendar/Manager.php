@@ -39,11 +39,22 @@ class Manager implements CalendarInterface
 
             while ($activeAvailability = $activeAvailabilities->next_result())
             {
-                $eventResultSet = $office365CalendarService->getEventsBetweenDates($fromDate, $toDate);
+                $eventResultSet = $office365CalendarService->getEventsForCalendarIdentifierAndBetweenDates(
+                    $activeAvailability->getCalendarId(),
+                    $fromDate,
+                    $toDate);
+
+                $availableCalendar = $office365CalendarService->getCalendarByIdentifier(
+                    $activeAvailability->getCalendarId());
 
                 while ($office365CalenderEvent = $eventResultSet->next_result())
                 {
-                    $eventParser = new EventParser($renderer, $office365CalenderEvent, $fromDate, $toDate);
+                    $eventParser = new EventParser(
+                        $renderer,
+                        $availableCalendar,
+                        $office365CalenderEvent,
+                        $fromDate,
+                        $toDate);
                     $events = array_merge($events, $eventParser->getEvents());
                 }
             }
@@ -59,6 +70,13 @@ class Manager implements CalendarInterface
     public function getCalendars()
     {
         $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
-        return $office365CalendarService->getOwnedCalendars();
+        $calendars = array();
+
+        if ($office365CalendarService->isAuthenticated())
+        {
+            $calendars = $office365CalendarService->getOwnedCalendars();
+        }
+
+        return $calendars;
     }
 }

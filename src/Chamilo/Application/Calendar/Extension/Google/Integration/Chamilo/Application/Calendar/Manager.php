@@ -67,6 +67,13 @@ class Manager implements CalendarInterface
     public function getCalendars()
     {
         $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
-        return $googleCalendarService->getOwnedCalendars();
+        $calendars = array();
+
+        if ($googleCalendarService->isAuthenticated())
+        {
+            $calendars = $googleCalendarService->getOwnedCalendars();
+        }
+
+        return $calendars;
     }
 }
