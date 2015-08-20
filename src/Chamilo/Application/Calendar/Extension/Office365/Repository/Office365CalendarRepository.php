@@ -19,7 +19,7 @@ use Chamilo\Application\Calendar\Extension\Office365\Manager;
 class Office365CalendarRepository
 {
     const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/';
-    const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v1.0';
+    const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v1.0/';
 
     /**
      *
@@ -108,9 +108,9 @@ class Office365CalendarRepository
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
             $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
             $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
-            $token = unserialize(LocalSetting :: get('token', $configurationContext));
+            $token = json_decode(LocalSetting :: get('token', $configurationContext));
 
-            self :: $instance = new static($clientId, $clientSecret, $tenantId, $token);
+            self :: $instance = new static($clientId, $clientSecret, $tenantId, $tenantName, $token);
         }
 
         return static :: $instance;
@@ -212,8 +212,7 @@ class Office365CalendarRepository
      */
     public function getAccessToken()
     {
-        $token = $this->getToken();
-        return $token['access_token'];
+        return $this->getToken()->access_token;
     }
 
     /**
@@ -222,8 +221,7 @@ class Office365CalendarRepository
      */
     public function getRefreshToken()
     {
-        $token = $this->getToken();
-        return $token['refresh_token'];
+        return $this->getToken()->refresh_token;
     }
 
     /**
@@ -232,8 +230,7 @@ class Office365CalendarRepository
      */
     public function getTokenExpirationTime()
     {
-        $token = $this->getToken();
-        return $token['expires_on'];
+        return $this->getToken()->expires_on;
     }
 
     /**
@@ -243,6 +240,7 @@ class Office365CalendarRepository
      */
     public function saveToken($token)
     {
+        $this->token = json_decode($token);
         return LocalSetting :: create_local_setting(
             'token',
             $token,
@@ -269,12 +267,6 @@ class Office365CalendarRepository
             $this->office365Client = new \GuzzleHttp\Client(['base_url' => self :: CALENDAR_BASE_URL]);
         }
 
-        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
-        {
-            $token = $this->refreshToken();
-            $this->saveToken($token);
-        }
-
         return $this->office365Client;
     }
 
@@ -285,25 +277,18 @@ class Office365CalendarRepository
         $request = $client->createRequest('POST', self :: AUTHENTICATION_BASE_URL . 'token');
         $postBody = $request->getBody();
 
-        $replyUri = new Redirect($this->getReplyParameters());
+        $replyUri = new Redirect();
 
         $postBody->setField('grant_type', 'refresh_token');
         $postBody->setField('client_id', $this->getClientId());
         $postBody->setField('scope', $this->getClientScope());
-        $postBody->setField('refresh_token', $this->getRefreshToken());
+        $postBody->setField('redirect_uri', $replyUri->getUrl());
+        $postBody->setField('resource', 'https://outlook.office365.com/');
         $postBody->setField('client_secret', $this->getClientSecret());
+        $postBody->setField('refresh_token', $this->getRefreshToken());
 
-        try
-        {
-            $response = $client->send($request);
-            var_dump($response);
-            exit();
-        }
-        catch (\Exception $exception)
-        {
-            var_dump($exception);
-            exit();
-        }
+        $response = $client->send($request);
+        return $response->getBody()->getContents();
     }
 
     /**
@@ -350,29 +335,21 @@ class Office365CalendarRepository
     private function requestAccessToken($authenticationCode)
     {
         $client = $this->getGuzzleHttpClient();
+        $replyUri = new Redirect();
 
         $request = $client->createRequest('POST', self :: AUTHENTICATION_BASE_URL . 'token');
         $postBody = $request->getBody();
-
-        $replyUri = new Redirect($this->getReplyParameters());
 
         $postBody->setField('grant_type', 'authorization_code');
         $postBody->setField('client_id', $this->getClientId());
         $postBody->setField('scope', $this->getClientScope());
         $postBody->setField('code', $authenticationCode);
+        $postBody->setField('redirect_uri', $replyUri->getUrl());
+        $postBody->setField('resource', 'https://outlook.office365.com/');
         $postBody->setField('client_secret', $this->getClientSecret());
 
-        try
-        {
-            $response = $client->send($request);
-            var_dump($response);
-            exit();
-        }
-        catch (\Exception $exception)
-        {
-            var_dump($exception);
-            exit();
-        }
+        $response = $client->send($request);
+        return $response->getBody()->getContents();
     }
 
     /**
@@ -402,35 +379,31 @@ class Office365CalendarRepository
 
     public function logout()
     {
-        $this->saveAccessToken(null);
+        $this->saveToken(null);
     }
 
     /**
      *
-     * @return \stdClass[]
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function findOwnedCalendars()
     {
+        $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars');
+        $result = $this->sendRequest($request);
+
+        $calendarItems = $result->value;
+
         $availableCalendars = array();
 
-        $samplePath = 'G:/calendarListSample.json';
-
-        if (file_exists($samplePath))
+        foreach ($calendarItems as $calendarItem)
         {
-            $result = file_get_contents($samplePath);
-            $result = json_decode($result);
-            $calendarItems = $result->value;
+            $availableCalendar = new AvailableCalendar();
 
-            foreach ($calendarItems as $calendarItem)
-            {
-                $availableCalendar = new AvailableCalendar();
+            $availableCalendar->setType(Manager :: package());
+            $availableCalendar->setIdentifier($calendarItem->Id);
+            $availableCalendar->setName($calendarItem->Name);
 
-                $availableCalendar->setType(Manager :: package());
-                $availableCalendar->setIdentifier($calendarItem->Id);
-                $availableCalendar->setName($calendarItem->Name);
-
-                $availableCalendars[] = $availableCalendar;
-            }
+            $availableCalendars[] = $availableCalendar;
         }
 
         return $availableCalendars;
@@ -438,25 +411,58 @@ class Office365CalendarRepository
 
     /**
      *
+     * @param string $calendarIdentifier
+     */
+    public function findCalendarByIdentifier($calendarIdentifier)
+    {
+        $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars/' . $calendarIdentifier);
+        $result = $this->sendRequest($request);
+
+        $availableCalendar = new AvailableCalendar();
+
+        $availableCalendar->setType(Manager :: package());
+        $availableCalendar->setIdentifier($result->Id);
+        $availableCalendar->setName($result->Name);
+
+        return $availableCalendar;
+    }
+
+    /**
+     *
+     * @param \GuzzleHttp\Message\Request $request
+     * @return \stdClass
+     */
+    private function sendRequest(\GuzzleHttp\Message\Request $request)
+    {
+        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
+        {
+            $token = $this->refreshToken();
+            $this->saveToken($token);
+        }
+
+        $client = $this->getGuzzleHttpClient();
+        $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
+
+        $response = $client->send($request);
+        return json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     *
+     * @param string $calendarIdentifier
      * @param integer $fromDate
      * @param integer $toDate
      * @return \Chamilo\Libraries\Storage\ResultSet\ArrayResultSet
      */
-    public function findEventsBetweenDates($fromDate, $toDate)
+    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        $samplePath = 'G:/calendarSample.json';
+        $request = $this->getGuzzleHttpClient()->createRequest(
+            'GET',
+            'me/calendars/' . $calendarIdentifier . '/calendarview',
+            ['query' => ['startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]]);
 
-        if (file_exists($samplePath))
-        {
-            $result = file_get_contents($samplePath);
-            $result = json_decode($result);
-            $result = $result->value;
-        }
-        else
-        {
-            $result = array();
-        }
+        $result = $this->sendRequest($request);
 
-        return new ArrayResultSet($result);
+        return new ArrayResultSet($result->value);
     }
 }

@@ -6,6 +6,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\L
 // use Chamilo\Libraries\Calendar\Event\RecurrenceRulesIcalParser;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 
 /**
  *
@@ -22,6 +23,12 @@ class EventParser
      * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
     private $renderer;
+
+    /**
+     *
+     * @var \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
+     */
+    private $availableCalendar;
 
     /**
      *
@@ -44,15 +51,16 @@ class EventParser
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param \Chamilo\Application\Calendar\Extension\Office365\CalendarProperties $calendarProperties
+     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
      * @param \Office365_Service_Calendar_Event $office365CalendarEvent
      * @param integer $fromDate
      * @param integer $toDate
      */
     public function __construct(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer,
-        \stdClass $office365CalendarEvent, $fromDate, $toDate)
+        AvailableCalendar $availableCalendar, \stdClass $office365CalendarEvent, $fromDate, $toDate)
     {
         $this->renderer = $renderer;
+        $this->availableCalendar = $availableCalendar;
         $this->office365CalendarEvent = $office365CalendarEvent;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
@@ -74,6 +82,25 @@ class EventParser
     public function setRenderer($renderer)
     {
         $this->renderer = $renderer;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
+     */
+    public function getAvailableCalendar()
+    {
+        return $this->availableCalendar;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
+     */
+    public function setAvailableCalendar(
+        \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar)
+    {
+        $this->availableCalendar = $availableCalendar;
     }
 
     /**
@@ -154,7 +181,7 @@ class EventParser
             $url,
             $office365CalendarEvent->Subject,
             $office365CalendarEvent->Body->Content,
-            $this->getSource('CALENDAR NAME GOES HERE'),
+            $this->getSource($this->getAvailableCalendar()->getName()),
             \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
 
         $event->setOffice365CalendarEvent($office365CalendarEvent);

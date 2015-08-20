@@ -58,6 +58,16 @@ class Office365CalendarService
 
     /**
      *
+     * @param string $calendarIdentifier
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
+     */
+    public function getCalendarByIdentifier($calendarIdentifier)
+    {
+        return $this->getOffice365CalendarRepository()->findCalendarByIdentifier($calendarIdentifier);
+    }
+
+    /**
+     *
      * @return boolean
      */
     public function login($authenticationCode = null)
@@ -76,13 +86,17 @@ class Office365CalendarService
 
     /**
      *
+     * @param string $calendarIdentifier
      * @param integer $fromDate
      * @param integer $toDate
      * @return \Chamilo\Application\Calendar\Extension\Office365\EventResultSet
      */
-    public function getEventsBetweenDates($fromDate, $toDate)
+    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        return $this->getOffice365CalendarRepository()->findEventsBetweenDates($fromDate, $toDate);
+        return $this->getOffice365CalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+            $calendarIdentifier,
+            $fromDate,
+            $toDate);
     }
 
     /**
@@ -91,7 +105,6 @@ class Office365CalendarService
      */
     public function isAuthenticated()
     {
-        return true;
         return $this->getOffice365CalendarRepository()->hasAccessToken();
     }
 }
