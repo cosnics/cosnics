@@ -6,6 +6,7 @@
 		<property name="calendar_type" type="text" length="255" notnull="1" />
 		<property name="calendar_id" type="text" length="255" notnull="1" />
 		<property name="visibility" type="integer" notnull="1" default="1" />
+		<property name="colour" type="text" length="10" />
 	</properties>
 	<index name="user_id">
 		<indexproperty name="user_id" />

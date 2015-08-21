@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
 	<package>
-		<name>Google Calendar</name>
-		<code>google</code>
-		<context>Chamilo\Application\Calendar\Extension\Google</context>
+		<name>Office 365</name>
+		<code>office365</code>
+		<context>Chamilo\Application\Calendar\Extension\Office365</context>
 		<type>Chamilo\Application\Calendar\Extension</type>
 		<category>social</category>
 		<authors />

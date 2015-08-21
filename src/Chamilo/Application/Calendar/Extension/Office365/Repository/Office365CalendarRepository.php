@@ -8,6 +8,8 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
+use Doctrine\Common\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -270,6 +272,10 @@ class Office365CalendarRepository
         return $this->office365Client;
     }
 
+    /**
+     *
+     * @return \stdClass
+     */
     private function refreshToken()
     {
         $client = $this->getGuzzleHttpClient();
@@ -300,6 +306,11 @@ class Office365CalendarRepository
         return $this->getTokenExpirationTime() < time();
     }
 
+    /**
+     *
+     * @param unknown $authenticationCode
+     * @return boolean
+     */
     public function login($authenticationCode = null)
     {
         if ($this->hasAccessToken())
@@ -319,7 +330,7 @@ class Office365CalendarRepository
             $replyUri = new Redirect($this->getReplyParameters());
 
             $redirect = new Redirect();
-            $redirect->writeHeader($this->createAuthUrl($this->getClientId(), $replyUri));
+            $redirect->writeHeader($this->createAuthUrl($replyUri));
         }
     }
 
@@ -332,6 +343,11 @@ class Office365CalendarRepository
         return 'https://outlook.office.com/Calendars.Read';
     }
 
+    /**
+     *
+     * @param string $authenticationCode
+     * @return \stdClass
+     */
     private function requestAccessToken($authenticationCode)
     {
         $client = $this->getGuzzleHttpClient();
@@ -363,7 +379,12 @@ class Office365CalendarRepository
             \Chamilo\Application\Calendar\Extension\Office365\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Office365\Manager :: ACTION_LOGIN);
     }
 
-    private function createAuthUrl($clientId, Redirect $replyUri)
+    /**
+     *
+     * @param Redirect $replyUri
+     * @return string
+     */
+    private function createAuthUrl(Redirect $replyUri)
     {
         $params = array(
             'response_type' => 'code',
@@ -443,8 +464,20 @@ class Office365CalendarRepository
         $client = $this->getGuzzleHttpClient();
         $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
 
-        $response = $client->send($request);
-        return json_decode($response->getBody()->getContents());
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheIdentifier = md5(serialize($request));
+
+        if (! $cache->contains($cacheIdentifier))
+        {
+            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+
+            $response = $client->send($request);
+            $result = json_decode($response->getBody()->getContents());
+            $cache->save($cacheIdentifier, $result, $lifetimeInMinutes * 60);
+        }
+
+        return $cache->fetch($cacheIdentifier);
     }
 
     /**

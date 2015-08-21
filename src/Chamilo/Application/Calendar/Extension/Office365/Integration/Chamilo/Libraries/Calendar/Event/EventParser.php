@@ -239,7 +239,7 @@ class EventParser
     private function getSource($calendarName)
     {
         return Translation :: get(
-            'Office365SourceName',
+            'SourceName',
             array('CALENDAR' => $calendarName),
             \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());
     }

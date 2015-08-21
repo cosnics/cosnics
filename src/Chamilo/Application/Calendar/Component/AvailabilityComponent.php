@@ -28,7 +28,7 @@ class AvailabilityComponent extends Manager
             $values = $form->exportValues();
             $result = $availabilityService->setAvailabilities(
                 $this->get_user(),
-                $values[AvailabilityService :: PROPERTY_AVAILABLE]);
+                $values[AvailabilityService :: PROPERTY_CALENDAR]);
 
             $nextAction = new Redirect(
                 array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));

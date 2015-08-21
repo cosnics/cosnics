@@ -7,7 +7,6 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
-use Doctrine\Common\ClassLoader;
 use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
@@ -196,9 +195,6 @@ class Configuration
 
     public function is_connectable()
     {
-        $classLoader = new ClassLoader('Doctrine', __DIR__ . '/../../plugin/');
-        $classLoader->register();
-
         $configuration = new \Doctrine\DBAL\Configuration();
 
         $data_source_name = DataSourceName :: factory(
@@ -422,19 +418,27 @@ class Configuration
         $this->set(
             array('Chamilo\Configuration', 'storage', 'archive'),
             Path :: getInstance()->getStoragePath('archive'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'cache_path'), Path :: getInstance()->getStoragePath('cache'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'cache_path'),
+            Path :: getInstance()->getStoragePath('cache'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'garbage'),
             Path :: getInstance()->getStoragePath('garbage_path'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'),
             Path :: getInstance()->getStoragePath('hotpotatoes'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'logs_path'), Path :: getInstance()->getStoragePath('logs'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'logs_path'),
+            Path :: getInstance()->getStoragePath('logs'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'repository_path'),
             Path :: getInstance()->getStoragePath('repository'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'scorm_path'), Path :: getInstance()->getStoragePath('scorm'));
-        $this->set(array('Chamilo\Configuration', 'storage', 'temp_path'), Path :: getInstance()->getStoragePath('temp'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'scorm_path'),
+            Path :: getInstance()->getStoragePath('scorm'));
+        $this->set(
+            array('Chamilo\Configuration', 'storage', 'temp_path'),
+            Path :: getInstance()->getStoragePath('temp'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'userpictures'),
             Path :: getInstance()->getStoragePath('userpictures_path'));

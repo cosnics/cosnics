@@ -89,12 +89,17 @@ class RecurrenceRulesIcalParser
 
             if ($icalRecurrenceRules['BYMONTHDAY'])
             {
-                $recurrenceRules->setByDay($icalRecurrenceRules['BYMONTHDAY']);
+                $recurrenceRules->setByMonthDay($icalRecurrenceRules['BYMONTHDAY']);
             }
 
             if ($icalRecurrenceRules['BYMONTH'])
             {
-                $recurrenceRules->setByDay($icalRecurrenceRules['BYMONTH']);
+                $recurrenceRules->setByMonth($icalRecurrenceRules['BYMONTH']);
+            }
+
+            if ($icalRecurrenceRules['BYWEEKNO'])
+            {
+                $recurrenceRules->setByWeekNumber($icalRecurrenceRules['BYWEEKNO']);
             }
         }
 

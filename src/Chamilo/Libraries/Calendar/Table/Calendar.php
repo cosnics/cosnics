@@ -71,6 +71,7 @@ abstract class Calendar extends HTML_Table
     public function addEvent($time, $content)
     {
         $this->eventsToShow[$time][] = $content;
+        sort($this->eventsToShow[$time]);
     }
 
     /**

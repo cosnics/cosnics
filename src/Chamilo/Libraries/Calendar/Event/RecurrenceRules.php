@@ -62,6 +62,12 @@ class RecurrenceRules
 
     /**
      *
+     * @var integer[]
+     */
+    private $byWeekNumber;
+
+    /**
+     *
      * @param integer $frequency
      * @param integer $until
      * @param integer $count
@@ -69,9 +75,10 @@ class RecurrenceRules
      * @param string[] $byDay
      * @param integer[] $byMonthDay
      * @param integer[] $byMonth
+     * @param integer[] $byWeekNumber
      */
     public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(),
-        $byMonth = array())
+        $byMonth = array(), $byWeekNumber = array())
     {
         $this->frequency = $frequency;
         $this->until = $until;
@@ -80,6 +87,7 @@ class RecurrenceRules
         $this->byDay = $byDay;
         $this->byMonthDay = $byMonthDay;
         $this->byMonth = $byMonth;
+        $this->byWeekNumber = $byWeekNumber;
     }
 
     /**
@@ -206,6 +214,24 @@ class RecurrenceRules
     public function setByMonth($byMonth)
     {
         $this->byMonth = $byMonth;
+    }
+
+    /**
+     *
+     * @return integer[]
+     */
+    public function getByWeekNumber()
+    {
+        return $this->byWeekNumber;
+    }
+
+    /**
+     *
+     * @param integer[] $byWeekNumber
+     */
+    public function setByWeekNumber($byWeekNumber)
+    {
+        $this->byWeekNumber = $byWeekNumber;
     }
 
     /**
