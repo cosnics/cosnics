@@ -79,6 +79,11 @@ class IcalRecurrenceRulesFormatter
             $iCalRules['BYMONTH'] = implode(',', $recurrenceRules->getByMonth());
         }
 
+        if ($recurrenceRules->getByWeekNumber())
+        {
+            $iCalRules['BYWEEKNO'] = implode(',', $recurrenceRules->getByWeekNumber());
+        }
+
         return $iCalRules;
     }
 

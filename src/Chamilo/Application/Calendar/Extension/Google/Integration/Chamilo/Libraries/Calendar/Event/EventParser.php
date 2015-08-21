@@ -236,7 +236,7 @@ class EventParser
     private function getSource(CalendarProperties $calendarProperties)
     {
         return Translation :: get(
-            'GoogleSourceName',
+            'SourceName',
             array('CALENDAR' => $calendarProperties->getSummary()),
             \Chamilo\Application\Calendar\Extension\Google\Manager :: context());
     }

@@ -4,4 +4,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Office 365"
-Office365SourceName = "Office 365 - {CALENDAR}"
+SourceName = "Office 365 - {CALENDAR}"

@@ -107,15 +107,30 @@ class AvailabilityForm extends FormValidator
 
                 foreach ($ownedCalendars as $ownedCalendar)
                 {
-                    $this->addElement(
+                    $calendarElements = array();
+
+                    $calendarElements[] = $this->createElement(
                         'checkbox',
-                        AvailabilityService :: PROPERTY_AVAILABLE . '[' . $ownedCalendar->getType() . '][' .
-                             $ownedCalendar->getIdentifier() . ']',
+                        AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                             $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_AVAILABLE . ']',
                             $ownedCalendar->getName(),
-                            $ownedCalendar->getDescription(),
+                            null,
                             null,
                             1,
                             0);
+
+//                     $colourElement = $this->createElement(
+//                         'text',
+//                         AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+//                              $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_COLOUR . ']',
+//                             $ownedCalendar->getName() . ' Colour',
+//                             array('class' => 'colour-selection'));
+//                     $colourElement->setType('color');
+
+//                     $calendarElements[] = $colourElement;
+                    $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
+
+                    $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
                 }
 
                 $this->addElement('category');
@@ -132,7 +147,8 @@ class AvailabilityForm extends FormValidator
 
         while ($calendarAvailability = $calendarAvailabilities->next_result())
         {
-            $defaultValues[AvailabilityService :: PROPERTY_AVAILABLE][$calendarAvailability->getCalendarType()][$calendarAvailability->getCalendarId()] = $calendarAvailability->getAvailability();
+            $defaultValues[AvailabilityService :: PROPERTY_CALENDAR][$calendarAvailability->getCalendarType()][$calendarAvailability->getCalendarId()][AvailabilityService :: PROPERTY_AVAILABLE] = $calendarAvailability->getAvailability();
+            $defaultValues[AvailabilityService :: PROPERTY_CALENDAR][$calendarAvailability->getCalendarType()][$calendarAvailability->getCalendarId()][AvailabilityService :: PROPERTY_COLOUR] = $calendarAvailability->getColour();
         }
 
         foreach ($this->getAvailableCalendars() as $ownedCalendarType => $ownedCalendars)
@@ -143,9 +159,9 @@ class AvailabilityForm extends FormValidator
                 $calendarIdentifier = $ownedCalendar->getIdentifier();
 
                 if (! isset(
-                    $defaultValues[AvailabilityService :: PROPERTY_AVAILABLE][$calendarType][$calendarIdentifier]))
+                    $defaultValues[AvailabilityService :: PROPERTY_CALENDAR][$calendarType][$calendarIdentifier][AvailabilityService :: PROPERTY_AVAILABLE]))
                 {
-                    $defaultValues[AvailabilityService :: PROPERTY_AVAILABLE][$calendarType][$calendarIdentifier] = 1;
+                    $defaultValues[AvailabilityService :: PROPERTY_CALENDAR][$calendarType][$calendarIdentifier][AvailabilityService :: PROPERTY_AVAILABLE] = 1;
                 }
             }
         }

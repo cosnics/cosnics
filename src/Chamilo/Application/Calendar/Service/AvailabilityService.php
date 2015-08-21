@@ -16,7 +16,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class AvailabilityService
 {
+    const PROPERTY_CALENDAR = 'calendar';
     const PROPERTY_AVAILABLE = 'available';
+    const PROPERTY_COLOUR = 'colour';
 
     /**
      *
@@ -105,9 +107,10 @@ class AvailabilityService
      * @param string $calendarType
      * @param string $calendarIdentifier
      * @param boolean $isAvailable
+     * @param string $colour
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
-    public function createAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true)
+    public function createAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
         $availability = new Availability();
         $this->setAvailabilityProperties($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
@@ -127,12 +130,19 @@ class AvailabilityService
      * @param string $calendarType
      * @param string $calendarIdentifier
      * @param boolean $isAvailable
+     * @param string $colour
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
     public function updateAvailability(Availability $availability, User $user, $calendarType, $calendarIdentifier,
-        $isAvailable = true)
+        $isAvailable = true, $colour = null)
     {
-        $this->setAvailabilityProperties($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
+        $this->setAvailabilityProperties(
+            $availability,
+            $user,
+            $calendarType,
+            $calendarIdentifier,
+            $isAvailable,
+            $colour);
 
         if (! $availability->update())
         {
@@ -149,14 +159,16 @@ class AvailabilityService
      * @param string $calendarType
      * @param string $calendarIdentifier
      * @param boolean $isAvailable
+     * @param string $colour
      */
     private function setAvailabilityProperties(Availability $availability, User $user, $calendarType,
-        $calendarIdentifier, $isAvailable)
+        $calendarIdentifier, $isAvailable, $colour)
     {
         $availability->setUserId($user->getId());
         $availability->setCalendarType($calendarType);
         $availability->setCalendarId($calendarIdentifier);
         $availability->setAvailability($isAvailable);
+        $availability->setColour($colour);
     }
 
     /**
@@ -167,7 +179,7 @@ class AvailabilityService
      * @param boolean $isAvailable
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
-    public function setAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true)
+    public function setAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
         $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
             $user,
@@ -176,11 +188,17 @@ class AvailabilityService
 
         if ($availability instanceof Availability)
         {
-            return $this->updateAvailability($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
+            return $this->updateAvailability(
+                $availability,
+                $user,
+                $calendarType,
+                $calendarIdentifier,
+                $isAvailable,
+                $colour);
         }
         else
         {
-            return $this->createAvailability($user, $calendarType, $calendarIdentifier, $isAvailable);
+            return $this->createAvailability($user, $calendarType, $calendarIdentifier, $isAvailable, $colour);
         }
     }
 
@@ -196,9 +214,14 @@ class AvailabilityService
 
         foreach ($calendarAvailabilityTypes as $calendarType => $calendarAvailabilities)
         {
-            foreach ($calendarAvailabilities as $calendarIdentifier => $isAvailable)
+            foreach ($calendarAvailabilities as $calendarIdentifier => $settings)
             {
-                if (! $this->setAvailability($user, $calendarType, $calendarIdentifier, (boolean) $isAvailable))
+                if (! $this->setAvailability(
+                    $user,
+                    $calendarType,
+                    $calendarIdentifier,
+                    (boolean) $settings[self :: PROPERTY_AVAILABLE],
+                    $settings[self :: PROPERTY_COLOUR]))
                 {
                     $failedActions ++;
                 }

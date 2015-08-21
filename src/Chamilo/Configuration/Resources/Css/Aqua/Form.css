@@ -212,6 +212,11 @@ input.checkbox, input[type=checkbox] {
 	border-width: 0;
 }
 
+input[type=color], input.colour-selection {
+	width: 30px;
+	padding: 0px;
+}
+
 /* Normal submit button */
 input.mainoption {
 	font-weight: bold;
@@ -292,8 +297,7 @@ input.rating_question_high_value {
 }
 
 .advanced_select_question input.add {
-	background-image:
-		url('../../Images/Aqua/Buttons/ActivateElement.png');
+	background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
 }
 
 .advanced_select_question input.remove {
@@ -1141,8 +1145,7 @@ fieldset legend {
 	margin-right: 10px;
 }
 
-div.ui-datepicker
-{
+div.ui-datepicker {
 	background-color: #F7FBFD;
 	border: 1px solid #d7e6ed !important;
 	padding: 10px;

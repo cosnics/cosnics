@@ -4,4 +4,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Google Calendar"
-GoogleSourceName = "Google Calendar - {CALENDAR}"
+SourceName = "Google Calendar - {CALENDAR}"

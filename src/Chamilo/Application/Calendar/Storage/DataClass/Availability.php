@@ -20,6 +20,7 @@ class Availability extends DataClass
     const PROPERTY_CALENDAR_TYPE = 'calendar_type';
     const PROPERTY_CALENDAR_ID = 'calendar_id';
     const PROPERTY_AVAILABILITY = 'availability';
+    const PROPERTY_COLOUR = 'colour';
 
     /**
      *
@@ -32,7 +33,8 @@ class Availability extends DataClass
                 self :: PROPERTY_USER_ID,
                 self :: PROPERTY_CALENDAR_TYPE,
                 self :: PROPERTY_CALENDAR_ID,
-                self :: PROPERTY_AVAILABILITY));
+                self :: PROPERTY_AVAILABILITY,
+                self :: PROPERTY_COLOUR));
     }
 
     public function get_data_manager()
@@ -110,5 +112,23 @@ class Availability extends DataClass
     public function setAvailability($availability)
     {
         $this->set_default_property(self :: PROPERTY_AVAILABILITY, $availability);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getColour()
+    {
+        return $this->get_default_property(self :: PROPERTY_COLOUR);
+    }
+
+    /**
+     *
+     * @param string $colour
+     */
+    public function setColour($colour)
+    {
+        $this->set_default_property(self :: PROPERTY_COLOUR, $colour);
     }
 }

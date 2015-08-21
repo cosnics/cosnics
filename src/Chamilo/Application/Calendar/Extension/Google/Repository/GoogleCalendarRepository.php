@@ -7,6 +7,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -189,6 +190,12 @@ class GoogleCalendarRepository
             {
                 $this->googleClient->setAccessToken($this->getAccessToken());
             }
+
+            $this->googleClient->setClassConfig(
+                'Google_Cache_File',
+                array('directory' => Path :: getInstance()->getCachePath(__NAMESPACE__)));
+
+            $this->googleClient->setCache(new \Google_Cache_File($this->googleClient));
         }
 
         if ($this->hasAccessToken() && $this->googleClient->isAccessTokenExpired())
