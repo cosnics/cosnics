@@ -172,7 +172,11 @@ class Legend
             $result[] = '<legend class="event-legend-label">' . Translation :: get('Legend') . '</legend>';
             $result[] = '<div class="event-legend">';
 
-            foreach ($this->getSources() as $source)
+            $sources = $this->getSources();
+
+            sort($sources);
+
+            foreach ($sources as $source)
             {
                 if ($this->getDataProvider()->supportsVisibility())
                 {

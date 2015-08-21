@@ -178,7 +178,7 @@ class EventParser
     public function getEvents()
     {
         $calendarEvent = $this->getCalendarEvent();
-        $url = null;
+
         $events = array();
 
         if ($calendarEvent['occurences'] > 1)
@@ -195,58 +195,69 @@ class EventParser
                     $baseDate = strtotime($weekLabels[$weekNumber]);
                     $baseDate += ($calendarEvent['day'] * 24 * 60 * 60);
 
-                    $baseDay = date('j', $baseDate);
-                    $baseMonth = date('n', $baseDate);
-                    $baseYear = date('Y', $baseDate);
+                    $startDate = mktime(
+                        date('G', $startTime),
+                        date('i', $startTime),
+                        date('s', $startTime),
+                        date('n', $baseDate),
+                        date('j', $baseDate),
+                        date('Y', $baseDate));
 
-                    $hour = date('G', $startTime);
-                    $minute = date('i', $startTime);
-                    $second = date('s', $startTime);
-
-                    $startDate = mktime($hour, $minute, $second, $baseMonth, $baseDay, $baseYear);
                     $endDate = $startDate + ($calendarEvent['duration'] * 60);
 
-                    $event = new Event(
-                        $calendarEvent['id'],
-                        $startDate,
-                        $endDate,
-                        new RecurrenceRules(),
-                        $url,
-                        $calendarEvent['name'] . ' [' . $calendarEvent['teacher'] . ']',
-                        $calendarEvent['name'],
-                        Translation :: get(
-                            'TypeName',
-                            null,
-                            \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context()),
-                        \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context());
-
-                    $event->setCalendarEvent($calendarEvent);
-                    $events[] = $event;
+                    $events[] = $this->getEvent($calendarEvent, $startDate, $endDate);
                 }
             }
-
-            // var_dump(count($events));
         }
         else
         {
-            $event = new Event(
-                $calendarEvent['id'],
+            $events[] = $this->getEvent(
+                $calendarEvent,
                 $calendarEvent['start_timestamp'],
-                $calendarEvent['end_timestamp'],
-                new RecurrenceRules(),
-                $url,
-                $calendarEvent['name'] . ' [' . $calendarEvent['teacher'] . ']',
-                $calendarEvent['name'],
-                Translation :: get(
-                    'TypeName',
-                    null,
-                    \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context()),
-                \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context());
-
-            $event->setCalendarEvent($calendarEvent);
-            $events[] = $event;
+                $calendarEvent['end_timestamp']);
         }
 
         return $events;
+    }
+
+    /**
+     *
+     * @param string[] $calendarEvent
+     * @param integer $startDate
+     * @param integer $endDate
+     * @return \Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Libraries\Calendar\Event\Event
+     */
+    private function getEvent($calendarEvent, $startDate, $endDate)
+    {
+        $url = null;
+
+        $event = new Event(
+            $calendarEvent['id'],
+            $startDate,
+            $endDate,
+            new RecurrenceRules(),
+            $url,
+            $this->getEventLabel($calendarEvent),
+            $this->getEventLabel($calendarEvent),
+            Translation :: get(
+                'TypeName',
+                null,
+                \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context()),
+            \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: context());
+
+        $event->setCalendarEvent($calendarEvent);
+
+        return $event;
+    }
+
+    private function getEventLabel($calendarEvent)
+    {
+        $html = array();
+
+        $html[] = $calendarEvent['name'];
+        $html[] = '[' . $calendarEvent['type_code'] . ']';
+        $html[] = '[' . $calendarEvent['teacher'] . ']';
+
+        return implode(PHP_EOL, $html);
     }
 }

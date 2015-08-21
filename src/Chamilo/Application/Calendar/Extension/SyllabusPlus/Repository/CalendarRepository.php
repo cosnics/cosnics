@@ -5,6 +5,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Storage\DataManager;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Storage\ResultSet;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Doctrine\Common\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -45,22 +48,53 @@ class CalendarRepository
      */
     public function findEventsForUserAndBetweenDates(User $user, $fromDate, $toDate)
     {
-        if ($user->get_official_code())
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheIdentifier = md5(serialize(array(__METHOD__, $user->get_id(), $fromDate, $toDate)));
+
+        if (! $cache->contains($cacheIdentifier))
         {
-            $query = 'SELECT * FROM [dbo].[v_syllabus_courses] WHERE person_id = N\'' . $user->get_official_code() . '\'';
-            $statement = DataManager :: get_instance()->get_connection()->query($query);
-            return new ResultSet($statement);
+            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+
+            if ($user->get_official_code())
+            {
+                $query = 'SELECT * FROM [dbo].[v_syllabus_courses] WHERE person_id = N\'' . $user->get_official_code() .
+                     '\'';
+                $statement = DataManager :: get_instance()->get_connection()->query($query);
+                $resultSet = new ResultSet($statement);
+            }
+            else
+            {
+                $resultSet = new ArrayResultSet(array());
+            }
+
+            $cache->save($cacheIdentifier, $resultSet, $lifetimeInMinutes * 60);
         }
-        else
-        {
-            return new ArrayResultSet(array());
-        }
+
+        return $cache->fetch($cacheIdentifier);
     }
 
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Extension\SyllabusPlus\Storage\ResultSet
+     */
     public function findWeekLabels()
     {
-        $query = 'SELECT * FROM [dbo].[v_syllabus_weeks]';
-        $statement = DataManager :: get_instance()->get_connection()->query($query);
-        return new ResultSet($statement);
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheIdentifier = md5(serialize(array(__METHOD__)));
+
+        if (! $cache->contains($cacheIdentifier))
+        {
+            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+
+            $query = 'SELECT * FROM [dbo].[v_syllabus_weeks]';
+            $statement = DataManager :: get_instance()->get_connection()->query($query);
+            $resultSet = new ResultSet($statement);
+
+            $cache->save($cacheIdentifier, $resultSet, $lifetimeInMinutes * 60);
+        }
+
+        return $cache->fetch($cacheIdentifier);
     }
 }
