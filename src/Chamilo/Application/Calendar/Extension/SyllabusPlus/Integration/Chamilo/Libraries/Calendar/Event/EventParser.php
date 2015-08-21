@@ -212,7 +212,7 @@ class EventParser
                         $endDate,
                         new RecurrenceRules(),
                         $url,
-                        $calendarEvent['name'],
+                        $calendarEvent['name'] . ' [' . $calendarEvent['teacher'] . ']',
                         $calendarEvent['name'],
                         Translation :: get(
                             'TypeName',
@@ -225,7 +225,7 @@ class EventParser
                 }
             }
 
-//             var_dump(count($events));
+            // var_dump(count($events));
         }
         else
         {
@@ -235,7 +235,7 @@ class EventParser
                 $calendarEvent['end_timestamp'],
                 new RecurrenceRules(),
                 $url,
-                $calendarEvent['name'],
+                $calendarEvent['name'] . ' [' . $calendarEvent['teacher'] . ']',
                 $calendarEvent['name'],
                 Translation :: get(
                     'TypeName',
@@ -248,41 +248,5 @@ class EventParser
         }
 
         return $events;
-    }
-
-    private function getRecurrence(array $calendarEvent)
-    {
-        $recurrenceRules = new RecurrenceRules();
-
-        var_dump(strtotime('2016W01'));
-        exit();
-
-        if ($calendarEvent['occurences'] > 1)
-        {
-            var_dump($calendarEvent);
-
-            $recurrenceRules->setFrequency(RecurrenceRules :: FREQUENCY_YEARLY);
-            $recurrenceRules->setCount($calendarEvent['occurences']);
-
-            $pattern = str_split($calendarEvent['pattern']);
-            $weekLabels = $this->getWeekLabels();
-            $enabledWeeks = array();
-
-            foreach ($pattern as $weekNumber => $isEnabled)
-            {
-                if ($isEnabled)
-                {
-                    $enabledWeeks[] = $weekLabels[$weekNumber];
-                }
-            }
-
-            sort($enabledWeeks);
-
-            $recurrenceRules->setByWeekNumber($enabledWeeks);
-
-            var_dump($recurrenceRules);
-        }
-
-        return $recurrenceRules;
     }
 }
