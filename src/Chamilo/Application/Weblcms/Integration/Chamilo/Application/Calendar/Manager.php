@@ -13,6 +13,12 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 
 /**
  *
@@ -30,26 +36,39 @@ class Manager implements CalendarInterface
      */
     public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
     {
-        $condition = $this->getConditions($renderer->getDataProvider()->getDataUser());
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            ContentObjectPublication :: class_name(),
-            $condition);
-
         $events = array();
 
-        while ($publication = $publications->next_result())
-        {
-            if (! WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
-                WeblcmsRights :: VIEW_RIGHT,
-                $publication->get_id(),
-                WeblcmsRights :: TYPE_PUBLICATION,
-                $publication->get_course_id()))
-            {
-                continue;
-            }
+        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+        $packageContext = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+        $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
 
-            $eventParser = new EventParser($publication, $fromDate, $toDate);
-            $events = array_merge($events, $eventParser->getEvents());
+        $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+            $renderer->getDataProvider()->getDataUser(),
+            $packageContext,
+            $packageName);
+
+        if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
+        {
+
+            $condition = $this->getConditions($renderer->getDataProvider()->getDataUser());
+            $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
+                ContentObjectPublication :: class_name(),
+                $condition);
+
+            while ($publication = $publications->next_result())
+            {
+                if (! WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                    WeblcmsRights :: VIEW_RIGHT,
+                    $publication->get_id(),
+                    WeblcmsRights :: TYPE_PUBLICATION,
+                    $publication->get_course_id()))
+                {
+                    continue;
+                }
+
+                $eventParser = new EventParser($publication, $fromDate, $toDate);
+                $events = array_merge($events, $eventParser->getEvents());
+            }
         }
 
         return $events;
@@ -64,10 +83,12 @@ class Manager implements CalendarInterface
     {
         $user_courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
         $course_ids = array();
+
         while ($course = $user_courses->next_result())
         {
             $course_ids[] = $course->get_id();
         }
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -105,6 +126,13 @@ class Manager implements CalendarInterface
      */
     public function getCalendars()
     {
-        return array();
+        $package = \Chamilo\Application\Weblcms\Manager :: package();
+
+        $calendar = new AvailableCalendar();
+        $calendar->setIdentifier(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package));
+        $calendar->setType($package);
+        $calendar->setName(Translation :: get('TypeName', null, $package));
+
+        return array($calendar);
     }
 }
