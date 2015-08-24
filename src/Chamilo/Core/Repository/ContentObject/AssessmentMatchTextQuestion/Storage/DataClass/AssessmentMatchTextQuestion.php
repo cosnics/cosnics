@@ -26,9 +26,9 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_OPTIONS, 
-            self :: PROPERTY_USE_WILDCARDS, 
-            self :: PROPERTY_IGNORE_CASE, 
+            self :: PROPERTY_OPTIONS,
+            self :: PROPERTY_USE_WILDCARDS,
+            self :: PROPERTY_IGNORE_CASE,
             self :: PROPERTY_HINT);
     }
 
@@ -66,7 +66,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -123,7 +123,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         }
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -132,7 +132,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())
@@ -144,7 +144,6 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
     {
         $best_score = 0;
         $best_option = null;
-        
         foreach ($this->get_options() as $key => $option)
         {
             if ($option->get_score() > $best_score)
@@ -153,7 +152,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
                 $best_option = $option;
             }
         }
-        
+
         return $best_option;
     }
 
@@ -166,7 +165,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
                 return $option;
             }
         }
-        
+
         return null;
     }
 }
