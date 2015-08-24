@@ -38,7 +38,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
 
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-        $parameters[Application :: PARAM_ACTION] = Manager :: ACTION_IMPORT;
+        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_IMPORT;
 
         $redirect = new Redirect($parameters);
         $link = $redirect->getUrl();

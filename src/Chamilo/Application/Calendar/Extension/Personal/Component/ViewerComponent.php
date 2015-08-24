@@ -79,7 +79,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            return $this->display_error_page(htmlentities(Translation :: get('NoProfileSelected')));
+            return $this->display_error_page(htmlentities(Translation :: get('NoEventSelected')));
         }
     }
 
