@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: question_selecter.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -23,6 +24,7 @@ class QuestionSelecterComponent extends Manager
     public function run()
     {
         $assessment_id = Request :: get(self :: PARAM_ASSESSMENT_ID);
+
         if ($assessment_id)
         {
             $clois = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
@@ -41,6 +43,7 @@ class QuestionSelecterComponent extends Manager
         else
         {
             $question_ids = Request :: get(self :: PARAM_QUESTION_ID);
+
             if (! is_array($question_ids))
                 $question_ids = array($question_ids);
         }
@@ -75,16 +78,27 @@ class QuestionSelecterComponent extends Manager
                 ContentObject :: class_name(),
                 $question_id);
 
-            $cloi = ComplexContentObjectItem :: factory($question->package());
+            $contentObjectClassName = $question->package() . '\Storage\DataClass\\' .
+                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($question->package());
+
+            $cloi = ComplexContentObjectItem :: factory($contentObjectClassName);
+
             $cloi->set_ref($question_id);
             $cloi->set_parent($parent);
             $cloi->set_user_id($this->get_user_id());
             $cloi->set_display_order(\Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order($parent));
+
             $succes &= $cloi->create();
         }
 
         $message = $succes ? Translation :: get('QuestionsAdded') : Translation :: get('QuestionsNotAdded');
 
-        $this->redirect($message, ! $succes, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $this->redirect(
+            $message,
+            ! $succes,
+            array(
+                self :: PARAM_ACTION => self :: ACTION_BROWSE,
+                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
+                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID)));
     }
 }

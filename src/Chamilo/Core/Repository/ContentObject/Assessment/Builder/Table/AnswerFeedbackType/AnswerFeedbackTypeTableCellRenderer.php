@@ -39,13 +39,13 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
                 return StringUtilities :: getInstance()->truncate($title, 53, false);
             case AnswerFeedbackTypeTableColumnModel :: PROPERTY_FEEDBACK_TYPE :
                 return Theme :: getInstance()->getImage(
-                    'answer_feedback_type/' . $complex_content_object_item->get_show_answer_feedback(),
+                    'AnswerFeedbackType/' . $complex_content_object_item->get_show_answer_feedback(),
                     'png',
                     Configuration :: answer_feedback_string($complex_content_object_item->get_show_answer_feedback()),
                     null,
                     ToolbarItem :: DISPLAY_ICON,
                     false,
-                    $this->get_component()->get_root_content_object()->context());
+                    $this->get_component()->get_root_content_object()->package());
         }
 
         return parent :: render_cell($column, $complex_content_object_item);
@@ -58,7 +58,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer imp
     public function get_actions($complex_content_object_item)
     {
         $toolbar = new Toolbar();
-        $context = $this->get_component()->get_root_content_object()->context();
+        $context = $this->get_component()->get_root_content_object()->package();
 
         $types = array(
             Configuration :: ANSWER_FEEDBACK_TYPE_NONE,

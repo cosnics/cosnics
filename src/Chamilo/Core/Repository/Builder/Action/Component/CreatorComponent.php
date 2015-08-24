@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Builder\Action\Component;
 
 use Chamilo\Core\Repository\Builder\Action\Manager;
-use Chamilo\Core\Repository\Exception\NoTemplateException;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -38,21 +37,38 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
         $type_selection = $this->get_type_selection();
         $content_object = $this->get_parent_content_object();
-        $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($type_selection);
-        $template = $template_registration->get_template();
 
-        $html[] = '<h4>';
-        $html[] = Translation :: get(
-            'AddOrCreateNewTo',
-            array(
-                'NEW_TYPE' => $template->translate('TypeName'),
-                'PARENT_TYPE' => Translation :: get(
-                    'TypeName',
-                    null,
-                    ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())),
-                'TITLE' => $content_object->get_title()),
-            \Chamilo\Core\Repository\Manager :: context());
-        $html[] = '</h4><br />';
+        if ($type_selection)
+        {
+            $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($type_selection);
+            $template = $template_registration->get_template();
+
+            $html[] = '<h4>';
+            $html[] = Translation :: get(
+                'AddOrCreateNewTo',
+                array(
+                    'NEW_TYPE' => $template->translate('TypeName'),
+                    'PARENT_TYPE' => Translation :: get(
+                        'TypeName',
+                        null,
+                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())),
+                    'TITLE' => $content_object->get_title()),
+                \Chamilo\Core\Repository\Manager :: context());
+            $html[] = '</h4><br />';
+        }
+        else
+        {
+            $title[] = Translation :: get(
+                'AddOrCreateNewTo',
+                array(
+                    'NEW_TYPE' => Translation :: get('Items'),
+                    'PARENT_TYPE' => Translation :: get(
+                        'TypeName',
+                        null,
+                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())),
+                    'TITLE' => $content_object->get_title()),
+                \Chamilo\Core\Repository\Manager :: context());
+        }
 
         return implode(PHP_EOL, $html);
     }
@@ -66,73 +82,66 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
         $exclude[] = $this->get_root_content_object()->get_id();
 
-        if ($this->type_selection)
+        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
-            {
-                $factory = new ApplicationFactory(
-                    \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $factory = new ApplicationFactory(
+                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
-                $component = $factory->getComponent();
+            $component = $factory->getComponent();
 
-                $component->set_parameter(
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                    $this->get_parent()->get_complex_content_object_item_id());
+            $component->set_parameter(
+                \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                $this->get_parent()->get_complex_content_object_item_id());
 
-                $component->set_parameter(TypeSelector :: PARAM_SELECTION, $this->type_selection);
+            $component->set_parameter(TypeSelector :: PARAM_SELECTION, $this->type_selection);
 
-                $component->set_excluded_objects($exclude);
+            $component->set_excluded_objects($exclude);
 
-                return $component->run();
-            }
-            else
-            {
-                $objects = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
-
-                if (! is_array($objects))
-                {
-                    $objects = array($objects);
-                }
-
-                foreach ($objects as $content_object_id)
-                {
-                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                        ContentObject :: class_name(),
-                        $content_object_id);
-
-                    if (method_exists($this->get_parent(), 'get_helper_object'))
-                    {
-                        $helper_object = $this->get_parent()->get_helper_object($type);
-                        if ($helper_object)
-                        {
-                            $this->create_helper_object($helper_object, $content_object_id);
-                            $content_object_id = $helper_object->get_id();
-                        }
-                    }
-
-                    // gets the type of the helper object
-                    $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                        ContentObject :: class_name(),
-                        $content_object_id);
-
-                    $this->create_complex_content_object_item($type, $content_object_id);
-                }
-
-                $this->redirect(
-                    Translation :: get(
-                        'ObjectAdded',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES),
-                    false,
-                    array(
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE,
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
-            }
+            return $component->run();
         }
         else
         {
-            throw new NoTemplateException();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
+
+            if (! is_array($objects))
+            {
+                $objects = array($objects);
+            }
+
+            foreach ($objects as $content_object_id)
+            {
+                $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
+                    ContentObject :: class_name(),
+                    $content_object_id);
+
+                if (method_exists($this->get_parent(), 'get_helper_object'))
+                {
+                    $helper_object = $this->get_parent()->get_helper_object($type);
+                    if ($helper_object)
+                    {
+                        $this->create_helper_object($helper_object, $content_object_id);
+                        $content_object_id = $helper_object->get_id();
+                    }
+                }
+
+                // gets the type of the helper object
+                $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
+                    ContentObject :: class_name(),
+                    $content_object_id);
+
+                $this->create_complex_content_object_item($type, $content_object_id);
+            }
+
+            $this->redirect(
+                Translation :: get(
+                    'ObjectAdded',
+                    array('OBJECT' => Translation :: get('ContentObject')),
+                    Utilities :: COMMON_LIBRARIES),
+                false,
+                array(
+                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE,
+                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
         }
     }
 
