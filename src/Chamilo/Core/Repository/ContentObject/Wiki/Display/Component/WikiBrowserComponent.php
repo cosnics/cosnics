@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Wiki\Display\Tabel\WikiPage\WikiPageTable;
+use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPage\WikiPageTable;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;

@@ -4,18 +4,18 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
+use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\Version\VersionTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: wiki_history.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -41,7 +41,8 @@ class WikiHistoryComponent extends Manager implements TableSupport
             $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ComplexContentObjectItem :: class_name(),
                 $this->complex_wiki_page_id);
-            $compare_object_ids = Request :: post(VersionTable :: DEFAULT_NAME . VersionTable :: CHECKBOX_NAME_SUFFIX);
+
+            $compare_object_ids = VersionTable :: get_selected_ids();
 
             $html = array();
 
@@ -60,7 +61,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
                     ContentObject :: class_name(),
                     $compare_object_id);
 
-                $html[] = $compare_object->get_difference($compare_version_id);
+                $html[] = $compare_object->get_difference($compare_version_id)->render();
             }
             else
             {
@@ -68,14 +69,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 $version_parameters = $this->get_parameters();
                 $version_parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->complex_wiki_page_id;
 
-                $version_browser = new VersionTable($this, $version_parameters);
-                $actions = new TableFormActions(__NAMESPACE__);
-                $actions->add_form_action(
-                    new TableFormAction(
-                        array(self :: PARAM_ACTION => self :: ACTION_COMPARE),
-                        Translation :: get('CompareSelected'),
-                        false));
-                $version_browser->set_form_actions($actions);
+                $version_browser = new VersionTable($this);
 
                 $html[] = '<div class="wiki-pane-content-title">' . Translation :: get('RevisionHistory') . ': ' .
                      $this->wiki_page->get_title() . '</div>';
@@ -102,7 +96,9 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
     public function get_table_condition($class_name)
     {
-        return new EqualityCondition(ContentObject :: PROPERTY_OBJECT_NUMBER, $this->wiki_page->get_object_number());
+        return new EqualityCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
+            new StaticConditionVariable($this->wiki_page->get_object_number()));
     }
 
     public function count_content_object_versions_resultset($condition = null)

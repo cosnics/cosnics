@@ -19,16 +19,17 @@ class VersionTableDataProvider extends DataClassTableDataProvider
             $order_property = new OrderBy(
                 new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID, SORT_DESC));
         }
-        
+
+
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
+
         return DataManager :: retrieve_content_objects(ContentObject :: class_name(), $parameters);
     }
 
     public function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        
+
         return DataManager :: count_content_objects(ContentObject :: class_name(), $parameters);
     }
 }

@@ -16,7 +16,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
     public function run()
     {
         $action = $this->get_action();
-        
+
         switch ($action)
         {
             case self :: ACTION_PAGE_STATISTICS :
@@ -29,7 +29,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
                 $template = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate';
                 break;
         }
-             
+
         $factory = new ApplicationFactory(
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
