@@ -30,7 +30,7 @@ class ComparerComponent extends Manager
     public function run()
     {
         // $trail = BreadcrumbTrail :: get_instance();
-        $object_ids = Request :: post(VersionTable :: DEFAULT_NAME . VersionTable :: CHECKBOX_NAME_SUFFIX);
+        $object_ids = VersionTable :: get_selected_ids();
 
         if ($object_ids)
         {

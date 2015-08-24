@@ -14,6 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  * $Id: wiki_discuss.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -39,14 +40,18 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
             self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
             $this->get_selected_complex_content_object_item_id());
 
+        $html = array();
+
+        $html[] = $this->render_header();
+
         $factory = new ApplicationFactory(
             \Chamilo\Core\Repository\Feedback\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
-    }
 
-    public function add_actionbar_item()
-    {
+        $html[] = $factory->run();
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function render_header()
@@ -106,7 +111,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function retrieve_feedbacks()
     {
-        // TODO Auto-generated method stub
+        return new ArrayResultSet(array());
     }
 
     /**
@@ -115,7 +120,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function count_feedbacks()
     {
-        // TODO Auto-generated method stub
+        return 0;
     }
 
     /**
@@ -142,7 +147,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function is_allowed_to_view_feedback()
     {
-        // TODO Auto-generated method stub
+        return true;
     }
 
     /**
@@ -151,7 +156,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function is_allowed_to_create_feedback()
     {
-        // TODO Auto-generated method stub
+        return true;
     }
 
     /**
@@ -160,7 +165,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function is_allowed_to_update_feedback($feedback)
     {
-        // TODO Auto-generated method stub
+        return true;
     }
 
     /**
@@ -169,6 +174,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function is_allowed_to_delete_feedback($feedback)
     {
-        // TODO Auto-generated method stub
+        return true;
     }
 }

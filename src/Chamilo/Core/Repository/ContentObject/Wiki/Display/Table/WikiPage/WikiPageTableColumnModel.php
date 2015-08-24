@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Tabel\WikiPage;
+namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPage;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
