@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\Calendar\Extension\SyllabusPlus">
+	<settings>
+		<category name="general">
+			<setting name="dbms" field="text" default="mysql" />
+			<setting name="host" field="text" default="localhost" />
+			<setting name="database" field="text" default="cas" />
+			<setting name="user" field="text" default="root" />
+			<setting name="password" field="text" default="" />
+			<setting name="academic_year" field="text" default="" />
+			<setting name="archive_academic_year" field="text" default="" />
+		</category>
+	</settings>
+</package>
