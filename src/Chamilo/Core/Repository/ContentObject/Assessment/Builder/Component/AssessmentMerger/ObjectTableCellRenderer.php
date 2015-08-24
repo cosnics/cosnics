@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class TableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
+class ObjectTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
     public function render_cell($column, $content_object)
@@ -35,7 +35,7 @@ class TableCellRenderer extends DataClassTableCellRenderer implements TableCellR
         return parent :: render_cell($column, $content_object);
     }
 
-    private function get_actions($content_object)
+    public function get_actions($content_object)
     {
         $toolbar = new Toolbar();
 

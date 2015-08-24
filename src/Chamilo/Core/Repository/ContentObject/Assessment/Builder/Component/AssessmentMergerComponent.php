@@ -21,6 +21,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: assessment_merger.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -52,7 +53,6 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
                 \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID,
                 Request :: get(\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID));
 
-            $component->get_parent()->parse_input_from_table();
             return $component->run();
         }
         else
@@ -82,7 +82,6 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
             $table = new ObjectTable($this);
 
             $html[] = $table->as_html();
-            $html[] = '<br />' . implode(PHP_EOL, $html);
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -92,8 +91,10 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
     public function get_condition($selected_assessment)
     {
         $sub_condition = new EqualityCondition(
-            ComplexContentObjectItem :: PROPERTY_PARENT,
-            $selected_assessment->get_id());
+            new PropertyConditionVariable(
+                ComplexContentObjectItem :: class_name(),
+                ComplexContentObjectItem :: PROPERTY_PARENT),
+            new StaticConditionVariable($selected_assessment->get_id()));
         $condition = new SubselectCondition(
 
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
