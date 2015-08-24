@@ -3,6 +3,13 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Preview"
+TypeName = "Voorbeeld"
 PreviewModeWarning = "Opgelet: voorbeeldmodus"
 AvailableTemplates = "Beschikbare templates"
+ViewFull = "Volledig"
+ViewPreview = "Presentatie"
+ViewThumbnail = "Miniatuur"
+ViewDescription = "Description"
+ViewShort = "Kort"
+ViewInline = "Inline"
+ViewForm = "Formulier"
