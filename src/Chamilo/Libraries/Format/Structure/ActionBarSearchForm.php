@@ -64,7 +64,15 @@ class ActionBarSearchForm extends FormValidator
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
             'size="20" class="search_query"');
-        $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
+
+        if ($this->get_query())
+        {
+            $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
+        }
+        else
+        {
+            $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
+        }
     }
 
     /**
