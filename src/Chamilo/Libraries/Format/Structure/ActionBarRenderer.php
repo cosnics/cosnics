@@ -6,6 +6,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Session\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -171,11 +173,20 @@ class ActionBarRenderer
             $search_form = $this->search_form;
             if ($search_form)
             {
+                if ($search_form->validate())
+                {
+                    if ($this->clear_form_submitted())
+                    {
+                        $redirect_response = new RedirectResponse($this->get_search_url());
+                        $redirect_response->send();
+                    }
+                }
                 $html[] = '<div class="search_form">';
                 $html[] = $search_form->as_html();
                 $html[] = '</div>';
             }
         }
+
         $html[] = '</td>';
 
         $html[] = '</tr>';
@@ -195,6 +206,11 @@ class ActionBarRenderer
         $html[] = '<div class="clear"></div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function clear_form_submitted()
+    {
+        return ! is_null(Request :: post('clear'));
     }
 
     public function render_vertical()

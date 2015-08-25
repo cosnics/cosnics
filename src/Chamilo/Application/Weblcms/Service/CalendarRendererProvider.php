@@ -177,6 +177,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
         foreach ($publications as $publication)
         {
+
             if (method_exists(
                 $this->getRenderer()->get_tool_browser()->get_parent(),
                 'convert_content_object_publication_to_calendar_event'))
@@ -193,6 +194,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
             $publicationObject = new ContentObjectPublication();
             $publicationObject->set_default_properties($publication);
+            $publicationObject->set_content_object($object);
 
             $eventParser = new EventParser($publicationObject, $startTime, $endTime);
             $events = array_merge($events, $eventParser->getEvents());
