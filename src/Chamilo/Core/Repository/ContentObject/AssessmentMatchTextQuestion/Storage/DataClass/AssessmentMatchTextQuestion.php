@@ -146,7 +146,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         $best_option = null;
         foreach ($this->get_options() as $key => $option)
         {
-            if ($option->get_score() > $best_score)
+            if ($option->get_score() >= $best_score)
             {
                 $best_score = $option->get_score();
                 $best_option = $option;
