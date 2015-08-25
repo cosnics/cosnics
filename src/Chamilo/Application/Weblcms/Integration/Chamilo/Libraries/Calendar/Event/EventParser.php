@@ -114,7 +114,7 @@ class EventParser
             $this->getPublication()->get_course_id());
 
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser :: factory(
-            $this->getPublication()->get_content_object(true),
+            $this->getPublication()->get_content_object(),
             $this->getFromDate(),
             $this->getToDate(),
             Event :: class_name());

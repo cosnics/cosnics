@@ -384,13 +384,6 @@ class BrowserComponent extends Manager
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         }
 
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
         if ($this->is_course_admin && $this->get_parent() instanceof Categorizable)
         {
             $action_bar->add_common_action(
@@ -662,8 +655,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * Returns the default object table order for the browser.
-     * Can be "overridden" by the individual component to force
+     * Returns the default object table order for the browser. Can be "overridden" by the individual component to force
      * a different order if needed. Because the individual component is not an actual implementation but merely this
      * parent, there is a check if the method exists.
      *
