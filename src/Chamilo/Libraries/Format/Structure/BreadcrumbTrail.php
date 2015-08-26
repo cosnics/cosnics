@@ -67,7 +67,8 @@ class BreadcrumbTrail
             $this->add(
                 new Breadcrumb(
                     Path :: getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin')));
+                    $this->get_setting('site_name', 'Chamilo\Core\Admin'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'BreadcrumbHome')));
         }
     }
 
@@ -181,8 +182,16 @@ class BreadcrumbTrail
         {
             foreach ($breadcrumbtrail as $breadcrumb)
             {
-                $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">' .
-                     StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true) . '</a></li>';
+                if ($breadcrumb->getImage())
+                {
+                    $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self"><img src="' .
+                         $breadcrumb->getImage() . '" title="' . $breadcrumb->get_name() . '"></a></li>';
+                }
+                else
+                {
+                    $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">' .
+                         StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true) . '</a></li>';
+                }
             }
         }
 

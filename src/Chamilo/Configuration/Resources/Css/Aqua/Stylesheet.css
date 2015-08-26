@@ -5,6 +5,8 @@
 @import url('Plugin.css');
 
 /* Platform CSS */
+@import url('Header.css');
+
 @import url('General.css');
 
 @import url('Form.css');
