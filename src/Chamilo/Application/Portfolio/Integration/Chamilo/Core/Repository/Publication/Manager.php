@@ -5,7 +5,6 @@ use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Publication\LocationSupport;
-use Chamilo\Core\Repository\Publication\Location\Location;
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -23,6 +22,11 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 
 /**
  * Manager class that guarantees the integration of the portfolio application with the repository
@@ -302,11 +306,23 @@ class Manager implements PublicationInterface
         $locations = new Locations(__NAMESPACE__);
         $allowed_types = Portfolio :: get_allowed_types();
 
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID),
+            new StaticConditionVariable($user->get_id()));
+        $userPublication = DataManager :: retrieve(
+            Publication :: class_name(),
+            new DataClassRetrieveParameters($condition));
+
         $type = $content_object->get_type();
-        if (in_array($type, $allowed_types))
+
+        if (in_array($type, $allowed_types) && $userPublication instanceof Publication)
         {
             $locations->add_location(
-                new Location($applicationContext, Translation :: get('TypeName', null, $applicationContext)));
+                new Location(
+                    $applicationContext,
+                    Translation :: get('TypeName', null, $applicationContext),
+                    $user->getId(),
+                    $userPublication->getId()));
         }
 
         return $locations;
@@ -316,29 +332,83 @@ class Manager implements PublicationInterface
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
     public static function publish_content_object(
-        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
+        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject, LocationSupport $location,
         $options = array())
     {
-        // $publication = new Publication();
-        // $publication->set_content_object_id($content_object->get_id());
-        // $publication->set_publisher_id(Session :: get_user_id());
-        // $publication->set_published(time());
-        // $publication->set_modified(time());
+        $publication = DataManager :: retrieve_by_id(Publication :: class_name(), $location->getPublicationIdentifier());
 
-        // if ($publication->create())
-        // {
-        // return Translation :: get(
-        // 'ObjectCreated',
-        // array('OBJECT' => Translation :: get('PortfolioPublication')),
-        // Utilities :: COMMON_LIBRARIES);
-        // }
-        // else
-        // {
-        // return Translation :: get(
-        // 'ObjectNotCreation',
-        // array('OBJECT' => Translation :: get('PortfolioPublication')),
-        // Utilities :: COMMON_LIBRARIES);
-        // }
+        if ($publication instanceof Publication && $publication->get_publisher_id() == $location->getUserIdentifier())
+        {
+            $portfolioContentObject = $publication->get_content_object();
+            $portfolioPath = $portfolioContentObject->get_complex_content_object_path();
+            $rootNode = $portfolioPath->get_root();
+
+            if ($rootNode->forms_cycle_with($contentObject->getId()))
+            {
+                return false;
+            }
+
+            if (! $contentObject instanceof Portfolio)
+            {
+                $newObject = ContentObject :: factory(PortfolioItem :: class_name());
+                $newObject->set_owner_id($location->getUserIdentifier());
+                $newObject->set_title(PortfolioItem :: get_type_name());
+                $newObject->set_description(PortfolioItem :: get_type_name());
+                $newObject->set_parent_id(0);
+                $newObject->set_reference($contentObject->getId());
+                $newObject->create();
+            }
+            else
+            {
+                $newObject = $contentObject;
+            }
+
+            if ($newObject instanceof Portfolio)
+            {
+                $wrapper = new ComplexPortfolio();
+            }
+            else
+            {
+                $wrapper = new \Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\ComplexPortfolioItem();
+            }
+
+            $wrapper->set_ref($newObject->get_id());
+            $wrapper->set_parent($portfolioContentObject->get_id());
+            $wrapper->set_user_id($location->getUserIdentifier());
+            $wrapper->set_display_order(
+                \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order(
+                    $portfolioContentObject->get_id()));
+
+            if (! $wrapper->create())
+            {
+                return false;
+            }
+            else
+            {
+                Event :: trigger(
+                    'activity',
+                    \Chamilo\Core\Repository\Manager :: context(),
+                    array(
+                        Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM,
+                        Activity :: PROPERTY_USER_ID => $location->getUserIdentifier(),
+                        Activity :: PROPERTY_DATE => time(),
+                        Activity :: PROPERTY_CONTENT_OBJECT_ID => $portfolioContentObject->get_id(),
+                        Activity :: PROPERTY_CONTENT => $portfolioContentObject->get_title() . ' > ' .
+                             $contentObject->get_title()));
+
+                $currentParentsContentObjectIds = $rootNode->get_parents_content_object_ids(true, true);
+                $currentParentsContentObjectIds[] = $contentObject->getId();
+
+                $portfolioPath->reset();
+                $portfolioPath = $portfolioContentObject->get_complex_content_object_path();
+                return $portfolioPath->follow_path_by_content_object_ids($currentParentsContentObjectIds);
+            }
+        }
+        else
+
+        {
+            return false;
+        }
     }
 
     /*
