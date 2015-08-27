@@ -57,15 +57,22 @@ class JumpForm extends FormValidator
             '<form {attributes}><div class="jump_form">{content}</div><div class="clear">&nbsp;</div></form>');
         $this->renderer->setElementTemplate('<div class="row"><div class="formw">{element}</div></div>');
 
-        $this->addElement('static', null, null, Translation :: get('JumpTo', null, Utilities :: COMMON_LIBRARIES));
-        $this->addElement('select', self :: JUMP_DAY, null, $this->getDays(), array('class' => 'postback'));
-        $this->addElement('select', self :: JUMP_MONTH, null, $this->getMonths(), array('class' => 'postback'));
-        $this->addElement('select', self :: JUMP_YEAR, null, $this->getYears(), array('class' => 'postback'));
+        $this->addElement('category', Translation :: get('JumpTo', null, Utilities :: COMMON_LIBRARIES));
+
+        $dateGroup = array();
+
+        $dateGroup[] = $this->createElement('select', self :: JUMP_DAY, null, $this->getDays(), array('class' => 'postback'));
+        $dateGroup[] = $this->createElement('select', self :: JUMP_MONTH, null, $this->getMonths(), array('class' => 'postback'));
+        $dateGroup[] = $this->createElement('select', self :: JUMP_YEAR, null, $this->getYears(), array('class' => 'postback'));
+
+        $this->addGroup($dateGroup, null, null, ' ', false);
+
         $this->addElement('style_submit_button', 'submit', Translation :: get('Jump'), array('class' => 'normal'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'));
+        $this->addElement('category');
 
         $this->setDefaults(
             array(

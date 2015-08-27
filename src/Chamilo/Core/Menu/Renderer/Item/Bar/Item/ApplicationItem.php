@@ -47,13 +47,15 @@ class ApplicationItem extends Bar
         }
 
         $html = array();
+
         if ($this->get_item()->get_use_translation())
         {
             $title = Translation :: get('TypeName', null, $this->get_item()->get_application());
         }
         else
         {
-            $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+            $title = $this->get_item()->get_titles()->get_translation(
+                Translation :: getInstance()->getLanguageIsocode());
         }
 
         $html[] = '<a ' . $class . 'href="' . $url . '">';
@@ -70,7 +72,8 @@ class ApplicationItem extends Bar
 
         if ($this->get_item()->show_title())
         {
-            $html[] = $title;
+            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+                 '</div>';
         }
 
         $html[] = '</a>';
