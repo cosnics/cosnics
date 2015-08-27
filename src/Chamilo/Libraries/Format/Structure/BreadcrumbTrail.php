@@ -211,7 +211,7 @@ class BreadcrumbTrail
 
         if (is_array($help_item) && count($help_item) == 2)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('core\help');
+            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration('core\help');
 
             if ($registration instanceof Registration && $registration->is_active())
             {

@@ -59,7 +59,7 @@ class UnsubscriberComponent extends Manager
                 else
                 {
                     Event :: trigger(
-                        'unsubscribe_user',
+                        'UnsubscribeUser',
                         Manager :: context(),
                         array(
                             \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),

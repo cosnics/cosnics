@@ -124,7 +124,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 else
                 {
                     Event :: trigger(
-                        'activity',
+                        'Activity',
                         Manager :: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_CREATED,

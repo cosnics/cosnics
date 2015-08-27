@@ -1,20 +1,18 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
-use Chamilo\Core\Tracking\Manager;
 use Chamilo\Core\Tracking\Storage\DataManager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: event.class.php 213 2009-11-13 13:38:50Z vanpouckesven $
- * 
+ *
  * @package tracking.lib
  */
 
 /**
  * This class presents a event
- * 
+ *
  * @author Sven Vanpoucke
  */
 class Event extends DataClass
@@ -22,7 +20,7 @@ class Event extends DataClass
 
     private $trackers;
     const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Event properties
      */
@@ -32,7 +30,7 @@ class Event extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names()
@@ -51,7 +49,7 @@ class Event extends DataClass
 
     /**
      * Returns the name of this Event.
-     * 
+     *
      * @return the name.
      */
     public function get_name()
@@ -61,7 +59,7 @@ class Event extends DataClass
 
     /**
      * Sets the name of this Event.
-     * 
+     *
      * @param name
      */
     public function set_name($name)
@@ -71,7 +69,7 @@ class Event extends DataClass
 
     /**
      * Returns the active of this Event.
-     * 
+     *
      * @return the active.
      */
     public function get_active()
@@ -81,7 +79,7 @@ class Event extends DataClass
 
     /**
      * Sets the active of this Event.
-     * 
+     *
      * @param active
      */
     public function set_active($active)
@@ -100,7 +98,7 @@ class Event extends DataClass
 
     /**
      * Returns the context of this Event.
-     * 
+     *
      * @return the context.
      */
     public function get_context()
@@ -110,7 +108,7 @@ class Event extends DataClass
 
     /**
      * Sets the context of this Event.
-     * 
+     *
      * @param context
      */
     public function set_context($context)
@@ -126,23 +124,30 @@ class Event extends DataClass
      */
     public static function factory($name, $context)
     {
-        return DataManager :: retrieve_event_by_name($name, $context);
+        $eventClass = $context . '\Event\\' . $name;
+        return new $eventClass();
+    }
+
+    /**
+     *
+     * @return multitype:string
+     */
+    public function getTrackerClasses()
+    {
+        return array();
     }
 
     public function get_trackers()
     {
         if (! $this->trackers)
         {
-            $tracker_registrations = DataManager :: retrieve_trackers_from_event($this->get_id());
             $trackers = array();
-            
-            foreach ($tracker_registrations as $tracker_registration)
+
+            foreach ($this->getTrackerClasses() as $trackerClass)
             {
-                $trackers[] = Tracker :: factory(
-                    $tracker_registration->get_tracker(), 
-                    $tracker_registration->get_context());
+                $trackers[] = new $trackerClass();
             }
-            
+
             $this->trackers = $trackers;
         }
         return $this->trackers;
@@ -153,15 +158,6 @@ class Event extends DataClass
         $this->trackers = $trackers;
     }
 
-    /**
-     *
-     * @deprecated Use get_trackers() now
-     */
-    public function get_tracker_registrations()
-    {
-        return DataManager :: retrieve_trackers_from_event($this->get_id());
-    }
-
     public static function trigger($name, $context, $parameters)
     {
         $context .= '\Integration\Chamilo\Core\Tracking';
@@ -170,37 +166,23 @@ class Event extends DataClass
 
     public function run($parameters)
     {
-        $setting = PlatformSetting :: get('enable_tracking', Manager :: context());
-        
-        if (! $setting)
+        $parameters['event'] = $this->get_name();
+        $data = array();
+
+        $trackers = $this->get_trackers();
+        foreach ($trackers as $tracker)
         {
-            return false;
-        }
-        
-        if ($this->is_active())
-        {
-            $parameters['event'] = $this->get_name();
-            $data = array();
-            
-            $trackers = $this->get_trackers();
-            foreach ($trackers as $tracker)
+            // FIXME: Temporary solution untill all trackers have been converted
+            if (method_exists($tracker, 'set_event'))
             {
-                // FIXME: Temporary solution untill all trackers have been converted
-                if (method_exists($tracker, 'set_event'))
-                {
-                    $tracker->set_event($this);
-                }
-                
-                $tracker->run($parameters);
-                
-                $data[] = $tracker;
+                $tracker->set_event($this);
             }
-            
-            return $data;
+
+            $tracker->run($parameters);
+
+            $data[] = $tracker;
         }
-        else
-        {
-            return false;
-        }
+
+        return $data;
     }
 }

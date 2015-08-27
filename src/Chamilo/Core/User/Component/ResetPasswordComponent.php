@@ -70,7 +70,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             {
                 $this->create_new_password($user);
                 Event :: trigger(
-                    'reset_password',
+                    'ResetPassword',
                     Manager :: context(),
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()));
                 $html[] = Display :: normal_message('lang_your_password_has_been_emailed_to_you');

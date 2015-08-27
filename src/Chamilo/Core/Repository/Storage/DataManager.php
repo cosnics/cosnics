@@ -41,6 +41,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Configuration\Configuration;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -602,7 +603,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (! (self :: $registered_types))
         {
-            $registrations = \Chamilo\Configuration\Storage\DataManager :: get_registrations_by_type(
+            $registrations = Configuration :: get_instance()->get_registrations_by_type(
                 Manager :: package() . '\\ContentObject');
             $types = array();
 
@@ -617,6 +618,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             self :: $registered_types = $types;
         }
+
         return self :: $registered_types;
     }
 

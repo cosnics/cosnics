@@ -55,7 +55,7 @@ class SecurityTokenAuthentication extends Authentication
             {
                 Session :: register('_uid', $user->get_id());
                 Event :: trigger(
-                    'login',
+                    'Login',
                     \Chamilo\Core\User\Manager :: context(),
                     array('server' => $_SERVER, 'user' => $user));
                 return true;

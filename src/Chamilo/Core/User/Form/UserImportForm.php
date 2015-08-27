@@ -181,7 +181,7 @@ class UserImportForm extends FormValidator
                     }
 
                     Event :: trigger(
-                        'import',
+                        'Import',
                         Manager :: context(),
                         array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()));
                 }
@@ -295,8 +295,9 @@ class UserImportForm extends FormValidator
         }
         // 1. Check if username exists
         if (($action == 'A' &&
-             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) || ($action !=
-             'A' && \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
+             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) ||
+             ($action != 'A' &&
+             \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
         {
             $failures ++;
         }
