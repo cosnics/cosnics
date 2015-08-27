@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
@@ -100,11 +100,11 @@ class SessionHandler
     public function garbage($max_lifetime)
     {
         $border = time() - $this->lifetime;
-        $condition = new InequalityCondition(
+        $condition = new ComparisonCondition(
             new PropertyConditionVariable(
                 \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
                 \Chamilo\Core\User\Storage\DataClass\Session :: PROPERTY_MODIFIED),
-            InequalityCondition :: LESS_THAN,
+            ComparisonCondition :: LESS_THAN,
             new StaticConditionVariable($border));
         return \Chamilo\Core\User\Storage\DataManager :: deletes(
             \Chamilo\Core\User\Storage\DataClass\Session :: class_name(),
