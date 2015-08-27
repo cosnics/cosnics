@@ -104,7 +104,8 @@ class WidgetItem extends Bar
 
         if ($this->get_item()->show_title())
         {
-            $html[] = $title;
+            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+                 '</div>';
         }
 
         $html[] = '</a>';

@@ -47,7 +47,8 @@ class WorkspaceConfigureItem extends Bar
 
         if ($this->get_item()->show_title())
         {
-            $html[] = '<em>' . $title . '</em>';
+            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '"><em>' .
+                 $title . '</em></div>';
         }
 
         $html[] = '</a>';

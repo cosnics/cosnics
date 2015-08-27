@@ -57,6 +57,7 @@ div.applications li {
 	background-color: #262F52;
 	border-left: 1px solid #3a5599;
 	height: 50px;
+	line-height:48px;
 }
 
 .navbar ul li.current {
@@ -246,4 +247,15 @@ div.applications li {
 /*Color subcells hovering mode*/
 .navbar ul li a:hover ul li a:hover {
 	text-decoration: none;
+}
+
+.navbar li a div.label {
+	display: inline-block;
+	height: 50px;
+	line-height: 49px;
+	padding: 0px 15px;
+}
+
+.navbar li a div.label-with-image {
+	padding-left: 0px;
 }

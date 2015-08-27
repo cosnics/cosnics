@@ -18,7 +18,12 @@ class LinkItem extends Bar
     {
         $html = array();
         $html[] = '<a href="' . $this->get_item()->get_url() . '" target="' . $this->get_item()->get_target_string() .
-             '">' . $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+             '">';
+
+        $html[] = '<div class="label">' .
+             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
+             '</div>';
+
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
