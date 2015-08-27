@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<package context="Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking">
-	<event name="online">
-		<tracker name="online" />
-	</event>
-</package>

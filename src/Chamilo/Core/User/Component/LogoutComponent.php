@@ -19,7 +19,7 @@ class LogoutComponent extends Manager
     public function run()
     {
         \Chamilo\Core\User\Storage\DataManager :: logout();
-        Event :: trigger('logout', Manager :: context(), array('server' => $_SERVER, 'user' => $this->get_user()));
+        Event :: trigger('Logout', Manager :: context(), array('server' => $_SERVER, 'user' => $this->get_user()));
 
         $parameters = array(self :: PARAM_CONTEXT => null);
 

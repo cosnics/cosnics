@@ -87,12 +87,12 @@ class Footer
 
         if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
         {
-
             $output[] = '<div class="clear">&nbsp;</div>';
             $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
             $output[] = '</div> <!-- end of #main" -->';
 
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('Chamilo\Core\Menu');
+            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration(
+                'Chamilo\Core\Menu');
 
             if ($registration instanceof Registration && $registration->is_active())
             {

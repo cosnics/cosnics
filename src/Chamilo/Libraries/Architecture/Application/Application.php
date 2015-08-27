@@ -641,7 +641,7 @@ abstract class Application
     {
         if (self :: exists($context))
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($context);
+            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration($context);
 
             if ($registration && $registration->is_active())
             {

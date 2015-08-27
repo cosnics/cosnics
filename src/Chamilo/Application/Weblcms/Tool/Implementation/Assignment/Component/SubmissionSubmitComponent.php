@@ -408,7 +408,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE => $submitter_type,
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_USER_ID => $this->get_user_id(),
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_IP_ADDRESS => $_SERVER['REMOTE_ADDR']);
-        Event :: trigger('submission_assignment', \Chamilo\Application\Weblcms\Manager :: context(), $arguments);
+        Event :: trigger('SubmissionAssignment', \Chamilo\Application\Weblcms\Manager :: context(), $arguments);
         return $submitter_type . $submitter_id;
     }
 

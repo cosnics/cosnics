@@ -32,10 +32,9 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
-             RightsService :: getInstance()->canEditContentObject(
-                $this->get_user(),
-                $this->get_current_content_object()))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) && RightsService :: getInstance()->canEditContentObject(
+            $this->get_user(),
+            $this->get_current_content_object()))
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
@@ -58,7 +57,7 @@ class UpdaterComponent extends TabComponent
                 if ($succes)
                 {
                     Event :: trigger(
-                        'activity',
+                        'Activity',
                         \Chamilo\Core\Repository\Manager :: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,

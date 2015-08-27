@@ -52,7 +52,7 @@ class ActiveChangerComponent extends Manager
                 if ($user->update())
                 {
                     Event :: trigger(
-                        'update',
+                        'Update',
                         Manager :: context(),
                         array(
                             ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(),

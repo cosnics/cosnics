@@ -68,7 +68,7 @@ class RestorerComponent extends Manager
                             if ($version->update())
                             {
                                 Event :: trigger(
-                                    'activity',
+                                    'Activity',
                                     Manager :: context(),
                                     array(
                                         Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_RESTORE,

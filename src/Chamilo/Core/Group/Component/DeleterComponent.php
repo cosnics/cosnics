@@ -77,7 +77,7 @@ class DeleterComponent extends Manager
                 else
                 {
                     Event :: trigger(
-                        'delete',
+                        'Delete',
                         Manager :: context(),
                         array(
                             \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: PROPERTY_REFERENCE_ID => $group->get_id(),

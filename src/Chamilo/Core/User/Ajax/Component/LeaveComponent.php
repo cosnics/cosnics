@@ -25,13 +25,8 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
             $tracker = Request :: post('tracker');
             $user_id = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
 
-            // $return = Event :: trigger('LeaveComponent', UserManager :: context(), array(VisitTracker :: PROPERTY_ID
-            // =>
-            // $tracker, VisitTracker :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'], VisitTracker :: PROPERTY_USER_ID
-            // =>
-            // $user_id));
             $return = Event :: trigger(
-                'leave',
+                'Leave',
                 Manager :: context(),
                 array(
                     Visit :: PROPERTY_ID => $tracker,

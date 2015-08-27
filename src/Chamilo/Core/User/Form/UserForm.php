@@ -68,13 +68,13 @@ class UserForm extends FormValidator
      * Creates a basic form
      */
     public function build_basic_form()
-    { 
+    {
         $profilePhotoUrl = new Redirect(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
-        
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->user->get_id()));
+
         $this->addElement(
             'html',
             '<img src="' . $profilePhotoUrl->getUrl() . '" alt="' . $this->user->get_fullname() .
@@ -338,7 +338,7 @@ class UserForm extends FormValidator
         if ($value)
         {
             Event :: trigger(
-                'update',
+                'Update',
                 Manager :: context(),
                 array(
                     ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(),
@@ -416,7 +416,7 @@ class UserForm extends FormValidator
             if ($value)
             {
                 Event :: trigger(
-                    'create',
+                    'Create',
                     Manager :: context(),
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()));
             }

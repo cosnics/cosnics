@@ -54,7 +54,7 @@ class ExporterComponent extends Manager
                 }
 
                 Event :: trigger(
-                    'export',
+                    'Export',
                     Manager :: context(),
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                 $data[] = $user_array;
