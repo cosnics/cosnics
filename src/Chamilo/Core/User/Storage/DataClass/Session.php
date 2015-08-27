@@ -6,13 +6,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * user.
- * 
+ *
  * @author GillardMagali
  */
 class Session extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Session properties
      */
@@ -25,7 +25,7 @@ class Session extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @param multitype:string $extended_property_names
      * @return multitype:string The property names.
      */
@@ -37,13 +37,13 @@ class Session extends DataClass
         $extended_property_names[] = self :: PROPERTY_LIFETIME;
         $extended_property_names[] = self :: PROPERTY_DATA;
         $extended_property_names[] = self :: PROPERTY_SAVE_PATH;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
     /**
      * Get the data class data manager
-     * 
+     *
      * @return \libraries\storage\data_manager\DataManager
      */
     public function get_data_manager()
@@ -53,7 +53,7 @@ class Session extends DataClass
 
     /**
      * Returns the name of this Session.
-     * 
+     *
      * @return string The name.
      */
     public function get_name()
@@ -63,7 +63,7 @@ class Session extends DataClass
 
     /**
      * Sets the name of this Session.
-     * 
+     *
      * @param string $name
      */
     public function set_name($name)
@@ -73,7 +73,7 @@ class Session extends DataClass
 
     /**
      * Returns the session_id of this Session.
-     * 
+     *
      * @return string The session_id.
      */
     public function get_session_id()
@@ -83,7 +83,7 @@ class Session extends DataClass
 
     /**
      * Sets the session_id of this Session.
-     * 
+     *
      * @param string $session_id
      */
     public function set_session_id($session_id)
@@ -93,7 +93,7 @@ class Session extends DataClass
 
     /**
      * Returns the modified of this Session.
-     * 
+     *
      * @return int The modified.
      */
     public function get_modified()
@@ -103,7 +103,7 @@ class Session extends DataClass
 
     /**
      * Sets the modified of this Session.
-     * 
+     *
      * @param int $modified
      */
     public function set_modified($modified)
@@ -113,7 +113,7 @@ class Session extends DataClass
 
     /**
      * Returns the lifetime of this Session.
-     * 
+     *
      * @return int The lifetime.
      */
     public function get_lifetime()
@@ -123,7 +123,7 @@ class Session extends DataClass
 
     /**
      * Sets the lifetime of this Session.
-     * 
+     *
      * @param int $lifetime
      */
     public function set_lifetime($lifetime)
@@ -133,7 +133,7 @@ class Session extends DataClass
 
     /**
      * Returns the data of this Session.
-     * 
+     *
      * @return string The data.
      */
     public function get_data()
@@ -143,7 +143,7 @@ class Session extends DataClass
 
     /**
      * Sets the data of this Session.
-     * 
+     *
      * @param string $data
      */
     public function set_data($data)
@@ -153,7 +153,7 @@ class Session extends DataClass
 
     /**
      * Returns the save_path of this Session.
-     * 
+     *
      * @return string The save_path.
      */
     public function get_save_path()
@@ -163,7 +163,7 @@ class Session extends DataClass
 
     /**
      * Sets the save_path of this Session.
-     * 
+     *
      * @param string $save_path
      */
     public function set_save_path($save_path)
@@ -179,5 +179,15 @@ class Session extends DataClass
     public function is_valid()
     {
         return $this->get_expiration_time() > time();
+    }
+
+    /**
+     * Returns the table name for this dataclass
+     *
+     * @return string
+     */
+    public static function get_table_name()
+    {
+        return DataManager :: PREFIX . 'session';
     }
 }
