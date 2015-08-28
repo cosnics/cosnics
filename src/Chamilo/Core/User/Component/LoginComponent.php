@@ -36,7 +36,7 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
         if ($user instanceof User)
         {
             \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $user->get_id());
-            Event :: trigger('login', Manager :: context(), array('server' => $_SERVER, 'user' => $user));
+            Event :: trigger('Login', Manager :: context(), array('server' => $_SERVER, 'user' => $user));
 
             if (PlatformSetting :: get('enable_terms_and_conditions', self :: context()) &&
                  ! $user->terms_conditions_uptodate())

@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 
 class IcalContentObjectExportController extends ContentObjectExportController
 {
@@ -66,9 +67,20 @@ class IcalContentObjectExportController extends ContentObjectExportController
             $this->process($content_object);
         }
 
+        $this->addTimeZone();
         $this->save();
 
         return $this->file;
+    }
+
+    private function addTimeZone()
+    {
+        \iCalUtilityFunctions :: createTimezone(
+            new TimeZoneCalendarWrapper($this->get_calendar()),
+            date_default_timezone_get(),
+            array(),
+            1,
+            2145916799);
     }
 
     public function process($content_object)

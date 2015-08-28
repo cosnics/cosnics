@@ -55,7 +55,7 @@ class DeleterComponent extends Manager
                 if ($user->delete())
                 {
                     Event :: trigger(
-                        'delete',
+                        'Delete',
                         Manager :: context(),
                         array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                 }

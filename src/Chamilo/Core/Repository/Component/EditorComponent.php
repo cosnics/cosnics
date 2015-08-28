@@ -116,7 +116,7 @@ class EditorComponent extends Manager implements DelegateComponent
                         $values[EntityService :: PROPERTY_METADATA_SCHEMA]);
 
                     Event :: trigger(
-                        'activity',
+                        'Activity',
                         Manager :: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,

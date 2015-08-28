@@ -53,7 +53,7 @@ class SorterComponent extends Manager implements DelegateComponent
                         $new_content_object_ids_path);
 
                     Event :: trigger(
-                        'activity',
+                        'Activity',
                         \Chamilo\Core\Repository\Manager :: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,

@@ -136,7 +136,7 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
                         else
                         {
                             Event :: trigger(
-                                'activity',
+                                'Activity',
                                 \Chamilo\Core\Repository\Manager :: context(),
                                 array(
                                     Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM,

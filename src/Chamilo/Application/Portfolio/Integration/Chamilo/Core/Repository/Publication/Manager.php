@@ -386,7 +386,7 @@ class Manager implements PublicationInterface
             else
             {
                 Event :: trigger(
-                    'activity',
+                    'Activity',
                     \Chamilo\Core\Repository\Manager :: context(),
                     array(
                         Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM,

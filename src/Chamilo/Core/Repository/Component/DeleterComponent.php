@@ -65,7 +65,7 @@ class DeleterComponent extends Manager
                             else
                             {
                                 Event :: trigger(
-                                    'activity',
+                                    'Activity',
                                     Manager :: context(),
                                     array(
                                         Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_DELETED,
@@ -96,7 +96,7 @@ class DeleterComponent extends Manager
                                     else
                                     {
                                         Event :: trigger(
-                                            'activity',
+                                            'Activity',
                                             Manager :: context(),
                                             array(
                                                 Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_DELETED,
@@ -119,7 +119,7 @@ class DeleterComponent extends Manager
                                     else
                                     {
                                         Event :: trigger(
-                                            'activity',
+                                            'Activity',
                                             Manager :: context(),
                                             array(
                                                 Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_RECYCLE,
