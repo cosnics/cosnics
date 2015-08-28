@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\Task\Implementation\Export\IcalExportImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
@@ -9,7 +8,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Sabre\VObject;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -325,51 +323,6 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
     public function set_bymonth($bymonth)
     {
         return $this->set_additional_property(self :: PROPERTY_BYMONTH, $bymonth);
-    }
-
-    public function get_repeats($from_date = 0, $to_date = 0)
-    {
-        $vcalendar = new VObject\Component\VCalendar();
-
-        $start_date_time = new \DateTime();
-        $start_date_time->setTimestamp($this->get_start_date());
-
-        $due_date_time = new \DateTime();
-        $due_date_time->setTimestamp($this->get_due_date());
-
-        $vevent = $vcalendar->add('VEVENT');
-
-        $vevent->add('SUMMARY', $this->get_title());
-        $vevent->add('DESCRIPTION', $this->get_description());
-        $vevent->add('DTSTART', $start_date_time);
-        $vevent->add('DUE', $due_date_time);
-
-        $rrules = IcalExportImplementation :: rrule($this);
-
-        if (isset($rrules['BYDAY']))
-        {
-            $bydays = array();
-
-            foreach ($rrules['BYDAY'] as $byday)
-            {
-                $bydays[] = implode('', $byday);
-            }
-
-            $rrules['BYDAY'] = implode(',', $bydays);
-        }
-
-        $vevent->add('RRULE', $rrules);
-        $vevent->add('UID', uniqid());
-
-        $from_date_time = new \DateTime();
-        $from_date_time->setTimestamp($from_date);
-
-        $to_date_time = new \DateTime();
-        $to_date_time->setTimestamp($to_date);
-
-        $vcalendar->expand($from_date_time, $to_date_time);
-
-        return $vcalendar->VEVENT;
     }
 
     public static function get_frequency_options()
