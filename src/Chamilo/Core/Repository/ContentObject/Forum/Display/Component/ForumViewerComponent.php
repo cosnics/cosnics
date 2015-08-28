@@ -324,7 +324,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 case 2 :
                     $src = Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'ImportantRead', 'gif');
+                        'ImportantRead',
+                        'gif');
                     $hover = 'Important';
                     break;
             }
@@ -788,7 +789,7 @@ public function get_forum_actions($forum)
 
     $parameters = array();
     $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-    $parameters[self :: PARAM_SELECTED_] = $forum->get_id();
+    $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
     if (! $this->is_locked)
     {
         if ($this->get_user()->get_id() == $forum->get_user_id() || $this->get_user()->is_platform_admin() || $this->is_forum_manager(
@@ -860,7 +861,7 @@ public function get_forum_actions($forum)
                 new ToolbarItem(
                     Translation :: get('Subscribe'),
                     Theme :: getInstance()->getImagePath(
-                        ContentObject :: get_content_object_type_namespace('forum'),
+                        ContentObject :: get_content_object_type_namespace('Forum'),
                         'Action/Mail'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON,
@@ -875,8 +876,8 @@ public function get_forum_actions($forum)
                 new ToolbarItem(
                     Translation :: get('UnSubscribe'),
                     Theme :: getInstance()->getImagePath(
-                        ContentObject :: get_content_object_type_namespace('forum'),
-                        'ActionUnmail'),
+                        ContentObject :: get_content_object_type_namespace('Forum'),
+                        'Action/Unmail'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
