@@ -439,16 +439,17 @@ class Kernel
         if ($this->getUser() instanceof User)
         {
             Event :: trigger(
-                'online',
+                'Online',
                 \Chamilo\Core\Admin\Manager :: context(),
                 array('user' => $this->getUser()->get_id()));
 
             $requestUri = $this->getRequest()->server->get('REQUEST_URI');
 
-            if (strpos($requestUri, 'leave.php') === false && strpos($requestUri, 'ajax') === false)
+            if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
+                 $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent')
             {
                 $return = Event :: trigger(
-                    'enter',
+                    'Enter',
                     \Chamilo\Core\User\Manager :: context(),
                     array(
                         \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],

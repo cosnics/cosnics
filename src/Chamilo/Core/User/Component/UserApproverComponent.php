@@ -59,7 +59,7 @@ class UserApproverComponent extends Manager
                     if ($user->update())
                     {
                         Event :: trigger(
-                            'update',
+                            'Update',
                             Manager :: context(),
                             array(
                                 ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(),
@@ -80,7 +80,7 @@ class UserApproverComponent extends Manager
                     if ($user->delete())
                     {
                         Event :: trigger(
-                            'delete',
+                            'Delete',
                             Manager :: context(),
                             array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                     }

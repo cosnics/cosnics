@@ -95,7 +95,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
 
         Event :: trigger(
-            CourseVisit :: EVENT_VISIT,
+            'VisitCourse',
             Manager :: context(),
             array(
                 CourseVisit :: PROPERTY_USER_ID => $this->get_user_id(),

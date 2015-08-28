@@ -111,7 +111,7 @@ class Banner
 
             $output[] = '<div id="emulator">' .
                  Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
-                 $this->getApplication()->get_user()->get_fullname() . ' <a href="' . $link . '">' .
+                 $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
                  Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
         }
 
@@ -123,18 +123,21 @@ class Banner
              'index.php" target="_top"><span class="logo">' . PlatformSetting :: get('site_name', 'Chamilo\Core\Admin') .
              '</span></a></div>';
 
-        if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
+        if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('Chamilo\Core\Menu');
+            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration(
+                'Chamilo\Core\Menu');
+
             if ($registration instanceof Registration && $registration->is_active())
             {
                 $output[] = '<div class="applications">';
                 $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
                     \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
-                    $this->getApplication()->get_user());
+                    $this->getApplication()->getUser());
                 $output[] = '<div class="clear">&nbsp;</div>';
                 $output[] = '</div>';
             }
+
             $output[] = '<div class="clear">&nbsp;</div>';
         }
 

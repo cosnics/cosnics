@@ -12,7 +12,8 @@
         "mrclay/minify" : "=2.2.0",
         "danielstjules/stringy" : "1.*",
         "ensepar/html2pdf" : "=1.0.1",
-        "phpoffice/phpexcel" : "=1.8.0"
+        "phpoffice/phpexcel" : "=1.8.0",
+        "kigkonsult/icalcreator": "*"
 
     },
 

@@ -16,10 +16,10 @@ class ConfigurationCreatorComponent extends TabComponent
     {
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
-           
+
             $configuration_id = Request :: get(self :: PARAM_CONFIGURATION_ID);
             $page = $this->get_current_node()->get_parent()->get_content_object();
-                      
+
             if ($configuration_id)
             {
                 $form = new ConfigureQuestionForm($this, $page, $configuration_id);
@@ -28,51 +28,51 @@ class ConfigurationCreatorComponent extends TabComponent
             {
                 $form = new ConfigureQuestionForm($this, $page);
             }
-            
+
             if ($form->validate())
             {
                 $succes = $form->create_configuration();
-                
+
                 if ($succes)
                 {
                     $content_object = $this->get_current_content_object();
-                    
+
                     $configuration = $form->getConfiguration();
                     $variable = $configuration_id ? 'configurationUpdated' : 'configurationCreated';
                     $content = Translation :: getInstance()->getTranslation($variable) . ' : ' .
                          $configuration->getName();
-                    
+
                     Event :: trigger(
-                        'activity', 
-                        \Chamilo\Core\Repository\Manager :: context(), 
+                        'Activity',
+                        \Chamilo\Core\Repository\Manager :: context(),
                         array(
-                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED, 
-                            Activity :: PROPERTY_USER_ID => $this->get_user_id(), 
-                            Activity :: PROPERTY_DATE => time(), 
-                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,
+                            Activity :: PROPERTY_USER_ID => $this->get_user_id(),
+                            Activity :: PROPERTY_DATE => time(),
+                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
                             Activity :: PROPERTY_CONTENT => $content_object->get_title()));
                 }
-                
+
                 $message = htmlentities(
                     Translation :: get(
-                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
-                        array('OBJECT' => Translation :: get('ContentObject')), 
+                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
+                        array('OBJECT' => Translation :: get('ContentObject')),
                         Utilities :: COMMON_LIBRARIES));
-                
+
                 $params = array();
                 $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[self :: PARAM_ACTION] = self :: ACTION_QUESTION_MANAGER;
-                
+
                 $this->redirect($message, (! $succes), $params);
             }
             else
             {
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
         }

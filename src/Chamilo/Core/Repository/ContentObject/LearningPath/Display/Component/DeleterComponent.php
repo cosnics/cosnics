@@ -75,7 +75,7 @@ class DeleterComponent extends Manager
             if ($success)
             {
                 Event :: trigger(
-                    'activity',
+                    'Activity',
                     \Chamilo\Core\Repository\Manager :: context(),
                     array(
                         Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_DELETE_ITEM,

@@ -187,7 +187,8 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
             Renderer :: TYPE_MONTH,
             Renderer :: TYPE_WEEK,
             Renderer :: TYPE_DAY,
-            Renderer :: TYPE_YEAR);
+            Renderer :: TYPE_YEAR,
+            Renderer :: TYPE_LIST);
 
         $renderer_type_items = Renderer :: getToolbarItems($renderer_types, $type_url, $today_url);
 

@@ -455,7 +455,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: PROPERTY_PUBLICATION_ID] = $this->get_publication()->get_id();
         $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
 
-        Event :: trigger('view_forum_topic', \Chamilo\Application\Weblcms\Manager :: context(), $parameters);
+        Event :: trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager :: context(), $parameters);
     }
 
     public function forum_count_topic_views($complex_topic_id)

@@ -57,7 +57,7 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
             {
                 Session :: register('_uid', $user->get_id());
                 Event :: trigger(
-                    'login',
+                    'Login',
                     \Chamilo\Core\User\Manager :: context(),
                     array('server' => $_SERVER, 'user' => $user));
 

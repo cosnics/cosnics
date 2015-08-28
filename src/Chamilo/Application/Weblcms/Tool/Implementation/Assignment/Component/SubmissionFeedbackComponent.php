@@ -93,7 +93,7 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_MODIFIED => time(),
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_USER_ID => $this->get_user_id(),
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: PROPERTY_CONTENT_OBJECT_ID => $this->get_repo_object());
-        Event :: trigger('feedback_submission', \Chamilo\Application\Weblcms\Manager :: context(), $arguments);
+        Event :: trigger('FeedbackSubmission', \Chamilo\Application\Weblcms\Manager :: context(), $arguments);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

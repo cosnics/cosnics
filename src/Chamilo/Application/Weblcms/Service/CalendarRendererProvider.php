@@ -145,18 +145,24 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $actions = array();
 
-        if ($event->get_context() == __NAMESPACE__)
+        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager :: package())
         {
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->getRenderer()->get_publication_editing_url($event->get_id()),
+                $this->getRenderer()->get_tool_browser()->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
                 ToolbarItem :: DISPLAY_ICON);
 
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->getRenderer()->get_publication_deleting_url($event->get_id()),
+                $this->getRenderer()->get_tool_browser()->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
                 ToolbarItem :: DISPLAY_ICON,
                 true);
         }
