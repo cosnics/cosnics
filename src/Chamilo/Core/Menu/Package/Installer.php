@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
+use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 
@@ -45,24 +45,24 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                     Utilities :: COMMON_LIBRARIES));
         }
 
-//         $languageItem = new LanguageItem();
-//         $languageItem->set_display(Item :: DISPLAY_TEXT);
+        $languageItem = new LanguageCategoryItem();
+        $languageItem->set_display(Item :: DISPLAY_TEXT);
 
-//         if (! $languageItem->create())
-//         {
-//             return false;
-//         }
-//         else
-//         {
-//             $itemTitle = new ItemTitle();
-//             $itemTitle->set_title(Translation :: get('ChangeLanguage'));
-//             $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
-//             $itemTitle->set_item_id($languageItem->get_id());
-//             if (! $itemTitle->create())
-//             {
-//                 return false;
-//             }
-//         }
+        if (! $languageItem->create())
+        {
+            return false;
+        }
+        else
+        {
+            $itemTitle = new ItemTitle();
+            $itemTitle->set_title(Translation :: get('ChangeLanguage'));
+            $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+            $itemTitle->set_item_id($languageItem->get_id());
+            if (! $itemTitle->create())
+            {
+                return false;
+            }
+        }
 
         return true;
     }
