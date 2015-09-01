@@ -33,24 +33,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $dataUser;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $viewingUser;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $displayParameters;
-
-    /**
-     *
      * @var string
      */
     private $visibilityContext;
@@ -67,10 +49,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         User $viewingUser, $displayParameters, $visibilityContext)
     {
         $this->dataProviderRepository = $dataProviderRepository;
-        $this->dataUser = $dataUser;
-        $this->viewingUser = $viewingUser;
-        $this->displayParameters = $displayParameters;
         $this->visibilityContext = $visibilityContext;
+
+        parent :: __construct($dataUser, $viewingUser, $displayParameters);
     }
 
     /**
@@ -107,60 +88,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function setVisibilityContext($visibilityContext)
     {
         $this->visibilityContext = $visibilityContext;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getDataUser()
-    {
-        return $this->dataUser;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     */
-    public function setDataUser(User $dataUser)
-    {
-        $this->dataUser = $dataUser;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getViewingUser()
-    {
-        return $this->viewingUser;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     */
-    public function setViewingUser(User $viewingUser)
-    {
-        $this->viewingUser = $viewingUser;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getDisplayParameters()
-    {
-        return $this->displayParameters;
-    }
-
-    /**
-     *
-     * @param string[] $displayParameters
-     */
-    public function setDisplayParameters($displayParameters)
-    {
-        $this->displayParameters = $displayParameters;
     }
 
     /**
@@ -251,10 +178,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param int $sourceType
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
+    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime,
+        $endTime)
     {
         $events = array();
 
@@ -263,13 +192,16 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
         foreach ($registrations as $registration)
         {
-            $context = $registration->get_context();
-            $class_name = $context . '\Manager';
-
-            if (class_exists($class_name))
+            if ($registration->is_active())
             {
-                $implementor = new $class_name();
-                $events = array_merge($events, $implementor->getEvents($renderer, $startTime, $endTime));
+                $context = $registration->get_context();
+                $class_name = $context . '\Manager';
+
+                if (class_exists($class_name))
+                {
+                    $implementor = new $class_name();
+                    $events = array_merge($events, $implementor->getEvents($renderer, $startTime, $endTime));
+                }
             }
         }
 

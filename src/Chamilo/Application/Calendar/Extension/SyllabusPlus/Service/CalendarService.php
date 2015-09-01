@@ -75,4 +75,21 @@ class CalendarService
 
         return $weeks;
     }
+
+    /**
+     * @param \Chamilo\Configuration\Configuration $configuration
+     * @return boolean
+     */
+    public function isConfigured(\Chamilo\Configuration\Configuration $configuration)
+    {
+        $namespace = \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: package();
+
+        $hasDriver = $configuration->get_setting(array($namespace, 'dbms'));
+        $hasUser = $configuration->get_setting(array($namespace, 'user'));
+        $hasPassword = $configuration->get_setting(array($namespace, 'password'));
+        $hasHost = $configuration->get_setting(array($namespace, 'host'));
+        $hasDatabase = $configuration->get_setting(array($namespace, 'database'));
+
+        return $hasDriver && $hasUser && $hasPassword && $hasHost && $hasDatabase;
+    }
 }

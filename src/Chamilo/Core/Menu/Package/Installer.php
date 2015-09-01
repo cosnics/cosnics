@@ -45,24 +45,24 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                     Utilities :: COMMON_LIBRARIES));
         }
 
-        $languageItem = new LanguageItem();
-        $languageItem->set_display(Item :: DISPLAY_TEXT);
+//         $languageItem = new LanguageItem();
+//         $languageItem->set_display(Item :: DISPLAY_TEXT);
 
-        if (! $languageItem->create())
-        {
-            return false;
-        }
-        else
-        {
-            $itemTitle = new ItemTitle();
-            $itemTitle->set_title(Translation :: get('ChangeLanguage'));
-            $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
-            $itemTitle->set_item_id($languageItem->get_id());
-            if (! $itemTitle->create())
-            {
-                return false;
-            }
-        }
+//         if (! $languageItem->create())
+//         {
+//             return false;
+//         }
+//         else
+//         {
+//             $itemTitle = new ItemTitle();
+//             $itemTitle->set_title(Translation :: get('ChangeLanguage'));
+//             $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+//             $itemTitle->set_item_id($languageItem->get_id());
+//             if (! $itemTitle->create())
+//             {
+//                 return false;
+//             }
+//         }
 
         return true;
     }
