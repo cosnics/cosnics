@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
@@ -19,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Application\Calendar\Architecture\InternalCalendarInterface;
+use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 
 /**
  *
@@ -28,14 +27,15 @@ use Chamilo\Application\Calendar\Architecture\InternalCalendarInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface, InternalCalendarInterface
+class Manager extends InternalCalendar
 {
 
     /**
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
+        $toDate)
     {
         $events = array();
 
@@ -50,7 +50,6 @@ class Manager implements CalendarInterface, InternalCalendarInterface
 
         if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
         {
-
             $condition = $this->getConditions($renderer->getDataProvider()->getDataUser());
             $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                 ContentObjectPublication :: class_name(),

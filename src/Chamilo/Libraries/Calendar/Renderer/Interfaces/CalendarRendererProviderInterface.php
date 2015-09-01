@@ -33,8 +33,8 @@ interface CalendarRendererProviderInterface
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternalInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime,
-        $calculateRecurrence = true);
+    public function getExternalEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
+        $endTime, $calculateRecurrence = true);
 
     /**
      * Get the events between $start_time and $end_time
@@ -62,7 +62,7 @@ interface CalendarRendererProviderInterface
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternal(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer);
+    public function getExternalEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer);
 
     /**
      * Get the events

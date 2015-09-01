@@ -5,7 +5,7 @@
 		<property name="user_id" type="integer" unsigned="1" notnull="1" />
 		<property name="calendar_type" type="text" length="255" notnull="1" />
 		<property name="calendar_id" type="text" length="255" notnull="1" />
-		<property name="visibility" type="integer" notnull="1" default="1" />
+		<property name="availability" type="integer" notnull="1" default="1" />
 		<property name="colour" type="text" length="10" />
 	</properties>
 	<index name="user_id">
@@ -17,8 +17,8 @@
 	<index name="calendar_id">
 		<indexproperty name="calendar_id" />
 	</index>
-	<index name="visibility">
-		<indexproperty name="visibility" />
+	<index name="availability">
+		<indexproperty name="availability" />
 	</index>
 	<index name="entry" type="unique">
 		<indexproperty name="user_id" />
