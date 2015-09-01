@@ -100,10 +100,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param integer $sourceType
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
+    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime,
+        $endTime)
     {
         $publications = $this->getRenderer()->get_publications();
         $events = array();

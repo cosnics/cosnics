@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Application\Calendar\Architecture\ExternalCalendarInterface;
+use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 
 /**
  *
@@ -17,14 +16,15 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendarInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface, ExternalCalendarInterface
+class Manager extends ExternalCalendar
 {
 
     /**
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
+        $toDate)
     {
         $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
         $events = array();

@@ -28,8 +28,8 @@ class LoginComponent extends Manager implements DelegateComponent
         {
             $nextAction = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Google\Manager :: context(),
-                    \Chamilo\Application\Calendar\Extension\Google\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Google\Manager :: ACTION_VISIBILITY));
+                    Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context(),
+                    \Chamilo\Application\Calendar\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Manager :: ACTION_AVAILABILITY));
 
             $nextAction->toUrl();
         }

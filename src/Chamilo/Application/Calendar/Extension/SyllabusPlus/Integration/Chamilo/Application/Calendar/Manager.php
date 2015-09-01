@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Repository\CalendarRepository;
@@ -11,8 +10,8 @@ use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Application\Calendar\Architecture\ExternalCalendarInterface;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 
 /**
  *
@@ -21,14 +20,15 @@ use Chamilo\Configuration\Configuration;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface, ExternalCalendarInterface
+class Manager extends ExternalCalendar
 {
 
     /**
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $fromDate, $toDate)
+    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
+        $toDate)
     {
         $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $events = array();

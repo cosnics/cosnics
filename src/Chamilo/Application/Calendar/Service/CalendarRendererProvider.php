@@ -182,8 +182,8 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime,
-        $endTime)
+    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType,
+        $startTime, $endTime)
     {
         $events = array();
 
@@ -200,7 +200,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 if (class_exists($class_name))
                 {
                     $implementor = new $class_name();
-                    $events = array_merge($events, $implementor->getEvents($renderer, $startTime, $endTime));
+
+                    if ($this->matchesRequestedSource($requestedSourceType, $implementor->getSourceType()))
+                    {
+                        $events = array_merge(
+                            $events,
+                            $implementor->getEvents($renderer, $requestedSourceType, $startTime, $endTime));
+                    }
                 }
             }
         }

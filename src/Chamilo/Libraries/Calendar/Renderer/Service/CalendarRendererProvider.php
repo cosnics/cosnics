@@ -120,8 +120,8 @@ abstract class CalendarRendererProvider implements
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalInPeriod()
      */
-    public function getExternalInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime,
-        $calculateRecurrence = true)
+    public function getExternalEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
+        $endTime, $calculateRecurrence = true)
     {
         return $this->getEvents($renderer, self :: SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
     }
@@ -149,7 +149,7 @@ abstract class CalendarRendererProvider implements
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternal()
      */
-    public function getExternal(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer)
+    public function getExternalEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer)
     {
         return $this->getEvents($renderer, self :: SOURCE_TYPE_EXTERNAL);
     }
@@ -170,7 +170,7 @@ abstract class CalendarRendererProvider implements
     private function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime = null,
         $endTime = null, $calculateRecurrence = false)
     {
-        $events = $this->aggregateEvents($renderer, $sourceType, $startTime = null, $endTime = null);
+        $events = $this->aggregateEvents($renderer, $sourceType, $startTime, $endTime);
 
         if ($startTime && $endTime && $calculateRecurrence)
         {
@@ -198,7 +198,7 @@ abstract class CalendarRendererProvider implements
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param int $sourceType
+     * @param integer $sourceType
      * @param integer $startTime
      * @param integer $endTime
      */
@@ -239,5 +239,36 @@ abstract class CalendarRendererProvider implements
     public function supportsActions()
     {
         return $this instanceof ActionSupport;
+    }
+
+    /**
+     *
+     * @param integer $source
+     * @return boolean
+     */
+    public function isInternalSource($source)
+    {
+        return $this->matchesRequestedSource(self :: SOURCE_TYPE_INTERNAL, $source);
+    }
+
+    /**
+     *
+     * @param integer $source
+     * @return boolean
+     */
+    public function isExternalSource($source)
+    {
+        return $this->matchesRequestedSource(self :: SOURCE_TYPE_EXTERNAL, $source);
+    }
+
+    /**
+     *
+     * @param integer $requestedSource
+     * @param integer $implementationSource
+     * @return boolean
+     */
+    public function matchesRequestedSource($requestedSource, $implementationSource)
+    {
+        return (boolean) ($requestedSource & $implementationSource);
     }
 }
