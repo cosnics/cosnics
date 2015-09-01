@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\CalendarInterface;
+use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\SyllabusPlus\Repository\CalendarRepository;
@@ -11,6 +11,8 @@ use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Application\Calendar\Architecture\ExternalCalendarInterface;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -19,7 +21,7 @@ use Chamilo\Application\Calendar\Storage\DataClass\Availability;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface
+class Manager implements CalendarInterface, ExternalCalendarInterface
 {
 
     /**
@@ -31,28 +33,31 @@ class Manager implements CalendarInterface
         $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $events = array();
 
-        $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $packageContext = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
-        $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
-
-        $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $renderer->getDataProvider()->getDataUser(),
-            $packageContext,
-            $packageName);
-
-        $weekLabels = $calendarService->getWeekLabels();
-
-        if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
+        if ($calendarService->isConfigured(Configuration :: get_instance()))
         {
-            $eventResultSet = $calendarService->getEventsForUserAndBetweenDates(
-                $renderer->getDataProvider()->getDataUser(),
-                $fromDate,
-                $toDate);
+            $availabilityService = new AvailabilityService(new AvailabilityRepository());
+            $packageContext = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+            $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
 
-            while ($calenderEvent = $eventResultSet->next_result())
+            $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+                $renderer->getDataProvider()->getDataUser(),
+                $packageContext,
+                $packageName);
+
+            $weekLabels = $calendarService->getWeekLabels();
+
+            if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
             {
-                $eventParser = new EventParser($renderer, $weekLabels, $calenderEvent, $fromDate, $toDate);
-                $events = array_merge($events, $eventParser->getEvents());
+                $eventResultSet = $calendarService->getEventsForUserAndBetweenDates(
+                    $renderer->getDataProvider()->getDataUser(),
+                    $fromDate,
+                    $toDate);
+
+                while ($calenderEvent = $eventResultSet->next_result())
+                {
+                    $eventParser = new EventParser($renderer, $weekLabels, $calenderEvent, $fromDate, $toDate);
+                    $events = array_merge($events, $eventParser->getEvents());
+                }
             }
         }
 
@@ -65,13 +70,21 @@ class Manager implements CalendarInterface
      */
     public function getCalendars()
     {
-        $package = \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: package();
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $calendars = array();
 
-        $calendar = new AvailableCalendar();
-        $calendar->setIdentifier(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package));
-        $calendar->setType($package);
-        $calendar->setName(Translation :: get('TypeName', null, $package));
+        if ($calendarService->isConfigured(Configuration :: get_instance()))
+        {
+            $package = \Chamilo\Application\Calendar\Extension\SyllabusPlus\Manager :: package();
 
-        return array($calendar);
+            $calendar = new AvailableCalendar();
+            $calendar->setIdentifier(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package));
+            $calendar->setType($package);
+            $calendar->setName(Translation :: get('TypeName', null, $package));
+
+            $calendars[] = $calendar;
+        }
+
+        return $calendars;
     }
 }

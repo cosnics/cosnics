@@ -147,7 +147,8 @@ class ExternalCalendar extends ContentObject implements Versionable
             self :: PROPERTY_FILESIZE,
             self :: PROPERTY_PATH,
             self :: PROPERTY_HASH,
-            self :: PROPERTY_PATH_TYPE, self :: PROPERTY_STORAGE_PATH);
+            self :: PROPERTY_PATH_TYPE,
+            self :: PROPERTY_STORAGE_PATH);
     }
 
     public function get_full_path()

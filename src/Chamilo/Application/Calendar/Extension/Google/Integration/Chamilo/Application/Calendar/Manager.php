@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\CalendarInterface;
+use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Application\Calendar\Architecture\ExternalCalendarInterface;
 
 /**
  *
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface
+class Manager implements CalendarInterface, ExternalCalendarInterface
 {
 
     /**

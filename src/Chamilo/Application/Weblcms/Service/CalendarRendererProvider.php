@@ -32,24 +32,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $dataUser;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $viewingUser;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $displayParameters;
-
-    /**
-     *
      * @param \Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer $renderer
      * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
@@ -60,9 +42,8 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         User $viewingUser, $displayParameters)
     {
         $this->renderer = $renderer;
-        $this->dataUser = $dataUser;
-        $this->viewingUser = $viewingUser;
-        $this->displayParameters = $displayParameters;
+
+        parent :: __construct($dataUser, $viewingUser, $displayParameters);
     }
 
     /**
@@ -81,60 +62,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function setRenderer(CalendarContentObjectPublicationListRenderer $renderer)
     {
         $this->renderer = $renderer;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getDataUser()
-    {
-        return $this->dataUser;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     */
-    public function setDataUser(User $dataUser)
-    {
-        $this->dataUser = $dataUser;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getViewingUser()
-    {
-        return $this->viewingUser;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     */
-    public function setViewingUser(User $viewingUser)
-    {
-        $this->viewingUser = $viewingUser;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getDisplayParameters()
-    {
-        return $this->displayParameters;
-    }
-
-    /**
-     *
-     * @param string[] $displayParameters
-     */
-    public function setDisplayParameters($displayParameters)
-    {
-        $this->displayParameters = $displayParameters;
     }
 
     /**

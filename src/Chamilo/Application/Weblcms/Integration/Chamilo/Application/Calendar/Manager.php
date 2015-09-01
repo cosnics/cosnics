@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\CalendarInterface;
+use Chamilo\Application\Calendar\Architecture\CalendarInterface;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
@@ -19,6 +19,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Application\Calendar\Architecture\InternalCalendarInterface;
 
 /**
  *
@@ -27,7 +28,7 @@ use Chamilo\Application\Calendar\Storage\DataClass\Availability;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager implements CalendarInterface
+class Manager implements CalendarInterface, InternalCalendarInterface
 {
 
     /**

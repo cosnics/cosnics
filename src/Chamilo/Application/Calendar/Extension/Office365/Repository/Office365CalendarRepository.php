@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
-use Doctrine\Common\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -455,20 +455,20 @@ class Office365CalendarRepository
      */
     private function sendRequest(\GuzzleHttp\Message\Request $request)
     {
-        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
-        {
-            $token = $this->refreshToken();
-            $this->saveToken($token);
-        }
-
-        $client = $this->getGuzzleHttpClient();
-        $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
-
         $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
         $cacheIdentifier = md5(serialize($request));
 
         if (! $cache->contains($cacheIdentifier))
         {
+            if ($this->hasAccessToken() && $this->isAccessTokenExpired())
+            {
+                $token = $this->refreshToken();
+                $this->saveToken($token);
+            }
+
+            $client = $this->getGuzzleHttpClient();
+            $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
+
             $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
                 array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
 

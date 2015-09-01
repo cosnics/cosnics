@@ -17,6 +17,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 abstract class CalendarRendererProvider implements
     \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
 {
+    const SOURCE_TYPE_INTERNAL = 1;
+    const SOURCE_TYPE_EXTERNAL = 2;
+    const SOURCE_TYPE_BOTH = 3;
 
     /**
      *
@@ -105,36 +108,102 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEventsInPeriod()
+     */
+    public function getInternalEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
+        $endTime, $calculateRecurrence = true)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_INTERNAL, $startTime, $endTime, $calculateRecurrence);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalInPeriod()
+     */
+    public function getExternalInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime,
+        $calculateRecurrence = true)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEventsInPeriod()
+     */
+    public function getAllEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime,
+        $calculateRecurrence = true)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_BOTH, $startTime, $endTime, $calculateRecurrence);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEvents()
+     */
+    public function getInternalEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_INTERNAL);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternal()
+     */
+    public function getExternal(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_EXTERNAL);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEvents()
+     */
+    public function getAllEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer)
+    {
+        return $this->getEvents($renderer, self :: SOURCE_TYPE_BOTH);
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime)
+    private function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime = null,
+        $endTime = null, $calculateRecurrence = false)
     {
-        $events = $this->aggregateEvents($renderer, $startTime, $endTime);
+        $events = $this->aggregateEvents($renderer, $sourceType, $startTime = null, $endTime = null);
 
-        $recurringEvents = array();
-
-        foreach ($events as $event)
+        if ($startTime && $endTime && $calculateRecurrence)
         {
-            $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
-            $parsedEvents = $recurrenceCalculator->getEvents();
+            $recurringEvents = array();
 
-            foreach ($parsedEvents as $parsedEvent)
+            foreach ($events as $event)
             {
-                $recurringEvents[] = $parsedEvent;
-            }
-        }
+                $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
+                $parsedEvents = $recurrenceCalculator->getEvents();
 
-        return $recurringEvents;
+                foreach ($parsedEvents as $parsedEvent)
+                {
+                    $recurringEvents[] = $parsedEvent;
+                }
+            }
+
+            return $recurringEvents;
+        }
+        else
+        {
+            return $events;
+        }
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param int $sourceType
      * @param integer $startTime
      * @param integer $endTime
      */
-    abstract public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
-        $endTime);
+    abstract public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType,
+        $startTime, $endTime);
 
     /**
      *
