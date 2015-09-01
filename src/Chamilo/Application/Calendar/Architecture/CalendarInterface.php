@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar;
+namespace Chamilo\Application\Calendar\Architecture;
 
 /**
  *
