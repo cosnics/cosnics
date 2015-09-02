@@ -20,12 +20,6 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    private $renderer;
-
-    /**
-     *
      * @var \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
      */
     private $availableCalendar;
@@ -50,38 +44,18 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
      * @param \Office365_Service_Calendar_Event $office365CalendarEvent
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer,
-        AvailableCalendar $availableCalendar, \stdClass $office365CalendarEvent, $fromDate, $toDate)
+    public function __construct(AvailableCalendar $availableCalendar, \stdClass $office365CalendarEvent, $fromDate,
+        $toDate)
     {
-        $this->renderer = $renderer;
         $this->availableCalendar = $availableCalendar;
         $this->office365CalendarEvent = $office365CalendarEvent;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    public function getRenderer()
-    {
-        return $this->renderer;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     */
-    public function setRenderer($renderer)
-    {
-        $this->renderer = $renderer;
     }
 
     /**

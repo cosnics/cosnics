@@ -34,8 +34,9 @@ class Manager extends InternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
-        $toDate)
+    public function getEvents(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        $requestedSourceType, $fromDate, $toDate)
     {
         $events = array();
 
@@ -44,13 +45,13 @@ class Manager extends InternalCalendar
         $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
 
         $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $renderer->getDataProvider()->getDataUser(),
+            $calendarRendererProvider->getDataUser(),
             $packageContext,
             $packageName);
 
         if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
         {
-            $condition = $this->getConditions($renderer->getDataProvider()->getDataUser());
+            $condition = $this->getConditions($calendarRendererProvider->getDataUser());
             $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                 ContentObjectPublication :: class_name(),
                 $condition);

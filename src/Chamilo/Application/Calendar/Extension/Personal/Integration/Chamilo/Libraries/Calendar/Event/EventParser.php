@@ -17,9 +17,9 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
      */
-    private $renderer;
+    private $calendarRendererProvider;
 
     /**
      *
@@ -41,15 +41,16 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, Publication $publication,
-        $fromDate, $toDate)
+    public function __construct(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        Publication $publication, $fromDate, $toDate)
     {
-        $this->renderer = $renderer;
+        $this->calendarRendererProvider = $calendarRendererProvider;
         $this->publication = $publication;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
@@ -59,18 +60,19 @@ class EventParser
      *
      * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
-    public function getRenderer()
+    public function getCalendarRendererProvider()
     {
-        return $this->renderer;
+        return $this->calendarRendererProvider;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      */
-    public function setRenderer($renderer)
+    public function setCalendarRendererProvider(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
     {
-        $this->renderer = $renderer;
+        $this->calendarRendererProvider = $calendarRendererProvider;
     }
 
     /**
@@ -144,7 +146,7 @@ class EventParser
 
         foreach ($parser->getEvents() as &$parsedEvent)
         {
-            if ($publisher != $this->getRenderer()->getDataProvider()->getViewingUser()->getId())
+            if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
             {
                 $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }

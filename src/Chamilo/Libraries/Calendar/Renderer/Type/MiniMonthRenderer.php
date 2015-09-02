@@ -81,7 +81,7 @@ class MiniMonthRenderer extends TableRenderer
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
 
-        $events = $this->getEvents($this, $startTime, $endTime);
+        $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)

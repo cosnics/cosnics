@@ -36,7 +36,7 @@ class DayRenderer extends TableRenderer
         $fromDate = strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
         $toDate = strtotime(date('Y-m-d 23:59:59', $this->getDisplayTime()));
 
-        $events = $this->getEvents($this, $fromDate, $toDate);
+        $events = $this->getEvents($fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();

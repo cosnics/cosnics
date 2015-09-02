@@ -16,12 +16,6 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    private $renderer;
-
-    /**
-     *
      * @var string[]
      */
     private $weekLabels;
@@ -46,38 +40,17 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param string[] $weekLabels
      * @param string[] $calendarEvent
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $weekLabels, $calendarEvent,
-        $fromDate, $toDate)
+    public function __construct($weekLabels, $calendarEvent, $fromDate, $toDate)
     {
-        $this->renderer = $renderer;
         $this->weekLabels = $weekLabels;
         $this->calendarEvent = $calendarEvent;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    public function getRenderer()
-    {
-        return $this->renderer;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     */
-    public function setRenderer($renderer)
-    {
-        $this->renderer = $renderer;
     }
 
     /**

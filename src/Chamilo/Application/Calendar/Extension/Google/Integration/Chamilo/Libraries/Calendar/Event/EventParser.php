@@ -17,12 +17,6 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    private $renderer;
-
-    /**
-     *
      * @var \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
      */
     private $calendarProperties;
@@ -53,32 +47,13 @@ class EventParser
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer,
-        CalendarProperties $calendarProperties, \Google_Service_Calendar_Event $googleCalendarEvent, $fromDate, $toDate)
+    public function __construct(CalendarProperties $calendarProperties,
+        \Google_Service_Calendar_Event $googleCalendarEvent, $fromDate, $toDate)
     {
-        $this->renderer = $renderer;
         $this->calendarProperties = $calendarProperties;
         $this->googleCalendarEvent = $googleCalendarEvent;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
-     */
-    public function getRenderer()
-    {
-        return $this->renderer;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     */
-    public function setRenderer($renderer)
-    {
-        $this->renderer = $renderer;
     }
 
     /**

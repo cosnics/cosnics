@@ -15,62 +15,53 @@ interface CalendarRendererProviderInterface
     /**
      * Get the internal events between $start_time and $end_time
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getInternalEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
-        $endTime, $calculateRecurrence = true);
+    public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
      * Get the external events between $start_time and $end_time
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternalEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime,
-        $endTime, $calculateRecurrence = true);
+    public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
      * Get the events between $start_time and $end_time
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param int $startTime
      * @param int $endTime
      * @param boolean $calculateRecurrence
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEventsInPeriod(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $startTime, $endTime,
-        $calculateRecurrence = true);
+    public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
 
     /**
      * Get the internal events
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getInternalEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer);
+    public function getInternalEvents();
 
     /**
      * Get the external events
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternalEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer);
+    public function getExternalEvents();
 
     /**
      * Get the events
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer);
+    public function getAllEvents();
 
     /**
      *
