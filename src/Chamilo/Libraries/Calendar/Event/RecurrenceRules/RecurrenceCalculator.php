@@ -1,7 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Event;
+namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 use Sabre\VObject;
+use Chamilo\Libraries\Calendar\Event\Event;
 
 /**
  *

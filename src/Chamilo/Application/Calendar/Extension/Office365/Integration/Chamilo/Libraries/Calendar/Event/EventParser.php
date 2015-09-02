@@ -1,10 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event;
 
-// use Chamilo\Application\Calendar\Extension\Office365\CalendarProperties;
-// use Chamilo\Libraries\Platform\Translation;
-// use Chamilo\Libraries\Calendar\Event\RecurrenceRulesIcalParser;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 

@@ -23,5 +23,8 @@ class ICalComponent extends Manager
             $this->get_user(),
             array(),
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
+
+        $events = $dataProvider->getAllEvents();
+        var_dump($events);
     }
 }
