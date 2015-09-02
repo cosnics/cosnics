@@ -46,7 +46,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $tabs[] = new DynamicVisualTab(
             'ImportIcal',
             Translation :: get('ImportIcal'),
-            Theme :: getInstance()->getFileExtension('Ics', Theme :: ICON_SMALL),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/ImportIcal'),
             $link,
             false,
             false,

@@ -99,6 +99,37 @@ class BrowserComponent extends Manager implements DelegateComponent
                 false,
                 DynamicVisualTab :: POSITION_RIGHT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+
+        $iCalUrl = new Redirect(
+            array(Application :: PARAM_CONTEXT => self :: package(), self :: PARAM_ACTION => Manager :: ACTION_ICAL));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'ICalExternal',
+                Translation :: get('ICalExternal', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalExternal'),
+                $iCalUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+
+        $icalDownloadUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => Manager :: ACTION_ICAL,
+                self :: PARAM_DOWNLOAD => 1));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'ICalDownload',
+                Translation :: get('ICalDownload', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalDownload'),
+                $icalDownloadUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
     }
 
     /**
