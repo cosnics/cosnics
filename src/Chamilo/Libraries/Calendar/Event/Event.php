@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
+
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
  *
@@ -84,7 +86,7 @@ class Event
         $this->id = $id;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->recurrenceRules = $recurrenceRules?:new RecurrenceRules();
+        $this->recurrenceRules = $recurrenceRules ?  : new RecurrenceRules();
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;

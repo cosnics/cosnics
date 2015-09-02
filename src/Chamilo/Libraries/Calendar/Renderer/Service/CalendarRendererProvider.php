@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Service;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
