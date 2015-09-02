@@ -27,11 +27,11 @@ class ListRenderer extends Renderer
         $html[] = '<div class="calendar-container">';
 
         // Upcoming events: range from now until 6 months in the future
-        $upcomingEvents = $this->getEvents($this, time(), strtotime('+6 Months', time()));
+        $upcomingEvents = $this->getEvents(time(), strtotime('+6 Months', time()));
         $html[] = $this->renderEvents($upcomingEvents, 'UpcomingEvents');
 
         // Recent events: range from one months ago until now
-        $recentEvents = $this->getEvents($this, strtotime('-2 Months', time()), time());
+        $recentEvents = $this->getEvents(strtotime('-2 Months', time()), time());
         $html[] = $this->renderEvents($recentEvents, 'RecentEvents');
 
         $html[] = '</div>';

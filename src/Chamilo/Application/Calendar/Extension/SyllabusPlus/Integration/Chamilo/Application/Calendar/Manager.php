@@ -27,8 +27,9 @@ class Manager extends ExternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
-        $toDate)
+    public function getEvents(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        $requestedSourceType, $fromDate, $toDate)
     {
         $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $events = array();
@@ -40,7 +41,7 @@ class Manager extends ExternalCalendar
             $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
 
             $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-                $renderer->getDataProvider()->getDataUser(),
+                $calendarRendererProvider->getDataUser(),
                 $packageContext,
                 $packageName);
 
@@ -49,13 +50,13 @@ class Manager extends ExternalCalendar
             if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
             {
                 $eventResultSet = $calendarService->getEventsForUserAndBetweenDates(
-                    $renderer->getDataProvider()->getDataUser(),
+                    $calendarRendererProvider->getDataUser(),
                     $fromDate,
                     $toDate);
 
                 while ($calenderEvent = $eventResultSet->next_result())
                 {
-                    $eventParser = new EventParser($renderer, $weekLabels, $calenderEvent, $fromDate, $toDate);
+                    $eventParser = new EventParser($weekLabels, $calenderEvent, $fromDate, $toDate);
                     $events = array_merge($events, $eventParser->getEvents());
                 }
             }

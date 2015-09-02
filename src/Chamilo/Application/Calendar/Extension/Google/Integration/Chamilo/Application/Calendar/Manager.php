@@ -23,8 +23,9 @@ class Manager extends ExternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
-        $toDate)
+    public function getEvents(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        $requestedSourceType, $fromDate, $toDate)
     {
         $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
         $events = array();
@@ -35,7 +36,7 @@ class Manager extends ExternalCalendar
             $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
 
             $activeAvailabilities = $availabilityService->getActiveAvailabilitiesForUserAndCalendarType(
-                $renderer->getDataProvider()->getDataUser(),
+                $calendarRendererProvider->getDataUser(),
                 $package);
 
             while ($activeAvailability = $activeAvailabilities->next_result())
@@ -48,7 +49,6 @@ class Manager extends ExternalCalendar
                 while ($googleCalenderEvent = $eventResultSet->next_result())
                 {
                     $eventParser = new EventParser(
-                        $renderer,
                         $eventResultSet->getCalendarProperties(),
                         $googleCalenderEvent,
                         $fromDate,

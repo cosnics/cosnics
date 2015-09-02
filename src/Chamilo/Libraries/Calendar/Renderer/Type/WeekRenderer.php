@@ -36,7 +36,7 @@ class WeekRenderer extends TableRenderer
         $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
         $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
 
-        $events = $this->getEvents($this, $fromDate, $toDate);
+        $events = $this->getEvents($fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $toDate;

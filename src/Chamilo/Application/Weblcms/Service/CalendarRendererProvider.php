@@ -104,8 +104,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $sourceType, $startTime,
-        $endTime)
+    public function aggregateEvents($sourceType, $startTime, $endTime)
     {
         $publications = $this->getRenderer()->get_publications();
         $events = array();

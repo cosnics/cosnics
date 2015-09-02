@@ -14,14 +14,15 @@ interface CalendarInterface
     /**
      * Gets the events published in the implementing context
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $requestedSourceType
      * @param integer $fromDate
      * @param integer $toDate
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
-        $toDate);
+    public function getEvents(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        $requestedSourceType, $fromDate, $toDate);
 
     /**
      * Get the individual calendars in the implementing context

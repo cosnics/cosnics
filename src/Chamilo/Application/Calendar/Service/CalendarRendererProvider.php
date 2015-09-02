@@ -177,13 +177,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
      * @param int $sourceType
      * @param integer $startTime
      * @param integer $endTime
      */
-    public function aggregateEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType,
-        $startTime, $endTime)
+    public function aggregateEvents($requestedSourceType, $startTime, $endTime)
     {
         $events = array();
 
@@ -205,7 +203,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                     {
                         $events = array_merge(
                             $events,
-                            $implementor->getEvents($renderer, $requestedSourceType, $startTime, $endTime));
+                            $implementor->getEvents($this, $requestedSourceType, $startTime, $endTime));
                     }
                 }
             }

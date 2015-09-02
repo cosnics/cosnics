@@ -167,9 +167,9 @@ abstract class Renderer
      * @param int $endTime
      * @return Event[]
      */
-    public function getEvents(Renderer $renderer, $startTime, $endTime)
+    public function getEvents($startTime, $endTime)
     {
-        return $this->getDataProvider()->getAllEventsInPeriod($renderer, $startTime, $endTime);
+        return $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
     }
 
     /**

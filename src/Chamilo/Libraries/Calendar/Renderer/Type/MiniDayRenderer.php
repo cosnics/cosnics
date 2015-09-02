@@ -135,7 +135,7 @@ class MiniDayRenderer extends TableRenderer
         $fromDate = $calendar->getStartTime();
         $toDate = $calendar->getEndTime();
 
-        $events = $this->getEvents($this, $fromDate, $toDate);
+        $events = $this->getEvents($fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();

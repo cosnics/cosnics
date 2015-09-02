@@ -23,8 +23,9 @@ class Manager extends ExternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(\Chamilo\Libraries\Calendar\Renderer\Renderer $renderer, $requestedSourceType, $fromDate,
-        $toDate)
+    public function getEvents(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
+        $requestedSourceType, $fromDate, $toDate)
     {
         $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
         $events = array();
@@ -35,7 +36,7 @@ class Manager extends ExternalCalendar
             $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
 
             $activeAvailabilities = $availabilityService->getActiveAvailabilitiesForUserAndCalendarType(
-                $renderer->getDataProvider()->getDataUser(),
+                $calendarRendererProvider->getDataUser(),
                 $package);
 
             while ($activeAvailability = $activeAvailabilities->next_result())
@@ -50,12 +51,7 @@ class Manager extends ExternalCalendar
 
                 while ($office365CalenderEvent = $eventResultSet->next_result())
                 {
-                    $eventParser = new EventParser(
-                        $renderer,
-                        $availableCalendar,
-                        $office365CalenderEvent,
-                        $fromDate,
-                        $toDate);
+                    $eventParser = new EventParser($availableCalendar, $office365CalenderEvent, $fromDate, $toDate);
                     $events = array_merge($events, $eventParser->getEvents());
                 }
             }

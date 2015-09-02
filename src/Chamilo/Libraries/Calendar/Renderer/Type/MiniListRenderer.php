@@ -28,19 +28,19 @@ class MiniListRenderer extends Renderer
         // Today's events, from the current time until midnight
         $fromTime = time();
         $toTime = strtotime('tomorrow -1 second', time());
-        $events = $this->getEvents($this, $fromTime, $toTime);
+        $events = $this->getEvents($fromTime, $toTime);
         $html[] = $this->renderEvents($events, 'Today', $fromTime, $toTime);
 
         // Tomorrow's events, from midnight tomorrow until midnight the day after tomorrow
         $fromTime = strtotime('tomorrow', time());
         $toTime = strtotime('tomorrow +1 day -1 second', time());
-        $events = $this->getEvents($this, $fromTime, $toTime);
+        $events = $this->getEvents($fromTime, $toTime);
         $html[] = $this->renderEvents($events, 'Tomorrow', $fromTime, $toTime);
 
         // Events that will happen soon, from midnight the day after tomorrow untill next week midnight
         $fromTime = strtotime('tomorrow +1 day', time());
         $toTime = strtotime('tomorrow +7 days -1 second', time());
-        $events = $this->getEvents($this, $fromTime, $toTime);
+        $events = $this->getEvents($fromTime, $toTime);
         $html[] = $this->renderEvents($events, 'Soon', $fromTime, $toTime);
 
         $html[] = '</div>';
