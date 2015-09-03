@@ -1,50 +1,48 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
+use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Renderer\Type\View\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayRenderer extends TableRenderer
+class MonthRenderer extends TableRenderer
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
      */
     public function initializeCalendar()
     {
-        return new DayCalendar($this->getDisplayTime());
+        return new MonthCalendar($this->getDisplayTime());
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @see \libraries\calendar\renderer\Renderer::render()
      */
     public function render()
     {
         $calendar = $this->getCalendar();
-        $fromDate = strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
-        $toDate = strtotime(date('Y-m-d 23:59:59', $this->getDisplayTime()));
-
-        $events = $this->getEvents($fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
+
+        $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+' . $calendar->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+1 Day', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -57,7 +55,6 @@ class DayRenderer extends TableRenderer
                 {
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($calendar->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 

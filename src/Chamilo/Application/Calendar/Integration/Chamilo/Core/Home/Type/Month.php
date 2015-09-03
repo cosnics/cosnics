@@ -2,11 +2,11 @@
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Block;
-use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\Table\MiniMonthRenderer;
 
 /**
  *

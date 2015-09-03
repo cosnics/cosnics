@@ -38,7 +38,7 @@
             }
         });
         $('#end_date').datetimepicker({
-            timeFormat : 'hh:mm',
+            timeFormat : 'HH:mm',
             dateFormat : 'dd-mm-yy',
             controlType : 'select',
             separator : '  ',
