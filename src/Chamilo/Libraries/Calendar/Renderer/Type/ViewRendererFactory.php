@@ -1,7 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer;
+namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 
 /**
  *
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RendererFactory
+class ViewRendererFactory
 {
 
     /**
@@ -166,7 +167,7 @@ class RendererFactory
      */
     public function getRenderer()
     {
-        $className = __NAMESPACE__ . '\Type\\' . $this->getRendererType() . 'Renderer';
+        $className = __NAMESPACE__ . '\View\\' . $this->getRendererType() . 'Renderer';
 
         return new $className(
             $this->getDataProvider(),

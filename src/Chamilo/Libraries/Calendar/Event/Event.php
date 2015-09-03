@@ -35,7 +35,7 @@ class Event
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     * @var \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
      */
     private $recurrenceRules;
 
@@ -132,7 +132,7 @@ class Event
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
      */
     public function getRecurrenceRules()
     {
@@ -141,7 +141,7 @@ class Event
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
+     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules $recurrenceRules
      */
     public function setRecurrenceRules($recurrenceRules)
     {

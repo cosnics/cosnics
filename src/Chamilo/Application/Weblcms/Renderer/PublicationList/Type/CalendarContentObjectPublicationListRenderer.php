@@ -7,8 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,7 +18,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\RendererFactory;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 
 /**
  * Renderer to display events in a week calendar
@@ -56,7 +56,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
     public function getView()
     {
-        return Request :: get(Renderer :: PARAM_TYPE, \Chamilo\Libraries\Calendar\Renderer\Renderer :: TYPE_MONTH);
+        return Request :: get(ViewRenderer :: PARAM_TYPE, ViewRenderer :: TYPE_MONTH);
     }
 
     /**
@@ -67,7 +67,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
     {
         if (! isset($this->display_time))
         {
-            $this->display_time = Request :: get(Renderer :: PARAM_TIME, time());
+            $this->display_time = Request :: get(ViewRenderer :: PARAM_TIME, time());
         }
 
         return $this->display_time;
@@ -79,7 +79,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
      */
     public function get_current_renderer_type()
     {
-        return Request :: get(Renderer :: PARAM_TYPE, Renderer :: TYPE_MONTH);
+        return Request :: get(ViewRenderer :: PARAM_TYPE, ViewRenderer :: TYPE_MONTH);
     }
 
     public function as_html()
@@ -110,7 +110,11 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $view = $this->getView();
 
-        $rendererFactory = new RendererFactory($view, $dataProvider, $calendarLegend, $this->getCurrentRendererTime());
+        $rendererFactory = new ViewRendererFactory(
+            $view,
+            $dataProvider,
+            $calendarLegend,
+            $this->getCurrentRendererTime());
 
         $html[] = $rendererFactory->render();
         $html[] = '</div>';
@@ -180,17 +184,18 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_VERTICAL);
 
-        $type_url = $this->get_url(array(Renderer :: PARAM_TYPE => Renderer :: MARKER_TYPE));
-        $today_url = $this->get_url(array(Renderer :: PARAM_TYPE => $this->getView(), Renderer :: PARAM_TIME => time()));
+        $type_url = $this->get_url(array(ViewRenderer :: PARAM_TYPE => ViewRenderer :: MARKER_TYPE));
+        $today_url = $this->get_url(
+            array(ViewRenderer :: PARAM_TYPE => $this->getView(), ViewRenderer :: PARAM_TIME => time()));
 
         $renderer_types = array(
-            Renderer :: TYPE_MONTH,
-            Renderer :: TYPE_WEEK,
-            Renderer :: TYPE_DAY,
-            Renderer :: TYPE_YEAR,
-            Renderer :: TYPE_LIST);
+            ViewRenderer :: TYPE_MONTH,
+            ViewRenderer :: TYPE_WEEK,
+            ViewRenderer :: TYPE_DAY,
+            ViewRenderer :: TYPE_YEAR,
+            ViewRenderer :: TYPE_LIST);
 
-        $renderer_type_items = Renderer :: getToolbarItems($renderer_types, $type_url, $today_url);
+        $renderer_type_items = ViewRenderer :: getToolbarItems($renderer_types, $type_url, $today_url);
 
         foreach ($renderer_type_items as $renderer_type_item)
         {
