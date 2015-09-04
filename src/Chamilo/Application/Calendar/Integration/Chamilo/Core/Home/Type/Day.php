@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\Table\MiniDayRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
 
 /**
  *

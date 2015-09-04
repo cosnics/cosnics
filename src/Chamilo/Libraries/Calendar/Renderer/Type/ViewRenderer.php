@@ -176,13 +176,13 @@ abstract class ViewRenderer extends Renderer
         {
             $items[] = new ToolbarItem(
                 Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Type/' . $type),
+                Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Type/' . $type),
                 str_replace(self :: MARKER_TYPE, $type, $typeUrl));
         }
 
         $items[] = new ToolbarItem(
             Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Today'),
+            Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'),
             $todayUrl);
 
         return $items;
@@ -203,7 +203,7 @@ abstract class ViewRenderer extends Renderer
             $tabs[] = new DynamicVisualTab(
                 $type,
                 Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Tab/Type/' . $type),
+                Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Type/' . $type),
                 str_replace(self :: MARKER_TYPE, $type, $typeUrl),
                 false,
                 false,
@@ -214,7 +214,7 @@ abstract class ViewRenderer extends Renderer
         $tabs[] = new DynamicVisualTab(
             'today',
             Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Renderer/Tab/Today'),
+            Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Today'),
             $todayUrl,
             false,
             false,

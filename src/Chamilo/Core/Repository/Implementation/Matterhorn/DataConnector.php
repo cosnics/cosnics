@@ -9,10 +9,8 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\UUID;
-use DOMDocument;
 use Exception;
 use GuzzleHttp\Post\PostFile;
-use XML_Unserializer;
 
 /**
  *
@@ -37,29 +35,29 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function __construct($external_repository_instance)
     {
         parent :: __construct($external_repository_instance);
-        
+
         $url = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'url', 
+            'url',
             $this->get_external_repository_instance_id());
-        
+
         $this->client = new \GuzzleHttp\Client(['base_url' => $url]);
-        
+
         $enable_authentication = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'enable', 
+            'enable',
             $this->get_external_repository_instance_id());
-        
+
         if ($enable_authentication)
         {
             $username = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-                'username', 
+                'username',
                 $this->get_external_repository_instance_id());
             $password = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-                'password', 
+                'password',
                 $this->get_external_repository_instance_id());
-            
+
             $this->client->setDefaultOption('auth', [$username, $password, 'digest']);
             $this->client->setDefaultOption(
-                'headers', 
+                'headers',
                 ['X-Requested-Auth' => 'Digest', 'X-Opencast-Matterhorn-Authorization' => 'true']);
         }
     }
@@ -71,7 +69,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_objects($condition, $order_by, $offset, $count)
     {
         $order_by = $order_by[0];
-        
+
         if ($order_by instanceof OrderBy && $order_by->get_property() instanceof PropertyConditionVariable)
         {
             switch ($order_by->get_property()->get_property())
@@ -86,36 +84,36 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                     $sort = '';
                     break;
             }
-            
+
             $sort .= $order_by->get_direction() == SORT_DESC ? '_DESC' : '';
         }
         else
         {
             $sort = '';
         }
-        
+
         $response = $this->client->get(
-            '/search/episode.xml', 
+            '/search/episode.xml',
             ['query' => ['limit' => $count, 'offset' => $offset, 'q' => $condition, 'sort' => $sort]]);
-        
+
         $results = $response->xml();
-        
+
         $objects = array();
-        
+
         if ($results->result->count() > 0)
         {
             foreach ($results->result as $result)
             {
                 $parser = new SimpleXmlMediaPackageParser($result);
-                
+
                 $object = $parser->process();
                 $object->set_external_repository_id($this->get_external_repository_instance_id());
                 $object->set_rights($this->determine_rights());
-                
+
                 $objects[] = $object;
             }
         }
-        
+
         return new ArrayResultSet($objects);
     }
 
@@ -127,15 +125,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $response = $this->retrieve_media_package($id);
         $results = $response->xml();
-        
+
         if ($results->result->count() > 0)
         {
             $parser = new SimpleXmlMediaPackageParser($results->result[0]);
-            
+
             $object = $parser->process();
             $object->set_external_repository_id($this->get_external_repository_instance_id());
             $object->set_rights($this->determine_rights());
-            
+
             return $object;
         }
         else
@@ -175,13 +173,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // Get an empty media package container
         $response = $this->client->get('/ingest/createMediaPackage');
         $media_package_xml = $response->getBody()->getContents();
-        
+
         // Add a track to it (the uploaded file or a file selected from the inbox)
         $request = $this->client->createRequest('POST', '/ingest/addTrack');
         $postBody = $request->getBody();
         $postBody->setField('flavor', $values[ExternalObjectForm :: PARAM_WORKFLOW]);
         $postBody->setField('mediaPackage', $media_package_xml);
-        
+
         if ($values[ExternalObjectForm :: PARAM_UPLOAD] == 0)
         {
             $postBody->addFile(new PostFile('file', fopen($track_path, 'r')));
@@ -194,46 +192,46 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             return false;
         }
-        
+
         $response = $this->client->send($request);
         $media_package_xml = $response->getBody()->getContents();
-        
+
         // Add the media package dublin core metadata
-        
+
         $media_package_dublin_core_identifier = UUID :: v4();
         $media_package_dublin_core = new MediaPackageDublinCore(
-            $media_package_dublin_core_identifier, 
-            $values[ExternalObject :: PROPERTY_TITLE], 
-            $values[ExternalObject :: PROPERTY_OWNER_ID], 
-            $values[ExternalObject :: PROPERTY_CONTRIBUTORS], 
-            $values[ExternalObject :: PROPERTY_DESCRIPTION], 
-            $values[ExternalObject :: PROPERTY_SUBJECTS], 
+            $media_package_dublin_core_identifier,
+            $values[ExternalObject :: PROPERTY_TITLE],
+            $values[ExternalObject :: PROPERTY_OWNER_ID],
+            $values[ExternalObject :: PROPERTY_CONTRIBUTORS],
+            $values[ExternalObject :: PROPERTY_DESCRIPTION],
+            $values[ExternalObject :: PROPERTY_SUBJECTS],
             $values[ExternalObject :: PROPERTY_LICENSE]);
-        
+
         $request = $this->client->createRequest('POST', '/ingest/addDCCatalog');
         $postBody = $request->getBody();
         $postBody->setField('flavor', 'dublincore/episode');
         $postBody->setField('mediaPackage', $media_package_xml);
         $postBody->setField('dublinCore', $media_package_dublin_core->as_string());
-        
+
         $response = $this->client->send($request);
         $media_package_xml = $response->getBody()->getContents();
-        
+
         // If a new series was entered, create it. If not, use the one which was selected (possibly none)
         $new_series = $values[ExternalObjectForm :: NEW_SERIES];
-        
+
         if ($new_series)
         {
             $series_identifier = UUID :: v4();
             $series_dublin_core = new SeriesDublinCore($series_identifier, $new_series, null, null, $new_series);
-            
+
             $parameters = array('series' => $series_dublin_core->as_string(), 'acl' => $series_dublin_core->get_acl());
-            
+
             $request = $this->client->createRequest('POST', '/series/');
             $postBody = $request->getBody();
             $postBody->setField('series', $series_dublin_core->as_string());
             $postBody->setField('acl', $series_dublin_core->get_acl());
-            
+
             $response = $this->client->send($request);
             $series_xml = $response->getBody()->getContents();
         }
@@ -243,7 +241,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $response = $this->client->get('/series/' . $series_identifier . '.xml');
             $series_xml = $response->getBody()->getContents();
         }
-        
+
         // If a series was selected, add it to the media package
         if ($series_identifier)
         {
@@ -252,20 +250,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $postBody->setField('flavor', 'dublincore/series');
             $postBody->setField('mediaPackage', $media_package_xml);
             $postBody->setField('dublinCore', $series_xml);
-            
+
             $response = $this->client->send($request);
             $media_package_xml = $response->getBody()->getContents();
         }
-        
+
         try
         {
             $response = $this->execute_workflow($media_package_xml, 'avilarts-html5');
             $parser = new SimpleXmlMediaPackageParser($response->xml());
-            
+
             $object = $parser->process();
             $object->set_external_repository_id($this->get_external_repository_instance_id());
             $object->set_rights($this->determine_rights());
-            
+
             return $object;
         }
         catch (\Exception $exception)
@@ -285,7 +283,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $request = $this->client->createRequest('POST', '/ingest/ingest/' . $workflow_id);
         $postBody = $request->getBody();
         $postBody->setField('MEDIAPACKAGE', $media_package_xml);
-        
+
         return $this->client->send($request);
     }
 
@@ -315,17 +313,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function get_inbox_list()
     {
         $files = array();
-        
+
         $response = $this->client->get('/files/list/inbox.json');
         $results = $response->json();
-        
+
         foreach ($results as $result)
         {
             $file = new InboxFile();
             $file->set_path($result);
             $files[] = $file;
         }
-        
+
         return new ArrayResultSet($files);
     }
 
@@ -347,17 +345,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function get_series($id)
     {
         $series = new Series();
-        
+
         if ($id)
         {
             $response = $this->client->get('/series/' . $id . '.xml');
             $result = $response->xml(['ns_is_prefix' => true, 'ns' => 'dcterms']);
-            
+
             $series->set_id((string) $result->identifier);
             $series->set_title((string) $result->title);
             $series->set_description((string) $result->description);
         }
-        
+
         return $series;
     }
 
@@ -368,22 +366,22 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function get_all_series()
     {
         $collections = array();
-        
+
         $response = $this->client->get('/series/series.xml', ['query' => ['sort' => 'TITLE']]);
         $result = $response->xml();
-        
+
         foreach ($result->dublincore as $collection)
         {
             $properties = $collection->children('dcterms', true);
             $series = new Series();
-            
+
             $series->set_id((string) $properties->identifier);
             $series->set_title((string) $properties->title);
             $series->set_description((string) $properties->description);
-            
+
             $collections[] = $series;
         }
-        
+
         return new ArrayResultSet($collections);
     }
 
@@ -409,7 +407,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $postBody = $request->getBody();
         $postBody->setField('id', $id);
         $postBody->setField('definitionId', 'retract');
-        
+
         try
         {
             $response = $this->client->send($request);

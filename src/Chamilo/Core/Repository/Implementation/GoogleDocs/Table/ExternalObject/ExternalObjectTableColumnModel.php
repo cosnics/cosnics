@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Table\ExternalObject;
 
 use Chamilo\Core\Repository\External\Table\ExternalObject\DefaultExternalObjectTableColumnModel;
-use Chamilo\Core\Repository\Implementation\GoogleDocs\ExternalObject;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 
 class ExternalObjectTableColumnModel extends DefaultExternalObjectTableColumnModel
 {

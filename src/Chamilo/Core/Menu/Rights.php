@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use ReflectionClass;
 
 /**
  *

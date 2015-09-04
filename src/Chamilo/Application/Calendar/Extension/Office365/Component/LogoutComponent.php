@@ -3,10 +3,12 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Component;
 
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
-use Chamilo\Application\Calendar\Extension\Office365\Service\Office365CalendarService;
-use Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository;
+use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 
 /**
  *
@@ -20,8 +22,14 @@ class LogoutComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
-        $isSuccessful = $office365CalendarService->logout();
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $isSuccessful = $calendarService->logout();
+
+        if ($isSuccessful)
+        {
+            $availabilityService = new AvailabilityService(new AvailabilityRepository());
+            $availabilityService->deleteAvailabilityByCalendarType(self :: package());
+        }
 
         $nextAction = new Redirect(
             array(Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager :: context()));

@@ -11,7 +11,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_QuickForm;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class VersionTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
