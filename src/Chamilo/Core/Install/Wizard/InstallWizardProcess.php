@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
-use Exception;
 use HTML_QuickForm_Action;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 

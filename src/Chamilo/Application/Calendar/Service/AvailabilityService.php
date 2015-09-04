@@ -295,4 +295,14 @@ class AvailabilityService
 
         return ! $availability instanceof Availability || $availability->getAvailability() == 1;
     }
+
+    /**
+     *
+     * @param string $calendarType
+     * @return boolean
+     */
+    public function deleteAvailabilityByCalendarType($calendarType)
+    {
+        return $this->getAvailabilityRepository()->removeAvailabilityByCalendarType($calendarType);
+    }
 }

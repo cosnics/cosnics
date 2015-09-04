@@ -17,7 +17,7 @@ use Chamilo\Libraries\File\Cache\FilesystemCache;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class GoogleCalendarRepository
+class CalendarRepository
 {
 
     /**
@@ -73,13 +73,13 @@ class GoogleCalendarRepository
 
     /**
      *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository
+     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
     private static $instance;
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository
+     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
     static public function getInstance()
     {
@@ -242,8 +242,10 @@ class GoogleCalendarRepository
     {
         if ($this->getGoogleClient()->revokeToken())
         {
-            $this->saveAccessToken(null);
+            return $this->saveAccessToken(null);
         }
+
+        return false;
     }
 
     /**

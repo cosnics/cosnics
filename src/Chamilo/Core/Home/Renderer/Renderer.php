@@ -3,7 +3,6 @@ namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
-use Exception;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**

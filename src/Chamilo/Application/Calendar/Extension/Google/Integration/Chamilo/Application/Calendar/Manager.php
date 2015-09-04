@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar;
 
 use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
-use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
+use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -27,10 +27,10 @@ class Manager extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
-        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $events = array();
 
-        if ($googleCalendarService->isAuthenticated())
+        if ($calendarService->isAuthenticated())
         {
             $availabilityService = new AvailabilityService(new AvailabilityRepository());
             $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
@@ -41,7 +41,7 @@ class Manager extends ExternalCalendar
 
             while ($activeAvailability = $activeAvailabilities->next_result())
             {
-                $eventResultSet = $googleCalendarService->getEventsForCalendarIdentifierAndBetweenDates(
+                $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
                     $activeAvailability->getCalendarId(),
                     $fromDate,
                     $toDate);
@@ -67,12 +67,12 @@ class Manager extends ExternalCalendar
      */
     public function getCalendars()
     {
-        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $calendars = array();
 
-        if ($googleCalendarService->isAuthenticated())
+        if ($calendarService->isAuthenticated())
         {
-            $calendars = $googleCalendarService->getOwnedCalendars();
+            $calendars = $calendarService->getOwnedCalendars();
         }
 
         return $calendars;

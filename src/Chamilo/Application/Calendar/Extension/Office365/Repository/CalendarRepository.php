@@ -18,7 +18,7 @@ use Chamilo\Libraries\File\Path;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Office365CalendarRepository
+class CalendarRepository
 {
     const AUTHENTICATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/';
     const CALENDAR_BASE_URL = 'https://outlook.office365.com/api/v1.0/';
@@ -91,13 +91,13 @@ class Office365CalendarRepository
 
     /**
      *
-     * @var \Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository
+     * @var \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository
      */
     private static $instance;
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository
+     * @return \Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository
      */
     static public function getInstance()
     {
@@ -400,7 +400,7 @@ class Office365CalendarRepository
 
     public function logout()
     {
-        $this->saveToken(null);
+        return $this->saveToken(null);
     }
 
     /**
