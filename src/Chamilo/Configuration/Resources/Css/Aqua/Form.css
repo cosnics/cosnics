@@ -1,0 +1,1157 @@
+div.column {
+	float: left;
+	margin-right: 10px;
+}
+
+/****************
+ *  FORM STYLES *
+ ****************/
+div.row {
+	clear: both;
+	padding-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.row div.form_header {
+	white-space: nowrap;
+	padding: 2px;
+	background-color: #E5EDF9;
+	border: 1px solid #4271B5;
+}
+
+div.row div.label {
+	float: left;
+	width: 18%;
+	text-align: right;
+	overflow: hidden;
+	font-weight: bold;
+	color: #565656;
+}
+
+div.row div.formw {
+	width: 80%;
+	float: left;
+	text-align: left;
+}
+
+div.formw input[type=text], div.row div.formw input[type=password], div.row div.formw select
+	{ /*
+	background-image: url(../../Images/Aqua/Buttons/Link.png);
+	background-repeat: no-repeat;
+	background-position: 2px center;
+	padding-left: 20px;
+	*/
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	background-repeat: no-repeat;
+	background-position: 4px 50%;
+}
+
+div.formw input[type=text]:hover, div.row div.formw input[type=text]:focus,
+	div.row div.formw input[type=password]:hover, div.row div.formw input[type=password]:focus,
+	div.row div.formw select:hover, div.row div.formw select:focus
+div.row div.formw textarea:hover, div.row div.formw textarea:focus {
+	background-color: #f7fbfd;
+	border-color: #4171B5;
+}
+
+div.formw input[type=text].input_conflict, div.row div.formw input[type=password].input_conflict,
+	div.row div.formw select.input_conflict
+		div.formw input[type=text].input_conflict:hover, div.row div.formw input[type=password].input_conflict:hover,
+	div.row div.formw select.input_conflict:hover, div.formw input[type=text].input_conflict:focus,
+	div.row div.formw input[type=password].input_conflict:focus, div.row div.formw select.input_conflict:focus
+	{
+	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
+	background-color: #FFD1D1 !important;
+	border: 1px solid #ff9b9d !important;
+	color: #b40404 !important;
+	padding-left: 24px;
+}
+
+div.formw input[type=text].input_valid, div.row div.formw input[type=password].input_valid,
+	div.row div.formw select.input_valid, div.formw input[type=text].input_valid:hover,
+	div.row div.formw input[type=password].input_valid:hover, div.row div.formw select.input_valid:hover,
+	div.formw input[type=text].input_valid:focus, div.row div.formw input[type=password].input_valid:focus,
+	div.row div.formw select.input_valid:focus {
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
+	border: 1px solid #339900 !important;
+	background-color: #ddffaa !important;
+	color: #006600 !important;
+	padding-left: 24px;
+}
+
+div.formw input[type=text].input_warning, div.row div.formw input[type=password].input_warning,
+	div.row div.formw select.input_warning
+		div.formw input[type=text].input_warning:hover, div.row div.formw input[type=password].input_warning:hover,
+	div.row div.formw select.input_warning:hover, div.formw input[type=text].input_warning:focus,
+	div.row div.formw input[type=password].input_warning:focus, div.row div.formw select.input_warning:focus
+	{
+	background-image: url('../../Images/Aqua/Status/WarningMini.png');
+	border: 1px solid #ffd89b !important;
+	background-color: #fff8aa !important;
+	color: #996900 !important;
+	padding-left: 24px;
+}
+
+div.dynamic_search_action {
+	padding: 15px 0px;
+}
+
+div.dynamic_search_action input[type=text], div.dynamic_search_action div.row div.formw input[type=password],
+	div.dynamic_search_action div.row div.formw select { /*
+	background-image: url(../../Images/Aqua/Buttons/Link.png);
+	background-repeat: no-repeat;
+	background-position: 2px center;
+	padding-left: 20px;
+	*/
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	padding: 6px;
+	position: relative;
+	top: 2px;
+	margin-right: 10px;
+}
+
+div.row div.formwa, div.row div.formwa_no_margin {
+	margin-left: 20%;
+	border-width: 1px;
+	padding: 10px 10px 10px 50px;
+	padding-left: 10px;
+	border-style: solid;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	/*background-image: url('../../Images/Aqua/Status/Warning.png');*/
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+	color: #996900;
+}
+
+div.row div.formc, div.row div.formc_no_margin {
+	margin-left: 20%;
+	border-width: 1px;
+	padding: 10px 10px 10px 50px;
+	padding-left: 10px;
+	border-style: solid;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	/*background-image: url('../../Images/Aqua/Status/ConfirmationMedium.png');*/
+	background-color: #E5EDF9;
+	border: 1px solid #b9d0ef;
+	color: #212467;
+}
+
+div.row div.forme, div.row div.forme_no_margin {
+	margin-left: 20%;
+	border-width: 1px;
+	padding: 10px 10px 10px 50px;
+	padding-left: 10px;
+	border-style: solid;
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	background-color: #FFD1D1;
+	border: 1px solid #ff9b9d;
+	color: #b40404;
+}
+
+div.row div.forme h2, div.row div.forme_no_margin h2, div.row div.formwa h2,
+	div.row div.formwa_no_margin h2, div.row div.formc h2, div.row div.formc_no_margin h2
+	{
+	padding: 0px 0px 5px 0px;
+	margin: 0px;
+	font-size: 120%;
+	font-weight: bold;
+}
+
+div.row div.forme_no_margin, div.row div.formwa_no_margin, div.row div.formc_no_margin
+	{
+	margin-left: 0px;
+}
+
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+	float: left;
+	text-align: right;
+}
+
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+	float: right;
+	text-align: left;
+}
+
+div.row div.element {
+	float: left;
+}
+
+div.row div.feedback {
+	position: relative;
+	left: 15px;
+}
+
+span.form_required {
+	color: #f00;
+}
+
+span.form_error {
+	color: #f00;
+	font-size: x-small;
+	margin: 2px;
+}
+
+/* Form elements - some general styling */
+select, textarea {
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+}
+
+input[type=text], input[type=password] {
+	margin: 0px;
+	padding: 2px 4px 2px 4px;
+	border: 1px solid #4171B5;
+}
+
+input.checkbox, input[type=checkbox] {
+	border-width: 0;
+}
+
+input[type=color], input.colour-selection {
+	width: 30px;
+	padding: 0px;
+}
+
+/* Normal submit button */
+input.mainoption {
+	font-weight: bold;
+}
+
+/* None-bold submit button */
+input.liteoption {
+	font-weight: normal;
+}
+
+select, input[type=checkbox], input[type=radio], input[type=button],
+	input[type=submit] {
+	cursor: pointer;
+	font-size: 12px;
+}
+
+input[text] {
+	font-size: 12px;
+}
+
+textarea {
+	padding: 2px 2px 2px 2px;
+}
+
+textarea.answer {
+	width: 651px;
+}
+
+.input_numeric {
+	text-align: right;
+}
+
+input.rating_question_low_value, input.rating_question_high_value {
+	background-image: url(../../Images/Aqua/Buttons/Low.png);
+	background-position: 4px center;
+	background-repeat: no-repeat;
+	padding-left: 24px;
+}
+
+input.rating_question_high_value {
+	background-image: url(../../Images/Aqua/Buttons/High.png);
+}
+
+.select_question {
+	width: 150px;
+}
+
+.advanced_select_question select {
+	width: 150px;
+	height: 150px;
+}
+
+.advanced_select_question input {
+	margin: 0px;
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	font-size: 0px;
+	line-height: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	height: 24px;
+	width: 30px;
+	overflow: visible;
+	padding: 4px 7px 4px 7px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.advanced_select_question input:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+.advanced_select_question input.add {
+	background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
+}
+
+.advanced_select_question input.remove {
+	background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
+}
+
+/*********************************************************
+ * Fixes button elements in Firefox ... unbelievable :-S *
+ *********************************************************/
+button: :-moz-focus-inner {
+	border: 0px;
+	padding: 0px;
+}
+
+button, a.button {
+	margin: 0 7px 0 0;
+	background-color: #f5f5f5;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	outline-style: none;
+	font-size: 100%;
+	line-height: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	width: auto;
+	overflow: visible;
+	padding: 7px 10px 7px 36px;
+	vertical-align: middle;
+}
+
+a.button {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	display: inline-block;
+}
+
+button.last, a.last_button {
+	margin: 0px;
+}
+
+button.positive, a.positive_button {
+	background-image: url(../../Images/Aqua/Buttons/Confirm.png);
+	color: #529214;
+}
+
+a.positive_button:hover, button.positive:hover {
+	background-color: #E6EFC2;
+	border: 1px solid #C6D880;
+	color: #529214;
+}
+
+button.positive:active, a.positive_button:active {
+	background-color: #5ca54d;
+	border: 1px solid #5ca54d;
+	color: #ffffff;
+}
+
+button.negative, a.negative_button {
+	background-image: url(../../Images/Aqua/Buttons/Cancel.png);
+	color: #d12f19;
+}
+
+a.negative_button:hover, button.negative:hover {
+	background-color: #fbe3e4;
+	border: 1px solid #fbc2c4;
+	color: #d12f19;
+}
+
+button.negative:active, a.negative_button:active {
+	background-color: #bf382b;
+	border: 1px solid #bf382b;
+	color: #ffffff;
+}
+
+button.normal, a.normal_button {
+	background-image: url(../../Images/Aqua/Buttons/Next.png);
+}
+
+a.normal_button:hover, button.normal:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+button.normal:active, a.normal_button:active {
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+button.alert, a.alert_button {
+	background-image: url(../../Images/Aqua/Buttons/Warning.png);
+	color: #996900;
+}
+
+a.alert_button:hover, button.alert:hover {
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+	color: #996900;
+}
+
+button.alert:active, a.alert_button:active {
+	background-color: #ffd89b;
+	border: 1px solid #ffd89b;
+	color: #ffffff;
+}
+
+button.calendar, a.calendar_button {
+	background-image: url(../../Images/Aqua/Buttons/Calendar.png);
+}
+
+a.calendar_button:hover, button.calendar:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+button.calendar:active, a.calendar_button:active {
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+button.mini, a.mini_button, button.mini:hover, a.mini_button:hover,
+	button.mini:active, a.mini_button:active {
+	background-position: center center;
+	padding: 0px;
+	margin: -3px 0px 0px -3px;
+	line-height: 16px;
+	height: 22px;
+	vertical-align: middle;
+	font-size: 0px;
+	width: 22px;
+	overflow: hidden;
+	background-color: transparent !important;
+	border: 0px solid white !important;
+}
+
+button.mini, a.mini_button {
+	border: 1px solid #dedede;
+}
+
+button.next, a.next_button {
+	background-image: url(../../Images/Aqua/Buttons/Next.png);
+}
+
+button.previous, a.previous_button {
+	background-image: url(../../Images/Aqua/Buttons/Previous.png);
+}
+
+button.empty, a.empty_button {
+	background-image: url(../../Images/Aqua/Buttons/Empty.png);
+}
+
+button.select, a.select_button {
+	background-image: url(../../Images/Aqua/Buttons/Select.png);
+}
+
+button.join, a.join_button {
+	background-image: url(../../Images/Aqua/Buttons/Join.png);
+}
+
+button.create, a.create_button {
+	background-image: url(../../Images/Aqua/Buttons/Create.png);
+}
+
+button.error, a.error_button {
+	background-image: url(../../Images/Aqua/Buttons/Error.png);
+}
+
+button.warning, a.warning_button {
+	background-image: url(../../Images/Aqua/Buttons/Warning.png);
+}
+
+button.login, a.login_button {
+	background-image: url(../../Images/Aqua/Buttons/Login.png);
+	float: left;
+	margin-bottom: 7px;
+}
+
+button.logout, a.logout_button {
+	background-image: url(../../Images/Aqua/Buttons/Logout.png);
+}
+
+button.search, a.search_button {
+	background-image: url(../../Images/Aqua/Buttons/Search.png);
+}
+
+button.filter, a.filter_button {
+	background-image: url(../../Images/Aqua/Buttons/Filter.png);
+}
+
+button.save, a.save_button {
+	background-image: url(../../Images/Aqua/Buttons/Save.png);
+}
+
+button.update, a.update_button {
+	background-image: url(../../Images/Aqua/Buttons/Update.png);
+}
+
+button.publish, a.publish_button {
+	background-image: url(../../Images/Aqua/Buttons/Publish.png);
+}
+
+button.send, a.send_button {
+	background-image: url(../../Images/Aqua/Buttons/Send.png);
+}
+
+button.import, a.import_button {
+	background-image: url(../../Images/Aqua/Buttons/Import.png);
+}
+
+button.export, a.export_button {
+	background-image: url(../../Images/Aqua/Buttons/Export.png);
+}
+
+button.subscribe, a.subscribe_button {
+	background-image: url(../../Images/Aqua/Buttons/Subscribe.png);
+}
+
+button.unsubscribe, a.unsubscribe_button {
+	background-image: url(../../Images/Aqua/Buttons/Unsubscribe.png);
+}
+
+button.move, a.move_button {
+	background-image: url(../../Images/Aqua/Buttons/Move.png);
+}
+
+button.compare, a.compare_button {
+	background-image: url(../../Images/Aqua/Buttons/Compare.png);
+}
+
+button.finish, a.finish_button {
+	background-image: url(../../Images/Aqua/Buttons/Finish.png);
+}
+
+button.register, a.register_button {
+	background-image: url(../../Images/Aqua/Buttons/Register.png);
+	float: left;
+	padding-bottom: 11px;
+	margin-bottom: 7px;
+}
+
+button.switch, a.switch_button {
+	background-image: url(../../Images/Aqua/Buttons/Switch.png);
+}
+
+button.add, a.add_button {
+	background-image: url(../../Images/Aqua/Buttons/Add.png);
+}
+
+button.low, a.low_button {
+	background-image: url(../../Images/Aqua/Buttons/Low.png);
+}
+
+button.high, a.high_button {
+	background-image: url(../../Images/Aqua/Buttons/High.png);
+}
+
+button.refresh, a.refresh_button {
+	background-image: url(../../Images/Aqua/Buttons/Refresh.png);
+}
+
+button.upload, a.upload_button {
+	background-image: url(../../Images/Aqua/Buttons/Upload.png);
+}
+
+button.download, a.download_button {
+	background-image: url(../../Images/Aqua/Buttons/Download.png);
+}
+
+button.left, a.left_button {
+	background-image: url(../../Images/Aqua/Buttons/Left.png);
+}
+
+button.right, a.right_button {
+	background-image: url(../../Images/Aqua/Buttons/Right.png);
+}
+
+button.start, a.start_button {
+	background-image: url(../../Images/Aqua/Buttons/Start.png);
+}
+
+button.read, a.read_button {
+	background-image: url(../../Images/Aqua/Buttons/Read.png);
+}
+
+button.surf, a.surf_button {
+	background-image: url(../../Images/Aqua/Buttons/Surf.png);
+}
+
+button.help, a.help_button {
+	background-image: url(../../Images/Aqua/Buttons/Help.png);
+}
+
+button.email, a.email_button {
+	background-image: url(../../Images/Aqua/Buttons/Email.png);
+}
+
+button.email_go, a.email_go_button {
+	background-image: url(../../Images/Aqua/Buttons/EmailGo.png);
+}
+
+button.build, a.build_button {
+	background-image: url(../../Images/Aqua/Buttons/Build.png);
+}
+
+button.quickstart, a.quickstart_button {
+	background-image: url(../../Images/Aqua/Buttons/Quickstart.png);
+}
+
+button.continue, a.continue_button {
+	background-image: url(../../Images/Aqua/Buttons/Continue.png);
+}
+
+button.hide, a.hide_button {
+	background-image: url(../../Images/Aqua/Buttons/Hide.png);
+}
+
+button.loading, a.loading_button {
+	background-image: url(../../Images/Aqua/Action/LoadingMini.gif);
+}
+
+button.delete, a.delete_button {
+	background-image: url(../../Images/Aqua/Buttons/Delete.png);
+}
+
+button.delete-na, a.delete-na_button {
+	background-image: url(../../Images/Aqua/Buttons/DeleteNa.png);
+}
+
+button.clear, a.clear_button {
+	background-image: url(../../Images/Aqua/Buttons/Clear.png);
+}
+
+/*IE-fix to avoid adding unwanted margins to the form*/
+div.simple_search form {
+	margin: 0;
+	padding: 0;
+}
+
+div.configuration_form {
+	clear: both;
+	margin: 20px 2px 2px 2px;
+	padding: 10px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-radius-topright: 10px;
+	border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
+div.form_splitter {
+	clear: both;
+	margin: 20px -10px 0px -10px;
+	padding: 6px 10px;
+	border-top: 1px solid #ebebeb;
+	height: 0px;
+}
+
+div.configuration_form span.category, div.form_splitter span.category {
+	position: relative;
+	top: -20px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #4271B5;
+	padding: 0px 5px 0px 5px;
+}
+
+div.form_splitter span.category {
+	top: -16px;
+}
+
+/*********************************************
+ * QUICKFORM ELEMENT FINDER STYLES           *
+ * ----------------------------------------- *
+ * Don't change unless you have a death wish *
+ *********************************************/
+.element_finder_inactive {
+	margin-right: 5px;
+}
+
+.active_elements, .inactive_elements {
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	padding: 2px 4px 2px 4px;
+	/*****************
+	 * width: 294px; *
+	 *****************/
+	width: 310px;
+}
+
+.active_elements:hover, .active_elements:focus, .inactive_elements:hover,
+	.inactive_elements:focus {
+	background-color: #f7fbfd;
+	border: 1px solid #4171B5;
+}
+
+input[type=text].element_query { /*****************
+	 * width: 278px; *
+	 *****************/
+	width: 276px;
+	background-image: url('../../Images/Aqua/Buttons/Search.png');
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
+	padding: 2px 4px 2px 20px;
+	margin-right: 5px;
+}
+
+input[type=button].activate_elements, input[type=button].deactivate_elements
+	{
+	background-color: #f5f5f5;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	font-size: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	padding: 0px;
+	width: 32px;
+	height: 29px;
+	margin: 2px 0px 2px -5px;
+}
+
+input[type=button].activate_elements {
+	background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
+}
+
+input[type=button].activate_elements.disabled {
+	cursor: default;
+	background-image: url('../../Images/Aqua/Buttons/ActivateElementNa.png');
+}
+
+input[type=button].deactivate_elements {
+	background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
+}
+
+input[type=button].activate_elements:not (.disabled ):hover, input[type=button].deactivate_elements:hover
+	{
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+input[type=button].activate_elements:not (.disabled ):active, input[type=button].deactivate_elements:active
+	{
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+div.element_finder {
+	margin: 0px;
+	padding: 0px;
+}
+
+div.element_finder_search {
+	margin-bottom: 5px;
+}
+
+div.element_finder_active, div.element_finder_buttons, div.element_finder_inactive
+	{
+	float: left;
+}
+
+div.element_finder_buttons {
+	padding: 3px 0px 3px 0px;
+}
+
+div.element_finder_buttons_container {
+	margin: -31px 10px 0 10px;
+	position: relative;
+	top: 50%;
+}
+
+div.element_finder_types, div.element_finder_container {
+	float: left;
+	margin-right: 10px;
+}
+
+div.element_finder_types div.filter_box {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div.element_finder button.hide {
+	float: right;
+}
+
+#selected_image {
+	border: 1px solid #dedede;
+	margin-bottom: 5px;
+}
+
+div.element_finder div.inactive_elements div.previous_elements {
+	height: 20px;
+	border-bottom: 1px solid #B9D0EF;
+	background: url('../../Images/Aqua/Action/Up.png') center center
+		no-repeat #E5EDF9;
+	margin: -2px -4px 5px -4px;
+	cursor: pointer;
+}
+
+div.element_finder div.inactive_elements div.next_elements {
+	height: 20px;
+	border-top: 1px solid #B9D0EF;
+	background: url('../../Images/Aqua/Action/Down.png') center center
+		no-repeat #E5EDF9;
+	margin: 5px -4px -2px -4px;
+	cursor: pointer;
+}
+
+/**********************
+ * FILTER FORM STYLES *
+ **********************/
+div.filter_form {
+	clear: both;
+	float: right;
+	padding-top: 4px;
+}
+
+div.filter_form div.row {
+	clear: none;
+	float: left;
+	padding: 0px;
+	margin-left: 10px;
+}
+
+div.filter_form div.row div.formw {
+	float: none;
+	width: auto;
+}
+
+div.filter_form div.row div.formw button {
+	margin-top: -4px;
+}
+
+/**********************
+ * ADVANCED FILTER FORM STYLES *
+ **********************/
+div.advanced_filter_form {
+	clear: both;
+	padding-top: 4px;
+	font-size: 11px !important;
+}
+
+div.advanced_filter_form div.configuration_form {
+	clear: both;
+	margin: 0px -10px 10px -10px;
+	padding: 0px 10px 0px 10px;
+	border: 0px solid #000000 !important;
+}
+
+div.advanced_filter_form div.configuration_form span.category {
+	clear: both;
+	position: relative;
+	top: 0px !important;
+	font-weight: bold;
+	padding: 0px 10px 0px 10px;
+	margin-bottom: 5px;
+	margin-left: -10px;
+	margin-right: -10px;
+	margin-top: 0px;
+	display: block;
+	border-bottom: 1px solid #999999;
+}
+
+div.advanced_filter_form a.calendar_button:hover, div.advanced_filter_form a.calendar_button
+	{
+	margin: 0;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+	padding: 2px;
+	position: relative;
+	top: -2px;
+}
+
+div.advanced_filter_form div.row {
+	clear: both;
+	padding: 0px;
+	width: 100%;
+}
+
+div.advanced_filter_form div.row input, div.advanced_filter_form div.row select
+	{
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	height: 16px;
+	font-size: 11px !important;
+}
+
+div.advanced_filter_form div.row select {
+	margin: 0;
+	padding: 2px 2px;
+	height: 22px;
+}
+
+div.advanced_filter_form div.row input.full, div.advanced_filter_form div.row select.full
+	{
+	width: 100%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	height: 20px;
+}
+
+/**********************
+ * JUMP FORM STYLES *
+ **********************/
+#personal_calendar_jump_form select {
+	width: 100%;
+}
+
+div.jump_form {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+div.jump_form div.row {
+	clear: both;
+	padding: 0px;
+}
+
+div.jump_form div.row div.formw {
+	float: none;
+	width: 100%;
+}
+
+input.search_query {
+	background: url(../../Images/Aqua/Action/Search.png) 1px 50% no-repeat;
+	padding: 0 0 0 21px;
+}
+
+input.search_query_no_icon {
+	padding: 0px 0px 0px 0px;
+}
+
+input#attachments_expand_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Attachment.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#attachments_expand_button :hover {
+	color: red;
+}
+
+input#attachments_collapse_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Attachment.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#attachments_collapse_button :hover {
+	color: red;
+}
+
+input#rights_templates_expand_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Rights.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#rights_templates_expand_button :hover {
+	color: red;
+}
+
+input#rights_templates_collapse_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Rights.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#rights_templates_collapse_button :hover {
+	color: red;
+}
+
+input.link_alike {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #4171b5;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+input.link_alike:hover {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #FF0000;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+form br {
+	clear: both;
+}
+
+/**************************
+ * ACTION BAR SEARCH FORM *
+ **************************/
+div.search_form {
+	background-color: white;
+	border: 1px solid grey;
+	height: 18px;
+	overflow: hidden;
+}
+
+div.search_form input.search_query {
+	border: 0px solid white;
+	background-image: none;
+	padding: 0px 2px 0px 2px;
+	height: 18px;
+}
+
+div.search_form button.search, div.search_form button.clear {
+	background-color: white;
+	border: 0px solid white;
+	width: 18px;
+	height: 18px;
+	/*	background-image: none;*/
+	background-position: center center;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: top;
+	text-align: center;
+}
+
+div.search_form button.search img, div.search_form button.clear img{
+	padding: 0px;
+	margin: 1px 2px 0px 2px;
+}
+
+input.visual_input {
+	background-image: url(../../Images/Aqua/Buttons/Right.png);
+	background-repeat: no-repeat;
+	background-position: 4px 50%;
+	padding-left: 24px;
+}
+
+input.width {
+	background-image: url(../../Images/Aqua/Buttons/Width.png);
+}
+
+input.height {
+	background-image: url(../../Images/Aqua/Buttons/Height.png);
+}
+
+/*
+ * Collapsible
+*/
+div .expanded a {
+	background-image: url(../../Images/Aqua/Action/ToggleShow.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 16px;
+}
+
+div .collapsed {
+	padding-bottom: 0px;
+	height: 10px;
+}
+
+div .collapsed .row {
+	display: none;
+}
+
+div .collapsed a {
+	background-image: url(../../Images/Aqua/Action/ToggleHide.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 10px;
+}
+
+div .collapsed div {
+	display: none;
+}
+
+fieldset {
+	clear: both;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-radius-topright: 10px;
+	border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
+fieldset legend {
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #4271B5;
+	padding: 0px 5px 0px 5px;
+	margin-right: 10px;
+}
+
+div.ui-datepicker {
+	background-color: #F7FBFD;
+	border: 1px solid #d7e6ed !important;
+	padding: 10px;
+	margin: 2px;
+}
