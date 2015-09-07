@@ -9,13 +9,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_VIEWED = 'viewed';
     const PROPERTY_CONTENT = 'content';
     const PROPERTY_MODIFIER_ID = 'modifier_id';
-    const PROPERTY_ACL = 'acl';
     const PROPERTY_PREVIEW = 'preview';
 
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
-            array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID, self :: PROPERTY_ACL));
+            array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID));
     }
 
     public function get_viewed()
@@ -97,6 +96,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         {
             case 'document' :
                 $url = $this->get_content() . '&format=' . $export_format;
+
                 break;
             case 'presentation' :
                 $url = $this->get_content() . '&exportFormat=' . $export_format;
@@ -114,5 +114,10 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
             Instance :: class_name(),
             $this->get_external_repository_id());
         return DataConnector :: get_instance($external_repository)->download_external_repository_object($url);
+    }
+
+    public function get_icon_image()
+    {
+        return '<img src="' . $this->get_type() . '" />';
     }
 }

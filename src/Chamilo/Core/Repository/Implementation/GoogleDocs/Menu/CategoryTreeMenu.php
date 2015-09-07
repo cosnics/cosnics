@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Menu;
 
-use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\DataConnector;
