@@ -31,6 +31,13 @@ interface ApplicationConfigurationInterface
 
     /**
      *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function setUser(\Chamilo\Core\User\Storage\DataClass\User $user);
+
+    /**
+     *
      * @param string $key
      * @param mixed $defaultValue
      * @return mixed

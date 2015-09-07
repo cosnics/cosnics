@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Display;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
-use Exception;
 
 /**
  *

@@ -58,7 +58,7 @@ class SecurityTokenAuthentication extends Authentication
                     'Login',
                     \Chamilo\Core\User\Manager :: context(),
                     array('server' => $_SERVER, 'user' => $user));
-                return true;
+                return $user;
             }
             else
             {

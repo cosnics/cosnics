@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Libraries\Architecture\Kernel;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 
@@ -17,26 +16,17 @@ class AuthenticationValidator
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Kernel
+     * @var \Chamilo\Configuration\Configuration
      */
-    private $kernel;
+    private $configuration;
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Kernel $kernel
+     * @param \Chamilo\Configuration\Configuration $configuration
      */
-    public function __construct(Kernel $kernel)
+    public function __construct(\Chamilo\Configuration\Configuration $configuration)
     {
-        $this->kernel = $kernel;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Kernel
-     */
-    public function getKernel()
-    {
-        return $this->kernel;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -45,16 +35,16 @@ class AuthenticationValidator
      */
     public function getConfiguration()
     {
-        return $this->getKernel()->getConfiguration();
+        return $this->configuration;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Kernel $kernel
+     * @param \Chamilo\Configuration\Configuration $configuration
      */
-    public function setKernel(Kernel $kernel)
+    public function setConfiguration(\Chamilo\Configuration\Configuration $configuration)
     {
-        $this->kernel = $kernel;
+        $this->configuration = $configuration;
     }
 
     public function validate()
@@ -66,7 +56,7 @@ class AuthenticationValidator
         else
         {
             // TODO: Re-invent this in a durable way ...
-            // $preventDoubleLogin = (boolean) $this->getKernel()->getConfiguration()->get_setting(
+            // $preventDoubleLogin = (boolean) $this->getConfiguration()->get_setting(
             // \Chamilo\Core\User\Manager :: context(),
             // 'prevent_double_login');
 
@@ -91,7 +81,7 @@ class AuthenticationValidator
 
     public function tryExternalAuthentication()
     {
-        $externalAuthenticationEnabled = $this->getKernel()->getConfiguration()->get_setting(
+        $externalAuthenticationEnabled = $this->getConfiguration()->get_setting(
             array('Chamilo\Core\Admin', 'enableExternalAuthentication'));
         $bypassExternalAuthentication = (boolean) Request :: get('noExtAuth', false);
 
@@ -108,15 +98,14 @@ class AuthenticationValidator
     public function performExternalAuthentication()
     {
         $externalAuthenticationTypes = Authentication :: getExternalTypes();
-        // $preventDoubleLogin = (boolean) $this->getKernel()->getConfiguration()->get_setting(
+        // $preventDoubleLogin = (boolean) $this->getConfiguration()->get_setting(
         // \Chamilo\Core\User\Manager :: context(),
         // 'prevent_double_login');
 
         foreach ($externalAuthenticationTypes as $externalAuthenticationType)
         {
-            $typeAuthenticationEnabled = $this->getKernel()->getConfiguration()->get_setting(
-                array('Chamilo\Core\Admin',
-                'enable' . $externalAuthenticationType . 'Authentication'));
+            $typeAuthenticationEnabled = $this->getConfiguration()->get_setting(
+                array('Chamilo\Core\Admin', 'enable' . $externalAuthenticationType . 'Authentication'));
             $bypassTypeAuthentication = Request :: get('no' . $externalAuthenticationType . 'Auth');
 
             if ($typeAuthenticationEnabled && ! $bypassTypeAuthentication)

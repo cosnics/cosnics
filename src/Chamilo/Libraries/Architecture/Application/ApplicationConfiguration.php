@@ -41,7 +41,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null, 
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, $user = null, $application = null,
         $configurationParameters = array())
     {
         $this->request = $request;
@@ -75,6 +75,16 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function setUser(\Chamilo\Core\User\Storage\DataClass\User $user)
+    {
+        $this->user = $user;
     }
 
     /**

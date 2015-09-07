@@ -2,17 +2,12 @@
 namespace Chamilo\Core\Repository\Implementation\Soundcloud;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use OAuthConsumer;
-use Soundcloud;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'soundcloud/soundcloud.php';
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'soundcloud/oauth.php';
 
 /**
  *
@@ -68,12 +63,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             'secret',
             $this->get_external_repository_instance_id());
 
-//         $this->soundcloud = new Soundcloud($this->key, $this->secret);
-        $this->soundcloud = new Soundcloud\Client($this->key, $this->secret);
+        // $this->soundcloud = new Soundcloud($this->key, $this->secret);
+        $this->soundcloud = new \SoundCloud\Client($this->key, $this->secret);
 
         $outh_token = Setting :: get('oauth_token', $this->get_external_repository_instance_id());
         $outh_token_secret = Setting :: get('oauth_token_secret', $this->get_external_repository_instance_id());
-
 
         if (! $outh_token || ! $outh_token_secret)
         {

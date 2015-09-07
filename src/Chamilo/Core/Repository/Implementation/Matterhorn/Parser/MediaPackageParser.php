@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Matterhorn\Parser;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMElement;
-use StdClass;
+use stdClass;
 
 abstract class MediaPackageParser
 {

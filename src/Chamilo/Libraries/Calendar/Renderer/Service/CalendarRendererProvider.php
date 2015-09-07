@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Service;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceCalculator;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceCalculator;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -107,8 +107,12 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the internal events between $start_time and $end_time
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEventsInPeriod()
+     * @param int $startTime
+     * @param int $endTime
+     * @param boolean $calculateRecurrence
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -116,8 +120,12 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the external events between $start_time and $end_time
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalInPeriod()
+     * @param int $startTime
+     * @param int $endTime
+     * @param boolean $calculateRecurrence
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -125,8 +133,12 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the events between $start_time and $end_time
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEventsInPeriod()
+     * @param int $startTime
+     * @param int $endTime
+     * @param boolean $calculateRecurrence
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
     {
@@ -134,8 +146,9 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the internal events
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getInternalEvents()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getInternalEvents()
     {
@@ -143,8 +156,9 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the external events
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternal()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getExternalEvents()
     {
@@ -152,8 +166,9 @@ abstract class CalendarRendererProvider implements
     }
 
     /**
+     * Get the events
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEvents()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getAllEvents()
     {
@@ -162,7 +177,11 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getEvents()
+     * @param integer $sourceType
+     * @param integer $startTime
+     * @param integer $endTime
+     * @param boolean $calculateRecurrence
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     private function getEvents($sourceType, $startTime = null, $endTime = null, $calculateRecurrence = false)
     {
@@ -196,6 +215,7 @@ abstract class CalendarRendererProvider implements
      * @param integer $sourceType
      * @param integer $startTime
      * @param integer $endTime
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     abstract public function aggregateEvents($sourceType, $startTime, $endTime);
 

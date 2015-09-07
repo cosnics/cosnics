@@ -6,21 +6,21 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\RendererFactory;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 
 /**
  *
@@ -99,6 +99,37 @@ class BrowserComponent extends Manager implements DelegateComponent
                 false,
                 DynamicVisualTab :: POSITION_RIGHT,
                 DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+
+        $iCalUrl = new Redirect(
+            array(Application :: PARAM_CONTEXT => self :: package(), self :: PARAM_ACTION => Manager :: ACTION_ICAL));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'ICalExternal',
+                Translation :: get('ICalExternal', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalExternal'),
+                $iCalUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+
+        $icalDownloadUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => Manager :: ACTION_ICAL,
+                self :: PARAM_DOWNLOAD => 1));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'ICalDownload',
+                Translation :: get('ICalDownload', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalDownload'),
+                $icalDownloadUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
     }
 
     /**
@@ -110,21 +141,21 @@ class BrowserComponent extends Manager implements DelegateComponent
         $typeUrl = $this->get_url(
             array(
                 Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                Renderer :: PARAM_TYPE => Renderer :: MARKER_TYPE));
+                ViewRenderer :: PARAM_TYPE => ViewRenderer :: MARKER_TYPE));
         $todayUrl = $this->get_url(
             array(
                 Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
-                Renderer :: PARAM_TIME => time()));
+                ViewRenderer :: PARAM_TYPE => $this->getCurrentRendererType(),
+                ViewRenderer :: PARAM_TIME => time()));
 
         $rendererTypes = array(
-            Renderer :: TYPE_MONTH,
-            Renderer :: TYPE_WEEK,
-            Renderer :: TYPE_DAY,
-            Renderer :: TYPE_YEAR,
-            Renderer :: TYPE_LIST);
+            ViewRenderer :: TYPE_MONTH,
+            ViewRenderer :: TYPE_WEEK,
+            ViewRenderer :: TYPE_DAY,
+            ViewRenderer :: TYPE_YEAR,
+            ViewRenderer :: TYPE_LIST);
 
-        $rendererTypeTabs = Renderer :: getTabs($rendererTypes, $typeUrl, $todayUrl);
+        $rendererTypeTabs = ViewRenderer :: getTabs($rendererTypes, $typeUrl, $todayUrl);
 
         foreach ($rendererTypeTabs as $rendererTypeTab)
         {
@@ -168,8 +199,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $displayParameters = array(
             self :: PARAM_CONTEXT => self :: package(),
             self :: PARAM_ACTION => self :: ACTION_BROWSE,
-            Renderer :: PARAM_TYPE => $this->getCurrentRendererType(),
-            Renderer :: PARAM_TIME => $this->getCurrentRendererTime());
+            ViewRenderer :: PARAM_TYPE => $this->getCurrentRendererType(),
+            ViewRenderer :: PARAM_TIME => $this->getCurrentRendererTime());
 
         $dataProvider = new CalendarRendererProvider(
             new CalendarRendererProviderRepository(),
@@ -187,7 +218,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             null,
             $this->getMiniMonthMarkPeriod());
 
-        $rendererFactory = new RendererFactory(
+        $rendererFactory = new ViewRendererFactory(
             $this->getCurrentRendererType(),
             $dataProvider,
             $calendarLegend,
@@ -221,7 +252,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function get_additional_parameters()
     {
-        return array(Renderer :: PARAM_TYPE, Renderer :: PARAM_TIME);
+        return array(ViewRenderer :: PARAM_TYPE, ViewRenderer :: PARAM_TIME);
     }
 
     /**
@@ -230,7 +261,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getCurrentRendererType()
     {
-        return Request :: get(Renderer :: PARAM_TYPE, Renderer :: TYPE_MONTH);
+        return Request :: get(ViewRenderer :: PARAM_TYPE, ViewRenderer :: TYPE_MONTH);
     }
 
     /**
@@ -241,7 +272,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if (! isset($this->currentTime))
         {
-            $this->currentTime = Request :: get(Renderer :: PARAM_TIME, time());
+            $this->currentTime = Request :: get(ViewRenderer :: PARAM_TIME, time());
         }
 
         return $this->currentTime;
@@ -251,11 +282,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         switch ($this->getCurrentRendererType())
         {
-            case Renderer :: TYPE_DAY :
+            case ViewRenderer :: TYPE_DAY :
                 return MiniMonthCalendar :: PERIOD_DAY;
-            case Renderer :: TYPE_MONTH :
+            case ViewRenderer :: TYPE_MONTH :
                 return MiniMonthCalendar :: PERIOD_MONTH;
-            case Renderer :: TYPE_WEEK :
+            case ViewRenderer :: TYPE_WEEK :
                 return MiniMonthCalendar :: PERIOD_WEEK;
             default :
                 return MiniMonthCalendar :: PERIOD_DAY;

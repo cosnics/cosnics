@@ -102,4 +102,18 @@ class AvailabilityRepository
 
         return DataManager :: retrieve(Availability :: class_name(), new DataClassRetrieveParameters($condition));
     }
+
+    /**
+     *
+     * @param string $calendarType
+     * @return boolean
+     */
+    public function removeAvailabilityByCalendarType($calendarType)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Availability :: class_name(), Availability :: PROPERTY_CALENDAR_TYPE),
+            new StaticConditionVariable($calendarType));
+
+        return DataManager :: deletes(Availability :: class_name(), $condition);
+    }
 }

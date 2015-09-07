@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Application\Calendar;
 
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Extension\Office365\Service\Office365CalendarService;
-use Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository;
+use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
@@ -27,10 +27,10 @@ class Manager extends ExternalCalendar
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
         $requestedSourceType, $fromDate, $toDate)
     {
-        $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $events = array();
 
-        if ($office365CalendarService->isAuthenticated())
+        if ($calendarService->isAuthenticated())
         {
             $availabilityService = new AvailabilityService(new AvailabilityRepository());
             $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
@@ -41,12 +41,12 @@ class Manager extends ExternalCalendar
 
             while ($activeAvailability = $activeAvailabilities->next_result())
             {
-                $eventResultSet = $office365CalendarService->getEventsForCalendarIdentifierAndBetweenDates(
+                $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
                     $activeAvailability->getCalendarId(),
                     $fromDate,
                     $toDate);
 
-                $availableCalendar = $office365CalendarService->getCalendarByIdentifier(
+                $availableCalendar = $calendarService->getCalendarByIdentifier(
                     $activeAvailability->getCalendarId());
 
                 while ($office365CalenderEvent = $eventResultSet->next_result())
@@ -66,12 +66,12 @@ class Manager extends ExternalCalendar
      */
     public function getCalendars()
     {
-        $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
         $calendars = array();
 
-        if ($office365CalendarService->isAuthenticated())
+        if ($calendarService->isAuthenticated())
         {
-            $calendars = $office365CalendarService->getOwnedCalendars();
+            $calendars = $calendarService->getOwnedCalendars();
         }
 
         return $calendars;
