@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\SyllabusPlus\Integration\Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -231,6 +231,6 @@ class EventParser
         $html[] = '[' . $calendarEvent['type_code'] . ']';
         $html[] = '[' . $calendarEvent['teacher'] . ']';
 
-        return implode(PHP_EOL, $html);
+        return implode(' ', $html);
     }
 }

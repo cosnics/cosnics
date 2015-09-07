@@ -30,7 +30,7 @@ abstract class Manager extends Application
     public function get_additional_parameters()
     {
         return array(
-            \Chamilo\Libraries\Calendar\Renderer\Renderer :: PARAM_TIME,
-            \Chamilo\Libraries\Calendar\Renderer\Renderer :: PARAM_TYPE);
+            \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TIME,
+            \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TYPE);
     }
 }

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 use HTML_QuickForm_RuleRegistry;
-use HTML_QuickForm_Rule_HTML;
 
 /**
  *
@@ -508,7 +507,7 @@ EOT;
     }
 
     /**
-     * Add a option_orderer element to the form 
+     * Add a option_orderer element to the form
      *
      * @param string $label The label for the form-element
      * @param string $name The element name
@@ -525,8 +524,8 @@ EOT;
             array('form_name' => $this->getAttribute('name'), 'class' => $name));
         return $element;
     }
-    
-    
+
+
     /**
      * Add a timepicker element to the form
      *
@@ -544,7 +543,7 @@ EOT;
             $include_minutes_picker);
         return $element;
     }
-    
+
     /**
      * Add a timewindow element to the form.
      * 2 datepicker elements are added and a rule to check if the first date is
@@ -1145,7 +1144,7 @@ EOT;
         {
             $return_value .= Display :: error_message(Translation :: get('FormHasErrorsPleaseComplete'), true);
         }
-        
+
         $return_value .= parent :: toHtml();
         // Add the div which will hold the progress bar
 

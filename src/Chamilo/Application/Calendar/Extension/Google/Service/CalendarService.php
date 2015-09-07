@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
-use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
+use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
 
@@ -12,41 +12,41 @@ use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class GoogleCalendarService
+class CalendarService
 {
     const PARAM_AUTHORIZATION_CODE = 'code';
 
     /**
      *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository
+     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
-    private $googleCalendarRepository;
+    private $calendarRepository;
 
     /**
      *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository $googleCalendarRepository
+     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
      */
-    public function __construct(GoogleCalendarRepository $googleCalendarRepository)
+    public function __construct(CalendarRepository $calendarRepository)
     {
-        $this->googleCalendarRepository = $googleCalendarRepository;
+        $this->calendarRepository = $calendarRepository;
     }
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository
+     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
-    public function getGoogleCalendarRepository()
+    public function getCalendarRepository()
     {
-        return $this->googleCalendarRepository;
+        return $this->calendarRepository;
     }
 
     /**
      *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository $googleCalendarRepository
+     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
      */
-    public function setGoogleCalendarRepository(GoogleCalendarRepository $googleCalendarRepository)
+    public function setCalendarRepository(CalendarRepository $calendarRepository)
     {
-        $this->googleCalendarRepository = $googleCalendarRepository;
+        $this->calendarRepository = $calendarRepository;
     }
 
     /**
@@ -55,7 +55,7 @@ class GoogleCalendarService
      */
     public function getOwnedCalendars()
     {
-        return $this->getGoogleCalendarRepository()->findOwnedCalendars();
+        return $this->getCalendarRepository()->findOwnedCalendars();
     }
 
     /**
@@ -64,7 +64,7 @@ class GoogleCalendarService
      */
     public function login($authenticationCode = null)
     {
-        return $this->getGoogleCalendarRepository()->login($authenticationCode);
+        return $this->getCalendarRepository()->login($authenticationCode);
     }
 
     /**
@@ -73,7 +73,7 @@ class GoogleCalendarService
      */
     public function logout()
     {
-        return $this->getGoogleCalendarRepository()->logout();
+        return $this->getCalendarRepository()->logout();
     }
 
     /**
@@ -85,7 +85,7 @@ class GoogleCalendarService
      */
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        $googleCalendarEvents = $this->getGoogleCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+        $googleCalendarEvents = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
             $calendarIdentifier,
             $fromDate,
             $toDate);
@@ -116,6 +116,6 @@ class GoogleCalendarService
      */
     public function isAuthenticated()
     {
-        return $this->getGoogleCalendarRepository()->hasAccessToken();
+        return $this->getCalendarRepository()->hasAccessToken();
     }
 }

@@ -1,73 +1,127 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Renderer\Type;
+namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Calendar\Renderer\Type\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Renderer\Type\View\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MiniMonthRenderer extends TableRenderer
+class MiniDayRenderer extends TableRenderer
 {
 
     /**
-     * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
-     * MiniMonthCalendar :: PERIOD_DAY;
      *
-     * @var integer
+     * @var int
      */
-    private $markPeriod;
+    private $hourStep;
+
+    /**
+     *
+     * @var int
+     */
+    private $startHour;
+
+    /**
+     *
+     * @var int
+     */
+    private $endHour;
 
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param int $displayTime
      * @param string $linkTarget
-     * @param int $markPeriod
+     * @param int $hourStep
+     * @param int $startHour
+     * @param int $endHour
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $linkTarget = '', $markPeriod = null)
+        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24)
     {
-        $this->markPeriod = $markPeriod;
+        $this->hourStep = $hourStep;
+        $this->startHour = $startHour;
+        $this->endHour = $endHour;
 
         parent :: __construct($dataProvider, $legend, $displayTime, $linkTarget);
     }
 
     /**
      *
-     * @return integer
+     * @return int
      */
-    public function getMarkPeriod()
+    public function getHourStep()
     {
-        return $this->markPeriod;
+        return $this->hourStep;
     }
 
     /**
      *
-     * @param integer $markPeriod
+     * @param int $hourStep
      */
-    public function setMarkPeriod($markPeriod)
+    public function setHourStep($hourStep)
     {
-        $this->markPeriod = $markPeriod;
+        $this->hourStep = $hourStep;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar
+     * @return int
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param int $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     *
+     * @param int $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniDayCalendar
      */
     public function initializeCalendar()
     {
-        return new MiniMonthCalendar($this->getDisplayTime());
+        return new MiniDayCalendar(
+            $this->getDisplayTime(),
+            $this->getHourStep(),
+            $this->getStartHour(),
+            $this->getEndHour());
     }
 
     /**
@@ -78,15 +132,18 @@ class MiniMonthRenderer extends TableRenderer
     {
         $calendar = $this->getCalendar();
 
+        $fromDate = $calendar->getStartTime();
+        $toDate = $calendar->getEndTime();
+
+        $events = $this->getEvents($fromDate, $toDate);
+
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
-
-        $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+1 Day', $tableDate);
+            $nextTableDate = strtotime('+' . $calendar->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $index => $event)
             {
@@ -94,18 +151,12 @@ class MiniMonthRenderer extends TableRenderer
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
-                     $tableDate < $endDate && $endDate <= $nextTableDate ||
+                     $tableDate < $endDate && $endDate < $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    if (! $calendar->containsEventsForTime($tableDate))
-                    {
-                        $marker = '<br /><div class="event_marker" style="width: 14px; height: 15px;"><img src="' . htmlspecialchars(
-                            Theme :: getInstance()->getCommonImagePath('Action/Marker')) . '"/></div>';
-                        $calendar->addEvent($tableDate, $marker);
-                    }
-
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
+                    $configuration->setHourStep($calendar->getHourStep());
 
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
 
@@ -121,13 +172,10 @@ class MiniMonthRenderer extends TableRenderer
 
         $redirect = new Redirect($parameters);
         $calendar->addCalendarNavigation($redirect->getUrl());
-        $calendar->addNavigationLinks($redirect->getUrl());
 
-        if (! is_null($this->getMarkPeriod()))
-        {
-            $calendar->markPeriod($this->getMarkPeriod());
-        }
-
-        return $calendar->render();
+        $html = array();
+        $html[] = $calendar->render();
+        $html[] = $this->getLegend()->render();
+        return implode(PHP_EOL, $html);
     }
 }

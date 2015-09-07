@@ -3,8 +3,8 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Application\Calendar\Extension\Google\Service\GoogleCalendarService;
-use Chamilo\Application\Calendar\Extension\Google\Repository\GoogleCalendarRepository;
+use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 
@@ -20,9 +20,8 @@ class LoginComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $googleCalendarService = new GoogleCalendarService(GoogleCalendarRepository :: getInstance());
-        $result = $googleCalendarService->login(
-            $this->getRequest()->query->get(GoogleCalendarService :: PARAM_AUTHORIZATION_CODE));
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $result = $calendarService->login($this->getRequest()->query->get(CalendarService :: PARAM_AUTHORIZATION_CODE));
 
         if ($result)
         {

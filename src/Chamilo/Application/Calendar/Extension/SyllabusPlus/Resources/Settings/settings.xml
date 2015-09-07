@@ -2,13 +2,11 @@
 <package context="Chamilo\Application\Calendar\Extension\SyllabusPlus">
 	<settings>
 		<category name="general">
-			<setting name="dbms" field="text" default="mysql" />
+			<setting name="dbms" field="text" default="mssql" />
 			<setting name="host" field="text" default="localhost" />
-			<setting name="database" field="text" default="cas" />
-			<setting name="user" field="text" default="root" />
+			<setting name="database" field="text" default="syllabus_plus" />
+			<setting name="user" field="text" default="" />
 			<setting name="password" field="text" default="" />
-			<setting name="academic_year" field="text" default="" />
-			<setting name="archive_academic_year" field="text" default="" />
 		</category>
 	</settings>
 </package>

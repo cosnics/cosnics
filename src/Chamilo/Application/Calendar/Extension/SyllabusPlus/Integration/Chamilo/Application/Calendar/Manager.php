@@ -11,7 +11,7 @@ use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
+use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 
 /**
  *
@@ -20,7 +20,7 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager extends ExternalCalendar
+class Manager extends InternalCalendar
 {
 
     /**

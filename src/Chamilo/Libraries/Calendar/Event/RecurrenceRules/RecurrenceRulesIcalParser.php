@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Event;
+namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\Properties;
 
-use Finfo;
+use finfo;
 
 class FileProperties
 {

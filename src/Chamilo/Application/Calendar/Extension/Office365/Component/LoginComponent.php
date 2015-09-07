@@ -3,8 +3,8 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Component;
 
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
-use Chamilo\Application\Calendar\Extension\Office365\Service\Office365CalendarService;
-use Chamilo\Application\Calendar\Extension\Office365\Repository\Office365CalendarRepository;
+use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 
@@ -20,9 +20,9 @@ class LoginComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $office365CalendarService = new Office365CalendarService(Office365CalendarRepository :: getInstance());
-        $result = $office365CalendarService->login(
-            $this->getRequest()->query->get(Office365CalendarService :: PARAM_AUTHORIZATION_CODE));
+        $calendarService = new CalendarService(CalendarRepository :: getInstance());
+        $result = $calendarService->login(
+            $this->getRequest()->query->get(CalendarService :: PARAM_AUTHORIZATION_CODE));
 
         if ($result)
         {
