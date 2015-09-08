@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class XmlRepositoryCategoryMenuFeedComponent extends \Chamilo\Core\Repository\Implementation\GoogleDocs\Ajax\Manager
+class CategoryMenuFeedComponent extends \Chamilo\Core\Repository\Implementation\GoogleDocs\Ajax\Manager
 {
 
     function run()

@@ -5,11 +5,4 @@ use Chamilo\Core\Repository\External\Table\ExternalObject\DefaultExternalObjectT
 
 class ExternalObjectTableColumnModel extends DefaultExternalObjectTableColumnModel
 {
-
-//     public function initialize_columns()
-//     {
-//         parent :: initialize_columns();
-//         $this->add_column(
-//             new DataClassPropertyTableColumn(ExternalObject :: class_name(), ExternalObject :: PROPERTY_ACL));
-//     }
 }

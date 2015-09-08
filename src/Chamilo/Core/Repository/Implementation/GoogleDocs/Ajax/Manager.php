@@ -12,5 +12,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_CATEGORY_MENU_FEED = 'XmlRepositoryCategoryMenuFeed';
+    const ACTION_CATEGORY_MENU_FEED = 'CategoryMenuFeed';
 }

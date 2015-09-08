@@ -9,6 +9,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 class ExternalObjectForm extends FormValidator
 {
@@ -17,6 +20,8 @@ class ExternalObjectForm extends FormValidator
     const TYPE_NEWFOLDER = 3;
     const PREVIEW = 'preview';
     const FILE = 'file';
+    const PARENT_ID = 'parent_id';
+    const NEW_FOLDER = 'new_folder';
 
     private $application;
 
@@ -27,11 +32,11 @@ class ExternalObjectForm extends FormValidator
     public function __construct($form_type, $action, $application)
     {
         parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-        
+
         $this->application = $application;
-        
+
         $this->form_type = $form_type;
-        
+
         if ($this->form_type == self :: TYPE_EDIT)
         {
             $this->build_editing_form();
@@ -44,19 +49,19 @@ class ExternalObjectForm extends FormValidator
         {
             $this->build_newfolder_form();
         }
-        
+
         $this->setDefaults();
     }
 
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-        
+
         $defaults[ExternalObject :: PROPERTY_ID] = $external_repository_object->get_id();
-        
+
         $display = ExternalObjectDisplay :: factory($external_repository_object);
         $defaults[self :: PREVIEW] = $display->get_preview();
-        
+
         parent :: setDefaults($defaults);
     }
 
@@ -65,8 +70,8 @@ class ExternalObjectForm extends FormValidator
         if ($this->form_type == self :: TYPE_EDIT)
         {
             $this->add_information_message(
-                'google_docs_api_move', 
-                null, 
+                'google_docs_api_move',
+                null,
                 Translation :: get('GoogleDocsAPIMoveImpossible'));
         }
     }
@@ -74,22 +79,22 @@ class ExternalObjectForm extends FormValidator
     public function build_editing_form()
     {
         $this->addElement('static', self :: PREVIEW);
-        
+
         $this->build_basic_form();
-        
+
         $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -99,12 +104,12 @@ class ExternalObjectForm extends FormValidator
             $this->exportValues());
     }
 
-    public function upload_file()
+    public function upload_file($folder)
     {
-        if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
+        if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE])))
         {
             return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
-                $_FILES[self :: FILE]);
+                $_FILES[self :: FILE], $folder);
         }
         else
         {
@@ -112,48 +117,83 @@ class ExternalObjectForm extends FormValidator
         }
     }
 
+    public function get_folders()
+    {
+        $folders = $this->application->get_external_repository_manager_connector()->retrieve_my_folders('root');
+        $new_folders = array();
+        while ($folder = $folders->next_result())
+        {
+            $new_folders[$folder->getId()] = $folder->getTitle();
+        }
+        return $new_folders;
+    }
+
     public function build_creation_form()
     {
         $this->build_basic_form();
-        
+
+        $category_group = array();
+        $category_group[] = $this->createElement(
+            'select',
+            self :: PARENT_ID,
+            Translation :: get('FolderTypeName'),
+            $this->get_folders());
+        $category_group[] = $this->createElement(
+            'image',
+            'add_folder',
+            Theme :: getInstance()->getCommonImagePath('Action/Add'),
+            array('id' => 'add_folder', 'style' => 'display:none'));
+        $this->addGroup($category_group, null, Translation :: get('FolderTypeName'));
+
+        $group = array();
+        $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_FOLDER . '">');
+        $group[] = $this->createElement('text', self :: NEW_FOLDER);
+        $group[] = $this->createElement('static', null, null, '</div>');
+        $this->addGroup($group);
+
         $this->addElement('file', self :: FILE, Translation :: get('FileName'));
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create'), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create'),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset'), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset'),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\GoogleDocs', true) .
+                     'Upload.js'));
     }
 
     public function build_newfolder_form()
     {
         $this->addElement('text', 'foldername', 'Name of new folder', array('size' => '50'));
         $this->addRule(
-            'foldername', 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            'foldername',
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $this->addElement('hidden', 'folder');
         $this->setDefaults(array('folder' => Request :: get('folder')));
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create'), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create'),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset'), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset'),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -162,7 +202,7 @@ class ExternalObjectForm extends FormValidator
         if (! is_null($_POST['foldername']))
         {
             return $this->application->get_external_repository_manager_connector()->create_external_repository_folder(
-                $_POST['foldername'], 
+                $_POST['foldername'],
                 $_POST['folder']);
         }
         else

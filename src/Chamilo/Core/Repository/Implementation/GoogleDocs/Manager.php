@@ -19,6 +19,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
 
+    const DEFAULT_ACTION = self :: ACTION_LOGIN;
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()
      */
