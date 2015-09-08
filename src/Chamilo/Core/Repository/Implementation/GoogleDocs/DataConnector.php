@@ -49,10 +49,21 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $condition = new AndCondition($conditions);
 
         $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
-        if ($setting instanceof Setting)
+        if ($setting instanceof Setting && $setting->get_value())
         {
             $this->client->setAccessToken($setting->get_value());
         }
+
+        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_id',
+            $this->get_external_repository_instance_id());
+        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            'client_secret',
+            $this->get_external_repository_instance_id());
+
+        $this->client->setClientId($client_id);
+        $this->client->setClientSecret($client_secret);
+        $this->client->setScopes('https://www.googleapis.com/auth/drive');
 
         $this->service = new \Google_Service_Drive($this->client);
     }
@@ -69,17 +80,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function login()
     {
-        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'client_id',
-            $this->get_external_repository_instance_id());
-        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'client_secret',
-            $this->get_external_repository_instance_id());
-
-        $this->client->setClientId($client_id);
-        $this->client->setClientSecret($client_secret);
-        $this->client->setScopes('https://www.googleapis.com/auth/drive');
-
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: package(),
@@ -121,23 +121,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_object($id)
     {
         $file = $this->service->files->get($id);
-        // var_dump($file);
         $object = new ExternalObject();
         $object->set_id($file->id);
         $object->set_description($file->description);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_title($file->title);
         $object->set_created(strtotime($file->createdDate));
-
-        $mime_type = explode('application/vnd.google-apps.', $file->mimeType);
-        if ($mime_type[0] == '')
-        {
-            $object->set_type($mime_type[1]);
-        }
-        else
-        {
-            $object->set_type($mime_type[0]);
-        }
+        $object->set_type($file->iconLink);
 
         if ($file->lastViewedByMeDate != null)
         {
@@ -157,15 +147,21 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_owner_name($file->owners[0]['displayName']);
         $object->set_modifier_id($file->lastModifyingUser['emailAddress']);
 
-        $object->set_content($file->selfLink);
+        if ($file->embedLink && strpos($file->embedLink, 'video.google.com') === false)
+        {
+            $object->set_content($file->embedLink);
+        }
+        else
+        {
+            $object->set_content(str_replace('=s220', '=w1000', $file->thumbnailLink));
+        }
+
         $rights = array();
         $rights[ExternalObject :: RIGHT_USE] = $file->copyable;
-        $rights[ExternalObject :: RIGHT_EDIT] = $file->editable;
+        $rights[ExternalObject :: RIGHT_EDIT] = false;
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file->copyable;
-        $rights[ExternalObject :: RIGHT_DELETE] = $file->editable;
+        $rights[ExternalObject :: RIGHT_DELETE] = false;
         $object->set_rights($rights);
-
-        // $object->set_acl($this->get_document_acl($resource_id[1]));
 
         return $object;
     }
@@ -227,21 +223,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_title($file_item['title']);
             $object->set_created(strtotime($file_item['createdDate']));
 
-            // if ($file_item['mimeType'] == 'application/vnd.google-apps.folder')
-            // {
-            // $this->create_folder($file_item);
-            // }
-
-            $mime_type = explode('application/vnd.google-apps.', $file_item['mimeType']);
-            if ($mime_type[0] == '')
-            {
-                $object->set_type($mime_type[1]);
-            }
-            else
-            {
-                $object->set_type($mime_type[0]);
-            }
-
+            $object->set_type($file_item['iconLink']);
             if ($file_item['lastViewedByMeDate'] != null)
             {
                 $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
@@ -271,9 +253,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
             $rights = array();
             $rights[ExternalObject :: RIGHT_USE] = $file_item['copyable'];
-            $rights[ExternalObject :: RIGHT_EDIT] = $file_item['editable'];
+            $rights[ExternalObject :: RIGHT_EDIT] = false;
             $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file_item['copyable'];
-            $rights[ExternalObject :: RIGHT_DELETE] = $file_item['editable'];
+            $rights[ExternalObject :: RIGHT_DELETE] = false;
             $object->set_rights($rights);
 
             $newParent = new \Google_Service_Drive_ParentReference();
@@ -284,7 +266,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $this->service->parents->insert($file_item['id'], $newParent);
             }
 
-            $object->set_content($file_item['selfLink']);
+            if ($file_item['embedLink'] && strpos($file_item['embedLink'], 'video.google.com') === false)
+            {
+                $object->set_content($file_item['embedLink']);
+            }
+            else
+            {
+                $object->set_content(str_replace('=s220', '=w1000', $file_item['thumbnailLink']));
+            }
+
             $object->set_preview($file_item['embedLink']);
 
             $objects[] = $object;
@@ -298,14 +288,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $this->retrieve_folders("'" . $id . "' in parents and mimeType = 'application/vnd.google-apps.folder'");
     }
 
-    public function retrieve_shared_folders()
+    public function retrieve_shared_folders($id)
     {
-        return $this->retrieve_folders("sharedWithMe and mimeType = 'application/vnd.google-apps.folder'");
+        return $this->retrieve_folders(
+            "'" . $id . "' in parents and sharedWithMe and mimeType = 'application/vnd.google-apps.folder'");
     }
 
     private function retrieve_folders($query)
     {
-        $files = $this->service->files->listFiles(array('q' => $query));
+        $files = $this->service->files->listFiles(array('orderBy' => 'title', 'q' => $query));
         $files_items = $files['modelData']['items'];
         $folders = array();
 
@@ -339,11 +330,31 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return file_get_contents($url);
     }
 
-    public function create_external_repository_object($fileId, $folderId)
+    public function create_external_repository_object($file, $folder)
     {
-        $newParent = new \Google_Service_Drive_ParentReference();
-        $newParent->setId($folderId);
-        $service->parents->insert($fileId, $newParent);
+        $google_file = new \Google_Service_Drive_DriveFile();
+
+        if (is_array($file))
+        {
+            $title = explode('.', $file['name']);
+            $google_file->setTitle($title[0]);
+            $google_file->setMimeType($file['type']);
+
+            $data = file_get_contents($file['name']);
+        }
+        else
+        {
+            $google_file->setTitle($file);
+            $google_file->setMimeType('application/vnd.google-apps.folder');
+            $data = null;
+        }
+
+        $parent = new \Google_Service_Drive_ParentReference();
+        $parent->setId($folder);
+        $google_file->setParents(array($parent));
+
+        $fileCreated = $this->service->files->insert($google_file, array('data' => $data, 'mimeType' => $file['type']));
+        return $fileCreated->getId();
     }
 
     public function retrieve_folder($id)
