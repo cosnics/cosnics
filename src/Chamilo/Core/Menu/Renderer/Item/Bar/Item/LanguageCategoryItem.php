@@ -73,7 +73,9 @@ class LanguageCategoryItem extends CategoryItem
 
             $html[] = '<li>';
             $html[] = '<a href="#">';
-            $html[] = $currentLanguage;
+
+            $html[] = '<div class="label">' . $currentLanguage . '</div>';
+
             $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';
             $html[] = '<!--[if lte IE 6]><table><tr><td><![endif]-->';
 
