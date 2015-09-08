@@ -34,7 +34,7 @@ div.row div.formw {
 	text-align: left;
 }
 
-div.formw input[type=text],div.row div.formw input[type=password],div.row div.formw select
+div.formw input[type=text], div.row div.formw input[type=password], div.row div.formw select
 	{ /*
 	background-image: url(../../Images/Ruby/Buttons/Link.png);
 	background-repeat: no-repeat;
@@ -47,14 +47,19 @@ div.formw input[type=text],div.row div.formw input[type=password],div.row div.fo
 	background-position: 4px 50%;
 }
 
-div.formw input[type=text]:hover,div.row div.formw input[type=text]:focus,div.row div.formw input[type=password]:hover,div.row div.formw input[type=password]:focus,div.row div.formw select:hover,div.row div.formw select:focus
-div.row div.formw textarea:hover,div.row div.formw textarea:focus {
+div.formw input[type=text]:hover, div.row div.formw input[type=text]:focus,
+	div.row div.formw input[type=password]:hover, div.row div.formw input[type=password]:focus,
+	div.row div.formw select:hover, div.row div.formw select:focus
+div.row div.formw textarea:hover, div.row div.formw textarea:focus {
 	background-color: #FDF8F7;
 	border-color: #9e021b;
 }
 
-div.formw input[type=text].input_conflict,div.row div.formw input[type=password].input_conflict,div.row div.formw select.input_conflict
-		div.formw input[type=text].input_conflict:hover,div.row div.formw input[type=password].input_conflict:hover,div.row div.formw select.input_conflict:hover,div.formw input[type=text].input_conflict:focus,div.row div.formw input[type=password].input_conflict:focus,div.row div.formw select.input_conflict:focus
+div.formw input[type=text].input_conflict, div.row div.formw input[type=password].input_conflict,
+	div.row div.formw select.input_conflict
+		div.formw input[type=text].input_conflict:hover, div.row div.formw input[type=password].input_conflict:hover,
+	div.row div.formw select.input_conflict:hover, div.formw input[type=text].input_conflict:focus,
+	div.row div.formw input[type=password].input_conflict:focus, div.row div.formw select.input_conflict:focus
 	{
 	background-image: url('../../Images/Ruby/Status/ErrorMini.png');
 	background-color: #FFD1D1 !important;
@@ -63,8 +68,11 @@ div.formw input[type=text].input_conflict,div.row div.formw input[type=password]
 	padding-left: 24px;
 }
 
-div.formw input[type=text].input_valid,div.row div.formw input[type=password].input_valid,div.row div.formw select.input_valid,div.formw input[type=text].input_valid:hover,div.row div.formw input[type=password].input_valid:hover,div.row div.formw select.input_valid:hover,div.formw input[type=text].input_valid:focus,div.row div.formw input[type=password].input_valid:focus,div.row div.formw select.input_valid:focus
-	{
+div.formw input[type=text].input_valid, div.row div.formw input[type=password].input_valid,
+	div.row div.formw select.input_valid, div.formw input[type=text].input_valid:hover,
+	div.row div.formw input[type=password].input_valid:hover, div.row div.formw select.input_valid:hover,
+	div.formw input[type=text].input_valid:focus, div.row div.formw input[type=password].input_valid:focus,
+	div.row div.formw select.input_valid:focus {
 	background-image: url('../../Images/Ruby/Status/ConfirmMini.png');
 	border: 1px solid #339900 !important;
 	background-color: #ddffaa !important;
@@ -72,8 +80,11 @@ div.formw input[type=text].input_valid,div.row div.formw input[type=password].in
 	padding-left: 24px;
 }
 
-div.formw input[type=text].input_warning,div.row div.formw input[type=password].input_warning,div.row div.formw select.input_warning
-		div.formw input[type=text].input_warning:hover,div.row div.formw input[type=password].input_warning:hover,div.row div.formw select.input_warning:hover,div.formw input[type=text].input_warning:focus,div.row div.formw input[type=password].input_warning:focus,div.row div.formw select.input_warning:focus
+div.formw input[type=text].input_warning, div.row div.formw input[type=password].input_warning,
+	div.row div.formw select.input_warning
+		div.formw input[type=text].input_warning:hover, div.row div.formw input[type=password].input_warning:hover,
+	div.row div.formw select.input_warning:hover, div.formw input[type=text].input_warning:focus,
+	div.row div.formw input[type=password].input_warning:focus, div.row div.formw select.input_warning:focus
 	{
 	background-image: url('../../Images/Ruby/Status/WarningMini.png');
 	border: 1px solid #ffd89b !important;
@@ -86,8 +97,8 @@ div.dynamic_search_action {
 	padding: 15px 0px;
 }
 
-div.dynamic_search_action input[type=text],div.dynamic_search_action div.row div.formw input[type=password],div.dynamic_search_action div.row div.formw select
-	{ /*
+div.dynamic_search_action input[type=text], div.dynamic_search_action div.row div.formw input[type=password],
+	div.dynamic_search_action div.row div.formw select { /*
 	background-image: url(../../Images/Ruby/Buttons/Link.png);
 	background-repeat: no-repeat;
 	background-position: 2px center;
@@ -101,7 +112,7 @@ div.dynamic_search_action input[type=text],div.dynamic_search_action div.row div
 	margin-right: 10px;
 }
 
-div.row div.formwa,div.row div.formwa_no_margin {
+div.row div.formwa, div.row div.formwa_no_margin {
 	margin-left: 20%;
 	border-width: 1px;
 	padding: 10px 10px 10px 50px;
@@ -115,7 +126,7 @@ div.row div.formwa,div.row div.formwa_no_margin {
 	color: #996900;
 }
 
-div.row div.formc,div.row div.formc_no_margin {
+div.row div.formc, div.row div.formc_no_margin {
 	margin-left: 20%;
 	border-width: 1px;
 	padding: 10px 10px 10px 50px;
@@ -129,7 +140,7 @@ div.row div.formc,div.row div.formc_no_margin {
 	color: #000008;
 }
 
-div.row div.forme,div.row div.forme_no_margin {
+div.row div.forme, div.row div.forme_no_margin {
 	margin-left: 20%;
 	border-width: 1px;
 	padding: 10px 10px 10px 50px;
@@ -142,7 +153,8 @@ div.row div.forme,div.row div.forme_no_margin {
 	color: #b40404;
 }
 
-div.row div.forme h2,div.row div.forme_no_margin h2,div.row div.formwa h2,div.row div.formwa_no_margin h2,div.row div.formc h2,div.row div.formc_no_margin h2
+div.row div.forme h2, div.row div.forme_no_margin h2, div.row div.formwa h2,
+	div.row div.formwa_no_margin h2, div.row div.formc h2, div.row div.formc_no_margin h2
 	{
 	padding: 0px 0px 5px 0px;
 	margin: 0px;
@@ -150,17 +162,17 @@ div.row div.forme h2,div.row div.forme_no_margin h2,div.row div.formwa h2,div.ro
 	font-weight: bold;
 }
 
-div.row div.forme_no_margin,div.row div.formwa_no_margin,div.row div.formc_no_margin
+div.row div.forme_no_margin, div.row div.formwa_no_margin, div.row div.formc_no_margin
 	{
 	margin-left: 0px;
 }
 
-[dir=ltr] div.row div.label,[dir=rtl] div.row div.formw {
+[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
 	float: left;
 	text-align: right;
 }
 
-[dir=rtl] div.row div.label,[dir=ltr] div.row div.formw {
+[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
 	float: right;
 	text-align: left;
 }
@@ -185,19 +197,24 @@ span.form_error {
 }
 
 /* Form elements - some general styling */
-select,textarea {
+select, textarea {
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 }
 
-input[type=text],input[type=password] {
+input[type=text], input[type=password] {
 	margin: 0px;
 	padding: 2px 4px 2px 4px;
 	border: 1px solid #9e021b;
 }
 
-input.checkbox,input[type=checkbox] {
+input.checkbox, input[type=checkbox] {
 	border-width: 0;
+}
+
+input[type=color], input.colour-selection {
+	width: 30px;
+	padding: 0px;
 }
 
 /* Normal submit button */
@@ -210,8 +227,8 @@ input.liteoption {
 	font-weight: normal;
 }
 
-select,input[type=checkbox],input[type=radio],input[type=button],input[type=submit]
-	{
+select, input[type=checkbox], input[type=radio], input[type=button],
+	input[type=submit] {
 	cursor: pointer;
 	font-size: 12px;
 }
@@ -232,7 +249,7 @@ textarea.answer {
 	text-align: right;
 }
 
-input.rating_question_low_value,input.rating_question_high_value {
+input.rating_question_low_value, input.rating_question_high_value {
 	background-image: url(../../Images/Ruby/Buttons/Low.png);
 	background-position: 4px center;
 	background-repeat: no-repeat;
@@ -280,13 +297,11 @@ input.rating_question_high_value {
 }
 
 .advanced_select_question input.add {
-	background-image:
-		url('../../Images/Ruby/Buttons/ButtonActivateElement.png');
+	background-image: url('../../Images/Ruby/Buttons/ActivateElement.png');
 }
 
 .advanced_select_question input.remove {
-	background-image:
-		url('../../Images/Ruby/Buttons/DeactivateElement.png');
+	background-image: url('../../Images/Ruby/Buttons/DeactivateElement.png');
 }
 
 /*********************************************************
@@ -297,7 +312,7 @@ button: :-moz-focus-inner {
 	padding: 0px;
 }
 
-button,a.button {
+button, a.button {
 	margin: 0 7px 0 0;
 	background-color: #f5f5f5;
 	background-repeat: no-repeat;
@@ -324,91 +339,91 @@ a.button {
 	display: inline-block;
 }
 
-button.positive,a.positive_button {
+button.positive, a.positive_button {
 	background-image: url(../../Images/Ruby/Buttons/Confirm.png);
 	color: #529214;
 }
 
-a.positive_button:hover,button.positive:hover {
+a.positive_button:hover, button.positive:hover {
 	background-color: #E6EFC2;
 	border: 1px solid #C6D880;
 	color: #529214;
 }
 
-button.positive:active,a.positive_button:active {
+button.positive:active, a.positive_button:active {
 	background-color: #5ca54d;
 	border: 1px solid #5ca54d;
 	color: #ffffff;
 }
 
-button.negative,a.negative_button {
+button.negative, a.negative_button {
 	background-image: url(../../Images/Ruby/Buttons/Cancel.png);
 	color: #d12f19;
 }
 
-a.negative_button:hover,button.negative:hover {
+a.negative_button:hover, button.negative:hover {
 	background-color: #fbe3e4;
 	border: 1px solid #fbc2c4;
 	color: #d12f19;
 }
 
-button.negative:active,a.negative_button:active {
+button.negative:active, a.negative_button:active {
 	background-color: #bf382b;
 	border: 1px solid #bf382b;
 	color: #ffffff;
 }
 
-button.normal,a.normal_button {
+button.normal, a.normal_button {
 	background-image: url(../../Images/Ruby/Buttons/Next.png);
 }
 
-a.normal_button:hover,button.normal:hover {
+a.normal_button:hover, button.normal:hover {
 	background-color: #dff4ff;
 	border: 1px solid #c2e1ef;
 	color: #336699;
 }
 
-button.normal:active,a.normal_button:active {
+button.normal:active, a.normal_button:active {
 	background-color: #6299c5;
 	border: 1px solid #6299c5;
 	color: #ffffff;
 }
 
-button.alert,a.alert_button {
+button.alert, a.alert_button {
 	background-image: url(../../Images/Ruby/Buttons/Warning.png);
 	color: #996900;
 }
 
-a.alert_button:hover,button.alert:hover {
+a.alert_button:hover, button.alert:hover {
 	border: 1px solid #ffd89b;
 	background-color: #fff8aa;
 	color: #996900;
 }
 
-button.alert:active,a.alert_button:active {
+button.alert:active, a.alert_button:active {
 	background-color: #ffd89b;
 	border: 1px solid #ffd89b;
 	color: #ffffff;
 }
 
-button.calendar,a.calendar_button {
+button.calendar, a.calendar_button {
 	background-image: url(../../Images/Ruby/Buttons/Calendar.png);
 }
 
-a.calendar_button:hover,button.calendar:hover {
+a.calendar_button:hover, button.calendar:hover {
 	background-color: #dff4ff;
 	border: 1px solid #c2e1ef;
 	color: #336699;
 }
 
-button.calendar:active,a.calendar_button:active {
+button.calendar:active, a.calendar_button:active {
 	background-color: #6299c5;
 	border: 1px solid #6299c5;
 	color: #ffffff;
 }
 
-button.mini,a.mini_button,button.mini:hover,a.mini_button:hover,button.mini:active,a.mini_button:active
-	{
+button.mini, a.mini_button, button.mini:hover, a.mini_button:hover,
+	button.mini:active, a.mini_button:active {
 	background-position: center center;
 	padding: 0px;
 	margin: -3px 0px 0px -3px;
@@ -422,197 +437,201 @@ button.mini,a.mini_button,button.mini:hover,a.mini_button:hover,button.mini:acti
 	border: 0px solid white !important;
 }
 
-button.mini,a.mini_button {
+button.mini, a.mini_button {
 	border: 1px solid #dedede;
 }
 
-button.next,a.next_button {
+button.next, a.next_button {
 	background-image: url(../../Images/Ruby/Buttons/Next.png);
 }
 
-button.previous,a.previous_button {
+button.previous, a.previous_button {
 	background-image: url(../../Images/Ruby/Buttons/Previous.png);
 }
 
-button.empty,a.empty_button {
+button.empty, a.empty_button {
 	background-image: url(../../Images/Ruby/Buttons/Empty.png);
 }
 
-button.select,a.select_button {
+button.select, a.select_button {
 	background-image: url(../../Images/Ruby/Buttons/Select.png);
 }
 
-button.join,a.join_button {
+button.join, a.join_button {
 	background-image: url(../../Images/Ruby/Buttons/Join.png);
 }
 
-button.create,a.create_button {
+button.create, a.create_button {
 	background-image: url(../../Images/Ruby/Buttons/Create.png);
 }
 
-button.error,a.error_button {
+button.error, a.error_button {
 	background-image: url(../../Images/Ruby/Buttons/Error.png);
 }
 
-button.warning,a.warning_button {
+button.warning, a.warning_button {
 	background-image: url(../../Images/Ruby/Buttons/Warning.png);
 }
 
-button.login,a.login_button {
+button.login, a.login_button {
 	background-image: url(../../Images/Ruby/Buttons/Login.png);
 	float: left;
 	margin-bottom: 7px;
 }
 
-button.logout,a.logout_button {
+button.logout, a.logout_button {
 	background-image: url(../../Images/Ruby/Buttons/Logout.png);
 }
 
-button.search,a.search_button {
+button.search, a.search_button {
 	background-image: url(../../Images/Ruby/Buttons/Search.png);
 }
 
-button.filter,a.filter_button {
+button.filter, a.filter_button {
 	background-image: url(../../Images/Ruby/Buttons/Filter.png);
 }
 
-button.save,a.save_button {
+button.save, a.save_button {
 	background-image: url(../../Images/Ruby/Buttons/Save.png);
 }
 
-button.update,a.update_button {
+button.update, a.update_button {
 	background-image: url(../../Images/Ruby/Buttons/Update.png);
 }
 
-button.publish,a.publish_button {
+button.publish, a.publish_button {
 	background-image: url(../../Images/Ruby/Buttons/Publish.png);
 }
 
-button.send,a.send_button {
+button.send, a.send_button {
 	background-image: url(../../Images/Ruby/Buttons/Send.png);
 }
 
-button.import,a.import_button {
+button.import, a.import_button {
 	background-image: url(../../Images/Ruby/Buttons/Import.png);
 }
 
-button.export,a.export_button {
+button.export, a.export_button {
 	background-image: url(../../Images/Ruby/Buttons/Export.png);
 }
 
-button.subscribe,a.subscribe_button {
+button.subscribe, a.subscribe_button {
 	background-image: url(../../Images/Ruby/Buttons/Subscribe.png);
 }
 
-button.unsubscribe,a.unsubscribe_button {
+button.unsubscribe, a.unsubscribe_button {
 	background-image: url(../../Images/Ruby/Buttons/Unsubscribe.png);
 }
 
-button.move,a.move_button {
+button.move, a.move_button {
 	background-image: url(../../Images/Ruby/Buttons/Move.png);
 }
 
-button.compare,a.compare_button {
+button.compare, a.compare_button {
 	background-image: url(../../Images/Ruby/Buttons/Compare.png);
 }
 
-button.finish,a.finish_button {
+button.finish, a.finish_button {
 	background-image: url(../../Images/Ruby/Buttons/Finish.png);
 }
 
-button.register,a.register_button {
+button.register, a.register_button {
 	background-image: url(../../Images/Ruby/Buttons/Register.png);
 	float: left;
 	padding-bottom: 11px;
 	margin-bottom: 7px;
 }
 
-button.switch,a.switch_button {
+button.switch, a.switch_button {
 	background-image: url(../../Images/Ruby/Buttons/Switch.png);
 }
 
-button.add,a.add_button {
+button.add, a.add_button {
 	background-image: url(../../Images/Ruby/Buttons/Add.png);
 }
 
-button.low,a.low_button {
+button.low, a.low_button {
 	background-image: url(../../Images/Ruby/Buttons/Low.png);
 }
 
-button.high,a.high_button {
+button.high, a.high_button {
 	background-image: url(../../Images/Ruby/Buttons/High.png);
 }
 
-button.refresh,a.refresh_button {
+button.refresh, a.refresh_button {
 	background-image: url(../../Images/Ruby/Buttons/Refresh.png);
 }
 
-button.upload,a.upload_button {
+button.upload, a.upload_button {
 	background-image: url(../../Images/Ruby/Buttons/Upload.png);
 }
 
-button.download,a.download_button {
+button.download, a.download_button {
 	background-image: url(../../Images/Ruby/Buttons/Download.png);
 }
 
-button.left,a.left_button {
+button.left, a.left_button {
 	background-image: url(../../Images/Ruby/Buttons/Left.png);
 }
 
-button.right,a.right_button {
+button.right, a.right_button {
 	background-image: url(../../Images/Ruby/Buttons/Right.png);
 }
 
-button.start,a.start_button {
+button.start, a.start_button {
 	background-image: url(../../Images/Ruby/Buttons/Start.png);
 }
 
-button.read,a.read_button {
+button.read, a.read_button {
 	background-image: url(../../Images/Ruby/Buttons/Read.png);
 }
 
-button.surf,a.surf_button {
+button.surf, a.surf_button {
 	background-image: url(../../Images/Ruby/Buttons/Surf.png);
 }
 
-button.help,a.help_button {
+button.help, a.help_button {
 	background-image: url(../../Images/Ruby/Buttons/Help.png);
 }
 
-button.email,a.email_button {
+button.email, a.email_button {
 	background-image: url(../../Images/Ruby/Buttons/Email.png);
 }
 
-button.email_go,a.email_go_button {
+button.email_go, a.email_go_button {
 	background-image: url(../../Images/Ruby/Buttons/EmailGo.png);
 }
 
-button.build,a.build_button {
+button.build, a.build_button {
 	background-image: url(../../Images/Ruby/Buttons/Build.png);
 }
 
-button.quickstart,a.quickstart_button {
+button.quickstart, a.quickstart_button {
 	background-image: url(../../Images/Ruby/Buttons/Quickstart.png);
 }
 
-button.continue,a.continue_button {
+button.continue, a.continue_button {
 	background-image: url(../../Images/Ruby/Buttons/Continue.png);
 }
 
-button.hide,a.hide_button {
+button.hide, a.hide_button {
 	background-image: url(../../Images/Ruby/Buttons/Hide.png);
 }
 
-button.loading,a.loading_button {
+button.loading, a.loading_button {
 	background-image: url(../../Images/Ruby/Action/LoadingMini.gif);
 }
 
-button.delete,a.delete_button {
+button.delete, a.delete_button {
 	background-image: url(../../Images/Ruby/Buttons/Delete.png);
 }
 
-button.delete-na,a.delete-na_button {
+button.delete-na, a.delete-na_button {
 	background-image: url(../../Images/Ruby/Buttons/DeleteNa.png);
+}
+
+button.clear, a.clear_button {
+	background-image: url(../../Images/Ruby/Buttons/Clear.png);
 }
 
 /*IE-fix to avoid adding unwanted margins to the form*/
@@ -642,7 +661,7 @@ div.form_splitter {
 	height: 0px;
 }
 
-div.configuration_form span.category,div.form_splitter span.category {
+div.configuration_form span.category, div.form_splitter span.category {
 	position: relative;
 	top: -20px;
 	background-color: #FFFFFF;
@@ -664,7 +683,7 @@ div.form_splitter span.category {
 	margin-right: 5px;
 }
 
-.active_elements,.inactive_elements {
+.active_elements, .inactive_elements {
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 	padding: 2px 4px 2px 4px;
@@ -674,8 +693,8 @@ div.form_splitter span.category {
 	width: 310px;
 }
 
-.active_elements:hover,.active_elements:focus,.inactive_elements:hover,.inactive_elements:focus
-	{
+.active_elements:hover, .active_elements:focus, .inactive_elements:hover,
+	.inactive_elements:focus {
 	background-color: #FDF8F7;
 	border: 1px solid #9e021b;
 }
@@ -691,7 +710,7 @@ input[type=text].element_query { /*****************
 	margin-right: 5px;
 }
 
-input[type=button].activate_elements,input[type=button].deactivate_elements
+input[type=button].activate_elements, input[type=button].deactivate_elements
 	{
 	background-color: #f5f5f5;
 	background-repeat: no-repeat;
@@ -711,29 +730,26 @@ input[type=button].activate_elements,input[type=button].deactivate_elements
 }
 
 input[type=button].activate_elements {
-	background-image:
-		url('../../Images/Ruby/Buttons/ActivateElement.png');
+	background-image: url('../../Images/Ruby/Buttons/ActivateElement.png');
 }
 
 input[type=button].activate_elements.disabled {
 	cursor: default;
-	background-image:
-		url('../../Images/Ruby/Buttons/ActivateElementNa.png');
+	background-image: url('../../Images/Ruby/Buttons/ActivateElementNa.png');
 }
 
 input[type=button].deactivate_elements {
-	background-image:
-		url('../../Images/Ruby/Buttons/DeactivateElement.png');
+	background-image: url('../../Images/Ruby/Buttons/DeactivateElement.png');
 }
 
-input[type=button].activate_elements:not (.disabled ):hover,input[type=button].deactivate_elements:hover
+input[type=button].activate_elements:not (.disabled ):hover, input[type=button].deactivate_elements:hover
 	{
 	background-color: #dff4ff;
 	border: 1px solid #c2e1ef;
 	color: #336699;
 }
 
-input[type=button].activate_elements:not (.disabled ):active,input[type=button].deactivate_elements:active
+input[type=button].activate_elements:not (.disabled ):active, input[type=button].deactivate_elements:active
 	{
 	background-color: #6299c5;
 	border: 1px solid #6299c5;
@@ -749,7 +765,7 @@ div.element_finder_search {
 	margin-bottom: 5px;
 }
 
-div.element_finder_active,div.element_finder_buttons,div.element_finder_inactive
+div.element_finder_active, div.element_finder_buttons, div.element_finder_inactive
 	{
 	float: left;
 }
@@ -764,7 +780,7 @@ div.element_finder_buttons_container {
 	top: 50%;
 }
 
-div.element_finder_types,div.element_finder_container {
+div.element_finder_types, div.element_finder_container {
 	float: left;
 	margin-right: 10px;
 }
@@ -856,7 +872,7 @@ div.advanced_filter_form div.configuration_form span.category {
 	border-bottom: 1px solid #999999;
 }
 
-div.advanced_filter_form a.calendar_button:hover,div.advanced_filter_form a.calendar_button
+div.advanced_filter_form a.calendar_button:hover, div.advanced_filter_form a.calendar_button
 	{
 	margin: 0;
 	background-position: center center;
@@ -873,7 +889,7 @@ div.advanced_filter_form div.row {
 	width: 100%;
 }
 
-div.advanced_filter_form div.row input,div.advanced_filter_form div.row select
+div.advanced_filter_form div.row input, div.advanced_filter_form div.row select
 	{
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
@@ -887,7 +903,7 @@ div.advanced_filter_form div.row select {
 	height: 22px;
 }
 
-div.advanced_filter_form div.row input.full,div.advanced_filter_form div.row select.full
+div.advanced_filter_form div.row input.full, div.advanced_filter_form div.row select.full
 	{
 	width: 100%;
 	-moz-box-sizing: border-box;
@@ -1127,4 +1143,11 @@ fieldset legend {
 	color: #4271B5;
 	padding: 0px 5px 0px 5px;
 	margin-right: 10px;
+}
+
+div.ui-datepicker {
+	background-color: #F7FBFD;
+	border: 1px solid #d7e6ed !important;
+	padding: 10px;
+	margin: 2px;
 }

@@ -5,11 +5,11 @@
 @import url('Plugin.css');
 
 /* Platform CSS */
+@import url('Header.css');
+
 @import url('General.css');
 
 @import url('Form.css');
-
-@import url('Menu.css');
 
 @import url('Table.css');
 

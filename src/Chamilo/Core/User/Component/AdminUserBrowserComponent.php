@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -83,21 +82,14 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
     {
         // construct search properties
         $search_properties = array();
-        $search_properties[] = new ConditionProperty(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME));
-        $search_properties[] = new ConditionProperty(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME));
-        $search_properties[] = new ConditionProperty(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME));
-        $search_properties[] = new ConditionProperty(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE));
-        $search_properties[] = new ConditionProperty(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL));
+        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
+        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
+        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME);
+        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE);
+        $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL);
 
         // get conditions
-        $condition = $this->get_action_bar()->get_conditions($search_properties);
-
-        return $condition;
+        return $this->get_action_bar()->get_conditions($search_properties);
     }
 
     public function get_action_bar()
