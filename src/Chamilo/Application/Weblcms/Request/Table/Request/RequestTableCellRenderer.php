@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 
 class RequestTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -27,6 +28,18 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return DatetimeUtilities :: format_locale_date(null, $object->get_decision_date());
             case Request :: PROPERTY_DECISION :
                 return $object->get_decision_icon();
+            case Request :: PROPERTY_CATEGORY_ID :
+                $category = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
+                    CourseCategory :: class_name(),
+                    $object->get_category_id());
+                if (! $category)
+                {
+                    return null;
+                }
+                else
+                {
+                    return $category->get_name();
+                }
         }
         return parent :: render_cell($column, $object);
     }

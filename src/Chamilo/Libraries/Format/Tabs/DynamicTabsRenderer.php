@@ -108,12 +108,37 @@ class DynamicTabsRenderer
 
         if ($selected_tab)
         {
+            if (! $this->is_tab_name_active($selected_tab))
+            {
+                return null;
+            }
+
             return $this->get_name() . '_' . $selected_tab;
         }
         else
         {
             return null;
         }
+    }
+
+    /**
+     * Checks if a tab is active in this tabs renderer by a given tab name
+     *
+     * @param string $tab_name
+     *
+     * @return bool
+     */
+    protected function is_tab_name_active($tab_name)
+    {
+        foreach ($this->get_tabs() as $tab)
+        {
+            if ($tab->get_name() == $tab_name)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function footer()
@@ -140,7 +165,8 @@ class DynamicTabsRenderer
         $html[] = '	$("#' . $this->get_name() . '_tabs ul.tabs-header").css(\'display\', \'block\');';
         $html[] = '	$("#' . $this->get_name() . '_tabs h2").hide();';
         $html[] = '	$("#' . $this->get_name() . '_tabs").tabs();';
-//         $html[] = '	var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow: false} );';
+        // $html[] = ' var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow: false}
+        // );';
 
         $selected_tab = $this->get_selected_tab();
         if (isset($selected_tab))

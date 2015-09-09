@@ -142,10 +142,12 @@ class SubmissionViewerComponent extends SubmissionsManager
     private function is_platform_group_member($group_id, $user_id)
     {
         $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
+
         if (\Chamilo\Core\Group\Storage\DataManager :: is_group_member($group_id, $user_id))
         {
             return true;
         }
+
         if ($group->has_children())
         {
             foreach ($group->get_subgroups() as $subgroup)
