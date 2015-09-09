@@ -178,7 +178,9 @@ class CourseEntity implements RightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve(Course :: class_name(), (int) $id);
+        $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_by_id(
+            Course :: class_name(),
+            (int) $id);
 
         if (! $course)
         {

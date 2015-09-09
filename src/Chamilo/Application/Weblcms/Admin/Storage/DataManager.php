@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\ArrayResultSet;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  *
@@ -197,9 +198,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
             }
 
+            $properties = new DataClassProperties(
+                array(
+                    new PropertiesConditionVariable(
+                        \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course :: class_name())));
+
             $parameters = new RecordRetrievesParameters(
-                new PropertiesConditionVariable(
-                    \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course :: class_name()),
+                $properties,
                 new InCondition(
                     new PropertyConditionVariable(
                         \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course :: class_name(),
