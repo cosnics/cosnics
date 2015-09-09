@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 
 /**
  * This class represents a course in the weblcms.
@@ -1040,6 +1041,42 @@ class Course extends DataClass
     public function get_category_id()
     {
         return $this->get_default_property(self :: PROPERTY_CATEGORY_ID);
+    }
+
+    public function get_category()
+    {
+        if ($this->get_category_id())
+        {
+            return \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
+                CourseCategory :: class_name(),
+                $this->get_category_id());
+        }
+    }
+
+    public function get_fully_qualified_name($include_self = true)
+    {
+        $names = array();
+
+        if ($include_self)
+        {
+            if ($this->get_visual_code())
+            {
+                $names[] = $this->get_title() . ' (' . $this->get_visual_code() . ')';
+            }
+            else
+            {
+                $names[] = $this->get_title();
+            }
+        }
+
+        $category = $this->get_category();
+
+        if ($category instanceof CourseCategory)
+        {
+            $names[] = $category->get_fully_qualified_name();
+        }
+
+        return implode(' <span class="visible">></span> ', array_reverse($names));
     }
 
     /**

@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Application\Weblcms\Admin\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Entity\PlatformGroupEntity;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class UserEntityHelper
 {
@@ -117,12 +118,16 @@ class UserEntityHelper
                 new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
-        $parameters = new DataClassCountDistinctParameters(
+        $parameters = new DataClassCountParameters(
             $condition,
-            \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID,
-            $joins);
+            $joins,
+            new FunctionConditionVariable(
+                FunctionConditionVariable :: DISTINCT,
+                new PropertyConditionVariable(
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                    \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ID)));
 
-        return \Chamilo\Core\User\Storage\DataManager :: count_distinct(
+        return \Chamilo\Core\User\Storage\DataManager :: count(
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             $parameters);
     }

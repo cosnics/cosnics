@@ -17,6 +17,8 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Application\Weblcms\Admin\Storage\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 
 class CourseEntityHelper
 {
@@ -106,9 +108,14 @@ class CourseEntityHelper
      */
     public static function count_table_data($condition)
     {
-        $parameters = new DataClassCountDistinctParameters($condition, Admin :: PROPERTY_ID, self :: get_joins());
+        $parameters = new DataClassCountParameters(
+            $condition,
+            self :: get_joins(),
+            new FunctionConditionVariable(
+                FunctionConditionVariable :: DISTINCT,
+                new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ID)));
 
-        return DataManager :: count_distinct(Admin :: class_name(), $parameters);
+        return DataManager :: count(Admin :: class_name(), $parameters);
     }
 
     private static function get_joins()
