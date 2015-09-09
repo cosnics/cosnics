@@ -531,6 +531,7 @@ class Kernel
         }
         catch (\Exception $exception)
         {
+            var_dump($exception);
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
