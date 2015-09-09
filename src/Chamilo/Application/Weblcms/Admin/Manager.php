@@ -44,7 +44,7 @@ abstract class Manager extends Application
 
     public function get_tabs($current_tab, $content)
     {
-        $tabs = new DynamicVisualTabsRenderer('WeblcmsAdminManager', $content);
+        $tabs = new DynamicVisualTabsRenderer(__CLASS__, $content);
 
         $tabs->add_tab(
             new DynamicVisualTab(

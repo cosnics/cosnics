@@ -53,7 +53,7 @@ class EntityComponent extends Manager implements TableSupport
         $content = $table->as_html();
 
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__NAMESPACE__, true),
+            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__CLASS__, true),
             $table->as_html());
 
         foreach ($this->get_entity_types() as $entity_type)

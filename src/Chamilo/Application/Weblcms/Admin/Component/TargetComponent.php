@@ -64,7 +64,7 @@ class TargetComponent extends Manager implements TableSupport
         $table = new TargetTable($this);
 
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__NAMESPACE__, true),
+            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__CLASS__, true),
             $table->as_html());
 
         foreach ($this->get_target_types() as $target_type)
