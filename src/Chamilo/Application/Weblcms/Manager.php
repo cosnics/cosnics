@@ -83,6 +83,7 @@ abstract class Manager extends Application
     const ACTION_COURSE_MANAGER = 'CourseManager';
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const ACTION_ANNOUNCEMENT = 'Announcement';
+    const ACTION_ADMIN = 'Admin';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_WEBLCMS_HOME;

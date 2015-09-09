@@ -33,7 +33,6 @@ abstract class Manager extends Application
     const ACTION_BROWSE = 'Browser';
 
     // Parameters
-    const PARAM_ACTION = 'admin_action';
     const PARAM_ADMIN_ID = 'admin_id';
     const PARAM_ENTITY_TYPE = 'entity_type';
     const PARAM_ENTITY_ID = 'entity_id';

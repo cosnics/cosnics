@@ -252,8 +252,7 @@ class Renderer extends CourseListRenderer
                     $icon = Theme :: getInstance()->getCommonImagePath('Action/Lock');
 
                     $locked = '<img style="float: left; margin-left: -30px; padding-top: 1px;"
-                                src="' .
-                         Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
+                                src="' . Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
                 }
 
                 if ($course_visible)
@@ -271,8 +270,7 @@ class Renderer extends CourseListRenderer
                 }
 
                 $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-                        list-style-image: url(' . $icon .
-                     '); margin-left: 15px;' . $text_style . '">';
+                        list-style-image: url(' . $icon . '); margin-left: 15px;' . $text_style . '">';
                 $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
                      $course->get_title();
                 $html[] = '</a>';
@@ -342,7 +340,7 @@ class Renderer extends CourseListRenderer
 
             if ($selected_course_type_id > 0)
             {
-                $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve(
+                $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_by_id(
                     CourseType :: class_name(),
                     $selected_course_type_id);
 

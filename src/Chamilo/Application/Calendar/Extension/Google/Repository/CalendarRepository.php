@@ -186,6 +186,7 @@ class CalendarRepository
             $this->googleClient->setClientSecret($this->getClientSecret());
             $this->googleClient->setScopes('https://www.googleapis.com/auth/calendar.readonly');
             $this->googleClient->setAccessType('offline');
+            $this->googleClient->setApprovalPrompt('force');
 
             if ($this->hasAccessToken())
             {
