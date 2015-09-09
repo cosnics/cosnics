@@ -8,12 +8,13 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * User table column model
- * 
+ *
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 2;
 
     /**
      * Initializes the columns for the table

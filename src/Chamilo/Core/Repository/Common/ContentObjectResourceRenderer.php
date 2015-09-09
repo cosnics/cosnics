@@ -69,11 +69,18 @@ class ContentObjectResourceRenderer
                 $parameters[$parameter->name] = $parameter->value;
             }
 
-            $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
-                $source);
+            try
+            {
+                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $source);
 
-            if (! $object instanceof ContentObject)
+                if (! $object instanceof ContentObject)
+                {
+                    continue;
+                }
+            }
+            catch (\Exception $exception)
             {
                 continue;
             }
