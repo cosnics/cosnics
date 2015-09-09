@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Mail\Mail;
 
 class CreatorComponent extends Manager
 {
@@ -41,6 +42,41 @@ class CreatorComponent extends Manager
             $request->set_creation_date(time());
 
             $success = $request->create();
+
+            // If the request was successfully created, send an e-mail to the people who can actually grant or deny it.
+            if ($success)
+            {
+                $authorized_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_authorized_users(
+                    $this->get_user());
+
+                set_time_limit(3600);
+
+                $title = Translation :: get(
+                    'QuotaCreatedMailTitle',
+                    array('PLATFORM' => PlatformSetting :: get('site_name')));
+
+                $mail = Mail :: factory(
+                    $title,
+                    '',
+                    '',
+                    array(
+                        Mail :: NAME => PlatformSetting :: get('administrator_firstname') . ' ' . PlatformSetting :: get(
+                            'administrator_surname'),
+                        Mail :: EMAIL => PlatformSetting :: get('administrator_email')));
+
+                foreach ($authorized_users as $authorized_user)
+                {
+                    $mail->set_message(
+                        Translation :: get(
+                            'QuotaCreatedMailBody',
+                            array(
+                                'USER' => $authorized_user->get_fullname(),
+                                'PLATFORM' => PlatformSetting :: get('site_name'))));
+
+                    $mail->set_to($authorized_user->get_email());
+                    $mail->send();
+                }
+            }
 
             $parameters = array();
             $parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSE;
