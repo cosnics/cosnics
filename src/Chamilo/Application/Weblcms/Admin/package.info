@@ -3,34 +3,20 @@
 	<package>
 		<name>Admin</name>
 		<code>admin</code>
-		<context>application\weblcms\admin</context>
-		<section>weblcms</section>
-		<category>
-			education
-		</category>
-		<authors></authors>
+		<context>Chamilo\Application\Weblcms\Admin</context>
+		<type>Chamilo\Application\Weblcms</type>
+		<category>education</category>
+		<authors />
 		<version>5.0.0</version>
-		<cycle>
-			<phase>general_availability</phase>
-			<realm>main</realm>
-		</cycle>
-		<filename>pool/main/application/w/weblcms/weblcms-2.1.0.zip</filename>
-		<size></size>
-		<md5></md5>
-		<sha1></sha1>
-		<sha256></sha256>
-		<sha512></sha512>
-		<tagline></tagline>
-		<description>A course based application where several content objects
-			can be
-			published.
-		</description>
-		<homepage></homepage>
+		<description></description>
 		<pre-depends>
 			<dependency type="registration">
-				<id>application\weblcms</id>
+				<id>Chamilo\Application\Weblcms</id>
 				<version operator="4">5.0.0</version>
 			</dependency>
 		</pre-depends>
+		<extra>
+			<default-install>1</default-install>
+		</extra>
 	</package>
 </packages>
