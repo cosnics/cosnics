@@ -27,6 +27,7 @@ class Request extends DataClass
     const PROPERTY_DECISION_DATE = 'decision_date';
     const PROPERTY_DECISION = 'decision';
     const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
+    const PROPERTY_CATEGORY_ID = 'category_id';
     const DECISION_PENDING = 0;
     const DECISION_DENIED = 1;
     const DECISION_GRANTED = 2;
@@ -55,6 +56,7 @@ class Request extends DataClass
         $extended_property_names[] = self :: PROPERTY_DECISION_DATE;
         $extended_property_names[] = self :: PROPERTY_DECISION;
         $extended_property_names[] = self :: PROPERTY_DECISION_MOTIVATION;
+        $extended_property_names[] = self :: PROPERTY_CATEGORY_ID;
 
         return parent :: get_default_property_names($extended_property_names);
     }
@@ -361,5 +363,15 @@ class Request extends DataClass
     function is_pending()
     {
         return $this->get_decision() == self :: DECISION_PENDING;
+    }
+
+    public function get_category_id()
+    {
+        return $this->get_default_property(self :: PROPERTY_CATEGORY_ID);
+    }
+
+    public function set_category_id($category_id)
+    {
+        $this->set_default_property(self :: PROPERTY_CATEGORY_ID, $category_id);
     }
 }

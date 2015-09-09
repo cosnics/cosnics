@@ -486,8 +486,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         $conditions = array();
 
-        $course_ids = self :: get_subscribed_course_ids_by_user_relation($user->get_id(), $user_status) +
-             self :: get_subscribed_course_ids_by_group_relation($user->get_groups(true), $user_status);
+        $course_ids = array_merge(
+            self :: get_subscribed_course_ids_by_user_relation($user->get_id(), $user_status),
+            self :: get_subscribed_course_ids_by_group_relation($user->get_groups(true), $user_status));
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),

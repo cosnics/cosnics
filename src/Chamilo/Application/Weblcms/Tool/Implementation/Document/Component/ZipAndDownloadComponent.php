@@ -62,16 +62,16 @@ class ZipAndDownloadComponent extends Manager
             $this->zip_name .= ' -_' . $category->get_name();
         }
 
+        $is_course_admin = $this->get_course()->is_course_admin($this->get_user());
+
         // needed to prevent cutoff at a space char
         $this->zip_name = str_replace(" ", "_", $this->zip_name);
 
-        $category_folder_mapping = $this->create_folder_structure($category_id);
+        $category_folder_mapping = $this->create_folder_structure($category_id, $is_course_admin);
 
         $target_path = current($category_folder_mapping);
         foreach ($category_folder_mapping as $category_id => $dir)
         {
-            $is_course_admin = $this->get_course()->is_course_admin($this->get_user());
-
             // if we have access, retrieve the publications in the current
             // category
 
@@ -131,6 +131,13 @@ class ZipAndDownloadComponent extends Manager
                         $category_id,
                         $this->get_course_id());
                 }
+
+                // Only retrieve visible publications
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        ContentObjectPublication :: class_name(),
+                        ContentObjectPublication :: PROPERTY_HIDDEN),
+                    new StaticConditionVariable(0));
 
                 $publications = WeblcmsDataManager :: retrieve_content_object_publications_with_view_right_granted_in_category_location(
                     $location_id,
@@ -197,7 +204,7 @@ class ZipAndDownloadComponent extends Manager
      * @param $path
      * @return array An array mapping the category id to the folder.
      */
-    private function create_folder_structure($parent_cat, &$category_folder_mapping = array(), $path = null)
+    private function create_folder_structure($parent_cat, $course_admin = false, &$category_folder_mapping = array(), $path = null)
     {
         if (is_null($path))
         {
@@ -245,7 +252,7 @@ class ZipAndDownloadComponent extends Manager
             $category_path = Filesystem :: create_unique_name($path . '/' . $safe_name);
             $category_folder_mapping[$category->get_id()] = $category_path;
             Filesystem :: create_dir($category_path);
-            $this->create_folder_structure($category->get_id(), $category_folder_mapping, $category_path);
+            $this->create_folder_structure($category->get_id(), $course_admin, $category_folder_mapping, $category_path);
         }
 
         return $category_folder_mapping;

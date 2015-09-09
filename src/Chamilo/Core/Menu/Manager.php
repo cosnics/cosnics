@@ -86,7 +86,6 @@ abstract class Manager extends Application
                 array(
                     Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
                     Manager :: PARAM_PARENT => $temp_replacement));
-            $url_format = str_replace($temp_replacement, '%s', $url_format);
             $this->menu = new ItemMenu(Request :: get(self :: PARAM_PARENT), $url_format);
         }
         return $this->menu;

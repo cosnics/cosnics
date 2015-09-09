@@ -59,6 +59,7 @@ class GranterComponent extends Manager
                         $course->set_course_type_id($request->get_course_type_id());
                         $course->set_visual_code(strtoupper(uniqid()));
                         $course->set_titular_id($request->get_user_id());
+                        $course->set_category_id($request->get_category_id());
 
                         if ($course->create())
                         {

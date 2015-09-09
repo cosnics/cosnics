@@ -730,24 +730,23 @@ abstract class ContentObjectPublicationListRenderer
         if ($publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
         {
 
-            // if (!$publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT]
+            if (! $publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
             // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
-            // TYPE)) {
-            // $email_url = $this->get_url(
-            // array(
-            // Tool :: PARAM_PUBLICATION_ID => $publication_id,
-            // Tool :: PARAM_ACTION => Tool :: ACTION_MAIL_PUBLICATION
-            // )
-            // );
+            // TYPE))
+            {
+                $email_url = $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MAIL_PUBLICATION));
 
-            // $toolbar->add_item(
-            // new ToolbarItem(
-            // Translation :: get('SendByEMail'),
-            // Theme :: getInstance()->getCommonImagePath('action_email'), $email_url,
-            // ToolbarItem :: DISPLAY_ICON, true
-            // )
-            // );
-            // }
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('SendByEMail'),
+                        Theme :: getInstance()->getCommonImagePath('action_email'),
+                        $email_url,
+                        ToolbarItem :: DISPLAY_ICON,
+                        true));
+            }
         }
 
         $details_url = $this->get_url(
