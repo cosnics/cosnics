@@ -29,6 +29,8 @@ interface GenericTreeInterface
 
     public function get_node_title($node);
 
+    public function get_node_safe_title($node);
+
     public function get_node_id($node);
 
     public function get_node_parent($node);

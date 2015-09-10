@@ -16,6 +16,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Configuration\Configuration;
 
 /**
  * Cell renderer for a direct subscribed course user browser table, or users in a direct subscribed group.
@@ -214,8 +215,11 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer imp
                     ToolbarItem :: DISPLAY_ICON));
         }
 
+        $userViewAllowed = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
+
         // add action for view as user
-        if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // get_parent()->is_teacher())
+        if ($userViewAllowed && $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // get_parent()->is_teacher())
         {
             if ($user_id != $this->get_component()->get_user()->get_id())
             {

@@ -6,6 +6,11 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 
 class RequestForm extends FormValidator
 {
@@ -165,7 +170,14 @@ class RequestForm extends FormValidator
     {
         if (! isset($this->course_categories))
         {
-            $course_categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_categories_ordered_by_name();
+            $condition = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(CourseCategory :: class_name(), CourseCategory :: PROPERTY_STATE),
+                    new StaticConditionVariable(CourseCategory :: STATE_ARCHIVE)));
+
+            $course_categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_categories_ordered_by_name(
+                $condition);
+
             $course_categories_array = array();
 
             while ($category = $course_categories->next_result())
