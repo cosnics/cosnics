@@ -76,7 +76,7 @@ class AssessmentViewerForm extends FormValidator
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
-                     'Assessment.js'));
+                     'AssessmentViewer.js'));
 
         $start_time = Request :: post('start_time');
         $start_time = $start_time ? $start_time : 0;

@@ -99,7 +99,7 @@ class Join implements Hashable
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
-    public function set_condition(Condition $condition)
+    public function set_condition(Condition $condition = null)
     {
         $this->condition = $condition;
     }

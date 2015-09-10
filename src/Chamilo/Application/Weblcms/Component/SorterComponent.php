@@ -286,15 +286,13 @@ class SorterComponent extends Manager
         if ($direction == 'up')
         {
             $move_category->set_sort($sort - 1);
-            $next_category->set_sort($sort);
         }
         elseif ($direction == 'down')
         {
             $move_category->set_sort($sort + 1);
-            $next_category->set_sort($sort);
         }
 
-        if ($move_category->update() && $next_category->update())
+        if ($move_category->update())
         {
             return true;
         }

@@ -33,6 +33,13 @@ class Display extends QuestionDisplay
         $name = $clo_question->get_id() . '_0';
         $formvalidator->addElement('textarea', $name, '', array('style' => $textarea_style));
         $renderer->setElementTemplate($element_template, $name);
+
+        $formvalidator->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(
+                    ClassnameUtilities :: getInstance()->getNamespaceParent(
+                        'Chamilo\Core\Repository\ContentObject\Assessment')) . 'GiveHint.js'));
     }
 
     public function add_borders()

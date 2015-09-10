@@ -26,6 +26,8 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 {
     const CLASS_NAME = __CLASS__;
     const PROPERTY_CODE = 'code';
+    const PROPERTY_STATE = 'state';
+    const STATE_ARCHIVE = 0;
 
     public function __construct($default_properties = array(), $optional_properties = array())
     {
@@ -43,6 +45,16 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         $this->set_default_property(self :: PROPERTY_CODE, $code);
     }
 
+    public function get_state()
+    {
+        return $this->get_default_property(self :: PROPERTY_STATE);
+    }
+
+    public function set_state($state)
+    {
+        $this->set_default_property(self :: PROPERTY_STATE, $state);
+    }
+
     /**
      * Get the default properties of all contributions.
      *
@@ -50,7 +62,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      */
     public static function get_default_property_names()
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_CODE));
+        return parent :: get_default_property_names(array(self :: PROPERTY_CODE, self :: PROPERTY_STATE));
     }
 
     /**

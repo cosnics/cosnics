@@ -41,10 +41,9 @@ class DataClassNoResultException extends \Exception
         $this->class_name = $class_name;
         $this->parameters = $parameters;
 
-        if (is_null($message))
-        {
-            $message = Translation :: get('DataClassNoResultException', array('CLASS_NAME' => $class_name));
-        }
+        $message = Translation :: get(
+            'DataClassNoResultException',
+            array('CLASS_NAME' => $class_name, 'MESSAGE' => $message));
 
         parent :: __construct($message, $code, $previous);
     }

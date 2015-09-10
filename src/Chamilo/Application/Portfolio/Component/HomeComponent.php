@@ -315,11 +315,13 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      */
     public function get_portfolio_bookmark($current_step)
     {
+        $portfolioOwner = $this->get_root_content_object()->get_owner();
+
         $content_object = new Bookmark();
         $content_object->set_title(
-            Translation :: get('BookmarkTitle', array('NAME' => $this->get_user()->get_fullname())));
+            Translation :: get('BookmarkTitle', array('NAME' => $portfolioOwner->get_fullname())));
         $content_object->set_description(
-            Translation :: get('BookmarkDescription', array('NAME' => $this->get_user()->get_fullname())));
+            Translation :: get('BookmarkDescription', array('NAME' => $portfolioOwner->get_fullname())));
         $content_object->set_application(__NAMESPACE__);
         $content_object->set_url(
             $this->get_url(

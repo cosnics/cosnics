@@ -239,4 +239,14 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         return Group :: class_name();
     }
+
+    /**
+     * Get the fully qualified class name of the object
+     *
+     * @return string
+     */
+    public static function class_name()
+    {
+        return get_called_class();
+    }
 }

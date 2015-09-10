@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed
@@ -42,8 +41,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
                 return $title_short;
 
             case Group :: PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent :: render_cell($column, $group));
-                return StringUtilities :: getInstance()->truncate($description);
+                return $group->get_fully_qualified_name();
             case Translation :: get(
                 SubSubscribedPlatformGroupTableColumnModel :: USERS,
                 null,
