@@ -136,7 +136,7 @@ class DatetimeUtilities
     {
         if ($time / 3600 < 1 && $time / 60 < 1)
         {
-            $converted_time = $time . 's';
+            $converted_time = '000h 00m ' . str_pad($time, 2, '0', STR_PAD_LEFT) . 's';
         }
         else
         {
@@ -144,7 +144,8 @@ class DatetimeUtilities
             {
                 $min = (int) ($time / 60);
                 $sec = $time % 60;
-                $converted_time = $min . 'm ' . $sec . 's';
+                $converted_time = '000h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' .
+                     str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
             }
             else
             {
@@ -152,7 +153,8 @@ class DatetimeUtilities
                 $rest = $time % 3600;
                 $min = (int) ($rest / 60);
                 $sec = $rest % 60;
-                $converted_time = $hour . 'h ' . $min . 'm ' . $sec . 's';
+                $converted_time = str_pad($hour, 3, '0', STR_PAD_LEFT) . 'h ' . str_pad($min, 2, '0', STR_PAD_LEFT) .
+                     'm ' . str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
             }
         }
         return $converted_time;

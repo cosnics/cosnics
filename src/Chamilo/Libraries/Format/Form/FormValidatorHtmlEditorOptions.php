@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -30,11 +29,6 @@ abstract class FormValidatorHtmlEditorOptions
      * Name of the language to be used for the editor
      */
     const OPTION_LANGUAGE = 'language';
-
-    /**
-     * Name of the theme to be used for the editor
-     */
-    const OPTION_THEME = 'theme';
 
     /**
      * The width of the editor in pixels or percent
@@ -89,7 +83,6 @@ abstract class FormValidatorHtmlEditorOptions
             self :: OPTION_FULL_PAGE,
             self :: OPTION_LANGUAGE,
             self :: OPTION_TEMPLATES,
-            self :: OPTION_THEME,
             self :: OPTION_TOOLBAR,
             self :: OPTION_HEIGHT,
             self :: OPTION_WIDTH);
@@ -190,10 +183,6 @@ abstract class FormValidatorHtmlEditorOptions
             {
                 switch ($available_option)
                 {
-                    case self :: OPTION_THEME :
-                        // $this->set_option($available_option, 'aqua');
-                        $this->set_option($available_option, Theme :: getInstance()->getTheme());
-                        break;
                     case self :: OPTION_LANGUAGE :
                         $editor_lang = Translation :: getInstance()->getLanguageIsocode();
                         $this->set_option($available_option, $editor_lang);
