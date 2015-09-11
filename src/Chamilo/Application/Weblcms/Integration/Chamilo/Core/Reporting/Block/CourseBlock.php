@@ -25,8 +25,7 @@ abstract class CourseBlock extends ReportingBlock
 
     public function get_course_id()
     {
-        return $this->get_parent()->get_parent()->get_parameter(
-            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
+        return $this->get_parent()->get_parent()->get_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
     }
 
     public function get_score_bar($score)
@@ -97,7 +96,7 @@ abstract class CourseBlock extends ReportingBlock
      */
     public function convert_seconds_to_hours($seconds)
     {
-        return $seconds ? DatetimeUtilities :: convert_seconds_to_hours($seconds) : '0s';
+        return $seconds ? DatetimeUtilities :: convert_seconds_to_hours($seconds) : '000h 00m 00s';
     }
 
     /**
@@ -232,11 +231,14 @@ abstract class CourseBlock extends ReportingBlock
             $total_time = $course_visit[CourseVisit :: PROPERTY_TOTAL_TIME];
         }
 
-        $total_time = $total_time ? DatetimeUtilities :: convert_seconds_to_hours($total_time) : '0s';
+        $total_time = $total_time ? DatetimeUtilities :: convert_seconds_to_hours($total_time) : '000h 00m 00s';
+
+        $first_access_date = $first_access_date ? DatetimeUtilities :: format_locale_date(null, $first_access_date) : '-';
+        $last_access_date = $last_access_date ? DatetimeUtilities :: format_locale_date(null, $last_access_date) : '-';
 
         return array(
-            Translation :: get('FirstAccess') => DatetimeUtilities :: format_locale_date(null, $first_access_date),
-            Translation :: get('LastAccess') => DatetimeUtilities :: format_locale_date(null, $last_access_date),
+            Translation :: get('FirstAccess') => $first_access_date,
+            Translation :: get('LastAccess') => $last_access_date,
             Translation :: get('TotalVisits') => $total_visits,
             Translation :: get('TotalTime') => $total_time);
     }

@@ -686,11 +686,31 @@ class Course extends DataClass
                 {
                     return true;
                 }
+
+                // If the user is a sub administrator, grant all rights
+                if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
+                    \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
+                    $user->get_id(),
+                    \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
+                    $this->get_id()))
+                {
+                    return true;
+                }
             }
         }
         else
         {
             if ($user->is_platform_admin())
+            {
+                return true;
+            }
+
+            // If the user is a sub administrator, grant all rights
+            if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
+                \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
+                $user->get_id(),
+                \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
+                $this->get_id()))
             {
                 return true;
             }

@@ -17,6 +17,10 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  * Description of weblcms_new_block
@@ -37,8 +41,17 @@ class NewBlock extends Block
 
     public function get_content($tool)
     {
+        // All user courses for active course types
+        $excludedCourseTypes = explode(
+            ',',
+            Configuration :: get_instance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types')));
+        $archiveCondition = new NotCondition(
+            new InCondition(
+                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_COURSE_TYPE_ID),
+                $excludedCourseTypes));
+
         // All user courses
-        $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->get_user());
+        $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->get_user(), $archiveCondition);
 
         $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, 'Chamilo\Application\Weblcms'));
 
