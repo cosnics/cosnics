@@ -44,6 +44,7 @@ class Course extends DataClass
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
     const PROPERTY_TITULAR_ID = 'titular_id';
     const PROPERTY_VISUAL_CODE = 'visual_code';
+    const PROPERTY_SYSTEM_CODE = 'system_code';
     const PROPERTY_TITLE = 'title';
     const PROPERTY_LAST_VISIT = 'last_visit';
     const PROPERTY_LAST_EDIT = 'last_edit';
@@ -128,6 +129,7 @@ class Course extends DataClass
         $extended_properties[] = self :: PROPERTY_TITULAR_ID;
         $extended_properties[] = self :: PROPERTY_TITLE;
         $extended_properties[] = self :: PROPERTY_VISUAL_CODE;
+        $extended_properties[] = self :: PROPERTY_SYSTEM_CODE;
         $extended_properties[] = self :: PROPERTY_CREATION_DATE;
         $extended_properties[] = self :: PROPERTY_EXPIRATION_DATE;
         $extended_properties[] = self :: PROPERTY_LAST_EDIT;
@@ -885,6 +887,16 @@ class Course extends DataClass
     }
 
     /**
+     * Returns the system code of this course object
+     *
+     * @return String
+     */
+    public function get_system_code()
+    {
+        return $this->get_default_property(self :: PROPERTY_SYSTEM_CODE);
+    }
+
+    /**
      * Returns the title of this course object
      *
      * @return String
@@ -971,6 +983,16 @@ class Course extends DataClass
     public function set_visual_code($visual_code)
     {
         $this->set_default_property(self :: PROPERTY_VISUAL_CODE, $visual_code);
+    }
+
+    /**
+     * Sets the system code of this course object
+     *
+     * @param String $system_code
+     */
+    public function set_system_code($system_code)
+    {
+        $this->set_default_property(self :: PROPERTY_SYSTEM_CODE, $system_code);
     }
 
     /**
