@@ -17,6 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 
 /**
  * Component that allows a user to emulate the rights another user has on his or her portfolio
@@ -137,6 +138,17 @@ class UserComponent extends TabComponent implements TableSupport
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_PLATFORMADMIN),
             new StaticConditionVariable(0));
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                    \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_OFFICIAL_CODE),
+                new StaticConditionVariable('')));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_ACTIVE),
+            new StaticConditionVariable(1));
 
         return new AndCondition($conditions);
     }

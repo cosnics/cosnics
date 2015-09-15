@@ -306,7 +306,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 {
                     global $course;
 
-                    echo '<node id="group" classes="category unlinked" title="' . $course->get_title() . '">', "\n";
+                    echo '<node id="group" classes="category unlinked" title="' . htmlspecialchars($course->get_title()) . '">', "\n";
 
                     $this->dump_groups_tree($groups_tree);
                     echo '</node>', "\n";

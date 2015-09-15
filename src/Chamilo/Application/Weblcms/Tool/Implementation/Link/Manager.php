@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Link;
 
 use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 
 /**
  * $Id: link_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -19,6 +20,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Link :: CLASS_NAME);
+        return array(Link :: CLASS_NAME, RssFeed :: CLASS_NAME);
     }
 }

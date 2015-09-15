@@ -197,6 +197,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         if (! $this->isSubmitted())
         {
             $object = $this->get_content_object();
+
             if ($object->get_answer_text())
             {
                 // $options = $object->get_answers();

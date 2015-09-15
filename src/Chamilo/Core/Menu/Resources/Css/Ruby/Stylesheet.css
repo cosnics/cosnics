@@ -5,10 +5,10 @@ div.applications {
 	right: 0px;
 	width: 100%;
 	padding-right: 0%;
-	height: 32px;
+	height: 50px;
 }
 
-div.applications div,div.applications ul,div.applications li,div.applications td
+div.applications div, div.applications ul, div.applications li, div.applications td
 	{
 	margin: 0;
 	padding: 0;
@@ -56,7 +56,8 @@ div.applications li {
 	padding: 0px;
 	background-color: #C50C2E;
 	border-left: 1px solid #8b0504;
-	height: 32px;
+	height: 50px;
+	line-height:48px;
 }
 
 .navbar ul li.current {
@@ -72,30 +73,29 @@ div.applications li {
 	bottom: -1px;
 }
 
-.navbar ul li a,.navbar ul li a:visited {
+.navbar ul li a, .navbar ul li a:visited {
 	float: none !important /*Non-IE6*/;
 	float: left /*IE-6*/;
 	display: block;
-	line-height: 24px;
-	height: 24px;
-	padding: 4px 9px 4px 9px;
+	height: 50px;
+	padding: 0px;
 	text-decoration: none;
 	font-weight: bold;
-	color: #C50C2E;
+	color: white;
 	outline: none;
 }
 
 .navbar ul li a img.item-icon {
 	vertical-align: middle;
-	margin: 4px 0px;
+	margin: 0px;
 }
 
-.navbar ul li a.current,.navbar ul li a.current:visited {
+.navbar ul li a.current, .navbar ul li a.current:visited {
 	color: #444444;
 	text-decoration: none;
 }
 
-.navbar ul li ul,.navbar ul li.current ul {
+.navbar ul li ul, .navbar ul li.current ul {
 	display: none;
 	border: 0px solid white;
 	padding: 0px;
@@ -113,7 +113,7 @@ div.applications li {
 
 /*Color main cells hovering mode*/
 .navbar ul li:hover a {
-	color: #c7d6eb;
+	color: #d9d9d9;
 	text-decoration: none;
 	outline: none;
 }
@@ -127,15 +127,18 @@ div.applications li {
 	outline: none;
 }
 
-.navbar ul li:hover ul,.navbar ul li.current:hover ul {
+.navbar ul li:hover ul, .navbar ul li.current:hover ul {
 	display: block;
 	position: absolute;
 	z-index: 1000;
-	top: 31px;
+	top: 49px;
 	margin-top: 1px;
 	left: -1px;
 	/*	padding: 0px 16px 0px 16px;*/
 	border-top: none;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .navbar ul li.current:hover ul {
@@ -143,27 +146,27 @@ div.applications li {
 }
 
 /*Color subcells normal mode*/
-.navbar ul li:hover ul li,.navbar ul li.current:hover ul li {
+.navbar ul li:hover ul li, .navbar ul li.current:hover ul li {
 	margin-left: 1px;
 	display: block;
 	float: left;
 	clear: both;
 	width: 100%;
 	border-left: 0px solid #8b0504;
+	background-color: #f2f2f2;
 }
 
 .navbar ul li.current:hover ul li {
 	background-color: #f2f2f2;
 }
 
-.navbar ul li:hover ul li a,.navbar ul li.current:hover ul li a {
+.navbar ul li:hover ul li a, .navbar ul li.current:hover ul li a {
 	white-space: normal;
 	display: block;
-	height: 24px;
-	line-height: 24px;
-	padding: 4px 9px 4px 9px;
+	height: 50px;
+	padding: 0px;
 	border-bottom: 1px dotted #dcdcdc;
-	color: #8eadd8;
+	color: #d9d9d9;
 	outline: none;
 	white-space: nowrap;
 }
@@ -178,10 +181,10 @@ div.applications li {
 }
 
 /*Color subcells hovering mode*/
-.navbar ul li:hover ul li a:hover,.navbar ul li.current:hover ul li a:hover
+.navbar ul li:hover ul li a:hover, .navbar ul li.current:hover ul li a:hover
 	{
 	text-decoration: none;
-	color: #c7d6eb;
+	color: #d9d9d9;
 }
 
 .navbar ul li.current:hover ul li a:hover {
@@ -193,7 +196,7 @@ div.applications li {
 	position: absolute;
 }
 
-.navbar ul ul li a,.navbar ul ul li a:active,.navbar ul ul li a:visited
+.navbar ul ul li a, .navbar ul ul li a:active, .navbar ul ul li a:visited
 	{
 	display: none;
 }
@@ -214,7 +217,7 @@ div.applications li {
 .navbar ul li a:hover {
 	position: relative /*Sylvain IE hack*/;
 	z-index: 1000 /*Sylvain IE hack*/;
-	color: #c7d6eb;
+	color: #d9d9d9;
 	text-decoration: none;
 	outline: none;
 }
@@ -224,8 +227,8 @@ div.applications li {
 	width: 10.0em;
 	position: absolute;
 	z-index: 1000;
-	top: 32px;
-	t\op: 31px;
+	top: 50px;
+	t\op: 49px;
 	left: 0px;
 	marg\in-top: 1px;
 	/*	border-top: solid 1px rgb(215, 215, 215);*/
@@ -237,12 +240,22 @@ div.applications li {
 	display: block;
 	w\idth: 10.0em;
 	height: 1px;
-	line-height: 1.3em;
-	padding: 4px 9px 4px 9px;
+	padding: 0px;
 	border-bottom: 1px dotted #E5EDF9;
 }
 
 /*Color subcells hovering mode*/
 .navbar ul li a:hover ul li a:hover {
 	text-decoration: none;
+}
+
+.navbar li a div.label {
+	display: inline-block;
+	height: 50px;
+	line-height: 49px;
+	padding: 0px 15px;
+}
+
+.navbar li a div.label-with-image {
+	padding-left: 0px;
 }

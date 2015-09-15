@@ -91,4 +91,10 @@ AllowUpgrade = "Sta upgrade toe"
 AllowRequest = "Sta verzoek toe"
 Step = "Stap"
 MaximumUser = "Maximaal gebruiker"
-PackageTypeNameQuota = ""
+QuotaCreatedMailTitle = "[{PLATFORM}] Nieuwe quotumverhoging-aanvraag"
+QuotaCreatedMailBody = "Beste {USER},<br />
+<br />
+Er werd een nieuwe aanvraag tot quotumverhoging ingediend. Gelieve deze wanneer mogelijk te evalueren op de daartoe bestemde beheerspagina. (Repository >> Quota >> Hangende aanvragen)<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"

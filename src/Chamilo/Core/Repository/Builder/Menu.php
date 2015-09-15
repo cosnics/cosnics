@@ -69,7 +69,7 @@ class Menu extends HTML_Menu
     public function __construct($root, $cloi,
         $url_format = '?application=repository&go=build_complex&builder_action=browse', $view_entire_structure = false, $show_url = true)
     {
-        $url_format .= '&cloi=%s';
+        $url_format .= '&cloi=__CLOI__';
         $this->view_entire_structure = $view_entire_structure;
         $extra = array('publish');
 
@@ -159,8 +159,7 @@ class Menu extends HTML_Menu
                 {
                     if ($url)
                     {
-                        $menu_item['onclick'] = 'javascript:openPopup(\'' . str_replace('\\', '\\\\', $url) .
-                             '\'); return false;';
+                        $menu_item['onclick'] = 'javascript:openPopup(\'' . json_encode($url) . '\'); return false;';
                     }
                     else
                     {
@@ -189,10 +188,10 @@ class Menu extends HTML_Menu
     {
         if ($cloi == null || $cloi->get_ref() == $this->root)
         {
-            $new = str_replace('&cloi=%s', '', $this->urlFmt);
-            return sprintf($new, $this->root->get_id());
+            return str_replace('&cloi=__CLOI__', '', $this->urlFmt);
         }
-        return sprintf($this->urlFmt, $cloi->get_id(), $this->root->get_id());
+
+        return str_replace('__CLOI__', $cloi->get_id(), $this->urlFmt);
     }
 
     private function get_build_complex_url($object)

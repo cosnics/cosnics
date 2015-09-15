@@ -83,6 +83,7 @@ abstract class Manager extends Application
     const ACTION_COURSE_MANAGER = 'CourseManager';
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const ACTION_ANNOUNCEMENT = 'Announcement';
+    const ACTION_ADMIN = 'Admin';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_WEBLCMS_HOME;
@@ -560,6 +561,23 @@ abstract class Manager extends Application
     {
         if ($user != null && $course != null)
         {
+            // If the user is a platform administrator, grant all rights
+            if ($user->is_platform_admin())
+            {
+                return true;
+            }
+
+            // If the user is a sub administrator, grant all rights
+            if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
+                \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
+                $user->get_id(),
+                \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
+                $course->get_id()))
+            {
+                return true;
+            }
+
+            // If the user is enrolled as a teacher directlt or via a platform group, grant all rights
             $relation = $this->retrieve_course_user_relation($course->get_id(), $user->get_id());
 
             if (($relation && $relation->get_status() == 1) || $user->is_platform_admin())

@@ -41,7 +41,6 @@ class ConditionFilterRenderer extends FilterRenderer
         {
             if ($filter_data->has_filter_property(FilterData :: FILTER_TYPE))
             {
-                $template_id = $this->get_type();
                 $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id(
                     $filter_data->get_filter_property(FilterData :: FILTER_TYPE));
                 $class_name = $template_registration->get_content_object_type() . '\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(

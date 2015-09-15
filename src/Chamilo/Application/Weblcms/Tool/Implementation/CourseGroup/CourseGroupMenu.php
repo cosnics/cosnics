@@ -60,7 +60,7 @@ class CourseGroupMenu extends HTML_Menu
      *        string "?category=%s".
      */
     public function __construct($course, $current_group,
-        $url_format = '?application=weblcms&go=CourseViewer&tool=CourseGroup&course=%s&course_group=%s')
+        $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&course=%s&course_group=%s')
     {
         if ($current_group == '0' || is_null($current_group))
         {

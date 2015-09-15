@@ -9,9 +9,9 @@
 
     $(document).ready(function() {
         $('.path_type').hide();
-        $('input[name=path_type]:radio').on('click', showOptions);
+        $(document).on('click', 'input[name=path_type]:radio', showOptions);
         var pathType = $('input[name=path_type]:radio:checked').val();
         $('#path_type_' + pathType).show();
     })
-    
+
 })(jQuery);

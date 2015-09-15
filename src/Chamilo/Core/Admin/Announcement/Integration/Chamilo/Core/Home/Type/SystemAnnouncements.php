@@ -7,12 +7,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 {
@@ -75,46 +69,8 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
     {
         if (! isset($this->publications))
         {
-            $from_date_variables = new PropertyConditionVariable(
-                Publication :: class_name(),
-                Publication :: PROPERTY_FROM_DATE);
-
-            $to_date_variable = new PropertyConditionVariable(
-                Publication :: class_name(),
-                Publication :: PROPERTY_TO_DATE);
-
-            $time_conditions = array();
-
-            $time_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_HIDDEN),
-                new StaticConditionVariable(0));
-
-            $forever_conditions = array();
-            $forever_conditions[] = new EqualityCondition($from_date_variables, new StaticConditionVariable(0));
-            $forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
-            $forever_condition = new AndCondition($forever_conditions);
-
-            $between_conditions = array();
-            $between_conditions[] = new InequalityCondition(
-                $from_date_variables,
-                InequalityCondition :: LESS_THAN_OR_EQUAL,
-                new StaticConditionVariable(time()));
-            $between_conditions[] = new InequalityCondition(
-                $to_date_variable,
-                InequalityCondition :: GREATER_THAN_OR_EQUAL,
-                new StaticConditionVariable(time()));
-            $between_condition = new AndCondition($between_conditions);
-
-            $time_conditions[] = new OrCondition(array($forever_condition, $between_condition));
-
-            $condition = new AndCondition($time_conditions);
-
-            $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_me(
-                $condition,
-                array(),
-                0,
-                - 1,
-                $this->get_user()->get_id());
+            $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_user(
+                $this->get_user_id());
         }
 
         return $this->publications;

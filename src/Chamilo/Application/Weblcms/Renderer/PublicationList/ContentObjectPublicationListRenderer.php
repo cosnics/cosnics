@@ -222,6 +222,45 @@ abstract class ContentObjectPublicationListRenderer
             $html[] = '(' . $this->render_publication_period($publication) . ')';
         }
 
+        $publication_modified = $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] >
+             $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE];
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
+
+        $content_object_modified = $content_object->get_modification_date() >
+             $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE];
+
+        if ($publication_modified || $content_object_modified)
+        {
+            $html[] = '<br />';
+            $html[] = '<span class="highlight">';
+            $html[] = htmlentities(Translation :: get('LastModifiedOn'));
+
+            if ($content_object_modified && $publication_modified)
+            {
+                if ($content_object->get_modification_date() >
+                     $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
+                {
+                    $html[] = $this->format_date($content_object->get_modification_date());
+                }
+                else
+                {
+                    $html[] = $this->format_date($publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]);
+                }
+            }
+            elseif ($content_object_modified)
+            {
+                $html[] = $this->format_date($content_object->get_modification_date());
+            }
+            else
+            {
+                $html[] = $this->format_date($publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]);
+            }
+
+            $html[] = '</span> ';
+        }
+
         return implode(PHP_EOL, $html);
     }
 
@@ -730,24 +769,23 @@ abstract class ContentObjectPublicationListRenderer
         if ($publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
         {
 
-            // if (!$publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT]
+            if (! $publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
             // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
-            // TYPE)) {
-            // $email_url = $this->get_url(
-            // array(
-            // Tool :: PARAM_PUBLICATION_ID => $publication_id,
-            // Tool :: PARAM_ACTION => Tool :: ACTION_MAIL_PUBLICATION
-            // )
-            // );
+            // TYPE))
+            {
+                $email_url = $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MAIL_PUBLICATION));
 
-            // $toolbar->add_item(
-            // new ToolbarItem(
-            // Translation :: get('SendByEMail'),
-            // Theme :: getInstance()->getCommonImagePath('action_email'), $email_url,
-            // ToolbarItem :: DISPLAY_ICON, true
-            // )
-            // );
-            // }
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('SendByEMail'),
+                        Theme :: getInstance()->getCommonImagePath('action_email'),
+                        $email_url,
+                        ToolbarItem :: DISPLAY_ICON,
+                        true));
+            }
         }
 
         $details_url = $this->get_url(
@@ -911,6 +949,8 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type));
+
+            // Old functionality in new code
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
@@ -933,6 +973,60 @@ abstract class ContentObjectPublicationListRenderer
                     $visibility_url,
                     ToolbarItem :: DISPLAY_ICON));
 
+            // New functionality in old code
+
+            if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
+                 $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
+            {
+                $variable = 'PeriodForever';
+                $visibility_image = 'Action/Period';
+            }
+            else
+            {
+                if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
+                {
+                    $variable = 'PeriodBefore';
+                    $visibility_image = 'Action/PeriodBefore';
+                }
+                elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
+                {
+                    $variable = 'PeriodAfter';
+                    $visibility_image = 'Action/PeriodAfter';
+                }
+                else
+                {
+                    $variable = 'PeriodCurrent';
+                    $visibility_image = 'Action/Period';
+                }
+            }
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath($visibility_image),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
+                    ToolbarItem :: DISPLAY_ICON));
+
+            if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
+            {
+                $visibility_image = 'Action/Invisible';
+            }
+            else
+            {
+                $visibility_image = 'Action/Visible';
+            }
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath($visibility_image),
+                    $visibility_url,
+                    ToolbarItem :: DISPLAY_ICON));
+
+            // Move the publication
             if ($this->get_tool_browser()->get_parent() instanceof Categorizable)
             {
                 $toolbar->add_item(

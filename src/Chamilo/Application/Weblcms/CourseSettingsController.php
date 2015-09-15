@@ -193,17 +193,20 @@ class CourseSettingsController
                 }
             }
 
-            $course_setting_relation->truncate_values();
-
-            foreach ($course_setting_values as $course_setting_value)
+            if ($course_setting_relation)
             {
-                try
+                $course_setting_relation->truncate_values();
+
+                foreach ($course_setting_values as $course_setting_value)
                 {
-                    $course_setting_relation->add_course_setting_value($course_setting_value);
-                }
-                catch (\Exception $e)
-                {
-                    $succes = false;
+                    try
+                    {
+                        $course_setting_relation->add_course_setting_value($course_setting_value);
+                    }
+                    catch (\Exception $e)
+                    {
+                        $succes = false;
+                    }
                 }
             }
         }

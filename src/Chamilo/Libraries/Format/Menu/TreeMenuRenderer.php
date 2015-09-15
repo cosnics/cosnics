@@ -2,25 +2,33 @@
 namespace Chamilo\Libraries\Format\Menu;
 
 use HTML_Menu_DirectTreeRenderer;
+
 /**
  * $Id: tree_menu_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ *
  * @package common.html.menu
  */
 
 /**
  * Renderer which can be used to include a tree menu on your page.
+ *
  * @author Bart Mollet
  * @author Tim De Pauw
  */
 class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
 {
+
     /**
      * Boolean to check if this tree menu is allready initialized
      */
     private static $initialized;
+
     private $search_url;
+
     private $tree_name;
+
     private $item_url;
+
     private $collapsed;
 
     /**
@@ -33,7 +41,10 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
         $this->item_url = $item_url;
         $this->collapsed = $collapsed;
 
-        //$entryTemplates = array (HTML_MENU_ENTRY_INACTIVE => '<a href="{url}" onclick="{onclick}" id="{id}" class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVE => '<!--A--><a href="{url}" onclick="{onclick}" id="{id}" class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVEPATH => '<!--P--><a href="{url}" onclick="{onclick}" id="{id}" class="{class}">{title}</a>');
+        // $entryTemplates = array (HTML_MENU_ENTRY_INACTIVE => '<a href="{url}" onclick="{onclick}" id="{id}"
+        // class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVE => '<!--A--><a href="{url}" onclick="{onclick}"
+        // id="{id}" class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVEPATH => '<!--P--><a href="{url}"
+        // onclick="{onclick}" id="{id}" class="{class}">{title}</a>');
         $entryTemplates = array();
         $entryTemplates[HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
         $entryTemplates[HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
@@ -44,6 +55,7 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
 
     /**
      * Finishes rendering a level in the tree menu
+     *
      * @see HTML_Menu_DirectTreeRenderer::finishLevel
      */
     public function finishLevel($level)
@@ -51,7 +63,9 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
         $root = ($level == 0);
         if ($root)
         {
-            $this->setLevelTemplate('<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n", '</ul></div>' . "\n");
+            $this->setLevelTemplate(
+                '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n",
+                '</ul></div>' . "\n");
         }
         parent :: finishLevel($level);
         if ($root)
@@ -62,6 +76,7 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
 
     /**
      * Renders an entry in the tree menu
+     *
      * @see HTML_Menu_DirectTreeRenderer::renderEntry
      */
     public function renderEntry($node, $level, $type)
@@ -75,13 +90,17 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
             }
         }
 
-        $node['safe_title'] = strip_tags($node['title']);
+        if (! $node['safe_title'])
+        {
+            $node['safe_title'] = strip_tags($node['title']);
+        }
 
         parent :: renderEntry($node, $level, $type);
     }
 
     /**
      * Gets a HTML representation of the tree menu
+     *
      * @return string
      */
     public function toHtml()
@@ -94,7 +113,8 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
         $html[] = $parent_html;
 
         $html[] = '<script type="text/javascript">';
-        $html[] = '$("#' . $this->tree_name . '").tree_menu({search: "' . $this->search_url . '", item_url: "' . $this->item_url . '", collapsed: "'. $this->collapsed .'" });';
+        $html[] = '$("#' . $this->tree_name . '").tree_menu({search: "' . $this->search_url . '", item_url: "' .
+             $this->item_url . '", collapsed: "' . $this->collapsed . '" });';
         $html[] = '</script>';
 
         return implode(PHP_EOL, $html);

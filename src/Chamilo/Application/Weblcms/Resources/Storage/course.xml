@@ -11,6 +11,7 @@
 		<property name="expiration_date" type="integer" unsigned="1" notnull="1" />
 		<property name="title" type="text" length="250" fixed="true" />
 		<property name="visual_code" type="text" length="40" fixed="true" notnull="1" />
+		<property name="system_code" type="text" length="40" fixed="true" notnull="1" />
 		<property name="language" type="text" length="40" fixed="true" notnull="1" />
 	</properties>
 	<index name="course_type_id">

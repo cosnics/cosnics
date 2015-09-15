@@ -441,7 +441,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $content_object_versions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_versions(
                 $content_object);
 
-            foreach ($content_object_versions as $content_object_version)
+            while ($content_object_version = $content_object_versions->next_result())
             {
                 if (! $this->in_id_cache($content_object_version->get_id()))
                 {

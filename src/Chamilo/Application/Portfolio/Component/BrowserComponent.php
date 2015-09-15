@@ -8,6 +8,10 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
  * Portfolio browser component, used to browse for other users' portfolio
@@ -65,13 +69,23 @@ class BrowserComponent extends \Chamilo\Application\Portfolio\Manager implements
      */
     public function get_table_condition($table_class_name)
     {
-        return $this->action_bar->get_conditions(
+        $conditions = array();
+
+        $searchConditions = $this->action_bar->get_conditions(
             array(
-                new PropertyConditionVariable(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                    \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_LASTNAME),
-                new PropertyConditionVariable(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                    \Chamilo\Core\User\Storage\DataClass\User :: PROPERTY_FIRSTNAME)));
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)));
+
+        if ($searchConditions)
+        {
+            $conditions[] = $searchConditions;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ACTIVE),
+            new StaticConditionVariable(1));
+
+        return new AndCondition($conditions);
     }
 }

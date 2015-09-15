@@ -135,14 +135,14 @@ $(function()
     
     function lockWeight(ev, ui)
     {
-        var checked = $(this).attr('checked');
-        if (checked == 'checked')
+        var checked = $(this).prop('checked');
+        if (checked)
         {
-            $('input[name="weight"]').attr('disabled', 'disabled');
+            $('input[name="weight"]').prop('disabled', true);
         }
         else
         {
-            $('input[name="weight"]').removeAttr('disabled');
+            $('input[name="weight"]').prop('disabled', false);
         }
     }
 

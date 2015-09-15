@@ -229,7 +229,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $location = $context_dm :: retrieve($context_class :: class_name(), new DataClassRetrieveParameters($condition));
+        $location = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve(
+            $context_class,
+            new DataClassRetrieveParameters($condition));
 
         if (! $location)
         {

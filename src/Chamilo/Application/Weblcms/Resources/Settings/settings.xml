@@ -17,6 +17,12 @@
 					<option name="allow_download_page" value="1" />
 				</options>
 			</setting>
+			<setting name="allow_view_as_user" field="checkbox" default="1">
+				<options type="static">
+					<option name="allow_view_as_user" value="1" />
+				</options>
+			</setting>
+			<setting name="excluded_course_types" field="text" default="" />
 		</category>
 		<category name="viewer">
 			<setting name="view_state" field="radio" default="0" user_setting="1">
@@ -40,6 +46,13 @@
 					<option name="force_collaborate" value="1" />
 				</options>
 			</setting>
+
+			<setting name="collaborate_default" field="checkbox" default="1" user_setting="1">
+				<options type="static">
+					<option name="collaborate_default" value="1" />
+				</options>
+			</setting>
+
 			<setting name="log_mails" field="checkbox" default="0">
 				<options type="static">
 					<option name="log_mails" value="1" />

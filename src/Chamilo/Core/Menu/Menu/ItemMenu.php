@@ -38,10 +38,10 @@ class ItemMenu extends HTML_Menu
      */
     private $array_renderer;
 
-    public function __construct($current_category, $url_format = '?item=%s', $condition = null)
+    public function __construct($current_category, $url_format = '?item=__ITEM__', $condition = null)
     {
         $this->urlFmt = $url_format;
-        
+
         $menu = $this->get_items($condition);
         parent :: __construct($menu);
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
@@ -51,26 +51,26 @@ class ItemMenu extends HTML_Menu
     private function get_items($condition)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT), 
+            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
             new StaticConditionVariable(0));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE),
             new StaticConditionVariable(CategoryItem :: class_name()));
         $condition = new AndCondition($conditions);
-        
+
         $parameters = new DataClassRetrievesParameters(
-            $condition, 
-            null, 
-            null, 
+            $condition,
+            null,
+            null,
             new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
         $items = DataManager :: retrieves(Item :: class_name(), $parameters);
-        
+
         $menu_item = array();
         $menu_item['title'] = Translation :: get('Home');
         $menu_item['url'] = $this->get_category_url(0);
         $menu_item['class'] = 'home';
         $menu_item[OptionsMenuRenderer :: KEY_ID] = 0;
-        
+
         $sub_menu_items = array();
         while ($item = $items->next_result())
         {
@@ -81,7 +81,7 @@ class ItemMenu extends HTML_Menu
             $sub_menu_item[OptionsMenuRenderer :: KEY_ID] = $item->get_id();
             $sub_menu_items[] = $sub_menu_item;
         }
-        
+
         $menu_item['sub'] = $sub_menu_items;
         $menu[] = $menu_item;
         return $menu;
@@ -89,18 +89,18 @@ class ItemMenu extends HTML_Menu
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param int $category The id of the category
      * @return string The requested URL
      */
     private function get_category_url($item_id)
     {
-        return htmlentities(sprintf($this->urlFmt, $item_id));
+        return str_replace('__ITEM__', $item_id, $this->urlFmt);
     }
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -117,12 +117,12 @@ class ItemMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
     {
-        $renderer = new TreeMenuRenderer($this->get_tree_name());
+        $renderer = new TreeMenuRenderer($this->get_tree_name(), '', '#', false);
         $this->render($renderer, 'sitemap');
         return $renderer->toHTML();
     }

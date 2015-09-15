@@ -35,6 +35,7 @@ class CreatorComponent extends Manager
             $request->set_motivation($values[Request :: PROPERTY_MOTIVATION]);
             $request->set_decision(Request :: DECISION_PENDING);
             $request->set_creation_date(time());
+            $request->set_category_id($values[Request::PROPERTY_CATEGORY_ID]);
 
             $success = $request->create();
 

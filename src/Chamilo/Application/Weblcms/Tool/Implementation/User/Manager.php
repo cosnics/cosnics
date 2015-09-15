@@ -28,6 +28,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_SUBSCRIBE_USERS_FROM_GROUP = 'GroupUsersSubscribe';
     const ACTION_UNSUBSCRIBE_GROUPS = 'GroupUnsubscribe';
     const ACTION_REQUEST_SUBSCRIBE_USER = 'RequestSubscribeUser';
+    const ACTION_REQUEST_SUBSCRIBE_USERS = 'RequestSubscribeUsers';
     const ACTION_USER_DETAILS = 'Details';
     const ACTION_EMAIL = 'Emailer';
     const ACTION_REPORTING = 'ReportingViewer';

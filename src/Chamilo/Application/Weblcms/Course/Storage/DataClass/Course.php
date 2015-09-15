@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 
 /**
  * This class represents a course in the weblcms.
@@ -43,6 +44,7 @@ class Course extends DataClass
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
     const PROPERTY_TITULAR_ID = 'titular_id';
     const PROPERTY_VISUAL_CODE = 'visual_code';
+    const PROPERTY_SYSTEM_CODE = 'system_code';
     const PROPERTY_TITLE = 'title';
     const PROPERTY_LAST_VISIT = 'last_visit';
     const PROPERTY_LAST_EDIT = 'last_edit';
@@ -127,6 +129,7 @@ class Course extends DataClass
         $extended_properties[] = self :: PROPERTY_TITULAR_ID;
         $extended_properties[] = self :: PROPERTY_TITLE;
         $extended_properties[] = self :: PROPERTY_VISUAL_CODE;
+        $extended_properties[] = self :: PROPERTY_SYSTEM_CODE;
         $extended_properties[] = self :: PROPERTY_CREATION_DATE;
         $extended_properties[] = self :: PROPERTY_EXPIRATION_DATE;
         $extended_properties[] = self :: PROPERTY_LAST_EDIT;
@@ -685,11 +688,31 @@ class Course extends DataClass
                 {
                     return true;
                 }
+
+                // If the user is a sub administrator, grant all rights
+                if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
+                    \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
+                    $user->get_id(),
+                    \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
+                    $this->get_id()))
+                {
+                    return true;
+                }
             }
         }
         else
         {
             if ($user->is_platform_admin())
+            {
+                return true;
+            }
+
+            // If the user is a sub administrator, grant all rights
+            if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
+                \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
+                $user->get_id(),
+                \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
+                $this->get_id()))
             {
                 return true;
             }
@@ -864,6 +887,16 @@ class Course extends DataClass
     }
 
     /**
+     * Returns the system code of this course object
+     *
+     * @return String
+     */
+    public function get_system_code()
+    {
+        return $this->get_default_property(self :: PROPERTY_SYSTEM_CODE);
+    }
+
+    /**
      * Returns the title of this course object
      *
      * @return String
@@ -950,6 +983,16 @@ class Course extends DataClass
     public function set_visual_code($visual_code)
     {
         $this->set_default_property(self :: PROPERTY_VISUAL_CODE, $visual_code);
+    }
+
+    /**
+     * Sets the system code of this course object
+     *
+     * @param String $system_code
+     */
+    public function set_system_code($system_code)
+    {
+        $this->set_default_property(self :: PROPERTY_SYSTEM_CODE, $system_code);
     }
 
     /**
@@ -1040,6 +1083,42 @@ class Course extends DataClass
     public function get_category_id()
     {
         return $this->get_default_property(self :: PROPERTY_CATEGORY_ID);
+    }
+
+    public function get_category()
+    {
+        if ($this->get_category_id())
+        {
+            return \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
+                CourseCategory :: class_name(),
+                $this->get_category_id());
+        }
+    }
+
+    public function get_fully_qualified_name($include_self = true)
+    {
+        $names = array();
+
+        if ($include_self)
+        {
+            if ($this->get_visual_code())
+            {
+                $names[] = $this->get_title() . ' (' . $this->get_visual_code() . ')';
+            }
+            else
+            {
+                $names[] = $this->get_title();
+            }
+        }
+
+        $category = $this->get_category();
+
+        if ($category instanceof CourseCategory)
+        {
+            $names[] = $category->get_fully_qualified_name();
+        }
+
+        return implode(' <span class="visible">></span> ', array_reverse($names));
     }
 
     /**

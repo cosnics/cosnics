@@ -110,9 +110,13 @@ class Manager implements PublicationInterface
 
         $possible_courses = array();
 
+        $excludedCourseTypes = explode(
+            ',',
+            (string) Configuration :: get_instance()->get_setting('Chamilo\Application\Weblcms', 'excluded_course_types'));
+
         while ($course = $courses->next_result())
         {
-            if ($course->is_course_admin($user))
+            if ($course->is_course_admin($user) && ! in_array($course->get_course_type_id(), $excludedCourseTypes))
             {
                 $possible_courses[] = $course;
             }

@@ -44,6 +44,15 @@ class Connection
                 'driverClass' => $data_source_name->get_driver(true),
                 'charset' => 'UTF8');
             $this->connection = DriverManager :: getConnection($connection_parameters, $configuration);
+
+            try
+            {
+                $this->connection->connect();
+            }
+            catch (\Exception $ex)
+            {
+                throw new \Exception('Could not connect to the database. Please contact your system administrator.');
+            }
         }
         else
         {

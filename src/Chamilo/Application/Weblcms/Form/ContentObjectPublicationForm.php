@@ -35,6 +35,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  * This class represents a form to allow a user to publish a learning object.
@@ -210,7 +211,7 @@ class ContentObjectPublicationForm extends FormValidator
 
             if ($this->collaborate_possible && ! $force_collaborate)
             {
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = $first_publication->get_allow_collaboration();
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: get('collaborate_default', __NAMESPACE__);
             }
             else
             {

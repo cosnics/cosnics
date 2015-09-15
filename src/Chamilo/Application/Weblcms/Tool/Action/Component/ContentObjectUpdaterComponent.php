@@ -23,7 +23,8 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
     public function run()
     {
         $pid = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID) ? Request :: get(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID) : $_POST[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID];
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID) : Request :: post(
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
@@ -40,7 +41,10 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             $this->get_course(),
             $publication->get_default_properties());
 
-        if ($canEditContentObject || $canEditPublicationContentObject)
+        $is_admin_introduction = $this->get_course()->is_course_admin($this->get_user()) &&
+             $publication->get_content_object()->get_type() == Introduction :: class_name();
+
+        if ($canEditContentObject || $canEditPublicationContentObject || $is_admin_introduction)
         {
             $content_object = $publication->get_content_object();
 

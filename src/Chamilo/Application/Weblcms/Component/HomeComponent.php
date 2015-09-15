@@ -186,6 +186,21 @@ class HomeComponent extends Manager implements DelegateComponent
                     Translation :: get('RequestList')) . '</a></li>';
         }
 
+        if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: user_is_admin($this->get_user()))
+        {
+            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
+                 Theme :: getInstance()->getCommonImagePath('Action/Browser') .
+                 ')"><a style="top: -3px; position: relative;" href="' .
+                 htmlspecialchars(
+                    $this->get_url(
+                        array(
+                            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Manager :: package(),
+                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Manager :: ACTION_BROWSE))) .
+                 '">' .
+                 htmlspecialchars(
+                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package())) . '</a></li>';
+        }
+
         return implode(PHP_EOL, $html);
     }
 

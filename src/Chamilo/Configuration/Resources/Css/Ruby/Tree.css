@@ -1,7 +1,7 @@
 /*****************************************************
  *  TREEMENU STYLES                                  *
  *****************************************************/
-ul.tree-menu,ul.tree-menu ul {
+ul.tree-menu, ul.tree-menu ul {
 	list-style: none;
 	margin: 0px;
 	padding: 0px;
@@ -21,7 +21,8 @@ ul.tree-menu li {
 	clear: both;
 }
 
-ul.tree-menu li div,ul.tree-menu li div.last,ul.tree-menu li div.collapse,ul.tree-menu li div.lastCollapse,ul.tree-menu li div.expand,ul.tree-menu li div.lastExpand
+ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
+	ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand
 	{
 	padding-left: 18px;
 	background-repeat: no-repeat;
@@ -203,7 +204,7 @@ ul.tree-menu li div a.divider {
 	cursor: default;
 }
 
-ul.tree-menu li.current_path>div a.category,ul.tree-menu li.current>div a.category
+ul.tree-menu li.current_path>div a.category, ul.tree-menu li.current>div a.category
 	{
 	background-image: url(../../Images/Ruby/Treemenu/TreeFolderOpen.png);
 }
@@ -213,10 +214,9 @@ ul.tree-menu li div a.new_category {
 		url(../../Images/Ruby/Treemenu/TreeFolderClosedNew.png);
 }
 
-ul.tree-menu li.current_path>div a.new_category,ul.tree-menu li.current>div a.new_category
+ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category
 	{
-	background-image:
-		url(../../Images/Ruby/Treemenu/TreeFolderOpenNew.png);
+	background-image: url(../../Images/Ruby/Treemenu/TreeFolderOpenNew.png);
 }
 
 ul.tree-menu li div a.invisible_category {
@@ -225,7 +225,7 @@ ul.tree-menu li div a.invisible_category {
 		url(../../Images/Ruby/Treemenu/TreeFolderClosedInvisible.png);
 }
 
-ul.tree-menu li.current_path>div a.invisible_category,ul.tree-menu li.current>div a.invisible_category
+ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>div a.invisible_category
 	{
 	color: #666;
 	background-image:
@@ -375,7 +375,7 @@ div.tool_bar_icon_right {
 /****************************************
  * TOOL MENU IN LEFT OR LEFT ICON MODUS *
  ****************************************/
-div.tool_bar_left #tool_bar_hide_container.hide,div.tool_bar_icon_left #tool_bar_hide_container.hide
+div.tool_bar_left #tool_bar_hide_container.hide, div.tool_bar_icon_left #tool_bar_hide_container.hide
 	{
 	right: 0px;
 	margin-right: -1px;
@@ -383,7 +383,7 @@ div.tool_bar_left #tool_bar_hide_container.hide,div.tool_bar_icon_left #tool_bar
 		url(../../Images/Ruby/Action/ActionBar/LeftHideBackground.png);
 }
 
-div.tool_bar_left #tool_bar_hide_container.show,div.tool_bar_icon_left #tool_bar_hide_container.show
+div.tool_bar_left #tool_bar_hide_container.show, div.tool_bar_icon_left #tool_bar_hide_container.show
 	{
 	right: -18px;
 	margin-left: 0px;
@@ -394,7 +394,7 @@ div.tool_bar_left #tool_bar_hide_container.show,div.tool_bar_icon_left #tool_bar
 /******************************************
  * TOOL MENU IN RIGHT OR RIGHT ICON MODUS *
  ******************************************/
-div.tool_bar_right #tool_bar_hide_container.hide,div.tool_bar_icon_right #tool_bar_hide_container.hide
+div.tool_bar_right #tool_bar_hide_container.hide, div.tool_bar_icon_right #tool_bar_hide_container.hide
 	{
 	left: 0px;
 	margin-left: -1px;
@@ -402,7 +402,7 @@ div.tool_bar_right #tool_bar_hide_container.hide,div.tool_bar_icon_right #tool_b
 		url(../../Images/Ruby/Action/ActionBar/RightHideBackground.png);
 }
 
-div.tool_bar_right #tool_bar_hide_container.show,div.tool_bar_icon_right #tool_bar_hide_container.show
+div.tool_bar_right #tool_bar_hide_container.show, div.tool_bar_icon_right #tool_bar_hide_container.show
 	{
 	left: -18px;
 	margin-right: 0px;

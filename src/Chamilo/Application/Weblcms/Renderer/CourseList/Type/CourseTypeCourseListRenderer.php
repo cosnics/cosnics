@@ -377,6 +377,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                 if ($course_admin || $course_visible)
                 {
+                    $locked = '';
+                    $text_style = '';
                     $html[] = '<div style="float:left;">';
 
                     $icon = Theme :: getInstance()->getCommonImagePath('Action/Home');
@@ -388,19 +390,47 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     $course_closed = $course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED;
 
-                    if ($course_closed && ! $course_admin)
+                    if ($course_closed)
                     {
                         $icon = Theme :: getInstance()->getCommonImagePath('Action/Lock');
-                        $url = null;
+
+                        if (! $course_admin)
+                        {
+                            $url = null;
+                        }
+                        else
+                        {
+                            $locked = '<img style="float: left; margin-left: -30px; padding-top: 1px;" src="' .
+                                 Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
+                        }
                     }
 
                     if ($course_admin)
                     {
-                        $icon = Theme :: getInstance()->getImagePath(\Chamilo\Core\User\Manager :: context(), 'Logo/16');
+                        if ($course_visible)
+                        {
+                            $icon = Theme :: getInstance()->getImagePath(
+                                \Chamilo\Core\User\Manager :: context(),
+                                'Logo/16');
+                        }
+                        else
+                        {
+                            $icon = Theme :: getInstance()->getImagePath(
+                                \Chamilo\Core\User\Manager :: context(),
+                                'Logo/16Na');
+                        }
                     }
 
-                    $html[] = '<li style="list-style: none; margin-bottom: 5px; list-style-image: url(' . $icon . ');">';
-                    $html[] = '<a style="top: -2px; position: relative;" href="' . $url . '">' . $course->get_title();
+                    if (! $course_visible)
+                    {
+                        $text_style .= $this->get_invisible_text_style();
+                    }
+
+                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
+                        list-style-image: url(' . $icon . '); margin-left: 15px;' . $text_style . '">';
+                    $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
+                         $course->get_title();
+
                     $html[] = '</a>';
                     if ($this->get_new_publication_icons() && (! $course_closed || $course_admin))
                     {
@@ -465,6 +495,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
             return implode($html, "\n");
         }
+    }
+
+    public function get_invisible_text_style()
+    {
+        return "color: #999;";
     }
 
     /**
