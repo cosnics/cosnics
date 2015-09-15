@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass;
+namespace Chamilo\Core\Repository\Implementation\Youtube;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 

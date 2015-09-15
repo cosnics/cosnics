@@ -62,10 +62,12 @@ class CategoryTreeMenu extends GenericTree
      */
     public function get_node_url($node_id)
     {
+        $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = Manager :: context();
         $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $this->get_connector()->get_external_repository_instance_id();
         $parameters[Manager :: PARAM_FOLDER] = $node_id;
-        $redirect = new Redirect(array($parameters));
+        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+        $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }
 

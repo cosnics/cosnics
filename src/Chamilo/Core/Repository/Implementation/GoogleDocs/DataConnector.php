@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Core\Repository\Implementation\GoogleDocs\API\Google_Service_Drive;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -65,7 +66,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->client->setClientSecret($client_secret);
         $this->client->setScopes('https://www.googleapis.com/auth/drive');
 
-        $this->service = new \Google_Service_Drive($this->client);
+        $this->service = new Google_Service_Drive($this->client);
     }
 
     function expandHomeDirectory($path)
@@ -172,7 +173,20 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function count_external_repository_objects($condition)
     {
-        $files = $this->service->files->listFiles($condition);
+        if (! is_null($condition))
+        {
+            $condition = 'title contains \'' . $condition . '\' and ';
+        }
+        $condition .= 'trashed=false';
+
+        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        if (is_null($folder))
+        {
+            $folder = 'root';
+        }
+        $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
+
+        $files = $this->service->files->listFiles(array('q' => $condition));
         $files_items = $files['modelData']['items'];
         return count($files_items);
     }
@@ -210,13 +224,39 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
     {
-        $files = $this->service->files->listFiles(array('q' => $condition, 'maxResults' => $count));
+        if ($order_property[0]->get_property()->get_property() == ExternalObject :: PROPERTY_TITLE)
+        {
+            $orderBy = 'title' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
+        }
+        elseif ($order_property[0]->get_property()->get_property() == ExternalObject :: PROPERTY_CREATED)
+        {
+            $orderBy = 'createdDate' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
+        }
+        else
+        {
+            $orderBy = null;
+        }
+
+        if (! is_null($condition))
+        {
+            $condition = 'title contains \'' . $condition . '\' and ';
+        }
+        $condition .= 'trashed=false';
+
+        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        if (is_null($folder))
+        {
+            $folder = 'root';
+        }
+        $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
+
+        $files = $this->service->files->listFiles(
+            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy));
         $files_items = $files['modelData']['items'];
         $objects = array();
 
         foreach ($files_items as $file_item)
         {
-            // var_dump($file_item);
             $object = new ExternalObject();
             $object->set_id($file_item['id']);
             $object->set_external_repository_id($this->get_external_repository_instance_id());
@@ -285,13 +325,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_my_folders($id)
     {
-        return $this->retrieve_folders("'" . $id . "' in parents and mimeType = 'application/vnd.google-apps.folder'");
+        return $this->retrieve_folders(
+            "'" . $id . "' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'");
     }
 
     public function retrieve_shared_folders($id)
     {
         return $this->retrieve_folders(
-            "'" . $id . "' in parents and sharedWithMe and mimeType = 'application/vnd.google-apps.folder'");
+            "'" . $id .
+                 "' in parents and sharedWithMe and trashed=false and mimeType = 'application/vnd.google-apps.folder'");
     }
 
     private function retrieve_folders($query)
@@ -307,6 +349,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $folder->setId($file_item['id']);
             $folder->setTitle($file_item['title']);
             $folder->setParent($file_item['parents'][0]['id']);
+
             $folders[] = $folder;
         }
 

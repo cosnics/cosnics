@@ -14,8 +14,6 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
-use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\PlayList;
-use Chamilo\Core\Repository\Implementation\Youtube\Storage\DataClass\ExternalObject;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
@@ -89,7 +87,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
             $user_setting->set_external_id($this->get_external_repository_instance_id());
-
 
             return $user_setting->create();
         }
