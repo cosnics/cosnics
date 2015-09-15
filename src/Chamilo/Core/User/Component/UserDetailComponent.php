@@ -103,7 +103,7 @@ class UserDetailComponent extends Manager
                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                 Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                 \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
-        
+
         $table->setCellContents(1, 2, '<img src="' . $profilePhotoUrl->getUrl() . '" />');
         $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
 
@@ -198,14 +198,15 @@ class UserDetailComponent extends Manager
         {
             $i = 2;
 
-            $gm = new \Chamilo\Core\Group\Manager($this->get_user());
-
             while ($group = $groups->next_result())
             {
-                $url = '<a href="' . $gm->get_link(
+                $redirect = new Redirect(
                     array(
+                        Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: package(),
                         \Chamilo\Core\Group\Manager :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_VIEW_GROUP,
-                        \Chamilo\Core\Group\Manager :: PARAM_GROUP_ID => $group->get_id())) . '">';
+                        \Chamilo\Core\Group\Manager :: PARAM_GROUP_ID => $group->get_id()));
+
+                $url = '<a href="' . $redirect->getUrl() . '">';
 
                 $table->setCellContents($i, 0, $url . $group->get_code() . '</a>');
                 $table->setCellAttributes($i, 0, array('style' => 'width: 150px;'));
@@ -256,7 +257,7 @@ class UserDetailComponent extends Manager
     public function display_additional_information($user_id)
     {
         $form_viewer = new \Chamilo\Configuration\Form\Viewer(
-            self :: context(),
+            self :: package(),
             'account_fields',
             $user_id,
             Translation :: get('AdditionalUserInformation'));

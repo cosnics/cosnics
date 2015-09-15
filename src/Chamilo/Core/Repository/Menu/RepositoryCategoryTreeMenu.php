@@ -151,6 +151,11 @@ class RepositoryCategoryTreeMenu extends GenericTree
         return $node->get_name();
     }
 
+    public function get_node_safe_title($node)
+    {
+        return $this->get_node_title($node);
+    }
+
     public function get_node_id($node)
     {
         return $node->get_id();

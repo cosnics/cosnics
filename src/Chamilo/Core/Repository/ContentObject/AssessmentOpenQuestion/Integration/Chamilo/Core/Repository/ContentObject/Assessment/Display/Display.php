@@ -35,6 +35,13 @@ class Display extends QuestionDisplay
                 $this->add_document($clo_question, $formvalidator);
                 break;
         }
+
+        $formvalidator->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(
+                    ClassnameUtilities :: getInstance()->getNamespaceParent(
+                        'Chamilo\Core\Repository\ContentObject\Assessment')) . 'GiveHint.js'));
     }
 
     public function add_html_editor($clo_question, $formvalidator)

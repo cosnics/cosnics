@@ -123,7 +123,6 @@ class BrowseComponent extends Manager implements TableSupport
         $temp_replacement = '__CATEGORY_ID__';
 
         $url_format = $this->get_url(array(self :: PARAM_CATEGORY_ID => $temp_replacement));
-        $url_format = str_replace($temp_replacement, '%s', $url_format);
 
         $category_menu = new CourseCategoryMenu(Request :: get(self :: PARAM_CATEGORY_ID), $url_format);
 

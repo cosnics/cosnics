@@ -165,4 +165,9 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
 
         return $action_bar;
     }
+
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
+    }
 }

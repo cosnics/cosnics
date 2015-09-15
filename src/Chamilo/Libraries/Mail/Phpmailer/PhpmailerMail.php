@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Mail\Phpmailer;
 
 use Chamilo\Libraries\Mail\Mail;
 use PHPMailer;
+use Chamilo\Configuration\Storage\DataClass\MailLog;
 
 /**
  * $Id: phpmailer_mail.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
@@ -86,10 +87,26 @@ class PhpmailerMail extends Mail
             $mail->AddBCC($recipient, $recipient);
         }
 
+        $log = new MailLog();
+        $log->set_sender($mail->From);
+        $log->set_recipient($recipient);
+        $log->set_date(time());
+        $log->set_subject($mail->Subject);
+        $log->set_host(gethostname());
+
         if (! $mail->Send())
         {
+            $log->set_state(MailLog :: STATE_FAILED);
+            $log->set_message($mail->ErrorInfo);
+            $log->create();
             return false;
         }
+        else
+        {
+            $log->set_state(MailLog :: STATE_SUCCESSFUL);
+            $log->create();
+        }
+
         $mail->ClearAddresses();
         return true;
     }

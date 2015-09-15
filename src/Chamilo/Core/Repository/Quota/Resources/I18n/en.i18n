@@ -85,18 +85,15 @@ MostUsedContentObjectType = "Most used type"
 OtherFrequentlyUsedContentObjectTypes = "Frequently used types"
 OldestContentObject = "Oldest object"
 RightsComponent = "Configure access rights"
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
 General = "General"
 AllowUpgrade = "Allow upgrade"
 AllowRequest = "Allow request"
 Step = "Step"
 MaximumUser = "Maximum user"
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
-PackageTypeNameQuota = ""
+QuotaCreatedMailTitle = "[{PLATFORM}] Nieuwe quotumverhoging-aanvraag"
+QuotaCreatedMailBody = "Beste {USER},<br />
+<br />
+Er werd een nieuwe aanvraag tot quotumverhoging ingediend. Gelieve deze wanneer mogelijk te evalueren op de daartoe bestemde beheerspagina. (Repository >> Quota >> Hangende aanvragen)<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"

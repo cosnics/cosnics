@@ -11,10 +11,11 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * $Id: course_category.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.category_manager
  */
 /**
@@ -25,6 +26,8 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 {
     const CLASS_NAME = __CLASS__;
     const PROPERTY_CODE = 'code';
+    const PROPERTY_STATE = 'state';
+    const STATE_ARCHIVE = 0;
 
     public function __construct($default_properties = array(), $optional_properties = array())
     {
@@ -42,19 +45,29 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         $this->set_default_property(self :: PROPERTY_CODE, $code);
     }
 
+    public function get_state()
+    {
+        return $this->get_default_property(self :: PROPERTY_STATE);
+    }
+
+    public function set_state($state)
+    {
+        $this->set_default_property(self :: PROPERTY_STATE, $state);
+    }
+
     /**
      * Get the default properties of all contributions.
-     * 
+     *
      * @return array The property titles.
      */
     public static function get_default_property_names()
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_CODE));
+        return parent :: get_default_property_names(array(self :: PROPERTY_CODE, self :: PROPERTY_STATE));
     }
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return string[string]
      *
      */
@@ -65,7 +78,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 
     /**
      * Deletes the dataclass in the database and updates the children and courses
-     * 
+     *
      * @return bool
      */
     public function delete()
@@ -74,42 +87,42 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         {
             return false;
         }
-        
+
         $parent_variable = new PropertyConditionVariable(
-            CourseCategory :: class_name(), 
+            CourseCategory :: class_name(),
             CourseCategory :: PROPERTY_PARENT);
-        
+
         $condition = new EqualityCondition($parent_variable, new StaticConditionVariable($this->get_id()));
-        
+
         $properties = new DataClassProperties();
         $properties->add(new DataClassProperty($parent_variable, new StaticConditionVariable($this->get_parent())));
-        
+
         if (! DataManager :: updates(CourseCategory :: class_name(), $properties, $condition))
         {
             return false;
         }
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY_ID), 
+            new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $properties = new DataClassProperties();
         $properties->add(
             new DataClassProperty(
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY_ID), 
+                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY_ID),
                 new StaticConditionVariable($this->get_parent())));
-        
+
         if (! DataManager :: updates(Course :: class_name(), $properties, $condition))
         {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -119,11 +132,73 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()
     {
         return array(new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_PARENT));
+    }
+
+    public function get_parent_ids()
+    {
+        if ($this->get_parent() == 0)
+        {
+            return array();
+        }
+        else
+        {
+            $parent = DataManager :: retrieve_by_id(CourseCategory :: class_name(), $this->get_parent());
+
+            $parent_ids = array();
+            $parent_ids[] = $parent->get_id();
+            $parent_ids = array_merge($parent_ids, $parent->get_parent_ids());
+            return $parent_ids;
+        }
+    }
+
+    public function get_fully_qualified_name($include_self = true)
+    {
+        $parent_ids = $this->get_parent_ids();
+        $names = array();
+
+        if ($include_self)
+        {
+            $names[] = $this->get_name();
+        }
+
+        foreach ($parent_ids as $parent_id)
+        {
+            $parent = DataManager :: retrieve_by_id(CourseCategory :: class_name(), $parent_id);
+            $names[] = $parent->get_name();
+        }
+
+        return implode(' <span class="visible">></span> ', array_reverse($names));
+    }
+
+    public function get_children_ids($recursive = true)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_PARENT),
+            new StaticConditionVariable($this->get_id()));
+
+        if (! $recursive)
+        {
+            $parameters = new DataClassDistinctParameters($condition, self :: PROPERTY_ID);
+            return DataManager :: distinct(self :: class_name(), $parameters);
+        }
+        else
+        {
+            $children_ids = array();
+            $children = DataManager :: retrieve_categories($condition);
+
+            while ($child = $children->next_result())
+            {
+                $children_ids[] = $child->get_id();
+                $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
+            }
+
+            return $children_ids;
+        }
     }
 }

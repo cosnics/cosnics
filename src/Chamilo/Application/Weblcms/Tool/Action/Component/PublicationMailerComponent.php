@@ -37,8 +37,8 @@ class PublicationMailerComponent extends Manager
             }
             else
             {
-                $message = htmlentities(Translation :: get('NotAllowed'));
-                $failure = true;
+                $publication->mail_publication(true);
+                $message = Translation :: get('EmailSent');
             }
 
             $params = array();

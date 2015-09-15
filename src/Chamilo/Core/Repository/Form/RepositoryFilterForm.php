@@ -2,10 +2,8 @@
 namespace Chamilo\Core\Repository\Form;
 
 use Chamilo\Core\Repository\Selector\TypeSelector;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -13,10 +11,12 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * $Id: repository_filter_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -95,14 +95,13 @@ class RepositoryFilterForm extends FormValidator
         {
             if (is_integer($key))
             {
-                $select->addOption($type, 'disabled_' . $disabled_counter, array('disabled'));
-                $key = 'disabled_' . $disabled_counter;
-                $disabled_counter ++;
+                $select->addOption($type, $key);
             }
             else
             {
-
-                $select->addOption($type, $key);
+                $select->addOption($type, 'disabled_' . $disabled_counter, array('disabled'));
+                $key = 'disabled_' . $disabled_counter;
+                $disabled_counter ++;
             }
         }
 
@@ -123,59 +122,15 @@ class RepositoryFilterForm extends FormValidator
 
     public function get_filter_conditions()
     {
-        $session_filter = Session :: retrieve('filter');
-        if ($this->validate() || isset($session_filter))
+        $filter_condition_renderer = ConditionFilterRenderer :: factory(
+            FilterData :: get_instance(),
+            $this->get_user_id(),
+            $this->get_allowed_content_object_types());
+        $filter_condition = $filter_condition_renderer->render();
+
+        if ($filter_condition instanceof Condition)
         {
-            $values = $this->exportValues();
-            $filter = $values[self :: FILTER_TYPE];
-            if (substr($filter, 0, 9) == 'disabled_')
-                $filter = 0;
-
-            if ($this->validate())
-            {
-                Session :: register('filter', $filter);
-            }
-
-            $filter_type = ! is_null($filter) ? $filter : $session_filter;
-
-            if (is_numeric($filter_type))
-            {
-                if ($filter_type != '0')
-                {
-
-                    $parameters = new DataClassRetrievesParameters(
-                        new EqualityCondition(
-                            new PropertyConditionVariable(
-                                UserViewRelContentObject :: class_name(),
-                                UserViewRelContentObject :: PROPERTY_USER_VIEW_ID),
-                            new StaticConditionVariable($filter_type)));
-                    $content_objects = DataManager :: retrieves(UserViewRelContentObject :: class_name(), $parameters);
-                    while ($lo = $content_objects->next_result())
-                    {
-                        if ($lo->get_visibility())
-                        {
-                            $visible_lo[] = $lo->get_content_object_type();
-                        }
-                    }
-
-                    $condition = new InCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-                        $visible_lo,
-                        ContentObject :: get_table_name());
-                }
-                else
-                {
-                    $condition = null;
-                }
-            }
-            else
-            {
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-                    new StaticConditionVariable($filter_type));
-            }
-
-            return $condition;
+            return $filter_condition;
         }
     }
 

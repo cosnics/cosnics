@@ -184,4 +184,14 @@ class UserEntity implements RightsEntity
     {
         return User :: class_name();
     }
+
+    /**
+     * Get the fully qualified class name of the object
+     *
+     * @return string
+     */
+    public static function class_name()
+    {
+        return get_called_class();
+    }
 }

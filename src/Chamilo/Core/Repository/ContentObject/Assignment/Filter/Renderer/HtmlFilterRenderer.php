@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Render the parameters set via FilterData as HTML
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer
@@ -18,43 +18,43 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
     {
         $filter_data = $this->get_filter_data();
         $html = array();
-        
+
         $html[] = parent :: add_properties();
-        
+
         // Start time
         if ($filter_data->has_date(FilterData :: FILTER_START_TIME))
         {
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_START_TIME) . '">' . Translation :: get(
-                'StartsBetween', 
+                'StartsBetween',
                 array(
-                    'FROM' => $filter_data->get_start_time(FilterData :: FILTER_FROM_DATE), 
+                    'FROM' => $filter_data->get_start_time(FilterData :: FILTER_FROM_DATE),
                     'TO' => $filter_data->get_start_time(FilterData :: FILTER_TO_DATE))) . '</div>';
         }
         else
         {
-            if ($filter_data->get_creation_time(FilterData :: FILTER_FROM_DATE))
+            if ($filter_data->get_start_time(FilterData :: FILTER_FROM_DATE))
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_START_TIME) .
                      '">' . Translation :: get(
-                        'StartsAfter', 
+                        'StartsAfter',
                         array('FROM' => $filter_data->get_start_time(FilterData :: FILTER_FROM_DATE))) . '</div>';
             }
             elseif ($filter_data->get_start_time(FilterData :: FILTER_TO_DATE))
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_START_TIME) .
                      '">' . Translation :: get(
-                        'StartsBefore', 
+                        'StartsBefore',
                         array('TO' => $filter_data->get_start_time(FilterData :: FILTER_TO_DATE))) . '</div>';
             }
         }
-        
+
         // End time
         if ($filter_data->has_date(FilterData :: FILTER_END_TIME))
         {
             $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_END_TIME) . '">' . Translation :: get(
-                'EndsBetween', 
+                'EndsBetween',
                 array(
-                    'FROM' => $filter_data->get_end_time(FilterData :: FILTER_FROM_DATE), 
+                    'FROM' => $filter_data->get_end_time(FilterData :: FILTER_FROM_DATE),
                     'TO' => $filter_data->get_end_time(FilterData :: FILTER_TO_DATE))) . '</div>';
         }
         else
@@ -63,17 +63,17 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_END_TIME) . '">' .
                      Translation :: get(
-                        'EndsAfter', 
+                        'EndsAfter',
                         array('FROM' => $filter_data->get_modification_time(FilterData :: FILTER_FROM_DATE))) . '</div>';
             }
             elseif ($filter_data->get_end_time(FilterData :: FILTER_TO_DATE))
             {
                 $html[] = '<div class="parameter" id="' . $this->get_parameter_name(FilterData :: FILTER_END_TIME) . '">' . Translation :: get(
-                    'EndsBefore', 
+                    'EndsBefore',
                     array('TO' => $filter_data->get_end_time(FilterData :: FILTER_TO_DATE))) . '</div>';
             }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }

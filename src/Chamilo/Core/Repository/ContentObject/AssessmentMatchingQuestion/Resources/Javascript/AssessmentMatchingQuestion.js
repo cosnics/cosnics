@@ -234,14 +234,14 @@ $(function() {
 		processMatches();
 	}
 
-	function lockWeight(ev, ui) {
-		var checked = $(this).prop('checked');
-		if (checked) {
-			$('input[name="weight"]').prop('disabled', true);
-		} else {
-			$('input[name="weight"]').prop('disabled', false);
-		}
-	}
+    function lockWeight(ev, ui) {
+        var checked = $(this).prop('checked');
+        if (checked) {
+            $('input[name="weight"]').prop('disabled', true);
+        } else {
+            $('input[name="weight"]').prop('disabled', false);
+        }
+    }
 
 	$(document).ready(
 			function() {

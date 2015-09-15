@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -26,6 +27,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     const FILTER_TODAY = 'today';
     const FILTER_THIS_WEEK = 'week';
     const FILTER_THIS_MONTH = 'month';
+    const ACTION_DOWNLOAD_SELECTED_PUBLICATIONS = 'download_selected_publications';
 
     public function get_tool_actions()
     {
@@ -151,5 +153,14 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_additional_parameters()
     {
         return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+    }
+
+    public function get_additional_form_actions()
+    {
+        return array(
+            new TableFormAction(
+                array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SELECTED_PUBLICATIONS),
+                Translation :: get('DownloadSelected'),
+                true));
     }
 }

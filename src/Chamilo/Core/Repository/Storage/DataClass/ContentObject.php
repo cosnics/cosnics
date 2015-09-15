@@ -579,6 +579,11 @@ class ContentObject extends CompositeDataClass
 
     public function attach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
     {
+        if (is_null($ids))
+        {
+            return true;
+        }
+
         if (! is_array($ids))
         {
             $ids = array($ids);

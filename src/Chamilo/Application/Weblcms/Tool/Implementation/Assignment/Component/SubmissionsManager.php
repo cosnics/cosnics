@@ -455,12 +455,16 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      */
     public function generate_attachment_viewer_url($attachment, $type = null)
     {
-        return $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_ATTACHMENT,
-                self :: PARAM_PUBLICATION_ID => $this->get_publication_id(),
-                self :: PARAM_OBJECT_ID => $attachment->get_id(),
-                self :: PARAM_ATTACHMENT_TYPE => $type));
+        return str_replace(
+            '\\',
+            '\\\\',
+            urldecode(
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_ATTACHMENT,
+                        self :: PARAM_PUBLICATION_ID => $this->get_publication_id(),
+                        self :: PARAM_OBJECT_ID => $attachment->get_id(),
+                        self :: PARAM_ATTACHMENT_TYPE => $type))));
     }
 
     /**

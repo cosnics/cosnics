@@ -116,7 +116,9 @@ class CourseCopierForm extends FormValidator
 
         $this->addElement('html', '<h3>' . Translation :: get('SelectCourse') . '</h3>');
         $current_code = $this->parent->get_course_id();
+
         $options = array();
+
         while ($course = $courses->next_result())
         {
             if ($course->get_id() != $current_code && $course->is_course_admin($this->parent->get_user()))
@@ -124,6 +126,8 @@ class CourseCopierForm extends FormValidator
                 $options[$course->get_id()] = $course->get_title() . ' (' . $course->get_visual_code() . ')';
             }
         }
+
+        asort($options);
 
         $this->addElement(
             'select',

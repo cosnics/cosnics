@@ -16,7 +16,6 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
     {
         $mapping = parent :: get_mapping();
 
-        $mapping[self :: OPTION_THEME] = 'skin';
         $mapping[self :: OPTION_COLLAPSE_TOOLBAR] = 'toolbarStartupExpanded';
         $mapping[self :: OPTION_CONFIGURATION] = 'customConfig';
         $mapping[self :: OPTION_FULL_PAGE] = 'fullPage';
@@ -53,7 +52,5 @@ class FormValidatorCkeditorHtmlEditorOptions extends FormValidatorHtmlEditorOpti
         }
 
         $this->set_option(self :: OPTION_CONFIGURATION, $path);
-
-        $this->set_option(self :: OPTION_THEME, 'moonocolor');
     }
 }

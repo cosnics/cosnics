@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Cell renderer for a direct subscribed course group browser table.
@@ -45,8 +44,9 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
         {
             // Exceptions that need post-processing go here ...
             case Group :: PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent :: render_cell($column, $group_with_subscription_status));
-                return StringUtilities :: getInstance()->truncate($description);
+                return \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
+                    \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(),
+                    $group_with_subscription_status[\Chamilo\Core\Group\Storage\DataClass\Group :: PROPERTY_ID])->get_fully_qualified_name();
             case CourseGroupRelation :: PROPERTY_STATUS :
                 switch ($group_with_subscription_status[CourseGroupRelation :: PROPERTY_STATUS])
                 {

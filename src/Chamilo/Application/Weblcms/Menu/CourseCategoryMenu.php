@@ -13,12 +13,12 @@ use HTML_Menu_ArrayRenderer;
 
 /**
  * $Id: course_category_menu.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course
  */
 /**
  * This class provides a navigation menu to allow a user to browse through categories of courses.
- * 
+ *
  * @author Bart Mollet
  */
 class CourseCategoryMenu extends HTML_Menu
@@ -37,7 +37,7 @@ class CourseCategoryMenu extends HTML_Menu
 
     /**
      * Creates a new category navigation menu.
-     * 
+     *
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
@@ -55,7 +55,7 @@ class CourseCategoryMenu extends HTML_Menu
 
     /**
      * Returns the menu items.
-     * 
+     *
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -63,7 +63,7 @@ class CourseCategoryMenu extends HTML_Menu
     private function get_menu_items($extra_items)
     {
         $usercategories = DataManager :: retrieve_course_categories_ordered_by_name();
-        
+
         $categories = array();
         while ($category = $usercategories->next_result())
         {
@@ -74,7 +74,7 @@ class CourseCategoryMenu extends HTML_Menu
         {
             $menu = array_merge($menu, $extra_items);
         }
-        
+
         $home = array();
         $home['title'] = Translation :: get('AllCourses');
         $home['url'] = $this->get_home_url(0);
@@ -86,7 +86,7 @@ class CourseCategoryMenu extends HTML_Menu
 
     /**
      * Returns the items of the sub menu.
-     * 
+     *
      * @param $categories array The categories to include in this menu.
      * @param $parent int The parent category ID.
      * @return array An array with all menu items. The structure of this array is the structure needed by
@@ -98,7 +98,7 @@ class CourseCategoryMenu extends HTML_Menu
         foreach ($categories[$parent] as $category)
         {
             $menu_item = array();
-            
+
             $menu_item['title'] = $category->get_name();
             if (Request :: get(Application :: PARAM_ACTION) == Manager :: ACTION_COURSE_CATEGORY_MANAGER)
             {
@@ -122,25 +122,25 @@ class CourseCategoryMenu extends HTML_Menu
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param $category int The id of the category
      * @return string The requested URL
      */
     private function get_category_url($category)
     {
         // TODO: Put another class in charge of the htmlentities() invocation
-        return htmlentities(sprintf($this->urlFmt, $category));
+        return htmlentities(str_replace('__CATEGORY_ID__', $category, $this->urlFmt));
     }
 
     private function get_home_url($category)
     {
         // TODO: Put another class in charge of the htmlentities() invocation
-        return htmlentities(str_replace('&category_id=%s', '', $this->urlFmt));
+        return htmlentities(str_replace('&category_id=__CATEGORY_ID__', '', $this->urlFmt));
     }
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -157,7 +157,7 @@ class CourseCategoryMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()

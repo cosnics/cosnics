@@ -51,6 +51,8 @@ class AttachmentViewerComponent extends Manager
         {
             $reference_content_object_id = $reference_content_object->get_additional_property(
                 self :: PROPERTY_REFERENCE_ID);
+            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+                $reference_content_object_id);
         }
 
         $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(

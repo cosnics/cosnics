@@ -226,6 +226,7 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
 
         $tree_item = array();
         $tree_item['title'] = $this->get_node_title($node);
+        $tree_item['safe_title'] = $this->get_node_safe_title($node);
         $tree_item['url'] = $this->get_node_url($id);
 
         if ($this->node_has_children($id))

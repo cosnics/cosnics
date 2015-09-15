@@ -122,6 +122,7 @@ class CourseSettingsConnector
     public static function get_titulars()
     {
         $users = array();
+        $users[0] = Translation :: get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_STATUS),

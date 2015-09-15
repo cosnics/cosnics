@@ -944,7 +944,7 @@ class Database
         catch (\PDOException $exception)
         {
             $this->error_handling($exception);
-            throw new DataClassNoResultException($class, $parameters);
+            throw new DataClassNoResultException($class, $parameters, $sql);
         }
     }
 
@@ -1179,7 +1179,9 @@ class Database
         $query_builder->setFirstResult(0);
         $query_builder->setMaxResults(1);
 
-        $statement = $this->get_connection()->query($query_builder->getSQL());
+        $sqlQuery = $query_builder->getSQL();
+
+        $statement = $this->get_connection()->query($sqlQuery);
 
         if (! $statement instanceof \PDOException)
         {
@@ -1188,18 +1190,18 @@ class Database
         else
         {
             $this->error_handling($statement);
-            throw new DataClassNoResultException($class, $parameters);
+            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
         if ($record instanceof \PDOException)
         {
             $this->error_handling($record);
-            throw new DataClassNoResultException($class, $parameters);
+            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
         if (is_null($record) || ! is_array($record) || empty($record))
         {
-            throw new DataClassNoResultException($class, $parameters);
+            throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
         foreach ($record as &$field)
