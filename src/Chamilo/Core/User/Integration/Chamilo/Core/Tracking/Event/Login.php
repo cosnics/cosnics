@@ -27,4 +27,9 @@ class Login extends Event
             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Provider :: class_name(),
             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Referrer :: class_name());
     }
+
+    public function getType()
+    {
+        return 'login';
+    }
 }

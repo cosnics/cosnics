@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: whois_online.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
@@ -88,7 +89,9 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         }
         else
         {
-            return new EqualityCondition(User :: PROPERTY_ID, - 1);
+            return new EqualityCondition(
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
+                new StaticConditionVariable(- 1));
         }
     }
 

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Event;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 
 /**
  *
@@ -19,6 +20,11 @@ class Leave extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: class_name());
+        return array(Visit :: class_name());
+    }
+
+    public function getType()
+    {
+        return Visit :: TYPE_LEAVE;
     }
 }

@@ -22,4 +22,9 @@ class Enter extends Event
     {
         return array(Visit :: class_name());
     }
+
+    public function getType()
+    {
+        return Visit :: TYPE_ENTER;
+    }
 }

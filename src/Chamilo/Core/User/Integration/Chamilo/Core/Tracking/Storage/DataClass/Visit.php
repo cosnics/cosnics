@@ -35,7 +35,8 @@ class Visit extends SimpleTracker
     public function run(array $parameters = array())
     {
         $this->validate_parameters($parameters);
-        $type = $this->get_event()->get_name();
+        $type = $this->get_event()->getType();
+
         switch ($type)
         {
             default :

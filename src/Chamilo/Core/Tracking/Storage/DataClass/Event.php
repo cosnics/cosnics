@@ -125,6 +125,7 @@ class Event extends DataClass
     public static function factory($name, $context)
     {
         $eventClass = $context . '\Event\\' . $name;
+
         return new $eventClass();
     }
 
@@ -150,6 +151,7 @@ class Event extends DataClass
 
             $this->trackers = $trackers;
         }
+
         return $this->trackers;
     }
 

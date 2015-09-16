@@ -21,4 +21,9 @@ class Logout extends Event
     {
         return array(\Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name());
     }
+
+    public function getType()
+    {
+        return 'logout';
+    }
 }

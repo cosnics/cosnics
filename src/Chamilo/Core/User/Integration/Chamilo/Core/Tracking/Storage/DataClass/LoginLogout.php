@@ -17,17 +17,17 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
     {
         $user = $parameters['user'];
         $server = $parameters['server'];
-        
+
         $this->set_user_id($user->get_id());
         $this->set_date(time());
         $this->set_ip($server['REMOTE_ADDR']);
-        $this->set_type($this->get_event()->get_name());
+        $this->set_type($this->get_event()->getType());
     }
 
     public function empty_tracker($event)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
             new StaticConditionVariable($event->get_name()));
         return $this->remove($condition);
     }
@@ -36,14 +36,14 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
             new StaticConditionVariable($event->get_name()));
         return parent :: export($start_date, $end_date, $conditions);
     }
 
     /**
      * Get's the userid of the login tracker
-     * 
+     *
      * @return int $userid the userid
      */
     public function get_user_id()
@@ -53,7 +53,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Sets the userid of the login tracker
-     * 
+     *
      * @param int $userid the userid
      */
     public function set_user_id($userid)
@@ -63,7 +63,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Get's the date of the login tracker
-     * 
+     *
      * @return int $date the date
      */
     public function get_date()
@@ -73,7 +73,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Sets the date of the login tracker
-     * 
+     *
      * @param int $date the date
      */
     public function set_date($date)
@@ -83,7 +83,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Get's the ip of the login tracker
-     * 
+     *
      * @return int $ip the ip
      */
     public function get_ip()
@@ -93,7 +93,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Sets the ip of the login tracker
-     * 
+     *
      * @param int $ip the ip
      */
     public function set_ip($ip)
@@ -103,7 +103,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Get's the type of the login tracker
-     * 
+     *
      * @return int $type the type
      */
     public function get_type()
@@ -113,7 +113,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 
     /**
      * Sets the type of the login tracker
-     * 
+     *
      * @param int $type the type
      */
     public function set_type($type)
