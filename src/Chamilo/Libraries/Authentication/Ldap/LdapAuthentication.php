@@ -2,15 +2,11 @@
 namespace Chamilo\Libraries\Authentication\Ldap;
 
 use Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport;
-use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Authentication\CredentialsAuthentication;
+use Chamilo\Libraries\Authentication\AuthenticationException;
 
-/**
- * $Id: ldap_authentication.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
- * @package common.authentication.ldap
- */
 /**
  * This authentication class uses LDAP to authenticate users.
  * When you want to use LDAP, you might want to change this
@@ -18,20 +14,22 @@ use Chamilo\Libraries\Platform\Translation;
  * like myldap and to rename the class files. Then you can change your LDAP-implementation without changing this
  * default. Please note that the users in your database should have myldap as auth_source also in that case.
  */
-class LdapAuthentication extends Authentication implements UserRegistrationSupport
+class LdapAuthentication extends CredentialsAuthentication implements UserRegistrationSupport
 {
 
-    private $ldap_settings;
+    /**
+     *
+     * @var string[]
+     */
+    private $ldapSettings;
 
     /**
-     * Constructor
+     *
+     * @param unknown $password
+     * @throws \Exception
+     * @return boolean
      */
-    public function __construct()
-    {
-        $this->get_configuration();
-    }
-
-    public function check_login($user, $username, $password = null)
+    public function login($password)
     {
         if (! $this->is_configured())
         {
@@ -39,34 +37,36 @@ class LdapAuthentication extends Authentication implements UserRegistrationSuppo
         }
         else
         {
-            $settings = $this->get_configuration();
+            $settings = $this->getConfiguration();
 
-            // include __DIR__.'/ldap_authentication_config.inc.php';
-            $ldap_connect = ldap_connect($settings['host'], $settings['port']);
-            if ($ldap_connect)
+            $ldapConnect = ldap_connect($settings['host'], $settings['port']);
+
+            if ($ldapConnect)
             {
-                ldap_set_option($ldap_connect, LDAP_OPT_PROTOCOL_VERSION, 3);
-                $filter = "(uid=$username)";
-                $result = ldap_bind($ldap_connect, $settings['rdn'], $settings['password']);
-                $search_result = ldap_search($ldap_connect, $settings['search_dn'], $filter);
-                $info = ldap_get_entries($ldap_connect, $search_result);
+                ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
+                $filter = '(uid=' . $this->getUserName() . ')';
+
+                $result = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
+                $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
+                $info = ldap_get_entries($ldapConnect, $search_result);
+
                 $dn = ($info[0]["dn"]);
-                ldap_close($ldap_connect);
+
+                ldap_close($ldapConnect);
             }
             else
             {
-                $this->set_message(Translation :: get("CouldNotConnectToLDAPServer"));
-                return false;
+                throw new AuthenticationException(Translation :: get('CouldNotConnectToLDAPServer'));
             }
 
-            if ($dn == '')
+            if (! $dn)
             {
-                $this->set_message(Translation :: get("UserNotFoundInLDAP"));
-                return false;
+                throw new AuthenticationException(Translation :: get('UserNotFoundInLDAP'));
             }
-            if ($password == '')
+
+            if (! $password)
             {
-                return false;
+                throw new AuthenticationException(Translation :: get('UsernameOrPasswordIncorrect'));
             }
 
             /*
@@ -75,73 +75,63 @@ class LdapAuthentication extends Authentication implements UserRegistrationSuppo
              */
             if ($info[0]['useraccountcontrol'][0] & 2) // account is disabled
             {
-                $this->set_message(Translation :: get("AccountDisabled"));
-                return false;
-            }
-            if ($info[0]['useraccountcontrol'][0] & 16) // account is locked out
-            {
-                $this->set_message(Translation :: get("AccountLocked"));
-                return false;
+                throw new AuthenticationException(Translation :: get('AccountDisabled'));
             }
 
-            $ldap_connect = ldap_connect($settings['host'], $settings['port']);
-            ldap_set_option($ldap_connect, LDAP_OPT_PROTOCOL_VERSION, 3);
-            if (! (@ldap_bind($ldap_connect, $dn, $password)) == true)
+            if ($info[0]['useraccountcontrol'][0] & 16) // account is locked out
             {
-                ldap_close($ldap_connect);
-                $this->set_message(Translation :: get("UsernameOrPasswordIncorrect"));
-                return false;
+                throw new AuthenticationException(Translation :: get('AccountLocked'));
+            }
+
+            $ldapConnect = ldap_connect($settings['host'], $settings['port']);
+            ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+            if (! (@ldap_bind($ldapConnect, $dn, $password)) == true)
+            {
+                ldap_close($ldapConnect);
+
+                throw new AuthenticationException(Translation :: get('UsernameOrPasswordIncorrect'));
             }
             else
             {
-                ldap_close($ldap_connect);
+                ldap_close($ldapConnect);
                 return true;
             }
         }
     }
 
     /**
-     * Always returns false as the user's password is not stored in the Chamilo datasource.
      *
-     * @return bool false
+     * @see \Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport::registerUser()
      */
-    public function change_password($user, $old_password, $new_password)
+    public function registerUser()
     {
-        return false;
-    }
+        $settings = $this->getConfiguration();
 
-    public function get_password_requirements()
-    {
-        return null;
-    }
+        $ldapConnect = ldap_connect($settings['host'], $settings['port']);
 
-    public function register_new_user($username, $password = null)
-    {
-        if ($this->check_login(null, $username, $password))
+        if ($ldapConnect)
         {
-            $settings = $this->get_configuration();
+            ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
+            $ldapBind = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
+            $filter = '(uid=' . $this->getUserName() . ')';
+            $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
+            $info = ldap_get_entries($ldapConnect, $search_result);
 
-            include __DIR__ . '/ldap_parser.class.php';
-            $ldap_connect = ldap_connect($settings['host'], $settings['port']);
-            if ($ldap_connect)
-            {
-                ldap_set_option($ldap_connect, LDAP_OPT_PROTOCOL_VERSION, 3);
-                $ldap_bind = ldap_bind($ldap_connect, $settings['rdn'], $settings['password']);
-                $filter = "(uid=$username)";
-                $search_result = ldap_search($ldap_connect, $settings['search_dn'], $filter);
-                $info = ldap_get_entries($ldap_connect, $search_result);
-
-                $parser = new LdapParser();
-                return $parser->parse($info, $username);
-            }
-            ldap_close($ldap_connect);
+            $parser = new LdapParser();
+            return $parser->parse($info, $this->getUserName());
         }
-        return false;
+
+        ldap_close($ldapConnect);
     }
 
-    public function get_configuration()
+    /**
+     *
+     * @return string[]
+     */
+    public function getConfiguration()
     {
-        if (! isset($this->ldap_settings))
+        if (! isset($this->ldapSettings))
         {
             $ldap = array();
             $ldap['host'] = PlatformSetting :: get('ldap_host');
@@ -150,9 +140,9 @@ class LdapAuthentication extends Authentication implements UserRegistrationSuppo
             $ldap['password'] = PlatformSetting :: get('ldap_password');
             $ldap['search_dn'] = PlatformSetting :: get('ldap_search_dn');
 
-            $this->ldap_settings = $ldap;
+            $this->ldapSettings = $ldap;
         }
 
-        return $this->ldap_settings;
+        return $this->ldapSettings;
     }
 }

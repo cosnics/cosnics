@@ -6,9 +6,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 
 class Login extends Block
 {
@@ -28,26 +28,23 @@ class Login extends Block
         return false;
     }
 
-    // public function as_html($view = '')
-    // {
-    // if (! $this->get_user() || ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
-    // $this->get_user()->is_anonymous_user()))
-    // {
-    // return parent :: as_html($view);
-    // }
-    // }
     public function display_content()
     {
         $html = array();
+
         if (! $this->get_user() || ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
              $this->get_user()->is_anonymous_user()))
         {
-            $html[] = $this->display_login_form();
+            $request = $this->get_parent()->getApplication()->getApplicationConfiguration()->getRequest();
+            $message = $request->query->get(AuthenticationValidator :: PARAM_AUTHENTICATION_ERROR);
 
-            if (Request :: get('loginFailed') == 1)
+            if ($message)
             {
-                $html[] = $this->handle_login_failed();
+                $html[] = '<div class="error-message" style="width: auto; left: 0%; right: 0%; margin: auto;">' .
+                     $message . '</div>';
             }
+
+            $html[] = $this->display_login_form();
 
             if (! PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()))
             {
@@ -89,12 +86,6 @@ class Login extends Block
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function handle_login_failed()
-    {
-        return '<div class="error-message" style="width: auto; left: 0%; right: 0%; margin: auto;">' .
-             Translation :: get('LoginFailed') . '</div>';
     }
 
     public function display_login_form()

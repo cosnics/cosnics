@@ -85,6 +85,7 @@ class ICalRenderer extends Renderer
     {
         $response = new Response($serializedCalendar);
         $response->headers->set('Content-Type', 'text/calendar');
+        $response->headers->set('Content-Disposition', 'attachment; filename="myCalendar.ics"');
         $response->send();
     }
 

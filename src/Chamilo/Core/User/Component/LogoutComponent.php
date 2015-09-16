@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -18,12 +18,8 @@ class LogoutComponent extends Manager
      */
     public function run()
     {
-        \Chamilo\Core\User\Storage\DataManager :: logout();
-        Event :: trigger('Logout', Manager :: context(), array('server' => $_SERVER, 'user' => $this->get_user()));
-
-        $parameters = array(self :: PARAM_CONTEXT => null);
-
-        $redirect = new Redirect($parameters);
-        $redirect->toUrl();
+        $authenticationHandler = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
+        $authenticationHandler->logout($this->getUser());
+        exit();
     }
 }

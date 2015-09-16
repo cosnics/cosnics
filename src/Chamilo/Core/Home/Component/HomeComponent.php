@@ -24,7 +24,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $authenticationValidator = new AuthenticationValidator(Configuration :: get_instance());
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
         $authenticationValidator->validate();
 
         BreadcrumbTrail :: get_instance()->truncate();

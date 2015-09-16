@@ -1,27 +1,29 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Authentication\AuthenticationException;
 
 /**
  *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  * @author Sven Vanpoucke
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LoginComponent extends Manager implements NoAuthenticationSupport
 {
     const PARAM_LOGIN = 'login';
     const PARAM_PASSWORD = 'password';
-    const PARAM_LOGIN_FAILED = 'loginFailed';
     const PARAM_REQUEST_URI = 'request_uri';
 
     /**
@@ -29,14 +31,14 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $login = Request :: post(self :: PARAM_LOGIN);
-        $password = Request :: post(self :: PARAM_PASSWORD);
-        $user = \Chamilo\Core\User\Storage\DataManager :: login($login, $password);
+        $userName = $this->getRequest()->request->get(self :: PARAM_LOGIN);
+        $password = $this->getRequest()->request->get(self :: PARAM_PASSWORD);
 
-        if ($user instanceof User)
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
+
+        try
         {
-            \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $user->get_id());
-            Event :: trigger('Login', Manager :: context(), array('server' => $_SERVER, 'user' => $user));
+            $user = $authenticationValidator->performCredentialsAuthentication($userName, $password);
 
             if (PlatformSetting :: get('enable_terms_and_conditions', self :: context()) &&
                  ! $user->terms_conditions_uptodate())
@@ -67,10 +69,10 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
             $redirect = new Redirect($parameters);
             $redirect->toUrl();
         }
-        else
+        catch (AuthenticationException $exception)
         {
             \Chamilo\Libraries\Platform\Session\Session :: unregister('_uid');
-            $parameters = array(self :: PARAM_LOGIN_FAILED => true);
+            $parameters = array(AuthenticationValidator :: PARAM_AUTHENTICATION_ERROR => $exception->getMessage());
 
             $redirect = new Redirect($parameters);
             $redirect->toUrl();

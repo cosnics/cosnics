@@ -3,10 +3,6 @@ namespace Chamilo\Core\User\Storage;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
-use Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport;
-use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\QueryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -30,89 +26,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     const PREFIX = 'user_';
 
     /**
-     * Logs a user in to the platform
      *
-     * @param $username string
-     * @param $password string
+     * @param string $userName
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public static function login($username, $password = null)
+    public static function retrieveUserByUsername($userName)
     {
-        // Trim the username to make sure users are not created twice
-        $username = trim($username);
-
-        // If username is available, try to login
-        if (! self :: is_username_available($username))
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
-                new StaticConditionVariable($username));
-            $user = self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
-            $authentication_method = $user->get_auth_source();
-            $authentication = Authentication :: factory($authentication_method);
-            $succes = $authentication->check_login($user, $username, $password);
-
-            if ($succes)
-            {
-                return $user;
-            }
-
-            return $authentication->get_message();
-        }
-        // If username is not available, check if an authentication method is able to register
-        // the user in the platform
-        else
-        {
-            $error_message = Translation :: get('UsernameNotAvailable'); // default error message
-            $authentication_directory = dir(
-                Path :: getInstance()->namespaceToFullPath('Chamilo\Libraries\Authentication'));
-
-            while (false !== ($authentication_method = $authentication_directory->read()))
-            {
-                $is_directory = is_dir($authentication_directory->path . '/' . $authentication_method);
-                $is_enabled = PlatformSetting :: get('enable' . $authentication_method . 'Authentication');
-
-                if ($is_directory && $is_enabled)
-                {
-                    $authentication_class = 'Chamilo\Libraries\Authentication\\' . $authentication_method . '\\' .
-                         $authentication_method . 'Authentication';
-                    $authentication = new $authentication_class();
-
-                    if ($authentication instanceof UserRegistrationSupport)
-                    {
-                        if ($authentication->register_new_user($username, $password))
-                        {
-                            $authentication_directory->close();
-                            return self :: get_instance()->retrieve_user_by_username($username);
-                        }
-                        else
-                        {
-                            // get authentication specific error message
-                            $error_message = $authentication->get_message();
-                        }
-                    }
-                }
-            }
-
-            $authentication_directory->close();
-
-            return $error_message;
-        }
-    }
-
-    /**
-     * Logs the user out of the system
-     */
-    public static function logout()
-    {
-        $user = self :: retrieve_by_id(
-            User :: class_name(),
-            intval(\Chamilo\Libraries\Platform\Session\Session :: get_user_id()));
-        $authentication = Authentication :: factory($user->get_auth_source());
-        if ($authentication->logout($user))
-        {
-            return true;
-        }
-        return false;
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+            new StaticConditionVariable($userName));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -365,23 +288,26 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function is_username_available($username, $user_id = null)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
-            new StaticConditionVariable($username));
+        return ! self :: userExists($username, $user_id);
+    }
 
-        if ($user_id)
+    public static function userExists($userName, $userIdentifier = null)
+    {
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+            new StaticConditionVariable($userName));
+
+        if (! is_null($userIdentifier))
         {
-            $conditions = array();
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
-                new StaticConditionVariable($username));
             $conditions = new EqualityCondition(
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
-                new StaticConditionVariable($user_id));
-            $condition = new AndCondition($conditions);
+                new StaticConditionVariable($userIdentifier));
         }
 
-        return ! (self :: count(User :: class_name(), $condition) == 1);
+        $condition = new AndCondition($conditions);
+
+        return self :: count(User :: class_name(), new DataClassCountParameters($condition)) == 1;
     }
 
     /**
