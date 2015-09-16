@@ -5,6 +5,13 @@
 			<setting name="course_type" field="select" default="0">
 				<options type="dynamic" source="get_course_types" />
 			</setting>
+			<setting name="show_new_icons" field="radio" default="1">
+				<options type="static">
+					<option name="true" value="1" />
+					<option name="false" value="0" />
+				</options>
+			</setting>
 		</category>
+		
 	</settings>
 </block>

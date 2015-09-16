@@ -130,7 +130,7 @@ class ContentObjectPublisher
         $this->content_object_html = $html;
         $course = $this->parent->get_course();
         $is_course_admin = $course->is_course_admin($this->parent->get_user());
-        
+
         $form = new ContentObjectPublicationForm(
             $this->parent->get_user(),
             ContentObjectPublicationForm :: TYPE_CREATE,
@@ -175,7 +175,7 @@ class ContentObjectPublisher
     {
         if (! $this->show_form)
         {
-           
+
             return $this->create_publications_without_form();
         }
         return $this->content_object_publication_form->handle_form_submit();
