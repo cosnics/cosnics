@@ -486,7 +486,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         }
         else
         {
-            if ($this->get_tool() == 'home')
+            if ($this->get_tool() == 'Home')
             {
                 $parent_id = WeblcmsRights :: get_instance()->get_courses_subtree_root_id($this->get_course_id());
                 return WeblcmsRights :: get_instance()->create_location_in_courses_subtree(

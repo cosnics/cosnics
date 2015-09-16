@@ -43,10 +43,11 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
         }
 
         $user_attributes = phpCAS :: getAttributes();
-        if (is_numeric($user_attributes['person_id']) || strpos($user_attributes['person_id'], 'EXT') !== false)
+
+        if (is_numeric($user_attributes['person_number']) || strpos($user_attributes['person_number'], 'EXT') !== false)
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user_by_official_code(
-                $user_attributes['person_id']);
+                $user_attributes['person_number']);
 
             if (! $user instanceof User)
             {
@@ -141,7 +142,7 @@ class CasAuthentication extends Authentication implements UserRegistrationSuppor
         $user->set_email($user_attributes['email']);
         $user->set_lastname($user_attributes['last_name']);
         $user->set_firstname($user_attributes['first_name']);
-        $user->set_official_code($user_attributes['person_id']);
+        $user->set_official_code($user_attributes['person_number']);
 
         if (! $user->create())
         {
