@@ -22,7 +22,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
 
         $event = $this->getEventInstance();
         $event->setStartDate($object->get_start_date());
-        $event->setEndDate($object->get_end_date());
+        $event->setEndDate($object->get_due_date());
         $event->setTitle($object->get_title());
         $event->setContent($object->get_description());
         $event->setSource(Translation :: get('TypeName', null, $object->context()));

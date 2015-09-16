@@ -18,8 +18,15 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const PARAM_FOLDER = 'folder';
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
-
     const DEFAULT_ACTION = self :: ACTION_LOGIN;
+
+    private $categoryTreeMenu;
+
+    public function getCategoryTreeMenu()
+    {
+        return $this->categoryTreeMenu;
+    }
+
     /*
      * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#validate_settings()
      */
@@ -109,7 +116,13 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_menu()
     {
-        return new CategoryTreeMenu($this->get_external_repository_manager_connector(), $this->get_menu_items());
+        if (! isset($this->categoryTreeMenu))
+        {
+            $this->categoryTreeMenu = new CategoryTreeMenu(
+                $this->get_external_repository_manager_connector(),
+                $this->get_menu_items());
+        }
+        return $this->categoryTreeMenu;
     }
 
     /*

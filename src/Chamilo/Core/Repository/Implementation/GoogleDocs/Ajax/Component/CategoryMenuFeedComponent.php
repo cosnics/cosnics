@@ -27,10 +27,10 @@ class CategoryMenuFeedComponent extends \Chamilo\Core\Repository\Implementation\
             new OrderBy(
                 new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_NAME)));
 
-        header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";
-        echo $this->dump_tree($categories_tree);
-        echo '</tree>';
+//         header('Content-Type: text/xml');
+//         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";
+//         echo $this->dump_tree($categories_tree);
+//         echo '</tree>';
     }
 
     public function dump_tree($categories)
