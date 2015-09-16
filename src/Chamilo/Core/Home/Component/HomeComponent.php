@@ -6,6 +6,8 @@ use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Core\Home\Renderer\Factory;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -22,6 +24,9 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $authenticationValidator = new AuthenticationValidator(Configuration :: get_instance());
+        $authenticationValidator->validate();
+
         BreadcrumbTrail :: get_instance()->truncate();
 
         $type = $this->getRequest()->query->get(Renderer :: PARAM_VIEW_TYPE, Renderer :: TYPE_BASIC);

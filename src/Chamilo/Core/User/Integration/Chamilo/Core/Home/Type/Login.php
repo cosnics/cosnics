@@ -99,10 +99,13 @@ class Login extends Block
 
     public function display_login_form()
     {
+        $request = $this->get_parent()->getApplication()->getApplicationConfiguration()->getRequest();
+
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGIN));
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGIN,
+                'noExtAuth' => $request->query->get('noExtAuth')));
         $login_link = $redirect->getUrl();
 
         $form = new FormValidator('formLogin', 'post', $login_link);
