@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\forum_topic
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Forum topic"
+Topic = "Topic"
+Nothing = "Nothing"
+LastChangedAt = "Last changed at {TIME}"
+Top = "Top"
+ReplyOnTopic = "Reply on topic"
+ReplyOnPost = "Reply on post"
+Subscribe = "Follow topic"
+UnSubscribe = "Unfollow topic"
+SuccesSubscribe = "Succes follow topic"
+UnSuccesSubscribe = "Unsucces follow topic"
+SuccesUnSubscribe = "Succes topic not longer followed"
+UnSuccesUnSubscribe = "Un succes topic not longer followed"
+Title = ""
+Description = ""
+Properties = ""
+ForumTopicBuilderBrowserComponent = ""
+ForumTopicBuilderCreatorComponent = ""
