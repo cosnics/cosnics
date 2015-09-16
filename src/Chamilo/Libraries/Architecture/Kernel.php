@@ -267,7 +267,7 @@ class Kernel
         }
         else
         {
-            $authenticationValidator = new AuthenticationValidator($this->getConfiguration());
+            $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
 
             if (! $this->getApplication() instanceof NoAuthenticationSupport && ! $authenticationValidator->validate() &&
                  ! Authentication :: anonymous_user_exists())

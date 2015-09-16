@@ -186,8 +186,18 @@ class User extends DataClass
      * Returns the auth_source for this user.
      *
      * @return String The auth_source
+     * @deprecated Use getAuthenticationSource() now
      */
     public function get_auth_source()
+    {
+        return $this->getAuthenticationSource();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getAuthenticationSource()
     {
         return $this->get_default_property(self :: PROPERTY_AUTH_SOURCE);
     }

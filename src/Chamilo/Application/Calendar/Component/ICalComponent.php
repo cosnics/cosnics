@@ -7,13 +7,13 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
+use Chamilo\Libraries\Authentication\QueryAuthentication;
 
 /**
  *
@@ -27,12 +27,12 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
     public function run()
     {
-        $authenticationValidator = new AuthenticationValidator(Configuration :: get_instance());
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
 
         if (! $authenticationValidator->isAuthenticated())
         {
-            $authentication = Authentication :: factory('SecurityToken');
-            $user = $authentication->check_login();
+            $authentication = QueryAuthentication :: factory('SecurityToken', $this->getRequest());
+            $user = $authentication->login();
 
             if ($user instanceof User)
             {

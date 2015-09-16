@@ -79,6 +79,9 @@ abstract class Application
         return $this->applicationConfiguration;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
     public function getRequest()
     {
         return $this->getApplicationConfiguration()->getRequest();
