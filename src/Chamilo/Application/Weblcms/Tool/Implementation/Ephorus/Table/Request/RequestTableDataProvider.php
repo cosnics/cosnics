@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Data provider for ephorus requests browser table.
- * 
+ *
  * @author Tom Goethals - Hogeschool Gent
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -19,10 +19,9 @@ class RequestTableDataProvider extends DataClassTableDataProvider
 {
 
     /**
-     * Gets the objects to display in the table.
-     * For now, objects are composed in the code itself from several source
+     * Gets the objects to display in the table. For now, objects are composed in the code itself from several source
      * objects.
-     * 
+     *
      * @param $offset
      * @param $count
      * @param null $order_property
@@ -42,7 +41,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the count of the objects
-     * 
+     *
      * @return int
      */
     public function count_data($condition)

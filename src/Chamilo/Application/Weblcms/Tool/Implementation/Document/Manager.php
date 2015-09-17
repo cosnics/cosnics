@@ -68,12 +68,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
-        $allow_download_page = \Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get(
-            'allow_download_page',
-            \Chamilo\Libraries\Architecture\ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-                \Chamilo\Application\Weblcms\Manager :: class_name()));
-
-        if (! $content_object instanceof Page || $allow_download_page)
+        if (! $content_object instanceof Page)
         {
             $toolbar->add_item(
                 new ToolbarItem(
