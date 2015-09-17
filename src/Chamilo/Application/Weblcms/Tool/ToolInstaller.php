@@ -91,6 +91,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
 
         $tool_object->set_name($tool_name);
         $tool_object->set_section_type($this->retrieve_course_section_type_from_package_info());
+        $tool_object->setContext($toolNamespace);
 
         if ($tool_object->create())
         {
