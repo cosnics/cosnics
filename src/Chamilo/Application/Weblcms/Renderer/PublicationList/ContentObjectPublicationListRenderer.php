@@ -781,7 +781,7 @@ abstract class ContentObjectPublicationListRenderer
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('SendByEMail'),
-                        Theme :: getInstance()->getCommonImagePath('action_email'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Email'),
                         $email_url,
                         ToolbarItem :: DISPLAY_ICON,
                         true));
@@ -949,29 +949,6 @@ abstract class ContentObjectPublicationListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type));
-
-            // Old functionality in new code
-            if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
-            {
-                $visibility_image = 'Action/Invisible';
-            }
-            elseif ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
-                 $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
-            {
-                $visibility_image = 'Action/Visible';
-            }
-            else
-            {
-                $visibility_image = 'Action/Period';
-                $visibility_url = '#';
-            }
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath($visibility_image),
-                    $visibility_url,
-                    ToolbarItem :: DISPLAY_ICON));
 
             // New functionality in old code
 
