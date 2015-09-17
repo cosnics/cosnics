@@ -339,24 +339,19 @@ abstract class DataClass
      * Gets a foreign property of this data class object by name and retrieves it with lazy loading if the property does
      * not yet exists in this dataclass
      *
-     * @param $name string The name of the property.
-     * @param $datamanager DataManager - [OPTIONAL] The datamanager, default retrieved via get_data_manager()
+     * @param string $name
+     * @param string $classname The type of the foreign object
      * @return mixed
      */
-    public function get_foreign_property($name, $datamanager = null)
+    public function get_foreign_property($name, $classname)
     {
         $foreign_property = $this->get_specific_property(self :: PROPERTIES_FOREIGN, $name);
+
         if (is_null($foreign_property))
         {
-            $retrieve_function = 'retrieve_' . $name;
-            $foreign_property_id = $this->get_default_property($name . '_id');
-
-            if (is_null($datamanager))
-            {
-                $datamanager = static :: package() . '\Storage\DataManager';
-            }
-
-            $foreign_property = $datamanager :: $retrieve_function($foreign_property_id);
+            $foreign_property = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+                $classname,
+                $this->get_default_property($name . '_id'));
 
             $this->set_foreign_property($name, $foreign_property);
         }

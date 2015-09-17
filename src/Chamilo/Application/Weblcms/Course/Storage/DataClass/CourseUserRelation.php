@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Storage\DataClass;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * This class represents a course user relation in the weblcms.
- * 
+ *
  * @package application\weblcms\course;
  * @author Previously Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -16,7 +18,7 @@ class CourseUserRelation extends CourseEntityRelation
      * **************************************************************************************************************
      */
     const PROPERTY_USER_ID = 'user_id';
-    
+
     /**
      * **************************************************************************************************************
      * Foreign properties *
@@ -29,16 +31,16 @@ class CourseUserRelation extends CourseEntityRelation
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the default properties of this dataclass
-     * 
+     *
      * @return String[] - The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         $extended_property_names[] = self :: PROPERTY_USER_ID;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 
@@ -47,10 +49,10 @@ class CourseUserRelation extends CourseEntityRelation
      * Getters and Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the user id of this course user relation object
-     * 
+     *
      * @return int
      */
     public function get_user_id()
@@ -60,7 +62,7 @@ class CourseUserRelation extends CourseEntityRelation
 
     /**
      * Sets the user id of this course user relation object
-     * 
+     *
      * @param $user_id int
      */
     public function set_user_id($user_id)
@@ -73,22 +75,20 @@ class CourseUserRelation extends CourseEntityRelation
      * Foreign Properties Setters / Getters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the user of this course user relation object
-     * 
+     *
      * @return \core\user\User
      */
     public function get_user()
     {
-        return $this->get_foreign_property(
-            self :: FOREIGN_PROPERTY_USER, 
-            \Chamilo\Core\User\Storage\DataManager :: get_instance());
+        return $this->get_foreign_property(self :: FOREIGN_PROPERTY_USER, User :: class_name());
     }
 
     /**
      * Sets the user of this course user relation object
-     * 
+     *
      * @param $user \core\user\User
      */
     public function set_user(\Chamilo\Core\User\Storage\DataClass\User $user)

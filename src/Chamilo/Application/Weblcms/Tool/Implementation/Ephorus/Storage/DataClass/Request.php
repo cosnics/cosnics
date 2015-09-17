@@ -8,16 +8,17 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This class defines a request for the ephorus tool
- * 
+ *
  * @package application\weblcms\tool\ephorus;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Request extends EphorusDataClass
 {
-    
+
     /**
      * **************************************************************************************************************
      * Table Properties *
@@ -38,7 +39,7 @@ class Request extends EphorusDataClass
     const PROPERTY_DUPLICATE_STUDENT_NUMBER = 'duplicate_student_number';
     const PROPERTY_SUMMARY = 'summary';
     const PROPERTY_VISIBLE_IN_INDEX = 'visible_in_index';
-    
+
     /**
      * **************************************************************************************************************
      * Foreign Properties *
@@ -46,7 +47,7 @@ class Request extends EphorusDataClass
      */
     const FOREIGN_PROPERTY_CONTENT_OBJECT = 'content_object';
     const FOREIGN_PROPERTY_AUTHOR = 'author';
-    
+
     /**
      * **************************************************************************************************************
      * Status Definitions *
@@ -59,14 +60,14 @@ class Request extends EphorusDataClass
     const STATUS_NOT_ENOUGH_TEXT = 4;
     const STATUS_NO_TEXT = 5;
     const STATUS_OTHER = 6;
-    
+
     /**
      * **************************************************************************************************************
      * Help Properties *
      * **************************************************************************************************************
      */
     const PROPERTY_REQUEST_ID = 'request_id';
-    
+
     /**
      * **************************************************************************************************************
      * Process Types Definitions *
@@ -81,10 +82,10 @@ class Request extends EphorusDataClass
      * Properties *
      * **************************************************************************************************************
      */
-    
+
     /**
      * The supported extensions
-     * 
+     *
      * @var string[]
      */
     private $supported_extensions = array('doc', 'txt', 'rtf', 'sxw', 'odt', 'pdf', 'html', 'htm', 'docx', 'wpd');
@@ -94,10 +95,10 @@ class Request extends EphorusDataClass
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the default properties of this dataclass
-     * 
+     *
      * @return string[] - The property request_times.
      */
     public static function get_default_property_names($default_property_names = array())
@@ -117,13 +118,13 @@ class Request extends EphorusDataClass
         $default_property_names[] = self :: PROPERTY_DUPLICATE_STUDENT_NUMBER;
         $default_property_names[] = self :: PROPERTY_SUMMARY;
         $default_property_names[] = self :: PROPERTY_VISIBLE_IN_INDEX;
-        
+
         return parent :: get_default_property_names($default_property_names);
     }
 
     /**
      * Returns the datamanager
-     * 
+     *
      * @return DataManager @codeCoverageIgnore
      */
     public function get_data_manager()
@@ -133,19 +134,19 @@ class Request extends EphorusDataClass
 
     /**
      * Creates this object in the database
-     * 
+     *
      * @return boolean
      */
     public function create()
     {
         $this->set_request_time(time());
-        
+
         return parent :: create();
     }
 
     /**
      * Deletes this object in the database
-     * 
+     *
      * @return boolean
      */
     public function delete()
@@ -154,53 +155,53 @@ class Request extends EphorusDataClass
         {
             return false;
         }
-        
+
         return parent :: delete();
     }
 
     /**
      * Checks this dataclass integrity before saving it to the database
-     * 
+     *
      * @return boolean
      */
     protected function check_before_save()
     {
         $string_utilities_class = $this->get_string_utilities_class();
-        
+
         if (! $this->is_status_valid())
         {
             $this->set_status(self :: STATUS_IN_PROGRESS);
         }
-        
+
         if (! $this->is_process_type_valid())
         {
             $this->set_process_type(self :: PROCESS_TYPE_CHECK_AND_INVISIBLE);
         }
-        
+
         $this->is_content_object_valid();
         $this->is_author_valid();
-        
+
         if ($string_utilities_class :: is_null_or_empty($this->get_course_id()))
         {
             $this->add_error(Translation :: get('CourseIdIsRequired'));
         }
-        
+
         if ($string_utilities_class :: is_null_or_empty($this->get_request_user_id()))
         {
             $this->add_error(
-                Translation :: get('RequestUserIdIsRequired'), 
-                array(), 
+                Translation :: get('RequestUserIdIsRequired'),
+                array(),
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name()));
         }
-        
+
         if ($string_utilities_class :: is_null_or_empty($this->get_guid()))
         {
             $this->add_error(
-                Translation :: get('GuidIsRequired'), 
-                array(), 
+                Translation :: get('GuidIsRequired'),
+                array(),
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name()));
         }
-        
+
         return parent :: check_before_save();
     }
 
@@ -209,10 +210,10 @@ class Request extends EphorusDataClass
      * CRUD functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Truncates the results for this request
-     * 
+     *
      * @return boolean
      */
     public function truncate_results()
@@ -221,12 +222,12 @@ class Request extends EphorusDataClass
         {
             throw new \InvalidArgumentException('Can not truncate results if this object is not identified');
         }
-        
+
         $data_manager_class = $this->get_data_manager_class();
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID), 
+            new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         return $data_manager_class :: deletes(Result :: class_name(), $condition);
     }
 
@@ -235,10 +236,10 @@ class Request extends EphorusDataClass
      * Validation functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Checks whether or not the given status is valid
-     * 
+     *
      * @return boolean
      */
     protected function is_status_valid()
@@ -248,7 +249,7 @@ class Request extends EphorusDataClass
 
     /**
      * Checks whether or not the process type is valid
-     * 
+     *
      * @return boolean
      */
     protected function is_process_type_valid()
@@ -258,81 +259,81 @@ class Request extends EphorusDataClass
 
     /**
      * Checks whether or not the given content object is valid
-     * 
+     *
      * @return boolean
      */
     public function is_content_object_valid()
     {
         $string_utilities_class = $this->get_string_utilities_class();
-        
+
         $content_object_id = $this->get_content_object_id();
-        
+
         if ($string_utilities_class :: is_null_or_empty($content_object_id))
         {
             $this->add_error(Translation :: get('ContentObjectIdIsRequired'));
-            
+
             return false;
         }
-        
+
         $content_object = $this->get_content_object();
         if (! $content_object)
         {
             $this->add_error(Translation :: get('ContentObjectDoesNotExist'));
-            
+
             return false;
         }
-        
+
         if ($content_object->get_type() != File :: class_name())
         {
             $this->add_error(Translation :: get('ContentObjectMustBeDocument'));
-            
+
             return false;
         }
-        
+
         $extension = $content_object->get_extension();
         if (! in_array($extension, $this->supported_extensions))
         {
             $this->add_error(Translation :: get('DocumentExtensionNotValid'));
-            
+
             return false;
         }
-        
+
         if ($content_object->get_filesize() > 16777216)
         {
             $this->add_error(Translation :: get('FileCanNotBeBiggerThen16MB'));
-            
+
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Checks whether or not the given author is valid
-     * 
+     *
      * @return boolean
      */
     protected function is_author_valid()
     {
         $string_utilities_class = $this->get_string_utilities_class();
-        
+
         $author_id = $this->get_author_id();
-        
+
         if ($string_utilities_class :: is_null_or_empty($author_id))
         {
             $this->add_error(Translation :: get('AuthorIdIsRequired'));
-            
+
             return false;
         }
-        
+
         $author = $this->get_author();
         if (! $author)
         {
             $this->add_error(Translation :: get('AuthorDoesNotExist'));
-            
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -341,10 +342,10 @@ class Request extends EphorusDataClass
      * Helper functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the status as a string @codeCoverageIgnore
-     * 
+     *
      * @return string
      */
     public function get_status_as_string()
@@ -379,53 +380,53 @@ class Request extends EphorusDataClass
             case self :: STATUS_OTHER :
                 return Translation :: get('Other');
         }
-        
+
         return Translation :: get('InProgress');
     }
 
     /**
      * Returns the list with the available statusses
-     * 
+     *
      * @return int[]
      */
     public function get_available_statusses()
     {
         return array(
-            self :: STATUS_IN_PROGRESS, 
-            self :: STATUS_OK, 
-            self :: STATUS_DUPLICATE, 
-            self :: STATUS_PROTECTED, 
-            self :: STATUS_NOT_ENOUGH_TEXT, 
-            self :: STATUS_NO_TEXT, 
+            self :: STATUS_IN_PROGRESS,
+            self :: STATUS_OK,
+            self :: STATUS_DUPLICATE,
+            self :: STATUS_PROTECTED,
+            self :: STATUS_NOT_ENOUGH_TEXT,
+            self :: STATUS_NO_TEXT,
             self :: STATUS_OTHER);
     }
 
     /**
      * Returns the list with the available process types
-     * 
+     *
      * @return int[]
      */
     public function get_available_process_types()
     {
         return array(
-            self :: PROCESS_TYPE_CHECK_AND_VISIBLE, 
-            self :: PROCESS_TYPE_NO_CHECK_AND_VISIBLE, 
+            self :: PROCESS_TYPE_CHECK_AND_VISIBLE,
+            self :: PROCESS_TYPE_NO_CHECK_AND_VISIBLE,
             self :: PROCESS_TYPE_CHECK_AND_INVISIBLE);
     }
 
     /**
      * Don't test the getters and setters and ignore them in code coverage.
      */
-    
+
     /**
      * **************************************************************************************************************
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Gets the visibility in the ephorus index
-     * 
+     *
      * @return boolean
      */
     public function is_visible_in_index()
@@ -435,7 +436,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the visibility in the ephorus index
-     * 
+     *
      * @param $visible
      */
     public function set_visible_on_index($visible)
@@ -445,7 +446,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the course_id property of this object
-     * 
+     *
      * @return string
      */
     public function get_course_id()
@@ -455,7 +456,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the course_id property of this object
-     * 
+     *
      * @param $course_id string
      */
     public function set_course_id($course_id)
@@ -465,7 +466,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the content_object_id property of this object
-     * 
+     *
      * @return string
      */
     public function get_content_object_id()
@@ -475,7 +476,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the content_object_id property of this object
-     * 
+     *
      * @param $content_object_id string
      */
     public function set_content_object_id($content_object_id)
@@ -485,7 +486,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the author_id property of this object
-     * 
+     *
      * @return string
      */
     public function get_author_id()
@@ -495,7 +496,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the author_id property of this object
-     * 
+     *
      * @param $author_id string
      */
     public function set_author_id($author_id)
@@ -505,7 +506,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the request_user_id property of this object
-     * 
+     *
      * @return int
      */
     public function get_request_user_id()
@@ -515,7 +516,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the request_user_id property of this object
-     * 
+     *
      * @param $request_user_id int
      */
     public function set_request_user_id($request_user_id)
@@ -525,7 +526,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the request_time property of this object
-     * 
+     *
      * @return int
      */
     public function get_request_time()
@@ -535,7 +536,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the request_time property of this object
-     * 
+     *
      * @param $request_time int
      */
     public function set_request_time($request_time)
@@ -545,7 +546,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the status property of this object
-     * 
+     *
      * @return int
      */
     public function get_status()
@@ -555,7 +556,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the status property of this object
-     * 
+     *
      * @param $status int
      */
     public function set_status($status)
@@ -565,7 +566,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the process_type property of this object
-     * 
+     *
      * @return int
      */
     public function get_process_type()
@@ -575,7 +576,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the process_type property of this object
-     * 
+     *
      * @param $process_type int
      */
     public function set_process_type($process_type)
@@ -585,7 +586,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the percentage property of this object
-     * 
+     *
      * @return int
      */
     public function get_percentage()
@@ -595,7 +596,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the percentage property of this object
-     * 
+     *
      * @param $percentage int
      */
     public function set_percentage($percentage)
@@ -605,7 +606,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the status_description property of this object
-     * 
+     *
      * @return int
      */
     public function get_status_description()
@@ -615,7 +616,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the status_description property of this object
-     * 
+     *
      * @param $status_description int
      */
     public function set_status_description($status_description)
@@ -625,7 +626,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the guid property of this object
-     * 
+     *
      * @return int
      */
     public function get_guid()
@@ -635,7 +636,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the guid property of this object
-     * 
+     *
      * @param $guid int
      */
     public function set_guid($guid)
@@ -645,7 +646,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the duplicate_original_guid property of this object
-     * 
+     *
      * @return int
      */
     public function get_duplicate_original_guid()
@@ -655,7 +656,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the duplicate_original_guid property of this object
-     * 
+     *
      * @param $duplicate_original_guid int
      */
     public function set_duplicate_original_guid($duplicate_original_guid)
@@ -665,7 +666,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the duplicate_student_name property of this object
-     * 
+     *
      * @return int
      */
     public function get_duplicate_student_name()
@@ -675,7 +676,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the duplicate_student_name property of this object
-     * 
+     *
      * @param $duplicate_student_name int
      */
     public function set_duplicate_student_name($duplicate_student_name)
@@ -685,7 +686,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the duplicate_student_number property of this object
-     * 
+     *
      * @return int
      */
     public function get_duplicate_student_number()
@@ -695,7 +696,7 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the duplicate_student_number property of this object
-     * 
+     *
      * @param $duplicate_student_number int
      */
     public function set_duplicate_student_number($duplicate_student_number)
@@ -705,7 +706,7 @@ class Request extends EphorusDataClass
 
     /**
      * Returns the summary property of this object
-     * 
+     *
      * @return int
      */
     public function get_summary()
@@ -715,43 +716,41 @@ class Request extends EphorusDataClass
 
     /**
      * Sets the summary property of this object
-     * 
+     *
      * @param $summary int
      */
     public function set_summary($summary)
     {
         $this->set_default_property(self :: PROPERTY_SUMMARY, $summary);
     }
-    
+
     // @codeCoverageIgnoreStart
-    
+
     /**
      * **************************************************************************************************************
      * Foreign Objects *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the content object for this class
-     * 
+     *
      * @return repository\ContentObject
      */
     public function get_content_object()
     {
-        return $this->get_foreign_property(
-            self :: FOREIGN_PROPERTY_CONTENT_OBJECT, 
-            \Chamilo\Core\Repository\Storage\DataManager :: get_instance());
+        return $this->get_foreign_property(self :: FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject :: class_name());
     }
 
     /**
      * Returns the author for this class
-     * 
+     *
      * @return user\User
      */
     public function get_author()
     {
         return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             (int) $this->get_author_id());
     }
     // @codeCoverageIgnoreStop
