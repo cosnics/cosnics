@@ -89,7 +89,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             throw new \Exception(Translation :: get('SelectedCourseToolNotValid'));
         }
 
-        if ($tool != 'course_group')
+        if ($tool != 'CourseGroup')
         {
             $this->set_parameter('course_group', null);
         }
@@ -105,8 +105,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 CourseVisit :: PROPERTY_PUBLICATION_ID => Request :: get(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID)));
 
-        $namespace = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool;
-        $result = \Chamilo\Application\Weblcms\Tool\Manager :: factory_and_launch($namespace, $this);
+        $result = \Chamilo\Application\Weblcms\Tool\Manager :: factory_and_launch(
+            $this->course_tool_registration->getContext(),
+            $this);
 
         DataManager :: log_course_module_access($this->get_course_id(), $this->get_user_id(), $tool, $category);
 
