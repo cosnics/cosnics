@@ -140,22 +140,22 @@ class BrowserComponent extends Manager implements DelegateComponent
         $table->setHeaderContents(
             1,
             0,
-            Translation :: get("Forum", null, ContentObject :: get_content_object_type_namespace('forum')));
+            Translation :: get("Forum", null, ContentObject :: get_content_object_type_namespace('Forum')));
         $table->setCellAttributes(1, 0, array('colspan' => 2));
         $table->setHeaderContents(
             1,
             2,
-            Translation :: get("Topic", null, ContentObject :: get_content_object_type_namespace('forum')));
+            Translation :: get("Topic", null, ContentObject :: get_content_object_type_namespace('Forum')));
         $table->setCellAttributes(1, 2, array('width' => 50));
         $table->setHeaderContents(
             1,
             3,
-            Translation :: get("Posts", null, ContentObject :: get_content_object_type_namespace('forum')));
+            Translation :: get("Posts", null, ContentObject :: get_content_object_type_namespace('Forum')));
         $table->setCellAttributes(1, 3, array('width' => 50));
         $table->setHeaderContents(
             1,
             4,
-            Translation :: get("LastPostForum", null, ContentObject :: get_content_object_type_namespace('forum')));
+            Translation :: get("LastPostForum", null, ContentObject :: get_content_object_type_namespace('Forum')));
         $table->setCellAttributes(1, 4, array('width' => 130));
 
         $table->setHeaderContents(1, 5, '');
@@ -395,7 +395,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                  Translation :: get('ViewLastPost', null, 'Chamilo\Core\Repository\ContentObject\Forum') .
                                  '" src="' . Theme :: getInstance()->getImagePath(
                                     'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                    'Forum/IconTopicLatest') . '" /></a>';
+                                    'Forum/IconTopicLatest', 'gif') . '" /></a>';
 
                             $table->setCellContents($row, 4, $content);
                         }
@@ -423,7 +423,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                         null,
                                         'Chamilo\Core\Repository\ContentObject\Forum') . '" src="' . Theme :: getInstance()->getImagePath(
                                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                        'Forum/IconTopicLatest.gif') . '" /></a>';
+                                        'Forum/IconTopicLatest', 'gif') . '" /></a>';
 
                                 $table->setCellContents($row, 4, $content);
                             }
@@ -614,7 +614,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     true));
         }
 
-        $forum_namespace = ContentObject :: get_content_object_type_namespace('forum');
+        $forum_namespace = ContentObject :: get_content_object_type_namespace('Forum');
 
         if (! $forum->get_locked())
         {
