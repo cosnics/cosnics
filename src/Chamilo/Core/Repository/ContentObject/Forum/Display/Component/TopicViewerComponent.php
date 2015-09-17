@@ -367,7 +367,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     Translation :: get('Quote'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'Buttons/IconPostQuote'),
+                        'Buttons/IconPostQuote',
+                        'gif'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -378,7 +379,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     Translation :: get('Reply'),
                     Theme :: getInstance()->getImagePath(
                         'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                        'Buttons/PmReply'),
+                        'Buttons/PmReply',
+                        'gif'),
                     $this->get_url($parameters),
                     ToolbarItem :: DISPLAY_ICON));
 
@@ -391,7 +393,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                         Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                            'Buttons/IconPostEdit'),
+                            'Buttons/IconPostEdit',
+                            'gif'),
                         $this->get_url($parameters),
                         ToolbarItem :: DISPLAY_ICON));
             }
@@ -408,7 +411,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                             Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository\ContentObject\Forum\Display',
-                                'Buttons/IconPostDelete'),
+                                'Buttons/IconPostDelete',
+                                'gif'),
                             $this->get_url($parameters),
                             ToolbarItem :: DISPLAY_ICON,
                             true));
