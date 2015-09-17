@@ -268,7 +268,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             {
                 $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
             }
-            elseif ($file->modifiedDate != null)
+            elseif ($file_item['modifiedDate'] != null)
             {
                 $object->set_viewed(strtotime($file_item['modifiedDate']));
             }
