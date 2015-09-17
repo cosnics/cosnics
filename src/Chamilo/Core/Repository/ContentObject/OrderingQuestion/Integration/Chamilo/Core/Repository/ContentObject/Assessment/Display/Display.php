@@ -4,6 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Integration\Cha
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: ordering_question.class.php 200 2009-11-13 12:30:04Z kariboe $

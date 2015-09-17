@@ -3,6 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\I
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

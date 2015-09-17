@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\Qu
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: assessment_open_question.class.php 200 2009-11-13 12:30:04Z kariboe $
