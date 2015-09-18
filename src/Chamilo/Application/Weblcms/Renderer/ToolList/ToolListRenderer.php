@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Renderer\ToolList;
 
 use Chamilo\Libraries\Platform\Translation;
 use Exception;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: tool_list_renderer.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -49,6 +50,7 @@ abstract class ToolListRenderer
      */
     public static function factory($type, $parent, $visible_tools = array())
     {
+        $type = StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
         $type .= 'ToolListRenderer';
         $class = __NAMESPACE__ . '\Type\\' . $type;
 
