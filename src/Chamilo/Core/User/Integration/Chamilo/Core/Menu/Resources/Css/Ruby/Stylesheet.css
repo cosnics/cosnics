@@ -1,6 +1,6 @@
 .navbar ul li a img.item-icon-account {
-	max-height: 50px;
-	max-width: 50px;
+	height: 50px;
+	width: 50px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -45,8 +45,8 @@ div.item-account div.item-account-photo a {
 }
 
 div.item-account div.item-account-photo img {
-	max-width: 72px;
-	max-height: 72px;
+	width: 72px;
+	height: 72px;
 	border: 1px solid #3a5599;
 	z-index: 10;
 }
