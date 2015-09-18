@@ -185,11 +185,7 @@ class MenuToolListRenderer extends ToolListRenderer
 
         $tool_image = Theme :: ICON_MINI . $new;
 
-        $title = htmlspecialchars(
-            Translation :: get(
-                'TypeName',
-                null,
-                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name())));
+        $title = htmlspecialchars(Translation :: get('TypeName', null, $tool->get_context()));
 
         $html[] = '<li class="tool_list_menu" style="padding: 0px 0px 2px 0px;">';
 
@@ -206,9 +202,8 @@ class MenuToolListRenderer extends ToolListRenderer
 
         if ($this->display_menu_icons())
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
-                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
-                'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '"/> ';
+            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool->get_context(), 'Logo/' . $tool_image) .
+                 '" style="vertical-align: middle;" alt="' . $title . '"/> ';
         }
 
         if ($this->display_menu_text())

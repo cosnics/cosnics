@@ -34,8 +34,7 @@ use HTML_Table;
  */
 
 /**
- * Tool list renderer which displays all course tools on a fixed location.
- * Disabled tools will be shown in a disabled
+ * Tool list renderer which displays all course tools on a fixed location. Disabled tools will be shown in a disabled
  * looking way.
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
@@ -117,7 +116,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($visible_tools as $tool)
         {
-            $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name());
+            $tool_namespace = $tool->get_context();
 
             $sorted_tools[Translation :: get('TypeName', null, $tool_namespace)] = $tool;
         }
@@ -450,7 +449,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($tools as $tool)
         {
-            $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name());
+            $tool_namespace = $tool->get_context();
 
             $tool_visible = $course_settings_controller->get_course_setting(
                 $this->course,
