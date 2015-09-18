@@ -116,7 +116,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($visible_tools as $tool)
         {
-            $tool_namespace = $tool->get_context();
+            $tool_namespace = $tool->getContext();
 
             $sorted_tools[Translation :: get('TypeName', null, $tool_namespace)] = $tool;
         }
@@ -449,7 +449,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($tools as $tool)
         {
-            $tool_namespace = $tool->get_context();
+            $tool_namespace = $tool->getContext();
 
             $tool_visible = $course_settings_controller->get_course_setting(
                 $this->course,
