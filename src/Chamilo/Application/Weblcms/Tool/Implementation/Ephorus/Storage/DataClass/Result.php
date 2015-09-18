@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class defines a result for a request for the ephorus tool
- * 
+ *
  * @package application\weblcms\tool\ephorus;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -32,10 +32,10 @@ class Result extends EphorusDataClass
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the default properties of this dataclass
-     * 
+     *
      * @return string[] - The property types.
      */
     public static function get_default_property_names($default_property_names = array())
@@ -49,13 +49,13 @@ class Result extends EphorusDataClass
         $default_property_names[] = self :: PROPERTY_STUDENT_NUMBER;
         $default_property_names[] = self :: PROPERTY_STUDENT_NAME;
         $default_property_names[] = self :: PROPERTY_DIFF;
-        
+
         return parent :: get_default_property_names($default_property_names);
     }
 
     /**
      * Returns the datamanager
-     * 
+     *
      * @return DataManager @codeCoverageIgnore
      */
     public function get_data_manager()
@@ -65,13 +65,13 @@ class Result extends EphorusDataClass
 
     /**
      * Checks this dataclass integrity before saving it to the database
-     * 
+     *
      * @return boolean @codeCoverageIgnore
      */
     protected function check_before_save()
     {
         $this->is_valid_request();
-        
+
         return parent :: check_before_save();
     }
 
@@ -80,31 +80,31 @@ class Result extends EphorusDataClass
      * Validation functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Checks if the request for this result is valid
-     * 
+     *
      * @return boolean
      */
     protected function is_valid_request()
     {
         $string_utilities = $this->get_string_utilities_class();
-        if ($string_utilities :: is_null_or_empty($this->get_request_id()))
+        if ($string_utilities :: getInstance()->isNullOrEmpty($this->get_request_id()))
         {
             $this->add_error(Translation :: get('RequestIdIsRequired'));
-            
+
             return false;
         }
-        
+
         $data_manager = $this->get_data_manager_class();
         $request = $data_manager :: retrieve_by_id(Request :: class_name(), (int) $this->get_request_id());
         if (! $request)
         {
             $this->add_error(Translation :: get('RequestNotFound'));
-            
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -113,10 +113,10 @@ class Result extends EphorusDataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the request_id property of this object
-     * 
+     *
      * @return string
      */
     public function get_request_id()
@@ -126,7 +126,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the request_id property of this object
-     * 
+     *
      * @param $request_id string
      */
     public function set_request_id($request_id)
@@ -136,7 +136,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the url property of this object
-     * 
+     *
      * @return string
      */
     public function get_url()
@@ -146,7 +146,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the url property of this object
-     * 
+     *
      * @param $url string
      */
     public function set_url($url)
@@ -156,7 +156,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the mimetype property of this object
-     * 
+     *
      * @return int
      */
     public function get_mimetype()
@@ -166,7 +166,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the mimetype property of this object
-     * 
+     *
      * @param $mimetype int
      */
     public function set_mimetype($mimetype)
@@ -176,7 +176,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the type property of this object
-     * 
+     *
      * @return int
      */
     public function get_type()
@@ -186,7 +186,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the type property of this object
-     * 
+     *
      * @param $type int
      */
     public function set_type($type)
@@ -196,7 +196,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the percentage property of this object
-     * 
+     *
      * @return int
      */
     public function get_percentage()
@@ -206,7 +206,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the percentage property of this object
-     * 
+     *
      * @param $percentage int
      */
     public function set_percentage($percentage)
@@ -216,7 +216,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the original_guid property of this object
-     * 
+     *
      * @return int
      */
     public function get_original_guid()
@@ -226,7 +226,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the original_guid property of this object
-     * 
+     *
      * @param $original_guid int
      */
     public function set_original_guid($original_guid)
@@ -236,7 +236,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the student_number property of this object
-     * 
+     *
      * @return int
      */
     public function get_student_number()
@@ -246,7 +246,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the student_number property of this object
-     * 
+     *
      * @param $student_number int
      */
     public function set_student_number($student_number)
@@ -256,7 +256,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the student_name property of this object
-     * 
+     *
      * @return int
      */
     public function get_student_name()
@@ -266,7 +266,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the student_name property of this object
-     * 
+     *
      * @param $student_name int
      */
     public function set_student_name($student_name)
@@ -276,7 +276,7 @@ class Result extends EphorusDataClass
 
     /**
      * Returns the diff property of this object
-     * 
+     *
      * @return int
      */
     public function get_diff()
@@ -286,7 +286,7 @@ class Result extends EphorusDataClass
 
     /**
      * Sets the diff property of this object
-     * 
+     *
      * @param $diff int
      */
     public function set_diff($diff)

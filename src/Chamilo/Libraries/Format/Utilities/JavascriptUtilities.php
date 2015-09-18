@@ -74,5 +74,6 @@ class JavascriptUtilities extends ResourceUtilities
         $response->setContent($assets->dump());
         $response->headers->set('Content-Type', 'text/javascript');
         $response->send();
+        exit();
     }
 }

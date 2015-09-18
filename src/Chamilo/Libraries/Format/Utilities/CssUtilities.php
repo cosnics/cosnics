@@ -52,5 +52,6 @@ class CssUtilities extends ResourceUtilities
         $response->setContent($assets->dump());
         $response->headers->set('Content-Type', 'text/css');
         $response->send();
+        exit;
     }
 }
