@@ -53,7 +53,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
 
             $tool_image = Theme :: ICON_MINI . $new;
 
-            $title = htmlspecialchars(Translation :: get('TypeName', null, $tool->get_context()));
+            $title = htmlspecialchars(Translation :: get('TypeName', null, $tool->getContext()));
 
             $params = array(
                 Application :: PARAM_CONTEXT => Manager :: context(),
@@ -65,7 +65,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
             $url = $redirect->getUrl();
 
             $html[] = '<a href="' . $url . '" title="' . $title . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool->get_context(), 'Logo/' . $tool_image) .
+            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool->getContext(), 'Logo/' . $tool_image) .
                  '" style="vertical-align: middle;" alt="' . $title . '"/> ';
             $html[] = '</a>';
         }
