@@ -174,7 +174,6 @@ class Header
         $this->addCssFile(Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
 
         $this->addLink(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
-        $this->addLink('http://help.chamilo.org/', 'help');
         $this->addLink(
             Theme :: getInstance()->getCommonImagePath('Favicon', 'ico'),
             'shortcut icon',

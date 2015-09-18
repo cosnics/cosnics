@@ -33,5 +33,6 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         });
 
         $response->send();
+        exit;
     }
 }

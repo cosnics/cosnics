@@ -181,12 +181,12 @@ class Request extends EphorusDataClass
         $this->is_content_object_valid();
         $this->is_author_valid();
 
-        if ($string_utilities_class :: is_null_or_empty($this->get_course_id()))
+        if ($string_utilities_class :: getInstance()->isNullOrEmpty($this->get_course_id()))
         {
             $this->add_error(Translation :: get('CourseIdIsRequired'));
         }
 
-        if ($string_utilities_class :: is_null_or_empty($this->get_request_user_id()))
+        if ($string_utilities_class :: getInstance()->isNullOrEmpty($this->get_request_user_id()))
         {
             $this->add_error(
                 Translation :: get('RequestUserIdIsRequired'),
@@ -194,7 +194,7 @@ class Request extends EphorusDataClass
                 ClassnameUtilities :: getInstance()->getNamespaceFromClassname(self :: class_name()));
         }
 
-        if ($string_utilities_class :: is_null_or_empty($this->get_guid()))
+        if ($string_utilities_class :: getInstance()->isNullOrEmpty($this->get_guid()))
         {
             $this->add_error(
                 Translation :: get('GuidIsRequired'),
@@ -268,7 +268,7 @@ class Request extends EphorusDataClass
 
         $content_object_id = $this->get_content_object_id();
 
-        if ($string_utilities_class :: is_null_or_empty($content_object_id))
+        if ($string_utilities_class :: getInstance()->isNullOrEmpty($content_object_id))
         {
             $this->add_error(Translation :: get('ContentObjectIdIsRequired'));
 
@@ -319,7 +319,7 @@ class Request extends EphorusDataClass
 
         $author_id = $this->get_author_id();
 
-        if ($string_utilities_class :: is_null_or_empty($author_id))
+        if ($string_utilities_class :: getInstance()->isNullOrEmpty($author_id))
         {
             $this->add_error(Translation :: get('AuthorIdIsRequired'));
 
