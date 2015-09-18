@@ -185,7 +185,7 @@ class MenuToolListRenderer extends ToolListRenderer
 
         $tool_image = Theme :: ICON_MINI . $new;
 
-        $title = htmlspecialchars(Translation :: get('TypeName', null, $tool->get_context()));
+        $title = htmlspecialchars(Translation :: get('TypeName', null, $tool->getContext()));
 
         $html[] = '<li class="tool_list_menu" style="padding: 0px 0px 2px 0px;">';
 
@@ -202,7 +202,7 @@ class MenuToolListRenderer extends ToolListRenderer
 
         if ($this->display_menu_icons())
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool->get_context(), 'Logo/' . $tool_image) .
+            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool->getContext(), 'Logo/' . $tool_image) .
                  '" style="vertical-align: middle;" alt="' . $title . '"/> ';
         }
 
