@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion">
+	<properties>
+		<name>Default</name>
+		<answer_type>1</answer_type>
+		<options>
+			<option correct="0" score="0" feedback=""></option>
+			<option correct="0" score="0" feedback=""></option>
+			<option correct="0" score="0" feedback=""></option>
+		</options>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Multiple choice question
+			</translation>
+			<translation language="nl">Meerkeuze vraag</translation>
+		</variable>
+	</translations>
+</template>
