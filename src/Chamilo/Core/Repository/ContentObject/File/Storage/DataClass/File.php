@@ -15,6 +15,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
 use Exception;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  *
@@ -59,16 +61,14 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @var mixed
      */
     private $in_memory_file;
 
     /**
-     * Temporary file path.
-     * A path to a file that has to be moved and renamed when the File is saved. Useful for
+     * Temporary file path. A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
      *
      * @var string
@@ -224,8 +224,7 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * Get In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @return mixed
      */
@@ -235,8 +234,7 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * Set In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @var $in_memory_file mixed
      * @return void
@@ -279,8 +277,7 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Get temporary file path.
-     * A path to a file that has to be moved and renamed when the File is saved
+     * Get temporary file path. A path to a file that has to be moved and renamed when the File is saved
      *
      * @return string
      */
@@ -290,8 +287,7 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the File is saved
+     * Set temporary file path. A path to a file that has to be moved and renamed when the File is saved
      *
      * @var $temporary_file_path string
      * @return void
@@ -453,48 +449,42 @@ class File extends ContentObject implements Versionable, Includeable
 
     public function send_as_download()
     {
-        $filename = str_replace(' ', '_', $this->get_filename());
+        $fileName = str_replace(' ', '_', $this->get_filename());
 
-        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-        header('Cache-Control: public');
-        header('Pragma: no-cache');
-        header('Content-type: ' . $this->get_mime_type());
-        // header('Content-Type: application/force-download');
-        header('Content-length: ' . $this->get_filesize());
-        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
-        {
-            header('Content-Disposition: filename= "' . $filename . '"');
-        }
-        else
-        {
-            header('Content-Disposition: attachment; filename= "' . $filename . '"');
-        }
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        {
-            header('Pragma: ');
-            header('Cache-Control: ');
-            header('Cache-Control: public'); // IE cannot download from sessions
-                                                 // without a cache
-        }
-        header('Content-Description: ' . $filename);
-        header('Content-transfer-encoding: binary');
-        $fp = fopen($this->get_full_path(), 'r');
-        fpassthru($fp);
-        return true;
+        $file = $this->get_full_path();
+        $response = new StreamedResponse();
+        $response->headers->add(
+            array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
+
+        $dispositionHeader = $response->headers->makeDisposition(ResponseHeaderBag :: DISPOSITION_ATTACHMENT, $fileName);
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        $response->setCallback(function () use($file) {
+            readfile($file);
+        });
+
+        $response->send();
+        exit();
     }
 
     public function open_in_browser()
     {
-        $filename = str_replace(' ', '_', $this->get_filename());
+        $fileName = str_replace(' ', '_', $this->get_filename());
 
-        header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-        header('Content-type: ' . $this->get_mime_type());
-        header('Content-length: ' . $this->get_filesize());
-        header('Content-Description: ' . $filename);
-        header('Content-Disposition: inline; filename= "' . $filename . '"');
-        $fp = fopen($this->get_full_path(), 'r');
-        fpassthru($fp);
-        return true;
+        $file = $this->get_full_path();
+        $response = new StreamedResponse();
+        $response->headers->add(
+            array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
+
+        $dispositionHeader = $response->headers->makeDisposition(ResponseHeaderBag :: DISPOSITION_INLINE, $fileName);
+
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        $response->setCallback(function () use($file) {
+            readfile($file);
+        });
+
+        $response->send();
+        exit();
     }
 
     public static function get_additional_property_names()
@@ -674,8 +664,7 @@ class File extends ContentObject implements Versionable, Includeable
     }
 
     /**
-     * Copy the current file to a new unique filename.
-     * Set the new values of path and hash of the current object. Useful
+     * Copy the current file to a new unique filename. Set the new values of path and hash of the current object. Useful
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
      *

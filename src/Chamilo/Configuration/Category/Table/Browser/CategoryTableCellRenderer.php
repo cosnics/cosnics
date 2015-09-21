@@ -56,7 +56,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $condition = $this->get_component()->get_condition();
 
         $count = $this->get_component()->get_parent()->count_categories($condition);
-        $count_all = $this->get_component()->get_parent()->count_categories($condition);
+        $count_all = $this->get_component()->get_parent()->count_categories();
 
         /**
          * Added support for CategoryVisibilitySupported marker interface If present, the visibility attribute should be

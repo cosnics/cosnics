@@ -22,8 +22,7 @@ class VisibilityTogglerComponent extends Manager
 {
 
     /**
-     * Toggles the visibility of the category passed by id, if possible.
-     * If no category is found or the user has
+     * Toggles the visibility of the category passed by id, if possible. If no category is found or the user has
      * insufficient rights, an error is shown. Otherwise, the change is made and the user is redirected to the previous
      * page.
      */
@@ -97,14 +96,14 @@ class VisibilityTogglerComponent extends Manager
     {
         $category_class_name = get_class($this->get_parent()->get_category());
 
-        $categories = $this->retrieve_categories(
+        $categories = $this->get_parent()->retrieve_categories(
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
                 new StaticConditionVariable($id)));
         $category = $categories->next_result();
         if ($category instanceof CategoryVisibilitySupported)
         {
-            if ($this->allowed_to_change_category_visibility($id))
+            if ($this->get_parent()->allowed_to_change_category_visibility($id))
             {
                 $this->redirect_to_parent = $category->get_parent();
                 $category->toggle_visibility();
