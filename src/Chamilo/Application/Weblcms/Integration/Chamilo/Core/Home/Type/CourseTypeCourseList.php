@@ -21,6 +21,20 @@ class CourseTypeCourseList extends Block
 
     private $course_type;
 
+    public function as_html($view = '')
+    {
+        $renderer = $this->get_renderer();
+
+        if ($renderer->get_courses()->size() > 0)
+        {
+            return parent :: as_html($view);
+        }
+        else
+        {
+            return '';
+        }
+    }
+
     function display_content()
     {
         $configuration = $this->get_configuration();
