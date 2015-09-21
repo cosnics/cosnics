@@ -5,6 +5,8 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class represents a block to show the course list filtered in a given course type and optionally a given category
@@ -83,6 +85,18 @@ class FilteredCourseList extends Block
         }
 
         $html[] = $renderer->as_html();
+
+        if (! $configuration['show_new_icons'])
+        {
+            $courseTypeLink = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
+                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE => $this->get_course_type_id()));
+
+            $html[] = '<div style="margin-top: 15px;">';
+            $html[] = Translation :: get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
+            $html[] = '</div>';
+        }
 
         return implode(PHP_EOL, $html);
     }
