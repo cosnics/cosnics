@@ -17,7 +17,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -498,16 +497,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                         User :: get_table_name());
                     $conditions[] = $this->action_bar->get_conditions(
                         array(
-                            new ConditionProperty(
-                                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)),
-                            new ConditionProperty(
-                                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)),
-                            new ConditionProperty(
-                                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME)),
-                            new ConditionProperty(
-                                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME)),
-                            new ConditionProperty(
-                                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL))));
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL)));
                     break;
                 case self :: TAB_PLATFORM_GROUPS_SUBGROUPS :
                     $conditions[] = new PatternMatchCondition(
