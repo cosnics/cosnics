@@ -2,7 +2,6 @@
 namespace Chamilo\Configuration\Category\Component;
 
 use Chamilo\Configuration\Category\Manager;
-use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -11,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 
 /**
  * $Id: deleter.class.php 205 2009-11-13 12:57:33Z vanpouckesven $
@@ -117,8 +117,8 @@ class DeleterComponent extends Manager
             {
                 $categories = $this->get_parent()->retrieve_categories(
                     new EqualityCondition(
-                        new StaticConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
-                        new PlatformCategory($id)));
+                        new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
+                        new StaticConditionVariable($id)));
                 $category = $categories->next_result();
                 $this->redirect_to_parent = $category->get_parent();
 

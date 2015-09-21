@@ -13,7 +13,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
     private $publications;
 
-    public static function get_default_image_path($application = '', $type = '', $size = Theme :: ICON_MEDIUM)
+    public static function get_default_image_path($application = '', $type = '', $size = Theme :: ICON_MINI)
     {
         if ($type)
         {

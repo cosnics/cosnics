@@ -37,7 +37,9 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $factory = new ApplicationFactory(
             \Chamilo\Configuration\Category\Manager :: context(),
            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-        return $factory->run();
+        $component = $factory->getComponent();
+        $component->set_subcategories_allowed(true);
+        return $component->run();
     }
 
     /**
@@ -152,6 +154,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
                 ContentObjectPublicationCategory :: class_name(),
                 ContentObjectPublicationCategory :: PROPERTY_TOOL),
             new StaticConditionVariable($this->get_parent()->get_tool_id()));
+
         $condition = new AndCondition($conditions);
 
         return \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(

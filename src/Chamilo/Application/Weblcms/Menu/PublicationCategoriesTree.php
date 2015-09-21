@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -43,7 +45,7 @@ class PublicationCategoriesTree extends GenericTree
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
+     *            string "?category=%s".
      * @param $extra_items array An array of extra tree items, added to the root.
      */
     public function __construct($browser)
@@ -156,8 +158,12 @@ class PublicationCategoriesTree extends GenericTree
 
     public function get_search_url()
     {
-        return Path :: getInstance()->getBasePath(true) .
-             'application/weblcms/php/xml_feeds/xml_publications_tree_feed.php';
+        $searchUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager :: package(),
+                \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager :: ACTION_XML_GROUP_MENU_FEED));
+
+        return $searchUrl->getUrl();
     }
 
     public function get_url_format()

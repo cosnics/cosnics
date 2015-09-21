@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class XmlPublicationsTreeFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
@@ -34,9 +35,11 @@ class XmlPublicationsTreeFeedComponent extends \Chamilo\Application\Weblcms\Ajax
                 $condition,
                 null,
                 null,
-                new PropertyConditionVariable(
-                    ContentObjectPublicationCategory :: class_name(),
-                    ContentObjectPublicationCategory :: PROPERTY_DISPLAY_ORDER)))->as_array();
+                array(
+                    new OrderBy(
+                        new PropertyConditionVariable(
+                            ContentObjectPublicationCategory :: class_name(),
+                            ContentObjectPublicationCategory :: PROPERTY_DISPLAY_ORDER)))))->as_array();
 
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";

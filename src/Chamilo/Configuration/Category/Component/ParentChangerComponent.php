@@ -225,9 +225,7 @@ class ParentChangerComponent extends Manager
             null,
             array(
                 new OrderBy(
-                    new PropertyConditionVariable(
-                        PlatformCategory :: class_name(),
-                        PlatformCategory :: PROPERTY_DISPLAY_ORDER))));
+                    new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_DISPLAY_ORDER))));
 
         $i = 1;
 
