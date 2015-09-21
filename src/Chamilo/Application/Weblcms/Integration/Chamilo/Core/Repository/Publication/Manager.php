@@ -112,7 +112,9 @@ class Manager implements PublicationInterface
 
         $excludedCourseTypes = explode(
             ',',
-            (string) Configuration :: get_instance()->get_setting('Chamilo\Application\Weblcms', 'excluded_course_types'));
+            (string) Configuration :: get_instance()->get_setting(
+                'Chamilo\Application\Weblcms',
+                'excluded_course_types'));
 
         while ($course = $courses->next_result())
         {
@@ -133,13 +135,17 @@ class Manager implements PublicationInterface
         {
             $tool_name = $tool->get_name();
 
-            $class = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool_name) . '\Manager';
-            $allowed_types = $class :: get_allowed_types();
+            $class = $tool->getContext() . '\Manager';
 
-            if (count($allowed_types) > 0)
+            if (class_exists($class))
             {
-                $types[$tool->get_id()] = $allowed_types;
-                $tool_names[$tool->get_id()] = $tool->get_name();
+                $allowed_types = $class :: get_allowed_types();
+
+                if (count($allowed_types) > 0)
+                {
+                    $types[$tool->get_id()] = $allowed_types;
+                    $tool_names[$tool->get_id()] = $tool->get_name();
+                }
             }
         }
 

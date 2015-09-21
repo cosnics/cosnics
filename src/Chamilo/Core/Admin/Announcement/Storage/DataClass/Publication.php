@@ -203,10 +203,10 @@ class Publication extends DataClass
             return false;
         }
 
-        $parent = Rights :: get_instance()->get_root_id(self :: context());
+        $parent = Rights :: get_instance()->get_root_id(self :: package());
 
         return Rights :: get_instance()->create_location(
-            self :: context(),
+            self :: package(),
             Rights :: TYPE_PUBLICATION,
             $this->get_id(),
             false,
@@ -216,7 +216,7 @@ class Publication extends DataClass
     public function delete()
     {
         $location = Rights :: get_instance()->get_location_by_identifier(
-            self :: context(),
+            self :: package(),
             Rights :: TYPE_PUBLICATION,
             $this->get_id());
         if ($location)
