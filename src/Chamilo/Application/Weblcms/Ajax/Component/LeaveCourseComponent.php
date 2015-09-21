@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * Tracks the time when a course is left
@@ -20,10 +21,12 @@ class LeaveCourseComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
      */
     public function run()
     {
+        $courseVisitTrackerId = Request :: post(self :: PARAM_FILTER);
+
         Event :: trigger(
             'LeaveCourse',
             Manager :: context(),
-            array(CourseVisit :: PROPERTY_ID => $this->get_parameter(self :: PARAM_COURSE_VISIT_TRACKER_ID)));
+            array(CourseVisit :: PROPERTY_ID => $courseVisitTrackerId));
     }
 
     /**
