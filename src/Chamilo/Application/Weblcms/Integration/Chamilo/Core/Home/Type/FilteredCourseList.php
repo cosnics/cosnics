@@ -62,6 +62,24 @@ class FilteredCourseList extends Block
         $this->load_settings();
     }
 
+    public function as_html($view = '')
+    {
+        $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
+            $this,
+            $this->get_link_target(),
+            $this->get_course_type_id(),
+            $this->get_user_course_category_id());
+
+        if ($renderer->get_courses()->size() > 0)
+        {
+            return parent :: as_html($view);
+        }
+        else
+        {
+            return '';
+        }
+    }
+
     /**
      * Displays the content
      *
