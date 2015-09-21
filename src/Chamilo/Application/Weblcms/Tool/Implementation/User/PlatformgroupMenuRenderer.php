@@ -12,6 +12,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 class PlatformgroupMenuRenderer extends GenericTree
 {
@@ -128,7 +130,12 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_search_url()
     {
-        return Path :: getInstance()->getBasePath(true) . self :: PATH_TO_XML_FEED;
+        $searchUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager :: package(),
+                \Chamilo\Core\Group\Ajax\Manager :: PARAM_ACTION => \Chamilo\Core\Group\Ajax\Manager :: ACTION_XML_GROUP_MENU_FEED));
+
+        return $searchUrl->getUrl();
     }
 
     public function get_url_format()

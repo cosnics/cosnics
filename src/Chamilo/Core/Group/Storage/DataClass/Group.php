@@ -360,7 +360,7 @@ class Group extends NestedSet
                     new StaticConditionVariable($this->get_id()));
                 $parameters = new DataClassCountParameters(
                     $condition,
-                    array(),
+                    null,
                     new FunctionConditionVariable(
                         FunctionConditionVariable :: DISTINCT,
                         new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_USER_ID)));

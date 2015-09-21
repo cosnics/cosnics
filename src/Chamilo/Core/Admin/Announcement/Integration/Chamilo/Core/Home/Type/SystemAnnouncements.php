@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 {
@@ -79,6 +80,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
     public function get_publication_link($publication, $admin)
     {
         $paremeters = array();
+        $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager :: package();
         $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];

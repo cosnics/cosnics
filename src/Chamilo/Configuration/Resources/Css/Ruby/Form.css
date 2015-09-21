@@ -1061,7 +1061,7 @@ div.search_form input.search_query {
 	height: 18px;
 }
 
-div.search_form button.search {
+div.search_form button.search, div.search_form button.clear {
 	background-color: white;
 	border: 0px solid white;
 	width: 18px;
@@ -1074,7 +1074,7 @@ div.search_form button.search {
 	text-align: center;
 }
 
-div.search_form button.search img {
+div.search_form button.search img, div.search_form button.clear img {
 	padding: 0px;
 	margin: 1px 2px 0px 2px;
 }
