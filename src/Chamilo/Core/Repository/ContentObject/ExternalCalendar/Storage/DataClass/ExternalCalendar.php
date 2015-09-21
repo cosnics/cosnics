@@ -229,27 +229,35 @@ class ExternalCalendar extends ContentObject implements Versionable
 
     public function get_occurences($start_timestamp, $end_timestamp)
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Occurences'));
-        $cacheId = md5(serialize(array($this->get_path(), $start_timestamp, $end_timestamp)));
+        $occurences = array();
 
-        if ($cache->contains($cacheId))
+        try
         {
-            $occurences = $cache->fetch($cacheId);
+            $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Occurences'));
+            $cacheId = md5(serialize(array($this->get_path(), $start_timestamp, $end_timestamp)));
+
+            if ($cache->contains($cacheId))
+            {
+                $occurences = $cache->fetch($cacheId);
+            }
+            else
+            {
+                $calendar = $this->get_calendar();
+
+                $start_date_time = new \DateTime();
+                $start_date_time->setTimestamp($start_timestamp);
+
+                $end_date_time = new \DateTime();
+                $end_date_time->setTimestamp($end_timestamp);
+
+                $calendar->expand($start_date_time, $end_date_time);
+                $occurences = $calendar->VEVENT;
+
+                $cache->save($cacheId, $occurences);
+            }
         }
-        else
+        catch (\Exception $exception)
         {
-            $calendar = $this->get_calendar();
-
-            $start_date_time = new \DateTime();
-            $start_date_time->setTimestamp($start_timestamp);
-
-            $end_date_time = new \DateTime();
-            $end_date_time->setTimestamp($end_timestamp);
-
-            $calendar->expand($start_date_time, $end_date_time);
-            $occurences = $calendar->VEVENT;
-
-            $cache->save($cacheId, $occurences);
         }
 
         return $occurences;

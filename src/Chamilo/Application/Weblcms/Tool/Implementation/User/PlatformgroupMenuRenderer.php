@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
