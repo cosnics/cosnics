@@ -1176,7 +1176,7 @@ div.action_bar {
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
 	background: #d4e0f1 url(../../Images/Ruby/Background/ActionBar.png)
-		no-repeat;
+		repeat-x;
 }
 
 .action_bar_text {

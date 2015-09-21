@@ -80,6 +80,7 @@ abstract class Application
     }
 
     /**
+     *
      * @return \Symfony\Component\HttpFoundation\Request
      */
     public function getRequest()
@@ -798,7 +799,16 @@ abstract class Application
             $original_context = $context;
 
             // Adding a fallback for old-style contexts which might still exis in certain applications, links, etc.
-            $convertedContext = (string) StringUtilities :: getInstance()->createString($context)->upperCamelize();
+
+            $convertedContextParts = explode('\\', $context);
+
+            foreach ($convertedContextParts as $key => $convertedContextPart)
+            {
+                $convertedContextParts[$key] = (string) StringUtilities :: getInstance()->createString(
+                    $convertedContextPart)->upperCamelize();
+            }
+
+            $convertedContext = implode('\\', $convertedContextParts);
 
             $possible_contexts = array();
             $possible_contexts[] = 'Chamilo\Application\\' . $convertedContext;

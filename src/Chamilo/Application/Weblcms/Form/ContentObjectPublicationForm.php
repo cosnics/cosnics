@@ -959,6 +959,7 @@ class ContentObjectPublicationForm extends FormValidator
     {
         $parameters = array();
 
+        $parameters[Manager :: PARAM_CONTEXT] = Manager :: package();
         $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_COURSE;
         $parameters[Manager :: PARAM_COURSE] = $this->course->get_id();
         $parameters[Manager :: PARAM_TOOL] = $publication->get_tool();
