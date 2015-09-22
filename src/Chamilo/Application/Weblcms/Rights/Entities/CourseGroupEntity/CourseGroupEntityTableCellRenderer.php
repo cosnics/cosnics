@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Rights\Entities\Group;
+namespace Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityTableCellRenderer;

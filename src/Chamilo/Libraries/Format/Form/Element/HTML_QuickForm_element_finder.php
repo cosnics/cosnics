@@ -11,8 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 
 /**
- * AJAX-based tree search and multiselect element.
- * Use at your own risk.
+ * AJAX-based tree search and multiselect element. Use at your own risk.
  *
  * @author Tim De Pauw
  */
@@ -127,8 +126,8 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $values = $this->get_active_elements();
 
         /**
-         * Process the array values so we end up with a 2-dimensional array
-         * Keys are the selection type, values are the selected objects
+         * Process the array values so we end up with a 2-dimensional array Keys are the selection type, values are the
+         * selected objects
          */
 
         foreach ($values as $value)
@@ -253,10 +252,9 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
 
         $html[] = 'var ' . $this->getName() . '_excluded = new Array(' . implode(',', $exclude_ids) . ');';
 
-        $load_elements = $this->options['load_elements'];
+        $load_elements = $this->locale['load_elements'];
         $load_elements = (isset($load_elements) && $load_elements == true ? ', loadElements: true' : ', loadElements: false');
-
-        $default_query = $this->options['default_query'];
+        $default_query = $this->locale['default_query'];
         $default_query = (isset($default_query) && ! empty($default_query) ? ', defaultQuery: "' . $default_query . '"' : '');
 
         $html[] = '$("#' . $id . '").elementfinder({ name: "' . $this->getName() . '", search: "' . $this->search_url .
