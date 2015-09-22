@@ -455,8 +455,13 @@ class File extends ContentObject implements Versionable, Includeable
         $response = new StreamedResponse();
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
+        $safeFileName = Filesystem :: create_safe_name($fileName);
 
-        $dispositionHeader = $response->headers->makeDisposition(ResponseHeaderBag :: DISPOSITION_ATTACHMENT, $fileName);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag :: DISPOSITION_ATTACHMENT,
+            $fileName,
+            $safeFileName);
+
         $response->headers->set('Content-Disposition', $dispositionHeader);
 
         $response->setCallback(function () use($file) {
@@ -476,7 +481,12 @@ class File extends ContentObject implements Versionable, Includeable
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
 
-        $dispositionHeader = $response->headers->makeDisposition(ResponseHeaderBag :: DISPOSITION_INLINE, $fileName);
+        $safeFileName = Filesystem :: create_safe_name($fileName);
+
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag :: DISPOSITION_INLINE,
+            $fileName,
+            $safeFileName);
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
         $response->setCallback(function () use($file) {
