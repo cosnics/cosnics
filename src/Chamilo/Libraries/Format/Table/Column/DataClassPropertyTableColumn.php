@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Table\Column;
 
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This class represents a column for a table that is based on a property from the data class
@@ -68,5 +69,10 @@ class DataClassPropertyTableColumn extends TableColumn
     public function set_class_name($class_name)
     {
         $this->class_name = $class_name;
+    }
+
+    public function getConditionVariable()
+    {
+        return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
     }
 }
