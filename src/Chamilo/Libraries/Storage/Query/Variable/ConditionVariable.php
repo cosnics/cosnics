@@ -39,17 +39,24 @@ class ConditionVariable implements Hashable
         $this->hash = $hash;
     }
 
+    public function getHashParts()
+    {
+        return array(static :: class_name());
+    }
+
     /**
      * Get an md5 representation of this object for identification purposes
      *
-     * @param string[] $hash_parts
      * @return string
      */
-    public function hash($hash_parts = array())
+    public function hash()
     {
-        $hash_parts[] = self :: class_name();
+        if (! $this->get_hash())
+        {
+            $this->set_hash(md5(json_encode($this->getHashParts())));
+        }
 
-        return md5(serialize($hash_parts));
+        return $this->get_hash();
     }
 
     /**

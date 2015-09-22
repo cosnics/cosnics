@@ -59,6 +59,6 @@ class DataClassProperties implements Hashable
 
         sort($hashes);
 
-        return md5(serialize($hashes));
+        return md5(json_encode($hashes));
     }
 }

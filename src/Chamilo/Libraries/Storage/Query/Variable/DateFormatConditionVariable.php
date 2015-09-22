@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 
 /**
  * A ConditionVariable that describes a function on another ConditionVariable
- * 
+ *
  * @package Chamilo\Libraries\Storage\Query\Variable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -14,14 +14,14 @@ class DateFormatConditionVariable extends ConditionVariable
 
     /**
      * The ConditionVariable
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $condition_variable;
 
     /**
      * The DateFormat string
-     * 
+     *
      * @var string
      */
     private $format;
@@ -47,7 +47,7 @@ class DateFormatConditionVariable extends ConditionVariable
 
     /**
      * Get the ConditionVariable on the condition_variable side of the operation
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_condition_variable()
@@ -57,7 +57,7 @@ class DateFormatConditionVariable extends ConditionVariable
 
     /**
      * Set the ConditionVariable on the condition_variable side of the operation
-     * 
+     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
      */
     public function set_condition_variable($condition_variable)
@@ -101,23 +101,14 @@ class DateFormatConditionVariable extends ConditionVariable
         $this->alias = $alias;
     }
 
-    /**
-     * Get an md5 representation of this object for identification purposes
-     * 
-     * @param string[] $hash_parts
-     * @return string
-     */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = $this->condition_variable->hash();
-            $hash_parts[] = $this->format;
-            $hash_parts[] = $this->alias;
-            
-            $this->set_hash(parent :: hash($hash_parts));
-        }
-        
-        return $this->get_hash();
+        $hashParts = ConditionVariable :: getHashParts();
+
+        $hashParts[] = $this->get_condition_variable()->getHashParts();
+        $hashParts[] = $this->get_format();
+        $hashParts[] = $this->get_alias();
+
+        return $hashParts;
     }
 }

@@ -149,34 +149,26 @@ class OperationConditionVariable extends ConditionVariable
         $this->right = $right;
     }
 
-    /**
-     * Get an md5 representation of this object for identification purposes
-     *
-     * @param string[] $hash_parts
-     * @return string
-     */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
+        $hashParts = ConditionVariable :: getHashParts();
+
+        $parts = array();
+        $parts[] = $this->get_left()->getHashParts();
+        $parts[] = $this->get_right()->getHashParts();
+
+        if ($this->get_operator() != self :: DIVISION)
         {
-            $parts = array();
-            $parts[] = $this->left->hash();
-            $parts[] = $this->right->hash();
-
-            if ($this->operator != self :: DIVISION)
-            {
-                sort($parts);
-            }
-            foreach ($parts as $part)
-            {
-                $hash_parts[] = $part;
-            }
-
-            $hash_parts[] = $this->operator;
-
-            $this->set_hash(parent :: hash($hash_parts));
+            sort($parts);
         }
 
-        return $this->get_hash();
+        foreach ($parts as $part)
+        {
+            $hashParts[] = $part;
+        }
+
+        $hashParts[] = $this->get_operator();
+
+        return $hashParts;
     }
 }

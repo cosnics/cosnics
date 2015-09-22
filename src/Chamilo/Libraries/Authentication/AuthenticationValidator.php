@@ -227,8 +227,11 @@ class AuthenticationValidator
      */
     public function performCredentialsAuthentication($userName, $password)
     {
+
         if (\Chamilo\Core\User\Storage\DataManager :: userExists($userName))
         {
+            echo 'b';
+            exit;
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsername($userName);
             $this->isValidUser($user);
 
@@ -249,6 +252,9 @@ class AuthenticationValidator
         }
         else
         {
+            echo 'a';
+            exit;
+
             $errorMessages = array();
             $disabledSources = 0;
 
