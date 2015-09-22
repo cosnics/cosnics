@@ -149,7 +149,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation :: get('UnsubscribeNotAvailable'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe_na'),
+                            Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                             null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
@@ -193,7 +193,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation :: get('UnsubscribeNotAvailable'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe_na'),
+                        Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
             }
