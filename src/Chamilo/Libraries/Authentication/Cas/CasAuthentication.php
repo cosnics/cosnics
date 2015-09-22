@@ -7,6 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 use phpCAS;
 use Chamilo\Libraries\Authentication\ExternalAuthentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -45,7 +46,13 @@ class CasAuthentication extends ExternalAuthentication
         }
         else
         {
-            throw new AuthenticationException(Translation :: get('CasAuthenticationError'));
+            throw new AuthenticationException(
+                Translation :: get(
+                    'CasAuthenticationError',
+                    array(
+                        'PLATFORM' => Configuration :: get_instance()->get_setting(
+                            'Chamilo\Core\Admin',
+                            'platform_name'))));
         }
     }
 

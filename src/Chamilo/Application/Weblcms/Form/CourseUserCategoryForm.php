@@ -68,9 +68,10 @@ class CourseUserCategoryForm extends FormValidator
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+        $locale['load_elements'] = true;
         $attributes['locale'] = $locale;
         $attributes['defaults'] = array();
-        $attributes['options']['load_elements'] = true;
+
 
         $element_finder = $this->createElement(
             'user_group_finder',
@@ -78,8 +79,7 @@ class CourseUserCategoryForm extends FormValidator
             Translation :: get('CourseType'),
             $attributes['search_url'],
             $attributes['locale'],
-            $attributes['defaults'],
-            $attributes['options']);
+            $attributes['defaults']);
         $element_finder->excludeElements($attributes['exclude']);
         $this->addElement($element_finder);
     }
@@ -240,8 +240,7 @@ class CourseUserCategoryForm extends FormValidator
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.

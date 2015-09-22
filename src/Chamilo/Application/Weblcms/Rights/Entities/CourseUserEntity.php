@@ -78,7 +78,7 @@ class CourseUserEntity extends UserEntity
      * @param $condition Condition
      * @return Condition
      */
-    public function get_condition(Condition $condition)
+    public function get_condition(Condition $condition = null)
     {
         $conditions = array();
 

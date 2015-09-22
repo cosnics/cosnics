@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Rights\Entities\PlatformGroup;
+namespace Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 
 use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityTableColumnModel;
 

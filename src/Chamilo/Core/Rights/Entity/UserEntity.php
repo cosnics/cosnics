@@ -139,7 +139,7 @@ class UserEntity implements RightsEntity
      *
      * @return Condition
      */
-    public function get_condition($condition)
+    public function get_condition($condition = null)
     {
         return $condition;
     }

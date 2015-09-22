@@ -82,27 +82,17 @@ class CaseElementConditionVariable extends ConditionVariable
         $this->statement = $statement;
     }
 
-    /**
-     * Get an md5 representation of this object for identification purposes
-     *
-     * @param string[] $hash_parts
-     *
-     * @return string
-     */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
+        $hashParts = ConditionVariable :: getHashParts();
+
+        if ($this->get_condition() instanceof Condition)
         {
-            if ($this->condition instanceof Condition)
-            {
-                $hash_parts[] = $this->condition->hash();
-            }
-
-            $hash_parts[] = $this->statement;
-
-            $this->set_hash(parent :: hash($hash_parts));
+            $hashParts[] = $this->get_condition()->hash();
         }
 
-        return $this->get_hash();
+        $hashParts[] = $this->get_statement();
+
+        return $hashParts;
     }
 }

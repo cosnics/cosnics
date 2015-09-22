@@ -55,7 +55,7 @@ class FormValidator extends HTML_QuickForm
      * @param string $target Form's target defaults to '_self'
      * @param mixed $attributes (optional)Extra attributes for <form> tag
      * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
-     *        (default = true)
+     *            (default = true)
      */
     public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $trackSubmit = true)
     {
@@ -285,8 +285,7 @@ EOT;
     }
 
     /**
-     * Add a textfield to the form.
-     * A trim-filter is attached to the field.
+     * Add a textfield to the form. A trim-filter is attached to the field.
      *
      * @param string $label The label for the form-element
      * @param string $name The element name
@@ -385,8 +384,7 @@ EOT;
     }
 
     /**
-     * Add a HTML-editor to the form to fill in a title.
-     * A trim-filter is attached to the field. A HTML-filter is
+     * Add a HTML-editor to the form to fill in a title. A trim-filter is attached to the field. A HTML-filter is
      * attached to the field (cleans HTML) A rule is attached to check for unwanted HTML
      *
      * @param string $label The label for the form-element
@@ -495,7 +493,7 @@ EOT;
      */
     public function add_datepicker($name, $label, $include_time_picker = true)
     {
-//         $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
+        // $attributes = array_merge(array('form_name' => $this->getAttribute('name'), 'class' => $name),$attributes);
         $element = $this->addElement(
             'datepicker',
             $name,
@@ -525,7 +523,6 @@ EOT;
         return $element;
     }
 
-
     /**
      * Add a timepicker element to the form
      *
@@ -545,8 +542,7 @@ EOT;
     }
 
     /**
-     * Add a timewindow element to the form.
-     * 2 datepicker elements are added and a rule to check if the first date is
+     * Add a timewindow element to the form. 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
      *
      * @param string $label The label for the form-element
@@ -695,7 +691,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -898,12 +895,11 @@ EOT;
     }
 
     /**
-     * Adds a progress bar to the form.
-     * Once the user submits the form, a progress bar (animated gif) is displayed. The
+     * Adds a progress bar to the form. Once the user submits the form, a progress bar (animated gif) is displayed. The
      * progress bar will disappear once the page has been reloaded.
      *
      * @param int $delay The number of seconds between the moment the user submits the form and the start of the
-     *        progress bar.
+     *            progress bar.
      */
     public function add_progress_bar($delay = 2)
     {

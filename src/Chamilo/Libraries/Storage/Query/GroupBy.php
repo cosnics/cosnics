@@ -51,21 +51,26 @@ class GroupBy implements Hashable
         $this->group_by[] = $group_by;
     }
 
+    public function getHashParts()
+    {
+        $hashes = array();
+
+        foreach ($this->get() as $group_by)
+        {
+            $hashes[] = $group_by->getHashParts();
+        }
+
+        sort($hashes);
+
+        return $hashes;
+    }
+
     /**
      *
      * @return string
      */
     public function hash()
     {
-        $hashes = array();
-
-        foreach ($this->group_by as $group_by)
-        {
-            $hashes[] = $group_by->hash();
-        }
-
-        sort($hashes);
-
-        return md5(serialize($hashes));
+        return md5(json_encode($this->getHashParts()));
     }
 }

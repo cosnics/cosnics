@@ -46,22 +46,27 @@ class Joins implements \Countable
         $this->joins[] = $join;
     }
 
+    public function getHashParts()
+    {
+        $hashes = array();
+
+        foreach ($this->joins as $join)
+        {
+            $hashes[] = $join->getHashParts();
+        }
+
+        sort($hashes);
+
+        return $hashes;
+    }
+
     /**
      *
      * @return string
      */
     public function hash()
     {
-        $hashes = array();
-
-        foreach ($this->joins as $join)
-        {
-            $hashes[] = $join->hash();
-        }
-
-        sort($hashes);
-
-        return md5(serialize($hashes));
+        return md5(json_encode($this->getHashParts()));
     }
 
     /**

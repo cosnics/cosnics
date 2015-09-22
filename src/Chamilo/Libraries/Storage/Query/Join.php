@@ -124,17 +124,24 @@ class Join implements Hashable
         $this->type = $type;
     }
 
+    public function getHashParts()
+    {
+        $hashParts = array();
+
+        $hashParts[] = $this->get_data_class();
+        $hashParts[] = $this->get_condition()->getHashParts();
+        $hashParts[] = $this->get_type();
+
+        return $hashParts;
+    }
+
     /**
      *
      * @param string[] $hash_parts
      * @return string
      */
-    public function hash($hash_parts = array())
+    public function hash()
     {
-        $hash_parts[] = $this->data_class;
-        $hash_parts[] = $this->condition->hash();
-        $hash_parts[] = $this->type;
-
-        return md5(serialize($hash_parts));
+        return md5(json_encode($this->getHashParts()));
     }
 }

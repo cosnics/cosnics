@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 
-use Chamilo\Core\Rights\Manager;
+use Chamilo\Core\Rights\Editor\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 
 abstract class LocationEntityTable extends DataClassTable

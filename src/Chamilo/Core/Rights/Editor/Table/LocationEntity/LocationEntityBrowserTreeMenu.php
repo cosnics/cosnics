@@ -4,6 +4,8 @@ namespace Chamilo\Core\Rights\Editor\Table\LocationEntity;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class provides a navigation menu to browse through the entities
@@ -68,19 +70,25 @@ class LocationEntityBrowserTreeMenu extends GenericTree
 
     public function get_node($node_id)
     {
-        $condition = new EqualityCondition($this->entity->get_id_property(), $node_id);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_id_property()),
+            new StaticConditionVariable($node_id));
         return $this->entity->retrieve_entity_items($condition)->next_result();
     }
 
     public function get_node_children($parent_node_id)
     {
-        $condition = new EqualityCondition($this->entity->get_parent_property(), $parent_node_id);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()),
+            new StaticConditionVariable($parent_node_id));
         return $this->entity->retrieve_entity_items($condition);
     }
 
     public function node_has_children($node_id)
     {
-        $condition = new EqualityCondition($this->entity->get_parent_property(), $node_id);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()),
+            new StaticConditionVariable($node_id));
         $count = $this->entity->count_entity_items($condition);
 
         return ($count > 0);

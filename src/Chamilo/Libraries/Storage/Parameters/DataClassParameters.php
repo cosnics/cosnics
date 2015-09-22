@@ -116,7 +116,7 @@ abstract class DataClassParameters implements Hashable
         $hash_parts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->hash() : null);
         $hash_parts[] = ($this->get_joins() instanceof Joins ? $this->get_joins()->hash() : null);
 
-        return md5(serialize($hash_parts));
+        return md5(json_encode($hash_parts));
     }
 
     /**

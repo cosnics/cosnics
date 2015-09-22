@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Rights\Entities\Group;
+namespace Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityTableColumnModel;
@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Cell renderer for the course group entity browser
- * 
+ *
  * @author Sven Vanpoucke
  */
 class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
@@ -23,7 +23,7 @@ class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
             new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION));
         $this->add_column(new StaticTableColumn(self :: COLUMN_USERS));
         $this->add_column(new StaticTableColumn(self :: COLUMN_SUBGROUPS));
-        
+
         parent :: initialize_columns();
     }
 }

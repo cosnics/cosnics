@@ -87,7 +87,9 @@ class BrowseComponent extends Manager implements TableSupport
         }
 
         $search_condition = $this->action_bar->get_conditions(
-            array(Course :: PROPERTY_TITLE, Course :: PROPERTY_VISUAL_CODE));
+            array(
+                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE),
+                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_VISUAL_CODE)));
 
         if ($search_condition)
         {
