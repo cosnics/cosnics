@@ -14,6 +14,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Application\Weblcms\Ajax\Manager;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Class that describes the course groups for the rights editor
@@ -138,7 +140,7 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'PlaceGroup');
+        return Theme :: getInstance()->getImagePath('Chamilo\Core\Rights\Editor', 'Place/Group');
     }
 
     /**
@@ -208,7 +210,9 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     private function get_condition($condition)
     {
-        $course_condition = new EqualityCondition(CourseGroup :: PROPERTY_COURSE_CODE, $this->course_id);
+        $course_condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->course_id));
         if ($condition)
         {
             $conditions = array();

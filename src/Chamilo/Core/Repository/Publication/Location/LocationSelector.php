@@ -104,11 +104,10 @@ abstract class LocationSelector
 
             $group[] = $form_validator->createElement(
                 'checkbox',
-                $this->get_checkbox_name($locations->get_package()),
+                $this->get_checkbox_name($locations->get_package(), $location),
                 null,
                 null,
                 null,
-                $location->encode(),
                 $location->encode());
 
             foreach ($this->get_group($location) as $group_element)
@@ -134,10 +133,10 @@ abstract class LocationSelector
      * @param string $context
      * @return string
      */
-    public function get_checkbox_name($context)
+    public function get_checkbox_name($context, $location)
     {
         $registration = Configuration :: registration($context);
-        return Manager :: WIZARD_LOCATION . '[' . $registration->get_id() . '][' . uniqid() . ']';
+        return Manager :: WIZARD_LOCATION . '[' . $registration->get_id() . '][' . md5(serialize($location)) . ']';
     }
 
     /**

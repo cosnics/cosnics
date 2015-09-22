@@ -124,8 +124,8 @@ class AdvancedRightsEditorComponent extends RightsEditorComponent implements Tab
         $html[] = '<div style="overflow: auto;">';
 
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($selected_entity);
-        $class = get_class($selected_entity);
-        $location_entity_table = $namespace . '\\' . $class . 'table';
+        $class =  ClassnameUtilities :: getInstance()->getClassnameFromObject($selected_entity);
+        $location_entity_table = $namespace . '\\' . $class . '\\' . $class . 'Table';
 
         if ($selected_entity instanceof NestedRightsEntity)
         {

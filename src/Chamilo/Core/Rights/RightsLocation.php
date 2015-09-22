@@ -209,7 +209,7 @@ class RightsLocation extends NestedTreeNode
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
         $order = array(new OrderBy(new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_LEFT_VALUE)));
 
-        $datamanager = self :: context() . '\\DataManager';
+        $datamanager = self :: package() . '\Storage\DataManager';
         return $datamanager :: retrieve(
             self :: class_name(),
             new DataClassRetrieveParameters($locked_parent_condition, $order));
@@ -238,7 +238,7 @@ class RightsLocation extends NestedTreeNode
     {
         $conditions = array();
 
-        $class_name = static :: context() . '\\' . RightsLocationEntityRight :: class_name(false);
+        $class_name = static :: package() . '\Storage\DataClass\\' . RightsLocationEntityRight :: class_name(false);
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight :: PROPERTY_LOCATION_ID),
