@@ -55,19 +55,15 @@ abstract class DataClassPropertyParameters extends DataClassParameters
 
     /**
      *
-     * @param string[] $hash_parts
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = $this->get_property();
+        $hashParts = parent :: getHashParts();
 
-            $this->set_hash(parent :: hash($hash_parts));
-        }
+        $hashParts[] = $this->get_property();
 
-        return $this->get_hash();
+        return $hashParts;
     }
 
     /**

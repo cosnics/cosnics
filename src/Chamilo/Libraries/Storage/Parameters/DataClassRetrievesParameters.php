@@ -114,21 +114,17 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
 
     /**
      *
-     * @param string[] $hash_parts
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = $this->get_count();
-            $hash_parts[] = $this->get_offset();
-            $hash_parts[] = $this->get_distinct();
+        $hashParts = parent :: getHashParts();
 
-            $this->set_hash(parent :: hash($hash_parts));
-        }
+        $hashParts[] = $this->get_count();
+        $hashParts[] = $this->get_offset();
+        $hashParts[] = $this->get_distinct();
 
-        return $this->get_hash();
+        return $hashParts;
     }
 
     /**

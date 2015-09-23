@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 class DataClassProperties implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     private $properties;
 
@@ -46,19 +47,21 @@ class DataClassProperties implements Hashable
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash()
+    public function getHashParts()
     {
-        $hashes = array();
+        $hashParts = array();
 
-        foreach ($this->properties as $property)
+        $hashParts[] = __CLASS__;
+
+        foreach ($this->get() as $property)
         {
-            $hashes[] = $property->hash();
+            $hashParts[] = $property->getHashParts();
         }
 
-        sort($hashes);
+        sort($hashParts);
 
-        return md5(json_encode($hashes));
+        return $hashParts;
     }
 }

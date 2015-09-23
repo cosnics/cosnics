@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 class GroupBy implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      * List of ConditionVariables to group by
@@ -63,14 +64,5 @@ class GroupBy implements Hashable
         sort($hashes);
 
         return $hashes;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function hash()
-    {
-        return md5(json_encode($this->getHashParts()));
     }
 }
