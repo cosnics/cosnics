@@ -54,24 +54,4 @@ trait HashableTrait
      * @return string[]
      */
     abstract function getHashParts();
-
-    /**
-     *
-     * @return string
-     * @deprecated Use getHash($hash);
-     */
-    public function get_hash()
-    {
-        return $this->getHash();
-    }
-
-    /**
-     *
-     * @param string $hash
-     * @deprecated Use setHash($hash);
-     */
-    public function set_hash($hash)
-    {
-        $this->setHash($hash);
-    }
 }
