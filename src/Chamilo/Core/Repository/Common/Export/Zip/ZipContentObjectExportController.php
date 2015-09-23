@@ -38,13 +38,13 @@ class ZipContentObjectExportController extends ContentObjectExportController
         {
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                $content_object_ids,
-                ContentObject :: get_table_name());
+                $content_object_ids);
         }
         else
         {
             $condition = null;
         }
+
         $parameters = new DataClassRetrievesParameters($condition);
         $content_objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
 
@@ -52,6 +52,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
         {
             $this->process($content_object);
         }
+
         return $this->zip();
     }
 
@@ -78,7 +79,9 @@ class ZipContentObjectExportController extends ContentObjectExportController
     {
         $user_id = Session :: get_user_id();
 
-        $this->temporary_directory = Path :: getInstance()->getTemporaryPath() . $user_id . '/export_content_objects/';
+        $this->temporary_directory = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . $user_id .
+             DIRECTORY_SEPARATOR . 'export_content_objects' . DIRECTORY_SEPARATOR;
+
         if (! is_dir($this->temporary_directory))
         {
             mkdir($this->temporary_directory, 0777, true);
@@ -92,7 +95,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
      */
     public function add_files($source, $destination)
     {
-        Filesystem :: recurse_copy($source, $this->temporary_directory . $destination, true);
+        $result = Filesystem :: recurse_copy($source, $this->temporary_directory . $destination, true);
     }
 
     public function zip()
