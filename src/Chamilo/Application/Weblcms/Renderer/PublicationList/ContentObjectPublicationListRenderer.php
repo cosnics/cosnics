@@ -786,6 +786,16 @@ abstract class ContentObjectPublicationListRenderer
                         ToolbarItem :: DISPLAY_ICON,
                         true));
             }
+            else
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation :: get('SendByEMail'),
+                        Theme :: getInstance()->getCommonImagePath('Action/EmailNa'),
+                        null,
+                        ToolbarItem :: DISPLAY_ICON,
+                        true));
+            }
         }
 
         $details_url = $this->get_url(

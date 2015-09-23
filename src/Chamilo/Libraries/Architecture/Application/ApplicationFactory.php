@@ -297,8 +297,8 @@ class ApplicationFactory
         {
             $namespace = $this->getRequest()->request->get($tableName . '_namespace');
             $class = (string) StringUtilities :: getInstance()->createString($tableName)->upperCamelize();
-            $classname = $namespace . '\\' . $class;
 
+            $classname = $namespace . '\\' . $class;
             if (class_exists($classname))
             {
                 $ids = $classname :: get_selected_ids();

@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 /**
  * This class represents a table with learning objects which are candidates for publication.
- * 
+ *
  * @package application.weblcms
  * @author Original Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record table
@@ -20,13 +20,6 @@ class ObjectPublicationTable extends RecordTable implements TableFormActionsSupp
 
     /**
      * Returns the implemented form actions
-     * 
-     * @abstract
-     *
-     *
-     *
-     *
-     *
      * @return TableFormActions
      */
     public function get_implemented_form_actions()

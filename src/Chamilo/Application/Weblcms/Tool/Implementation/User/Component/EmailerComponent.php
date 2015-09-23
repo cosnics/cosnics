@@ -45,7 +45,7 @@ class EmailerComponent extends Manager
         }
         else
         {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(Translation :: get('user'));
+            throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(Translation :: get('User'));
         }
     }
 
