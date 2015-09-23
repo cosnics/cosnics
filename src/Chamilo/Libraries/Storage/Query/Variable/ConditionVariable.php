@@ -14,49 +14,11 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 class ConditionVariable implements Hashable
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
-    /**
-     *
-     * @var string
-     */
-    private $hash;
-
-    /**
-     *
-     * @return string
-     */
-    public function get_hash()
-    {
-        return $this->hash;
-    }
-
-    /**
-     *
-     * @param string $hash
-     */
-    public function set_hash($hash)
-    {
-        $this->hash = $hash;
-    }
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     public function getHashParts()
     {
         return array(static :: class_name());
-    }
-
-    /**
-     * Get an md5 representation of this object for identification purposes
-     *
-     * @return string
-     */
-    public function hash()
-    {
-        if (! $this->get_hash())
-        {
-            $this->set_hash(md5(json_encode($this->getHashParts())));
-        }
-
-        return $this->get_hash();
     }
 
     /**

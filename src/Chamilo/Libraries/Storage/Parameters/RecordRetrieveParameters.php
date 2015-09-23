@@ -90,20 +90,16 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
 
     /**
      *
-     * @param string[] $hash_parts
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = ($this->get_properties() instanceof DataClassProperties ? $this->get_properties()->hash() : null);
-            $hash_parts[] = ($this->get_group_by() instanceof GroupBy ? $this->get_group_by()->hash() : null);
+        $hashParts = parent :: getHashParts();
 
-            $this->set_hash(parent :: hash($hash_parts));
-        }
+        $hashParts[] = ($this->get_properties() instanceof DataClassProperties ? $this->get_properties()->getHashParts() : null);
+        $hashParts[] = ($this->get_group_by() instanceof GroupBy ? $this->get_group_by()->getHashParts() : null);
 
-        return $this->get_hash();
+        return $hashParts;
     }
 
     /**

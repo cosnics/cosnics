@@ -57,20 +57,16 @@ class DataClassCountParameters extends DataClassParameters
 
     /**
      *
-     * @param string[] $hash_parts
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->hash() : null);
-            $hash_parts[] = ($this->get_property() instanceof ConditionVariable ? $this->get_property()->hash() : null);
+        $hashParts = parent :: getHashParts();
 
-            $this->set_hash(parent :: hash($hash_parts));
-        }
+        $hashParts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->getHashParts() : null);
+        $hashParts[] = ($this->get_property() instanceof ConditionVariable ? $this->get_property()->getHashParts() : null);
 
-        return $this->get_hash();
+        return $hashParts;
     }
 
     /**

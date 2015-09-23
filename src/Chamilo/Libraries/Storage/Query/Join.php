@@ -15,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class Join implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+
     /**
      * **************************************************************************************************************
      * Join Types *
@@ -133,15 +135,5 @@ class Join implements Hashable
         $hashParts[] = $this->get_type();
 
         return $hashParts;
-    }
-
-    /**
-     *
-     * @param string[] $hash_parts
-     * @return string
-     */
-    public function hash()
-    {
-        return md5(json_encode($this->getHashParts()));
     }
 }
