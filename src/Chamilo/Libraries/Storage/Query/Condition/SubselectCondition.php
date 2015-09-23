@@ -133,25 +133,29 @@ class SubselectCondition extends Condition
         return $this->data_manager;
     }
 
-    public function hash()
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
+     */
+    public function getHashParts()
     {
-        if (! $this->get_hash())
+        $hashParts = parent :: getHashParts();
+
+        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+        $hashParts[] = $this->get_storage_unit_value();
+        $hashParts[] = $this->get_storage_unit_name();
+        $hashParts[] = ($this->get_data_manager() ? $this->get_data_manager()->class_name() : null);
+
+        if ($this->get_condition() instanceof Condition)
         {
-            $hashes = array();
-
-            $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-            $hashes[] = $this->value instanceof ConditionVariable ? $this->value->hash() : $this->value;
-            $hashes[] = $this->storage_unit_value;
-            $hashes[] = $this->storage_unit_name;
-            $hashes[] = ($this->data_manager ? $this->data_manager->class_name() : null);
-
-            if ($this->condition)
-            {
-                $hashes[] = $this->condition->hash();
-            }
-
-            $this->set_hash(parent :: hash($hashes));
+            $hashParts[] = $this->get_condition()->getHashParts();
         }
-        return $this->get_hash();
+        else
+        {
+            $hashParts[] = null;
+        }
+
+        return $hashParts;
     }
 }

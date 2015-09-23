@@ -38,6 +38,10 @@ abstract class Condition implements Hashable
         $this->hash = $hash;
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function getHashParts()
     {
         return array(static :: class_name());
@@ -46,14 +50,11 @@ abstract class Condition implements Hashable
     /**
      * Get an md5 representation of this object for identification purposes
      *
-     * @param $hash_parts multitype:string
      * @return string
      */
-    public function hash($hash_parts = array())
+    public function hash()
     {
-        $hash_parts[] = self :: class_name();
-
-        return md5(json_encode($hash_parts));
+        return md5(json_encode($this->getHashParts()));
     }
 
     /**
