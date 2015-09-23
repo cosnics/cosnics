@@ -878,7 +878,7 @@ abstract class Manager extends Application
                 $course_tool = $this->get_parent()->get_tool_registration();
                 $course_tool_name = $course_tool->get_name();
 
-                if ($course_tool_name && $course_tool_name != 'rights')
+                if ($course_tool_name && $course_tool_name != 'Rights')
                 {
                     $locations[] = $rights_util->get_weblcms_location_by_identifier_from_courses_subtree(
                         WeblcmsRights :: TYPE_COURSE_MODULE,

@@ -79,7 +79,7 @@ class BrowserComponent extends Manager
             $this->get_parent()->get_browser_type(),
             $this);
 
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions('Chamilo\Application\Weblcms\Table\Publication\Table');
 
         if (method_exists($this->get_parent(), 'get_additional_form_actions'))
         {
