@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
- * This class represents a condition that requires an inequality. An example would be requiring that a number be greater
+ * This class represents a condition that requires an inequality.
+ * An example would be requiring that a number be greater
  * than 4.
  *
  * @author Tim De Pauw
@@ -151,47 +152,48 @@ class ComparisonCondition extends Condition
         return $this->is_alias;
     }
 
-    public function hash()
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
+     */
+    public function getHashParts()
     {
-        if (! $this->get_hash())
+        $hashParts = parent :: getHashParts();
+
+        $hashParts[] = $this->get_operator();
+
+        switch ($this->get_operator())
         {
-            $hashes = array();
-            switch ($this->operator)
-            {
-                case self :: LESS_THAN :
-                    $hashes[] = $this->value instanceof ConditionVariable ? $this->value->hash() : $this->value;
-                    $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-                    $hashes[] = self :: GREATER_THAN;
-                    break;
-                case self :: LESS_THAN_OR_EQUAL :
-                    $hashes[] = $this->value instanceof ConditionVariable ? $this->value->hash() : $this->value;
-                    $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-                    $hashes[] = self :: GREATER_THAN_OR_EQUAL;
-                    break;
-                case self :: EQUAL :
-                    $parts = array();
-                    $parts[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-                    $parts[] = $this->value instanceof ConditionVariable ? $this->value->hash() : $this->value;
-                    sort($parts);
-                    foreach ($parts as $part)
-                    {
-                        $hashes[] = $part;
-                    }
-                    $hashes[] = $this->operator;
-                    break;
-                default :
-                    $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-                    $hashes[] = $this->value instanceof ConditionVariable ? $this->value->hash() : $this->value;
-                    $hashes[] = $this->operator;
-                    break;
-            }
+            case self :: LESS_THAN :
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                break;
+            case self :: LESS_THAN_OR_EQUAL :
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                break;
+            case self :: EQUAL :
+                $parts = array();
+                $parts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                $parts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
 
-            $hashes[] = $this->storage_unit;
-            $hashes[] = $this->is_alias;
+                sort($parts);
 
-            $this->set_hash(parent :: hash($hashes));
+                foreach ($parts as $part)
+                {
+                    $hashParts[] = $part;
+                }
+
+                break;
+            default :
+                $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+                $hashParts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
+                break;
         }
 
-        return $this->get_hash();
+        $hashParts[] = $this->get_storage_unit();
+        $hashParts[] = $this->is_alias();
+
+        return $hashParts;
     }
 }
