@@ -5,5 +5,5 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 
 class ZipContentObjectExport extends ContentObjectExport
 {
-    const TYPE_FLAT = 'flat';
+    const TYPE_FLAT = 'Flat';
 }
