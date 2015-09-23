@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\File\Compression\Pclzip;
 
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use PclZip;
 
 /**
@@ -47,19 +46,23 @@ class PclzipFilecompression extends Filecompression
 
     public function create_archive($path)
     {
-        $archive_file = $this->get_filename();
-        $temporary_path = Path :: getInstance()->getTemporaryPath();
+        $fileName = $this->get_filename();
+        $temporaryPath = $this->create_temporary_directory();
 
-        if (! isset($archive_file))
+        if (! isset($fileName))
         {
-            $archive_file = Filesystem :: create_unique_name($temporary_path, uniqid() . '.zip');
+            $fileName = Filesystem :: create_unique_name($temporaryPath, uniqid() . '.zip');
         }
 
-        $archive_file = $temporary_path . uniqid() . '_' . $archive_file;
-        $content = Filesystem :: get_directory_content($path, Filesystem :: LIST_FILES, true);
+        $archiveFile = $temporaryPath . $fileName;
 
-        $pclzip = new PclZip($archive_file);
-        $pclzip->add($content, PCLZIP_OPT_REMOVE_PATH, $path);
-        return $archive_file;
+        $fileList = Filesystem :: get_directory_content($path, Filesystem :: LIST_FILES, true);
+
+        $pclzip = new PclZip($archiveFile);
+        $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path);
+
+        Filesystem :: remove($temporaryPath);
+
+        return $archiveFile;
     }
 }
