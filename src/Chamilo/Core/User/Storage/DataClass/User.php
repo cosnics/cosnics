@@ -14,27 +14,14 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- * $Id: user.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
- * @package user.lib
- */
-/**
- * This class represents a user.
- * User objects have a number of default properties: - user_id: the numeric ID of the
- * user; - lastname: the lastname of the user; - firstname: the firstname of the user; - password: the password for this
- * user; - auth_source: - external_uid: the external authentication system unique id of the user (eg: Shibboleth uid,
- * OpenID uid, ...) - email: the email address of this user; - status: the status of this user: 1 is teacher, 5 is a
- * student; - phone: the phone number of the user; - official_code; the official code of this user; - picture_uri: the
- * URI location of the picture of this user; - creator_id: the user_id of the user who created this user; - language:
- * the language setting of this user; - disk quota: the disk quota for this user; - database_quota: the database quota
- * for this user; - version_quota: the default quota for this user of no quota for a specific learning object type is
- * set.
- *
- * @author Hans de Bisschop
+ * @package Chamilo\Core\User\Storage\DataClass$User
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class User extends DataClass
 {
@@ -493,12 +480,16 @@ class User extends DataClass
         }
         else
         {
-            $profilePictureIdentifier = Session :: get('profile_picture_identifier', false);
+            $profilePictureIdentifier = \Chamilo\Libraries\Platform\Session\Session :: get(
+                'profile_picture_identifier',
+                false);
 
             if (! $profilePictureIdentifier)
             {
                 $profilePictureIdentifier = rand(0, 75);
-                Session :: register('profile_picture_identifier', $profilePictureIdentifier);
+                \Chamilo\Libraries\Platform\Session\Session :: register(
+                    'profile_picture_identifier',
+                    $profilePictureIdentifier);
             }
 
             return Theme :: getInstance()->getImagePath(
