@@ -69,6 +69,11 @@ class BrowserComponent extends Manager implements TableSupport
         $this->get_form()->setDefaults(array(self :: PARAM_QUERY => $this->get_query()));
     }
 
+    public function get_additional_parameters()
+    {
+       return array(self :: PROPERTY_CATEGORY);
+    }
+
     /*
      * Inherited
      */
