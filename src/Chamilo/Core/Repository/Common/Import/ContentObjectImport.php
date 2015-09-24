@@ -19,7 +19,7 @@ abstract class ContentObjectImport
     const FORMAT_YOUTUBE = 'youtube';
     const FORMAT_VIMEO = 'vimeo';
     const FORMAT_HOTPOTATOES = 'hotpotatoes';
-    const FORMAT_SCORM = 'scorm';
+    // const FORMAT_SCORM = 'scorm';
     const FORMAT_FILE = 'file';
     const FORMAT_WEBPAGE = 'webpage';
     const TYPE_DEFAULT = 'default';
