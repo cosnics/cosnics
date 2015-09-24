@@ -227,6 +227,7 @@ class AuthenticationValidator
      */
     public function performCredentialsAuthentication($userName, $password)
     {
+
         if (\Chamilo\Core\User\Storage\DataManager :: userExists($userName))
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsername($userName);

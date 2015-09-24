@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
- * This class represents a selection condition that requires a value to be present in a list of values. An example of an
+ * This class represents a selection condition that requires a value to be present in a list of values.
+ * An example of an
  * instance would be a condition that requires that the id of a DataClass object be contained in the list {4,10,12}.
  *
  * @author Bart Mollet
@@ -17,7 +18,7 @@ class InCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @var string
+     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $name;
 
@@ -60,7 +61,7 @@ class InCondition extends Condition
     /**
      * Gets the DataClass property
      *
-     * @return string
+     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     public function get_name()
     {
@@ -97,21 +98,23 @@ class InCondition extends Condition
         return $this->is_alias;
     }
 
-    public function hash()
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
+     */
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hashes = array();
+        $hashParts = parent :: getHashParts();
 
-            $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-            ksort($this->values);
-            $hashes[] = $this->values;
-            $hashes[] = $this->storage_unit;
-            $hashes[] = $this->is_alias;
+        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
 
-            $this->set_hash(parent :: hash($hashes));
-        }
+        $values = $this->get_values();
+        ksort($values);
+        $hashParts[] = $values;
 
-        return $this->get_hash();
+        $hashParts[] = $this->get_storage_unit();
+        $hashParts[] = $this->is_alias();
+
+        return $hashParts;
     }
 }

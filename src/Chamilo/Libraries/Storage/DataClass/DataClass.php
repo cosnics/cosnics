@@ -22,6 +22,8 @@ abstract class DataClass
     const PROPERTY_ID = 'id';
     const NO_UID = - 1;
 
+    private static $tableNames = array();
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -762,9 +764,14 @@ abstract class DataClass
      */
     public static function get_table_name()
     {
-        $data_manager = static :: package() . '\Storage\DataManager';
-        return $data_manager :: PREFIX .
-             ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), true);
+        if (! isset(self :: $tableNames[static :: class_name()]))
+        {
+            $data_manager = static :: package() . '\Storage\DataManager';
+            self :: $tableNames[static :: class_name()] = $data_manager :: PREFIX .
+                 ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), true);
+        }
+
+        return self :: $tableNames[static :: class_name()];
     }
 
     public static function is_extended()

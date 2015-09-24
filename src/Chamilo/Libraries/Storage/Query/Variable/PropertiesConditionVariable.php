@@ -54,23 +54,13 @@ class PropertiesConditionVariable extends ConditionVariable
         $this->class = $class;
     }
 
-    /**
-     * Get an md5 representation of this object for identification purposes
-     *
-     * @param string[] $hash_parts
-     *
-     * @return string
-     */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hash_parts[] = $this->class;
+        $hashParts = ConditionVariable :: getHashParts();
 
-            $this->set_hash(parent :: hash($hash_parts));
-        }
+        $hashParts[] = $this->get_class();
 
-        return $this->get_hash();
+        return $hashParts;
     }
 
     /**

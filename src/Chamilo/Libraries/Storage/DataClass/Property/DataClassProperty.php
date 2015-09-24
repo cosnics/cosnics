@@ -17,6 +17,8 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class DataClassProperty implements Hashable
 {
 
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
+
     /**
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
@@ -77,15 +79,11 @@ class DataClassProperty implements Hashable
     }
 
     /**
-     * Hashes this object
      *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Parameters\DataClassParameters::getHashParts()
      */
-    public function hash()
+    public function getHashParts()
     {
-        $property = $this->get_property();
-        $value = $this->get_value();
-
-        return md5($property . $value);
+        return array(__CLASS__, $this->get_property(), $this->get_value());
     }
 }

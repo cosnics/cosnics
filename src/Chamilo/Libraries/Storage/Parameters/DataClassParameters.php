@@ -15,12 +15,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 abstract class DataClassParameters implements Hashable
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
-    /**
-     *
-     * @var string
-     */
-    private $hash;
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      * The condition to be applied to the action
@@ -45,24 +40,6 @@ abstract class DataClassParameters implements Hashable
     {
         $this->condition = $condition;
         $this->joins = $joins;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    function get_hash()
-    {
-        return $this->hash;
-    }
-
-    /**
-     *
-     * @param string $hash
-     */
-    function set_hash($hash)
-    {
-        $this->hash = $hash;
     }
 
     /**
@@ -105,18 +82,15 @@ abstract class DataClassParameters implements Hashable
         $this->joins = $joins;
     }
 
-    /**
-     *
-     * @param string[] $hash_parts
-     * @return string
-     */
-    public function hash($hash_parts = array())
+    public function getHashParts()
     {
-        $hash_parts[] = self :: class_name();
-        $hash_parts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->hash() : null);
-        $hash_parts[] = ($this->get_joins() instanceof Joins ? $this->get_joins()->hash() : null);
+        $hashParts = array();
 
-        return md5(serialize($hash_parts));
+        $hashParts[] = static :: class_name();
+        $hashParts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->getHashParts() : null);
+        $hashParts[] = ($this->get_joins() instanceof Joins ? $this->get_joins()->getHashParts() : null);
+
+        return $hashParts;
     }
 
     /**

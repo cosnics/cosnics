@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  * This class represents a condition that consists of multiple aggregated conditions.
  * Thus, it is used to model a single
  * relationship (AND, OR and perhaps others) between its aggregated conditions.
- * 
+ *
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @package common.libraries
@@ -15,14 +15,14 @@ abstract class MultipleAggregateCondition extends AggregateCondition
 
     /**
      * The aggregated conditions
-     * 
+     *
      * @var multitype:\common\libraries\storage\Condition
      */
     private $conditions;
 
     /**
      * Constructor
-     * 
+     *
      * @param $conditions multitype:\common\libraries\storage\Condition
      */
     public function __construct($conditions)
@@ -32,40 +32,41 @@ abstract class MultipleAggregateCondition extends AggregateCondition
 
     /**
      * Gets the aggregated conditions
-     * 
+     *
      * @return multitype:\common\libraries\storage\Condition
      */
     public function get_conditions()
     {
         return $this->conditions;
     }
-    
-    /*
-     * (non-PHPdoc) @see common\libraries.Condition::hash()
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
      */
-    public function hash()
+    public function getHashParts()
     {
-        if (! $this->get_hash())
+        $hashParts = parent :: getHashParts();
+
+        $hashParts[] = $this->get_operator();
+
+        $aggregateParts = array();
+
+        foreach ($this->get_conditions() as $condition)
         {
-            $hashes = array();
-            
-            $hashes[] = $this->get_operator();
-            foreach ($this->conditions as $condition)
-            {
-                $hashes[] = $condition->hash();
-            }
-            
-            sort($hashes);
-            
-            $this->set_hash(parent :: hash($hashes));
+            $aggregateParts[] = $condition->getHashParts();
         }
-        
-        return $this->get_hash();
+
+        sort($aggregateParts);
+
+        $hashParts[] = $aggregateParts;
+
+        return $hashParts;
     }
 
     /**
      * Gets the operator of this MultipleAggregateCondition
-     * 
+     *
      * @return string
      */
     abstract public function get_operator();
