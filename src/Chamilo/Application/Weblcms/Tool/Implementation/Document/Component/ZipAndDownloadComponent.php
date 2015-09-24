@@ -19,6 +19,8 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * $Id: document_zip_and_download.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -34,10 +36,16 @@ class ZipAndDownloadComponent extends Manager
 
     public function run()
     {
-        $archive_url = $this->create_document_archive();
+        $archivePath = $this->create_document_archive();
+        $archiveName = $this->zip_name . '.zip';
+        $archiveSafeName = Filesystem :: create_safe_name($archiveName);
 
-        Filesystem :: file_send_for_download($archive_url, true, $this->zip_name . '.zip');
-        Filesystem :: remove($archive_url);
+        $response = new BinaryFileResponse($archivePath, 200, array('Content-Type' => 'application/zip'));
+        $response->setContentDisposition(ResponseHeaderBag :: DISPOSITION_ATTACHMENT, $archiveName, $archiveSafeName);
+        $response->prepare($this->getRequest());
+        $response->send();
+
+        Filesystem :: remove($archivePath);
     }
 
     private function create_document_archive()
@@ -69,7 +77,7 @@ class ZipAndDownloadComponent extends Manager
 
         $category_folder_mapping = $this->create_folder_structure($category_id, $is_course_admin);
 
-        $target_path = current($category_folder_mapping);
+        $target_path = array_shift($category_folder_mapping);
         foreach ($category_folder_mapping as $category_id => $dir)
         {
             // if we have access, retrieve the publications in the current
@@ -187,13 +195,11 @@ class ZipAndDownloadComponent extends Manager
         }
 
         $compression = Filecompression :: factory();
-        $archive_file = $compression->create_archive($target_path);
+        $archiveFile = $compression->create_archive($target_path);
+
         Filesystem :: remove($target_path);
-        $archive_url = Path :: getInstance()->getBasePath() . str_replace(
-            DIRECTORY_SEPARATOR,
-            '/',
-            str_replace(realpath(Path :: getInstance()->getBasePath()), '', $archive_file));
-        return $archive_url;
+
+        return $archiveFile;
     }
 
     /**
@@ -208,8 +214,8 @@ class ZipAndDownloadComponent extends Manager
     {
         if (is_null($path))
         {
-            $path = realpath(Path :: getInstance()->getTemporaryPath());
-            $path = Filesystem :: create_unique_name($path . '/weblcms_document_download_' . $this->get_course_id());
+            $path = Path :: getInstance()->getTemporaryPath(__NAMESPACE__);
+            $path = Filesystem :: create_unique_name($path . 'weblcms_document_download_' . $this->get_course_id());
             $category_folder_mapping[$parent_cat] = $path;
             Filesystem :: create_dir($path);
         }

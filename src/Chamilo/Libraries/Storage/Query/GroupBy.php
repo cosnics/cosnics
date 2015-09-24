@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  */
 class GroupBy implements Hashable
 {
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      * List of ConditionVariables to group by
@@ -51,21 +52,17 @@ class GroupBy implements Hashable
         $this->group_by[] = $group_by;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function hash()
+    public function getHashParts()
     {
         $hashes = array();
 
-        foreach ($this->group_by as $group_by)
+        foreach ($this->get() as $group_by)
         {
-            $hashes[] = $group_by->hash();
+            $hashes[] = $group_by->getHashParts();
         }
 
         sort($hashes);
 
-        return md5(serialize($hashes));
+        return $hashes;
     }
 }

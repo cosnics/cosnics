@@ -13,45 +13,19 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 abstract class Condition implements Hashable
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
+    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
     /**
      *
-     * @var string
+     * @return string[]
      */
-    private $hash;
-
-    /**
-     *
-     * @return string
-     */
-    function get_hash()
+    public function getHashParts()
     {
-        return $this->hash;
+        return array(static :: class_name());
     }
 
     /**
      *
-     * @param string $hash
-     */
-    function set_hash($hash)
-    {
-        $this->hash = $hash;
-    }
-
-    /**
-     * Get an md5 representation of this object for identification purposes
-     *
-     * @param $hash_parts multitype:string
-     * @return string
-     */
-    public function hash($hash_parts = array())
-    {
-        $hash_parts[] = self :: class_name();
-
-        return md5(serialize($hash_parts));
-    }
-
-    /**
      * @return string
      */
     public static function package()

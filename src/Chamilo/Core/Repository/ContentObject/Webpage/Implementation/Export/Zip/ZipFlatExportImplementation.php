@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Webpage\Implementation\Export\Zi
 
 use Chamilo\Core\Repository\ContentObject\Webpage\Implementation\Export\ZipExportImplementation;
 
-class ZipDefaultExportImplementation extends ZipExportImplementation
+class ZipFlatExportImplementation extends ZipExportImplementation
 {
 
     /**
@@ -16,6 +16,6 @@ class ZipDefaultExportImplementation extends ZipExportImplementation
      */
     function get_path_for_file_in_zip($content_object, $filename)
     {
-        return $content_object->get_virtual_path() . $filename;
+        return $filename;
     }
 }

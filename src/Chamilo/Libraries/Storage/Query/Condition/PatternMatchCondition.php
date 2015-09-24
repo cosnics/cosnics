@@ -101,20 +101,19 @@ class PatternMatchCondition extends Condition
         return $this->is_alias;
     }
 
-    public function hash()
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\Condition::getHashParts()
+     */
+    public function getHashParts()
     {
-        if (! $this->get_hash())
-        {
-            $hashes = array();
+        $hashParts = parent :: getHashParts();
 
-            $hashes[] = $this->name instanceof ConditionVariable ? $this->name->hash() : $this->name;
-            $hashes[] = $this->pattern;
-            $hashes[] = $this->storage_unit;
-            $hashes[] = $this->is_alias;
+        $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] = $this->get_pattern();
+        $hashParts[] = $this->get_storage_unit();
+        $hashParts[] = $this->is_alias();
 
-            $this->set_hash(parent :: hash($hashes));
-        }
-
-        return $this->get_hash();
+        return $hashParts;
     }
 }
