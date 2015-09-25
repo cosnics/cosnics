@@ -120,7 +120,7 @@ class Manager implements PublicationInterface
                 new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_COURSE_TYPE_ID),
                 $excludedCourseTypes));
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user, $condition);
 
         $possible_courses = array();
 
