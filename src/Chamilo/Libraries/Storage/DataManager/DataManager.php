@@ -34,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Configuration\Configuration;
 
 /**
  * General and basic DataManager, providing basic functionality for all other DataManager objects
@@ -118,7 +119,18 @@ class DataManager
         {
             return false;
         }
-        return DataClassResultCache :: add($object);
+
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            return DataClassResultCache :: add($object);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public static function create_record($class_name, $record)
@@ -212,23 +224,46 @@ class DataManager
         return $parameters;
     }
 
+    private static function __retrieveClass($objectClass, $factoryClass, $parameters)
+    {
+        $record = self :: process_record(self :: get_instance()->retrieve($objectClass, $parameters));
+        return $factoryClass :: factory($objectClass, $record);
+    }
+
     private static function retrieveClass($cacheClass, $objectClass, $factoryClass, $parameters)
     {
-        if (! DataClassCache :: exists($cacheClass, $parameters))
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            if (! DataClassCache :: exists($cacheClass, $parameters))
+            {
+                try
+                {
+                    DataClassResultCache :: add(
+                        static :: __retrieveClass($objectClass, $factoryClass, $parameters),
+                        $parameters);
+                }
+                catch (DataClassNoResultException $exception)
+                {
+                    DataClassResultCache :: no_result($exception);
+                }
+            }
+
+            return DataClassCache :: get($cacheClass, $parameters);
+        }
+        else
         {
             try
             {
-                $record = self :: process_record(self :: get_instance()->retrieve($objectClass, $parameters));
-
-                DataClassResultCache :: add($factoryClass :: factory($objectClass, $record), $parameters);
+                return static :: __retrieveClass($objectClass, $factoryClass, $parameters);
             }
             catch (DataClassNoResultException $exception)
             {
-                DataClassResultCache :: no_result($exception);
+                return false;
             }
         }
-
-        return DataClassCache :: get($cacheClass, $parameters);
     }
 
     /**
@@ -258,25 +293,47 @@ class DataManager
         }
     }
 
+    private static function __record($class, $parameters)
+    {
+        return self :: process_record(self :: get_instance()->record($class, $parameters));
+    }
+
     public static function record($class, $parameters = null)
     {
         if (! $parameters instanceof RecordRetrieveParameters)
         {
             $parameters = RecordRetrieveParameters :: generate($parameters);
         }
-        if (! RecordCache :: exists($parameters))
+
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            if (! RecordCache :: exists($parameters))
+            {
+                try
+                {
+                    $record = RecordResultCache :: add(static :: __record($class, $parameters), $parameters);
+                }
+                catch (NoRecordException $exception)
+                {
+                    RecordResultCache :: no_result($exception);
+                }
+            }
+            return RecordCache :: get($parameters);
+        }
+        else
         {
             try
             {
-                $record = self :: process_record(self :: get_instance()->record($class, $parameters));
-                RecordResultCache :: add($record, $parameters);
+                return static :: __record($class, $parameters);
             }
             catch (NoRecordException $exception)
             {
-                RecordResultCache :: no_result($exception);
+                return false;
             }
         }
-        return RecordCache :: get($parameters);
     }
 
     /**
@@ -435,17 +492,37 @@ class DataManager
         return self :: retrievesClass($parentClassName, $className, $parameters);
     }
 
-    public static function retrievesClass($cacheClass, $objectClass, $parameters = null)
+    private static function __retrievesClass($objectClass, $parameters)
     {
-        if (! DataClassResultSetCache :: exists($cacheClass, $parameters))
+        return self :: get_instance()->retrieves($objectClass, $parameters);
+    }
+
+    private static function retrievesClass($cacheClass, $objectClass, $parameters = null)
+    {
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
         {
-            DataClassResultSetCache :: add(self :: get_instance()->retrieves($objectClass, $parameters), $parameters);
+            if (! DataClassResultSetCache :: exists($cacheClass, $parameters))
+            {
+                DataClassResultSetCache :: add(static :: __retrievesClass($objectClass, $parameters), $parameters);
+            }
+
+            $resultSet = DataClassResultSetCache :: get($cacheClass, $parameters);
+            $resultSet->reset();
+
+            return $resultSet;
         }
+        else
+        {
+            return static :: __retrievesClass($objectClass, $parameters);
+        }
+    }
 
-        $result_set = DataClassResultSetCache :: get($cacheClass, $parameters);
-        $result_set->reset();
-
-        return $result_set;
+    private static function __records($class, $parameters)
+    {
+        return self :: get_instance()->records($class, $parameters);
     }
 
     public static function records($class, $parameters = null)
@@ -455,15 +532,30 @@ class DataManager
             $parameters = RecordRetrievesParameters :: generate($parameters);
         }
 
-        if (! RecordResultSetCache :: exists($parameters))
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
         {
-            RecordResultSetCache :: add(self :: get_instance()->records($class, $parameters), $parameters);
+            if (! RecordResultSetCache :: exists($parameters))
+            {
+                RecordResultSetCache :: add(static :: __records($class, $parameters), $parameters);
+            }
+
+            $resultSet = RecordResultSetCache :: get($parameters);
+            $resultSet->reset();
+
+            return $resultSet;
         }
+        else
+        {
+            return static :: __records($class, $parameters);
+        }
+    }
 
-        $result_set = RecordResultSetCache :: get($parameters);
-        $result_set->reset();
-
-        return $result_set;
+    private static function __distinct($class, $parameters)
+    {
+        return self :: get_instance()->distinct($class, $parameters);
     }
 
     /**
@@ -481,11 +573,22 @@ class DataManager
             $parameters = DataClassDistinctParameters :: generate($parameters);
         }
 
-        if (! DataClassDistinctCache :: exists($class, $parameters))
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
         {
-            DataClassDistinctCache :: add($class, $parameters, self :: get_instance()->distinct($class, $parameters));
+            if (! DataClassDistinctCache :: exists($class, $parameters))
+            {
+                DataClassDistinctCache :: add($class, $parameters, static :: __distinct($class, $parameters));
+            }
+
+            return DataClassDistinctCache :: get($class, $parameters);
         }
-        return DataClassDistinctCache :: get($class, $parameters);
+        else
+        {
+            return static :: __distinct($class, $parameters);
+        }
     }
 
     /**
@@ -529,7 +632,17 @@ class DataManager
             return false;
         }
 
-        return DataClassCache :: truncate($class);
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            return DataClassCache :: truncate($class);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**
@@ -562,8 +675,17 @@ class DataManager
             }
         }
 
-        return DataClassCache :: truncate($class_name);
-        // return DataClassResultCache :: delete($object);
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            return DataClassCache :: truncate($class_name);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**
@@ -579,7 +701,18 @@ class DataManager
         {
             return false;
         }
-        return DataClassCache :: truncate($class);
+
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            return DataClassCache :: truncate($class);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**
@@ -614,16 +747,34 @@ class DataManager
         return self :: countClass($parentClassName, $className, $parameters);
     }
 
-    public static function countClass($cacheClass, $objectClass, $parameters = null)
+    private static function __countClass($objectClass, $parameters)
     {
-        if (! DataClassCountCache :: exists($cacheClass, $parameters))
+        return self :: get_instance()->count($objectClass, $parameters);
+    }
+
+    private static function countClass($cacheClass, $objectClass, $parameters)
+    {
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
         {
-            DataClassCountCache :: add(
-                $cacheClass,
-                $parameters,
-                self :: get_instance()->count($objectClass, $parameters));
+            if (! DataClassCountCache :: exists($cacheClass, $parameters))
+            {
+                DataClassCountCache :: add($cacheClass, $parameters, static :: __countClass($objectClass, $parameters));
+            }
+
+            return DataClassCountCache :: get($cacheClass, $parameters);
         }
-        return DataClassCountCache :: get($cacheClass, $parameters);
+        else
+        {
+            return static :: __countClass($objectClass, $parameters);
+        }
+    }
+
+    private static function __countGrouped($class, $parameters)
+    {
+        return self :: get_instance()->count_grouped($class, $parameters);
     }
 
     /**
@@ -641,14 +792,22 @@ class DataManager
             $parameters = DataClassCountGroupedParameters :: generate($parameters);
         }
 
-        if (! DataClassCountGroupedCache :: exists($class, $parameters))
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
         {
-            DataClassCountGroupedCache :: add(
-                $class,
-                $parameters,
-                self :: get_instance()->count_grouped($class, $parameters));
+            if (! DataClassCountGroupedCache :: exists($class, $parameters))
+            {
+                DataClassCountGroupedCache :: add($class, $parameters, static :: __countGrouped($class, $parameters));
+            }
+
+            return DataClassCountGroupedCache :: get($class, $parameters);
         }
-        return DataClassCountGroupedCache :: get($class, $parameters);
+        else
+        {
+            return static :: __countGrouped($class, $parameters);
+        }
     }
 
     /**

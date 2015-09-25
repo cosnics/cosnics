@@ -2,6 +2,9 @@
 namespace Chamilo\Libraries\Storage\Cache;
 
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Libraries\File\Cache\PhpFileCache;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -12,8 +15,10 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class ConditionVariableCache
 {
+    const PHP_FILE_CACHE_KEY = 'cache.condition.variable';
 
     /**
+     * The instance of the ConditionVariableCache
      *
      * @var \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
      */
@@ -22,37 +27,73 @@ class ConditionVariableCache
     /**
      * The cache
      *
-     * @var mixed[][]
+     * @var string[][]
      */
     private $cache;
 
     /**
-     * Get an instance of the DataClassCache
+     *
+     * @var \Chamilo\Libraries\File\Cache\PhpFileCache
+     */
+    private $phpFileCache;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $queryFileCacheEnabled;
+
+    /**
+     *
+     * @param boolean $queryFileCacheEnabled
+     */
+    public function __construct($queryFileCacheEnabled = true)
+    {
+        $this->cache = array();
+        $this->queryFileCacheEnabled = $queryFileCacheEnabled;
+
+        if ($this->queryFileCacheEnabled)
+        {
+            $this->phpFileCache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+
+            if (! $this->phpFileCache->contains(self :: PHP_FILE_CACHE_KEY))
+            {
+                $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, array());
+            }
+
+            $this->cache = $this->phpFileCache->fetch(self :: PHP_FILE_CACHE_KEY);
+        }
+    }
+
+    /**
+     * Get an instance of the ConditionVariableCache
      *
      * @return \Chamilo\Libraries\Storage\Cache\ConditionVariableCache
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
-            self :: $instance = new self();
+            $queryFileCacheEnabled = Configuration :: get_instance()->get_setting(
+                array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'));
+
+            self :: $instance = new self($queryFileCacheEnabled);
         }
+
         return self :: $instance;
     }
 
     /**
      * Get a translated condition_variable from the cache
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
-     * @return string boolean
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     * @return string
      */
-    public static function get(ConditionVariable $condition_variable)
+    public function get(ConditionVariable $conditionVariable)
     {
-        $instance = self :: get_instance();
-
-        if (self :: exists($condition_variable))
+        if ($this->exists($conditionVariable))
         {
-            return $instance->cache[$condition_variable->hash()];
+            return $this->cache[$conditionVariable->hash()];
         }
         else
 
@@ -62,16 +103,14 @@ class ConditionVariableCache
     }
 
     /**
-     * Returns whether a condition_variable object exists in the cache
+     * Returns whether a ConditionVariable object exists in the cache
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition_variable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return boolean
      */
-    public static function exists(ConditionVariable $condition_variable)
+    public function exists(ConditionVariable $conditionVariable)
     {
-        $instance = self :: get_instance();
-
-        if (isset($instance->cache[$condition_variable->hash()]))
+        if (isset($this->cache[$conditionVariable->hash()]))
         {
             return true;
         }
@@ -82,21 +121,28 @@ class ConditionVariableCache
     }
 
     /**
-     * Set the cache value for a specific condition_variable
+     * Set the cache value for a specific ConditionVariable
      *
-     * @param string $class
-     * @param string $hash
-     * @param mixed $value
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition
+     * @param string $value
      */
-    public static function set_cache($condition_variable, $value)
+    public function set($conditionVariable, $value)
     {
-        $instance = self :: get_instance();
-        $instance->cache[$condition_variable->hash()] = $value;
+        $this->cache[$conditionVariable->hash()] = $value;
+
+        if ($this->queryFileCacheEnabled)
+        {
+            $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, $this->cache);
+        }
     }
 
     public static function reset()
     {
-        $instance = self :: get_instance();
-        $instance->cache = array();
+        $this->cache = array();
+
+        if ($this->queryFileCacheEnabled)
+        {
+            $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, $this->cache);
+        }
     }
 }

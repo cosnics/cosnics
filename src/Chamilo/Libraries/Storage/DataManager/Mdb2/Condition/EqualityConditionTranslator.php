@@ -13,14 +13,15 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTransla
 class EqualityConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
-        $value = $this->get_condition()->get_value();
-
-        if (is_null($value))
+        if (is_null($this->get_condition()->get_value()))
         {
-            return ConditionVariableTranslator :: render($this->get_condition()->get_name()) .
-                 ' IS NULL';
+            return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' IS NULL';
         }
 
         return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator :: render(

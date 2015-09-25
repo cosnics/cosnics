@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Storage\DataManager\Mdb2\Variable;
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Mdb2\Variable
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
@@ -13,9 +13,8 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     * Translates the condition variable
      * 
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
      */
     public function translate()
     {
@@ -32,11 +31,13 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         
         if ($this->get_condition_variable()->get_alias())
         {
-            return implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
+            $value = implode(' ', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
         }
         else
         {
-            return implode('', $strings);
+            $value = implode(' ', $strings);
         }
+
+        return $value;
     }
 }

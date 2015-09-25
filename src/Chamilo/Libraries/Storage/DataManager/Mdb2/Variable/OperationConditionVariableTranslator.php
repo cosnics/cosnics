@@ -13,6 +13,10 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     */
     public function translate()
     {
         $strings = array();
@@ -33,6 +37,12 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 break;
             case OperationConditionVariable :: MULTIPLICATION :
                 $strings[] = '*';
+                break;
+            case OperationConditionVariable :: BITWISE_AND :
+                $strings[] = '&';
+                break;
+            case OperationConditionVariable :: BITWISE_OR :
+                $strings[] = '|';
                 break;
         }
 

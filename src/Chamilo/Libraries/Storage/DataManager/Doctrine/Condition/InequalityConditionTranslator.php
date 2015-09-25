@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 
@@ -21,32 +20,25 @@ class InequalityConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        if (! ConditionCache :: exists($this->get_condition()))
+        switch ($this->get_condition()->get_operator())
         {
-            switch ($this->get_condition()->get_operator())
-            {
-                case InequalityCondition :: GREATER_THAN :
-                    $operator = '>';
-                    break;
-                case InequalityCondition :: GREATER_THAN_OR_EQUAL :
-                    $operator = '>=';
-                    break;
-                case InequalityCondition :: LESS_THAN :
-                    $operator = '<';
-                    break;
-                case InequalityCondition :: LESS_THAN_OR_EQUAL :
-                    $operator = '<=';
-                    break;
-                default :
-                    die('Unknown operator for inequality condition');
-            }
-
-            $value = ConditionVariableTranslator :: render($this->get_condition()->get_name()) .
-                 ' ' . $operator . ' ' . ConditionVariableTranslator :: render(
-                    $this->get_condition()->get_value());
-            ConditionCache :: set_cache($this->get_condition(), $value);
+            case InequalityCondition :: GREATER_THAN :
+                $operator = '>';
+                break;
+            case InequalityCondition :: GREATER_THAN_OR_EQUAL :
+                $operator = '>=';
+                break;
+            case InequalityCondition :: LESS_THAN :
+                $operator = '<';
+                break;
+            case InequalityCondition :: LESS_THAN_OR_EQUAL :
+                $operator = '<=';
+                break;
+            default :
+                die('Unknown operator for inequality condition');
         }
 
-        return ConditionCache :: get($this->get_condition());
+        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' ' . $operator . ' ' . ConditionVariableTranslator :: render(
+            $this->get_condition()->get_value());
     }
 }

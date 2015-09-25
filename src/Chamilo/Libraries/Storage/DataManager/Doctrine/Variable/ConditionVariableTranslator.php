@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *
@@ -13,13 +12,14 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 abstract class ConditionVariableTranslator extends \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator
 {
+
     /**
      *
-     * @param ConditionVariable $condition_variable
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return string
      */
-    public static function render(ConditionVariable $condition_variable)
+    public static function runTranslator($conditionVariable)
     {
-        return parent :: factory(DataManager :: TYPE_DOCTRINE, $condition_variable)->translate();
+        return parent :: factory(DataManager :: TYPE_MDB2, $conditionVariable)->translate();
     }
 }

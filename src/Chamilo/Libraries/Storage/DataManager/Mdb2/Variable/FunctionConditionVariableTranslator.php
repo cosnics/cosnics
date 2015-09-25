@@ -13,6 +13,10 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 class FunctionConditionVariableTranslator extends ConditionVariableTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     */
     public function translate()
     {
         $strings = array();
@@ -35,17 +39,31 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        $strings[] = '(';
-        $strings[] = static :: render(
-            $this->get_condition_variable()->get_condition_variable());
-        $strings[] = ')';
-        if ($this->get_condition_variable()->get_alias())
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
         {
-            return implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
+        $strings[] = '(';
         }
         else
         {
-            return implode('', $strings);
+            $strings[] = ' ';
         }
+
+        $strings[] = static :: render($this->get_condition_variable()->get_condition_variable());
+
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+        {
+        $strings[] = ')';
+        }
+
+        if ($this->get_condition_variable()->get_alias())
+        {
+            $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
+        }
+        else
+        {
+            $value = implode('', $strings);
+        }
+
+        return $value;
     }
 }

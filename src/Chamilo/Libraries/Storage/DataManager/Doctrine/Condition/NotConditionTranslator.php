@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Condition
@@ -19,17 +17,12 @@ class NotConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        if (! ConditionCache :: exists($this->get_condition()))
-        {
-            $string = array();
+        $string = array();
 
-            $string[] = 'NOT (';
-            $string[] = ConditionTranslator :: render($this->get_condition()->get_condition());
-            $string[] = ')';
+        $string[] = 'NOT (';
+        $string[] = ConditionTranslator :: render($this->get_condition()->get_condition());
+        $string[] = ')';
 
-            ConditionCache :: set_cache($this->get_condition(), implode('', $string));
-        }
-
-        return ConditionCache :: get($this->get_condition());
+        return implode('', $string);
     }
 }
