@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
+namespace Chamilo\Libraries\Storage\DataManager\Mdb2\Condition;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Condition
+ * @package Chamilo\Libraries\Storage\DataManager\Mdb2\Condition
  * @author Pieterjan Broekaert <pieterjan.broekaert@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Variable
@@ -20,31 +18,26 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
+        $strings = array();
+
+        $strings[] = 'CASE ';
+
+        foreach ($this->get_condition_variable()->get_case_elements() as $case_element)
         {
-            $strings = array();
-
-            $strings[] = 'CASE ';
-
-            foreach ($this->get_condition_variable()->get_case_elements() as $case_element)
-            {
-                $strings[] = static :: render($case_element);
-            }
-
-            $strings[] = ' END';
-
-            if ($this->get_condition_variable()->get_alias())
-            {
-                $value = implode(' ', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
-            }
-            else
-            {
-                $value = implode(' ', $strings);
-            }
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
+            $strings[] = static :: render($case_element);
         }
 
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        $strings[] = ' END';
+
+        if ($this->get_condition_variable()->get_alias())
+        {
+            $value = implode(' ', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
+        }
+        else
+        {
+            $value = implode(' ', $strings);
+        }
+
+        return $value;
     }
 }

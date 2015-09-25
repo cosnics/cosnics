@@ -13,6 +13,10 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Database;
 class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     */
     public function translate()
     {
         return Database :: escape_column_name(

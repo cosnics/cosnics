@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
 /**
@@ -20,43 +19,36 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
+        $strings = array();
+
+        $strings[] = '(';
+        $strings[] = static :: render($this->get_condition_variable()->get_left());
+
+        switch ($this->get_condition_variable()->get_operator())
         {
-            $strings = array();
-
-            $strings[] = '(';
-            $strings[] = static :: render($this->get_condition_variable()->get_left());
-
-            switch ($this->get_condition_variable()->get_operator())
-            {
-                case OperationConditionVariable :: ADDITION :
-                    $strings[] = '+';
-                    break;
-                case OperationConditionVariable :: DIVISION :
-                    $strings[] = '/';
-                    break;
-                case OperationConditionVariable :: MINUS :
-                    $strings[] = '-';
-                    break;
-                case OperationConditionVariable :: MULTIPLICATION :
-                    $strings[] = '*';
-                    break;
-                case OperationConditionVariable :: BITWISE_AND :
-                    $strings[] = '&';
-                    break;
-                case OperationConditionVariable :: BITWISE_OR :
-                    $strings[] = '|';
-                    break;
-            }
-
-            $strings[] = static :: render($this->get_condition_variable()->get_right());
-            $strings[] = ')';
-
-            $value = implode(' ', $strings);
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
+            case OperationConditionVariable :: ADDITION :
+                $strings[] = '+';
+                break;
+            case OperationConditionVariable :: DIVISION :
+                $strings[] = '/';
+                break;
+            case OperationConditionVariable :: MINUS :
+                $strings[] = '-';
+                break;
+            case OperationConditionVariable :: MULTIPLICATION :
+                $strings[] = '*';
+                break;
+            case OperationConditionVariable :: BITWISE_AND :
+                $strings[] = '&';
+                break;
+            case OperationConditionVariable :: BITWISE_OR :
+                $strings[] = '|';
+                break;
         }
 
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        $strings[] = static :: render($this->get_condition_variable()->get_right());
+        $strings[] = ')';
+
+        return implode(' ', $strings);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 /**
@@ -20,19 +19,12 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
-        {
-            $class_name = $this->get_condition_variable()->get_class();
+        $class_name = $this->get_condition_variable()->get_class();
 
-            $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager :: get_instance()->get_alias(
-                $class_name :: get_table_name());
+        $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager :: get_instance()->get_alias(
+            $class_name :: get_table_name());
 
-            $value = Database :: escape_column_name($this->get_condition_variable()->get_property(), $table_alias) .
-                 ' AS ' . $this->get_condition_variable()->get_alias();
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
-        }
-
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        return Database :: escape_column_name($this->get_condition_variable()->get_property(), $table_alias) . ' AS ' .
+             $this->get_condition_variable()->get_alias();
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 
@@ -21,54 +20,48 @@ class InConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        if (! ConditionCache :: exists($this->get_condition()))
+        $values = $this->get_condition()->get_values();
+
+        if (! is_array($values))
         {
-            $values = $this->get_condition()->get_values();
-
-            if (! is_array($values))
+            if (is_scalar($values))
             {
-                if (is_scalar($values))
-                {
-                    $values = array($values);
-                }
-                elseif (is_null($values))
-                {
-                    $values = array();
-                }
-                else
-                {
-                    throw new \InvalidArgumentException(
-                        'An InCondition only accepts an array or a scalar as input for the values');
-                }
+                $values = array($values);
             }
-
-            if (count($values) > 0)
+            elseif (is_null($values))
             {
-                $where_clause = array();
-
-                $where_clause[] = ConditionVariableTranslator :: render(
-                    $this->get_condition()->get_name()) . ' IN (';
-
-                $placeholders = array();
-
-                foreach ($values as $value)
-                {
-                    $placeholders[] = Database :: quote($value);
-                }
-
-                $where_clause[] = implode(',', $placeholders);
-                $where_clause[] = ')';
-
-                $value = implode('', $where_clause);
+                $values = array();
             }
             else
             {
-                $value = 'true = false';
+                throw new \InvalidArgumentException(
+                    'An InCondition only accepts an array or a scalar as input for the values');
             }
-
-            ConditionCache :: set_cache($this->get_condition(), $value);
         }
 
-        return ConditionCache :: get($this->get_condition());
+        if (count($values) > 0)
+        {
+            $where_clause = array();
+
+            $where_clause[] = ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' IN (';
+
+            $placeholders = array();
+
+            foreach ($values as $value)
+            {
+                $placeholders[] = Database :: quote($value);
+            }
+
+            $where_clause[] = implode(',', $placeholders);
+            $where_clause[] = ')';
+
+            $value = implode('', $where_clause);
+        }
+        else
+        {
+            $value = 'true = false';
+        }
+
+        return $value;
     }
 }

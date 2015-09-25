@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Mdb2\Condition;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTranslator;
 
 /**
@@ -14,6 +14,10 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTransla
 class SubselectConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
         $string = array();
@@ -31,9 +35,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         $class = $this->get_condition()->get_value()->get_class();
         $table = $class :: get_table_name();
 
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($class);
-        $datamanager_class = $namespace . '\\DataManager';
-        $alias = $datamanager_class :: get_instance()->get_alias($table);
+        $alias = DataManager :: get_alias($table);
 
         $string[] = $table;
 
@@ -43,9 +45,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         if ($this->get_condition()->get_condition())
         {
             $string[] = 'WHERE ';
-            $string[] = ConditionTranslator :: render(
-                $this->get_condition()->get_condition(),
-                $alias);
+            $string[] = ConditionTranslator :: render($this->get_condition()->get_condition(), $alias);
         }
 
         $string[] = ')';

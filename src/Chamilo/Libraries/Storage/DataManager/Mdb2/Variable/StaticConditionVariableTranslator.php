@@ -13,13 +13,17 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Database;
 class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     */
     public function translate()
     {
         $value = $this->get_condition_variable()->get_value();
 
         if ($this->get_condition_variable()->get_quote())
         {
-            return Database :: quote($value);
+            $value = Database :: quote($value);
         }
 
         return $value;
