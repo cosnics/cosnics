@@ -126,7 +126,7 @@ class Manager implements PublicationInterface
 
         while ($course = $courses->next_result())
         {
-            if ($course->is_course_admin($user) && ! in_array($course->get_course_type_id(), $excludedCourseTypes))
+            if ($course->is_course_admin($user))
             {
                 $possible_courses[] = $course;
             }
