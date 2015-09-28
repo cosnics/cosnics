@@ -360,7 +360,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_ID),
             new StaticConditionVariable($publication_id));
-        $record = self :: record(ContentObjectPublication :: class_name(), $condition);
+        $record = self :: record(
+            ContentObjectPublication :: class_name(),
+            new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(ContentObjectPublication :: class_name())),
+                $condition));
 
         return self :: create_publication_attributes_from_record($record);
     }

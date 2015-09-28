@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * This class describes a category for content objects in the repository
@@ -305,7 +306,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
 
         if (! $recursive)
         {
-            $parameters = new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ID, $condition);
+            $parameters = new DataClassDistinctParameters($condition, self :: PROPERTY_ID);
             return (DataManager :: distinct(self :: class_name(), $parameters));
         }
         else
