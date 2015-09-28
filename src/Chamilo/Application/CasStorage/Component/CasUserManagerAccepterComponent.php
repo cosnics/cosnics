@@ -32,7 +32,7 @@ class CasUserManagerAccepterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $account_request = DataManager :: retrieve(AccountRequest :: class_name(), (int) $id);
+                $account_request = DataManager :: retrieve_by_id(AccountRequest :: class_name(), (int) $id);
 
                 if (! \Chamilo\Application\CasStorage\Account\Storage\DataManager :: generate_account_from_request(
                     $account_request))

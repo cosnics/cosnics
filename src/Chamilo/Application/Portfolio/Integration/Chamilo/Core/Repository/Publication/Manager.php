@@ -27,6 +27,7 @@ use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\Portfo
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\ComplexPortfolio;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 
 /**
  * Manager class that guarantees the integration of the portfolio application with the repository
@@ -170,7 +171,11 @@ class Manager implements PublicationInterface
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
             new StaticConditionVariable($publication_id));
-        $record = self :: record(Publication :: class_name(), $condition);
+        $record = self :: record(
+            Publication :: class_name(),
+            new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(Publication :: class_name())),
+                $condition));
 
         return self :: create_publication_attributes_from_record($record);
     }
