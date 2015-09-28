@@ -61,7 +61,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
-                    $new_category->set_user_id($this->get_user_id());
+                    $new_category->set_type_id($this->get_user_id());
                     $new_category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
                     if (! $new_category->create())
                     {
