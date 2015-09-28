@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\announcement
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Announcement"
+TypeCategory = "Content Objects"
+Title = "Subject"
+Description = "Message"
+AnnouncementToolBrowserComponent = "Announcements"
+AnnouncementToolIntroductionPublisherComponent = "Publish introduction"
+AnnouncementToolPublisherComponent = "Publish"
+AnnouncementToolUpdaterComponent = "Edit announcement"
+AnnouncementToolViewerComponent = "View announcement"
