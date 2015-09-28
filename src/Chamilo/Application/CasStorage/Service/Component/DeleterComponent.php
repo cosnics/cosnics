@@ -32,7 +32,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $cas_account = DataManager :: retrieve(Service :: class_name(), (int) $id);
+                $cas_account = DataManager :: retrieve_by_id(Service :: class_name(), (int) $id);
 
                 if (! $cas_account->delete())
                 {

@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -257,7 +258,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
             new StaticConditionVariable($publication_id));
-        $record = self :: record(Publication :: class_name(), $condition);
+
+        $record = self :: record(
+            Publication :: class_name(),
+            new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(Publication :: class_name())),
+                $condition));
 
         return self :: create_publication_attributes_from_record($record);
     }
