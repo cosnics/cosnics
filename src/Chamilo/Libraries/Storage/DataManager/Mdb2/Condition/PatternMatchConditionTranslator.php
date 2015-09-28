@@ -14,10 +14,14 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTransla
 class PatternMatchConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
-        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) .
-             ' LIKE ' . Database :: quote($this->search_string($this->get_condition()->get_pattern()));
+        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' LIKE ' .
+             Database :: quote($this->search_string($this->get_condition()->get_pattern()));
     }
 
     /**
@@ -25,8 +29,8 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      * pattern for use in a LIKE condition.
      * Should be suitable for any SQL flavor.
      *
-     * @param $string string The string that contains wildcard characters.
-     * @return string The escaped string.
+     * @param string $string
+     * @return string
      */
     public function search_string($string)
     {

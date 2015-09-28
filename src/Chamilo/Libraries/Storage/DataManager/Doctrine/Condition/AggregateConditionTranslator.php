@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Condition
@@ -19,32 +17,27 @@ class AggregateConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        if (! ConditionCache :: exists($this->get_condition()))
+        $string = '';
+
+        $condition_translations = array();
+        $count = 0;
+
+        foreach ($this->get_condition()->get_conditions() as $key => $condition)
         {
-            $string = '';
+            $count ++;
+            $translation = ConditionTranslator :: render($condition);
 
-            $condition_translations = array();
-            $count = 0;
-
-            foreach ($this->get_condition()->get_conditions() as $key => $condition)
+            if (! empty($translation))
             {
-                $count ++;
-                $translation = ConditionTranslator :: render($condition);
-
-                if (! empty($translation))
-                {
-                    $condition_translations[] = $translation;
-                }
+                $condition_translations[] = $translation;
             }
-
-            if (count($condition_translations) > 0)
-            {
-                $string = '(' . implode($this->get_condition()->get_operator(), $condition_translations) . ')';
-            }
-
-            ConditionCache :: set_cache($this->get_condition(), $string);
         }
 
-        return ConditionCache :: get($this->get_condition());
+        if (count($condition_translations) > 0)
+        {
+            $string = '(' . implode($this->get_condition()->get_operator(), $condition_translations) . ')';
+        }
+
+        return $string;
     }
 }

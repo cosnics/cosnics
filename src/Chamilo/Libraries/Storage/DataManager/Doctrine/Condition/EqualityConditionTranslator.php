@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 
 /**
@@ -22,25 +21,10 @@ class EqualityConditionTranslator extends ConditionTranslator
     {
         if (is_null($this->get_condition()->get_value()))
         {
-            if (! ConditionCache :: exists($this->get_condition()))
-            {
-                $value = ConditionVariableTranslator :: render(
-                    $this->get_condition()->get_name()) . ' IS NULL';
-
-                ConditionCache :: set_cache($this->get_condition(), $value);
-            }
-
-            return ConditionCache :: get($this->get_condition());
+            return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' IS NULL';
         }
 
-        if (! ConditionCache :: exists($this->get_condition()))
-        {
-            $value = ConditionVariableTranslator :: render($this->get_condition()->get_name()) .
-                 ' = ' . ConditionVariableTranslator :: render(
-                    $this->get_condition()->get_value());
-            ConditionCache :: set_cache($this->get_condition(), $value);
-        }
-
-        return ConditionCache :: get($this->get_condition());
+        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' = ' . ConditionVariableTranslator :: render(
+            $this->get_condition()->get_value());
     }
 }

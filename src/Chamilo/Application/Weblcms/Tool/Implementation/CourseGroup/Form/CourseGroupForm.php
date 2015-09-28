@@ -1249,9 +1249,11 @@ class CourseGroupForm extends FormValidator
 
             // existing groups size
         $condition = new EqualityCondition(
-            new EqualityCondition(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_course_group->get_id()));
-        $course_groups = DataManager :: retrieves(CourseGroup :: class_name(), $condition);
+        $course_groups = DataManager :: retrieves(
+            CourseGroup :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $size_children = 0;
         while ($existing_course_group = $course_groups->next_result())

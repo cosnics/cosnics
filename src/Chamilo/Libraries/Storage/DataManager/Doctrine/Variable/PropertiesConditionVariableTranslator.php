@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Variable
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -19,12 +18,6 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
-        {
-            $value = $this->get_condition_variable()->get_alias() . '.*';
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
-        }
-
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        return $this->get_condition_variable()->get_alias() . '.*';
     }
 }

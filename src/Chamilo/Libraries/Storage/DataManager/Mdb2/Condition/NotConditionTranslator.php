@@ -11,6 +11,10 @@ namespace Chamilo\Libraries\Storage\DataManager\Mdb2\Condition;
 class NotConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
         $string = array();

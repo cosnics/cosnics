@@ -16,6 +16,10 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 
 class Manager implements PublicationInterface
 {
@@ -106,19 +110,23 @@ class Manager implements PublicationInterface
         $locations = new Locations(__NAMESPACE__);
         $type = $content_object->get_type();
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
-
-        $possible_courses = array();
-
         $excludedCourseTypes = explode(
             ',',
             (string) Configuration :: get_instance()->get_setting(
-                'Chamilo\Application\Weblcms',
-                'excluded_course_types'));
+                array('Chamilo\Application\Weblcms', 'excluded_course_types')));
+
+        $condition = new NotCondition(
+            new InCondition(
+                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_COURSE_TYPE_ID),
+                $excludedCourseTypes));
+
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user, $condition);
+
+        $possible_courses = array();
 
         while ($course = $courses->next_result())
         {
-            if ($course->is_course_admin($user) && ! in_array($course->get_course_type_id(), $excludedCourseTypes))
+            if ($course->is_course_admin($user))
             {
                 $possible_courses[] = $course;
             }

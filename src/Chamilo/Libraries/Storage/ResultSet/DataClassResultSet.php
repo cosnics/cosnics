@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -77,36 +78,57 @@ class DataClassResultSet extends ArrayResultSet
      */
     public function get_object($class_name, $record)
     {
-        $cached = false;
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
 
-        foreach ($class_name :: get_cacheable_property_names() as $cacheable_property)
+        if ($queryCacheEnabled)
         {
-            $value = $record[$cacheable_property];
-            if (isset($value) && ! is_null($value))
-            {
-                $cacheable_property_parameters = new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($class_name, $cacheable_property),
-                        new StaticConditionVariable($value)));
+            $cached = false;
 
-                if (DataClassCache :: exists($class_name, $cacheable_property_parameters))
+            foreach ($class_name :: get_cacheable_property_names() as $cacheable_property)
+            {
+                $value = $record[$cacheable_property];
+                if (isset($value) && ! is_null($value))
                 {
-                    $object = DataClassResultCache :: get($class_name, $cacheable_property_parameters);
-                    $cached = true;
-                    break;
+                    $cacheable_property_parameters = new DataClassRetrieveParameters(
+                        new EqualityCondition(
+                            new PropertyConditionVariable($class_name, $cacheable_property),
+                            new StaticConditionVariable($value)));
+
+                    if (DataClassCache :: exists($class_name, $cacheable_property_parameters))
+                    {
+                        $object = DataClassResultCache :: get($class_name, $cacheable_property_parameters);
+                        $cached = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (! $cached)
+            if (! $cached)
+            {
+                $object = $this->buildObject($class_name, $record);
+                DataClassResultCache :: add($object);
+            }
+
+            return $object;
+        }
+        else
         {
-            $base = (is_subclass_of($class_name, CompositeDataClass :: class_name()) ? CompositeDataClass :: class_name() : DataClass :: class_name());
-            $class_name = (is_subclass_of($class_name, CompositeDataClass :: class_name()) ? $record[CompositeDataClass :: PROPERTY_TYPE] : $class_name);
-            $object = $base :: factory($class_name, $record);
-
-            DataClassResultCache :: add($object);
+            return $this->buildObject($class_name, $record);
         }
+    }
 
-        return $object;
+    /**
+     * Convert the record to a DataClass object
+     *
+     * @param string $className
+     * @param string[] $record
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    private function buildObject($className, $record)
+    {
+        $baseClassName = (is_subclass_of($className, CompositeDataClass :: class_name()) ? CompositeDataClass :: class_name() : DataClass :: class_name());
+        $className = (is_subclass_of($className, CompositeDataClass :: class_name()) ? $record[CompositeDataClass :: PROPERTY_TYPE] : $className);
+        return $baseClassName :: factory($className, $record);
     }
 }

@@ -14,6 +14,10 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Variable\ConditionVariableTransla
 class InConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
         $values = $this->get_condition()->get_values();
@@ -39,8 +43,7 @@ class InConditionTranslator extends ConditionTranslator
         {
             $where_clause = array();
 
-            $where_clause[] = ConditionVariableTranslator :: render(
-                $this->get_condition()->get_name()) . ' IN (';
+            $where_clause[] = ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' IN (';
 
             $placeholders = array();
             foreach ($values as $value)
@@ -50,11 +53,14 @@ class InConditionTranslator extends ConditionTranslator
 
             $where_clause[] = implode(',', $placeholders);
             $where_clause[] = ')';
-            return implode('', $where_clause);
+
+            $value = implode('', $where_clause);
         }
         else
         {
-            return 'true = false';
+            $value = 'true = false';
         }
+
+        return $value;
     }
 }

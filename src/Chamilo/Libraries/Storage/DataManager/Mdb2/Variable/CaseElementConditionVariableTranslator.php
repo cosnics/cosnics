@@ -7,8 +7,8 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 /**
  *
  * @package Chamilo\Libraries\Storage\DataManager\Mdb2\Variable
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
@@ -16,9 +16,8 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     * Translates the condition variable
      *
-     * @return string
+     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
      */
     public function translate()
     {

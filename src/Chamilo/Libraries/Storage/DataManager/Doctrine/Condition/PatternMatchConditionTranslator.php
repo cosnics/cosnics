@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Condition;
 
-use Chamilo\Libraries\Storage\Cache\ConditionCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 
@@ -21,15 +20,8 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        if (! ConditionCache :: exists($this->get_condition()))
-        {
-            $value = ConditionVariableTranslator :: render($this->get_condition()->get_name()) .
-                 ' LIKE ' . Database :: quote($this->search_string($this->get_condition()->get_pattern()));
-
-            ConditionCache :: set_cache($this->get_condition(), $value);
-        }
-
-        return ConditionCache :: get($this->get_condition());
+        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' LIKE ' .
+             Database :: quote($this->search_string($this->get_condition()->get_pattern()));
     }
 
     /**

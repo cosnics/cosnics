@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 
 /**
@@ -20,56 +19,51 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
+        $strings = array();
+        switch ($this->get_condition_variable()->get_function())
         {
-            $strings = array();
-            switch ($this->get_condition_variable()->get_function())
-            {
-                case FunctionConditionVariable :: SUM :
-                    $strings[] = 'SUM';
-                    break;
-                case FunctionConditionVariable :: COUNT :
-                    $strings[] = 'COUNT';
-                    break;
-                case FunctionConditionVariable :: MIN :
-                    $strings[] = 'MIN';
-                    break;
-                case FunctionConditionVariable :: MAX :
-                    $strings[] = 'MAX';
-                    break;
-                case FunctionConditionVariable :: DISTINCT :
-                    $strings[] = 'DISTINCT';
-                    break;
-            }
-
-            if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
-            {
-                $strings[] = '(';
-            }
-            else
-            {
-                $strings[] = ' ';
-            }
-
-            $strings[] = static :: render($this->get_condition_variable()->get_condition_variable());
-
-            if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
-            {
-                $strings[] = ')';
-            }
-
-            if ($this->get_condition_variable()->get_alias())
-            {
-                $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
-            }
-            else
-            {
-                $value = implode('', $strings);
-            }
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
+            case FunctionConditionVariable :: SUM :
+                $strings[] = 'SUM';
+                break;
+            case FunctionConditionVariable :: COUNT :
+                $strings[] = 'COUNT';
+                break;
+            case FunctionConditionVariable :: MIN :
+                $strings[] = 'MIN';
+                break;
+            case FunctionConditionVariable :: MAX :
+                $strings[] = 'MAX';
+                break;
+            case FunctionConditionVariable :: DISTINCT :
+                $strings[] = 'DISTINCT';
+                break;
         }
 
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+        {
+            $strings[] = '(';
+        }
+        else
+        {
+            $strings[] = ' ';
+        }
+
+        $strings[] = static :: render($this->get_condition_variable()->get_condition_variable());
+
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+        {
+            $strings[] = ')';
+        }
+
+        if ($this->get_condition_variable()->get_alias())
+        {
+            $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
+        }
+        else
+        {
+            $value = implode('', $strings);
+        }
+
+        return $value;
     }
 }
