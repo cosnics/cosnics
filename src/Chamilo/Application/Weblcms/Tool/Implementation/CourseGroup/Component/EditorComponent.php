@@ -45,6 +45,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EDIT_COURSE_GROUP,
                     self :: PARAM_COURSE_GROUP => $course_group_id)));
+
         if ($form->validate())
         {
             $succes = $form->update_course_group();

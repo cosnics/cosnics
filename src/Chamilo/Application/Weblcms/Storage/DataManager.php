@@ -2191,7 +2191,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $users = \Chamilo\Core\User\Storage\DataManager :: records(
                 User :: class_name(),
-                new InCondition(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), $user_ids))->as_array();
+                new RecordRetrievesParameters(
+                    new DataClassProperties(array(new PropertiesConditionVariable(User :: class_name()))),
+                    new InCondition(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), $user_ids)))->as_array();
 
             foreach ($users as $user)
             {
