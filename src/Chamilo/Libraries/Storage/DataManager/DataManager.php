@@ -145,13 +145,8 @@ class DataManager
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public static function retrieve($class, $parameters = null)
+    public static function retrieve($class, DataClassRetrieveParameters $parameters = null)
     {
-        if (! $parameters instanceof DataClassRetrieveParameters)
-        {
-            $parameters = DataClassRetrieveParameters :: generate($parameters);
-        }
-
         if (is_subclass_of($class, CompositeDataClass :: class_name()))
         {
             return self :: retrieveCompositeDataClass($class, $parameters);
@@ -298,13 +293,8 @@ class DataManager
         return self :: process_record(self :: get_instance()->record($class, $parameters));
     }
 
-    public static function record($class, $parameters = null)
+    public static function record($class, RecordRetrieveParameters $parameters = null)
     {
-        if (! $parameters instanceof RecordRetrieveParameters)
-        {
-            $parameters = RecordRetrieveParameters :: generate($parameters);
-        }
-
         $queryCacheEnabled = Configuration :: get_instance()->get_setting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
 
@@ -437,6 +427,7 @@ class DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_ID),
             new StaticConditionVariable($identifier));
+
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
                 array(new PropertyConditionVariable($conditionClass, $conditionClass :: PROPERTY_TYPE))),
@@ -785,13 +776,8 @@ class DataManager
      * @param $parameters \libraries\storage\DataClassCountGroupedParameters
      * @return multitype:int
      */
-    public static function count_grouped($class, $parameters)
+    public static function count_grouped($class, DataClassCountGroupedParameters $parameters)
     {
-        if (! $parameters instanceof DataClassCountGroupedParameters)
-        {
-            $parameters = DataClassCountGroupedParameters :: generate($parameters);
-        }
-
         $queryCacheEnabled = Configuration :: get_instance()->get_setting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
 

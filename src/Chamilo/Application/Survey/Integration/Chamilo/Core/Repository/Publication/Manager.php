@@ -168,7 +168,11 @@ class Manager implements PublicationInterface
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
             new StaticConditionVariable($publication_id));
-        $record = self :: record(Publication :: class_name(), $condition);
+        $record = self :: record(
+            Publication :: class_name(),
+            new RecordRetrieveParameters(
+                new DataClassProperties(new PropertiesConditionVariable(Publication :: class_name())),
+                $condition));
 
         return self :: create_publication_attributes_from_record($record);
     }
@@ -190,7 +194,7 @@ class Manager implements PublicationInterface
 
         $attributes->set_location(Translation :: get('TypeName'));
 
-        $url = 'index.php?application=survey&amp;go=' . \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PERSONAL; 
+        $url = 'index.php?application=survey&amp;go=' . \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PERSONAL;
 
         $attributes->set_url($url);
         $attributes->set_title($record[ContentObject :: PROPERTY_TITLE]);
@@ -219,7 +223,7 @@ class Manager implements PublicationInterface
             default :
                 return 0;
         }
-        
+
         if ($condition instanceof Condition)
         {
             $condition = new AndCondition(array($condition, $publication_condition));
@@ -300,14 +304,14 @@ class Manager implements PublicationInterface
         $applicationContext = \Chamilo\Application\Survey\Manager :: context();
 
         $locations = new Locations(__NAMESPACE__);
-//         $allowed_types = Survey :: get_allowed_types();
+        // $allowed_types = Survey :: get_allowed_types();
 
-//         $type = $content_object->get_type();
-//         if (in_array($type, $allowed_types))
-//         {
-            $locations->add_location(
-                new Location($applicationContext, Translation :: get('TypeName', null, $applicationContext)));
-//         }
+        // $type = $content_object->get_type();
+        // if (in_array($type, $allowed_types))
+        // {
+        $locations->add_location(
+            new Location($applicationContext, Translation :: get('TypeName', null, $applicationContext)));
+        // }
 
         return $locations;
     }
@@ -324,19 +328,19 @@ class Manager implements PublicationInterface
         $publication->setPublisherId(Session :: get_user_id());
         $publication->setPublished(time());
         $publication->setModified(time());
-        
+
         if ($publication->create())
         {
             return Translation :: get(
-                'ObjectCreated', 
-                array('OBJECT' => Translation :: get('SurveyPublication')), 
+                'ObjectCreated',
+                array('OBJECT' => Translation :: get('SurveyPublication')),
                 Utilities :: COMMON_LIBRARIES);
         }
         else
         {
             return Translation :: get(
-                'ObjectNotCreation', 
-                array('OBJECT' => Translation :: get('SurveyPublication')), 
+                'ObjectNotCreation',
+                array('OBJECT' => Translation :: get('SurveyPublication')),
                 Utilities :: COMMON_LIBRARIES);
         }
     }

@@ -1,10 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Exception;
 
 /**
  *
@@ -67,62 +64,5 @@ class DataClassRetrieveParameters extends DataClassParameters
         $hashParts[] = $this->get_order_by();
 
         return $hashParts;
-    }
-
-    /**
-     * Generate an instance based on the input or throw an exception if no compatible input was found
-     *
-     * @param mixed $parameter
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters
-     *
-     * @throws Exception
-     */
-    public static function generate($parameter)
-    {
-        // So you think you're being funny, eh? Right back at you ... you
-        // dog-blasted, ornery, no-account, long-eared
-        // varmint!
-        if (is_object($parameter) && $parameter instanceof DataClassRetrieveParameters)
-        {
-            return $parameter;
-        }
-
-        // If the parameter is a Condition, generate a new
-        // DataClassRetrieveParameters instance using the Condition
-        // provided by the context
-        elseif (is_object($parameter) && $parameter instanceof Condition)
-        {
-            return new self($parameter);
-        }
-
-        // If it's an integer, generate an EqualityCondition using the unique
-        // identifier
-        elseif (is_numeric($parameter))
-        {
-            debug_print_backtrace();
-
-            throw new Exception(
-                'Please use retrieve_by_id instead of retrieve or retrieves when retrieving a DataClass by it\'s identifier');
-        }
-
-        // If the parameter is an array, determine whether it's an array of
-        // ObjectTableOrder objects and if so generate
-        // a DataClassResultParameters
-        elseif (is_array($parameter) && count($parameter) > 0 && $parameter[0] instanceof OrderBy)
-        {
-            return new self(null, $parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof Joins)
-        {
-            return new self(null, null, $parameter);
-        }
-        elseif (is_null($parameter))
-        {
-            return new self();
-        }
-        else
-        {
-            throw new Exception('Illegal parameter passed to the DataManager :: retrieve() method.');
-        }
     }
 }

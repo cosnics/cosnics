@@ -32,7 +32,7 @@ class ActivaterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $cas_account = DataManager :: retrieve(Account :: class_name(), (int) $id);
+                $cas_account = DataManager :: retrieve_by_id(Account :: class_name(), (int) $id);
                 $cas_account->set_status(Account :: STATUS_ENABLED);
                 if (! $cas_account->update())
                 {
