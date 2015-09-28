@@ -51,7 +51,8 @@ class AttachmentViewerComponent extends Manager
         {
             $reference_content_object_id = $reference_content_object->get_additional_property(
                 self :: PROPERTY_REFERENCE_ID);
-            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object(
+            $reference_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
                 $reference_content_object_id);
         }
 
@@ -88,5 +89,23 @@ class AttachmentViewerComponent extends Manager
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
+     */
+    public function render_header()
+    {
+        return Page :: getInstance()->getHeader()->toHtml();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::render_footer()
+     */
+    public function render_footer()
+    {
+        return Page :: getInstance()->getFooter()->toHtml();
     }
 }

@@ -227,7 +227,6 @@ class AuthenticationValidator
      */
     public function performCredentialsAuthentication($userName, $password)
     {
-
         if (\Chamilo\Core\User\Storage\DataManager :: userExists($userName))
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsername($userName);
@@ -338,8 +337,10 @@ class AuthenticationValidator
         $userExpirationDate = $user->get_expiration_date();
         $userActivationDate = $user->get_activation_date();
 
-        if (($userExpirationDate != '0' && $userExpirationDate < time()) ||
-             ($userActivationDate != '0' && $userActivationDate > time()) || ! $user->get_active())
+        $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
+        $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
+
+        if (($accountHasExpired || $accountNotActivated || ! $user->get_active()) && ! $user->is_platform_admin())
         {
             throw new AuthenticationException(Translation :: get('AccountNotActive'));
         }

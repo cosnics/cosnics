@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Query\Condition;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Cache\ConditionCache;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -56,4 +58,30 @@ abstract class ConditionTranslator
      * @return string
      */
     abstract public function translate();
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     */
+    public static function render(Condition $condition)
+    {
+        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+
+        if ($queryCacheEnabled)
+        {
+            $conditionCache = ConditionCache :: getInstance();
+
+            if (! $conditionCache->exists($condition))
+            {
+                $conditionCache->set($condition, static :: runTranslator($condition));
+            }
+
+            return $conditionCache->get($condition);
+        }
+        else
+        {
+            return static :: runTranslator($condition);
+        }
+    }
 }

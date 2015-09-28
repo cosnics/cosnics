@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Storage;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Cache\QueryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -430,18 +429,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $user->delete();
         }
-    }
-
-    public static function query_cache_example($param1 = null, $param2 = null)
-    {
-        $hash = QueryCache :: hash();
-
-        if (! QueryCache :: exists($hash))
-        {
-            $record = 5;
-            QueryCache :: add($record, $hash);
-        }
-        return QueryCache :: get($hash);
     }
 
     /**

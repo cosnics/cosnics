@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -22,30 +21,23 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
+        $strings = array();
+
+        $condition_variable = $this->get_condition_variable();
+
+        if ($condition_variable->get_condition() instanceof Condition)
         {
-            $strings = array();
-
-            $condition_variable = $this->get_condition_variable();
-
-            if ($condition_variable->get_condition() instanceof Condition)
-            {
-                $strings[] = 'WHEN ';
-                $strings[] = ConditionTranslator :: render($condition_variable->get_condition());
-                $strings[] = ' THEN ';
-            }
-            else
-            {
-                $strings[] = ' ELSE ';
-            }
-
-            $strings[] = $condition_variable->get_statement();
-
-            $value = implode('', $strings);
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
+            $strings[] = 'WHEN ';
+            $strings[] = ConditionTranslator :: render($condition_variable->get_condition());
+            $strings[] = ' THEN ';
+        }
+        else
+        {
+            $strings[] = ' ELSE ';
         }
 
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        $strings[] = $condition_variable->get_statement();
+
+        return implode('', $strings);
     }
 }

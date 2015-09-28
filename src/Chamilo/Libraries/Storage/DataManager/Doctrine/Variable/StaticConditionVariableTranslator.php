@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Variable;
 
-use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 /**
@@ -20,18 +19,13 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        if (! ConditionVariableCache :: exists($this->get_condition_variable()))
+        $value = $this->get_condition_variable()->get_value();
+
+        if ($this->get_condition_variable()->get_quote())
         {
-            $value = $this->get_condition_variable()->get_value();
-
-            if ($this->get_condition_variable()->get_quote())
-            {
-                $value = Database :: quote($value);
-            }
-
-            ConditionVariableCache :: set_cache($this->get_condition_variable(), $value);
+            $value = Database :: quote($value);
         }
 
-        return ConditionVariableCache :: get($this->get_condition_variable());
+        return $value;
     }
 }

@@ -14,6 +14,10 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 class InequalityConditionTranslator extends ConditionTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     */
     public function translate()
     {
         switch ($this->get_condition()->get_operator())
@@ -34,8 +38,7 @@ class InequalityConditionTranslator extends ConditionTranslator
                 die('Unknown operator for inequality condition');
         }
 
-        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' ' .
-             $operator . ' ' .
-             ConditionVariableTranslator :: render($this->get_condition()->get_value());
+        return ConditionVariableTranslator :: render($this->get_condition()->get_name()) . ' ' . $operator . ' ' . ConditionVariableTranslator :: render(
+            $this->get_condition()->get_value());
     }
 }

@@ -10,16 +10,19 @@ use Chamilo\Libraries\Storage\DataManager\Mdb2\Database;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class FixedPropertyConditionVariableTranslator extends ConditionVariableTranslator
+class FixedPropertyConditionVariableTranslator extends PropertyConditionVariableTranslator
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\PropertyConditionVariableTranslator::translate()
+     */
     public function translate()
     {
         $class_name = $this->get_condition_variable()->get_class();
 
-        $data_manager = $class_name . '\\DataManager';
-
-        $table_alias = $data_manager :: get_instance()->get_alias($class_name :: get_table_name());
+        $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager :: get_instance()->get_alias(
+            $class_name :: get_table_name());
 
         return Database :: escape_column_name($this->get_condition_variable()->get_property(), $table_alias) . ' AS ' .
              $this->get_condition_variable()->get_alias();

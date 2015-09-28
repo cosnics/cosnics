@@ -119,7 +119,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         return new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_MODIFIED_DATE));
+                ContentObjectPublication :: PROPERTY_MODIFIED_DATE),
+            SORT_DESC);
     }
 
     public function get_additional_parameters()
