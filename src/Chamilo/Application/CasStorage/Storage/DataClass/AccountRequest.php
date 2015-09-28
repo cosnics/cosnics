@@ -189,7 +189,7 @@ class AccountRequest extends DataClass
 
     public function get_requester_user()
     {
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve(
+        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             User :: class_name(),
             (int) $this->get_requester_id());
         return ($user instanceof User ? $user : '');

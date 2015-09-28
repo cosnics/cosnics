@@ -21,7 +21,7 @@ class EditorComponent extends Manager
      */
     public function run()
     {
-        $account_request = DataManager :: retrieve(
+        $account_request = DataManager :: retrieve_by_id(
             AccountRequest :: class_name(),
             (int) Request :: get(Manager :: PARAM_REQUEST_ID));
         $form = new AccountRequestForm(

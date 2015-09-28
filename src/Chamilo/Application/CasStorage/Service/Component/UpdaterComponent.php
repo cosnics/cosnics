@@ -21,7 +21,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $cas_account = DataManager :: retrieve(
+        $cas_account = DataManager :: retrieve_by_id(
             Service :: class_name(),
             (int) Request :: get(Manager :: PARAM_ACCOUNT_ID));
 
