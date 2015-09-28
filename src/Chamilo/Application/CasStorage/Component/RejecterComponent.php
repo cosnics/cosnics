@@ -32,7 +32,7 @@ class RejecterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $account_request = DataManager :: retrieve(AccountRequest :: class_name(), (int) $id);
+                $account_request = DataManager :: retrieve_by_id(AccountRequest :: class_name(), (int) $id);
                 $account_request->set_status(AccountRequest :: STATUS_REJECTED);
                 if (! $account_request->update())
                 {
