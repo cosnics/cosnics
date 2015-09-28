@@ -3,5 +3,5 @@ namespace Chamilo\Application\Weblcms\Request\Storage;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'weblcms_request_';
+    const PREFIX = 'weblcms_';
 }
