@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matrix_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matrix question"
+TypeCategory = "Content Objects"
+Options = "Options"
+SwitchToMultipleMatches = "Allow multiple matches"
+SwitchToSingleMatch = "Only allow one match"
+AddMatrixQuestionOption = "Add an option"
+Answer = "Answer"
+Matches = "Matches"
+Feedback = "Feedback"
+Score = "Score"
+Weight = "Weight"
+Title = "Title"
+Description = "Question"
+AddMatch = "Add match"
+Match = "Match"
+RecalculateWeight = "Recalculate weight"
+RandomizeOptions = "Randomize options and matches"
+FeedbackAnswer = "Only show feedback for wrong answers"

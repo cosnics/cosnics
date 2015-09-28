@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\repository\user_view
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Mijn weergaves"
+BrowserComponent = "Doorblader mijn weergaves"
+CreatorComponent = "Maak weergave aan"
+DeleterComponent = "Wis weergave"
+UpdaterComponent = "Werk weergave bij"
+UserViews = "Mijn weergaves"
+UserView = "Weergave"
+UserViewNameNotUnique = "Weergegeven gebruikernaam is niet uniek"
+SelectTypesToShow = "Selecteer weer te geven types"
