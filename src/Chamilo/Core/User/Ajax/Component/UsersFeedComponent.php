@@ -93,7 +93,10 @@ class UsersFeedComponent extends \Chamilo\Core\User\Ajax\Manager
         {
             $conditions[] = Utilities :: query_to_condition(
                 $search_query,
-                array(User :: PROPERTY_USERNAME, User :: PROPERTY_FIRSTNAME, User :: PROPERTY_LASTNAME));
+                array(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)));
         }
 
         // Only include active users
