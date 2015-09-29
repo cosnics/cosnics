@@ -27,6 +27,7 @@ use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -507,6 +508,23 @@ class Kernel
         return $this;
     }
 
+    private function logException(\Exception $exception)
+    {
+        if (! $exception instanceof NotAllowedException)
+        {
+            Utilities :: write_error(
+                $exception->getCode(),
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine());
+
+            if (extension_loaded('newrelic'))
+            {
+                newrelic_notice_error('chamilo_exception', $exception);
+            }
+        }
+    }
+
     /**
      * Launch the kernel, executing some common checks, building the application component and executing it
      */
@@ -526,6 +544,8 @@ class Kernel
         }
         catch (\Exception $exception)
         {
+            $this->logException($exception);
+
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }

@@ -483,6 +483,10 @@ class Utilities
         switch ($errno)
         {
             case E_USER_ERROR :
+                if (extension_loaded('newrelic'))
+                {
+                    newrelic_notice_error($errstr, new \Exception($errstr, $errno));
+                }
                 self :: write_error('PHP Fatal error', $errstr, $errfile, $errline);
                 break;
             case E_USER_WARNING :
@@ -491,6 +495,10 @@ class Utilities
             case E_USER_NOTICE :
                 self :: write_error('PHP Notice', $errstr, $errfile, $errline);
             case E_RECOVERABLE_ERROR :
+                if (extension_loaded('newrelic'))
+                {
+                    newrelic_notice_error($errstr, new \Exception($errstr, $errno));
+                }
                 self :: write_error('PHP Recoverable error', $errstr, $errfile, $errline);
             default :
         }
