@@ -80,10 +80,24 @@ class SubmissionDeleterComponent extends Manager
 
             // delete the score of the submission
             $score_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
+
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
+                new StaticConditionVariable($submission_id));
+
             $score_tracker->remove($condition);
 
             // delete the note of the submission
             $note_tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote();
+
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: class_name(),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: PROPERTY_SUBMISSION_ID),
+                new StaticConditionVariable($submission_id));
+
             $note_tracker->remove($condition);
         }
 
