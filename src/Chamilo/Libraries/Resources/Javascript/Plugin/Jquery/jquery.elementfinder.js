@@ -247,7 +247,7 @@
 								theElement.addClass('disabled');
 								theElement.css("background-image", theElement
 										.css("background-image").replace(
-												".png", "_na.png"));
+												".png", "Na.png"));
 							}
 						}
 					}
@@ -267,7 +267,7 @@
 					// theElement.addClass('disabled');
 					// theElement.css("background-image",
 					// theElement.css("background-image").replace(".png",
-					// "_na.png"));
+					// "Na.png"));
 					// }
 					// }
 					// });
@@ -385,7 +385,7 @@
 						if (typeof theElement.css("background-image") !== 'undefined') {
 							theElement.removeClass('disabled');
 							theElement.css("background-image", theElement.css(
-									"background-image").replace("_na.png",
+									"background-image").replace("Na.png",
 									".png"));
 						}
 					}
@@ -403,7 +403,7 @@
 					// {
 					// theElement.removeClass('disabled');
 					// theElement.css("background-image",
-					// theElement.css("background-image").replace("_na.png",
+					// theElement.css("background-image").replace("Na.png",
 					// ".png"));
 					// }
 					// });

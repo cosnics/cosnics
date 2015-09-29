@@ -94,7 +94,7 @@
 						if (typeof theElement.css('background-image') !== 'undefined') {
 							theElement.removeClass('disabled');
 							theElement.css('background-image', theElement.css(
-									'background-image').replace('_na.png',
+									'background-image').replace('Na.png',
 									'.png'));
 
 							var filterBoxes = $('.filter_box', self);
@@ -113,7 +113,7 @@
 								theElement.addClass('disabled');
 								theElement.css('background-image', theElement
 										.css('background-image').replace(
-												'.png', '_na.png'));
+												'.png', 'Na.png'));
 
 								var filterBoxes = $('.filter_box', self);
 								$('#' + theElement.attr('id'), filterBoxes)
