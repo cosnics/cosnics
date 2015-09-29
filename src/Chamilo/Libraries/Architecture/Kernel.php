@@ -324,11 +324,6 @@ class Kernel
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
         }
 
-        if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type') === 'production')
-        {
-            ini_set('display_errors', 0);
-        }
-
         $timezone = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'platform_timezone');
         date_default_timezone_set($timezone);
 
