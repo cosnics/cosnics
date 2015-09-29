@@ -326,7 +326,7 @@ class Kernel
 
         if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type') === 'production')
         {
-            error_reporting(0);
+            ini_set('display_errors', 0);
         }
 
         $timezone = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'platform_timezone');
