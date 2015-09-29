@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Kalender"
+TypeName = "Mijn agenda"
 Jump = "Spring"
 ComponentFailedToLoad = "Fout bij het laden"
 File = "Bestand"
@@ -27,7 +27,11 @@ Month = "Maandkalender"
 AppointmentsAsSubscriber = "Afspraken in cursusruimte "
 Edit = "Bewerk {TITLE}"
 PersonalCalendarManagerIcalImporterComponent = "Importeer iCal"
-AllEventSourcesHidden = "All events are currently hidden, enable some sources in the legend to change this"
+AllEventSourcesHidden = "Alle items zijn op dit moment verborgen, activeer een aantal bronnen om dit te veranderen"
 ICalDownloadMessage = "If instead you wanted to download a copy of your entire calendar, please download the following link:<br /><a href="{URL}">{URL}</a>"
-ICalExternalMessage = "If you want to make your calendar available in your favourite calendaring client (Outlook, Thunderbird, Google Calendar, ...) or on your mobile device(s) please copy the following link and add it to the client or device as an external ical / ics file:<br /><a href="{URL}">{URL}</a> "
-ICalWarningMessage = "Please take into account that both the iCal download and/or link for your preferred calendaring client, will only include events from local sources and not those from externally located calendars.<br /><br />The following calendars will be included:<br />{INCLUDED_CALENDARS}<br /><br />The following calendars will be excluded:<br />{EXCLUDED_CALENDARS}<br /><br />A subset of events from the following calendars will be included:<br />{PARTIAL_CALENDARS}"
+ICalDownloadMessage = "Wou je daarentegen een kopie van je hele agenda downloaden, dan kan dat via de volgende link:<br /><a href="{URL}">{URL}</a>"
+ICalExternalMessage = "Indien je je agenda beschikbaar wil maken in je favoriete clïent (Outlook, Thunderbird, Google Calendar, ...) of op je mobiele apparaat / apparaten, kopieer dan de volgende link en voeg hem toe aan je client of apparaat als extern ical / ics bestand:<br /><a href="{URL}">{URL}</a> "
+ICalWarningMessage = "Hou er rekening mee dat zowel de iCal download als de iCal link voor de cliënt van je keuze enkel items zal bevatten van lokale bronnen en niet van externe agenda's.<br /><br />De volgende agenda's worden opgenomen:<br />{INCLUDED_CALENDARS}<br /><br />De volgende agenda's worden niet opgenomen:<br />{EXCLUDED_CALENDARS}<br /><br />De volgende agenda's zullen gedeeltelijk opgenomen worden:<br />{PARTIAL_CALENDARS}"
+VariousCalendars = "Andere kalenders"
+AvailabilityComponent = "Toegankelijke agendas"
+CalendarAvailabilityInformation = "Agenda's die niet geselecteerd of geactiveerd worden op deze pagina, zullen niet toegevoegd worden aan de geaggregeerde agenda en hun items worden noch opgehaald van de (externe) bron, noch weergegeven in de \"Mijn agenda\" applicatie."
