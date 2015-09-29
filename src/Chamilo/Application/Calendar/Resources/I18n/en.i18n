@@ -3,7 +3,7 @@
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Calendar"
+TypeName = "My Calendar"
 TypeCategory = "Applications"
 Jump = "Jump"
 ComponentFailedToLoad = "Failed to load"
@@ -31,3 +31,6 @@ AllEventSourcesHidden = "All events are currently hidden, enable some sources in
 ICalDownloadMessage = "If instead you wanted to download a copy of your entire calendar, please download the following link:<br /><a href="{URL}">{URL}</a>"
 ICalExternalMessage = "If you want to make your calendar available in your favourite calendaring client (Outlook, Thunderbird, Google Calendar, ...) or on your mobile device(s) please copy the following link and add it to the client or device as an external ical / ics file:<br /><a href="{URL}">{URL}</a> "
 ICalWarningMessage = "Please take into account that both the iCal download and/or link for your preferred calendaring client, will only include events from local sources and not those from externally located calendars.<br /><br />The following calendars will be included:<br />{INCLUDED_CALENDARS}<br /><br />The following calendars will be excluded:<br />{EXCLUDED_CALENDARS}<br /><br />A subset of events from the following calendars will be included:<br />{PARTIAL_CALENDARS}"
+VariousCalendars = "Other calendars"
+AvailabilityComponent = "Accessible calendars"
+CalendarAvailabilityInformation = "Calendars which are not selected or enabled on this page, will not be included in your aggregated calendar and will neither be retrieved from the (external) source nor displayed in the \"My calendar\" application."
