@@ -549,7 +549,9 @@ class ConfigurationForm extends FormValidator
                         $value = 0;
                     }
 
-                    $setting = DataManager :: retrieve_setting_from_variable_name($name, $this->context);
+                    $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
+                        $name,
+                        $this->context);
 
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
