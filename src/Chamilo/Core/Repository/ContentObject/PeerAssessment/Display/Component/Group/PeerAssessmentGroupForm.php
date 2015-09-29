@@ -92,7 +92,8 @@ class PeerAssessmentGroupForm extends FormValidator
             'Display' => Translation :: get('SelectGroupUsers', null, Utilities :: COMMON_LIBRARIES),
             'Searching' => Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES),
             'NoResults' => Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES),
-            'Error' => Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES));
+            'Error' => Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES),
+            'load_elements' => true);
 
         $elem = $this->addElement(
             'user_group_finder',
