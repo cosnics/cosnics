@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 
@@ -92,7 +91,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tabs->add_tab(
             new DynamicVisualTab(
                 'availability',
-                Translation :: get('Availability', null, Utilities :: COMMON_LIBRARIES),
+                Translation :: get('AvailabilityComponent'),
                 Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Availability'),
                 $availabilityUrl->getUrl(),
                 false,
@@ -106,7 +105,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tabs->add_tab(
             new DynamicVisualTab(
                 'ICalExternal',
-                Translation :: get('ICalExternal', null, Utilities :: COMMON_LIBRARIES),
+                Translation :: get('ICalExternal'),
                 Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalExternal'),
                 $iCalUrl->getUrl(),
                 false,
@@ -123,7 +122,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $tabs->add_tab(
             new DynamicVisualTab(
                 'ICalDownload',
-                Translation :: get('ICalDownload', null, Utilities :: COMMON_LIBRARIES),
+                Translation :: get('ICalDownload'),
                 Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalDownload'),
                 $icalDownloadUrl->getUrl(),
                 false,

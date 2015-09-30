@@ -25,6 +25,12 @@ use Chamilo\Libraries\Authentication\QueryAuthentication;
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
 
+    /**
+     *
+     * @var \Chamilo\Application\Calendar\Service\CalendarRendererProvider
+     */
+    private $calendarRendererProvider;
+
     public function run()
     {
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
@@ -72,21 +78,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $html[] = $this->render_header();
 
                 $html[] = Display :: normal_message(
-                    Translation :: get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
-                $html[] = Display :: normal_message(
                     Translation :: get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl())));
 
-                $partialCalendars = implode(', ', array());
-                $includedCalendars = implode(', ', array());
-                $excludedCalendars = implode(', ', array());
+                $html[] = Display :: normal_message(
+                    Translation :: get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
+
+                $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getInternalSourceNames());
 
                 $html[] = Display :: warning_message(
-                    Translation :: get(
-                        'ICalWarningMessage',
-                        array(
-                            'PARTIAL_CALENDARS' => $partialCalendars,
-                            'INCLUDED_CALENDARS' => $includedCalendars,
-                            'EXCLUDED_CALENDARS' => $excludedCalendars)));
+                    Translation :: get('ICalWarningMessage', array('INCLUDED_CALENDARS' => $includedCalendars)));
 
                 $html[] = $this->render_footer();
 
@@ -95,16 +95,28 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         }
     }
 
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\CalendarRendererProvider
+     */
+    private function getCalendarRendererProvider()
+    {
+        if (! isset($this->calendarRendererProvider))
+        {
+            $this->calendarRendererProvider = new CalendarRendererProvider(
+                new CalendarRendererProviderRepository(),
+                $this->get_user(),
+                $this->get_user(),
+                array(),
+                \Chamilo\Application\Calendar\Ajax\Manager :: context());
+        }
+
+        return $this->calendarRendererProvider;
+    }
+
     private function renderCalendar()
     {
-        $dataProvider = new CalendarRendererProvider(
-            new CalendarRendererProviderRepository(),
-            $this->get_user(),
-            $this->get_user(),
-            array(),
-            \Chamilo\Application\Calendar\Ajax\Manager :: context());
-
-        $icalRenderer = new ICalRenderer($dataProvider);
+        $icalRenderer = new ICalRenderer($this->getCalendarRendererProvider());
         $icalRenderer->renderAndSend();
     }
 }

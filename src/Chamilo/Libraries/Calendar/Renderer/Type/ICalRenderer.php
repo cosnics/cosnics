@@ -68,7 +68,7 @@ class ICalRenderer extends Renderer
 
     private function addEvents()
     {
-        $providedEvents = $this->getDataProvider()->getAllEvents();
+        $providedEvents = $this->getDataProvider()->getInternalEvents();
 
         foreach ($providedEvents as $providedEvent)
         {
