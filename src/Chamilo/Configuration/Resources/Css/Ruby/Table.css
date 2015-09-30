@@ -25,7 +25,7 @@
 	text-transform: uppercase;
 	text-align: left;
 	padding: 6px 10px 6px 10px;
-	background: #d4e0f1 url(../../Images/Ruby/Background/TableHeader.png)
+	background: #d5d5d5 url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 	overflow: hidden;
 }
@@ -317,7 +317,7 @@
 	text-transform: uppercase;
 	text-align: center;
 	vertical-align: middle;
-	background-color: #d4e0f1;
+	background-color: #f2f2f2;
 }
 
 .calendar_table th {
@@ -331,7 +331,7 @@
 	text-transform: uppercase;
 	text-align: center;
 	padding: 2px;
-	background: #d4e0f1 url(../../Images/Ruby/Background/TableHeader.png)
+	background: #d5d5d5 url(../../Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 
