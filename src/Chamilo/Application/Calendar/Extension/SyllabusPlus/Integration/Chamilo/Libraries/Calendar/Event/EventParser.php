@@ -219,8 +219,16 @@ class EventParser
 
         $html[] = $calendarEvent['name'];
         $html[] = '[' . $calendarEvent['type_code'] . ']';
-        $html[] = '[' . $calendarEvent['teacher'] . ']';
-        $html[] = '[' . $calendarEvent['location'] . ']';
+
+        if ($calendarEvent['teacher'])
+        {
+            $html[] = '[' . $calendarEvent['teacher'] . ']';
+        }
+
+        if ($calendarEvent['location'])
+        {
+            $html[] = '[' . $calendarEvent['location'] . ']';
+        }
 
         return implode(PHP_EOL, $html);
     }
