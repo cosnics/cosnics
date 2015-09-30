@@ -1,13 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 
 /**
@@ -38,17 +32,15 @@ class WorkspaceCategoryItem extends Item
     {
         if (! isset($this->children))
         {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
-                new StaticConditionVariable($this->get_id()));
-            $parameters = new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
-            $items = DataManager :: retrieves(Item :: class_name(), $parameters);
-            $this->children = $items->as_array();
+            $this->children = array();
+
+            $configurationItem = new WorkspaceConfigureItem();
+            $configurationItem->set_parent($this->get_id());
+            $configurationItem->set_display($this->get_display());
+
+            $this->children[] = $configurationItem;
         }
+
         return $this->children;
     }
 
@@ -76,6 +68,7 @@ class WorkspaceCategoryItem extends Item
                 return true;
             }
         }
+
         return false;
     }
 

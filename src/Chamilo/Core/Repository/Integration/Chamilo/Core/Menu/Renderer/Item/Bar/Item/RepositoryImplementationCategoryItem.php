@@ -45,10 +45,13 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         }
 
         $html[] = '<ul>';
-
-        $html[] = '<li>';
-        $html[] = '<a href="#">';
+        
         $selected = $this->get_item()->is_selected();
+        $class = $selected ? 'class="current" ' : '';
+        
+        $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
+        $html[] = '<a ' . $class . 'href="#">';
+        
         $title = Translation :: get('Instance');
 
         if ($this->get_item()->show_icon())

@@ -20,7 +20,7 @@ class WorkspaceConfigureItem extends Item
      */
     public function get_section()
     {
-        return \Chamilo\Core\Repository\Manager :: SECTION_WORKSPACE;
+        return \Chamilo\Core\Repository\Workspace\Favourite\Manager :: package();
     }
 
     /**
@@ -30,10 +30,12 @@ class WorkspaceConfigureItem extends Item
     public function is_selected()
     {
         $current_section = Page :: getInstance()->getSection();
+
         if ($current_section == $this->get_section())
         {
             return true;
         }
+
         return false;
     }
 }
