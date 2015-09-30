@@ -552,7 +552,7 @@ div.content_object div#content_object_tags ul {
 
 div.content_object div#content_object_tags ul li.tag {
 	float: right;
-	background-color: #D4E0F1;
+	background-color: #f2f2f2;
 	padding: 2px 4px;
 	border: 1px solid #B5CAE7;
 	border-radius: 3px;
@@ -1158,7 +1158,7 @@ div.action_bar_text {
 	-moz-border-radius-bottomright: 15px;
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
-	background: #d4e0f1 url(../../Images/Ruby/Background/ActionBar.png)
+	background: #d5d5d5 url(../../Images/Ruby/Background/ActionBar.png)
 		no-repeat;
 }
 
@@ -1175,7 +1175,7 @@ div.action_bar {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
-	background: #d4e0f1 url(../../Images/Ruby/Background/ActionBar.png)
+	background: #d5d5d5 url(../../Images/Ruby/Background/ActionBar.png)
 		repeat-x;
 }
 
@@ -1333,7 +1333,7 @@ div.reporting_filter_text {
 	-moz-border-radius-bottomright: 15px;
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
-	background: #d4e0f1
+	background: #d5d5d5
 		url(../../Images/Ruby/Background/ReportingFilter.png) no-repeat;
 }
 
@@ -1350,7 +1350,7 @@ div.reporting_filter {
 	-webkit-border-top-left-radius: 15px;
 	-webkit-border-bottom-right-radius: 15px;
 	/*height: 60px;*/
-	background: #d4e0f1
+	background: #d5d5d5
 		url(../../Images/Ruby/Background/ReportingFilter.png) no-repeat;
 }
 
@@ -2500,9 +2500,8 @@ a.cda_link {
 	color: #222222 /*{fcContent}*/;
 }
 
-.highlight
-{
-    color: #B1071C;
+.highlight {
+	color: #B1071C;
 }
 
 /***************************************************
@@ -2523,4 +2522,33 @@ a.cda_link {
 
 #header_quick_language li a {
 	color: #716A50;
+}
+
+pre {
+	font-size: 90%;
+	line-height: 1.2em;
+	font-family: "Courier 10 Pitch", Courier, monospace;
+	white-space: pre;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -o-pre-wrap;
+	height: 1%;
+	width: auto;
+	display: block;
+	clear: both;
+	color: #555555;
+	padding: 1em 1em;
+	background: #f4f4f4;
+	border: solid 1px #e1e1e1
+}
+
+code {
+	font-size: 90%;
+	line-height: 1.2em;
+	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono",
+		monospace;
+	display: inline;
+	color: #555555;
+	padding: 1em 1em;
+	background: #f4f4f4;
 }
