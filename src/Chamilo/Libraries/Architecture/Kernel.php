@@ -299,14 +299,20 @@ class Kernel
 
         if ($this->getUser() instanceof User)
         {
-            $themeSettable = \Chamilo\Configuration\Configuration :: get(
-                'Chamilo\Core\User',
-                'allow_user_theme_selection');
+            $themeSelectionAllowed = $this->getConfiguration()->get_setting(
+                array('Chamilo\Core\User', 'allow_user_theme_selection'));
 
-            if ($themeSettable)
+            if ($themeSelectionAllowed)
             {
-                $userTheme = LocalSetting :: get('theme');
-                Theme :: getInstance()->setTheme($userTheme);
+                Theme :: getInstance()->setTheme(LocalSetting :: get('theme'));
+            }
+
+            $languageSelectionAllowed = $this->getConfiguration()->get_setting(
+                array('Chamilo\Core\User', 'allow_user_change_platform_language'));
+
+            if ($languageSelectionAllowed)
+            {
+                Translation :: getInstance()->setLanguageIsocode(LocalSetting :: get('platform_language'));
             }
         }
 
