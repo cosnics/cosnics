@@ -185,8 +185,55 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $events = array();
 
+        foreach ($this->getSources($requestedSourceType) as $context => $implementor)
+        {
+            $events = array_merge($events, $implementor->getEvents($this, $requestedSourceType, $startTime, $endTime));
+        }
+
+        return $events;
+    }
+
+    /**
+     * Get the internal sources
+     *
+     * @return string[]
+     */
+    public function getInternalSources()
+    {
+        return $this->getSources(self :: SOURCE_TYPE_INTERNAL);
+    }
+
+    /**
+     * Get the external sources
+     *
+     * @return string[]
+     */
+    public function getExternalSources()
+    {
+        return $this->getSources(self :: SOURCE_TYPE_EXTERNAL);
+    }
+
+    /**
+     * Get the sources
+     *
+     * @return string[]
+     */
+    public function getAllSources()
+    {
+        return $this->getSources(self :: SOURCE_TYPE_BOTH);
+    }
+
+    /**
+     *
+     * @param integer $sourceType
+     * @return string[]
+     */
+    public function getSources($requestedSourceType)
+    {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
             \Chamilo\Application\Calendar\Manager :: context());
+
+        $sources = array();
 
         foreach ($registrations as $registration)
         {
@@ -201,15 +248,57 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
                     if ($this->matchesRequestedSource($requestedSourceType, $implementor->getSourceType()))
                     {
-                        $events = array_merge(
-                            $events,
-                            $implementor->getEvents($this, $requestedSourceType, $startTime, $endTime));
+                        $sources[$context] = $implementor;
                     }
                 }
             }
         }
 
-        return $events;
+        return $sources;
+    }
+
+    public function getSourceNames($requestedSourceType)
+    {
+        $sourceNames = array();
+
+        foreach ($this->getSources($requestedSourceType) as $sourceContext => $sourceImplementor)
+        {
+            $sourceNames[] = Translation :: get('TypeName', array(), $sourceContext);
+        }
+
+        sort($sourceNames);
+
+        return $sourceNames;
+    }
+
+    /**
+     * Get the internal source names
+     *
+     * @return string[]
+     */
+    public function getInternalSourceNames()
+    {
+        return $this->getSourceNames(self :: SOURCE_TYPE_INTERNAL);
+    }
+
+    /**
+     * Get the external source names
+     *
+     * @return string[]
+     */
+    public function getExternalSourceNames()
+    {
+        return $this->getSourceNames(self :: SOURCE_TYPE_EXTERNAL);
+    }
+
+    /**
+     * Get the source names
+     *
+     * @return string[]
+     */
+    public function getAllSourceNames()
+    {
+        return $this->getSourceNames(self :: SOURCE_TYPE_BOTH);
     }
 
     /**
