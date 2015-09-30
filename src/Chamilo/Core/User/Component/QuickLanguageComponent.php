@@ -14,13 +14,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class QuickLanguageComponent extends Manager
 {
 
-    private static function allowed_quick_language()
+    private function isAllowedToChangeLanguage()
     {
-        return PlatformSetting :: get('allow_user_change_platform_language', self :: context()) == 1 &&
-             PlatformSetting :: get('allow_user_quick_change_platform_language', self :: context()) == 1;
+        return PlatformSetting :: get('allow_user_change_platform_language', self :: package()) == 1 &&
+             PlatformSetting :: get('allow_user_quick_change_platform_language', self :: package()) == 1;
     }
 
-    private static function get_languages()
+    private function getLanguages()
     {
         return \Chamilo\Configuration\Storage\DataManager :: get_languages();
     }
@@ -32,10 +32,10 @@ class QuickLanguageComponent extends Manager
      */
     public function run()
     {
-        if (self :: allowed_quick_language())
+        if ($this->isAllowedToChangeLanguage())
         {
             $choice = Request :: get(self :: PARAM_CHOICE);
-            $languages = array_keys(self :: get_languages());
+            $languages = array_keys($this->getLanguages());
 
             if ($choice && in_array($choice, $languages))
             {
