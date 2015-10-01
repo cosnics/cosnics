@@ -414,6 +414,8 @@ class Configuration
 
         $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
+        $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_cache'), true);
+        $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'), false);
 
         $this->set(
             array('Chamilo\Configuration', 'storage', 'archive'),
