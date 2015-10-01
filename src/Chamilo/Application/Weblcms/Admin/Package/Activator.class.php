@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Admin;
+namespace Chamilo\Application\Weblcms\Admin\Package;
 
 /**
  *
