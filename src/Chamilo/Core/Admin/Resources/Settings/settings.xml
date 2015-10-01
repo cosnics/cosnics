@@ -168,9 +168,9 @@
 		</category>
 
 		<category name="credentials_authentication">
-			<setting name="enablePlatformAuthentication" field="checkbox">
+			<setting name="enablePlatformAuthentication" field="checkbox" default="1">
 				<options type="static">
-					<option name="enablePlatformAuthentication" value="1" default="1" />
+					<option name="enablePlatformAuthentication" value="1" />
 				</options>
 			</setting>
 			<setting name="enableLdapAuthentication" field="checkbox">
