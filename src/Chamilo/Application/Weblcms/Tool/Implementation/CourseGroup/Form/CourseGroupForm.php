@@ -477,7 +477,7 @@ class CourseGroupForm extends FormValidator
                 if ($parent_group_form_max_number_of_members > 0 &&
                      $total_size > $parent_group_form_max_number_of_members)
                 {
-                    $this->course_group->add_error(Translation :: get('MaxMembersTooBigForParentCourseGroup'));
+                    $this->course_group->add_error(Translation :: get('MaxMembersFromChildrenTooBigForParentCourseGroup'));
                     return false;
                 }
             }
