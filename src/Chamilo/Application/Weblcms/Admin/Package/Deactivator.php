@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Admin;
+namespace Chamilo\Application\Weblcms\Admin\Package;
 
 /**
  *
@@ -8,6 +8,6 @@ namespace Chamilo\Application\Weblcms\Admin;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Activator extends \Chamilo\Configuration\Package\Action\Activator
+class Deactivator extends \Chamilo\Configuration\Package\Action\Deactivator
 {
 }

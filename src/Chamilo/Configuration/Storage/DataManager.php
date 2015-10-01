@@ -155,19 +155,23 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_integrating_contexts($integration, $root = null)
     {
-        $condition = new PatternMatchCondition(
+        $conditions = array();
+        $conditions[] = new PatternMatchCondition(
             new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
             '*\\\Integration\\' . $integration);
 
         if ($root)
         {
-            $conditions = array();
-            $conditions[] = $condition;
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
                 $root . '*');
-            $condition = new AndCondition($conditions);
         }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_STATUS),
+            new StaticConditionVariable(1));
+
+        $condition = new AndCondition($conditions);
 
         return self :: retrieves(Registration :: class_name(), new DataClassRetrievesParameters($condition))->as_array();
     }

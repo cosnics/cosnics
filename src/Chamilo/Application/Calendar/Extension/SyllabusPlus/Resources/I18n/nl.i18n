@@ -3,5 +3,5 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Office 365"
-SourceName = "Office 365 - {CALENDAR}"
+TypeName = "Lessenrooster"
+SourceName = "Lessenrooster - {CALENDAR}"

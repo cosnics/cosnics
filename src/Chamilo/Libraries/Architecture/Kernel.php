@@ -27,6 +27,7 @@ use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -298,14 +299,20 @@ class Kernel
 
         if ($this->getUser() instanceof User)
         {
-            $themeSettable = \Chamilo\Configuration\Configuration :: get(
-                'Chamilo\Core\User',
-                'allow_user_theme_selection');
+            $themeSelectionAllowed = $this->getConfiguration()->get_setting(
+                array('Chamilo\Core\User', 'allow_user_theme_selection'));
 
-            if ($themeSettable)
+            if ($themeSelectionAllowed)
             {
-                $userTheme = LocalSetting :: get('theme');
-                Theme :: getInstance()->setTheme($userTheme);
+                Theme :: getInstance()->setTheme(LocalSetting :: get('theme'));
+            }
+
+            $languageSelectionAllowed = $this->getConfiguration()->get_setting(
+                array('Chamilo\Core\User', 'allow_user_change_platform_language'));
+
+            if ($languageSelectionAllowed)
+            {
+                Translation :: getInstance()->setLanguageIsocode(LocalSetting :: get('platform_language'));
             }
         }
 
@@ -322,11 +329,6 @@ class Kernel
         {
             set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
-        }
-
-        if (\Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type') === 'production')
-        {
-            error_reporting(0);
         }
 
         $timezone = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'platform_timezone');
@@ -512,6 +514,23 @@ class Kernel
         return $this;
     }
 
+    private function logException(\Exception $exception)
+    {
+        if (! $exception instanceof NotAllowedException)
+        {
+            Utilities :: write_error(
+                $exception->getCode(),
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine());
+
+            if (extension_loaded('newrelic'))
+            {
+                newrelic_notice_error('chamilo_exception', $exception);
+            }
+        }
+    }
+
     /**
      * Launch the kernel, executing some common checks, building the application component and executing it
      */
@@ -531,6 +550,8 @@ class Kernel
         }
         catch (\Exception $exception)
         {
+            $this->logException($exception);
+
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }

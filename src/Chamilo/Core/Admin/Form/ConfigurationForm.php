@@ -549,7 +549,9 @@ class ConfigurationForm extends FormValidator
                         $value = 0;
                     }
 
-                    $setting = DataManager :: retrieve_setting_from_variable_name($name, $this->context);
+                    $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
+                        $name,
+                        $this->context);
 
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
@@ -560,7 +562,7 @@ class ConfigurationForm extends FormValidator
                         new StaticConditionVariable(Session :: get_user_id()));
                     $condition = new AndCondition($conditions);
                     $user_setting = \Chamilo\Core\User\Storage\DataManager :: retrieve(
-                        \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                        \Chamilo\Core\User\Storage\DataClass\UserSetting :: class_name(),
                         new DataClassRetrieveParameters($condition));
 
                     if ($user_setting)

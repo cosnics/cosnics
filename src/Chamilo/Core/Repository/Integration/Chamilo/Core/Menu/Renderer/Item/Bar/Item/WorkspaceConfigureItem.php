@@ -21,6 +21,7 @@ class WorkspaceConfigureItem extends Bar
     public function getContent()
     {
         $selected = $this->get_item()->is_selected();
+        $selected = true;
 
         if ($selected)
         {

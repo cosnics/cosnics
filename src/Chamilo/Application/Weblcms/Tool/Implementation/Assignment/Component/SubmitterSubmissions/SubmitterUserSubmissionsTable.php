@@ -11,13 +11,14 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table to browse a list of submissions for a certain user.
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class SubmitterUserSubmissionsTable extends DataClassTable implements TableFormActionsSupport
 {
-    
+    const DEFAULT_NAME = 'submitter_user_submissions_table';
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableFormActionsSupport::get_implemented_form_actions()
      */
@@ -28,12 +29,12 @@ class SubmitterUserSubmissionsTable extends DataClassTable implements TableFormA
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS), 
-                    Translation :: get('DownloadSelected'), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS),
+                    Translation :: get('DownloadSelected'),
                     false));
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION),
                     Translation :: get('DeleteSelected')));
         }
         return $actions;

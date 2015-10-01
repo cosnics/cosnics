@@ -207,11 +207,13 @@ class ContentObjectPublicationForm extends FormValidator
                 $defaults = array_merge($defaults, $right_defaults);
             }
 
-            $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
+            $force_collaborate = PlatformSetting :: get('force_collaborate', Manager :: package()) === 1 ? true : false;
 
             if ($this->collaborate_possible && ! $force_collaborate)
             {
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: get('collaborate_default', __NAMESPACE__);
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: get(
+                    'collaborate_default',
+                    Manager :: package());
             }
             else
             {
@@ -438,7 +440,7 @@ class ContentObjectPublicationForm extends FormValidator
             ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
             Translation :: get('ShowOnHomepage'));
 
-        $force_collaborate = PlatformSetting :: get('force_collaborate', __NAMESPACE__) === 1 ? true : false;
+        $force_collaborate = PlatformSetting :: get('force_collaborate', Manager :: package()) === 1 ? true : false;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
@@ -880,7 +882,7 @@ class ContentObjectPublicationForm extends FormValidator
             }
         }
 
-        if (PlatformSetting :: get('log_mails', __NAMESPACE__))
+        if (PlatformSetting :: get('log_mails', Manager :: package()))
         {
             $dir = Path :: getInstance()->getLogPath() . 'mail';
 

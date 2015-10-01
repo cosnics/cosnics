@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="rights_location_entity_right_group">
+<object name="request_rights_location_entity_right_group">
 	<properties>
 		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
 		<property name="location_entity_right_id" type="integer" unsigned="1" notnull="1" />

@@ -9,6 +9,8 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -128,6 +130,12 @@ class MiniMonthRenderer extends TableRenderer
             $calendar->markPeriod($this->getMarkPeriod());
         }
 
-        return $calendar->render();
+        $html = array();
+
+        $html[] = $calendar->render();
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventMarker.js');
+
+        return implode(PHP_EOL, $html);
     }
 }

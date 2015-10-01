@@ -99,9 +99,17 @@ class AvailabilityForm extends FormValidator
 
     public function build()
     {
-        foreach ($this->getAvailableCalendars() as $ownedCalendarType => $ownedCalendars)
+        $this->add_information_message(
+            'calendar_availability',
+            null,
+            Translation :: get('CalendarAvailabilityInformation'),
+            true);
+
+        $availableCalendars = $this->getAvailableCalendars();
+
+        foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars)
         {
-            if (count($ownedCalendars) > 0)
+            if (count($ownedCalendars) > 1)
             {
                 $this->addElement('category', Translation :: get('TypeName', null, $ownedCalendarType));
 
@@ -119,15 +127,15 @@ class AvailabilityForm extends FormValidator
                             1,
                             0);
 
-//                     $colourElement = $this->createElement(
-//                         'text',
-//                         AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
-//                              $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_COLOUR . ']',
-//                             $ownedCalendar->getName() . ' Colour',
-//                             array('class' => 'colour-selection'));
-//                     $colourElement->setType('color');
+                    // $colourElement = $this->createElement(
+                    // 'text',
+                    // AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                    // $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_COLOUR . ']',
+                    // $ownedCalendar->getName() . ' Colour',
+                    // array('class' => 'colour-selection'));
+                    // $colourElement->setType('color');
 
-//                     $calendarElements[] = $colourElement;
+                    // $calendarElements[] = $colourElement;
                     $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
 
                     $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
@@ -136,6 +144,35 @@ class AvailabilityForm extends FormValidator
                 $this->addElement('category');
             }
         }
+
+        $this->addElement('category', Translation :: get('VariousCalendars'));
+
+        foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars)
+        {
+            if (count($ownedCalendars) == 1)
+            {
+                foreach ($ownedCalendars as $ownedCalendar)
+                {
+                    $calendarElements = array();
+
+                    $calendarElements[] = $this->createElement(
+                        'checkbox',
+                        AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                             $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_AVAILABLE . ']',
+                            $ownedCalendar->getName(),
+                            null,
+                            null,
+                            1,
+                            0);
+
+                    $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
+
+                    $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
+                }
+            }
+        }
+
+        $this->addElement('category');
 
         $this->addSaveResetButtons();
     }

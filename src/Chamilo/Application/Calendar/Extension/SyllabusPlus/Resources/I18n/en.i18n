@@ -3,5 +3,5 @@
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Syllabus Plus"
-SourceName = "SyllabusPlus - {CALENDAR}"
+TypeName = "Timetable"
+SourceName = "Timetable - {CALENDAR}"

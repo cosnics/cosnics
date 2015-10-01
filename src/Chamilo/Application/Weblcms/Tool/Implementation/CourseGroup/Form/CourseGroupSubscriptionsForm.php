@@ -13,6 +13,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: course_group_subscriptions_form.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -37,12 +39,17 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
     public function build_basic_form()
     {
+        $searchUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
+                \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager :: ACTION_XML_COURSE_USER_GROUP_FEED, \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $this->parent->get_course_id()));
+
         $url = Path :: getInstance()->getBasePath(true) .
-             'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course='. $this->parent->get_course_id();
-        
-        
-//         Path :: getInstance()->getBasePath(true) .
-//              'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
+             'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course=' .
+             $this->parent->get_course_id();
+
+        // Path :: getInstance()->getBasePath(true) .
+        // 'application/weblcms/php/xml_feeds/xml_course_user_group_feed.php?course=' . $this->parent->get_course_id();
 
         $course_group_users = DataManager :: retrieve_course_group_users($this->course_group->get_id());
         $defaults = array();
@@ -71,6 +78,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+        $locale['load_elements'] = true;
 
         $legend_items = array();
 
@@ -98,7 +106,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             'user_group_finder',
             'users',
             Translation :: get('SubscribeUsers'),
-            $url,
+            $searchUrl->getUrl(),
             $locale,
             $current,
             array('load_elements' => true));

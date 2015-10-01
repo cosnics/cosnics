@@ -113,7 +113,7 @@ div.applications li {
 
 /*Color main cells hovering mode*/
 .navbar ul li:hover a {
-	color: #d9d9d9;
+	color: #faea5b;
 	text-decoration: none;
 	outline: none;
 }
@@ -153,11 +153,11 @@ div.applications li {
 	clear: both;
 	width: 100%;
 	border-left: 0px solid #8b0504;
-	background-color: #f2f2f2;
+	background-color: #C50C2E;
 }
 
 .navbar ul li.current:hover ul li {
-	background-color: #f2f2f2;
+	background-color: #C50C2E;
 }
 
 .navbar ul li:hover ul li a, .navbar ul li.current:hover ul li a {
@@ -166,7 +166,7 @@ div.applications li {
 	height: 50px;
 	padding: 0px;
 	border-bottom: 1px dotted #dcdcdc;
-	color: #d9d9d9;
+	color: #faea5b;
 	outline: none;
 	white-space: nowrap;
 }
@@ -184,7 +184,7 @@ div.applications li {
 .navbar ul li:hover ul li a:hover, .navbar ul li.current:hover ul li a:hover
 	{
 	text-decoration: none;
-	color: #d9d9d9;
+	color: #faea5b;
 }
 
 .navbar ul li.current:hover ul li a:hover {
@@ -217,7 +217,7 @@ div.applications li {
 .navbar ul li a:hover {
 	position: relative /*Sylvain IE hack*/;
 	z-index: 1000 /*Sylvain IE hack*/;
-	color: #d9d9d9;
+	color: #faea5b;
 	text-decoration: none;
 	outline: none;
 }

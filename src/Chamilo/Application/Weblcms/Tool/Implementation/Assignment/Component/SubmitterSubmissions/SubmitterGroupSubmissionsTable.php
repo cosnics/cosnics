@@ -11,13 +11,14 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Description of submitter_group_submissions_browser_table
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class SubmitterGroupSubmissionsTable extends DataClassTable implements TableFormActionsSupport
 {
-    
+    const DEFAULT_NAME = 'submitter_group_submissions_table';
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableFormActionsSupport::get_implemented_form_actions()
      */
@@ -28,12 +29,12 @@ class SubmitterGroupSubmissionsTable extends DataClassTable implements TableForm
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS), 
-                    Translation :: get('DownloadSelected'), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS),
+                    Translation :: get('DownloadSelected'),
                     false));
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSIO), 
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSIO),
                     Translation :: get('DeleteSelected')));
         }
         return $actions;

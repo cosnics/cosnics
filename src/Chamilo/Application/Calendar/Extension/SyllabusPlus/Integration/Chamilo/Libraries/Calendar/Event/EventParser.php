@@ -154,40 +154,30 @@ class EventParser
 
         $events = array();
 
-        if ($calendarEvent['occurences'] > 1)
-        {
-            $pattern = str_split($calendarEvent['pattern']);
-            $weekLabels = $this->getWeekLabels();
-            $enabledWeeks = array();
+        $pattern = str_split($calendarEvent['pattern']);
+        $weekLabels = $this->getWeekLabels();
+        $enabledWeeks = array();
 
-            foreach ($pattern as $weekNumber => $isEnabled)
+        foreach ($pattern as $weekNumber => $isEnabled)
+        {
+            if ($isEnabled)
             {
-                if ($isEnabled)
-                {
-                    $startTime = strtotime($calendarEvent['start_time']);
-                    $baseDate = strtotime($weekLabels[$weekNumber]);
-                    $baseDate += ($calendarEvent['day'] * 24 * 60 * 60);
+                $startTime = strtotime($calendarEvent['start_time']);
+                $baseDate = strtotime($weekLabels[$weekNumber]);
+                $baseDate += ($calendarEvent['day'] * 24 * 60 * 60);
 
-                    $startDate = mktime(
-                        date('G', $startTime),
-                        date('i', $startTime),
-                        date('s', $startTime),
-                        date('n', $baseDate),
-                        date('j', $baseDate),
-                        date('Y', $baseDate));
+                $startDate = mktime(
+                    date('G', $startTime),
+                    date('i', $startTime),
+                    date('s', $startTime),
+                    date('n', $baseDate),
+                    date('j', $baseDate),
+                    date('Y', $baseDate));
 
-                    $endDate = $startDate + ($calendarEvent['duration'] * 60);
+                $endDate = $startDate + ($calendarEvent['duration'] * 60);
 
-                    $events[] = $this->getEvent($calendarEvent, $startDate, $endDate);
-                }
+                $events[] = $this->getEvent($calendarEvent, $startDate, $endDate);
             }
-        }
-        else
-        {
-            $events[] = $this->getEvent(
-                $calendarEvent,
-                $calendarEvent['start_timestamp'],
-                $calendarEvent['end_timestamp']);
         }
 
         return $events;
@@ -229,8 +219,17 @@ class EventParser
 
         $html[] = $calendarEvent['name'];
         $html[] = '[' . $calendarEvent['type_code'] . ']';
-        $html[] = '[' . $calendarEvent['teacher'] . ']';
 
-        return implode(' ', $html);
+        if ($calendarEvent['teacher'])
+        {
+            $html[] = '[' . $calendarEvent['teacher'] . ']';
+        }
+
+        if ($calendarEvent['location'])
+        {
+            $html[] = '[' . $calendarEvent['location'] . ']';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }
