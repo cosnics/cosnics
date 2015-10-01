@@ -3,8 +3,8 @@
 	<package>
 		<name>Calendar</name>
 		<code>Calendar</code>
-		<context>Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar</context>
-		<type>Chamilo\Application\Calendar\Extension\Google\Integration</type>
+		<context>Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Application\Calendar</context>
+		<type>Chamilo\Application\Calendar\Extension\Office365\Integration</type>
 		<category>core</category>
 		<authors />
 		<version>5.0.0</version>
@@ -16,7 +16,7 @@
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">
-					<id>Chamilo\Application\Calendar\Extension\Google</id>
+					<id>Chamilo\Application\Calendar\Extension\Office365</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 			</dependencies>
