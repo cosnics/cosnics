@@ -3,7 +3,7 @@
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-Typename = "Local manager"
+TypeName = "Local manager"
 BrowserComponent = "Course list"
 CreatorComponent = "Configure"
 EntityComponent = "List"

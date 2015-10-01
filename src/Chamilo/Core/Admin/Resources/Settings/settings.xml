@@ -166,17 +166,29 @@
 				</options>
 			</setting>
 		</category>
-		<category name="external_authentication">
+
+		<category name="credentials_authentication">
+			<setting name="enablePlatformAuthentication" field="checkbox">
+				<options type="static">
+					<option name="enablePlatformAuthentication" value="1" default="1" />
+				</options>
+			</setting>
 			<setting name="enableLdapAuthentication" field="checkbox">
 				<options type="static">
 					<option name="enableLdapAuthentication" value="1" />
 				</options>
 			</setting>
+		</category>
+
+		<category name="query_authentication">
 			<setting name="enableSecurityTokenAuthentication" field="checkbox">
 				<options type="static">
 					<option name="enableSecurityTokenAuthentication" value="1" />
 				</options>
 			</setting>
+		</category>
+
+		<category name="external_authentication">
 			<setting name="enableCasAuthentication" field="checkbox">
 				<options type="static">
 					<option name="enableCasAuthentication" value="1" />
