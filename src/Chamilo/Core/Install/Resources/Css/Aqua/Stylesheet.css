@@ -71,10 +71,10 @@
 	overflow: hidden;
 }
 
-.installation-step-successful { 	border: 1px solid #339900;
-	/*	background-color: #ddffaa; */
-	/*	color: #006600; */
-	
+.installation-step-successful {
+/* 	border: 1px solid #339900; */
+/* 	background-color: #ddffaa; */
+/* 	color: #006600; */
 }
 
 .installation-step-failed {
