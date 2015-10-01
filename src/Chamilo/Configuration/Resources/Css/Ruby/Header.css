@@ -1,0 +1,147 @@
+/*****************************************************
+ *  HEADER STYLES                                    *
+ *****************************************************/
+#header {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+/* Header 1: Containing title, portal and organization */
+#header1 {
+	z-index: 1000;
+	font-size: 12px;
+	padding: 0px;
+	background-color: #C50C2E;
+	position: relative;
+	height: 50px;
+}
+
+#header1 div.banner {
+	position: absolute;
+	left: 0 px;
+	top: 0px;
+	margin: 0px 1%;
+	padding: 0px 10px;
+	height: 50px;
+	width: 84px;
+}
+
+#header1 div.banner span.logo {
+	background-image: url('../../Images/Ruby/LogoHeader.png');
+	background-repeat: no-repeat;
+	height: 50px;
+	width: 84px;
+	display: block;
+	font-size: 0px;
+}
+
+#header1 div.menu_container {
+	z-index: 500;
+	position: relative;
+	margin-left: 281px;
+	right: 0px;
+	left: 0px;
+	margin-right: 19px;
+	color: white;
+}
+
+#sitename {
+	margin: 0;
+	font-weight: bold;
+}
+
+#institution {
+	float: left;
+	font-weight: bold;
+}
+
+#my_courses {
+	float: right;
+	font-weight: bold;
+}
+
+/* Header 2: Containing online users, student/teacher view, help */
+#header2 {
+	font-size: 1.0em;
+	padding: 0px 0px 0px 0px;
+	background-color: #9e021b;
+	color: #ffffff;
+	/* border-bottom: 1px solid #666; */
+}
+
+#trailbox2 {
+	clear: both;
+	position: relative;
+	left: 0px;
+	right: 0px;
+	padding: 0px 1% 0px 1%;
+	margin-bottom: 10px;
+}
+
+#trailbox2 ul, #breadcrumbtrail li {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#trailbox {
+	clear: both;
+	position: relative;
+	left: 0px;
+	right: 0px;
+	padding: 0px 1% 0px 1%;
+	margin-bottom: 10px;
+	color: #444444;
+	background-color: #f2f2f2;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #dcdcdc;
+	height: 26px;
+}
+
+#trailbox ul, #breadcrumbtrail li {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#breadcrumbtrail {
+	float: left;
+	height: 26px;
+	overflow: hidden;
+}
+
+#breadcrumbtrail img {
+	vertical-align: middle;
+}
+
+#breadcrumbtrail li {
+	float: left;
+	line-height: 26px;
+	padding-left: 10px;
+	color: #777;
+}
+
+#breadcrumbtrail li a {
+	display: block;
+	padding: 0 15px 0 0;
+	background: url(../../Images/Ruby/Background/Breadcrumb.png) no-repeat
+		right center;
+	color: #444444;
+}
+
+#breadcrumbtrail li a:hover {
+	color: red;
+}
+
+#breadcrumbtrail li a:active {
+	color: #fa8500;
+	outline: none;
+}
+
+#trailbox #help_item, #trailbox #extra_item {
+	float: right;
+	height: 26px;
+	line-height: 26px;
+	margin-left: 4px;
+}
