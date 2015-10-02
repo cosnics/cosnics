@@ -325,7 +325,7 @@ class CalendarRepository
             }
 
             $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+                array(Manager :: package(), 'refresh_calendar'));
             $cache->save($cacheIdentifier, $availableCalendars, $lifetimeInMinutes * 60);
         }
 
@@ -356,7 +356,7 @@ class CalendarRepository
             $timeMax->setTimestamp($toDate);
 
             $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_calendar'));
 
             $events = $this->getCalendarClient()->events->listEvents(
                 $calendarIdentifier,

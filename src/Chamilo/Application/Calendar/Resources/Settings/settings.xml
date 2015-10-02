@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<package context="Chamilo\Application\Calendar">
-	<settings>
-		<category name="caching">
-			<setting name="refresh_external" field="text" default="60" user_setting="1" />
-		</category>
-	</settings>
-</package>

@@ -14,7 +14,8 @@ use HTML_Table;
 use Pager;
 
 /**
- * This class allows you to display a sortable data-table. It is possible to split the data in several pages. Using this
+ * This class allows you to display a sortable data-table.
+ * It is possible to split the data in several pages. Using this
  * class you can: - automatically create checkboxes of the first table column - a "select all" and "deselect all" link
  * is added - only if you provide a list of actions for the selected items - click on the table header to sort the data
  * - choose how many items you see per page - navigate through all data-pages
@@ -118,6 +119,8 @@ class SortableTable extends HTML_Table
 
     private $allow_page_selection = true;
 
+    private $allow_page_navigation = true;
+
     /**
      * Create a new SortableTable
      *
@@ -130,7 +133,7 @@ class SortableTable extends HTML_Table
      */
     public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null,
         $default_column = 1, $default_items_per_page = 20, $default_order_direction = SORT_ASC, $ajax_enabled = false,
-        $allow_page_selection = true)
+        $allow_page_selection = true, $allow_page_navigation = true)
     {
         parent :: __construct(array('class' => 'data_table', 'id' => $table_name), 0, true);
         $this->table_name = $table_name;
@@ -153,10 +156,11 @@ class SortableTable extends HTML_Table
         $this->per_page = Request :: get($this->param_prefix . 'per_page') ? Request :: get(
             $this->param_prefix . 'per_page') : $default_items_per_page;
         $this->allow_page_selection = $allow_page_selection;
-//         $_SESSION[$this->param_prefix . 'per_page'] = $this->per_page;
-//         $_SESSION[$this->param_prefix . 'direction'] = $this->direction;
-//         $_SESSION[$this->param_prefix . 'page_nr'] = $this->page_nr;
-//         $_SESSION[$this->param_prefix . 'column'] = $this->column;
+        $this->allow_page_navigation = $allow_page_navigation;
+        // $_SESSION[$this->param_prefix . 'per_page'] = $this->per_page;
+        // $_SESSION[$this->param_prefix . 'direction'] = $this->direction;
+        // $_SESSION[$this->param_prefix . 'page_nr'] = $this->page_nr;
+        // $_SESSION[$this->param_prefix . 'column'] = $this->column;
 
         $this->pager = null;
         $this->default_items_per_page = $default_items_per_page;
@@ -235,7 +239,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Returns the complete table HTML. Alias of as_html().
+     * Returns the complete table HTML.
+     * Alias of as_html().
      */
     public function toHTML()
     {
@@ -262,21 +267,26 @@ class SortableTable extends HTML_Table
 
         if (! $empty_table)
         {
-            $form = $this->get_page_select_form();
-            $nav = $this->get_navigation_html();
-            $html[] = '<table style="width:100%;">';
-            $html[] = '<tr>';
-            $html[] = '<td style="width:25%;">';
-            $html[] = $form;
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:center;">';
-            $html[] = $this->get_table_title();
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:right;width:25%;">';
-            $html[] = $nav;
-            $html[] = '</td>';
-            $html[] = '</tr>';
-            $html[] = '</table>';
+            if ($this->allow_page_selection || $this->allow_page_navigation)
+            {
+                $form = $this->get_page_select_form();
+                $nav = $this->get_navigation_html();
+
+                $html[] = '<table style="width:100%;">';
+                $html[] = '<tr>';
+                $html[] = '<td style="width:25%;">';
+                $html[] = $form;
+                $html[] = '</td>';
+                $html[] = '<td style="text-align:center;">';
+                $html[] = $this->get_table_title();
+                $html[] = '</td>';
+                $html[] = '<td style="text-align:right;width:25%;">';
+                $html[] = $nav;
+                $html[] = '</td>';
+                $html[] = '</tr>';
+                $html[] = '</table>';
+            }
+
             if ($this->form_actions->has_form_actions())
             {
                 $params = $this->get_additional_url_paramstring();
@@ -291,9 +301,12 @@ class SortableTable extends HTML_Table
 
         if (! $empty_table)
         {
-            $html[] = '<table style="width:100%;">';
-            $html[] = '<tr>';
-            $html[] = '<td colspan="2">';
+            if ($this->allow_page_selection || $this->allow_page_navigation)
+            {
+                $html[] = '<table style="width:100%;">';
+                $html[] = '<tr>';
+                $html[] = '<td colspan="2">';
+            }
 
             if ($this->form_actions->has_form_actions())
             {
@@ -332,38 +345,27 @@ class SortableTable extends HTML_Table
                     null,
                     Utilities :: COMMON_LIBRARIES) . '"/>';
             }
-            else
+            elseif ($this->allow_page_selection || $this->allow_page_navigation)
             {
                 $html[] = $form;
             }
 
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:right;">';
-            $html[] = $nav;
-            $html[] = '</td>';
-            $html[] = '</tr>';
-            $html[] = '</table>';
+            if ($this->allow_page_selection || $this->allow_page_navigation)
+            {
+                $html[] = '</td>';
+                $html[] = '<td style="text-align:right;">';
+                $html[] = $nav;
+                $html[] = '</td>';
+                $html[] = '</tr>';
+                $html[] = '</table>';
+            }
 
             if ($this->form_actions->has_form_actions())
             {
                 $html[] = '</form>';
             }
-
-            if ($this->is_ajax_enabled())
-            {
-                $html[] = '<script type="text/javascript">';
-                $html[] = '(function($){';
-                $html[] = '';
-                $html[] = '$(document).ready(function() {';
-                $html[] = '    // Initialise the table';
-                $html[] = '    $(".data_table").tableDnD({';
-                $html[] = '    });';
-                $html[] = '});';
-                $html[] = '';
-                $html[] = '})(jQuery);';
-                $html[] = '</script>';
-            }
         }
+
         return implode(PHP_EOL, $html);
     }
 
@@ -372,11 +374,14 @@ class SortableTable extends HTML_Table
      */
     public function get_navigation_html()
     {
-        $pager = $this->get_pager();
-        $pager_links = $pager->getLinks();
-        $showed_items = $pager->getOffsetByPageId();
-        return $pager_links['first'] . ' ' . $pager_links['back'] . ' ' . $pager->getCurrentPageId() . ' / ' .
-             $pager->numPages() . ' ' . $pager_links['next'] . ' ' . $pager_links['last'];
+        if ($this->allow_page_navigation)
+        {
+            $pager = $this->get_pager();
+            $pager_links = $pager->getLinks();
+            $showed_items = $pager->getOffsetByPageId();
+            return $pager_links['first'] . ' ' . $pager_links['back'] . ' ' . $pager->getCurrentPageId() . ' / ' .
+                 $pager->numPages() . ' ' . $pager_links['next'] . ' ' . $pager_links['last'];
+        }
     }
 
     /**
@@ -484,8 +489,11 @@ class SortableTable extends HTML_Table
      */
     public function get_table_title()
     {
-        $showed_items = $this->get_pager()->getOffsetByPageId();
-        return $showed_items[0] . ' - ' . $showed_items[1] . ' / ' . $this->total_number_of_items;
+        if ($this->allow_page_navigation)
+        {
+            $showed_items = $this->get_pager()->getOffsetByPageId();
+            return $showed_items[0] . ' - ' . $showed_items[1] . ' / ' . $this->total_number_of_items;
+        }
     }
 
     /**
@@ -584,11 +592,12 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Add a filter to a column. If another filter was allready defined for the given column, it will be overwritten.
+     * Add a filter to a column.
+     * If another filter was allready defined for the given column, it will be overwritten.
      *
      * @param $column int The number of the column
      * @param $function string The name of the filter-function. This should be a function wich requires 1 parameter and
-     *            returns the filtered value.
+     *        returns the filtered value.
      */
     public function set_column_filter($column, $function)
     {
@@ -596,13 +605,14 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Define a list of actions which can be performed on the table-date. If you define a list of actions, the first
+     * Define a list of actions which can be performed on the table-date.
+     * If you define a list of actions, the first
      * column of the table will be converted into checkboxes.
      *
      * @param $actions array A list of actions. The key is the name of the action. The value is the label to show in the
-     *            select-box
+     *        select-box
      * @param $checkbox_name string The name of the generated checkboxes. The value of the checkbox will be the value of
-     *            the first column.
+     *        the first column.
      */
     public function set_form_actions($actions, $checkbox_name = 'id', $select_name = 'action')
     {
@@ -622,7 +632,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Set other tables on the same page. If you have other sortable tables on the page displaying this sortable tables,
+     * Set other tables on the same page.
+     * If you have other sortable tables on the page displaying this sortable tables,
      * you can define those other tables with this function. If you don't define the other tables, there sorting and
      * pagination will return to their default state when sorting this table.
      *
@@ -635,7 +646,8 @@ class SortableTable extends HTML_Table
 
     /**
      * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class. If you've defined actions, the first element of the given row will be converted into a
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
      * checkbox
      *
      * @param $row array A row from the table.
@@ -672,7 +684,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Get the total number of items. This function calls the function given as 2nd argument in the constructor of a
+     * Get the total number of items.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      */
     public function get_total_number_of_items()
@@ -685,7 +698,8 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Get the data to display. This function calls the function given as 2nd argument in the constructor of a
+     * Get the data to display.
+     * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
      * @param $from int Index of the first item to return.
@@ -768,6 +782,15 @@ class SortableTable extends HTML_Table
     public function disable_ajax()
     {
         $this->ajax_enabled = false;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isPageSelectionAllowed()
+    {
+        return $this->allow_page_selection;
     }
 
     public function get_per_page()

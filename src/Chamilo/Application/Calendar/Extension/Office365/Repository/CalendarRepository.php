@@ -470,7 +470,7 @@ class CalendarRepository
             $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
 
             $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_external'));
+                array(Manager :: package(), 'refresh_calendar'));
 
             $response = $client->send($request);
             $result = json_decode($response->getBody()->getContents());

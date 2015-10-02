@@ -2524,7 +2524,7 @@ a.cda_link {
 	color: #716A50;
 }
 
-pre {
+pre.inline {
 	font-size: 90%;
 	line-height: 1.2em;
 	font-family: "Courier 10 Pitch", Courier, monospace;
@@ -2542,7 +2542,7 @@ pre {
 	border: solid 1px #e1e1e1
 }
 
-code {
+code.inline {
 	font-size: 90%;
 	line-height: 1.2em;
 	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono",
