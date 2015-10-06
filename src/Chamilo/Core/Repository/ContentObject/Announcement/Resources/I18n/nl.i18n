@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\announcement
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aankondiging"
+Title = "Onderwerp"
+Description = "Bericht"
+AnnouncementToolBrowserComponent = "Aankondigingen"
+AnnouncementToolIntroductionPublisherComponent = "Publiceer introductietekst"
+AnnouncementToolPublisherComponent = "Publiceer aankondiging"
+AnnouncementToolUpdaterComponent = "Bewerk aankondiging"
+AnnouncementToolViewerComponent = "Bekijk aankondiging"
