@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: whois_online_table_cell_renderer.class.php 166 2009-11-12 11:03:06Z vanpouckesven $
- * 
+ *
  * @package admin.lib.admin_manager.component.whois_online_table
  */
 /**
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
 {
-    
+
     // Inherited
     public function render_cell($column, $user)
     {
@@ -52,13 +52,12 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
             case User :: PROPERTY_PICTURE_URI :
                 if ($this->get_component()->get_user()->is_platform_admin())
                 {
-                    
                     $profilePhotoUrl = new Redirect(
                         array(
                             Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                             Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                             \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
-                    
+
                     return '<a href="' . $this->get_component()->get_url(array('uid' => $user->get_id())) . '">' .
                          '<img style="max-width: 100px; max-height: 100px;" src="' . $profilePhotoUrl->getUrl() .
                          '" alt="' . Translation :: get('UserPicture', array(), \Chamilo\Core\User\Manager :: context()) .
