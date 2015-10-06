@@ -9,6 +9,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  * $Id: local_setting.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
@@ -112,25 +114,35 @@ class LocalSetting
             return null;
         }
 
-        $params = array();
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheIdentifier = md5(serialize(array(__METHOD__, $user_id)));
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-        $user_settings = \Chamilo\Core\User\Storage\DataManager :: retrieves(UserSetting :: class_name(), $condition);
-
-        while ($user_setting = $user_settings->next_result())
+        if (! $cache->contains($cacheIdentifier))
         {
+            $params = array();
+
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_ID),
-                new StaticConditionVariable($user_setting->get_setting_id()));
-            $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve(
-                Setting :: class_name(),
-                new DataClassRetrieveParameters($condition));
-            $params[$setting->get_application()][$setting->get_variable()] = $user_setting->get_value();
+                new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
+                new StaticConditionVariable($user_id));
+            $user_settings = \Chamilo\Core\User\Storage\DataManager :: retrieves(
+                UserSetting :: class_name(),
+                $condition);
+
+            while ($user_setting = $user_settings->next_result())
+            {
+                $condition = new EqualityCondition(
+                    new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_ID),
+                    new StaticConditionVariable($user_setting->get_setting_id()));
+                $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve(
+                    Setting :: class_name(),
+                    new DataClassRetrieveParameters($condition));
+                $params[$setting->get_application()][$setting->get_variable()] = $user_setting->get_value();
+            }
+
+            $cache->save($cacheIdentifier, $params);
         }
 
-        return $params;
+        return $cache->fetch($cacheIdentifier);
     }
 
     public static function create_local_setting($variable, $value, $application = 'Chamilo\Core\Admin', $user_id = null)
