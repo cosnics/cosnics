@@ -645,14 +645,13 @@ class SubmissionViewerComponent extends SubmissionsManager
         $html = array();
 
         $feedback_trackers = $this->get_feedback_trackers();
-
         if (count($feedback_trackers) == 0 && ! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $html[] = Translation :: get('NoFeedbacks');
         }
         else
         {
-            foreach ($feedback_trackers as $feedback_tracker)
+            while ($feedback_tracker = $feedback_trackers->next_result())
             {
                 $html[] = $this->get_feedback_html($feedback_tracker);
             }

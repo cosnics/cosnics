@@ -82,6 +82,7 @@ class SubmissionDetailFeedbackSection extends FormValidator
     private function create_tracker()
     {
         $values = $this->exportValues();
+
         $success = false;
 
         $description = new Description();
@@ -93,6 +94,7 @@ class SubmissionDetailFeedbackSection extends FormValidator
                 Translation :: get('Feedback') . ' ' . $this->submission_tracker->get_content_object()->get_title());
             $description->set_description($values[$this->submission_tracker->get_id()]);
             $description->set_owner_id($this->main_page->get_target_id());
+
             $description->create();
         }
 
