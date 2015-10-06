@@ -276,8 +276,7 @@ class SubmissionViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Returns the name of the submitter as a string.
-     * When submitted as a group, it will return the name of the user who
+     * Returns the name of the submitter as a string. When submitted as a group, it will return the name of the user who
      * submitted followed by the group name.
      *
      * @return string The name of the submitter
@@ -415,7 +414,7 @@ class SubmissionViewerComponent extends SubmissionsManager
         }
         else
         {
-            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Prev_na') . '"/>';
+            $html[] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/PrevNa') . '"/>';
             $html[] = Translation :: get('EarlierSubmission');
         }
         $html[] = ' [' . $this->get_position_submissions($this->get_submission_id()) . '/' .
