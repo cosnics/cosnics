@@ -195,7 +195,7 @@ class Security
 
         if (! empty($user_id))
         {
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User :: class_name(), (int) $user_id);
+            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User :: class_name(), $user_id);
 
             return $user->is_platform_admin() || $user->is_teacher();
         }

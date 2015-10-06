@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 
 /**
  * New version of rights utilities to work with entities and the application specific location tables
@@ -161,27 +162,21 @@ class RightsUtil
                 $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
                 $or_conditions = array();
+
                 foreach ($entities as $entity)
                 {
-                    $entity_type_condition = new EqualityCondition(
+                    $and_conditions = array();
+
+                    $and_conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             $context_entity_right,
                             $context_entity_right :: PROPERTY_ENTITY_TYPE),
                         new StaticConditionVariable($entity->get_entity_type()));
+                    $and_conditions[] = new InCondition(
+                        new PropertyConditionVariable($context_entity_right, $context_entity_right :: PROPERTY_ENTITY_ID),
+                        $entity->retrieve_entity_item_ids_linked_to_user($user_id));
 
-                    foreach ($entity->retrieve_entity_item_ids_linked_to_user($user_id) as $entity_item_id)
-                    {
-                        $and_conditions = array();
-                        $and_conditions[] = $entity_type_condition;
-
-                        $and_conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                $context_entity_right,
-                                $context_entity_right :: PROPERTY_ENTITY_ID),
-                            new StaticConditionVariable($entity_item_id));
-
-                        $or_conditions[] = new AndCondition($and_conditions);
-                    }
+                    $or_conditions[] = new AndCondition($and_conditions);
                 }
 
                 // add everyone 'entity'

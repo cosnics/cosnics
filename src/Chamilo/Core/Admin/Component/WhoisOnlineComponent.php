@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Table\WhoisOnline\WhoisOnlineTable;
-use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -17,6 +16,10 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataClass\Online;
 
 /**
  * $Id: whois_online.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
@@ -74,18 +77,20 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
     public function get_table_condition($class_name)
     {
-        $users = array();
-        $items = Tracker :: get_data(
-            \Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataClass\Online :: CLASS_NAME,
-            self :: APPLICATION_NAME);
-        while ($item = $items->next_result())
-        {
-            $users[] = $item->get_user_id();
-        }
+        $pastTime = strtotime('-' . PlatformSetting :: get('timelimit') . ' seconds', time());
 
-        if (! empty($users))
+        $parameters = new DataClassDistinctParameters(
+            new InequalityCondition(
+                new PropertyConditionVariable(Online :: class_name(), Online :: PROPERTY_LAST_ACCESS_DATE),
+                InEqualityCondition :: GREATER_THAN,
+                new StaticConditionVariable($pastTime)),
+            Online :: PROPERTY_USER_ID);
+
+        $userIds = DataManager :: distinct(Online :: class_name(), $parameters);
+
+        if (! empty($userIds))
         {
-            return new InCondition(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), $users);
+            return new InCondition(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), $userIds);
         }
         else
         {
