@@ -123,8 +123,10 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             Translation :: get('LPDownloadDocument'),
             $document->get_filename(),
             $document->get_filesize());
-        $html[] .= '<br /><a target="about:blank" href="' . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $document->get_id()) . '">' . Translation :: get('Download') . '</a>';
+        $html[] .= '<br /><a target="about:blank" href="' .
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $document->get_id(),
+                $document->calculate_security_code()) . '">' . Translation :: get('Download') . '</a>';
 
         $html[] = '</div>';
         $html[] = '<br />';

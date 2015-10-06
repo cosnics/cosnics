@@ -77,7 +77,9 @@ class Display extends QuestionDisplay
              '" class="hotspot_image" style="width: ' . $scaledDimensions['thumbnailWidth'] . 'px; height: ' .
              $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
              $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) . ')"></div></div>';
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $image_object->get_id(),
+                $image_object->calculate_security_code()) . ')"></div></div>';
         $image_html[] = '<div class="clear"></div>';
         $image_html[] = '<div id="hotspot_marking_' . $question_id . '" class="hotspot_marking">';
         $image_html[] = '<div class="colour_box_label">' . Translation :: get('CurrentlyMarking') . '</div>';

@@ -22,6 +22,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -87,7 +89,16 @@ abstract class Renderer
      */
     public static function as_html($type, $user)
     {
-        return self :: factory($type, $user)->render();
+        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        $cacheIdentifier = md5(serialize(array(__METHOD__, $type, $user->get_id())));
+
+        if (! $cache->contains($cacheIdentifier))
+        {
+            $menu = self :: factory($type, $user)->render();
+            $cache->save($cacheIdentifier, $menu);
+        }
+
+        return $cache->fetch($cacheIdentifier);
     }
 
     public function get_menu_items()

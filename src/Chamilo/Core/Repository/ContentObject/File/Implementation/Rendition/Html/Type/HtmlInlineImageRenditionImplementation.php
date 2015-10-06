@@ -11,7 +11,9 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
         $object = $this->get_content_object();
         $name = $object->get_filename();
 
-        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id());
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code());
 
         $parameters[self :: PARAM_MARGIN_HORIZONTAL] = (int) $parameters[self :: PARAM_MARGIN_HORIZONTAL];
         $parameters[self :: PARAM_MARGIN_VERTICAL] = (int) $parameters[self :: PARAM_MARGIN_VERTICAL];

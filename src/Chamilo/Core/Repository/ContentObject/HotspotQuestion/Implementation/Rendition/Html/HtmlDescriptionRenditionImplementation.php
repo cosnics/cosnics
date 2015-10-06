@@ -50,7 +50,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                  $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
                  'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
                  $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image->get_id()) . ')"></div></div>';
+                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                    $image->get_id(),
+                    $image->calculate_security_code()) . ')"></div></div>';
         }
         else
         {

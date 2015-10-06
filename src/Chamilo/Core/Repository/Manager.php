@@ -29,6 +29,7 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 
 /**
  *
@@ -579,23 +580,30 @@ abstract class Manager extends Application
         return DataManager :: count_active_content_objects(ContentObject :: class_name(), $parameters) > 0;
     }
 
-    public static function get_document_downloader_url($document_id)
+    public static function get_document_downloader_url($documentId, $securityCode = null)
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
-            $document_id);
-
-        if ($object)
+        if (! $securityCode)
         {
-            $security_code = $object->calculate_security_code();
+            $contentObject = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                ContentObject :: class_name(),
+                $documentId);
+
+            if ($contentObject)
+            {
+                $securityCode = $contentObject->calculate_security_code();
+            }
+            else
+            {
+                throw new ObjectNotExistException('ContentObject', $documentId);
+            }
         }
 
         $redirect = new Redirect(
             array(
                 self :: PARAM_CONTEXT => self :: package(),
                 self :: PARAM_ACTION => self :: ACTION_DOWNLOAD_DOCUMENT,
-                self :: PARAM_CONTENT_OBJECT_ID => $document_id,
-                ContentObject :: PARAM_SECURITY_CODE => $security_code));
+                self :: PARAM_CONTENT_OBJECT_ID => $documentId,
+                ContentObject :: PARAM_SECURITY_CODE => $securityCode));
 
         return $redirect->getUrl();
     }

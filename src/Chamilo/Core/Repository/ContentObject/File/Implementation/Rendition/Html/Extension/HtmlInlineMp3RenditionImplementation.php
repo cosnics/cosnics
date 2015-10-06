@@ -10,7 +10,9 @@ class HtmlInlineMp3RenditionImplementation extends HtmlInlineRenditionImplementa
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code()) . '&display=1';
 
         $html = array();
 
