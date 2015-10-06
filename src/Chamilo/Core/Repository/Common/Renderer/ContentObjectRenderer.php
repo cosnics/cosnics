@@ -317,7 +317,9 @@ abstract class ContentObjectRenderer implements TableSupport
             $actions[] = new ToolbarItem(
                 Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Download'),
-                $this->get_repository_browser()->get_document_downloader_url($content_object->get_id()),
+                $this->get_repository_browser()->get_document_downloader_url(
+                    $content_object->get_id(),
+                    $content_object->calculate_security_code()),
                 ToolbarItem :: DISPLAY_ICON);
         }
 
