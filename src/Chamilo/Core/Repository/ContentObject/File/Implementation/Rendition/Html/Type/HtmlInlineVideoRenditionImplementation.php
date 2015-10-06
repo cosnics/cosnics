@@ -13,13 +13,15 @@ class HtmlInlineVideoRenditionImplementation extends HtmlInlineRenditionImplemen
     {
         $object = $this->get_content_object();
         $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
-        
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $object->get_id(),
+                $object->calculate_security_code()) . '&display=1';
+
         $height = $parameters[self :: PARAM_HEIGHT] ? $parameters[self :: PARAM_HEIGHT] : self :: DEFAULT_HEIGHT;
         $width = $parameters[self :: PARAM_WIDTH] ? $parameters[self :: PARAM_WIDTH] : self :: DEFAULT_WIDTH;
-        
+
         $html = array();
-        
+
         $html[] = '<object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://www.videolan.org/" height="' .
              $parameters[self :: PARAM_HEIGHT] . '" width="' . $parameters[self :: PARAM_WIDTH] . '">';
         $html[] = '	<param name="showstatusbar" value="true" />';
@@ -47,7 +49,7 @@ class HtmlInlineVideoRenditionImplementation extends HtmlInlineRenditionImplemen
                             width="' . $width . '">';
         $html[] = '	</embed>';
         $html[] = '</object>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

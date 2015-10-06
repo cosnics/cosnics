@@ -29,7 +29,9 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $properties[ContentObject :: PROPERTY_ID] = $object->get_id();
         $properties[ContentObject :: PROPERTY_TITLE] = $object->get_title();
         $properties['fullPath'] = $full_path;
-        $properties['webPath'] = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id());
+        $properties['webPath'] = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code());
 
         $properties[File :: PROPERTY_FILENAME] = $object->get_filename();
         $properties[File :: PROPERTY_PATH] = $object->get_path();

@@ -156,7 +156,7 @@ class EventParser
 
             $parameters = array();
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: context();
-            $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_VIEW;
+            $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION] = \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_VIEW;
             $parameters[\Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID] = $this->getPublication()->get_id();
 
             $redirect = new Redirect($parameters);

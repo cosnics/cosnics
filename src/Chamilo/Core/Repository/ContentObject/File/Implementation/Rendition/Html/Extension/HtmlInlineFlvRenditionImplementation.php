@@ -9,10 +9,12 @@ class HtmlInlineFlvRenditionImplementation extends HtmlInlineRenditionImplementa
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
-        
+        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code()) . '&display=1';
+
         $html = array();
-        
+
         $html[] = '<object codebase="http://www.videolan.org/" height="' . $parameters[self :: PARAM_HEIGHT] .
              '" width="' . $parameters[self :: PARAM_WIDTH] . '">';
         $html[] = '	<param name="showstatusbar" value="true" />';
@@ -37,11 +39,10 @@ class HtmlInlineFlvRenditionImplementation extends HtmlInlineRenditionImplementa
                             showtracker="true"
                             src="' . $url . '"
                             type="video/x-flv"
-                            width="' . $parameters[self :: PARAM_WIDTH] .
-             '">';
+                            width="' . $parameters[self :: PARAM_WIDTH] . '">';
         $html[] = '	</embed>';
         $html[] = '</object>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

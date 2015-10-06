@@ -45,7 +45,9 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
              'px; height: ' . $scaledDimensions['thumbnailHeight'] . 'px; background-size: ' .
              $scaledDimensions['thumbnailWidth'] . 'px ' . $scaledDimensions['thumbnailHeight'] .
              'px;background-image: url(' .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($image_object->get_id()) . ')"></div></div>';
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $image_object->get_id(),
+                $image_object->calculate_security_code()) . ')"></div></div>';
         $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js') . '"></script>';

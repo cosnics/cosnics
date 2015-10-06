@@ -11,10 +11,12 @@ class HtmlInlineAudioRenditionImplementation extends HtmlInlineRenditionImplemen
     {
         $object = $this->get_content_object();
         $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url($object->get_id()) . '&display=1';
-        
+             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $object->get_id(),
+                $object->calculate_security_code()) . '&display=1';
+
         $html = array();
-        
+
         $html[] = '<object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://www.videolan.org/">';
         $html[] = '	<param name="showstatusbar" value="true" />';
         $html[] = '	<param name="showaudiocontrols" value="true" />';
@@ -32,7 +34,7 @@ class HtmlInlineAudioRenditionImplementation extends HtmlInlineRenditionImplemen
                             type="application/x-vlc-plugin">';
         $html[] = '	</embed>';
         $html[] = '</object>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }
