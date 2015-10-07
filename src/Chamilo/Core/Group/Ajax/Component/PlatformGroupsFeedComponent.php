@@ -129,7 +129,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
      */
     public function get_group_element($group)
     {
-        $description = strip_tags($group->get_fully_qualified_name() . '[' . $group->get_code() . ']');
+        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
 
         return new AdvancedElementFinderElement(
             self :: PARAM_GROUP . '_' . $group->get_id(),
