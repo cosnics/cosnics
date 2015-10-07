@@ -180,10 +180,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join = new Join(GroupRelUser :: class_name(), new AndCondition($join_conditions));
 
-        $parameters = new RecordRetrievesParameters(
-            $properties, /* $condition = */ null, /* $count = */ null, /* $offset = */ null,
-                /* $order_by = */ null,
-            new Joins(array($join)));
+        $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins(array($join)));
 
         $directly_subscribed_group_nesting_values = static :: records(Group :: class_name(), $parameters)->as_array();
 

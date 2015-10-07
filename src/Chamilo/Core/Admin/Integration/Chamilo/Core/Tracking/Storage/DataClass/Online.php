@@ -25,10 +25,7 @@ class Online extends SimpleTracker
 
     public function run(array $parameters = array())
     {
-        $time = time();
-        $parameters[self :: PARAM_TIME] = $time;
-
-        $this->remove_old_trackers($time);
+        $parameters[self :: PARAM_TIME] = time();
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID),
@@ -54,14 +51,6 @@ class Online extends SimpleTracker
     {
         $object->set_user_id($parameters[self :: PARAM_USER]);
         $object->set_last_access_date($parameters[self :: PARAM_TIME]);
-    }
-
-    public function remove_old_trackers($time)
-    {
-        $active_time = PlatformSetting :: get('timelimit');
-        $past_time = strtotime('-' . $active_time . ' seconds', $time);
-
-        $this->empty_tracker_before_date($past_time);
     }
 
     public function empty_tracker($event)
