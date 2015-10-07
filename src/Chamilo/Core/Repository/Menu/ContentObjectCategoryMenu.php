@@ -145,7 +145,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
             while($contentObjectCategory = $contentObjectCategories->next_result())
             {
-                $this->categories[$contentObjectCategory->get_parent()] = $contentObjectCategory;
+                $this->categories[$contentObjectCategory->get_parent()][] = $contentObjectCategory;
             }
         }
 
@@ -179,6 +179,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
             $menu_item[OptionsMenuRenderer :: KEY_ID] = $category->get_id();
             $categories[$category->get_id()] = $menu_item;
         }
+
         return $categories;
     }
 

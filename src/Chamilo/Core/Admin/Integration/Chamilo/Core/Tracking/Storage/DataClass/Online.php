@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataClass
 
 use Chamilo\Core\Admin\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
