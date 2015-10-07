@@ -3,17 +3,18 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubs
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Table column model for an all course user browser table.
- * 
+ *
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
-class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel implements 
+class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel implements
     TableColumnModelActionsColumnSupport
 {
     const SUBSCRIPTION_STATUS = 'subscription_status';
@@ -30,7 +31,7 @@ class AllSubscribedUserBrowserTableColumnModel extends RecordTableColumnModel im
         $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_FIRSTNAME));
         $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_USERNAME));
         $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_EMAIL));
-        $this->add_column(new TableColumn(self :: SUBSCRIPTION_STATUS, null, true, ''));
-        $this->add_column(new TableColumn(self :: SUBSCRIPTION_TYPE, null, false));
+        $this->add_column(new SortableStaticTableColumn(self :: SUBSCRIPTION_STATUS));
+        $this->add_column(new StaticTableColumn(self :: SUBSCRIPTION_TYPE));
     }
 }

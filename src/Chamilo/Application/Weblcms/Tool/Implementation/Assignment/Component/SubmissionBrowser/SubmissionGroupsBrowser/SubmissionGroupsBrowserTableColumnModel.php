@@ -5,11 +5,11 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\Submiss
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\TableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Extends SubmissionBrowserTableColumnModel to include the group members column.
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
@@ -22,8 +22,8 @@ class SubmissionGroupsBrowserTableColumnModel extends SubmissionBrowserTableColu
     public function initialize_columns()
     {
         $this->add_group_name_column();
-        $this->add_column(new TableColumn(Manager :: PROPERTY_GROUP_MEMBERS, null, false));
-        
+        $this->add_column(new StaticTableColumn(Manager :: PROPERTY_GROUP_MEMBERS));
+
         parent :: initialize_columns();
     }
 
