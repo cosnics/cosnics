@@ -128,7 +128,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
     private function getCategories($parentId = 0)
     {
-        if(!isset($this->categories))
+        if (! isset($this->categories))
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
@@ -143,7 +143,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
             $this->categories = array();
 
-            while($contentObjectCategory = $contentObjectCategories->next_result())
+            while ($contentObjectCategory = $contentObjectCategories->next_result())
             {
                 $this->categories[$contentObjectCategory->get_parent()][] = $contentObjectCategory;
             }
@@ -165,7 +165,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
         $objects = $this->getCategories($parent);
         $categories = array();
 
-        foreach ( $objects as $category)
+        foreach ($objects as $category)
         {
             $menu_item = array();
             $menu_item['title'] = $category->get_name()/* . ' (' . $count . ')'*/;

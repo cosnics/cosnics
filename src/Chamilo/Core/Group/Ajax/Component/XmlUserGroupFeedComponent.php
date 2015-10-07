@@ -218,19 +218,21 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
 
         foreach ($groups as $group)
         {
+            $description = strip_tags($group->get_fully_qualified_name() . '[' . $group->get_code() . ']');
+
             if ($this->contains_results($group['children']))
             {
                 echo '<node id="group_' . $group['group']->get_id() . '" classes="type type_group" title="' .
-                     htmlspecialchars($group['group']->get_name()) . '" description="' .
-                     htmlspecialchars($group['group']->get_name()) . '">', "\n";
+                     htmlspecialchars($group['group']->get_name()) . '" description="' . htmlspecialchars($description) .
+                     '">', "\n";
                 $this->dump_groups_tree($group['children']);
                 echo '</node>', "\n";
             }
             else
             {
                 echo '<leaf id="group_' . $group['group']->get_id() . '" classes="type type_group" title="' .
-                     htmlspecialchars($group['group']->get_name()) . '" description="' .
-                     htmlspecialchars($group['group']->get_name()) . '"/>' . "\n";
+                     htmlspecialchars($group['group']->get_name()) . '" description="' . htmlspecialchars($description) .
+                     '"/>' . "\n";
             }
         }
     }

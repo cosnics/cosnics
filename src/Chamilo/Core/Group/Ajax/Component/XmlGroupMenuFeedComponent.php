@@ -56,10 +56,11 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
     {
         foreach ($groups as $group)
         {
+            $description = strip_tags($group->get_fully_qualified_name() . '[' . $group->get_code() . ']');
+
             $has_children = $group->has_children() ? 1 : 0;
             echo '<leaf id="' . $group->get_id() . '" classes="category" has_children="' . $has_children . '" title="' .
-                 htmlspecialchars($group->get_name()) . '" description="' . htmlspecialchars($group->get_name()) . '"/>' .
-                 "\n";
+                 htmlspecialchars($group->get_name()) . '" description="' . htmlspecialchars($description) . '"/>' . "\n";
         }
     }
 
