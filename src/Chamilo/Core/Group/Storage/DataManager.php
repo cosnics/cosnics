@@ -160,92 +160,112 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return static :: retrieves(Group :: class_name(), $parameters);
     }
 
+    public static $allSubscribedGroupsCache = array();
+
     public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
     {
-        // First: retrieve the left and right values of groups the user is directly subscribed to.
-        $properties = new DataClassProperties();
+        $cacheId = md5(serialize(array($user_id, $only_retrieve_ids)));
 
-        $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE));
-        $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE));
-
-        $join_conditions = array();
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
-            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID));
-
-        $join = new Join(GroupRelUser :: class_name(), new AndCondition($join_conditions));
-
-        $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins(array($join)));
-
-        $directly_subscribed_group_nesting_values = static :: records(Group :: class_name(), $parameters)->as_array();
-
-        // Second: retrieve the (ids of) directly subscribed groups and their ancestors
-        if (count($directly_subscribed_group_nesting_values) > 0)
+        if (! isset(self :: $allSubscribedGroupsCache[$cacheId]))
         {
-            $conditions = array();
+            // First: retrieve the left and right values of groups the user is directly subscribed to.
+            $properties = new DataClassProperties();
 
-            $or_conditions = array();
+            $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE));
+            $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE));
 
-            foreach ($directly_subscribed_group_nesting_values as $descendent)
+            $join_conditions = array();
+
+            $join_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID),
+                new StaticConditionVariable($user_id));
+
+            $join_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID));
+
+            $join = new Join(GroupRelUser :: class_name(), new AndCondition($join_conditions));
+
+            $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins(array($join)));
+
+            $directly_subscribed_group_nesting_values = static :: records(Group :: class_name(), $parameters)->as_array();
+
+            // Second: retrieve the (ids of) directly subscribed groups and their ancestors
+            if (count($directly_subscribed_group_nesting_values) > 0)
             {
-                $or_conditions[] = new AndCondition(
-                    array(
-                        new InequalityCondition(
-                            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
-                            InequalityCondition :: LESS_THAN_OR_EQUAL,
-                            new StaticConditionVariable($descendent[Group :: PROPERTY_LEFT_VALUE])),
+                $conditions = array();
 
-                        new InequalityCondition(
-                            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
-                            InequalityCondition :: GREATER_THAN_OR_EQUAL,
-                            new StaticConditionVariable($descendent[Group :: PROPERTY_RIGHT_VALUE]))));
-            }
+                $or_conditions = array();
 
-            $conditions[] = new OrCondition($or_conditions);
-
-            if ($only_retrieve_ids)
-            {
-                $properties = new DataClassProperties();
-
-                $properties->add(
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable :: DISTINCT,
-                        new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID)));
-
-                $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
-
-                $records = static :: records(Group :: class_name(), $parameters);
-                $group_ids = array();
-
-                foreach ($records->as_array() as $group)
+                foreach ($directly_subscribed_group_nesting_values as $descendent)
                 {
-                    $group_ids[] = $group[Group :: PROPERTY_ID];
+                    $or_conditions[] = new AndCondition(
+                        array(
+                            new InequalityCondition(
+                                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
+                                InequalityCondition :: LESS_THAN_OR_EQUAL,
+                                new StaticConditionVariable($descendent[Group :: PROPERTY_LEFT_VALUE])),
+
+                            new InequalityCondition(
+                                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
+                                InequalityCondition :: GREATER_THAN_OR_EQUAL,
+                                new StaticConditionVariable($descendent[Group :: PROPERTY_RIGHT_VALUE]))));
                 }
 
-                return $group_ids;
+                $conditions[] = new OrCondition($or_conditions);
+
+                if ($only_retrieve_ids)
+                {
+                    $properties = new DataClassProperties();
+
+                    $properties->add(
+                        new FunctionConditionVariable(
+                            FunctionConditionVariable :: DISTINCT,
+                            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID)));
+
+                    $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
+
+                    $records = static :: records(Group :: class_name(), $parameters);
+                    $group_ids = array();
+
+                    foreach ($records->as_array() as $group)
+                    {
+                        $group_ids[] = $group[Group :: PROPERTY_ID];
+                    }
+
+                    self :: $allSubscribedGroupsCache[$cacheId] = $group_ids;
+                }
+                else
+                {
+                    $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
+
+                    self :: $allSubscribedGroupsCache[$cacheId] = static :: retrieves(
+                        Group :: class_name(),
+                        $parameters);
+                }
             }
             else
             {
-                $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
-
-                return static :: retrieves(Group :: class_name(), $parameters);
+                if ($only_retrieve_ids)
+                {
+                    self :: $allSubscribedGroupsCache[$cacheId] = array();
+                }
+                else
+                {
+                    // If the user is not a member of any group
+                    self :: $allSubscribedGroupsCache[$cacheId] = new EmptyResultSet();
+                }
             }
         }
 
-        if ($only_retrieve_ids)
+        $groups = self :: $allSubscribedGroupsCache[$cacheId];
+
+        if (! $only_retrieve_ids)
         {
-            return array();
+            $groups->reset();
         }
-        else
-        {
-            // If the user is not a member of any group
-            return new EmptyResultSet();
-        }
+
+        return $groups;
     }
 
     public static function retrieve_groups_and_subgroups($group_ids, $additional_condition = null, $count = null, $offset = null,
