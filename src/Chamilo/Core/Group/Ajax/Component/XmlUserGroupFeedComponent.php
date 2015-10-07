@@ -218,7 +218,7 @@ class XmlUserGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
 
         foreach ($groups as $group)
         {
-            $description = strip_tags($group->get_fully_qualified_name() . '[' . $group->get_code() . ']');
+            $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
 
             if ($this->contains_results($group['children']))
             {
