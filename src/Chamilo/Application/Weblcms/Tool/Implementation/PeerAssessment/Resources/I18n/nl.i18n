@@ -1,0 +1,9 @@
+TypeName = "Peer assessment"
+
+PeerAssessmentToolBrowserComponent = "Doorblader peer assessments"
+PeerAssessmentToolViewerComponent = "Peer assessment"
+PeerAssessmentToolPublisherComponent = "Publiceren"
+PublishPeerAssessment="Publiceer Peer Assessment"
+TypeNameSingle = "Peer assessment"
+AllowSelfSubscribe = "Activeer instelling om zelf in te schrijven"
+OnlyFeedback="Er kan op deze peer assessment enkel feedback worden gegeven"
