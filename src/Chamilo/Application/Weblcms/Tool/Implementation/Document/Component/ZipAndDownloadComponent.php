@@ -123,8 +123,6 @@ class ZipAndDownloadComponent extends Manager
 
                 $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
                     $condition);
-                var_dump($publications);
-                exit;
             }
             else
             {
