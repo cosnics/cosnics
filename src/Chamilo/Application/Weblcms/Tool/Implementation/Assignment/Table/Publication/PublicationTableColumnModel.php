@@ -5,11 +5,11 @@ use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCo
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Column\TableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Extension on the content object publication table column model for this tool
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
@@ -20,25 +20,25 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Initializes the columns for the table
      */
     public function initialize_columns()
     {
         parent :: initialize_columns();
-        
+
         $this->add_column(
             new DataClassPropertyTableColumn(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME, null, false));
-        
-        $this->add_column(new TableColumn(Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS, null, false));
-        
+
+        $this->add_column(new StaticTableColumn(Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS));
+
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Assignment :: class_name(), 
-                Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-                null, 
-                false), 
+                Assignment :: class_name(),
+                Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS,
+                null,
+                false),
             1);
     }
 }

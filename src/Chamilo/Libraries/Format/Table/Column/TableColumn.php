@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class TableColumn
+abstract class TableColumn
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
