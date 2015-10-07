@@ -126,6 +126,32 @@ class ContentObjectCategoryMenu extends HTML_Menu
         return $menu;
     }
 
+    private function getCategories($parentId = 0)
+    {
+        if(!isset($this->categories))
+        {
+            $conditions = array();
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
+                new StaticConditionVariable($this->currentWorkspace->getId()));
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
+                new StaticConditionVariable($this->currentWorkspace->getWorkspaceType()));
+            $condition = new AndCondition($conditions);
+
+            $contentObjectCategories = DataManager :: retrieve_categories($condition);
+
+            $this->categories = array();
+
+            while($contentObjectCategory = $contentObjectCategories->next_result())
+            {
+                $this->categories[$contentObjectCategory->get_parent()] = $contentObjectCategory;
+            }
+        }
+
+        return $this->categories[$parentId];
+    }
+
     /**
      * Returns the items of the sub menu.
      *
@@ -136,22 +162,10 @@ class ContentObjectCategoryMenu extends HTML_Menu
      */
     private function get_sub_menu_items($parent = 0)
     {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE_ID),
-            new StaticConditionVariable($this->currentWorkspace->getId()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_TYPE),
-            new StaticConditionVariable($this->currentWorkspace->getWorkspaceType()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
-            new StaticConditionVariable($parent));
-        $condition = new AndCondition($conditions);
-
-        $objects = DataManager :: retrieve_categories($condition);
+        $objects = $this->getCategories($parent);
         $categories = array();
 
-        while ($category = $objects->next_result())
+        foreach ( $objects as $category)
         {
             $menu_item = array();
             $menu_item['title'] = $category->get_name()/* . ' (' . $count . ')'*/;

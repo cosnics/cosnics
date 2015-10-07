@@ -252,6 +252,7 @@ class DataManager
         {
             try
             {
+                var_dump($objectClass);
                 return static :: __retrieveClass($objectClass, $factoryClass, $parameters);
             }
             catch (DataClassNoResultException $exception)
