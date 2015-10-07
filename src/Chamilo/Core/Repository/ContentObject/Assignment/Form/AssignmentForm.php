@@ -179,18 +179,29 @@ class AssignmentForm extends ContentObjectForm
 
         // attachment uploader and selector
         $url = Path :: getInstance()->getBasePath(true) .
-                 'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
+             'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                      'Plugin/Uploadify/jquery.uploadify.min.js'));
-        $this->addElement('static', 'uploadify', Translation :: get('UploadDocument'), '<div id="uploadify"></div>');
+
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(Assignment::package(), true) .
+                     'UploadifyFeedback.js'));
+        $this->addElement(
+            'static',
+            'uploadify',
+            Translation :: get('UploadDocument'),
+            '<div id="uploadifyFeedback"></div>');
         $elem = $this->addElement(
             'element_finder',
             Assignment :: PROPERTY_SELECT_ATTACHMENT,
@@ -205,6 +216,7 @@ class AssignmentForm extends ContentObjectForm
             Assignment :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
             Translation :: get('Text'),
             array('cols' => '60', 'rows' => '3'));
+
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
@@ -219,6 +231,7 @@ class AssignmentForm extends ContentObjectForm
             Translation :: get('AfterSubmission'),
             1);
         $this->addGroup($choices, null, Translation :: get('VisibiltyFeedback'), '<br/>', false);
+
         $this->addElement('category');
     }
 
