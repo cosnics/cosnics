@@ -223,11 +223,13 @@ class PlatformGroupEntity implements NestedRightsEntity
             return null;
         }
 
+        $description = strip_tags($group->get_fully_qualified_name() . '[' . $group->get_code() . ']');
+
         return new AdvancedElementFinderElement(
             static :: ENTITY_TYPE . '_' . $id,
             'type type_group',
             $group->get_name(),
-            $group->get_code());
+            $description);
     }
 
     /**
