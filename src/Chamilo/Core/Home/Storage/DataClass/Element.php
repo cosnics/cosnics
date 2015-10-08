@@ -189,19 +189,4 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         return array(new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID));
     }
-
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[string]
-     */
-    protected function get_dependencies()
-    {
-        return array(
-            ElementConfiguration :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(
-                    ElementConfiguration :: class_name(),
-                    ElementConfiguration :: PROPERTY_ELEMENT_ID),
-                new StaticConditionVariable($this->get_id())));
-    }
 }
