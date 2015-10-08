@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -9,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 
 /**
  *
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends DataClass implements DisplayOrderDataClassListenerSupport
+class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_TYPE = 'type';
     const PROPERTY_PARENT_ID = 'parent_id';
@@ -40,7 +40,17 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
                 self :: PROPERTY_PARENT_ID,
                 self :: PROPERTY_TITLE,
                 self :: PROPERTY_SORT,
-                self :: PROPERTY_USER_ID, self :: PROPERTY_CONFIGURATION));
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_CONFIGURATION));
+    }
+
+    /**
+     * @param string[] $configurationVariables
+     * @return string[]
+     */
+    public static function getConfigurationVariables($configurationVariables = array())
+    {
+        return $configurationVariables;
     }
 
     /**
@@ -139,7 +149,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function getConfiguration()
     {
-        return $this->get_default_property(self :: PROPERTY_CONFIGURATION);
+        return unserialize($this->get_default_property(self :: PROPERTY_CONFIGURATION));
     }
 
     /**
@@ -148,7 +158,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function setConfiguration($configuration)
     {
-        $this->set_default_property(self :: PROPERTY_CONFIGURATION, $configuration);
+        $this->set_default_property(self :: PROPERTY_CONFIGURATION, serialize($configuration));
     }
 
     public function delete()
@@ -188,5 +198,29 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function get_display_order_context_properties()
     {
         return array(new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID));
+    }
+
+    /**
+     *
+     * @param string $variable
+     * @return string
+     */
+    public function getSetting($variable)
+    {
+        $configuration = $this->getConfiguration();
+        return $configuration[$variable];
+    }
+
+    /**
+     *
+     * @param string $variable
+     * @param string $value
+     */
+    public function setSetting($variable, $value)
+    {
+        $configuration = $this->getConfiguration();
+        $configuration[$variable] = $value;
+
+        $this->setConfiguration($configuration);
     }
 }

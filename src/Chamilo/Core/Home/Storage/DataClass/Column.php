@@ -2,134 +2,48 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * $Id: home_column.class.php 227 2009-11-13 14:45:05Z kariboe $
  *
- * @package home.lib
+ * @package Chamilo\Core\Home\Storage\DataClass-
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Column extends DataClass implements DisplayOrderDataClassListenerSupport
+class Column extends Element
 {
-    const CLASS_NAME = __CLASS__;
-
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_SORT = 'sort';
-    const PROPERTY_WIDTH = 'width';
-    const PROPERTY_ROW = 'row_id';
-    const PROPERTY_USER = 'user_id';
-
-    public function __construct($default_properties = array(), $optional_properties = array())
-    {
-        parent :: __construct($default_properties = $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
-    }
+    const CONFIGURATION_WIDTH = 'width';
 
     /**
-     * Get the default properties of all user course categories.
      *
-     * @return array The property names.
+     * @param string[] $configurationVariables
+     * @return string[]
      */
-    public static function get_default_property_names()
+    public static function getConfigurationVariables($configurationVariables = array())
     {
-        return parent :: get_default_property_names(
-            array(
-                self :: PROPERTY_TITLE,
-                self :: PROPERTY_SORT,
-                self :: PROPERTY_WIDTH,
-                self :: PROPERTY_ROW,
-                self :: PROPERTY_USER));
+        return parent :: getConfigurationVariables(array(self :: CONFIGURATION_WIDTH));
     }
 
     /**
-     * inherited
+     *
+     * @return integer
      */
-    public function get_data_manager()
+    public function getWidth()
     {
-        return DataManager :: get_instance();
+        return $this->getSetting(self :: CONFIGURATION_WIDTH);
     }
 
-    public function get_sort()
+    /**
+     *
+     * @param integer $width
+     */
+    public function setWidth($width)
     {
-        return $this->get_default_property(self :: PROPERTY_SORT);
-    }
-
-    public function set_sort($sort)
-    {
-        $this->set_default_property(self :: PROPERTY_SORT, $sort);
-    }
-
-    public function get_title()
-    {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
-    }
-
-    public function set_title($title)
-    {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
-    }
-
-    public function get_width()
-    {
-        return $this->get_default_property(self :: PROPERTY_WIDTH);
-    }
-
-    public function set_width($width)
-    {
-        $this->set_default_property(self :: PROPERTY_WIDTH, $width);
-    }
-
-    public function get_row()
-    {
-        return $this->get_default_property(self :: PROPERTY_ROW);
-    }
-
-    public function set_row($row)
-    {
-        $this->set_default_property(self :: PROPERTY_ROW, $row);
-    }
-
-    public function get_user()
-    {
-        return $this->get_default_property(self :: PROPERTY_USER);
-    }
-
-    public function set_user($user)
-    {
-        $this->set_default_property(self :: PROPERTY_USER, $user);
-    }
-
-    public function create()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ROW),
-            new StaticConditionVariable($this->get_row()));
-        $this->set_sort(DataManager :: retrieve_next_value(self :: class_name(), self :: PROPERTY_SORT, $condition));
-        return parent :: create();
-    }
-
-    public function delete()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
-            new StaticConditionVariable($this->get_id()));
-        $blocks = DataManager :: retrieves(Block :: class_name(), $condition);
-
-        while ($block = $blocks->next_result())
-        {
-            if (! $block->delete())
-            {
-                return false;
-            }
-        }
-
-        return parent :: delete();
+        $this->setSetting(self :: CONFIGURATION_WIDTH, $width);
     }
 
     public function is_empty()
@@ -141,23 +55,5 @@ class Column extends DataClass implements DisplayOrderDataClassListenerSupport
         $blocks_count = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
 
         return ($blocks_count == 0);
-    }
-
-    /**
-     *
-     * @see \libraries\storage\DisplayOrderDataClassListenerSupport::get_display_order_property()
-     */
-    public function get_display_order_property()
-    {
-        return new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_SORT);
-    }
-
-    /**
-     *
-     * @see \libraries\storage\DisplayOrderDataClassListenerSupport::get_display_order_context_properties()
-     */
-    public function get_display_order_context_properties()
-    {
-        return array(new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ROW));
     }
 }
