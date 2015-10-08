@@ -12,12 +12,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: home_column.class.php 227 2009-11-13 14:45:05Z kariboe $
- * 
+ *
  * @package home.lib
  */
 class Column extends DataClass implements DisplayOrderDataClassListenerSupport
 {
     const CLASS_NAME = __CLASS__;
+
     const PROPERTY_TITLE = 'title';
     const PROPERTY_SORT = 'sort';
     const PROPERTY_WIDTH = 'width';
@@ -32,17 +33,17 @@ class Column extends DataClass implements DisplayOrderDataClassListenerSupport
 
     /**
      * Get the default properties of all user course categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names()
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_SORT, 
-                self :: PROPERTY_WIDTH, 
-                self :: PROPERTY_ROW, 
+                self :: PROPERTY_TITLE,
+                self :: PROPERTY_SORT,
+                self :: PROPERTY_WIDTH,
+                self :: PROPERTY_ROW,
                 self :: PROPERTY_USER));
     }
 
@@ -107,7 +108,7 @@ class Column extends DataClass implements DisplayOrderDataClassListenerSupport
     public function create()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ROW), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ROW),
             new StaticConditionVariable($this->get_row()));
         $this->set_sort(DataManager :: retrieve_next_value(self :: class_name(), self :: PROPERTY_SORT, $condition));
         return parent :: create();
@@ -116,10 +117,10 @@ class Column extends DataClass implements DisplayOrderDataClassListenerSupport
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN), 
+            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
             new StaticConditionVariable($this->get_id()));
         $blocks = DataManager :: retrieves(Block :: class_name(), $condition);
-        
+
         while ($block = $blocks->next_result())
         {
             if (! $block->delete())
@@ -127,18 +128,18 @@ class Column extends DataClass implements DisplayOrderDataClassListenerSupport
                 return false;
             }
         }
-        
+
         return parent :: delete();
     }
 
     public function is_empty()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN), 
+            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
             new StaticConditionVariable($this->get_id()));
-        
+
         $blocks_count = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
-        
+
         return ($blocks_count == 0);
     }
 

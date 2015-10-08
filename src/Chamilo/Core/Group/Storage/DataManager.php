@@ -164,6 +164,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
     {
+//         var_dump($user_id);
+//         var_dump($only_retrieve_ids);
+
         $cacheId = md5(serialize(array($user_id, $only_retrieve_ids)));
 
         if (! isset(self :: $allSubscribedGroupsCache[$cacheId]))
@@ -212,7 +215,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                                 new StaticConditionVariable($descendent[Group :: PROPERTY_RIGHT_VALUE]))));
                 }
 
-                $conditions[] = new OrCondition($or_conditions);
+                $condition = new OrCondition($or_conditions);
 
                 if ($only_retrieve_ids)
                 {
@@ -223,7 +226,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                             FunctionConditionVariable :: DISTINCT,
                             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID)));
 
-                    $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
+                    $parameters = new RecordRetrievesParameters($properties, $condition);
 
                     $records = static :: records(Group :: class_name(), $parameters);
                     $group_ids = array();
@@ -237,12 +240,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
                 else
                 {
-                    $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
+                    $parameters = new DataClassRetrievesParameters($condition);
 
                     self :: $allSubscribedGroupsCache[$cacheId] = static :: retrieves(
                         Group :: class_name(),
                         $parameters);
                 }
+
+//                 var_dump(self :: $allSubscribedGroupsCache[$cacheId]);
+
+//                 exit;
             }
             else
             {
