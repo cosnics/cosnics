@@ -15,7 +15,10 @@ use XML_Unserializer;
 
 /**
  *
- * @package home.lib
+ * @package Chamilo\Core\Home\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Block extends DataClass implements DisplayOrderDataClassListenerSupport
 {
