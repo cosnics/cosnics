@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Indicator</name>
+		<code>Indicator</code>
+		<context>Chamilo\Core\Repository\ContentObject\Indicator</context>
+		<type>Chamilo\Core\Repository\ContentObject</type>
+		<category>PeerAssessment</category>
+		<authors>
+			<author>
+				<name>Renaat De Muynck</name>
+				<email>renaat.demuynck@arteveldehs.be</email>
+				<company>Arteveldehogeschool</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description />
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Core\Repository</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+	</package>
+</packages>
