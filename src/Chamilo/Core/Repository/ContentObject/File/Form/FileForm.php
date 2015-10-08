@@ -37,13 +37,13 @@ class FileForm extends ContentObjectForm
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        $calculator->addUploadWarningToForm($this);
-
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName')));
         $this->addRule(
             'file',
             Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
             'disk_quota');
+
+        $calculator->addUploadWarningToForm($this);
 
         $this->addFormRule(array($this, 'check_document_form'));
         $this->addElement('category');
@@ -63,8 +63,6 @@ class FileForm extends ContentObjectForm
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        $calculator->addUploadWarningToForm($this);
-
         $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
 
         $object = $this->get_content_object();
@@ -74,6 +72,8 @@ class FileForm extends ContentObjectForm
             'file',
             Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
             'disk_quota');
+
+        $calculator->addUploadWarningToForm($this);
 
         $this->addElement('category');
     }
@@ -140,16 +140,16 @@ class FileForm extends ContentObjectForm
             switch ($_FILES['file']['error'])
             {
                 case 1 : // uploaded file exceeds the upload_max_filesize directive in php.ini
-                    $errors['upload_or_create'] = Translation :: get('FileTooBig');
+                    $errors['file'] = Translation :: get('FileTooBig');
                     break;
                 case 2 : // uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form
-                    $errors['upload_or_create'] = Translation :: get('FileTooBig');
+                    $errors['file'] = Translation :: get('FileTooBig');
                     break;
                 case 3 : // uploaded file was only partially uploaded
-                    $errors['upload_or_create'] = Translation :: get('UploadIncomplete');
+                    $errors['file'] = Translation :: get('UploadIncomplete');
                     break;
                 case 4 : // no file was uploaded
-                    $errors['upload_or_create'] = Translation :: get('NoFileSelected');
+                    $errors['file'] = Translation :: get('NoFileSelected');
                     break;
             }
         }
@@ -159,10 +159,7 @@ class FileForm extends ContentObjectForm
 
             if (! $calculator->canUpload($size))
             {
-                $errors['upload_or_create'] = Translation :: get(
-                    'DiskQuotaExceeded',
-                    null,
-                    Utilities :: COMMON_LIBRARIES);
+                $errors['file'] = Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES);
             }
 
             $array = explode('.', $_FILES['file']['name']);
@@ -170,7 +167,7 @@ class FileForm extends ContentObjectForm
 
             if (isset($fields['uncompress']) && $type != 'zip')
             {
-                $errors['upload_or_create'] = Translation :: get('UncompressNotAvailableForThisFile');
+                $errors['file'] = Translation :: get('UncompressNotAvailableForThisFile');
             }
 
             if (! $fields['uncompress'] && ! $this->allow_file_type($type))
@@ -182,13 +179,13 @@ class FileForm extends ContentObjectForm
                 }
                 else
                 {
-                    $errors['upload_or_create'] = Translation :: get('FileTypeNotAllowed');
+                    $errors['file'] = Translation :: get('FileTypeNotAllowed');
                 }
             }
         }
         else
         {
-            $errors['upload_or_create'] = Translation :: get('NoFileSelected');
+            $errors['file'] = Translation :: get('NoFileSelected');
         }
 
         if (count($errors) == 0)
