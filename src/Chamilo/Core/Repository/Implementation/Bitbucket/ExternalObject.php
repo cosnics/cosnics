@@ -11,7 +11,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_LOGO = 'logo';
     const PROPERTY_WEBSITE = 'website';
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(array(self :: PROPERTY_LOGO));
     }

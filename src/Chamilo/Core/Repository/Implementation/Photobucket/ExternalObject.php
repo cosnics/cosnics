@@ -27,7 +27,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return implode(", ", $this->get_tags());
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_TAGS, self :: PROPERTY_URL, self :: PROPERTY_THUMBNAIL));

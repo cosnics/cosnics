@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 class PortalHome extends \Chamilo\Core\Home\BlockRendition
 {
 
-    public function display_content()
+    public function displayContent()
     {
         $html = PlatformSetting :: get('portal_home');
         $html = $html ? $html : Translation :: get('ConfigurePortalHomeFirst');
@@ -18,7 +18,7 @@ class PortalHome extends \Chamilo\Core\Home\BlockRendition
         return $renderer->run();
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }

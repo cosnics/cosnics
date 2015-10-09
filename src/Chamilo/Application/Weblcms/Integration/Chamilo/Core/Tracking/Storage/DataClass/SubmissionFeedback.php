@@ -21,7 +21,7 @@ class SubmissionFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Simple
         $this->set_content_object_id($parameters[self :: PROPERTY_CONTENT_OBJECT_ID]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(

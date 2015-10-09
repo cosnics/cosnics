@@ -79,7 +79,7 @@ abstract class Renderer
      */
     abstract public function render();
 
-    public function get_current_tab()
+    public function getCurrentTabIdentifier()
     {
         return Request :: get(self :: PARAM_TAB_ID);
     }

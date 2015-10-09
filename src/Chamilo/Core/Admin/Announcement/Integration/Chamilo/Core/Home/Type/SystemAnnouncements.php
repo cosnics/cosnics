@@ -14,11 +14,11 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
     private $publications;
 
-    public static function get_default_image_path($application = '', $type = '', $size = Theme :: ICON_MINI)
+    public static function getDefaultImagePath($application = '', $type = '', $size = Theme :: ICON_MINI)
     {
         if ($type)
         {
-            return parent :: get_default_image_path($application, $type, $size);
+            return parent :: getDefaultImagePath($application, $type, $size);
         }
         else
         {
@@ -27,22 +27,22 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
              * Therefore do not use SystemAnnouncement::...
              */
             return Theme :: getInstance()->getImagePath(
-                ContentObject :: get_content_object_type_namespace('SystemAnnouncement'),
+                ContentObject :: get_content_object_type_namespace('SystemAnnouncement'), 
                 'Logo/' . $size);
         }
     }
 
-    public function is_visible()
+    public function isVisible()
     {
-        if (! $this->get_user() || ($this->is_empty() && ! $this->show_when_empty()))
+        if (! $this->getUser() || ($this->isEmpty() && ! $this->showWhenEmpty()))
         {
             return false;
         }
-
+        
         return true; // i.e.display on homepage when anonymous
     }
 
-    public function show_when_empty()
+    public function showWhenEmpty()
     {
         $configuration = $this->get_configuration();
         $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
@@ -50,83 +50,82 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         return $result;
     }
 
-    public function is_empty()
+    public function isEmpty()
     {
-        $announcements = $this->get_publications();
-        return $announcements->size() == 0;
+        return $this->getPublications()->size() == 0;
     }
 
     /**
      * Returns the url to the icon.
-     *
+     * 
      * @return string
      */
-    public function get_icon()
+    public function getIcon()
     {
-        return self :: get_default_image_path();
+        return self :: getDefaultImagePath();
     }
 
-    public function get_publications()
+    public function getPublications()
     {
         if (! isset($this->publications))
         {
             $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_user(
-                $this->get_user_id());
+                $this->getUserId());
         }
-
+        
         return $this->publications;
     }
 
-    public function get_publication_link($publication, $admin)
+    public function getPublicationLink($publication, $admin)
     {
         $paremeters = array();
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager :: package();
         $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];
-
+        
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }
 
-    public function display_content()
+    public function displayContent()
     {
-        $publcations = $this->get_publications();
-
+        $publcations = $this->getPublications();
+        
         if ($publcations->size() == 0)
         {
             return htmlspecialchars(Translation :: get('NoSystemAnnouncementsCurrently'));
         }
-
+        
         $data = array();
-
+        
         while ($publication = $publcations->next_result())
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+                ContentObject :: class_name(), 
                 (int) $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
-
+            
             $icon = $content_object->get_icon_image(
-                Theme :: ICON_MINI,
+                Theme :: ICON_MINI, 
                 ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
-
+            
             $href = htmlspecialchars($this->get_publication_link($publication));
             $title = htmlspecialchars($content_object->get_title());
             $target = $this->get_view() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
             $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
-
+            
             $data[] = array($icon, $link);
         }
-
+        
         $table = new SortableTable($data);
         $table->setAttribute('class', 'data_table invisible_table');
         $table->set_header(0, null, false);
         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
         $table->set_header(1, null, false);
         $table->getHeader()->setColAttributes(1, 'class="invisible"');
-
+        
         $html[] = $table->as_html();
-
+        
         return implode(PHP_EOL, $html);
     }
 }
