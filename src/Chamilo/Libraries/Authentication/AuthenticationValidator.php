@@ -208,7 +208,7 @@ class AuthenticationValidator
             }
         }
 
-        if ($user instanceof User)
+        if (isset($user) && $user instanceof User)
         {
             $this->setAuthenticatedUser($user);
             $this->trackLogin($user);

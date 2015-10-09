@@ -15,7 +15,7 @@ class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Si
         $this->set_feedback($parameters[self :: PROPERTY_FEEDBACK]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_ATTEMPT_STATUS_ID, self :: PROPERTY_USER_ID, self :: PROPERTY_FEEDBACK));

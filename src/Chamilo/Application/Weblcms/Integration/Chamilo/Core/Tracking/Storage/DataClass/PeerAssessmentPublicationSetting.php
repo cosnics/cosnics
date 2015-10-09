@@ -33,7 +33,7 @@ class PeerAssessmentPublicationSetting extends \Chamilo\Core\Tracking\Storage\Da
         $this->set_enable_user_results_export($parameters[self :: PROPERTY_ENABLE_USER_RESULTS_EXPORT]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
