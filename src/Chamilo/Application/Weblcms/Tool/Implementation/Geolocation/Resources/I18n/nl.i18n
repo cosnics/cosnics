@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\geolocation
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Locaties"
+TypeNameSingle = "Locatie"
+LocationsSummary = "Samenvatting van de locaties"
+GeolocationToolBrowserComponent = "Doorblader locaties"
+GeoLocationToolViewerComponent = "Bekijk de locatie"
+GeolocationToolEvaluateComponent = "Evalueer"
+GeolocationToolIntroductionPublisherComponent = "Publiceer introductie"
+GeolocationToolReportingViewerComponent = "Rapportering"
+GeolocationToolUpdaterComponent = "Bewerk locatie"

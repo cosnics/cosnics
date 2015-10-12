@@ -1,0 +1,68 @@
+<?php
+
+namespace {NAMESPACE};
+
+use common\libraries\Breadcrumb;
+use common\libraries\BreadcrumbTrail;
+use common\libraries\Translation;
+use common\libraries\ActionBarRenderer;
+use common\libraries\Theme;
+use common\libraries\ToolbarItem;
+use common\libraries\Utilities;
+
+/**
+ * @package application.{L_APPLICATION_NAME}.{L_APPLICATION_NAME}.component
+ */
+ 
+/**
+ * {L_APPLICATION_NAME} component which allows the user to browse his {L_OBJECT_CLASSES}
+ * @author Sven Vanpoucke
+ * @author {AUTHOR}
+ */
+class {APPLICATION_NAME}Manager{OBJECT_CLASSES}BrowserComponent extends {APPLICATION_NAME}Manager
+{
+    private $action_bar;
+    
+    function run()
+    {
+        $this->action_bar = $this->get_action_bar();
+        $this->display_header($trail);
+
+        echo $this->action_bar->as_html();
+        echo '<div id="action_bar_browser">';
+
+        ${L_OBJECT_CLASSES} = $this->retrieve_{L_OBJECT_CLASSES}();
+        while(${L_OBJECT_CLASS} = ${L_OBJECT_CLASSES}->next_result())
+        {
+            echo '<div style="border: 1px solid grey; padding: 5px;">';
+            dump(${L_OBJECT_CLASS});
+            echo '<br /><a href="' . $this->get_update_{L_OBJECT_CLASS}_url(${L_OBJECT_CLASS}). '">' . Translation :: get('Update{OBJECT_CLASS}') . '</a>';
+            echo ' | <a href="' . $this->get_delete_{L_OBJECT_CLASS}_url(${L_OBJECT_CLASS}) . '">' . Translation :: get('Delete{OBJECT_CLASS}') . '</a>';
+            echo '</div><br /><br />';
+        }
+
+        echo '</div>';
+        $this->display_footer();
+    }
+
+    function get_action_bar()
+    {
+        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+
+        $action_bar->add_common_action(new ToolbarItem(Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), Theme :: get_common_image_path() . 'Action/Add.png', $this->get_create_{L_OBJECT_CLASS}_url()));
+        return $action_bar;
+    }
+
+    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+    	$breadcrumbtrail->add_help('{L_OBJECT_CLASSES}_browser');
+    	$breadcrumbtrail->add(new Breadcrumb($this->get_url(array({APPLICATION_NAME}Manager :: PARAM_ACTION => {APPLICATION_NAME}Manager :: ACTION_BROWSE)), Translation :: get('{APPLICATION_NAME}ManagerBrowserComponent')));
+    }
+
+    function get_additional_parameters()
+    {
+    	return array();
+    }
+
+}
+?>
