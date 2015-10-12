@@ -5,12 +5,11 @@ use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Home\Renderer\Factory;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -62,28 +61,26 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $blocks = $this->unserialize_jquery($this->getPostDataValue(self :: PARAM_ORDER));
 
         $block = new Block();
-        $block->set_column($column_data[2]);
-        $block->set_title(
+        $block->setParentId($column_data[2]);
+        $block->setTitle(
             Translation :: get(
                 (string) StringUtilities :: getInstance()->createString(
                     $this->getPostDataValue(self :: PARAM_COMPONENT))->upperCamelize(),
                 null,
                 $this->getPostDataValue(self :: PARAM_CONTEXT)));
-        $registration = DataManager :: retrieve_home_block_registration_by_context_and_block(
-            $this->getPostDataValue(self :: PARAM_CONTEXT),
-            $this->getPostDataValue(self :: PARAM_COMPONENT));
-        $block->set_registration_id($registration->get_id());
-        $block->set_visibility('1');
-        $block->set_user($user_id);
-        $block->create();
 
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            User :: class_name(),
-            (int) Session :: get_user_id());
+        $block->setContext(
+            ClassnameUtilities :: getInstance()->getNamespaceParent($this->getPostDataValue(self :: PARAM_CONTEXT), 4));
+        $block->setBlockType(
+            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(
+                $this->getPostDataValue(self :: PARAM_COMPONENT)));
+        $block->setVisibility(true);
+        $block->setUserId($user_id);
+        $block->create();
 
         $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
         $renderer = $rendererFactory->getRenderer();
-        $html = BlockRendition :: factory($renderer, $block)->as_html();
+        $html = BlockRendition :: factory($renderer, $block)->toHtml();
 
         $result = new JsonAjaxResult(200);
         $result->set_property(self :: PROPERTY_BLOCK, $html);

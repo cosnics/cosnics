@@ -15,6 +15,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class FilteredCourseList extends Block
 {
+    const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
+    const CONFIGURATION_COURSE_TYPE = 'course_type';
+
     /**
      * **************************************************************************************************************
      * Parameters *
@@ -33,14 +36,14 @@ class FilteredCourseList extends Block
      *
      * @var int
      */
-    private $course_type_id;
+    private $courseTypeId;
 
     /**
      * The cached user course category id
      *
      * @var int
      */
-    private $user_course_category_id;
+    private $userCourseCategoryId;
 
     /**
      * **************************************************************************************************************
@@ -53,22 +56,21 @@ class FilteredCourseList extends Block
      *
      * @param mixed $parent
      * @param Block $block_info
-     * @param BlockConfiguration $configuration
      */
-    public function __construct($parent, $block_info, $configuration = null)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration);
+        parent :: __construct($renderer, $block);
 
-        $this->load_settings();
+        $this->loadSettings();
     }
 
     public function as_html($view = '')
     {
         $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
             $this,
-            $this->get_link_target(),
-            $this->get_course_type_id(),
-            $this->get_user_course_category_id());
+            $this->getLinkTarget(),
+            $this->getCourseTypeId(),
+            $this->getUserCourseCategoryId());
 
         if ($renderer->get_courses()->size() > 0)
         {
@@ -85,31 +87,29 @@ class FilteredCourseList extends Block
      *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
-        $configuration = $this->get_configuration();
-
         $html = array();
 
         $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
             $this,
-            $this->get_link_target(),
-            $this->get_course_type_id(),
-            $this->get_user_course_category_id());
+            $this->getLinkTarget(),
+            $this->getCourseTypeId(),
+            $this->getUserCourseCategoryId());
 
-        if ($configuration['show_new_icons'])
+        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
         {
             $renderer->show_new_publication_icons();
         }
 
         $html[] = $renderer->as_html();
 
-        if (! $configuration['show_new_icons'])
+        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
         {
             $courseTypeLink = new Redirect(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
-                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE => $this->get_course_type_id()));
+                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
 
             $html[] = '<div style="margin-top: 15px;">';
             $html[] = Translation :: get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
@@ -120,28 +120,19 @@ class FilteredCourseList extends Block
     }
 
     /**
-     * We need to override this because else we would redirect to the home page
-     *
-     * @param $parameters
-     */
-    public function get_link($parameters)
-    {
-        return $this->get_parent()->get_link($parameters);
-    }
-
-    /**
      * Returns the title of this block Changes the default title of the block to the title of the course type and
      * (optionally) the title of the selected user course category
      *
      * @return string
      */
-    public function get_title()
+    public function getTitle()
     {
-        $course_type_id = $this->get_course_type_id();
+        $course_type_id = $this->getCourseTypeId();
 
         if ($course_type_id > 0)
         {
             $course_type = CourseTypeDataManager :: retrieve_by_id(CourseType :: class_name(), $course_type_id);
+
             if ($course_type)
             {
                 $course_type_title = $course_type->get_title();
@@ -156,7 +147,7 @@ class FilteredCourseList extends Block
             $course_type_title = Translation :: get('NoCourseType');
         }
 
-        $user_course_category_id = $this->get_user_course_category_id();
+        $user_course_category_id = $this->getUserCourseCategoryId();
 
         if ($user_course_category_id > 0)
         {
@@ -185,9 +176,9 @@ class FilteredCourseList extends Block
      *
      * @return int
      */
-    public function get_course_type_id()
+    public function getCourseTypeId()
     {
-        return $this->course_type_id;
+        return $this->courseTypeId;
     }
 
     /**
@@ -195,22 +186,20 @@ class FilteredCourseList extends Block
      *
      * @return int
      */
-    public function get_user_course_category_id()
+    public function getUserCourseCategoryId()
     {
-        return $this->user_course_category_id;
+        return $this->userCourseCategoryId;
     }
 
     /**
      * Loads the settings of this block
      */
-    private function load_settings()
+    private function loadSettings()
     {
-        $configuration = $this->get_configuration();
-
-        $selected_course_type = $configuration[self :: PARAM_COURSE_TYPE];
+        $selected_course_type = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
         $exploded_value = json_decode($selected_course_type);
 
-        $this->course_type_id = $exploded_value[0];
-        $this->user_course_category_id = $exploded_value[1];
+        $this->courseTypeId = $exploded_value[0];
+        $this->userCourseCategoryId = $exploded_value[1];
     }
 }

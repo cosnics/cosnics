@@ -16,107 +16,93 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Block to display all bookmarks foor the handbooks application
- * 
+ *
  * @package handbook.block
  */
 class WeblcmsBookmarkDisplay extends NewBlock
 {
+    const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
-    public function __construct($parent, $block_info, $configuration)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration, Translation :: get('WeblcmsBookmarks'));
+        parent :: __construct($renderer, $block, Translation :: get('WeblcmsBookmarks'));
     }
 
-    public function is_configured()
+    public function isConfigured()
     {
         // no configuration needed for now
         return true;
     }
 
-    public function is_visible()
+    public function isVisible()
     {
-        if ($this->is_empty() && ! $this->show_when_empty())
+        if ($this->isEmpty() && ! $this->showWhenEmpty())
         {
             return false;
         }
         return true; // i.e.display on homepage when anonymous
     }
 
-    public function is_hidable()
+    public function isHidable()
     {
         return true;
     }
 
-    public function is_deletable()
+    public function isDeletable()
     {
         return true;
     }
 
     /**
      * Returns the html to display when the block is configured.
-     * 
+     *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
-        $bookmarks_resultset = $this->get_bookmarks();
-        
-        while ($bookmarks_resultset && $bm = $bookmarks_resultset->next_result())
+        $bookmarks = $this->getBookmarks();
+
+        while ($bookmark = $bookmarks->next_result())
         {
             $display = ContentObjectRenditionImplementation :: factory(
-                $bm, 
-                ContentObjectRendition :: FORMAT_HTML, 
-                ContentObjectRendition :: VIEW_SHORT, 
+                $bookmark,
+                ContentObjectRendition :: FORMAT_HTML,
+                ContentObjectRendition :: VIEW_SHORT,
                 $this);
+
             $html[] = $display->render();
             $html[] = '</br>';
         }
         return implode(PHP_EOL, $html);
     }
 
-    public function show_when_empty()
+    public function showWhenEmpty()
     {
-        $configuration = $this->get_configuration();
-        $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
-        $result = (bool) $result;
-        return $result;
+        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_EMPTY, true);
     }
 
-    public function is_empty()
+    public function isEmpty()
     {
-        $bookmarks = $this->get_bookmarks();
-        return $bookmarks->size() == 0;
+        return $this->get_bookmarks()->size() == 0;
     }
 
-    public function get_bookmarks()
+    public function getBookmarks()
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Bookmark :: class_name(), Bookmark :: PROPERTY_APPLICATION), 
+            new PropertyConditionVariable(Bookmark :: class_name(), Bookmark :: PROPERTY_APPLICATION),
             new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session :: get_user_id()));
-        
+
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters($condition);
-        
+
         $bookmarks_resultset = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-            Bookmark :: class_name(), 
+            Bookmark :: class_name(),
             $parameters);
-        
+
         return $bookmarks_resultset;
-    }
-
-    public function count_data()
-    {
-    }
-
-    public function get_views()
-    {
-    }
-
-    public function retrieve_data()
-    {
     }
 }

@@ -19,26 +19,28 @@ use Chamilo\Libraries\Utilities\Utilities;
 class NewAssignments extends NewBlock
 {
 
-    public function display_content()
+    public function displayContent()
     {
-        $publications = $this->get_content(self :: TOOL_ASSIGNMENT);
-        $html = $this->display_new_items($publications);
+        $publications = $this->getContent(self :: TOOL_ASSIGNMENT);
+        $html = $this->displayNewItems($publications);
 
         if (count($html) < 3)
         {
             return Translation :: get('NoNewAssignmentsSinceLastVisit');
         }
+
         return implode(PHP_EOL, $html);
     }
 
-    public function display_new_items($publications)
+    public function displayNewItems($publications)
     {
         ksort($publications);
-        $icon = '<img src="' . $this->get_new_assignments_icon() . '"/>';
+        $icon = '<img src="' . $this->getNewAssignmentsIcon() . '"/>';
 
         $html = array();
         $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
         $current_course_id = - 1;
+
         foreach ($publications as $publication)
         {
             $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
@@ -54,7 +56,7 @@ class NewAssignments extends NewBlock
             if ($course_id != $current_course_id)
             {
                 $current_course_id = $course_id;
-                $html[] = '<li>' . $this->get_course_by_id($current_course_id)->get_title() . '</li>';
+                $html[] = '<li>' . $this->getCourseById($current_course_id)->get_title() . '</li>';
             }
 
             $parameters = array(
@@ -78,11 +80,13 @@ class NewAssignments extends NewBlock
             $html[] = '<a href="' . $link . '">' . $icon . ' ' . $content_object->get_title() . '</a>: ' . Translation :: get(
                 'From') . ' ' . $start_date . ' ' . Translation :: get('Until') . ' ' . $end_date . '<br />';
         }
+
         $html[] = '</ul>';
+
         return $html;
     }
 
-    private function get_new_assignments_icon()
+    private function getNewAssignmentsIcon()
     {
         return Theme :: getInstance()->getImagePath(
             \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ASSIGNMENT),

@@ -4,23 +4,19 @@ namespace Chamilo\Core\Home\Storage;
 use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
-use Chamilo\Core\Home\Storage\DataClass\BlockRegistration;
 use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataClass\Row;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * $Id: home_data_manager.class.php 157 2009-11-10 13:44:02Z vanpouckesven $
@@ -64,91 +60,77 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
     }
 
-    public static function get_platform_blocks()
+    public static function getPlatformBlocks()
     {
+        $homeIntegrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(Manager :: package());
         $blocks = array();
 
-        $registrations = self :: retrieves(BlockRegistration :: class_name());
-
-        while ($registration = $registrations->next_result())
+        foreach ($homeIntegrations as $homeIntegration)
         {
-            $context = $registration->get_context();
-            $block = $registration->get_block();
+            $className = $homeIntegration->get_context() . '\Manager';
 
-            $home_block = new Block();
-            $home_block->set_registration_id($registration->get_id());
+            if (class_exists($className))
+            {
+                $homeIntegrationManager = new $className();
+                $blockTypes = $homeIntegrationManager->getBlockTypes();
 
-            // $renderer = HomeRenderer :: factory(HomeRenderer :: TYPE_BASIC);
-            // $block_object = Block :: factory($renderer, $home_block);
+                foreach ($blockTypes as $blockType)
+                {
+                    $parentNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                        $homeIntegration->get_type());
+                    $blockName = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($blockType);
 
-            // if (! $block_object->is_deletable())
-            // {
-            // continue;
-            // }
+                    $blocks[$homeIntegration->get_context()]['name'] = Translation :: get(
+                        'TypeName',
+                        null,
+                        $parentNamespace);
 
-            $parent = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($context)));
+                    $blocks[$homeIntegration->get_context()]['image'] = Theme :: getInstance()->getImagePath(
+                        $parentNamespace,
+                        'Logo/16');
 
-            $blocks[$context]['name'] = Translation :: get('TypeName', null, $parent);
-            $blocks[$context]['image'] = Theme :: getInstance()->getImagePath($parent, 'Logo/16');
-            $blocks[$context]['components'][] = array(
-                BlockRendition :: BLOCK_PROPERTY_ID => $block,
-                BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get(
-                    (string) StringUtilities :: getInstance()->createString($block)->upperCamelize(),
-                    null,
-                    $context),
-                BlockRendition :: BLOCK_PROPERTY_IMAGE => BlockRendition :: get_image_path($context, $block));
+                    $blocks[$homeIntegration->get_context()]['components'][] = array(
+                        BlockRendition :: BLOCK_PROPERTY_ID => $blockType,
+                        BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get(
+                            $blockName,
+                            null,
+                            $homeIntegration->get_context()),
+                        BlockRendition :: BLOCK_PROPERTY_IMAGE => BlockRendition :: getImagePath(
+                            $homeIntegration->get_context(),
+                            $blockName));
+                }
+            }
         }
 
         return $blocks;
     }
 
-    /**
-     *
-     * @param $context string
-     * @param $block string
-     * @return Ambigous <BlockRegistration, null>
-     */
-    public static function retrieve_home_block_registration_by_context_and_block($context, $block)
+    public static function retrieveTabBlocks($tabElement)
     {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(BlockRegistration :: class_name(), BlockRegistration :: PROPERTY_CONTEXT),
-            new StaticConditionVariable($context));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(BlockRegistration :: class_name(), BlockRegistration :: PROPERTY_BLOCK),
-            new StaticConditionVariable($block));
-        $condition = new AndCondition($conditions);
+        $columnCondition = new EqualityCondition(
+            new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_PARENT_ID),
+            new StaticConditionVariable($tabElement->getId()));
 
-        return self :: retrieve(BlockRegistration :: class_name(), new DataClassRetrieveParameters($condition));
+        $columnIdentifiers = self :: distinct(
+            Column :: class_name(),
+            new DataClassDistinctParameters($columnCondition, Column :: PROPERTY_ID));
+
+        $condition = new InCondition(
+            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_PARENT_ID),
+            $columnIdentifiers);
+
+        return self :: retrieves(Block :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
-    public static function retrieve_home_tab_blocks($home_tab)
-    {
-        $row_condition = new EqualityCondition(
-            new PropertyConditionVariable(Row :: class_name(), Row :: PROPERTY_TAB),
-            new StaticConditionVariable($home_tab->get_id()));
-        $column_condition = new SubselectCondition(
-            new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_ROW),
-            new PropertyConditionVariable(Row :: class_name(), Row :: PROPERTY_ID),
-            Row :: get_table_name(),
-            $row_condition);
-        $condition = new SubselectCondition(
-            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
-            new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_ID),
-            Column :: get_table_name(),
-            $column_condition);
-
-        return self :: retrieves(Block :: class_name(), $condition);
-    }
-
-    public static function truncate_home($user_id)
+    public static function truncateHome($userIdentifier)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_USER),
-            new StaticConditionVariable($user_id));
-        $tabs = self :: retrieves(Tab :: class_name(), $condition);
+            new StaticConditionVariable($userIdentifier));
+
+        $parameters = new DataClassRetrievesParameters($condition);
+
+        $tabs = self :: retrieves(Tab :: class_name(), $parameters);
 
         while ($tab = $tabs->next_result())
         {
@@ -159,13 +141,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return true;
-    }
-
-    public static function delete_home_block_configs($home_block)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(BlockConfiguration :: class_name(), BlockConfiguration :: PROPERTY_BLOCK_ID),
-            new StaticConditionVariable($home_block->get_id()));
-        return self :: deletes(BlockConfiguration :: class_name(), $condition);
     }
 }

@@ -29,6 +29,11 @@ class Block extends Element
             array(self :: CONFIGURATION_VISIBILITY, self :: CONFIGURATION_CONTEXT, self :: CONFIGURATION_BLOCK_TYPE));
     }
 
+    public function isConfigurable()
+    {
+        return count($this->getConfiguration()) > 3;
+    }
+
     /**
      *
      * @return boolean
@@ -91,7 +96,7 @@ class Block extends Element
     {
         $this->setSetting(self :: CONFIGURATION_BLOCK_TYPE, $blockType);
     }
-    
+
     // /**
     // *
     // * @return boolean
@@ -100,9 +105,9 @@ class Block extends Element
     // {
     // $context = $this->get_context();
     // $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $this->get_block() . '.xml';
-    
+
     // $result = array();
-    
+
     // if (file_exists($file))
     // {
     // $unserializer = new XML_Unserializer();
@@ -111,10 +116,10 @@ class Block extends Element
     // $unserializer->setOption(XML_UNSERIALIZER_OPTION_RETURN_RESULT, true);
     // $unserializer->setOption(XML_UNSERIALIZER_OPTION_GUESS_TYPES, true);
     // $unserializer->setOption(XML_UNSERIALIZER_OPTION_FORCE_ENUM, array('category', 'setting'));
-    
+
     // // userialize the document
     // $status = $unserializer->unserialize($file, true);
-    
+
     // if (PEAR :: isError($status))
     // {
     // throw new \Exception('Error: ' . $status->getMessage());
@@ -122,7 +127,7 @@ class Block extends Element
     // else
     // {
     // $data = $unserializer->getUnserializedData();
-    
+
     // $setting_categories = $data['settings']['category'];
     // foreach ($setting_categories as $setting_category)
     // {
@@ -132,7 +137,7 @@ class Block extends Element
     // $block_config->set_block_id($this->get_id());
     // $block_config->set_variable($setting['name']);
     // $block_config->set_value($setting['default']);
-    
+
     // if (! $block_config->create())
     // {
     // return false;
@@ -143,7 +148,7 @@ class Block extends Element
     // }
     // return true;
     // }
-    
+
     // /**
     // *
     // * @return multitype
@@ -155,14 +160,14 @@ class Block extends Element
     // new StaticConditionVariable($this->get_id()));
     // $configs = DataManager :: retrieves(BlockConfiguration :: class_name(), $condition);
     // $configuration = array();
-    
+
     // while ($config = $configs->next_result())
     // {
     // $configuration[$config->get_variable()] = $config->get_value();
     // }
     // return $configuration;
     // }
-    
+
     // /**
     // *
     // * @return boolean
@@ -171,7 +176,7 @@ class Block extends Element
     // {
     // $context = $this->get_context();
     // $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $this->get_block() . '.xml';
-    
+
     // if (file_exists($file))
     // {
     // return true;
@@ -181,7 +186,7 @@ class Block extends Element
     // return false;
     // }
     // }
-    
+
     // /**
     // *
     // * @return multitype
@@ -190,34 +195,34 @@ class Block extends Element
     // {
     // $context = $this->get_context();
     // $component = $this->get_component();
-    
+
     // $file = Path :: getInstance()->namespaceToFullPath($context) . '/Type/' . $component . '.xml';
     // $result = array();
-    
+
     // if (file_exists($file))
     // {
     // $doc = new DOMDocument();
     // $doc->load($file);
     // $object = $doc->getElementsByTagname('block')->item(0);
     // $name = $object->getAttribute('name');
-    
+
     // // Get categories
     // $categories = $doc->getElementsByTagname('category');
     // $settings = array();
-    
+
     // foreach ($categories as $index => $category)
     // {
     // $category_name = $category->getAttribute('name');
     // $category_properties = array();
-    
+
     // // Get settings in category
     // $properties = $category->getElementsByTagname('setting');
     // $attributes = array('field', 'default', 'locked');
-    
+
     // foreach ($properties as $index => $property)
     // {
     // $property_info = array();
-    
+
     // foreach ($attributes as $index => $attribute)
     // {
     // if ($property->hasAttribute($attribute))
@@ -225,7 +230,7 @@ class Block extends Element
     // $property_info[$attribute] = $property->getAttribute($attribute);
     // }
     // }
-    
+
     // if ($property->hasChildNodes())
     // {
     // $property_options = $property->getElementsByTagname('options')->item(0);
@@ -238,7 +243,7 @@ class Block extends Element
     // $options_attribute);
     // }
     // }
-    
+
     // if ($property_options->getAttribute('type') == 'static' && $property_options->hasChildNodes())
     // {
     // $options = $property_options->getElementsByTagname('option');
@@ -252,14 +257,14 @@ class Block extends Element
     // }
     // $category_properties[$property->getAttribute('name')] = $property_info;
     // }
-    
+
     // $settings[$category_name] = $category_properties;
     // }
-    
+
     // $result['name'] = $name;
     // $result['settings'] = $settings;
     // }
-    
+
     // return $result;
     // }
 }
