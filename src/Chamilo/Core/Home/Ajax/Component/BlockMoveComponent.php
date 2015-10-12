@@ -15,7 +15,7 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_COLUMN = 'column';
     const PARAM_BLOCK = 'block';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -23,27 +23,27 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_COLUMN, self :: PARAM_BLOCK);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-        
+
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $block = DataManager :: retrieve_by_id(
-            Block :: class_name(), 
+            Block :: class_name(),
             intval($this->getPostDataValue(self :: PARAM_BLOCK)));
-        
-        if ($block->get_user() == $user_id)
+
+        if ($block->getUserId() == $user_id)
         {
-            $block->set_column($this->getPostDataValue(self :: PARAM_COLUMN));
-            
+            $block->setParentId($this->getPostDataValue(self :: PARAM_COLUMN));
+
             if ($block->update())
             {
                 JsonAjaxResult :: success();
