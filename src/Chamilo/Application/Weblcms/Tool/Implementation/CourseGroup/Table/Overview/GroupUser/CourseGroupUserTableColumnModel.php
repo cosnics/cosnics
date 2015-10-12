@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumn
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class CourseGroupsUsersBrowserTableColumnModel extends DataClassTableColumnModel
+class CourseGroupUserTableColumnModel extends DataClassTableColumnModel
 {
     const COURSE_GROUP_COLOMN = 'CourseGroup';
     

@@ -146,7 +146,28 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     private function get_course_groups_tab()
     {
-        $course_groups = DataManager :: retrieves(CourseGroup :: class_name(), $this->get_condition());
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->get_course_id()));
+        $conditions[] = new InequalityCondition(
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
+            InequalityCondition :: GREATER_THAN,
+            new StaticConditionVariable(0));
+
+        $query = $this->action_bar->get_query();
+        $query_conditions[] = new PatternMatchCondition(
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME),
+            '*' . $query . '*',
+            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
+            true);
+        $query_conditions[] = new PatternMatchCondition(
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION),
+            '*' . $query . '*',
+            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
+            true);
+        $conditions[] = new OrCondition($query_conditions);
+
+        $course_groups = DataManager :: retrieves(CourseGroup :: class_name(), new AndCondition($conditions));
 
         $html_tables = '';
         while ($course_group = $course_groups->next_result())
@@ -208,16 +229,6 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $conditions[] = $search_condition;
         }
 
-        if ($this->current_tab == self :: TAB_COURSE_GROUPS)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
-                new StaticConditionVariable($this->get_course_id()));
-            $conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
-                InequalityCondition :: GREATER_THAN,
-                new StaticConditionVariable(0));
-        }
         if ($conditions)
         {
             return new AndCondition($conditions);
@@ -230,40 +241,27 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         $query = $this->action_bar->get_query();
         if (isset($query) && $query != '')
         {
-            $conditions = array();
-            switch ($this->current_tab)
+            if ($this->current_tab == self :: TAB_USERS)
             {
-                case self :: TAB_USERS :
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
-                        '*' . $query . '*');
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
-                        '*' . $query . '*');
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
-                        '*' . $query . '*');
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
-                        '*' . $query . '*');
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
-                        '*' . $query . '*');
-                    break;
-                case self :: TAB_COURSE_GROUPS :
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME),
-                        '*' . $query . '*',
-                        WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
-                        true);
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION),
-                        '*' . $query . '*',
-                        WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
-                        true);
-                    break;
+                $conditions = array();
+
+                $conditions[] = new PatternMatchCondition(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
+                    '*' . $query . '*');
+                $conditions[] = new PatternMatchCondition(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                    '*' . $query . '*');
+                $conditions[] = new PatternMatchCondition(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                    '*' . $query . '*');
+                $conditions[] = new PatternMatchCondition(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                    '*' . $query . '*');
+                $conditions[] = new PatternMatchCondition(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
+                    '*' . $query . '*');
+                return new OrCondition($conditions);
             }
-            return new OrCondition($conditions);
         }
         return null;
     }
@@ -287,6 +285,6 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        return $this->get_condition();
+        return $this->get_search_condition();
     }
 }

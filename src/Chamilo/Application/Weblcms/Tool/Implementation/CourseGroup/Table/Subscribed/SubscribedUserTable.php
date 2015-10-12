@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: course_group_subscribed_user_browser_table.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class SubscribedUserTable extends DataClassTable implements TableFormActionsSupport
@@ -22,14 +22,15 @@ class SubscribedUserTable extends DataClassTable implements TableFormActionsSupp
     {
         $actions = new TableFormActions(__NAMESPACE__);
         $browser = $this->get_component();
+
         if ($browser->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE), 
+                    array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE),
                     Translation :: get('UnsubscribeUsers')));
         }
-        
+
         return $actions;
     }
 }
