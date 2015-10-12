@@ -33,7 +33,7 @@ abstract class ConfigurationForm extends FormValidator
     public function __construct(Block $block)
     {
         parent :: __construct('block', 'post', '');
-
+        
         $this->block = $block;
         $this->buildForm();
         $this->setDefaults();
@@ -51,20 +51,20 @@ abstract class ConfigurationForm extends FormValidator
     public function buildForm()
     {
         $this->addSettings();
-
+        
         $this->addElement('hidden', Block :: PROPERTY_ID, $this->getBlock()->get_id());
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
+            'style_submit_button', 
+            'submit', 
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            'style_reset_button', 
+            'reset', 
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
             array('class' => 'normal empty'));
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -73,39 +73,39 @@ abstract class ConfigurationForm extends FormValidator
     public function build_form()
     {
         $homeblock = $this->homeblock;
-
+        
         $context = $homeblock->get_context();
         $component = $homeblock->get_component();
-
+        
         $homeblock_config = $this->homeblock_config;
-
+        
         if (count($homeblock_config['settings']) > 0)
         {
             foreach ($homeblock_config['settings'] as $category_name => $settings)
             {
                 $this->addElement('html', '<div class="configuration_form">');
                 $this->addElement(
-                    'html',
+                    'html', 
                     '<span class="category">' . Translation :: get(
                         (string) StringUtilities :: getInstance()->createString($category_name)->upperCamelize()) .
                          '</span>');
-
+                
                 foreach ($settings as $name => $setting)
                 {
                     if ($setting['locked'] == 'true')
                     {
                         $this->addElement(
-                            'static',
-                            $name,
+                            'static', 
+                            $name, 
                             Translation :: get(
                                 (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()));
                     }
                     elseif ($setting['field'] == 'text')
                     {
                         $this->add_textfield(
-                            $name,
+                            $name, 
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()),
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()), 
                             true);
                     }
                     else
@@ -121,58 +121,58 @@ abstract class ConfigurationForm extends FormValidator
                         {
                             $options = $setting['options']['values'];
                         }
-
+                        
                         if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox')
                         {
                             $group = array();
                             foreach ($options as $option_value => $option_name)
                             {
                                 $group[] = & $this->createElement(
-                                    $setting['field'],
-                                    $name,
-                                    null,
+                                    $setting['field'], 
+                                    $name, 
+                                    null, 
                                     Translation :: get(
-                                        (string) StringUtilities :: getInstance()->createString($option_name)->upperCamelize()),
+                                        (string) StringUtilities :: getInstance()->createString($option_name)->upperCamelize()), 
                                     $option_value);
                             }
                             $this->addGroup(
-                                $group,
-                                $name,
+                                $group, 
+                                $name, 
                                 Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()),
-                                '<br/>',
+                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()), 
+                                '<br/>', 
                                 false);
                         }
                         elseif ($setting['field'] == 'select')
                         {
                             $this->addElement(
-                                'select',
-                                $name,
+                                'select', 
+                                $name, 
                                 Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()),
+                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()), 
                                 $options);
                         }
                     }
                 }
-
+                
                 $this->addElement('html', '<div style="clear: both;"></div>');
                 $this->addElement('html', '</div>');
             }
-
+            
             $this->addElement('hidden', Block :: PROPERTY_ID, $this->homeblock->get_id());
-
+            
             // $this->addElement('submit', 'submit', Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES));
             $buttons[] = $this->createElement(
-                'style_submit_button',
-                'submit',
-                Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
+                'style_submit_button', 
+                'submit', 
+                Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
                 array('class' => 'positive'));
             $buttons[] = $this->createElement(
-                'style_reset_button',
-                'reset',
-                Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+                'style_reset_button', 
+                'reset', 
+                Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
                 array('class' => 'normal empty'));
-
+            
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else
@@ -185,14 +185,14 @@ abstract class ConfigurationForm extends FormValidator
      * Sets default values.
      * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
-     *
+     * 
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())
     {
         $homeblock_config = $this->homeblock_config;
         $homeblock_current_config = $this->homeblock->get_configuration();
-
+        
         foreach ($homeblock_config['settings'] as $category_name => $settings)
         {
             foreach ($settings as $name => $setting)
@@ -208,7 +208,7 @@ abstract class ConfigurationForm extends FormValidator
                 }
             }
         }
-
+        
         parent :: setDefaults($defaults);
     }
 }

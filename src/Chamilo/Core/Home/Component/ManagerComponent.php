@@ -22,14 +22,14 @@ class ManagerComponent extends Manager
         {
             \Chamilo\Libraries\Platform\Session\Session :: register('Chamilo\Core\Home\General', '1');
         }
-
+        
         $redirect = new Redirect();
         $redirect->toUrl();
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

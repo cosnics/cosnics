@@ -30,20 +30,20 @@ class BlockMoveComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-
+        
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-
+        
         $block = DataManager :: retrieve_by_id(
-            Block :: class_name(),
+            Block :: class_name(), 
             intval($this->getPostDataValue(self :: PARAM_BLOCK)));
-
+        
         if ($block->getUserId() == $user_id)
         {
             $block->setParentId($this->getPostDataValue(self :: PARAM_COLUMN));
-
+            
             if ($block->update())
             {
                 JsonAjaxResult :: success();

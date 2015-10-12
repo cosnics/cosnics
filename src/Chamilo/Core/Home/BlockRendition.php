@@ -23,7 +23,7 @@ class BlockRendition
     const PARAM_ACTION = 'block_action';
     const BLOCK_LIST_SIMPLE = 'simple';
     const BLOCK_LIST_ADVANCED = 'advanced';
-
+    
     // display the block view for integration into chamil's home page
     const BLOCK_VIEW = 'block_view';
     // display the widget view for integration into a third party application such as a portal
@@ -66,7 +66,7 @@ class BlockRendition
      * Returns the default image to be displayed for block's creation.
      * Can be redefined in subclasses to change the
      * default icon.
-     *
+     * 
      * @todo : not so good. would be better to make the whole "create block" a view.
      * @param string $application
      * @param string $type
@@ -76,7 +76,7 @@ class BlockRendition
     public static function getImagePath($context, $type)
     {
         $class = $context . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
-
+        
         if (method_exists($class, 'getDefaultImagePath'))
         {
             return $class :: getDefaultImagePath();
@@ -84,11 +84,11 @@ class BlockRendition
         else
         {
             $imagePath = Theme :: getInstance()->getImagePath($context, 'Blocks/' . $type, 'png', false);
-
+            
             if (! file_exists($imagePath) || ! is_file($imagePath))
             {
                 return Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4),
+                    ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4), 
                     'Logo/' . Theme :: ICON_MEDIUM);
             }
             else
@@ -113,7 +113,7 @@ class BlockRendition
      * The type of view: block or widget.
      * Block - default - is for integration into Chamilo's homepage. Widget is for
      * integration into a third party application - i.e. external portal.
-     *
+     * 
      * @return string
      */
     public function getView()
@@ -151,7 +151,7 @@ class BlockRendition
 
     /**
      * Returns the types of content object that this object may publish
-     *
+     * 
      * @return array The types.
      */
     public function getType()
@@ -187,7 +187,7 @@ class BlockRendition
      * Returns true if the block is to be displayed, false otherwise.
      * By default do not show on home page when user is
      * not connected.
-     *
+     * 
      * @return bool
      */
     public function isVisible()
@@ -197,7 +197,7 @@ class BlockRendition
 
     /**
      * Returns the block's title to display.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -217,7 +217,7 @@ class BlockRendition
 
     /**
      * Returns the url to the icon.
-     *
+     * 
      * @return string
      */
     public function getIcon()
@@ -231,17 +231,17 @@ class BlockRendition
         {
             return '';
         }
-
+        
         if ($view)
         {
             $this->setView($view);
         }
-
+        
         $html = array();
         $html[] = $this->renderHeader();
         $html[] = $this->displayContent();
         $html[] = $this->renderFooter();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -249,9 +249,9 @@ class BlockRendition
     {
         $block_id = $this->getBlock()->get_id();
         $icon_url = $this->getIcon();
-
+        
         $title = $this->displayTitle();
-
+        
         if ($this->getView() == self :: BLOCK_VIEW)
         { // i.e. in widget view it is the portal configuration that decides to show/hide
             $description_style = $this->getBlock()->isVisible() ? '' : ' style="display: none"';
@@ -260,12 +260,12 @@ class BlockRendition
         {
             $description_style = '';
         }
-
+        
         $html = array();
         $html[] = '<div class="portal-block" id="portal_block_' . $block_id . '">';
         $html[] = $title;
         $html[] = '<div class="entry-content description"' . $description_style . '>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -273,13 +273,13 @@ class BlockRendition
     {
         $title = htmlspecialchars($this->getTitle());
         $actions = $this->displayActions();
-
+        
         $html = array();
         $html[] = '<div class="title"><div style="float: left;" class="entry-title">' . $title . '</div>';
         $html[] = $actions;
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -289,11 +289,11 @@ class BlockRendition
         {
             return '';
         }
-
+        
         $html = array();
-
+        
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-
+        
         if ($this->getUser() instanceof User && ($userHomeAllowed || $this->getUser()->is_platform_admin()) &&
              ! $this->getUser()->is_anonymous_user())
         {
@@ -305,7 +305,7 @@ class BlockRendition
                 $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Delete')) .
                      '" alt="' . $delete_text . '" title="' . $delete_text . '"/></a>';
             }
-
+            
             if ($this->getBlock()->isConfigurable())
             {
                 $configure_text = Translation :: get('Configure');
@@ -314,7 +314,7 @@ class BlockRendition
                 $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Config')) .
                      '" alt="' . $configure_text . '" title="' . $configure_text . '"/></a>';
             }
-
+            
             if ($this->isHidable())
             {
                 $toggle_visibility_text = Translation :: get('ToggleVisibility');
@@ -327,14 +327,14 @@ class BlockRendition
                      ' src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Invisible')) .
                      '" alt="' . $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/></a>';
             }
-
+            
             $drag_text = Translation :: get('Drag');
             $html[] = '<a href="#" id="drag_block_' . $this->getBlock()->get_id() . '" class="dragEl" title="' .
                  $drag_text . '">';
             $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Drag')) .
                  '" alt="' . $drag_text . '" title="' . $drag_text . '"/></a>';
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -346,16 +346,16 @@ class BlockRendition
     public function renderFooter()
     {
         $html = array();
-
+        
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
-
+        
         $icon_url = $this->getIcon();
-
+        
         $html[] = '<div class="portal-block-badge"><img src="' . $icon_url . '" /></div>';
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -363,8 +363,8 @@ class BlockRendition
     {
         return $this->getManipulationLink(
             array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
+                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME, 
+                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK, 
                 Manager :: PARAM_HOME_ID => $block->get_id()));
     }
 
@@ -377,8 +377,8 @@ class BlockRendition
     {
         return $this->getManipulationLink(
             array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME_PERSONAL,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
+                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME_PERSONAL, 
+                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK, 
                 Manager :: PARAM_HOME_ID => $home_block->get_id()));
     }
 
@@ -386,8 +386,8 @@ class BlockRendition
     {
         return $this->getManipulationLink(
             array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_CONFIGURE_HOME_PERSONAL,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
+                Manager :: PARAM_ACTION => Manager :: ACTION_CONFIGURE_HOME_PERSONAL, 
+                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK, 
                 Manager :: PARAM_HOME_ID => $home_block->get_id()));
     }
 
@@ -437,14 +437,14 @@ class BlockRendition
         {
             $result[Renderer :: PARAM_WIDGET_ID] = $widget_id;
         }
-
+        
         return $result;
     }
 
     /**
      * Default response for blocks who use an attachment viewer.
      * Override for different functionality.
-     *
+     * 
      * @param ContentObject $object The content object to be tested.
      * @return boolean default response: false.
      */
