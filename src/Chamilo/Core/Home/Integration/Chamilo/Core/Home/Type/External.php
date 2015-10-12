@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * An "External" block.
  * I.e. a block that displays a page's content in an iFrame. Usefull to integrate external pages.
- *
+ * 
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author laurent.opprecht@unige.ch
@@ -18,7 +18,7 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
 
     /**
      * Returns the list of type names that this block can map to.
-     *
+     * 
      * @return array
      */
     public static function getSupportedTypes()
@@ -56,7 +56,7 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
         $scrolling = $this->getBlock()->getSetting(self :: CONFIGURATION_SCROLLING, 'no');
         $src = $this->getObject() ? $this->getObject()->get_url() : '';
         $height = $this->get_height();
-
+        
         $result = <<<EOT
 
         <iframe src="$src" width="100%" height="$height" frameborder="$frameborder" scrolling="$scrolling">

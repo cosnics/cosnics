@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
 class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_ORDER = 'order';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -35,7 +35,7 @@ class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         return $elements;
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */

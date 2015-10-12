@@ -35,13 +35,13 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         $block_data = explode('&', $jquery);
         $blocks = array();
-
+        
         foreach ($block_data as $block)
         {
             $block_split = explode('=', $block);
             $blocks[] = $block_split[1];
         }
-
+        
         return $blocks;
     }
 
@@ -51,24 +51,24 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-
+        
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-
+        
         $column_data = explode('_', $this->getPostDataValue(self :: PARAM_COLUMN));
         $blocks = $this->unserialize_jquery($this->getPostDataValue(self :: PARAM_ORDER));
-
+        
         $block = new Block();
         $block->setParentId($column_data[2]);
         $block->setTitle(
             Translation :: get(
                 (string) StringUtilities :: getInstance()->createString(
-                    $this->getPostDataValue(self :: PARAM_COMPONENT))->upperCamelize(),
-                null,
+                    $this->getPostDataValue(self :: PARAM_COMPONENT))->upperCamelize(), 
+                null, 
                 $this->getPostDataValue(self :: PARAM_CONTEXT)));
-
+        
         $block->setContext(
             ClassnameUtilities :: getInstance()->getNamespaceParent($this->getPostDataValue(self :: PARAM_CONTEXT), 4));
         $block->setBlockType(
@@ -77,11 +77,11 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $block->setVisibility(true);
         $block->setUserId($user_id);
         $block->create();
-
+        
         $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
         $renderer = $rendererFactory->getRenderer();
         $html = BlockRendition :: factory($renderer, $block)->toHtml();
-
+        
         $result = new JsonAjaxResult(200);
         $result->set_property(self :: PROPERTY_BLOCK, $html);
         $result->display();

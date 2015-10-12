@@ -28,16 +28,16 @@ class BlockDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-
+        
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-
+        
         $block_data = explode('_', $this->getPostDataValue(self :: PARAM_BLOCK));
-
+        
         $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($block_data[2]));
-
+        
         if ($block->getUserId() == $user_id)
         {
             if ($block->delete())

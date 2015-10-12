@@ -41,24 +41,24 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-
+        
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-
+        
         $block = intval($this->getPostDataValue(self :: PARAM_BLOCK));
         $data = $this->getPostDataValue(self :: PARAM_DATA);
-
+        
         $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
-
+        
         if ($block->get_user() == $user_id)
         {
             $homeblock_config = $block->parse_settings();
             $values = $this->getPostDataValue(self :: PARAM_DATA);
-
+            
             $problems = 0;
-
+            
             foreach ($homeblock_config['settings'] as $category_name => $settings)
             {
                 foreach ($settings as $name => $setting)
@@ -68,18 +68,18 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                         $conditions = array();
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                BlockConfiguration :: class_name(),
-                                BlockConfiguration :: PROPERTY_BLOCK_ID),
+                                BlockConfiguration :: class_name(), 
+                                BlockConfiguration :: PROPERTY_BLOCK_ID), 
                             new StaticConditionVariable($block->get_id()));
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                BlockConfiguration :: class_name(),
-                                BlockConfiguration :: PROPERTY_VARIABLE),
+                                BlockConfiguration :: class_name(), 
+                                BlockConfiguration :: PROPERTY_VARIABLE), 
                             new StaticConditionVariable($name));
                         $condition = new AndCondition($conditions);
-
+                        
                         $block_config = DataManager :: retrieve(
-                            BlockConfiguration :: class_name(),
+                            BlockConfiguration :: class_name(), 
                             new DataClassRetrieveParameters($condition));
                         $block_config->set_value($values[$name]);
                         if (! $block_config->update())
@@ -89,7 +89,7 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                     }
                 }
             }
-
+            
             if ($problems > 0)
             {
                 JsonAjaxResult :: general_error();
@@ -98,14 +98,14 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             {
                 DataClassCache :: truncates(array(Block :: class_name(), BlockConfiguration :: class_name()));
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    User :: class_name(),
+                    User :: class_name(), 
                     (int) Session :: get_user_id());
-
+                
                 $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
                 $renderer = $rendererFactory->getRenderer();
-
+                
                 $html = BlockRendition :: factory($renderer, $block)->as_html();
-
+                
                 $result = new JsonAjaxResult(200);
                 $result->set_property(self :: PROPERTY_BLOCK, $html);
                 $result->display();

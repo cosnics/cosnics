@@ -17,14 +17,14 @@ class TruncaterComponent extends Manager
     public function run()
     {
         $success = DataManager :: truncate_home($this->get_user_id());
-
+        
         $redirect = new Redirect();
         $redirect->toUrl();
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

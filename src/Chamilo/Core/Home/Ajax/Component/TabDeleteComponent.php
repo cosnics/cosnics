@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
 class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_TAB = 'tab';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -22,7 +22,7 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_TAB);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -37,7 +37,7 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($this->getPostDataValue(self :: PARAM_TAB)));
         
-        if ($tab->get_user() == $user_id && $tab->can_be_deleted())
+        if ($tab->getUserId() == $user_id && $tab->canBeDeleted())
         {
             if ($tab->delete())
             {
