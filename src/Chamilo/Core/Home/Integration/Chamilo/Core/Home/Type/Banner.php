@@ -19,30 +19,31 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
      *
      * @return array
      */
-    public static function get_supported_types()
+    public static function getSupportedTypes()
     {
         $result = array();
-        $result[] = \Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement :: get_type_name();
-        $result[] = \Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description :: get_type_name();
-        $result[] = \Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note :: get_type_name();
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description';
+        $result[] = 'Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note';
 
         return $result;
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }
 
-    public function render_header()
+    public function renderHeader()
     {
-        $block_id = $this->get_block_info()->get_id();
-        $icon_url = $this->get_icon();
+        $block_id = $this->getBlock()->getId();
+        $icon_url = $this->getIcon();
 
-        $title = $this->display_title();
-        if ($this->get_view() == self :: BLOCK_VIEW)
+        $title = $this->displayTitle();
+
+        if ($this->getView() == self :: BLOCK_VIEW)
         { // i.e. in widget view it is the portal configuration that decides to show/hide
-            $description_style = $this->get_block_info()->is_visible() ? '' : ' style="display: none"';
+            $description_style = $this->getBlock()->isVisible() ? '' : ' style="display: none"';
         }
         else
         {
@@ -58,7 +59,7 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         return implode(PHP_EOL, $html);
     }
 
-    public function render_footer()
+    public function renderFooter()
     {
         $html = array();
 
@@ -69,10 +70,10 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         return implode(PHP_EOL, $html);
     }
 
-    public function display_title()
+    public function displayTitle()
     {
-        $title = htmlspecialchars($this->get_title());
-        $actions = $this->display_actions();
+        $title = htmlspecialchars($this->getTitle());
+        $actions = $this->displayActions();
 
         $html = array();
         $html[] = '<div class="title"><div style="float: left;" class="entry-title">' . $title . '</div>';
@@ -83,8 +84,8 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         return implode(PHP_EOL, $html);
     }
 
-    public function display_content()
+    public function displayContent()
     {
-        return $this->get_object()->get_description();
+        return $this->getObject()->get_description();
     }
 }

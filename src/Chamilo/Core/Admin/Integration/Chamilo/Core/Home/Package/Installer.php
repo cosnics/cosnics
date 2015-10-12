@@ -24,7 +24,7 @@ class Installer extends \Chamilo\Core\Home\Action\Installer
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     \Chamilo\Core\Home\Storage\DataClass\Column :: class_name(),
-                    \Chamilo\Core\Home\Storage\DataClass\Column :: PROPERTY_USER),
+                    \Chamilo\Core\Home\Storage\DataClass\Column :: PROPERTY_USER_ID),
                 new StaticConditionVariable(0));
             $condition = new AndCondition($conditions);
 
@@ -37,13 +37,14 @@ class Installer extends \Chamilo\Core\Home\Action\Installer
             {
 
                 $block = new \Chamilo\Core\Home\Storage\DataClass\Block();
-                $block->set_column($column->get_id());
-                $block->set_title(Translation :: get('PortalHome', null, \Chamilo\Core\Admin\Manager :: context()));
-                $registration = \Chamilo\Core\Home\Storage\DataManager :: retrieve_home_block_registration_by_context_and_block(
-                    static :: package(),
-                    'PortalHome');
-                $block->set_registration_id($registration->get_id());
-                $block->set_user('0');
+
+                $block->setParentId($column->getId());
+                $block->setContext(\Chamilo\Core\Admin\Manager :: context());
+                $block->setBlockType('PortalHome');
+                $block->setVisibility(true);
+                $block->setTitle(Translation :: get('PortalHome', null, \Chamilo\Core\Admin\Manager :: context()));
+                $block->setUserId(0);
+
                 if (! $block->create())
                 {
                     return false;

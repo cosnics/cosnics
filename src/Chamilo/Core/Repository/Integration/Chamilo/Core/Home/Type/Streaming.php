@@ -21,7 +21,7 @@ class Streaming extends Block
      *
      * @return array
      */
-    public static function get_supported_types()
+    public static function getSupportedTypes()
     {
         $result = array();
 
@@ -34,13 +34,12 @@ class Streaming extends Block
         return $result;
     }
 
-    public function __construct($parent, $block_info, $configuration)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration);
-        $this->default_title = Translation :: get('Streaming');
+        parent :: __construct($renderer, $block, Translation :: get('Streaming'));
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }
@@ -50,9 +49,9 @@ class Streaming extends Block
      *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
-        $contentObject = $this->get_object();
+        $contentObject = $this->getObject();
 
         $renditionImplementation = ContentObjectRenditionImplementation :: factory(
             $contentObject,

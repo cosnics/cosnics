@@ -16,18 +16,19 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseTypeCourseList extends Block
 {
+    const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
+    const CONFIGURATION_SHOW_WHEN_EMPTY = 'show_when_empty';
+    const CONFIGURATION_COURSE_TYPE = 'course_type';
 
-    private $renderer;
+    private $courseRenderer;
 
-    private $course_type;
+    private $courseType;
 
-    public function as_html($view = '')
+    public function toHtml($view = '')
     {
-        $renderer = $this->get_renderer();
-
-        if ($renderer->get_courses()->size() > 0)
+        if ($this->getCourseRenderer()->get_courses()->size() > 0)
         {
-            return parent :: as_html($view);
+            return parent :: toHtml($view);
         }
         else
         {
@@ -35,21 +36,21 @@ class CourseTypeCourseList extends Block
         }
     }
 
-    function display_content()
+    function displayContent()
     {
         $configuration = $this->get_configuration();
 
         $html = array();
-        $renderer = $this->get_renderer();
+        $renderer = $this->getCourseRenderer();
 
-        if ($configuration['show_new_icons'])
+        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS))
         {
             $renderer->show_new_publication_icons();
         }
 
         $html[] = $renderer->as_html(false);
 
-        if (! $configuration['show_new_icons'])
+        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_WHEN_EMPTY, true))
         {
             $courseTypeLink = new Redirect(array());
 
@@ -63,10 +64,10 @@ class CourseTypeCourseList extends Block
 
     function get_title()
     {
-        $course_type = $this->course_type;
-        if ($course_type && ! is_null($course_type))
+        $courseType = $this->courseType;
+        if ($courseType && ! is_null($courseType))
         {
-            return $course_type->get_title();
+            return $courseType->get_title();
         }
         else
         {
@@ -74,38 +75,39 @@ class CourseTypeCourseList extends Block
         }
     }
 
-    function get_renderer()
+    function getCourseRenderer()
     {
-        if ($this->renderer == null)
+        if ($this->courseRenderer == null)
         {
             // $this->renderer = new SelectedCourseTypeCourseListRenderer($this, $this->get_link_target(),
-            // $course_type);
-            $this->renderer = new FilteredCourseListRenderer(
+            // $courseType);
+            $this->courseRenderer = new FilteredCourseListRenderer(
                 $this,
                 $this->get_link_target(),
-                $this->get_course_type_id());
+                $this->getCourseTypeId());
         }
-        return $this->renderer;
+        return $this->courseRenderer;
     }
 
-    function get_course_type()
+    function getCourseType()
     {
-        $configuration = $this->get_configuration();
-        if (isset($configuration['course_type']))
+        $courseTypeId = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
+
+        if ($courseTypeId)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseType :: class_name(), CourseType :: PROPERTY_ID),
-                new StaticConditionVariable($configuration['course_type']));
-            $this->course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve(
+                new StaticConditionVariable($courseTypeId));
+            $this->courseType = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve(
                 CourseType :: class_name(),
                 new DataClassRetrieveParameters($condition));
         }
         else
         {
-            $this->course_type = null;
+            $this->courseType = null;
         }
 
-        return $this->course_type;
+        return $this->courseType;
     }
 
     /**
@@ -113,27 +115,17 @@ class CourseTypeCourseList extends Block
      *
      * @return int
      */
-    protected function get_course_type_id()
+    protected function getCourseTypeId()
     {
-        $course_type = $this->get_course_type();
-        return $course_type ? $course_type->get_id() : 0;
+        $courseType = $this->getCourseType();
+        return $courseType ? $courseType->get_id() : 0;
     }
 
-    /**
-     * We need to override this because else we would redirect to the home page
-     *
-     * @param $parameters
-     */
-    function get_link($parameters)
+    function isVisible()
     {
-        return $this->get_parent()->get_link($parameters);
-    }
-
-    function is_visible()
-    {
-        if ($this->get_user() instanceof \Chamilo\Core\User\Storage\DataClass\User)
+        if ($this->getUser() instanceof \Chamilo\Core\User\Storage\DataClass\User)
         {
-            if ($this->is_empty() && ! $this->show_when_empty())
+            if ($this->isEmpty() && ! $this->showWhenEmpty())
             {
                 return false;
             }
@@ -146,21 +138,17 @@ class CourseTypeCourseList extends Block
         }
     }
 
-    function show_when_empty()
+    function showWhenEmpty()
     {
-        $configuration = $this->get_configuration();
-
-        $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
-        $result = (bool) $result;
-        return $result;
+        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_WHEN_EMPTY, true);
     }
 
-    function is_empty()
+    function isEmpty()
     {
-        return $this->get_renderer()->get_courses()->size() <= 0;
+        return $this->getCourseRenderer()->get_courses()->size() <= 0;
     }
 
-    function show_empty_courses()
+    function showEmptyCourses()
     {
         return true;
     }

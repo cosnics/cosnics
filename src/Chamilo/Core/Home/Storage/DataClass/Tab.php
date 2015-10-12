@@ -13,14 +13,13 @@ use Chamilo\Core\Home\Storage\DataManager;
 class Tab extends Element
 {
 
-    public function can_be_deleted()
+    public function canBeDeleted()
     {
-        $blocks = DataManager :: retrieve_home_tab_blocks($this);
+        $blocks = DataManager :: retrieveTabBlocks($this);
 
         while ($block = $blocks->next_result())
         {
-            $context = $block->get_context();
-            if ($context == 'Chamilo\Core\Admin' || $context == 'Chamilo\Core\User')
+            if ($block->getContext() == 'Chamilo\Core\Admin' || $block->getContext() == 'Chamilo\Core\User')
             {
                 return false;
             }

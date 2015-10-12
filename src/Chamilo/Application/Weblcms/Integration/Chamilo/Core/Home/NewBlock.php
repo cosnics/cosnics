@@ -39,7 +39,7 @@ class NewBlock extends Block
 
     private $courses;
 
-    public function get_content($tool)
+    public function getContent($tool)
     {
         // All user courses for active course types
         $excludedCourseTypes = explode(
@@ -51,7 +51,7 @@ class NewBlock extends Block
                 $excludedCourseTypes));
 
         // All user courses
-        $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->get_user(), $archiveCondition);
+        $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->getUser(), $archiveCondition);
 
         $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, 'Chamilo\Application\Weblcms'));
 
@@ -66,6 +66,7 @@ class NewBlock extends Block
 
         $course_settings_controller = \Chamilo\Application\Weblcms\CourseSettingsController :: get_instance();
         $unique_publications = array();
+
         while ($course = $user_courses->next_result())
         {
             $this->courses[$course->get_id()] = $course;
@@ -74,7 +75,7 @@ class NewBlock extends Block
                 $course,
                 \Chamilo\Application\Weblcms\CourseSettingsConnector :: VISIBILITY) == 1)
             {
-                $condition = $this->get_publication_conditions($course, $tool);
+                $condition = $this->getPublicationConditions($course, $tool);
                 $course_module_id = WeblcmsDataManager :: retrieve_course_tool_by_name($tool)->get_id();
                 $location = \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
                     \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: TYPE_COURSE_MODULE,
@@ -109,7 +110,7 @@ class NewBlock extends Block
         return $unique_publications;
     }
 
-    private function get_publication_conditions($course, $tool)
+    private function getPublicationConditions($course, $tool)
     {
         $type = null;
         switch ($tool)
@@ -126,12 +127,12 @@ class NewBlock extends Block
         }
         $last_visit_date = \Chamilo\Application\Weblcms\Storage\DataManager :: get_last_visit_date(
             $course->get_id(),
-            $this->get_user_id(),
+            $this->getUserId(),
             $tool,
             0);
 
         $conditions = array();
-        $conditions[] = WeblcmsDataManager :: get_publications_condition($course, $this->get_user(), $tool, $type);
+        $conditions[] = WeblcmsDataManager :: get_publications_condition($course, $this->getUser(), $tool, $type);
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
@@ -141,12 +142,12 @@ class NewBlock extends Block
         return new AndCondition($conditions);
     }
 
-    protected function get_course_by_id($course_id)
+    protected function getCourseById($course_id)
     {
         return $this->courses[$course_id];
     }
 
-    public function get_oversized_warning()
+    public function getOversizedWarning()
     {
         return '<div class="warning-message" style="width: auto; margin: 0 0 1em 0; position: static;">' .
              Translation :: get('OversizedWarning', null, Utilities :: COMMON_LIBRARIES) . ' <a href="?' .

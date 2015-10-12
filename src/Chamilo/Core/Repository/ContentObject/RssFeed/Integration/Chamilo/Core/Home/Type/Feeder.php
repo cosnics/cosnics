@@ -8,13 +8,12 @@ use Chamilo\Libraries\Platform\Translation;
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
 {
 
-    public function __construct($parent, $block_info, $configuration)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration);
-        $this->default_title = Translation :: get('Feeder');
+        parent :: __construct($renderer, $block, Translation :: get('Feeder'));
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }
@@ -24,16 +23,16 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
      *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
-        $content_object = $this->get_object();
+        $content_object = $this->getObject();
 
         $html = array();
         $feed = RenditionImplementation :: parse_file($content_object->get_url());
 
         if ($feed)
         {
-            $target = $this->get_link_target();
+            $target = $this->getLinkTarget();
             $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
             $icon = Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\ContentObject\RssFeed',

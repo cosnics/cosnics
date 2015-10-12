@@ -36,11 +36,11 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_PARENT_ID, 
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_SORT, 
-                self :: PROPERTY_USER_ID, 
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_PARENT_ID,
+                self :: PROPERTY_TITLE,
+                self :: PROPERTY_SORT,
+                self :: PROPERTY_USER_ID,
                 self :: PROPERTY_CONFIGURATION));
     }
 
@@ -170,10 +170,10 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(static :: class_name(), static :: PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Element :: class_name(), static :: PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
         $childElements = DataManager :: retrieves(Block :: class_name(), $condition);
-        
+
         while ($childElement = $childElements->next_result())
         {
             if (! $childElement->delete())
@@ -181,29 +181,29 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
                 return false;
             }
         }
-        
+
         return parent :: delete();
     }
 
     public function hasChildren()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $childCount = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
-        
+
         return ($childCount == 0);
     }
 
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_SORT);
+        return new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_SORT);
     }
 
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID));
+        return array(new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID));
     }
 
     /**
@@ -226,7 +226,7 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
     {
         $configuration = $this->getConfiguration();
         $configuration[$variable] = $value;
-        
+
         $this->setConfiguration($configuration);
     }
 }
