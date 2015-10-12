@@ -34,7 +34,7 @@ class SubmitterGroupSubmissionsTable extends DataClassTable implements TableForm
                     false));
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSIO),
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION),
                     Translation :: get('DeleteSelected')));
         }
         return $actions;
