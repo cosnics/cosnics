@@ -67,4 +67,9 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         return '<div style="height: 4px;"></div>' . implode(PHP_EOL, $html);
     }
+
+    public function isConfigurable()
+    {
+        return true;
+    }
 }

@@ -61,4 +61,9 @@ class Streaming extends Block
 
         return ContentObjectRendition :: factory($renditionImplementation)->render();
     }
+
+    public function isConfigurable()
+    {
+        return true;
+    }
 }

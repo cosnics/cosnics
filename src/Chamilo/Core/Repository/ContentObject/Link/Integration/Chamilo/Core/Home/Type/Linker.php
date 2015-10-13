@@ -28,4 +28,9 @@ class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         return implode(PHP_EOL, $html);
     }
+
+    public function isConfigurable()
+    {
+        return true;
+    }
 }

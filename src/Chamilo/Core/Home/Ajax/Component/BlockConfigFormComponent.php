@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
-use Chamilo\Core\Home\Form\BlockConfigurationForm;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -30,20 +29,20 @@ class BlockConfigFormComponent extends \Chamilo\Core\Home\Ajax\Manager
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-        
+
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $block = DataManager :: retrieve_by_id(
-            Block :: class_name(), 
+            Block :: class_name(),
             intval($this->getPostDataValue(self :: PARAM_BLOCK)));
-        
+
         $formClassName = $block->getContext() . '\Integration\Chamilo\Core\Home\Form\\' . $block->getBlockType() . 'Form';
         $form = new $formClassName($block);
-        
-        if ($block->get_user() == $user_id)
+
+        if ($block->getUserId() == $user_id)
         {
             $result = new JsonAjaxResult(200);
             $result->set_property(self :: PROPERTY_FORM, $form->toHtml());

@@ -27,7 +27,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
              * Therefore do not use SystemAnnouncement::...
              */
             return Theme :: getInstance()->getImagePath(
-                ContentObject :: get_content_object_type_namespace('SystemAnnouncement'), 
+                ContentObject :: get_content_object_type_namespace('SystemAnnouncement'),
                 'Logo/' . $size);
         }
     }
@@ -38,7 +38,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         {
             return false;
         }
-        
+
         return true; // i.e.display on homepage when anonymous
     }
 
@@ -57,7 +57,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
     /**
      * Returns the url to the icon.
-     * 
+     *
      * @return string
      */
     public function getIcon()
@@ -72,7 +72,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
             $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_user(
                 $this->getUserId());
         }
-        
+
         return $this->publications;
     }
 
@@ -83,7 +83,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];
-        
+
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }
@@ -91,41 +91,46 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
     public function displayContent()
     {
         $publcations = $this->getPublications();
-        
+
         if ($publcations->size() == 0)
         {
             return htmlspecialchars(Translation :: get('NoSystemAnnouncementsCurrently'));
         }
-        
+
         $data = array();
-        
+
         while ($publication = $publcations->next_result())
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 (int) $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
-            
+
             $icon = $content_object->get_icon_image(
-                Theme :: ICON_MINI, 
+                Theme :: ICON_MINI,
                 ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
-            
+
             $href = htmlspecialchars($this->get_publication_link($publication));
             $title = htmlspecialchars($content_object->get_title());
             $target = $this->get_view() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
             $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
-            
+
             $data[] = array($icon, $link);
         }
-        
+
         $table = new SortableTable($data);
         $table->setAttribute('class', 'data_table invisible_table');
         $table->set_header(0, null, false);
         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
         $table->set_header(1, null, false);
         $table->getHeader()->setColAttributes(1, 'class="invisible"');
-        
+
         $html[] = $table->as_html();
-        
+
         return implode(PHP_EOL, $html);
+    }
+
+    public function isConfigurable()
+    {
+        return true;
     }
 }

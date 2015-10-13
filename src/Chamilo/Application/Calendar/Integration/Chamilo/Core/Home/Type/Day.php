@@ -23,24 +23,29 @@ class Day extends \Chamilo\Core\Home\BlockRendition
     public function displayContent()
     {
         $dataProvider = new CalendarRendererProvider(
-            new CalendarRendererProviderRepository(), 
-            $this->getUser(), 
-            $this->getUser(), 
-            array(), 
+            new CalendarRendererProviderRepository(),
+            $this->getUser(),
+            $this->getUser(),
+            array(),
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
-        
+
         $calendarLegend = new Legend($dataProvider);
-        
+
         $time = Request :: get('time') ? intval(Request :: get('time')) : time();
         $minidaycalendar = new MiniDayRenderer(
-            $dataProvider, 
-            $calendarLegend, 
-            $time, 
-            $this->getLinkTarget(), 
-            $this->getBlock()->getSetting(self :: CONFIGURATION_HOUR_STEP, 1), 
-            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START), 
+            $dataProvider,
+            $calendarLegend,
+            $time,
+            $this->getLinkTarget(),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_HOUR_STEP, 1),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START),
             $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_END));
-        
+
         return $minidaycalendar->render();
+    }
+
+    public function isConfigurable()
+    {
+        return true;
     }
 }
