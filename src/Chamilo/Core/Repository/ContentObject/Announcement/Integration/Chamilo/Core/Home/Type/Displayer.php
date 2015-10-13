@@ -29,4 +29,9 @@ class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\B
             $this->getRenderer());
         return $display->render();
     }
+
+    public function isConfigurable()
+    {
+        return true;
+    }
 }

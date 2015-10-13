@@ -98,7 +98,7 @@ $(function() {
         var columnId, rowId, countColumns, widthBox, widthRow, widthPercentage, widthCurrentTotal, widthSurplus;
 
         columnId = $(this).attr("id");
-        rowId = $(this).parent().attr("id");
+        tabId = $(this).parent().attr("id");
         countColumns = $("div.portal_column", $(this).parent()).length;
 
         widthBox = $(this).width();
@@ -108,7 +108,7 @@ $(function() {
 
         widthCurrentTotal = 0;
 
-        $("#" + rowId + " div.portal_column").each(function(i) {
+        $("#" + tabId + " div.portal_column").each(function(i) {
             var curWidthBox, curWidthPercentage;
             curWidthBox = $(this).width();
             curWidthPercentage = (curWidthBox / widthRow) * 100;
@@ -305,7 +305,7 @@ $(function() {
         for ( var i in ordering) {
         var availablePackage = $('<span></span>');
         availablePackage.addClass('package');
-        availablePackage.attr('id', 'package_' + i);
+        availablePackage.attr('data-context', i);
         // availablePackage.css('background-image', 'url(' +
         // availableBlocks[i].image + ')');
 
@@ -333,7 +333,7 @@ $(function() {
 
         availableComponent.addClass('component');
         availableComponent.css('cursor', 'pointer');
-        availableComponent.attr('id', i + '-' + availableBlocks[i].components[j].id);
+        availableComponent.attr('data-block', availableBlocks[i].components[j].id);
         availableComponent.attr('title', availableBlocks[i].components[j].name);
 
         componentButton = $('<div />');
@@ -427,14 +427,12 @@ $(function() {
         columnId = column.attr("id");
         order = column.sortable("serialize");
 
-        var blockId = $(this).attr("id");
-        blockId = blockId.split('-');
+        var blockId = $(this).data("block");
 
         var parameters = {
             'application' : ajaxContext,
             'go' : 'block_add',
-            'block_context' : blockId[0],
-            'block_component' : blockId[1],
+            'block' : blockId,
             'column' : columnId,
             'order' : order
         };
@@ -532,10 +530,9 @@ $(function() {
         }
         }
 
-        var selectedPackage = $('#packages-list .package.selected-package').attr('id');
+        var selectedPackage = $('#packages-list .package.selected-package').data('context');
         if (typeof (selectedPackage) == 'string' && selectedPackage !== 'all_packages') {
-        var packageId = explode("_", selectedPackage, 2);
-        packageId = packageId[1];
+        packageId = selectedPackage;
         } else {
         selectedPackage = null;
         }
@@ -543,37 +540,27 @@ $(function() {
         var displayPackage = true;
 
         for ( var i in availableBlocks) {
-        if (typeof (selectedPackage) == 'string' && i != packageId) {
-        displayPackage = false;
-        } else {
-        displayPackage = true;
-        }
-
-        for ( var j in availableBlocks[i].components) {
-        var blockName = availableBlocks[i].components[j].name;
-
-        var identifier = str_replace('\\', '\\\\', i);
-        var block = $('#' + str_replace('\\', '\\\\', i) + '-' + availableBlocks[i].components[j].id);
-
-        if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) === -1) {
-        // alert('package: ' + i + ' || block: ' + blockName + ' ||
-        // search no match');
-        block.hide();
-        } else if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) !== -1) {
-        // alert('package: ' + i + ' || block: ' + blockName + ' ||
-        // search match');
-        block.show();
-        } else if (displayPackage === true) {
-        // alert('package: ' + i + ' || block: ' + blockName + ' ||
-        // no search display package');
-        block.show();
-        } else {
-        // alert('package: ' + i + ' || block: ' + blockName + ' ||
-        // no search no display package');
-        block.hide();
-        }
-
-        }
+            if (typeof (selectedPackage) == 'string' && i != packageId) {
+                displayPackage = false;
+            } else {
+                displayPackage = true;
+            }
+    
+            for ( var j in availableBlocks[i].components) {
+                
+                var blockName = availableBlocks[i].components[j].name;
+                var block = $('div.component[data-block="' + availableBlocks[i].components[j].id + '"]');
+        
+                if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) === -1) {
+                    block.hide();
+                } else if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) !== -1) {
+                    block.show();
+                } else if (displayPackage === true) {
+                    block.show();
+                } else {
+                    block.hide();
+                }
+            }
         }
 
         if ($('#components .component').length == 0) {
@@ -632,7 +619,7 @@ $(function() {
     function addColumn(e, ui) {
         e.preventDefault();
 
-        var row, rowId;
+        var tab, tabId;
 
         tab = $(".portal_tab:visible");
         tabId = tab.attr('id');
@@ -654,7 +641,7 @@ $(function() {
             columnHtml = json.properties.html;
             newWidths = json.properties.width;
 
-            lastColumn = $("div.portal_column:last", row);
+            lastColumn = $("div.portal_column:last", tab);
 
             if (lastColumn.length > 0) {
             lastColumn.css('margin-right', '1%');
@@ -1052,7 +1039,7 @@ $(function() {
         blockSplit = block.split("_");
         blockId = blockSplit[2];
 
-        newColumn = $("#portal_tab_" + newTabId + " .portal_row:first .portal_column:first").attr('id');
+        newColumn = $("#portal_tab_" + newTabId + " .portal_column:first").attr('id');
         newColumnSplit = newColumn.split("_");
         newColumnId = newColumnSplit[2];
 
