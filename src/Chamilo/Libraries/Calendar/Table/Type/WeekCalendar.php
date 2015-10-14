@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -31,15 +30,37 @@ class WeekCalendar extends Calendar
     private $hourStep;
 
     /**
+     *
+     * @var int
+     */
+    private $startHour;
+
+    /**
+     *
+     * @var int
+     */
+    private $endHour;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $hideOtherHours;
+
+    /**
      * Creates a new week calendar
      *
      * @param int $displayTime A time in the week to be displayed
      * @param int $hourStep The number of hours for one table cell. Defaults to 2.
      */
-    public function __construct($displayTime, $hourStep = 2)
+    public function __construct($displayTime, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
         $this->navigationHtml = '';
         $this->hourStep = $hourStep;
+        $this->startHour = $startHour;
+        $this->endHour = $endHour;
+        $this->hideOtherHours = $hideOtherHours;
+
         parent :: __construct($displayTime);
         $this->buildTable();
     }
@@ -52,6 +73,70 @@ class WeekCalendar extends Calendar
     public function getHourStep()
     {
         return $this->hourStep;
+    }
+
+    /**
+     * Sets the number of hours for one table cell.
+     *
+     * @return int
+     */
+    public function setHourStep($hourStep)
+    {
+        $this->hourStep = $hourStep;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param integer $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     *
+     * @param integer $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getHideOtherHours()
+    {
+        return $this->hideOtherHours;
+    }
+
+    /**
+     *
+     * @param boolean $hideOtherHours
+     */
+    public function setHideOtherHours($hideOtherHours)
+    {
+        $this->hideOtherHours = $hideOtherHours;
     }
 
     /**
@@ -104,9 +189,9 @@ class WeekCalendar extends Calendar
         $firstDay = $this->getStartTime();
         $lastDay = $this->getEndTime;
 
-        $workingStart = LocalSetting :: get('working_hours_start');
-        $workingEnd = LocalSetting :: get('working_hours_end');
-        $hide = LocalSetting :: get('hide_none_working_hours');
+        $workingStart = $this->getStartHour();
+        $workingEnd = $this->getEndHour();
+        $hide = $this->getHideOtherHours();
         $start = 0;
         $end = 24;
 
@@ -176,9 +261,9 @@ class WeekCalendar extends Calendar
     private function addEvents()
     {
         $events = $this->getEventsToShow();
-        $workingStart = LocalSetting :: get('working_hours_start');
-        $workingEnd = LocalSetting :: get('working_hours_end');
-        $hide = LocalSetting :: get('hide_none_working_hours');
+        $workingStart = $this->getStartHour();
+        $workingEnd = $this->getEndHour();
+        $hide = $this->getHideOtherHours();
         $start = 0;
         $end = 24;
 
