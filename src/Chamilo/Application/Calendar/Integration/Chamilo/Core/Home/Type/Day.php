@@ -6,6 +6,7 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *
@@ -14,11 +15,25 @@ use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Day extends \Chamilo\Core\Home\BlockRendition
+class Day extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {
     const CONFIGURATION_HOUR_STEP = 'hour_step';
     const CONFIGURATION_TIME_START = 'time_start';
     const CONFIGURATION_TIME_END = 'time_end';
+    const CONFIGURATION_TIME_HIDE = 'time_hide';
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(
+            self :: CONFIGURATION_HOUR_STEP,
+            self :: CONFIGURATION_TIME_START,
+            self :: CONFIGURATION_TIME_END,
+            self :: CONFIGURATION_TIME_HIDE);
+    }
 
     public function displayContent()
     {
@@ -38,14 +53,10 @@ class Day extends \Chamilo\Core\Home\BlockRendition
             $time,
             $this->getLinkTarget(),
             $this->getBlock()->getSetting(self :: CONFIGURATION_HOUR_STEP, 1),
-            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START),
-            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_END));
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START, 8),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_END, 17),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_HIDE, 17));
 
         return $minidaycalendar->render();
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

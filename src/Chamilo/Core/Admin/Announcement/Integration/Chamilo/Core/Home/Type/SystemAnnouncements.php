@@ -8,11 +8,22 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
+class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {
+    const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
     private $publications;
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_SHOW_EMPTY);
+    }
 
     public static function getDefaultImagePath($application = '', $type = '', $size = Theme :: ICON_MINI)
     {
@@ -44,10 +55,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
 
     public function showWhenEmpty()
     {
-        $configuration = $this->get_configuration();
-        $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
-        $result = (bool) $result;
-        return $result;
+        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_EMPTY, true);
     }
 
     public function isEmpty()
@@ -127,10 +135,5 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

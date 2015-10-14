@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class Installer extends \Chamilo\Core\Home\Action\Installer
+class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     public function extra()

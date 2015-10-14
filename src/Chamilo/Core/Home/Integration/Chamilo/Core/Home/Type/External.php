@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * An "External" block.
@@ -12,9 +13,19 @@ use Chamilo\Libraries\Platform\Translation;
  * @author laurent.opprecht@unige.ch
  * @package home.block
  */
-class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
     const CONFIGURATION_SCROLLING = 'scrolling';
+    const CONFIGURATION_HEIGHT = 'height';
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_OBJECT_ID, self :: CONFIGURATION_SCROLLING, self :: CONFIGURATION_HEIGHT);
+    }
 
     /**
      * Returns the list of type names that this block can map to.
@@ -43,8 +54,7 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
 
     public function getHeight()
     {
-        $result = $this->get('height', '300');
-        $resut = (int) $result;
+        $result = (int) $this->getBlock()->getSetting(self :: CONFIGURATION_HEIGHT, 300);
         $result = max($this->getMinHeight(), $result);
         return $result;
     }
@@ -65,10 +75,5 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
 
 EOT;
         return $result;
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

@@ -40,17 +40,25 @@ class BlockConfigFormComponent extends \Chamilo\Core\Home\Ajax\Manager
             intval($this->getPostDataValue(self :: PARAM_BLOCK)));
 
         $formClassName = $block->getContext() . '\Integration\Chamilo\Core\Home\Form\\' . $block->getBlockType() . 'Form';
-        $form = new $formClassName($block);
 
-        if ($block->getUserId() == $user_id)
+        if (class_exists($formClassName))
         {
-            $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PROPERTY_FORM, $form->toHtml());
-            $result->display();
+            $form = new $formClassName($block);
+
+            if ($block->getUserId() == $user_id)
+            {
+                $result = new JsonAjaxResult(200);
+                $result->set_property(self :: PROPERTY_FORM, $form->toHtml());
+                $result->display();
+            }
+            else
+            {
+                JsonAjaxResult :: not_allowed();
+            }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult :: not_found();
         }
     }
 }

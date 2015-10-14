@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+
 /**
  * A "Static" block.
  * I.e. a block that display the title and description of an object. Usefull to display free html
@@ -11,7 +13,7 @@ namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
  * @author laurent.opprecht@unige.ch
  * @package home.block
  */
-class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
 
     /**
@@ -87,10 +89,5 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     public function displayContent()
     {
         return $this->getObject()->get_description();
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

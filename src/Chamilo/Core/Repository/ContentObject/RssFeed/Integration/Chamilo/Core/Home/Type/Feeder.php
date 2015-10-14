@@ -4,8 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core
 use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\RenditionImplementation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
 
     public function __construct($renderer, $block)
@@ -66,10 +67,5 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         }
 
         return '<div style="height: 4px;"></div>' . implode(PHP_EOL, $html);
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

@@ -13,6 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *
@@ -185,7 +186,7 @@ class BlockRendition
 
     public function isConfigurable()
     {
-        return false;
+        return $this instanceof ConfigurableInterface;
     }
 
     /**
