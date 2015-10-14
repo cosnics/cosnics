@@ -16,7 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class SubscribedUserTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_UNSUBSCRIBE_USERS;
+    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Manager :: PARAM_USERS;
 
     public function get_implemented_form_actions()
     {

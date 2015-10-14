@@ -287,7 +287,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $user_ids);
 
         $condition = new AndCondition($conditions);
-
         return self :: deletes(CourseGroupUserRelation :: class_name(), $condition);
     }
 
