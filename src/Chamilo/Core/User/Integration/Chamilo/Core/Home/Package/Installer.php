@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Core\Home\Action\Installer
+class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     public function extra()

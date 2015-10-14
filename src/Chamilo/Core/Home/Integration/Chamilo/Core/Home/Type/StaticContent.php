@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+
 /**
  * A "Static" block.
  * I.e. a block that display the title and description of an object. Usefull to display free html
@@ -11,7 +13,8 @@ namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
  * @author laurent.opprecht@unige.ch
  * @package home.block
  */
-class StaticContent extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class StaticContent extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements
+    ConfigurableInterface
 {
 
     /**
@@ -43,11 +46,6 @@ class StaticContent extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Ho
     public function isViewAttachmentAllowed($object)
     {
         // Is the current user the owner?
-        return $object->get_owner_id() == $this->get_user_id();
-    }
-
-    public function isConfigurable()
-    {
-        return true;
+        return $object->get_owner_id() == $this->getUserId();
     }
 }

@@ -540,27 +540,27 @@ $(function() {
         var displayPackage = true;
 
         for ( var i in availableBlocks) {
-            if (typeof (selectedPackage) == 'string' && i != packageId) {
-                displayPackage = false;
-            } else {
-                displayPackage = true;
-            }
-    
-            for ( var j in availableBlocks[i].components) {
-                
-                var blockName = availableBlocks[i].components[j].name;
-                var block = $('div.component[data-block="' + availableBlocks[i].components[j].id + '"]');
-        
-                if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) === -1) {
-                    block.hide();
-                } else if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) !== -1) {
-                    block.show();
-                } else if (displayPackage === true) {
-                    block.show();
-                } else {
-                    block.hide();
-                }
-            }
+        if (typeof (selectedPackage) == 'string' && i != packageId) {
+        displayPackage = false;
+        } else {
+        displayPackage = true;
+        }
+
+        for ( var j in availableBlocks[i].components) {
+
+        var blockName = availableBlocks[i].components[j].name;
+        var block = $('div.component[data-block="' + availableBlocks[i].components[j].id + '"]');
+
+        if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) === -1) {
+        block.hide();
+        } else if (typeof (searchQuery) !== 'undefined' && blockName.indexOf(searchQuery) !== -1) {
+        block.show();
+        } else if (displayPackage === true) {
+        block.show();
+        } else {
+        block.hide();
+        }
+        }
         }
 
         if ($('#components .component').length == 0) {
@@ -931,18 +931,16 @@ $(function() {
                 opacity : 50
             });
 
-            $('form#home_block button[name="submit"]').bind('click', function(e, ui) {
+            $('form#block button[name="submit"]').bind('click', function(e, ui) {
                 e.preventDefault();
 
                 var submittedData = {};
 
-                $('form#home_block :input').each(function(index) {
+                $('form#block :input').each(function(index) {
                     var inputElement = $(this);
                     if (inputElement.attr('type') != 'radio' || inputElement.prop('checked') == true)
                         submittedData[inputElement.attr('name')] = inputElement.val();
                 });
-
-                var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
                 var parameters = {
                     'application' : ajaxContext,

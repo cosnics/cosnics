@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -222,6 +223,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             $dataProvider,
             $calendarLegend,
             $this->getCurrentRendererTime());
+        $renderer = $rendererFactory->getRenderer();
+
+        if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY)
+        {
+            $renderer->setStartHour(LocalSetting :: get('working_hours_start'));
+            $renderer->setEndHour(LocalSetting :: get('working_hours_end'));
+            $renderer->setHideOtherHours(LocalSetting :: get('hide_none_working_hours'));
+        }
 
         $html = array();
 
@@ -230,7 +239,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->form->toHtml();
         $html[] = '</div>';
         $html[] = '<div class="normal_calendar">';
-        $html[] = $rendererFactory->render();
+        $html[] = $renderer->render();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

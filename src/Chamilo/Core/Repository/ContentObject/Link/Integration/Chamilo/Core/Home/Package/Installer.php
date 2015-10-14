@@ -8,6 +8,6 @@ namespace Chamilo\Core\Repository\ContentObject\Link\Integration\Chamilo\Core\Ho
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Core\Home\Action\Installer
+class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 }

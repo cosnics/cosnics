@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Link\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
 
     public function __construct($renderer, $block)
@@ -27,10 +28,5 @@ class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
              '</a></div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

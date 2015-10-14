@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * Block to display streaming media.
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
  */
-class Streaming extends Block
+class Streaming extends Block implements ConfigurableInterface
 {
 
     /**
@@ -60,10 +61,5 @@ class Streaming extends Block
             $this);
 
         return ContentObjectRendition :: factory($renditionImplementation)->render();
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }

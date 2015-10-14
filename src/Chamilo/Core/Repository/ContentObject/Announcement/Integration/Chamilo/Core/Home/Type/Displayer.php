@@ -4,8 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Announcement\Integration\Chamilo
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
 
     public function __construct($renderer, $block)
@@ -28,10 +29,5 @@ class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\B
             ContentObjectRendition :: VIEW_DESCRIPTION,
             $this->getRenderer());
         return $display->render();
-    }
-
-    public function isConfigurable()
-    {
-        return true;
     }
 }
