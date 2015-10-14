@@ -225,7 +225,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getCurrentRendererTime());
         $renderer = $rendererFactory->getRenderer();
 
-        if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY)
+        if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
+             $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
         {
             $renderer->setStartHour(LocalSetting :: get('working_hours_start'));
             $renderer->setEndHour(LocalSetting :: get('working_hours_end'));
