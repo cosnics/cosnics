@@ -54,4 +54,14 @@ class Block extends \Chamilo\Core\Home\BlockRendition
 
         return $tracker->get_date();
     }
+
+    public function get_user()
+    {
+        return $this->getUser();
+    }
+
+    public function get_user_id()
+    {
+        return $this->getUserId();
+    }
 }
