@@ -2,48 +2,73 @@
 namespace Chamilo\Core\Home\Form;
 
 use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: home_block_config_form.class.php 227 2009-11-13 14:45:05Z kariboe $
  *
- * @package home.lib.forms
+ * @package Chamilo\Core\Home\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BlockConfigurationForm extends FormValidator
+abstract class ConfigurationForm extends FormValidator
 {
     const RESULT_SUCCESS = 'ObjectUpdated';
     const RESULT_ERROR = 'ObjectUpdateFailed';
 
     /**
      *
-     * @var Block
+     * @var \Chamilo\Core\Home\Storage\DataClass\Block
      */
-    private $homeblock;
+    private $block;
 
     /**
      *
-     * @var multitype
-     */
-    private $homeblock_config;
-
-    /**
-     *
-     * @param Block $homeblock
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      * @param string $action
      */
-    public function __construct($homeblock, $action)
+    public function __construct(Block $block)
     {
-        parent :: __construct('home_block', 'post', $action);
+        parent :: __construct('block', 'post', '');
 
-        $this->homeblock = $homeblock;
-        $this->homeblock_config = $homeblock->parse_settings();
-        $this->build_form();
+        $this->block = $block;
+        $this->buildForm();
         $this->setDefaults();
     }
+
+    /**
+     *
+     * @return \Chamilo\Core\Home\Storage\DataClass\Block
+     */
+    public function getBlock()
+    {
+        return $this->block;
+    }
+
+    public function buildForm()
+    {
+        $this->addSettings();
+
+        $this->addElement('hidden', Block :: PROPERTY_ID, $this->getBlock()->get_id());
+
+        $buttons[] = $this->createElement(
+            'style_submit_button',
+            'submit',
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive'));
+        $buttons[] = $this->createElement(
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    abstract function addSettings();
 
     public function build_form()
     {
@@ -156,71 +181,34 @@ class BlockConfigurationForm extends FormValidator
         }
     }
 
-    public function update_block_config()
-    {
-        $values = $this->exportValues();
-        $homeblock = $this->homeblock;
-        $homeblock_config = $this->homeblock_config;
+//     /**
+//      * Sets default values.
+//      * Traditionally, you will want to extend this method so it sets default for your learning
+//      * object type's additional properties.
+//      *
+//      * @param array $defaults Default values for this form's parameters.
+//      */
+//     public function setDefaults($defaults = array ())
+//     {
+//         $homeblock_config = $this->homeblock_config;
+//         $homeblock_current_config = $this->homeblock->get_configuration();
 
-        $problems = 0;
+//         foreach ($homeblock_config['settings'] as $category_name => $settings)
+//         {
+//             foreach ($settings as $name => $setting)
+//             {
+//                 $configuration_value = $homeblock_current_config[$name];
+//                 if (isset($configuration_value))
+//                 {
+//                     $defaults[$name] = $configuration_value;
+//                 }
+//                 else
+//                 {
+//                     $defaults[$name] = $setting['default'];
+//                 }
+//             }
+//         }
 
-        foreach ($homeblock_config['settings'] as $category_name => $settings)
-        {
-            foreach ($settings as $name => $setting)
-            {
-                if ($setting['locked'] != 'true')
-                {
-                    $block_config = new BlockConfiguration();
-                    $block_config->set_block_id($homeblock->get_id());
-                    $block_config->set_variable($name);
-                    $block_config->set_value($values[$name]);
-
-                    if (! $block_config->update())
-                    {
-                        $problems ++;
-                    }
-                }
-            }
-        }
-
-        if ($problems > 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
-     * object type's additional properties.
-     *
-     * @param array $defaults Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = array ())
-    {
-        $homeblock_config = $this->homeblock_config;
-        $homeblock_current_config = $this->homeblock->get_configuration();
-
-        foreach ($homeblock_config['settings'] as $category_name => $settings)
-        {
-            foreach ($settings as $name => $setting)
-            {
-                $configuration_value = $homeblock_current_config[$name];
-                if (isset($configuration_value))
-                {
-                    $defaults[$name] = $configuration_value;
-                }
-                else
-                {
-                    $defaults[$name] = $setting['default'];
-                }
-            }
-        }
-
-        parent :: setDefaults($defaults);
-    }
+//         parent :: setDefaults($defaults);
+//     }
 }

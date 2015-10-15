@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Home\Package;
 
 use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataClass\Row;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -40,40 +39,32 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function create_basic_home()
     {
         $tab = new Tab();
-        $tab->set_title(Translation :: get('Home'));
-        $tab->set_user('0');
+        $tab->setTitle(Translation :: get('Home'));
+        $tab->setUserId(0);
+        
         if (! $tab->create())
         {
             return false;
         }
         
-        $row = new Row();
-        $row->set_title(Translation :: get('Site'));
-        $row->set_tab($tab->get_id());
-        $row->set_user('0');
-        if (! $row->create())
+        $columnNews = new Column();
+        $columnNews->setParentId($tab->get_id());
+        $columnNews->setTitle(Translation :: get('News'));
+        $columnNews->setWidth(66);
+        $columnNews->setUserId(0);
+        
+        if (! $columnNews->create())
         {
             return false;
         }
         
-        $column_news = new Column();
-        $column_news->set_row($row->get_id());
-        $column_news->set_title(Translation :: get('News'));
-        $column_news->set_sort('1');
-        $column_news->set_width('66');
-        $column_news->set_user('0');
-        if (! $column_news->create())
-        {
-            return false;
-        }
+        $columnVarious = new Column();
+        $columnVarious->setParentId($tab->get_id());
+        $columnVarious->setTitle(Translation :: get('Various'));
+        $columnVarious->setWidth(33);
+        $columnVarious->setUserId(0);
         
-        $column_varia = new Column();
-        $column_varia->set_row($row->get_id());
-        $column_varia->set_title(Translation :: get('Various'));
-        $column_varia->set_sort('2');
-        $column_varia->set_width('33');
-        $column_varia->set_user('0');
-        if (! $column_varia->create())
+        if (! $columnVarious->create())
         {
             return false;
         }

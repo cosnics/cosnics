@@ -8,17 +8,28 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
+class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {
+    const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
     private $publications;
 
-    public static function get_default_image_path($application = '', $type = '', $size = Theme :: ICON_MINI)
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_SHOW_EMPTY);
+    }
+
+    public static function getDefaultImagePath($application = '', $type = '', $size = Theme :: ICON_MINI)
     {
         if ($type)
         {
-            return parent :: get_default_image_path($application, $type, $size);
+            return parent :: getDefaultImagePath($application, $type, $size);
         }
         else
         {
@@ -32,9 +43,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         }
     }
 
-    public function is_visible()
+    public function isVisible()
     {
-        if (! $this->get_user() || ($this->is_empty() && ! $this->show_when_empty()))
+        if (! $this->getUser() || ($this->isEmpty() && ! $this->showWhenEmpty()))
         {
             return false;
         }
@@ -42,18 +53,14 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         return true; // i.e.display on homepage when anonymous
     }
 
-    public function show_when_empty()
+    public function showWhenEmpty()
     {
-        $configuration = $this->get_configuration();
-        $result = isset($configuration['show_when_empty']) ? $configuration['show_when_empty'] : true;
-        $result = (bool) $result;
-        return $result;
+        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_EMPTY, true);
     }
 
-    public function is_empty()
+    public function isEmpty()
     {
-        $announcements = $this->get_publications();
-        return $announcements->size() == 0;
+        return $this->getPublications()->size() == 0;
     }
 
     /**
@@ -61,23 +68,23 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
      *
      * @return string
      */
-    public function get_icon()
+    public function getIcon()
     {
-        return self :: get_default_image_path();
+        return self :: getDefaultImagePath();
     }
 
-    public function get_publications()
+    public function getPublications()
     {
         if (! isset($this->publications))
         {
             $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_user(
-                $this->get_user_id());
+                $this->getUserId());
         }
 
         return $this->publications;
     }
 
-    public function get_publication_link($publication, $admin)
+    public function getPublicationLink($publication, $admin)
     {
         $paremeters = array();
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager :: package();
@@ -89,9 +96,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
         return $redirect->getUrl();
     }
 
-    public function display_content()
+    public function displayContent()
     {
-        $publcations = $this->get_publications();
+        $publcations = $this->getPublications();
 
         if ($publcations->size() == 0)
         {
@@ -110,9 +117,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition
                 Theme :: ICON_MINI,
                 ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
 
-            $href = htmlspecialchars($this->get_publication_link($publication));
+            $href = htmlspecialchars($this->getPublicationLink($publication));
             $title = htmlspecialchars($content_object->get_title());
-            $target = $this->get_view() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
+            $target = $this->getView() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
             $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
 
             $data[] = array($icon, $link);

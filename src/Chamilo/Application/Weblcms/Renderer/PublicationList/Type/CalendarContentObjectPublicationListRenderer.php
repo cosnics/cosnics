@@ -20,6 +20,7 @@ use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  * Renderer to display events in a week calendar
@@ -115,8 +116,17 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
             $dataProvider,
             $calendarLegend,
             $this->getCurrentRendererTime());
+        $renderer = $rendererFactory->getRenderer();
 
-        $html[] = $rendererFactory->render();
+        if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
+             $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
+        {
+            $renderer->setStartHour(LocalSetting :: get('working_hours_start'));
+            $renderer->setEndHour(LocalSetting :: get('working_hours_end'));
+            $renderer->setHideOtherHours(LocalSetting :: get('hide_none_working_hours'));
+        }
+
+        $html[] = $renderer->render();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

@@ -12,7 +12,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const SIZE_MEDIUM = 'medium';
     const SIZE_ORIGINAL = 'original';
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(array(self :: PROPERTY_URLS));
     }

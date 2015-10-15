@@ -15,7 +15,7 @@ class TabEditComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_TAB = 'tab';
     const PARAM_TITLE = 'title';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -23,7 +23,7 @@ class TabEditComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_TAB, self :: PARAM_TITLE);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -41,9 +41,9 @@ class TabEditComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $tab = DataManager :: retrieve_by_id(Tab :: class_name(), $tab);
         
-        if ($tab->get_user() == $user_id)
+        if ($tab->getUserId() == $user_id)
         {
-            $tab->set_title($title);
+            $tab->setTitle($title);
             if ($tab->update())
             {
                 JsonAjaxResult :: success();

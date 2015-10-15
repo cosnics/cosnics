@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
 class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_BLOCK = 'block';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -21,7 +21,7 @@ class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_BLOCK);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -38,15 +38,15 @@ class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($block_data[2]));
         
-        if ($block->get_user() == $user_id)
+        if ($block->getUserId() == $user_id)
         {
-            if ($block->is_visible())
+            if ($block->isVisible())
             {
-                $block->set_invisible();
+                $block->setVisibility(false);
             }
             else
             {
-                $block->set_visible();
+                $block->setVisibility(true);
             }
             
             if ($block->update())

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
 class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_COLUMN = 'column';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -22,7 +22,7 @@ class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_COLUMN);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -39,7 +39,7 @@ class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
             Column :: class_name(), 
             intval($this->getPostDataValue(self :: PARAM_COLUMN)));
         
-        if ($column->get_user() == $user_id)
+        if ($column->getUserId() == $user_id)
         {
             if ($column->delete())
             {

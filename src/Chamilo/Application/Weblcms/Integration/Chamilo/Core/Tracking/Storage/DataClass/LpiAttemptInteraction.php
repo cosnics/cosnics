@@ -29,7 +29,7 @@ class LpiAttemptInteraction extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
         $this->set_display_order($parameters[self :: PROPERTY_DISPLAY_ORDER]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(

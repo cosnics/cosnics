@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Storage;
 
-use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
 use Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass\LearningPathItem;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
@@ -42,6 +41,8 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -629,18 +630,27 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return true;
         }
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(BlockConfiguration :: class_name(), BlockConfiguration :: PROPERTY_VARIABLE),
-            new StaticConditionVariable('use_object'));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(BlockConfiguration :: class_name(), BlockConfiguration :: PROPERTY_VALUE),
-            new StaticConditionVariable($object->get_id()));
-        $condition = new AndCondition($conditions);
+        // Home block content object display
+        $formats = array();
+        $formats[] = 's:10:"use_object";i:' . (int) $object->get_id() . ';';
+        $formats[] = 's:10:"use_object";s:' . strlen((string) $object->get_id()) . ':"' . $object->get_id() . '";';
 
-        $blockinfos = \Chamilo\Core\Home\Storage\DataManager :: retrieves(
-            BlockConfiguration :: class_name(),
-            $condition);
-        if ($blockinfos->size() > 0)
+        $conditions = array();
+
+        foreach ($formats as $format)
+        {
+            $conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_CONFIGURATION),
+                '*' . $format . '*');
+        }
+
+        $condition = new OrCondition($conditions);
+
+        $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
+            Block :: class_name(),
+            new DataClassCountParameters($condition));
+
+        if ($usedInBlocks > 0)
         {
             return false;
         }

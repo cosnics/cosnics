@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * Block to display streaming media.
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
  */
-class Streaming extends Block
+class Streaming extends Block implements ConfigurableInterface
 {
 
     /**
@@ -21,7 +22,7 @@ class Streaming extends Block
      *
      * @return array
      */
-    public static function get_supported_types()
+    public static function getSupportedTypes()
     {
         $result = array();
 
@@ -34,13 +35,12 @@ class Streaming extends Block
         return $result;
     }
 
-    public function __construct($parent, $block_info, $configuration)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration);
-        $this->default_title = Translation :: get('Streaming');
+        parent :: __construct($renderer, $block, Translation :: get('Streaming'));
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }
@@ -50,9 +50,9 @@ class Streaming extends Block
      *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
-        $contentObject = $this->get_object();
+        $contentObject = $this->getObject();
 
         $renditionImplementation = ContentObjectRenditionImplementation :: factory(
             $contentObject,

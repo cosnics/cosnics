@@ -15,7 +15,7 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_BLOCK = 'block';
     const PARAM_TITLE = 'title';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -23,7 +23,7 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_BLOCK, self :: PARAM_TITLE);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -41,9 +41,9 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
         
-        if ($block->get_user() == $user_id)
+        if ($block->getUserId() == $user_id)
         {
-            $block->set_title($title);
+            $block->setTitle($title);
             if ($block->update())
             {
                 JsonAjaxResult :: success();

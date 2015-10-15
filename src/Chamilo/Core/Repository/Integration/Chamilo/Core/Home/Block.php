@@ -15,13 +15,23 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class Block extends \Chamilo\Core\Home\BlockRendition
 {
+    const CONFIGURATION_OBJECT_ID = 'use_object';
 
-    protected $default_title = '';
+    protected $defaultTitle = '';
 
-    public function __construct($parent, $block_info, $configuration, $default_title = '')
+    public function __construct($renderer, $block, $defaultTitle = '')
     {
-        parent :: __construct($parent, $block_info, $configuration);
-        $this->default_title = $default_title ? $default_title : Translation :: get('Object');
+        parent :: __construct($renderer, $block);
+        $this->defaultTitle = $defaultTitle ? $defaultTitle : Translation :: get('Object');
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_OBJECT_ID);
     }
 
     /**
@@ -30,14 +40,14 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return string
      */
-    protected function get_default_title()
+    protected function getDefaultTitle()
     {
-        return $this->default_title;
+        return $this->defaultTitle;
     }
 
-    protected function set_default_title($value)
+    protected function setDefaultTitle($value)
     {
-        $this->default_title = $value;
+        $this->defaultTitle = $value;
     }
 
     /**
@@ -46,24 +56,9 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return int
      */
-    public function get_object_id()
+    public function getObjectId()
     {
-        return $this->get('use_object', 0);
-    }
-
-    /**
-     * Return configuration property.
-     *
-     * @param string $name Name of the configuration property to retrieve
-     * @param object $default Default value to return if property is not defined
-     * @return object Configuration property value.
-     */
-    public function get($name, $default = null)
-    {
-        $configuration = $this->get_configuration();
-
-        $result = isset($configuration[$name]) ? $configuration[$name] : null;
-        return $result;
+        return $this->getBlock()->getSetting(self :: CONFIGURATION_OBJECT_ID, 0);
     }
 
     /**
@@ -72,9 +67,9 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return ContentObject
      */
-    public function get_object()
+    public function getObject()
     {
-        $object_id = $this->get_object_id();
+        $object_id = $this->getObjectId();
 
         if ($object_id == 0)
         {
@@ -94,27 +89,26 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return bool
      */
-    public function is_configured()
+    public function isConfigured()
     {
-        $object_id = $this->get_object_id();
-        return $object_id != 0;
+        return $this->getObjectId() != 0;
     }
 
-    public function as_html($view = '')
+    public function toHtml($view = '')
     {
-        if (! $this->is_visible())
+        if (! $this->isVisible())
         {
             return '';
         }
         if ($view)
         {
-            $this->set_view($view);
+            $this->setView($view);
         }
 
         $html = array();
-        $html[] = $this->render_header();
-        $html[] = $this->is_configured() ? $this->display_content() : $this->display_empty();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->isConfigured() ? $this->displayContent() : $this->displayEmpty();
+        $html[] = $this->renderFooter();
         return implode(PHP_EOL, $html);
     }
 
@@ -123,7 +117,7 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return string
      */
-    public function display_empty()
+    public function displayEmpty()
     {
         return Translation :: get('ConfigureBlockFirst', null, \Chamilo\Core\Home\Manager :: context());
     }

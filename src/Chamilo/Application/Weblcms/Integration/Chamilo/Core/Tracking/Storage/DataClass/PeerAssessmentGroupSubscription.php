@@ -13,7 +13,7 @@ class PeerAssessmentGroupSubscription extends \Chamilo\Core\Tracking\Storage\Dat
         $this->set_group_id($parameters[self :: PROPERTY_GROUP_ID]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(array(self :: PROPERTY_USER_ID, self :: PROPERTY_GROUP_ID));
     }

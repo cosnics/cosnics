@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -9,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 
 /**
  *
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends DataClass implements DisplayOrderDataClassListenerSupport
+class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
     const PROPERTY_TYPE = 'type';
     const PROPERTY_PARENT_ID = 'parent_id';
@@ -32,15 +32,26 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_TYPE,
-                self :: PROPERTY_PARENT_ID,
-                self :: PROPERTY_TITLE,
-                self :: PROPERTY_SORT,
-                self :: PROPERTY_USER_ID, self :: PROPERTY_CONFIGURATION));
+                self :: PROPERTY_TYPE, 
+                self :: PROPERTY_PARENT_ID, 
+                self :: PROPERTY_TITLE, 
+                self :: PROPERTY_SORT, 
+                self :: PROPERTY_USER_ID, 
+                self :: PROPERTY_CONFIGURATION));
+    }
+
+    /**
+     *
+     * @param string[] $configurationVariables
+     * @return string[]
+     */
+    public static function getConfigurationVariables($configurationVariables = array())
+    {
+        return $configurationVariables;
     }
 
     /**
@@ -77,6 +88,11 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function setParentId($parentId)
     {
         $this->set_default_property(self :: PROPERTY_PARENT_ID, $parentId);
+    }
+
+    public function isOnTopLevel()
+    {
+        return $this->getParentId() == 0;
     }
 
     /**
@@ -139,7 +155,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function getConfiguration()
     {
-        return $this->get_default_property(self :: PROPERTY_CONFIGURATION);
+        return unserialize($this->get_default_property(self :: PROPERTY_CONFIGURATION));
     }
 
     /**
@@ -148,16 +164,16 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function setConfiguration($configuration)
     {
-        $this->set_default_property(self :: PROPERTY_CONFIGURATION, $configuration);
+        $this->set_default_property(self :: PROPERTY_CONFIGURATION, serialize($configuration));
     }
 
     public function delete()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(static :: class_name(), static :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element :: class_name(), static :: PROPERTY_PARENT_ID), 
             new StaticConditionVariable($this->get_id()));
         $childElements = DataManager :: retrieves(Block :: class_name(), $condition);
-
+        
         while ($childElement = $childElements->next_result())
         {
             if (! $childElement->delete())
@@ -165,28 +181,52 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
                 return false;
             }
         }
-
+        
         return parent :: delete();
     }
 
     public function hasChildren()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID), 
             new StaticConditionVariable($this->get_id()));
-
+        
         $childCount = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
-
+        
         return ($childCount == 0);
     }
 
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_SORT);
+        return new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_SORT);
     }
 
     public function get_display_order_context_properties()
     {
-        return array(new PropertyConditionVariable(static :: class_name(), self :: PROPERTY_PARENT_ID));
+        return array(new PropertyConditionVariable(Element :: class_name(), self :: PROPERTY_PARENT_ID));
+    }
+
+    /**
+     *
+     * @param string $variable
+     * @return string
+     */
+    public function getSetting($variable, $defaultValue = null)
+    {
+        $configuration = $this->getConfiguration();
+        return (isset($configuration[$variable]) ? $configuration[$variable] : $defaultValue);
+    }
+
+    /**
+     *
+     * @param string $variable
+     * @param string $value
+     */
+    public function setSetting($variable, $value)
+    {
+        $configuration = $this->getConfiguration();
+        $configuration[$variable] = $value;
+        
+        $this->setConfiguration($configuration);
     }
 }
