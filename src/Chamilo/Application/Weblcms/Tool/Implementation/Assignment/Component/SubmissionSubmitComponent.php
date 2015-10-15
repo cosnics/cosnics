@@ -27,6 +27,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -214,7 +215,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
 
             $cgr_resultset = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
                 CourseGroupRelation :: class_name(),
-                $cgr_condition);
+                new DataClassRetrievesParameters($cgr_condition));
 
             $group_ids = array();
             while ($course_group_rel = $cgr_resultset->next_result())

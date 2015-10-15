@@ -230,13 +230,11 @@ class AssignmentUserScoresBlock extends AssignmentReportingManager
     }
 
     /**
-     * Returns the score from the given score trackers.
-     * The type of score is determined by the request. If no score type
+     * Returns the score from the given score trackers. The type of score is determined by the request. If no score type
      * is found, it will return the average score.
      *
      * @param $score_trackers \application\weblcms\integration\core\tracking\tracker\SubmissionScore The score trackers
-     *        used to
-     *        determine the score
+     *            used to determine the score
      * @return int The score
      */
     private function get_score($score_trackers)

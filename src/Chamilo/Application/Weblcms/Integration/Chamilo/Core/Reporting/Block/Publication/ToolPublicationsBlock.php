@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class ToolPublicationsBlock extends ToolBlock
 {
@@ -65,7 +66,7 @@ class ToolPublicationsBlock extends ToolBlock
 
         $content_object_publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublication :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
