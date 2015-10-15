@@ -27,73 +27,73 @@ class AttachmentViewerComponent extends Manager
     {
         $trail = BreadcrumbTrail :: get_instance();
         // $trail->add_help('courses general');
-
+        
         $failed = false;
         $error_message = '';
-
+        
         // retrieve the parent content object
         $parent_id = Request :: get(self :: PARAM_PARENT_ID);
-
+        
         if (is_null($parent_id))
         {
             throw new ParameterNotDefinedException(self :: PARAM_PARENT_ID);
         }
         $parent = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+            ContentObject :: class_name(), 
             $parent_id);
-
+        
         if (is_null($parent))
         {
             throw new ObjectNotExistException(Translation :: get('Object'), $parent);
         }
-
+        
         // retrieve the attachment
         $object_id = Request :: get(self :: PARAM_OBJECT_ID);
-
+        
         if (is_null($object_id))
         {
             $failed = true;
             $error_message = Translation :: get('NoAttachmentSelected');
         }
-
+        
         $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+            ContentObject :: class_name(), 
             $object_id);
-
+        
         if (is_null($object))
         {
             $failed = true;
             throw new ObjectNotExistException(Translation :: get('Attachment'), $object);
         }
-
+        
         // Default the attachment is attached to the content object of the
         // publication
         if (! $parent->is_attached_to_or_included_in($object_id))
-
+        
         {
             $failed = true;
             $error_message = Translation :: get('WrongObjectSelected');
         }
-
+        
         $html = array();
-
+        
         Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
-
+        
         if (! $failed)
         {
             $trail->add(
                 new Breadcrumb(
-                    $this->get_url(array('object' => $parent_id)),
+                    $this->get_url(array('object' => $parent_id)), 
                     Translation :: get('ViewAttachment', null, \Chamilo\Core\Repository\Manager :: context())));
-
+            
             $html[] = $this->render_header();
-
+            
             $html[] = ContentObjectRenditionImplementation :: launch(
-                $object,
-                ContentObjectRendition :: FORMAT_HTML,
-                ContentObjectRendition :: VIEW_FULL,
+                $object, 
+                ContentObjectRendition :: FORMAT_HTML, 
+                ContentObjectRendition :: VIEW_FULL, 
                 $this);
-
+            
             $html[] = $this->render_footer();
         }
         else
@@ -102,7 +102,7 @@ class AttachmentViewerComponent extends Manager
             $html[] = $this->display_error_message($error_message);
             $html[] = $this->render_footer();
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -114,7 +114,7 @@ class AttachmentViewerComponent extends Manager
 
     /**
      * Constructs the attachment url for the given attachment and the current object.
-     *
+     * 
      * @param ContentObject $attachment The attachment for which the url is needed.
      * @return mixed the url, or null if no view right.
      */
@@ -122,9 +122,9 @@ class AttachmentViewerComponent extends Manager
     {
         $object_id = Request :: get(self :: PARAM_OBJECT_ID);
         $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+            ContentObject :: class_name(), 
             $object_id);
-
+        
         if (! $this->is_view_attachment_allowed($object))
         {
             return null;
@@ -135,7 +135,7 @@ class AttachmentViewerComponent extends Manager
 
     /**
      * Determines whether the object may be viewed by the current user.
-     *
+     * 
      * @param ContentObject $object The content object to be tested.
      * @return boolean Whether the current user may view the content object.
      */

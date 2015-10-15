@@ -11,24 +11,24 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Block extends \Chamilo\Core\Home\BlockRendition
 {
 
-    public function get_last_login($user_id)
+    public function getLastLogin($user_id)
     {
-        return $this->get_login_logout($user_id, 'login');
+        return $this->getLoginLogout($user_id, 'login');
     }
 
-    public function get_last_logout($user_id)
+    public function getLastLogout($user_id)
     {
-        return $this->get_login_logout($user_id, 'logout');
+        return $this->getLoginLogout($user_id, 'logout');
     }
 
-    protected function get_login_logout($user_id, $type)
+    protected function getLoginLogout($user_id, $type)
     {
-        // Retrieve the last login
-        $conditions = array();
         $order_by = new OrderBy(
             new PropertyConditionVariable(
                 \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
                 \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: PROPERTY_DATE));
+
+        $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
@@ -43,15 +43,25 @@ class Block extends \Chamilo\Core\Home\BlockRendition
 
         $trackers = \Chamilo\Core\Tracking\Storage\DataManager :: retrieves(
             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
-            new DataClassRetrievesParameters($condition, 1, 0, $order_by));
+            new DataClassRetrievesParameters($condition, 1, 0, array($order_by)));
 
         $tracker = $trackers->next_result();
 
         if (is_null($tracker))
         {
-            return '0';
+            return 0;
         }
 
         return $tracker->get_date();
+    }
+
+    public function get_user()
+    {
+        return $this->getUser();
+    }
+
+    public function get_user_id()
+    {
+        return $this->getUserId();
     }
 }

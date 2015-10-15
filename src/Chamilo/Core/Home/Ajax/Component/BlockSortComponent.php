@@ -15,7 +15,7 @@ class BlockSortComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_COLUMN = 'column';
     const PARAM_ORDER = 'order';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -37,7 +37,7 @@ class BlockSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         return $blocks;
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -55,22 +55,25 @@ class BlockSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $column = DataManager :: retrieve_by_id(Column :: class_name(), intval($column_data[2]));
         
-        if ($column->get_user() == $user_id)
+        if ($column->getUserId() == $user_id)
         {
             $errors = 0;
-            
             $i = 1;
+            
             foreach ($blocks as $block_id)
             {
                 $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($block_id));
+                
                 if ($block)
                 {
-                    $block->set_column($column->get_id());
-                    $block->set_sort($i);
+                    $block->setParentId($column->get_id());
+                    $block->setSort($i);
+                    
                     if (! $block->update())
                     {
                         $errors ++;
                     }
+                    
                     $i ++;
                 }
             }

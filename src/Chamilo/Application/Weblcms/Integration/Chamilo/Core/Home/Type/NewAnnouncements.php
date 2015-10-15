@@ -21,12 +21,11 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class NewAnnouncements extends NewBlock
 {
+    const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
-    public function display_content()
+    public function displayContent()
     {
-        $configuration = $this->get_configuration();
-
-        if (! $configuration['show_content'])
+        if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_CONTENT, false))
         {
             $redirect = new Redirect(
                 array(
@@ -36,15 +35,15 @@ class NewAnnouncements extends NewBlock
             return Translation :: get('ClickForAnnouncements', array('URL' => $redirect->getUrl()));
         }
 
-        $publications = $this->get_content(self :: TOOL_ANNOUNCEMENT);
+        $publications = $this->getContent(self :: TOOL_ANNOUNCEMENT);
 
         if ($publications === self :: OVERSIZED_WARNING)
         {
-            return $this->get_oversized_warning();
+            return $this->getOversizedWarning();
         }
 
         ksort($publications);
-        $icon = $this->get_new_announcements_icon();
+        $icon = $this->getNewAnnouncementsIcon();
 
         $html = array();
         $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
@@ -63,12 +62,12 @@ class NewAnnouncements extends NewBlock
                     $html[] = '</ul>';
                 }
                 $current_course_id = $course_id;
-                $html[] = '<li>' . $this->get_course_by_id($current_course_id)->get_title() . '</li>';
+                $html[] = '<li>' . $this->getCourseById($current_course_id)->get_title() . '</li>';
                 $html[] = '<ul style="padding: 0px; margin: 2px 2px 2px 20px;">';
             }
 
             $title = htmlspecialchars($title);
-            $link = $this->get_course_viewer_link($this->get_course_by_id($course_id), $publication);
+            $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
             $html[] = '<li style="list-style: none; list-style-image: url(' . $icon . ');">' . '<a href="' . $link .
                  '" >' . $title . '</a></li>';
         }
@@ -88,14 +87,14 @@ class NewAnnouncements extends NewBlock
         return implode(PHP_EOL, $html);
     }
 
-    private function get_new_announcements_icon()
+    private function getNewAnnouncementsIcon()
     {
         return Theme :: getInstance()->getImagePath(
             \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ANNOUNCEMENT),
             'Logo/' . Theme :: ICON_MINI . 'New');
     }
 
-    private function get_course_viewer_link($course, $publication)
+    private function getCourseViewerLink($course, $publication)
     {
         $id = $publication[ContentObjectPublication :: PROPERTY_ID];
 

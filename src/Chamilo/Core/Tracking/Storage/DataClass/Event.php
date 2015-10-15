@@ -33,7 +33,7 @@ class Event extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_NAME, self :: PROPERTY_ACTIVE, self :: PROPERTY_CONTEXT));

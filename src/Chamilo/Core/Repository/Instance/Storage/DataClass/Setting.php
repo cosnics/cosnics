@@ -37,7 +37,7 @@ class Setting extends DataClass
      *
      * @return array:
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(

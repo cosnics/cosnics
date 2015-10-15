@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *
@@ -15,21 +15,32 @@ use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Day extends Block
+class Day extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {
+    const CONFIGURATION_HOUR_STEP = 'hour_step';
+    const CONFIGURATION_TIME_START = 'time_start';
+    const CONFIGURATION_TIME_END = 'time_end';
+    const CONFIGURATION_TIME_HIDE = 'time_hide';
 
-    public function display_content()
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
     {
-        $configuration = $this->get_configuration();
+        return array(
+            self :: CONFIGURATION_HOUR_STEP,
+            self :: CONFIGURATION_TIME_START,
+            self :: CONFIGURATION_TIME_END,
+            self :: CONFIGURATION_TIME_HIDE);
+    }
 
-        $hour_step = $configuration['hour_step'];
-        $time_start = $configuration['time_start'];
-        $time_end = $configuration['time_end'];
-
+    public function displayContent()
+    {
         $dataProvider = new CalendarRendererProvider(
             new CalendarRendererProviderRepository(),
-            $this->get_user(),
-            $this->get_user(),
+            $this->getUser(),
+            $this->getUser(),
             array(),
             \Chamilo\Application\Calendar\Ajax\Manager :: context());
 
@@ -40,10 +51,11 @@ class Day extends Block
             $dataProvider,
             $calendarLegend,
             $time,
-            $this->get_link_target(),
-            $hour_step,
-            $time_start,
-            $time_end);
+            $this->getLinkTarget(),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_HOUR_STEP, 1),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START, 8),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_END, 17),
+            $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_HIDE, 17));
 
         return $minidaycalendar->render();
     }

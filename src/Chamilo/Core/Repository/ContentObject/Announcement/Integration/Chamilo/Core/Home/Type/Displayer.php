@@ -4,30 +4,30 @@ namespace Chamilo\Core\Repository\ContentObject\Announcement\Integration\Chamilo
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
 
-    public function __construct($parent, $block_info, $configuration)
+    public function __construct($renderer, $block)
     {
-        parent :: __construct($parent, $block_info, $configuration);
-        $this->default_title = Translation :: get('Displayer');
+        parent :: __construct($renderer, $block, Translation :: get('Displayer'));
     }
 
-    public function is_visible()
+    public function isVisible()
     {
         return true; // i.e.display on homepage when anonymous
     }
 
-    public function display_content()
+    public function displayContent()
     {
-        $content_object = $this->get_object();
-        
+        $content_object = $this->getObject();
+
         $display = ContentObjectRenditionImplementation :: factory(
-            $content_object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_DESCRIPTION, 
-            $this->get_parent());
+            $content_object,
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_DESCRIPTION,
+            $this->getRenderer());
         return $display->render();
     }
 }

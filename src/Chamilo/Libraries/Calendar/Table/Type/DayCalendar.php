@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
@@ -30,15 +29,40 @@ class DayCalendar extends Calendar
     private $hourStep;
 
     /**
+     *
+     * @var int
+     */
+    private $startHour;
+
+    /**
+     *
+     * @var int
+     */
+    private $endHour;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $hideOtherHours;
+
+    /**
      * Creates a new day calendar
      *
      * @param int $displayTime A time in the day to be displayed
      * @param int $hourStep The number of hours for one table cell. Defaults to 1.
+     * @param int $startHour
+     * @param int $endHour
+     * @param boolean $hideOtherHours
      */
-    public function __construct($displayTime, $hourStep = 1)
+    public function __construct($displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
         $this->navigationHtml = '';
         $this->hourStep = $hourStep;
+        $this->startHour = $startHour;
+        $this->endHour = $endHour;
+        $this->hideOtherHours = $hideOtherHours;
+
         parent :: __construct($displayTime);
         $this->buildTable();
     }
@@ -64,18 +88,70 @@ class DayCalendar extends Calendar
     }
 
     /**
+     *
+     * @return integer
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     *
+     * @param integer $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     *
+     * @param integer $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getHideOtherHours()
+    {
+        return $this->hideOtherHours;
+    }
+
+    /**
+     *
+     * @param boolean $hideOtherHours
+     */
+    public function setHideOtherHours($hideOtherHours)
+    {
+        $this->hideOtherHours = $hideOtherHours;
+    }
+
+    /**
      * Gets the first date which will be displayed by this calendar.
      *
      * @return int
      */
     public function getStartTime()
     {
-        $hide = LocalSetting :: get('hide_none_working_hours');
-
-        if ($hide)
+        if ($this->getHideOtherHours())
         {
-            $workingStart = LocalSetting :: get('working_hours_start');
-            return strtotime(date('Y-m-d ' . $workingStart . ':00:00', $this->getDisplayTime()));
+            // $workingStart = LocalSetting :: get('working_hours_start');
+            return strtotime(date('Y-m-d ' . $this->getStartHour() . ':00:00', $this->getDisplayTime()));
         }
 
         return strtotime(date('Y-m-d 00:00:00', $this->getDisplayTime()));
@@ -88,12 +164,10 @@ class DayCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $hide = LocalSetting :: get('hide_none_working_hours');
-
-        if ($hide)
+        if ($this->getHideOtherHours())
         {
-            $workingEnd = LocalSetting :: get('working_hours_end');
-            return strtotime(date('Y-m-d ' . ($workingEnd - 1) . ':59:59', $this->getDisplayTime()));
+            // $workingEnd = LocalSetting :: get('working_hours_end');
+            return strtotime(date('Y-m-d ' . ($this->getEndHour() - 1) . ':59:59', $this->getDisplayTime()));
         }
 
         return strtotime('+24 Hours', $this->getStartTime());
@@ -104,78 +178,82 @@ class DayCalendar extends Calendar
      */
     protected function buildTable()
     {
-        $year_day = date('z', $this->getDisplayTime()) + 1;
-        $year_week = date('W', $this->getDisplayTime());
+        $yearDay = date('z', $this->getDisplayTime()) + 1;
+        $yearWeek = date('W', $this->getDisplayTime());
 
         $header = $this->getHeader();
         $header->addRow(
             array(
-                Translation :: get('Day', null, Utilities :: COMMON_LIBRARIES) . ' ' . $year_day . ', ' .
-                     Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $year_week));
+                Translation :: get('Day', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearDay . ', ' .
+                     Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearWeek));
         $header->setRowType(0, 'th');
 
-        $workingStart = LocalSetting :: get('working_hours_start');
-        $workingEnd = LocalSetting :: get('working_hours_end');
-        $hide = LocalSetting :: get('hide_none_working_hours');
-        $start = 0;
-        $end = 24;
+        $startHour = 0;
+        $endHour = 24;
 
-        if ($hide)
+        if ($this->getHideOtherHours())
         {
-            $start = $workingStart;
-            $end = $workingEnd;
+            $startHour = $this->getStartHour();
+            $endHour = $this->getEndHour();
         }
 
-        for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
+        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
         {
-            $table_start_date = mktime(
+            $rowId = ($hour / $this->getHourStep()) - $startHour;
+
+            $tableStartDate = mktime(
                 $hour,
                 0,
                 0,
                 date('m', $this->getDisplayTime()),
                 date('d', $this->getDisplayTime()),
                 date('Y', $this->getDisplayTime()));
-            $table_end_date = strtotime('+' . $this->getHourStep() . ' hours', $table_start_date);
-            $cellContents = $hour . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES) . ' - ' .
-                 ($hour + $this->getHourStep()) . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES);
 
-            $row = ($hour - $start) / $this->getHourStep();
+            $tableEndDate = strtotime('+' . $this->getHourStep() . ' hours', $tableStartDate);
+            $this->setCellContents($rowId, 0, $this->getCellIdentifier($hour));
 
-            $this->setCellContents($row, 0, $cellContents);
             // Highlight current hour
             if (date('Y-m-d') == date('Y-m-d', $this->getDisplayTime()))
             {
                 if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
                 {
-                    $this->updateCellAttributes($row, 0, 'class="highlight"');
+                    $this->updateCellAttributes($rowId, 0, 'class="highlight"');
                 }
             }
 
             // Is current table hour during working hours?
-            if ($hour < $workingStart || $hour >= $workingEnd)
+            if ($hour < $this->getStartHour() || $hour >= $this->getEndHour())
             {
-                $this->updateCellAttributes($row, 0, 'class="disabled_month"');
+                $this->updateCellAttributes($rowId, 0, 'class="disabled_month"');
             }
         }
     }
 
     /**
+     *
+     * @param integer $hour
+     * @return string
+     */
+    public function getCellIdentifier($hour)
+    {
+        return $hour . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES) . ' - ' .
+             ($hour + $this->getHourStep()) . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES);
+    }
+
+    /**
      * Adds the events to the calendar
      */
-    private function addEvents()
+    protected function addEvents()
     {
         $events = $this->getEventsToShow();
 
-        $workingStart = LocalSetting :: get('working_hours_start');
-        $workingEnd = LocalSetting :: get('working_hours_end');
-        $hide = LocalSetting :: get('hide_none_working_hours');
         $start = 0;
         $end = 24;
 
-        if ($hide)
+        if ($this->getHideOtherHours())
         {
-            $start = $workingStart;
-            $end = $workingEnd;
+            $start = $this->getStartHour();
+            $end = $this->getEndHour();
         }
 
         foreach ($events as $time => $items)
@@ -184,7 +262,9 @@ class DayCalendar extends Calendar
             {
                 continue;
             }
+
             $row = (date('H', $time) - $start) / $this->hourStep;
+
             foreach ($items as $index => $item)
             {
                 $cellContent = $this->getCellContents($row, 0);
@@ -204,7 +284,7 @@ class DayCalendar extends Calendar
         $prev = strtotime('-1 Day', $this->getDisplayTime());
         $next = strtotime('+1 Day', $this->getDisplayTime());
 
-        $navigation = new HTML_Table('class="calendar_navigation"');
+        $navigation = new HTML_Table('class="' . $this->getNavigationClasses() . '"');
         $navigation->updateCellAttributes(0, 0, 'style="text-align: left;"');
         $navigation->updateCellAttributes(0, 1, 'style="text-align: center;"');
         $navigation->updateCellAttributes(0, 2, 'style="text-align: right;"');
@@ -223,6 +303,11 @@ class DayCalendar extends Calendar
                  '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
 
         $this->navigationHtml = $navigation->toHtml();
+    }
+
+    public function getNavigationClasses()
+    {
+        return 'calendar_navigation';
     }
 
     /**

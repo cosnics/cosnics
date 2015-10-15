@@ -28,12 +28,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 class EndingAssignments extends Block
 {
 
-    public function display_content()
+    public function displayContent()
     {
         // deadline min 1 week (60 * 60 * 24 * 7)
         $deadline = time() + 604800;
 
-        $courses = CourseDataManager :: retrieve_all_courses_from_user($this->get_user());
+        $courses = CourseDataManager :: retrieve_all_courses_from_user($this->getUser());
 
         while ($course = $courses->next_result())
         {
@@ -103,7 +103,7 @@ class EndingAssignments extends Block
         }
 
         ksort($ending_assignments);
-        $html = $this->display_new_items($ending_assignments);
+        $html = $this->displayNewItems($ending_assignments);
 
         if (count($html) == 0)
         {
@@ -113,7 +113,7 @@ class EndingAssignments extends Block
         return implode(PHP_EOL, $html);
     }
 
-    public function display_new_items($items)
+    public function displayNewItems($items)
     {
         $html = array();
         foreach ($items as $item)
@@ -125,7 +125,7 @@ class EndingAssignments extends Block
                     Utilities :: COMMON_LIBRARIES),
                 $item['end_time']);
 
-            $html[] = '<a href="' . $item[link] . '">' . $item[title] . '</a>: ' . Translation :: get('Until') . ' ' .
+            $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' . Translation :: get('Until') . ' ' .
                  $end_date . '<br />';
         }
         return $html;

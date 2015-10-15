@@ -23,9 +23,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class AssignmentSubmissions extends Block
 {
 
-    public function display_content()
+    public function displayContent()
     {
-        $user_id = $this->get_user_id();
+        $user_id = $this->getUserId();
 
         // Retrieve the assignments of the user
         $conditions = array();
@@ -52,11 +52,12 @@ class AssignmentSubmissions extends Block
         }
 
         $items = array();
+
         while ($publication = $assignment_publications_resultset->next_result())
         {
             // Retrieve last time the publication was accessed
             $course_tool = WeblcmsDataManager :: retrieve_course_tool_by_name($publication->get_tool());
-            $last_access_time = $this->get_last_visit(
+            $last_access_time = $this->getLastVisit(
                 $user_id,
                 $publication->get_course_id(),
                 $course_tool->get_id(),
@@ -64,6 +65,7 @@ class AssignmentSubmissions extends Block
                 $publication->get_id());
 
             $item = array();
+
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -77,6 +79,7 @@ class AssignmentSubmissions extends Block
                 InequalityCondition :: GREATER_THAN,
                 new StaticConditionVariable($last_access_time));
             $condition = new AndCondition($conditions);
+
             $submissions_resultset = \Chamilo\Core\Tracking\Storage\DataManager :: retrieves(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
                 new DataClassRetrievesParameters($condition));
@@ -105,33 +108,41 @@ class AssignmentSubmissions extends Block
             }
         }
 
-        $html = $this->display_new_items($items);
+        $html = $this->displayNewItems($items);
+
         if (count($html) == 0)
         {
             return Translation :: get('NoNewSubmissionsSinceLastVisit');
         }
+
         return implode('', $html);
     }
 
-    public function display_new_items($items)
+    public function displayNewItems($items)
     {
         $html = array();
+
         foreach ($items as $item)
         {
             $html[] = '<a href="' . $item[link] . '">' . $item[title] . '</a>: ';
             $html[] = $item[count] . ' ' . Translation :: get('New') . '<br />';
         }
+
         return $html;
     }
 
-    private function get_last_visit($user_id, $course_id, $tool_id, $category_id, $publication_id)
+    private function getLastVisit($user_id, $course_id, $tool_id, $category_id, $publication_id)
     {
         $course_visit = new CourseVisit();
         $course_visit->set_user_id($user_id);
         $course_visit->set_course_id($course_id);
         $course_visit->set_tool_id($tool_id);
+
         if ($category_id == 0)
+        {
             $category_id = null;
+        }
+
         $course_visit->set_category_id($category_id);
         $course_visit->set_publication_id($publication_id);
         $course_visit = $course_visit->retrieve_course_visit_with_current_data();

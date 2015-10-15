@@ -121,7 +121,7 @@ class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
         $this->set_default_property(self :: PROPERTY_TYPE, $type);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_TYPE, self :: PROPERTY_USER_ID, self :: PROPERTY_DATE, self :: PROPERTY_IP));

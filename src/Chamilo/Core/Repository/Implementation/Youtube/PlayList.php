@@ -39,7 +39,7 @@ class PlayList extends DataClass
         return $this->set_default_property(self :: PROPERTY_DATE, $date);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_DATE, self :: PROPERTY_TITLE, self :: PROPERTY_DESCRIPTION));

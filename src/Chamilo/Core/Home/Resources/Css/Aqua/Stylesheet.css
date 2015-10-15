@@ -8,11 +8,11 @@ div.manage {
 	padding-bottom: 10px;
 }
 
-div.manage ul.toolbar,div.manage ul.toolbar_horizontal {
+div.manage ul.toolbar, div.manage ul.toolbar_horizontal {
 	float: none;
 }
 
-div.manage ul.toolbar li,div.manage ul.toolbar_horizontal li {
+div.manage ul.toolbar li, div.manage ul.toolbar_horizontal li {
 	float: none;
 	display: inline;
 }
