@@ -44,7 +44,7 @@ class AssignmentSubmissions extends Block
 
         $assignment_publications_resultset = WeblcmsDataManager :: retrieves(
             ContentObjectPublication :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         if ($assignment_publications_resultset->size() == 0)
         {

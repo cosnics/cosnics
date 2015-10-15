@@ -14,7 +14,6 @@ class ExportTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         return DataManager :: retrieves(Export :: class_name(), $parameters);
-       
     }
 
     function count_data($condition)

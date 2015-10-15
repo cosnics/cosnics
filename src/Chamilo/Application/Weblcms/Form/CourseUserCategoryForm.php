@@ -72,7 +72,6 @@ class CourseUserCategoryForm extends FormValidator
         $attributes['locale'] = $locale;
         $attributes['defaults'] = array();
 
-
         $element_finder = $this->createElement(
             'user_group_finder',
             self :: COURSE_TYPE_TARGET_ELEMENTS,
@@ -143,7 +142,9 @@ class CourseUserCategoryForm extends FormValidator
                 CourseTypeUserCategory :: PROPERTY_COURSE_USER_CATEGORY_ID),
             new StaticConditionVariable($course_user_category->get_id()));
 
-        $existing_types = DataManager :: retrieves(CourseTypeUserCategory :: class_name(), $condition);
+        $existing_types = DataManager :: retrieves(
+            CourseTypeUserCategory :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         if ($existing_types)
         {
@@ -258,7 +259,9 @@ class CourseUserCategoryForm extends FormValidator
                     CourseTypeUserCategory :: PROPERTY_COURSE_USER_CATEGORY_ID),
                 new StaticConditionVariable($course_user_category->get_id()));
 
-            $course_types = DataManager :: retrieves(CourseTypeUserCategory :: class_name(), $condition);
+            $course_types = DataManager :: retrieves(
+                CourseTypeUserCategory :: class_name(),
+                new DataClassRetrievesParameters($condition));
 
             while ($type = $course_types->next_result())
             {

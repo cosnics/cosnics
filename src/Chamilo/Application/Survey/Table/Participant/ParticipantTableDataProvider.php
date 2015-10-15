@@ -13,7 +13,7 @@ class ParticipantTableDataProvider extends DataClassTableDataProvider
     function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager :: retrieves(
-            Participant :: CLASS_NAME, 
+            Participant :: class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 

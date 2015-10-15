@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseB
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class NoOfCoursesByLanguageBlock extends CourseBlock
 {
@@ -17,7 +18,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         $arr = array();
-        $courses = CourseDataManager :: retrieves(Course :: class_name());
+        $courses = CourseDataManager :: retrieves(Course :: class_name(),  new DataClassRetrievesParameters();
 
         $categories = array();
 

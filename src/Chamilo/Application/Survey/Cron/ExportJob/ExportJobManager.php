@@ -334,9 +334,9 @@ class ExportJobManager
     static public function update_tracker_data($publication_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: CLASS_NAME, Answer :: PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID),
             $publication_id);
-        $answers = DataManager :: retrieves(Answer :: CLASS_NAME, new DataClassRetrievesParameters($condition));
+        $answers = DataManager :: retrieves(Answer :: class_name(), new DataClassRetrievesParameters($condition));
 
         while ($raw_answer = $answers->next_result())
         {
