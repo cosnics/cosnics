@@ -64,7 +64,7 @@ class FilteredCourseList extends Block
         $this->loadSettings();
     }
 
-    public function as_html($view = '')
+    public function toHtml($view = '')
     {
         $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
             $this,
@@ -74,7 +74,7 @@ class FilteredCourseList extends Block
 
         if ($renderer->get_courses()->size() > 0)
         {
-            return parent :: as_html($view);
+            return parent :: toHtml($view);
         }
         else
         {
@@ -104,7 +104,7 @@ class FilteredCourseList extends Block
 
         $html[] = $renderer->as_html();
 
-        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
+        if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
         {
             $courseTypeLink = new Redirect(
                 array(
@@ -196,10 +196,8 @@ class FilteredCourseList extends Block
      */
     private function loadSettings()
     {
-        $selected_course_type = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
-        $exploded_value = json_decode($selected_course_type);
-
-        $this->courseTypeId = $exploded_value[0];
-        $this->userCourseCategoryId = $exploded_value[1];
+        $this->courseTypeId = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
+        // TODO: Fix this?
+        $this->userCourseCategoryId = null;
     }
 }

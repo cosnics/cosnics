@@ -117,9 +117,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements C
                 Theme :: ICON_MINI,
                 ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
 
-            $href = htmlspecialchars($this->get_publication_link($publication));
+            $href = htmlspecialchars($this->getPublicationLink($publication));
             $title = htmlspecialchars($content_object->get_title());
-            $target = $this->get_view() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
+            $target = $this->getView() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
             $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
 
             $data[] = array($icon, $link);
