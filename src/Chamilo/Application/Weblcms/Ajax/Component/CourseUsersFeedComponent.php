@@ -17,6 +17,9 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Join;
 
 /**
  * Feed to return users of this course
@@ -109,22 +112,33 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         }
 
         // Retrieve the users subscribed through platform groups
-        $relation_condition = new EqualityCondition(
+        $relationCondition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
 
-        $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseGroupRelation :: class_name(),
-            $relation_condition);
+        $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
+            Group :: class_name(),
+            new DataClassRetrievesParameters(
+                $relationCondition,
+                null,
+                null,
+                array(),
+                new Joins(
+                    new Join(
+                        CourseGroupRelation :: class_name(),
+                        new EqualityCondition(
+                            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
+                            new PropertyConditionVariable(
+                                CourseGroupRelation :: class_name(),
+                                CourseGroupRelation :: PROPERTY_GROUP_ID))))));
 
         $group_users = array();
 
-        while ($group_relation = $course_group_relations->next_result())
+        while ($group = $groups->next_result())
         {
-            $group = $group_relation->get_group();
-            $group_user_ids = $group->get_users(true, true);
+        $group_user_ids = $group->get_users(true, true);
 
-            $group_users = array_merge($group_users, $group_user_ids);
+        $group_users = array_merge($group_users, $group_user_ids);
         }
 
         $user_ids = array_merge($user_ids, $group_users);
