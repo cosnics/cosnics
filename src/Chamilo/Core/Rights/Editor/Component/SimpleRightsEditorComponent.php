@@ -18,8 +18,7 @@ class SimpleRightsEditorComponent extends RightsEditorComponent
 
     public function run()
     {
-        $this->action_bar = $this->get_action_bar();
-        
+
         $form = new SimpleRightsEditorForm(
             $this->get_url(),
             $this->get_context(),
@@ -38,11 +37,7 @@ class SimpleRightsEditorComponent extends RightsEditorComponent
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = '<br />';
-        $html[] = $this->action_bar->as_html();
-        $html[] = '<div id="action_bar_browser" style="width:100%;">';
         $html[] = $form->toHtml();
-        $html[] = '</div>';
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

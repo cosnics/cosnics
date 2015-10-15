@@ -2,25 +2,16 @@
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -45,12 +36,12 @@ class RightsEditorComponent extends Manager
     public function run()
     {
         $course = $this->get_course();
-        
+
         if (! $course->is_course_admin($this->get_user()) && ! $this->get_user()->is_platform_admin())
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-        
+
         $factory = new ApplicationFactory(
             \Chamilo\Core\Rights\Editor\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
@@ -215,125 +206,15 @@ class RightsEditorComponent extends Manager
 
     public function get_entities()
     {
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
-        
-        $platform_group_relations = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseGroupRelation :: class_name(),
-            $relation_condition);
-        
-        $limited_users = array();
-       
-        while ($platform_group_relation = $platform_group_relations->next_result())
-        {
-
-           
-            
-            $platform_group_id = $platform_group_relation->get_group_id();
-            $subscribed_platform_group_ids[] = $platform_group_id;
-            $limited_platform_groups[] = $platform_group_id;
-
-            // get the users in that platform group
-            $eq_condition = new EqualityCondition(
-                new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
-                new StaticConditionVariable($platform_group_id));
-            $group_rel_users_dataset = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
-                GroupRelUser :: class_name(),
-                $eq_condition);
-            while ($group_rel_user = $group_rel_users_dataset->next_result())
-            {
-                $limited_users[] = $group_rel_user->get_user_id();
-            }
-
-            $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                Group :: class_name(),
-                $platform_group_id);
-            if (! $group)
-            {
-                continue;
-            }
-            
-
-            
-            $children_conditions = array();
-
-            $children_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
-                InequalityCondition :: GREATER_THAN,
-                new StaticConditionVariable($group->get_left_value()));
-
-            $children_conditions[] = new InequalityCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
-                InequalityCondition :: LESS_THAN,
-                new StaticConditionVariable($group->get_right_value()));
-
-            $children_condition = new AndCondition($children_conditions);
-
-            // retrieve the subgroups subscribed implicitly
-            $child_groups = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
-                Group :: class_name(),
-                $children_condition);
-            while ($cgroup = $child_groups->next_result())
-            {
-                $limited_platform_groups[] = $cgroup->get_id();
-                $eq_condition = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
-                    new StaticConditionVariable($cgroup->get_id()));
-                $group_rel_users_dataset = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
-                    GroupRelUser :: class_name(),
-                    $eq_condition);
-
-                while ($group_rel_user = $group_rel_users_dataset->next_result())
-                {
-                    $limited_users[] = $group_rel_user->get_user_id();
-                }
-            }
-        }
-       
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
-    
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_STATUS),
-            new StaticConditionVariable(CourseUserRelation :: STATUS_STUDENT));
-
-        $condition = new AndCondition($conditions);
-        
-        $relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseUserRelation :: class_name(),
-            $condition);
-
-        while ($relation = $relations->next_result())
-        {
-            $limited_users[] = $relation->get_user_id();
-        }
-
-        $limited_users[] = $this->get_user_id();
-        $excluded_users[] = $this->get_user_id();
-        $limited_platform_groups[] = 1;
-        $excluded_platform_groups[] = 1;
-
         $entities = array();
 
         $user_entity = new CourseUserEntity($this->get_course_id());
-        $user_entity->exclude_users($excluded_users);
-        $user_entity->limit_users($limited_users);
 
         $entities[CourseUserEntity :: ENTITY_TYPE] = $user_entity;
         $entities[CourseGroupEntity :: ENTITY_TYPE] = new CourseGroupEntity($this->get_course_id());
 
-        if (! empty($subscribed_platform_group_ids))
-        {
-            $group_entity = new CoursePlatformGroupEntity($this->get_course_id());
-            $group_entity->set_subscribed_platform_group_ids($subscribed_platform_group_ids);
-            $group_entity->exclude_groups($excluded_platform_groups);
-            $group_entity->limit_groups($limited_platform_groups);
-
-            $entities[CoursePlatformGroupEntity :: ENTITY_TYPE] = $group_entity;
-        }
+        $group_entity = new CoursePlatformGroupEntity($this->get_course_id());
+        $entities[CoursePlatformGroupEntity :: ENTITY_TYPE] = $group_entity;
 
         return $entities;
     }
