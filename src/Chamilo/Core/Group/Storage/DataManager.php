@@ -16,10 +16,10 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * $Id: group_data_manager.class.php 157 2009-11-10 13:44:02Z vanpouckesven $
@@ -164,9 +164,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
     {
-//         var_dump($user_id);
-//         var_dump($only_retrieve_ids);
-
         $cacheId = md5(serialize(array($user_id, $only_retrieve_ids)));
 
         if (! isset(self :: $allSubscribedGroupsCache[$cacheId]))
@@ -219,22 +216,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                 if ($only_retrieve_ids)
                 {
-                    $properties = new DataClassProperties();
-
-                    $properties->add(
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable :: DISTINCT,
-                            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID)));
-
-                    $parameters = new RecordRetrievesParameters($properties, $condition);
-
-                    $records = static :: records(Group :: class_name(), $parameters);
-                    $group_ids = array();
-
-                    foreach ($records->as_array() as $group)
-                    {
-                        $group_ids[] = $group[Group :: PROPERTY_ID];
-                    }
+                    $parameters = new DataClassDistinctParameters($condition, Group :: PROPERTY_ID);
+                    $group_ids = static :: distinct(Group :: class_name(), $parameters);
 
                     self :: $allSubscribedGroupsCache[$cacheId] = $group_ids;
                 }
@@ -246,10 +229,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                         Group :: class_name(),
                         $parameters);
                 }
-
-//                 var_dump(self :: $allSubscribedGroupsCache[$cacheId]);
-
-//                 exit;
             }
             else
             {

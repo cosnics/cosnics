@@ -78,44 +78,44 @@ class DataClassResultSet extends ArrayResultSet
      */
     public function get_object($class_name, $record)
     {
-        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
-            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+        // $queryCacheEnabled = Configuration :: get_instance()->get_setting(
+        // array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
 
-        if ($queryCacheEnabled)
-        {
-            $cached = false;
+        // if ($queryCacheEnabled)
+        // {
+        // $cached = false;
 
-            foreach ($class_name :: get_cacheable_property_names() as $cacheable_property)
-            {
-                $value = $record[$cacheable_property];
-                if (isset($value) && ! is_null($value))
-                {
-                    $cacheable_property_parameters = new DataClassRetrieveParameters(
-                        new EqualityCondition(
-                            new PropertyConditionVariable($class_name, $cacheable_property),
-                            new StaticConditionVariable($value)));
+        // foreach ($class_name :: get_cacheable_property_names() as $cacheable_property)
+        // {
+        // $value = $record[$cacheable_property];
+        // if (isset($value) && ! is_null($value))
+        // {
+        // $cacheable_property_parameters = new DataClassRetrieveParameters(
+        // new EqualityCondition(
+        // new PropertyConditionVariable($class_name, $cacheable_property),
+        // new StaticConditionVariable($value)));
 
-                    if (DataClassCache :: exists($class_name, $cacheable_property_parameters))
-                    {
-                        $object = DataClassResultCache :: get($class_name, $cacheable_property_parameters);
-                        $cached = true;
-                        break;
-                    }
-                }
-            }
+        // if (DataClassCache :: exists($class_name, $cacheable_property_parameters))
+        // {
+        // $object = DataClassResultCache :: get($class_name, $cacheable_property_parameters);
+        // $cached = true;
+        // break;
+        // }
+        // }
+        // }
 
-            if (! $cached)
-            {
-                $object = $this->buildObject($class_name, $record);
-                DataClassResultCache :: add($object);
-            }
+        // if (! $cached)
+        // {
+        // $object = $this->buildObject($class_name, $record);
+        // DataClassResultCache :: add($object);
+        // }
 
-            return $object;
-        }
-        else
-        {
-            return $this->buildObject($class_name, $record);
-        }
+        // return $object;
+        // }
+        // else
+        // {
+        return $this->buildObject($class_name, $record);
+        // }
     }
 
     /**

@@ -144,6 +144,7 @@ class CourseListRenderer
     {
         $html = array();
         $courses = $this->retrieve_courses();
+
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
 
         $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, __NAMESPACE__));

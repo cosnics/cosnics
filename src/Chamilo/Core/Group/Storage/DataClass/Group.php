@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * $Id: group.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -57,6 +58,8 @@ class Group extends NestedSet
      * @var array
      */
     private $subgroups;
+
+    private $subgroupIdentifiers;
 
     /**
      * Array used to cache subgroup counts, depending on request (recursive or not)
@@ -315,13 +318,9 @@ class Group extends NestedSet
         if (! isset($this->users[(int) $include_subgroups][(int) $recursive_subgroups]))
         {
             $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
-            $group_rel_users = DataManager :: retrieves(GroupRelUser :: class_name(), $condition);
-            $users = array();
-
-            while ($group_rel_user = $group_rel_users->next_result())
-            {
-                $users[$group_rel_user->get_user_id()] = $group_rel_user->get_user_id();
-            }
+            $users = DataManager :: distinct(
+                GroupRelUser :: class_name(),
+                new DataClassDistinctParameters($condition, GroupRelUser :: PROPERTY_USER_ID));
 
             $this->users[(int) $include_subgroups][(int) $recursive_subgroups] = $users;
         }
@@ -331,22 +330,59 @@ class Group extends NestedSet
 
     private function get_user_condition($include_subgroups = false, $recursive_subgroups = false)
     {
-        $groups = array();
-        $groups[] = $this->get_id();
-
         if ($include_subgroups)
         {
-            $subgroups = $this->get_subgroups($recursive_subgroups);
+            $groups = $this->getSubgroupIdentifiers($recursive_subgroups);
 
-            foreach ($subgroups as $subgroup)
+            if (! is_array($groups))
             {
-                $groups[] = $subgroup->get_id();
+                $groups = array();
             }
         }
+        else
+        {
+            $groups = array();
+        }
+
+        $groups[] = $this->get_id();
 
         return new InCondition(
             new PropertyConditionVariable(GroupRelUser :: class_name(), GroupReluser :: PROPERTY_GROUP_ID),
             $groups);
+    }
+
+    private function getSubgroupIdentifiers($recursive = false)
+    {
+        if (! isset($this->subgroupIdentifiers[(int) $recursive]))
+        {
+            if ($recursive)
+            {
+                $childrenCondition = array();
+                $childrenCondition[] = new InequalityCondition(
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
+                    InequalityCondition :: GREATER_THAN,
+                    new StaticConditionVariable($this->get_left_value()));
+                $childrenCondition[] = new InequalityCondition(
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
+                    InequalityCondition :: LESS_THAN,
+                    new StaticConditionVariable($this->get_right_value()));
+                $childrenCondition = new AndCondition($childrenCondition);
+            }
+            else
+            {
+                $childrenCondition = new EqualityCondition(
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
+                    new StaticConditionVariable($this->get_id()));
+            }
+
+            $subgroupIdentifiers = DataManager :: distinct(
+                Group :: class_name(),
+                new DataClassDistinctParameters($childrenCondition, Group :: PROPERTY_ID));
+
+            $this->subgroupIdentifiers[(int) $recursive] = $subgroupIdentifiers;
+        }
+
+        return $this->subgroupIdentifiers[(int) $recursive];
     }
 
     public function count_users($include_subgroups = false, $recursive_subgroups = false)
