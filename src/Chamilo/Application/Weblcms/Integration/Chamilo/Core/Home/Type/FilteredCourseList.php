@@ -7,13 +7,14 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * This class represents a block to show the course list filtered in a given course type and optionally a given category
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FilteredCourseList extends Block
+class FilteredCourseList extends Block implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
     const CONFIGURATION_COURSE_TYPE = 'course_type';
@@ -199,5 +200,14 @@ class FilteredCourseList extends Block
         $this->courseTypeId = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
         // TODO: Fix this?
         $this->userCourseCategoryId = null;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_SHOW_NEW_ICONS, self :: CONFIGURATION_COURSE_TYPE);
     }
 }

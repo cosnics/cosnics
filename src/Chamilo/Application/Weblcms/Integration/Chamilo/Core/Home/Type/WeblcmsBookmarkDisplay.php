@@ -13,13 +13,14 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * Block to display all bookmarks foor the handbooks application
  *
  * @package handbook.block
  */
-class WeblcmsBookmarkDisplay extends NewBlock
+class WeblcmsBookmarkDisplay extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
@@ -104,5 +105,14 @@ class WeblcmsBookmarkDisplay extends NewBlock
             $parameters);
 
         return $bookmarks_resultset;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_SHOW_EMPTY);
     }
 }
