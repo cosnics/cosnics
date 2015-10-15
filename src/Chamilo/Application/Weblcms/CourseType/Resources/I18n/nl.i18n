@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; Package: application/weblcms/course_type
+;;;;; Language: nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Cursustype"
+CourseTypeTitle = "Cursustype"
+CourseTypeDescription = "Beschrijving"
+CourseTypeActive = "Geactiveerd"
+CourseTypeManagerCreateComponent = "Maak cursustype"
+CourseTypeManagerBrowseComponent = "Doorblader cursustypes"
+CourseTypeManagerUpdateComponent = "Bewerk cursustype"
+CourseTypeManagerViewComponent = "Bekijk cursustype"
+Title = "Cursustype"
+Description = "Beschrijving"
+Active = "Geactiveerd"
+CourseType = "Cursustype"
+DeleterConfirm = "Geselecteerde cursustypes verwijderen"
+Course = "Cursus"
+Courses = "Cursussen"
+NoCourseType = "Geen cursustype"
