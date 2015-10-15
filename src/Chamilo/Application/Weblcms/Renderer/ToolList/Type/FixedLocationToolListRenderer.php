@@ -225,7 +225,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 new StaticConditionVariable(1));
             $condition = new AndCondition($conditions);
 
-            $this->publication_links = DataManager :: retrieves(ContentObjectPublication :: class_name(), $condition);
+            $this->publication_links = DataManager :: retrieves(
+                ContentObjectPublication :: class_name(),
+                new DataClassRetrievesParameters($condition));
         }
 
         return $this->publication_links;
@@ -280,7 +282,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_tool_rel_course_section = DataManager :: retrieves(
             CourseToolRelCourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         if ($course_tool_rel_course_section->size() > 0)
         {

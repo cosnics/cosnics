@@ -69,54 +69,54 @@ class AssessmentAttempt extends AbstractAttempt
     {
         $this->set_default_property(self :: PROPERTY_ASSESSMENT_ID, $assessment_id);
     }
-    
+
     // TODO: These two methods should NOT be here as they are not related to ONE assessment attempt, but a collection of
     // attempts
     public function get_times_taken($publication, $user_id = null)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
-        
+
         if ($user_id)
         {
             $conditions = array();
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID), 
+                new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
             $condition = new AndCondition($conditions);
         }
-        
+
         return DataManager :: count(self :: class_name(), new DataClassCountParameters($condition));
     }
 
     public function get_average_score($publication, $user_id = null)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ASSESSMENT_ID), 
+            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
-        
+
         if ($user_id)
         {
             $conditions = array();
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID), 
+                new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_USER_ID),
                 new StaticConditionVariable($user_id));
             $condition = new AndCondition($conditions);
         }
-        
+
         $trackers = DataManager :: retrieves(self :: class_name(), new DataClassRetrievesParameters($condition));
         $num = $trackers->size();
-        
+
         $total_score = 0;
-        
+
         while ($tracker = $trackers->next_result())
         {
             $total_score += $tracker->get_total_score();
         }
-        
+
         $total_score = round($total_score / $num, 2);
         return $total_score;
     }

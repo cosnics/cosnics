@@ -47,8 +47,7 @@ class AttachmentViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Checks whether the object you want to view is really attached to the submission.
-     * It will get the submission id
+     * Checks whether the object you want to view is really attached to the submission. It will get the submission id
      * and the object id from the url.
      *
      * @return boolean True if the object is attached to the submission.
@@ -112,8 +111,7 @@ class AttachmentViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Checks whether the automatic feedback object you want to view is really attached to the assignment.
-     * It will get
+     * Checks whether the automatic feedback object you want to view is really attached to the assignment. It will get
      * the assignment via the publication id from the url and the object id from the url.
      *
      * @return boolean True if the automatic feedback object is attached to the assignment
@@ -151,8 +149,7 @@ class AttachmentViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Checks whether the object you want to view is really attached to the publication.
-     * It will get the publication id
+     * Checks whether the object you want to view is really attached to the publication. It will get the publication id
      * and object id from the url.
      *
      * @return boolean True if the object is attached to the publication

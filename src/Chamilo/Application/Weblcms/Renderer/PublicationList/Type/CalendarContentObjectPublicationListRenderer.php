@@ -21,6 +21,7 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Renderer to display events in a week calendar
@@ -150,7 +151,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $user_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseUserRelation :: class_name(),
-            $user_condition);
+            new DataClassRetrievesParameters($user_condition));
 
         if ($user_relations->size() > 0)
         {
@@ -167,9 +168,10 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $groups = DataManager :: retrieves(
             CourseGroup :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
-                new StaticConditionVariable($course)));
+            new DataClassRetrievesParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
+                    new StaticConditionVariable($course))));
 
         if ($groups->size() > 0)
         {

@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * @package application.lib.weblcms.weblcms_manager.component.admin_course_type_browser
  */
 /**
- * Data provider for a repository browser table.
- * This class implements some functions to allow repository browser tables
+ * Data provider for a repository browser table. This class implements some functions to allow repository browser tables
  * to retrieve information about the learning objects to display.
  */
 class AdminRequestTableDataProvider extends DataClassTableDataProvider

@@ -96,7 +96,9 @@ class RawExportResultsComponent extends Manager
 
         $assessment_results = array();
 
-        $assessment_attempts = WeblcmsTrackingDataManager :: retrieves(AssessmentAttempt :: class_name(), $condition);
+        $assessment_attempts = WeblcmsTrackingDataManager :: retrieves(
+            AssessmentAttempt :: class_name(),
+            new DataClassRetrievesParameters($condition));
         while ($assessment_attempt = $assessment_attempts->next_result())
         {
             $assessment_result = new AssessmentResult(

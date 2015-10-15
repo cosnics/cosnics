@@ -156,7 +156,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             }
 
             $context = $this->assessment->package() . '\Display';
-            $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $factory = new ApplicationFactory(
+                $context,
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
     }
