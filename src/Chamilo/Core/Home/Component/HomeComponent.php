@@ -26,18 +26,18 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
     {
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
         $authenticationValidator->validate();
-
+        
         BreadcrumbTrail :: get_instance()->truncate();
-
+        
         $type = $this->getRequest()->query->get(Renderer :: PARAM_VIEW_TYPE, Renderer :: TYPE_BASIC);
         $rendererFactory = new Factory($type, $this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $rendererFactory->getRenderer()->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

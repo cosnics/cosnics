@@ -8,6 +8,6 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Package;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Remover extends \Chamilo\Core\Home\Action\Remover
+class Remover extends \Chamilo\Configuration\Package\Action\Remover
 {
 }

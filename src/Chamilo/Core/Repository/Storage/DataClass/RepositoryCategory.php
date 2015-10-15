@@ -229,7 +229,7 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      *
      * @return string[]
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return array(
             self :: PROPERTY_TYPE_ID,

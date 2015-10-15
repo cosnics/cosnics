@@ -28,16 +28,16 @@ class AssignmentSubmission extends \Chamilo\Core\Tracking\Storage\DataClass\Simp
         $this->set_ip_address($parameters[self :: PROPERTY_IP_ADDRESS]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_CONTENT_OBJECT_ID,
-                self :: PROPERTY_SUBMITTER_ID,
-                self :: PROPERTY_DATE_SUBMITTED,
-                self :: PROPERTY_SUBMITTER_TYPE,
-                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_PUBLICATION_ID, 
+                self :: PROPERTY_CONTENT_OBJECT_ID, 
+                self :: PROPERTY_SUBMITTER_ID, 
+                self :: PROPERTY_DATE_SUBMITTED, 
+                self :: PROPERTY_SUBMITTER_TYPE, 
+                self :: PROPERTY_USER_ID, 
                 self :: PROPERTY_IP_ADDRESS));
     }
 
@@ -116,7 +116,7 @@ class AssignmentSubmission extends \Chamilo\Core\Tracking\Storage\DataClass\Simp
         try
         {
             return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+                ContentObject :: class_name(), 
                 $this->get_content_object_id());
         }
         catch (\Exception $ex)

@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *
@@ -52,63 +53,35 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
 
         $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
 
-        if ($block->get_user() == $user_id)
+        if ($block->getUserId() == $user_id)
         {
-            $homeblock_config = $block->parse_settings();
-            $values = $this->getPostDataValue(self :: PARAM_DATA);
+            $postedValues = $this->getPostDataValue(self :: PARAM_DATA);
 
-            $problems = 0;
+            $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
+            $blockRendition = BlockRendition :: factory($rendererFactory->getRenderer(), $block);
 
-            foreach ($homeblock_config['settings'] as $category_name => $settings)
+            if ($blockRendition instanceof ConfigurableInterface)
             {
-                foreach ($settings as $name => $setting)
+                foreach ($blockRendition->getConfigurationVariables() as $configurationVariable)
                 {
-                    if ($setting['locked'] != 'true')
-                    {
-                        $conditions = array();
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                BlockConfiguration :: class_name(),
-                                BlockConfiguration :: PROPERTY_BLOCK_ID),
-                            new StaticConditionVariable($block->get_id()));
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                BlockConfiguration :: class_name(),
-                                BlockConfiguration :: PROPERTY_VARIABLE),
-                            new StaticConditionVariable($name));
-                        $condition = new AndCondition($conditions);
-
-                        $block_config = DataManager :: retrieve(
-                            BlockConfiguration :: class_name(),
-                            new DataClassRetrieveParameters($condition));
-                        $block_config->set_value($values[$name]);
-                        if (! $block_config->update())
-                        {
-                            $problems ++;
-                        }
-                    }
+                    $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
                 }
-            }
 
-            if ($problems > 0)
-            {
-                JsonAjaxResult :: general_error();
+                if (! $block->update())
+                {
+                    JsonAjaxResult :: general_error();
+                }
+                else
+                {
+
+                    $result = new JsonAjaxResult(200);
+                    $result->set_property(self :: PROPERTY_BLOCK, $blockRendition->toHtml());
+                    $result->display();
+                }
             }
             else
             {
-                DataClassCache :: truncates(array(Block :: class_name(), BlockConfiguration :: class_name()));
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    User :: class_name(),
-                    (int) Session :: get_user_id());
-
-                $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
-                $renderer = $rendererFactory->getRenderer();
-
-                $html = BlockRendition :: factory($renderer, $block)->as_html();
-
-                $result = new JsonAjaxResult(200);
-                $result->set_property(self :: PROPERTY_BLOCK, $html);
-                $result->display();
+                JsonAjaxResult :: bad_request();
             }
         }
         else

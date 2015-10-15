@@ -218,12 +218,7 @@ class ClassnameUtilities
         if (! isset($this->namespaceParentMap[$namespace]) || ! isset($this->namespaceParentMap[$namespace][$levels]))
         {
             $namespaceParts = explode('\\', $namespace);
-
-            for ($i = 0; $i < $levels; $i ++)
-            {
-                array_pop($namespaceParts);
-            }
-
+            $namespaceParts = array_slice($namespaceParts, 0, - $levels);
             $this->namespaceParentMap[$namespace][$levels] = implode('\\', $namespaceParts);
         }
 
@@ -242,12 +237,7 @@ class ClassnameUtilities
         if (! isset($this->namespaceChildMap[$namespace]) || ! isset($this->namespaceChildMap[$namespace][$levels]))
         {
             $namespaceParts = explode('\\', $namespace);
-
-            for ($i = 0; $i < $levels; $i ++)
-            {
-                array_shift($namespaceParts);
-            }
-
+            $namespaceParts = array_slice($namespaceParts, $levels);
             $this->namespaceChildMap[$namespace][$levels] = implode('\\', $namespaceParts);
         }
 

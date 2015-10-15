@@ -14,7 +14,7 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_COLUMN = 'column';
     const PARAM_WIDTH = 'width';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
@@ -22,7 +22,7 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
     {
         return array(self :: PARAM_COLUMN, self :: PARAM_WIDTH);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
@@ -43,9 +43,9 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
         
         $column = DataManager :: retrieve_by_id(Column :: class_name(), intval($column_data[2]));
         
-        if ($column->get_user() == $user_id)
+        if ($column->getUserId() == $user_id)
         {
-            $column->set_width($column_width);
+            $column->setWidth((int) $column_width);
             if ($column->update())
             {
                 JsonAjaxResult :: success();

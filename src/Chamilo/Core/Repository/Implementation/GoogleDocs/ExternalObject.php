@@ -11,7 +11,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_MODIFIER_ID = 'modifier_id';
     const PROPERTY_PREVIEW = 'preview';
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID));

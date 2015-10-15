@@ -32,7 +32,7 @@ class Breadcrumb
      * @param string $name
      * @param string $image
      */
-    public function __construct($url, $name, $image)
+    public function __construct($url, $name, $image = null)
     {
         $this->url = $url;
         $this->name = $name;

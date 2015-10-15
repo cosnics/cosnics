@@ -9,14 +9,14 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * A portfolio publication
- *
+ * 
  * @package application\portfolio$Publication
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Publication extends DataClass
 {
     const CLASS_NAME = __CLASS__;
-
+    
     // DataClass properties
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_PUBLISHER_ID = 'publisher_id';
@@ -39,13 +39,13 @@ class Publication extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_CONTENT_OBJECT_ID,
-                self :: PROPERTY_PUBLISHER_ID,
-                self :: PROPERTY_PUBLISHED,
+                self :: PROPERTY_CONTENT_OBJECT_ID, 
+                self :: PROPERTY_PUBLISHER_ID, 
+                self :: PROPERTY_PUBLISHED, 
                 self :: PROPERTY_MODIFIED));
     }
 
@@ -67,10 +67,10 @@ class Publication extends DataClass
         if (! isset($this->content_object))
         {
             $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+                ContentObject :: class_name(), 
                 $this->get_content_object_id());
         }
-
+        
         return $this->content_object;
     }
 
@@ -101,10 +101,10 @@ class Publication extends DataClass
         if (! isset($this->publisher))
         {
             $this->publisher = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
                 $this->get_publisher_id());
         }
-
+        
         return $this->publisher;
     }
 
@@ -155,14 +155,14 @@ class Publication extends DataClass
 
     /**
      * Returns the dependencies for this dataclass
-     *
+     * 
      * @return \libraries\storage\Condition[string]
      */
     protected function get_dependencies()
     {
         return array(
             Feedback :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(Feedback :: class_name(), Feedback :: PROPERTY_PUBLICATION_ID),
+                new PropertyConditionVariable(Feedback :: class_name(), Feedback :: PROPERTY_PUBLICATION_ID), 
                 new StaticConditionVariable($this->get_id())));
     }
 }

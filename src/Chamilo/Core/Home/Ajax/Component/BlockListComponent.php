@@ -12,14 +12,14 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PROPERTY_BLOCKS = 'blocks';
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_BLOCKS, DataManager :: get_platform_blocks());
+        $result->set_property(self :: PROPERTY_BLOCKS, DataManager :: getPlatformBlocks());
         $result->display();
     }
 }

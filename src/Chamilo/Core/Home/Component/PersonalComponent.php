@@ -26,14 +26,14 @@ class PersonalComponent extends Manager
         {
             \Chamilo\Libraries\Platform\Session\Session :: unregister('Chamilo\Core\Home\General');
         }
-
+        
         $redirect = new Redirect();
         $redirect->toUrl();
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

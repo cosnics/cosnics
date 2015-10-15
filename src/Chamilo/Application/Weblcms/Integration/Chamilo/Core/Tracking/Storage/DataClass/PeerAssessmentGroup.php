@@ -15,7 +15,7 @@ class PeerAssessmentGroup extends \Chamilo\Core\Tracking\Storage\DataClass\Simpl
         $this->set_description($parameters[self :: PROPERTY_DESCRIPTION]);
     }
 
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(self :: PROPERTY_PUBLICATION_ID, self :: PROPERTY_NAME, self :: PROPERTY_DESCRIPTION));

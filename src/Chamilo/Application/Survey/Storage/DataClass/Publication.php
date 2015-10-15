@@ -36,7 +36,7 @@ class Publication extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
@@ -152,67 +152,67 @@ class Publication extends DataClass
     {
         $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
     }
-    
+
     /**
      * Returns the title of this Publication.
-     *
+     * 
      * @return the title.
      */
     function getTitle()
     {
         return $this->get_default_property(self :: PROPERTY_TITLE);
     }
-    
+
     /**
      * Sets the title of this Publication.
-     *
+     * 
      * @param title
      */
     function setTitle($title)
     {
         $this->set_default_property(self :: PROPERTY_TITLE, $title);
     }
-    
+
     /**
      * Returns the from_date of this Publication.
-     *
+     * 
      * @return the from_date.
      */
     function getFromDate()
     {
         return $this->get_default_property(self :: PROPERTY_FROM_DATE);
     }
-    
+
     /**
      * Sets the from_date of this Publication.
-     *
+     * 
      * @param from_date
      */
     function setFromDate($fromDate)
     {
         $this->set_default_property(self :: PROPERTY_FROM_DATE, $fromDate);
     }
-    
+
     /**
      * Returns the to_date of this Publication.
-     *
+     * 
      * @return the to_date.
      */
     function getToDate()
     {
         return $this->get_default_property(self :: PROPERTY_TO_DATE);
     }
-    
+
     /**
      * Sets the to_date of this Publication.
-     *
+     * 
      * @param to_date
      */
     function setToDate($toDate)
     {
         $this->set_default_property(self :: PROPERTY_TO_DATE, $toDate);
     }
-    
+
     function isPublicationPeriod()
     {
         $fromDate = $this->getFromDate();
@@ -221,9 +221,9 @@ class Publication extends DataClass
         {
             return true;
         }
-    
+        
         $time = time();
-    
+        
         if ($time < $fromDate || $time > $toDate)
         {
             return false;

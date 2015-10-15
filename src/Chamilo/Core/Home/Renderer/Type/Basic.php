@@ -6,24 +6,16 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataClass\Row;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
-use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Repository\HomeRepository;
 
 /**
  *
@@ -35,67 +27,125 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Basic extends Renderer
 {
 
-    public function render()
-    {
-        $current_tab = $this->get_current_tab();
-        $user = $this->get_user();
-        $user_home_allowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $general_mode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+    /**
+     *
+     * @var \Chamilo\Core\Home\Storage\DataClass\Element[]
+     */
+    private $elements;
 
-        // Get user id
-        if ($user instanceof User && $general_mode && $user->is_platform_admin())
+    /**
+     *
+     * @var integer
+     */
+    private $homeUserIdentifier;
+
+    /**
+     *
+     * @var \Chamilo\Core\Home\Service\HomeService
+     */
+    private $homeService;
+
+    /**
+     *
+     * @return \Chamilo\Core\Home\Service\HomeService
+     */
+    private function getHomeService()
+    {
+        if (! isset($this->homeService))
         {
-            $user_id = '0';
+            $this->homeService = new HomeService(new HomeRepository());
         }
-        elseif ($user_home_allowed && $user instanceof User)
+
+        return $this->homeService;
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param integer $parentId
+     */
+    private function getElements($type, $parentIdentifier = 0)
+    {
+        if (! isset($this->elements))
         {
-            $user_id = $user->get_id();
+            $homeUserIdentifier = $this->determineHomeUserIdentifier();
+            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+
+            if ($userHomeAllowed && $this->get_user() instanceof User)
+            {
+                if ($this->getHomeService()->countElementsByUserIdentifier($homeUserIdentifier) == 0)
+                {
+                    $this->getHomeService()->createDefaultHomeByUserIdentifier($homeUserIdentifier);
+                }
+            }
+
+            $elementsResultSet = $this->getHomeService()->getElementsByUserIdentifier($homeUserIdentifier);
+
+            while ($element = $elementsResultSet->next_result())
+            {
+                $this->elements[$element->get_type()][$element->getParentId()][] = $element;
+            }
+        }
+
+        if (isset($this->elements[$type]) && isset($this->elements[$type][$parentIdentifier]))
+        {
+            return $this->elements[$type][$parentIdentifier];
         }
         else
         {
-            $user_id = '0';
+            return array();
+        }
+    }
+
+    private function determineHomeUserIdentifier()
+    {
+        if (! isset($this->homeUserIdentifier))
+        {
+            $user = $this->get_user();
+            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+            $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+
+            // Get user id
+            if ($user instanceof User && $generalMode && $user->is_platform_admin())
+            {
+                $this->homeUserIdentifier = 0;
+            }
+            elseif ($userHomeAllowed && $user instanceof User)
+            {
+                $this->homeUserIdentifier = $user->get_id();
+            }
+            else
+            {
+                $this->homeUserIdentifier = 0;
+            }
         }
 
-        if (($general_mode && $user instanceof User && $user->is_platform_admin()))
+        return $this->homeUserIdentifier;
+    }
+
+    public function render()
+    {
+        $currentTabIdentifier = $this->getCurrentTabIdentifier();
+        $homeUserIdentifier = $this->determineHomeUserIdentifier();
+        $user = $this->get_user();
+
+        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+
+        if (($generalMode && $user instanceof User && $user->is_platform_admin()))
         {
             $html[] = '<div class="general_mode">' . Translation :: get('HomepageInGeneralMode') . '</div>';
         }
 
-        $tabs_condition = new EqualityCondition(
-            new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_USER),
-            new StaticConditionVariable($user_id));
-        $parameters = new DataClassRetrievesParameters(
-            $tabs_condition,
-            null,
-            null,
-            array(new OrderBy(new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_SORT))));
-        $tabs = DataManager :: retrieves(Tab :: class_name(), $parameters);
-
-        // If the homepage can be personalised but we have no rows, get the
-        // default (to prevent lockouts) and display a warning / notification
-        // which tells the user he can personalise his homepage
-        if ($user_home_allowed && $user instanceof User && $tabs->size() == 0)
-        {
-            $this->create_user_home();
-
-            $tabs_condition = new EqualityCondition(
-                new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_USER),
-                new StaticConditionVariable($user->get_id()));
-            $parameters = new DataClassRetrievesParameters(
-                $tabs_condition,
-                null,
-                null,
-                array(new OrderBy(new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_SORT))));
-            $tabs = DataManager :: retrieves(Tab :: class_name(), $parameters);
-        }
+        $tabs = $this->getElements(Tab :: class_name());
 
         $html[] = '<div id="tab_menu"><ul id="tab_elements">';
-        while ($tab = $tabs->next_result())
+        foreach ($tabs as $tabKey => $tab)
         {
             $tab_id = $tab->get_id();
 
-            if (($tab_id == $current_tab) || ($tabs->position() == ResultSet :: POSITION_SINGLE) ||
-                 (! isset($current_tab) && $tabs->position() == ResultSet :: POSITION_FIRST))
+            if (($tab_id == $currentTabIdentifier) || (count($tabs) == 1) ||
+                 (! isset($currentTabIdentifier) && $tabKey == 0))
             {
                 $class = 'current';
             }
@@ -105,11 +155,11 @@ class Basic extends Renderer
             }
 
             $html[] = '<li class="' . $class . '" id="tab_select_' . $tab->get_id() . '"><a class="tabTitle" href="' .
-                 htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' . htmlspecialchars($tab->get_title()) .
+                 htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' . htmlspecialchars($tab->getTitle()) .
                  '</a>';
 
             $isUser = $this->get_user() instanceof User;
-            $homeAllowed = $isUser && ($user_home_allowed || ($this->get_user()->is_platform_admin()) && $general_mode);
+            $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
             $isAnonymous = $isUser && $this->get_user()->is_anonymous_user();
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
@@ -122,14 +172,13 @@ class Basic extends Renderer
         }
         $html[] = '</ul>';
 
-        if ($user instanceof User && ($user_home_allowed || $user->is_platform_admin()))
+        if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
         {
-
-            $style = (! $user_home_allowed && ! $general_mode && $user->is_platform_admin()) ? ' style="display:block;"' : '';
+            $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' : '';
 
             $html[] = '<div id="tab_actions" ' . $style . '>';
 
-            if ($user_home_allowed || $general_mode)
+            if ($userHomeAllowed || $generalMode)
             {
                 $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
@@ -143,7 +192,7 @@ class Basic extends Renderer
 
                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
-                if ($user_id != '0')
+                if ($homeUserIdentifier != '0')
                 {
                     $html[] = '<a onclick="return confirm(\'' .
                          Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
@@ -153,7 +202,7 @@ class Basic extends Renderer
                 }
             }
 
-            if (! $general_mode && $user->is_platform_admin())
+            if (! $generalMode && $user->is_platform_admin())
             {
                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
 
@@ -161,11 +210,11 @@ class Basic extends Renderer
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Configure')) . '" />&nbsp;' .
                      htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
             }
-            elseif ($general_mode && $user->is_platform_admin())
+            elseif ($generalMode && $user->is_platform_admin())
             {
                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
 
-                $title = $user_home_allowed ? 'BackToPersonal' : 'ViewDefault';
+                $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
                 $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Home')) . '" />&nbsp;' .
@@ -179,169 +228,56 @@ class Basic extends Renderer
         $html[] = '</div>';
         $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
 
-        $tabs->reset();
-
-        while ($tab = $tabs->next_result())
+        foreach ($tabs as $tabKey => $tab)
         {
             $html[] = '<div class="portal_tab" id="portal_tab_' . $tab->get_id() . '" style="display: ' . (((! isset(
-                $current_tab) &&
-                 ($tabs->position() == ResultSet :: POSITION_FIRST || $tabs->position() == ResultSet :: POSITION_SINGLE)) ||
-                 $current_tab == $tab->get_id()) ? 'block' : 'none') . ';">';
+                $currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) || $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') .
+                 ';">';
 
-            $rows_conditions = array();
-            $rows_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Row :: class_name(), Row :: PROPERTY_TAB),
-                new StaticConditionVariable($tab->get_id()));
-            $rows_condition = new AndCondition($rows_conditions);
-            $parameters = new DataClassRetrievesParameters(
-                $rows_condition,
-                null,
-                null,
-                array(new OrderBy(new PropertyConditionVariable(Row :: class_name(), Row :: PROPERTY_SORT))));
-            $rows = DataManager :: retrieves(Row :: class_name(), $parameters);
+            $columns = $this->getElements(Column :: class_name(), $tab->get_id());
 
-            while ($row = $rows->next_result())
+            foreach ($columns as $columnKey => $column)
             {
-                $rows_position = $rows->position();
-                $html[] = '<div class="portal_row" id="portal_row_' . $row->get_id() . '" style="' .
-                     ($rows_position != ResultSet :: POSITION_LAST ? 'margin-bottom: 1%;' : '') . '">';
+                $html[] = '<div class="portal_column" id="portal_column_' . $column->get_id() . '" style="width: ' .
+                     $column->getWidth() . '%;' . ($columnKey != (count($columns) - 1) ? ' margin-right: 1%;' : '') .
+                     '">';
 
-                $conditions = array();
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_ROW),
-                    new StaticConditionVariable($row->get_id()));
-                $condition = new AndCondition($conditions);
+                $blocks = $this->getElements(Block :: class_name(), $column->get_id());
 
-                // Get the user or platform columns
-                $parameters = new DataClassRetrievesParameters(
-                    $condition,
-                    null,
-                    null,
-                    array(new OrderBy(new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_SORT))));
-                $columns = DataManager :: retrieves(Column :: class_name(), $parameters);
-
-                while ($column = $columns->next_result())
+                foreach ($blocks as $block)
                 {
-                    $columns_position = $columns->position();
-
-                    $html[] = '<div class="portal_column" id="portal_column_' . $column->get_id() . '" style="width: ' .
-                         $column->get_width() . '%;' .
-                         ($columns_position != ResultSet :: POSITION_LAST ? ' margin-right: 1%;' : '') . '">';
-
-                    $conditions = array();
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
-                        new StaticConditionVariable($column->get_id()));
-                    $condition = new AndCondition($conditions);
-
-                    $parameters = new DataClassRetrievesParameters(
-                        $condition,
-                        null,
-                        null,
-                        array(new OrderBy(new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_SORT))));
-                    $blocks = DataManager :: retrieves(Block :: class_name(), $parameters);
-
-                    while ($block = $blocks->next_result())
-                    {
-                        $block_component = BlockRendition :: factory($this, $block);
-                        if ($block_component->is_visible())
-                        {
-                            $html[] = $block_component->as_html();
-                        }
-                    }
-
-                    $footer_style = ($blocks->size() > 0) ? 'style="display:none;"' : '';
-                    $html[] = '<div class="empty_portal_column" ' . $footer_style . '>';
-                    $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-                    $html[] = '<div class="deleteColumn"><a href="#"><img src="' . htmlspecialchars(
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn')) .
-                         '" /></a></div>';
-                    $html[] = '<div style="clear:both"></div>';
-                    $html[] = '</div>';
-
-                    $html[] = '</div>';
+                    $html[] = BlockRendition :: factory($this, $block)->toHtml();
                 }
 
+                $footer_style = (count($blocks) > 0) ? 'style="display:none;"' : '';
+                $html[] = '<div class="empty_portal_column" ' . $footer_style . '>';
+                $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
+                $html[] = '<div class="deleteColumn"><a href="#"><img src="' .
+                     htmlspecialchars(Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn')) .
+                     '" /></a></div>';
+                $html[] = '<div style="clear:both"></div>';
                 $html[] = '</div>';
-                $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
+
+                $html[] = '</div>';
             }
 
             $html[] = '</div>';
+            $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
         }
 
         $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
 
-        if ($user instanceof User && ($user_home_allowed || ($user->is_platform_admin() && $general_mode)))
+        if ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)))
         {
             $html[] = '<script type="text/javascript" src="' .
                  Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function create_user_home()
-    {
-        $user = $this->get_user();
-
-        $tabs_condition = new EqualityCondition(
-            new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_USER),
-            new StaticConditionVariable('0'));
-        $tabs = DataManager :: retrieves(Tab :: class_name(), $tabs_condition);
-
-        while ($tab = $tabs->next_result())
+        else
         {
-            $old_tab_id = $tab->get_id();
-            $tab->set_user($user->get_id());
-            $tab->create();
-
-            $rows_conditions = array();
-            $rows_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Row :: class_name(), Row :: PROPERTY_TAB),
-                new StaticConditionVariable($old_tab_id));
-            $rows_condition = new AndCondition($rows_conditions);
-            $rows = DataManager :: retrieves(Row :: class_name(), $rows_condition);
-
-            while ($row = $rows->next_result())
-            {
-                $old_row_id = $row->get_id();
-                $row->set_user($user->get_id());
-                $row->set_tab($tab->get_id());
-                $row->create();
-
-                $conditions = array();
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Column :: class_name(), Column :: PROPERTY_ROW),
-                    new StaticConditionVariable($old_row_id));
-                $condition = new AndCondition($conditions);
-
-                $columns = DataManager :: retrieves(Column :: class_name(), $condition);
-
-                while ($column = $columns->next_result())
-                {
-                    $old_column_id = $column->get_id();
-                    $column->set_user($user->get_id());
-                    $column->set_row($row->get_id());
-                    $column->create();
-
-                    $conditions = array();
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN),
-                        new StaticConditionVariable($old_column_id));
-                    $condition = new AndCondition($conditions);
-
-                    $blocks = DataManager :: retrieves(Block :: class_name(), $condition);
-
-                    while ($block = $blocks->next_result())
-                    {
-                        $block->set_user($user->get_id());
-                        $block->set_column($column->get_id());
-                        $block->create();
-                    }
-                }
-            }
+            $html[] = '<script type="text/javascript" src="' .
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
         }
 
-        DataClassCache :: truncate(Tab :: class_name());
+        return implode(PHP_EOL, $html);
     }
 }
