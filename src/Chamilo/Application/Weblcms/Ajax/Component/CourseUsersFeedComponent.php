@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Feed to return users of this course
- * 
+ *
  * @author Sven Vanpoucke
  * @package application.weblcms
  */
@@ -45,29 +45,29 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
     public function run()
     {
         $result = new JsonAjaxResult();
-        
+
         $elements = $this->get_elements();
         $elements = $elements->as_array();
-        
+
         $result->set_property(self :: PROPERTY_ELEMENTS, $elements);
         $result->set_property(self :: PROPERTY_TOTAL_ELEMENTS, $this->user_count);
-        
+
         $result->display();
     }
 
     /**
      * Returns all the elements for this feed
-     * 
+     *
      * @return Array
      */
     private function get_elements()
     {
         $elements = new AdvancedElementFinderElements();
-        
+
         // Add user category
         $user_category = new AdvancedElementFinderElement('users', 'category', 'Users', 'Users');
         $elements->add_element($user_category);
-        
+
         $users = $this->retrieve_users();
         if ($users)
         {
@@ -75,102 +75,102 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
             {
                 $user_category->add_child(
                     new AdvancedElementFinderElement(
-                        CourseUserEntity :: ENTITY_TYPE . '_' . $user->get_id(), 
-                        'type type_user', 
-                        $user->get_fullname(), 
+                        CourseUserEntity :: ENTITY_TYPE . '_' . $user->get_id(),
+                        'type type_user',
+                        $user->get_fullname(),
                         $user->get_official_code()));
             }
         }
-        
+
         return $elements;
     }
 
     /**
      * Retrieves the users from the course (direct subscribed and group subscribed)
-     * 
+     *
      * @return ResultSet
      */
     private function retrieve_users()
     {
         $course_id = $this->getPostDataValue(self :: PARAM_COURSE_ID);
-        
+
         // Retrieve the users directly subscribed to the course
         $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
         $course_user_relation_result_set = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseUserRelation :: class_name(), 
+            CourseUserRelation :: class_name(),
             $relation_condition);
-        
+
         $user_ids = array();
         while ($course_user = $course_user_relation_result_set->next_result())
         {
             $user_ids[] = $course_user->get_user_id();
         }
-        
+
         // Retrieve the users subscribed through platform groups
         $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID), 
+            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
-        
+
         $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseGroupRelation :: class_name(), 
+            CourseGroupRelation :: class_name(),
             $relation_condition);
-        
+
         $group_users = array();
-        
+
         while ($group_relation = $course_group_relations->next_result())
         {
             $group = $group_relation->get_group();
             $group_user_ids = $group->get_users(true, true);
-            
+
             $group_users = array_merge($group_users, $group_user_ids);
         }
-        
+
         $user_ids = array_merge($user_ids, $group_users);
-        
+
         if (count($user_ids) == 0)
         {
             return;
         }
-        
+
         $search_query = Request :: post(self :: PARAM_SEARCH_QUERY);
-        
+
         // Set the conditions for the search query
         if ($search_query && $search_query != '')
         {
             $conditions[] = Utilities :: query_to_condition(
-                $search_query, 
+                $search_query,
                 array(User :: PROPERTY_USERNAME, User :: PROPERTY_FIRSTNAME, User :: PROPERTY_LASTNAME));
         }
-        
+
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID), 
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
             $user_ids);
-        
+
         // Combine the conditions
         $count = count($conditions);
         if ($count > 1)
         {
             $condition = new AndCondition($conditions);
         }
-        
+
         if ($count == 1)
         {
             $condition = $conditions[0];
         }
         $this->user_count = \Chamilo\Core\User\Storage\DataManager :: count(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             $condition);
-        
+
         $parameters = new DataClassRetrievesParameters(
-            $condition, 
-            100, 
-            $this->get_offset(), 
+            $condition,
+            100,
+            $this->get_offset(),
             array(
-                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)), 
+                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)),
                 new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME))));
-        
+
         return \Chamilo\Core\User\Storage\DataManager :: retrieves(User :: class_name(), $parameters);
     }
 
@@ -181,7 +181,7 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         {
             $offset = 0;
         }
-        
+
         return $offset;
     }
 }
