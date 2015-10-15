@@ -136,9 +136,9 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 
         while ($group = $groups->next_result())
         {
-        $group_user_ids = $group->get_users(true, true);
+            $group_user_ids = $group->get_users(true, true);
 
-        $group_users = array_merge($group_users, $group_user_ids);
+            $group_users = array_merge($group_users, $group_user_ids);
         }
 
         $user_ids = array_merge($user_ids, $group_users);
@@ -155,7 +155,10 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         {
             $conditions[] = Utilities :: query_to_condition(
                 $search_query,
-                array(User :: PROPERTY_USERNAME, User :: PROPERTY_FIRSTNAME, User :: PROPERTY_LASTNAME));
+                array(
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)));
         }
 
         $conditions[] = new InCondition(
