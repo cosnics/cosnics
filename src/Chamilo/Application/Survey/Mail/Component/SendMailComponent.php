@@ -63,7 +63,7 @@ class SendMailComponent extends Manager
         {
             case Mail :: PARTICIPANT_TYPE :
                 $target_entities = RightsService :: get_instance();
-                   
+
 
                 if (is_array(($target_entities[UserEntity :: ENTITY_TYPE])))
                 {
@@ -102,7 +102,7 @@ class SendMailComponent extends Manager
                         Participant :: PROPERTY_SURVEY_PUBLICATION_ID),
                     new StaticConditionVariable($this->publication_id));
                 $parameters = new DataClassRetrievesParameters($condition);
-                $participants = DataManager :: retrieves(Participant :: class_name(), $parameters);
+                $participants = DataManager:: retrieves(Participant :: class_name(), $parameters);
 
                 while ($participant = $participants->next_result())
                 {

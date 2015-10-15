@@ -19,6 +19,7 @@ use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -54,7 +55,7 @@ class Manager extends InternalCalendar
             $condition = $this->getConditions($calendarRendererProvider->getDataUser());
             $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                 ContentObjectPublication :: class_name(),
-                $condition);
+                new DataClassRetrievesParameters($condition));
 
             while ($publication = $publications->next_result())
             {

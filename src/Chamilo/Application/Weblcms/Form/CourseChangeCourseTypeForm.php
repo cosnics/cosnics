@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: group_move_form.class.php 224 2010-04-06 14:40:30Z yannick $
@@ -65,7 +66,8 @@ class CourseChangeCourseTypeForm extends FormValidator
     public function get_course_types()
     {
         $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieves(
-            CourseType :: class_name());
+            CourseType :: class_name(),
+            new DataClassRetrievesParameters());
         $course_types = array();
         if (empty($this->course_type_id) || $this->allow_no_course_type)
         {

@@ -223,7 +223,8 @@ class PublicationRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findPublicationFavouritesByUser(User $user, $entities, $limit = null, $offset = null, $orderProperty = array())
+    public function findPublicationFavouritesByUser(User $user, $entities, $limit = null, $offset = null,
+        $orderProperty = array())
     {
         return DataManager :: retrieves(
             Publication :: class_name(),
@@ -296,14 +297,14 @@ class PublicationRepository
 
         $orConditions[] = $this->getPublicationsByCreatorCondition($user);
         $orConditions[] = $this->getSharedPublicationsForEntitiesWithRightCondition($entities, $right);
-        
+
         $andConditions[] = new OrCondition($orConditions);
         $andConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 PublicationUserFavourite :: class_name(),
                 PublicationUserFavourite :: PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));
-        
+
         return new AndCondition($andConditions);
     }
 

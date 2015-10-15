@@ -253,8 +253,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * Fixes the course tabs user orders when they are broken due to for example new course tabs, removal or
-     * (in)activation of course tabs.
-     * When new course types are found / activated, new course type user orders are added
+     * (in)activation of course tabs. When new course types are found / activated, new course type user orders are added
      * with highest order (last) When coures types are deleted or inactivated, the course type user oders are deleted
      * and the display orders are fixed.
      *
@@ -295,7 +294,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $active_course_types = DataManager :: retrieves(CourseType :: class_name(), $condition);
+        $active_course_types = DataManager :: retrieves(
+            CourseType :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($course_type = $active_course_types->next_result())
         {

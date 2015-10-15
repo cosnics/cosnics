@@ -36,10 +36,10 @@ use DOMDocument;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * This class represents a form to allow a user to publish a learning object.
- * The form allows the user to set some
+ * This class represents a form to allow a user to publish a learning object. The form allows the user to set some
  * properties of the publication (publication dates, target users, visibility, ...)
  *
  * @author Sven Vanpoucke
@@ -169,8 +169,7 @@ class ContentObjectPublicationForm extends FormValidator
     }
 
     /**
-     * Sets the default values of the form.
-     * By default the publication is for everybody who has access to the tool and
+     * Sets the default values of the form. By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
     public function setDefaults($defaults = array())
@@ -488,7 +487,9 @@ class ContentObjectPublicationForm extends FormValidator
             new StaticConditionVariable($parent_id));
         $condition = new AndCondition($conditions);
 
-        $cats = DataManager :: retrieves(ContentObjectPublicationCategory :: class_name(), $condition);
+        $cats = DataManager :: retrieves(
+            ContentObjectPublicationCategory :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($cat = $cats->next_result())
         {

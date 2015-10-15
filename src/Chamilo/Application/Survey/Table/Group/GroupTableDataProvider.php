@@ -13,7 +13,7 @@ class GroupTableDataProvider extends DataClassTableDataProvider
     function retrieve_data($condition, $offset, $count, $order_property = NULL)
     {
         return DataManager :: retrieves(
-            Group :: class_name(), 
+            Group :: class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 

@@ -133,7 +133,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         $condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
             new StaticConditionVariable($filter_id));
-        $relations = \Chamilo\Core\Group\Storage\DataManager :: retrieves(GroupRelUser :: class_name(), $condition);
+        $relations = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
+            GroupRelUser :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $user_ids = array();
 

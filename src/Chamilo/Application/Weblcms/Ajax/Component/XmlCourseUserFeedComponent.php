@@ -78,7 +78,7 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
 
         $course_user_relation_result_set = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseUserRelation :: class_name(),
-            $relation_condition);
+            new DataClassRetrievesParameters($relation_condition));
 
         $user_ids = array();
         while ($course_user = $course_user_relation_result_set->next_result())

@@ -126,7 +126,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
             $course_user_relation_result_set = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
                 CourseUserRelation :: class_name(),
-                $relation_condition);
+                new DataClassRetrievesParameters($relation_condition));
 
             $user_ids = array();
             while ($course_user = $course_user_relation_result_set->next_result())
@@ -306,7 +306,8 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 {
                     global $course;
 
-                    echo '<node id="group" classes="category unlinked" title="' . htmlspecialchars($course->get_title()) . '">', "\n";
+                    echo '<node id="group" classes="category unlinked" title="' . htmlspecialchars($course->get_title()) .
+                         '">', "\n";
 
                     $this->dump_groups_tree($groups_tree);
                     echo '</node>', "\n";

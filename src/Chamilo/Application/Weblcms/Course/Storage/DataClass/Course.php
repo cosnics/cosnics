@@ -512,8 +512,7 @@ class Course extends DataClass
     }
 
     /**
-     * Returns whether or not a given course setting is locked for this object.
-     * Since courses do not support locking of
+     * Returns whether or not a given course setting is locked for this object. Since courses do not support locking of
      * course settings the course settings are never locked
      *
      * @param mixed[string] CourseSetting
@@ -595,7 +594,7 @@ class Course extends DataClass
         }
 
         // Create a location for each tool
-        $tools = DataManager :: retrieves(CourseTool :: class_name());
+        $tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters());
         while ($tool = $tools->next_result())
         {
             if (! CourseManagementRights :: get_instance()->create_location_in_courses_subtree(
@@ -798,7 +797,9 @@ class Course extends DataClass
         $relation_condition = new EqualityCondition(
             new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
-        return DataManager :: retrieves(CourseUserRelation :: class_name(), $relation_condition)->as_array();
+        return DataManager :: retrieves(
+            CourseUserRelation :: class_name(),
+            new DataClassRetrievesParameters($relation_condition))->as_array();
     }
 
     /**
@@ -824,7 +825,9 @@ class Course extends DataClass
         $relation_condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
-        return DataManager :: retrieves(CourseGroupRelation :: class_name(), $relation_condition)->as_array();
+        return DataManager :: retrieves(
+            CourseGroupRelation :: class_name(),
+            new DataClassRetrievesParameters($relation_condition))->as_array();
     }
 
     /**

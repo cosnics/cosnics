@@ -12,6 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This class describes the submanager for course management
@@ -94,7 +95,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),
             $course_ids);
-        $result_set = DataManager :: retrieves(Course :: class_name(), $condition);
+        $result_set = DataManager :: retrieves(Course :: class_name(), new DataClassRetrievesParameters($condition));
         if ($result_set->size() == 0)
         {
             throw new ObjectNotExistException(Translation :: get('Course'), $course_ids);
