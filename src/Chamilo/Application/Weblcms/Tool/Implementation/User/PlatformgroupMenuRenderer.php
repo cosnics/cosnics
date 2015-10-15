@@ -38,8 +38,7 @@ class PlatformgroupMenuRenderer extends GenericTree
     // CONSTRUCTOR
     // **************************************************************************
     /**
-     * Constructor.
-     * Creates a new group navigation menu for subscribed groups.
+     * Constructor. Creates a new group navigation menu for subscribed groups.
      *
      * @param $browser PersonalMessengerManager The browser
      */

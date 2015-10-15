@@ -35,8 +35,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     /**
      * Check wether there can be anything coppied to a course and if there is even another course where the user can
-     * copy to.
-     * Build the form check validate and copy the selected information
+     * copy to. Build the form check validate and copy the selected information
      */
     public function run()
     {
@@ -52,7 +51,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             new StaticConditionVariable($this->get_course_id()));
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $common_sections = array(
             CourseSection :: TYPE_TOOL,
@@ -174,7 +173,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($course_section = $course_sections->next_result())
         {
