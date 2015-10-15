@@ -8,6 +8,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * $Id: new_announcements.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -19,7 +20,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * This class represents a calendar repo_viewer component which can be used to browse through the possible learning
  * objects to publish.
  */
-class NewAnnouncements extends NewBlock
+class NewAnnouncements extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
@@ -107,5 +108,14 @@ class NewAnnouncements extends NewBlock
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(self :: CONFIGURATION_SHOW_CONTENT);
     }
 }

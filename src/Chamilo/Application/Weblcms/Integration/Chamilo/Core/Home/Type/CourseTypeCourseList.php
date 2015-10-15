@@ -10,11 +10,12 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * This class represents a block that shows courses of a specific type
  */
-class CourseTypeCourseList extends Block
+class CourseTypeCourseList extends Block implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
     const CONFIGURATION_SHOW_WHEN_EMPTY = 'show_when_empty';
@@ -152,6 +153,16 @@ class CourseTypeCourseList extends Block
     {
         return true;
     }
-}
 
-?>
+    /**
+     *
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return array(
+            self :: CONFIGURATION_SHOW_NEW_ICONS,
+            self :: CONFIGURATION_SHOW_WHEN_EMPTY,
+            self :: CONFIGURATION_COURSE_TYPE);
+    }
+}
