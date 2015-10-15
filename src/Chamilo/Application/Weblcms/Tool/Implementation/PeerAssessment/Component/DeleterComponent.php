@@ -16,8 +16,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * Enter description here .
- * ..
+ * Enter description here . ..
  *
  * @author Renaat De Muynck
  */

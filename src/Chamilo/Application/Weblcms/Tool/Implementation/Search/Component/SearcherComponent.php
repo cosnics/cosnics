@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\String\Text;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: search_searcher.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -67,7 +68,7 @@ class SearcherComponent extends Manager
 
             $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                 ContentObjectPublication :: class_name(),
-                $this->get_retrieve_publications_condition());
+                new DataClassRetrievesParameters($this->get_retrieve_publications_condition()));
 
             $tools = array();
 

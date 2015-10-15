@@ -465,7 +465,9 @@ class CourseGroupForm extends FormValidator
                     new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
                     new StaticConditionVariable($parent_course_group->get_id()));
 
-                $c_course_groups = DataManager :: retrieves(CourseGroup :: class_name(), $condition);
+                $c_course_groups = DataManager :: retrieves(
+                    CourseGroup :: class_name(),
+                    new DataClassRetrievesParameters($condition));
 
                 while ($course_group = $c_course_groups->next_result())
                 {
@@ -477,7 +479,8 @@ class CourseGroupForm extends FormValidator
                 if ($parent_group_form_max_number_of_members > 0 &&
                      $total_size > $parent_group_form_max_number_of_members)
                 {
-                    $this->course_group->add_error(Translation :: get('MaxMembersFromChildrenTooBigForParentCourseGroup'));
+                    $this->course_group->add_error(
+                        Translation :: get('MaxMembersFromChildrenTooBigForParentCourseGroup'));
                     return false;
                 }
             }
@@ -1633,7 +1636,9 @@ class CourseGroupForm extends FormValidator
             new StaticConditionVariable($parent));
         $condition = new AndCondition($conditions);
 
-        $data_set = DataManager :: retrieves(ContentObjectPublicationCategory :: class_name(), $condition);
+        $data_set = DataManager :: retrieves(
+            ContentObjectPublicationCategory :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $category = $data_set->next_result();
         if ($category)
@@ -1655,8 +1660,7 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
@@ -1697,8 +1701,7 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $counternteger.
