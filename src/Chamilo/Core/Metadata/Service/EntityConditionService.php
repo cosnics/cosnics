@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -99,7 +100,9 @@ class EntityConditionService
         }
         else
         {
-            $dataClassInstances = DataManager :: retrieves($entity->getDataClassName());
+            $dataClassInstances = DataManager :: retrieves(
+                $entity->getDataClassName(),
+                new DataClassRetrievesParameters());
 
             while ($dataClassInstance = $dataClassInstances->next_result())
             {

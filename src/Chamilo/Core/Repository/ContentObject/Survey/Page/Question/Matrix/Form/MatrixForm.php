@@ -24,7 +24,6 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Template\TemplateConfiguration;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
 
-
 /**
  *
  * @package repository.content_object.survey_matrix_question
@@ -34,16 +33,15 @@ use Chamilo\Core\Repository\Exception\NoTemplateException;
  */
 class MatrixForm extends ContentObjectForm
 {
-
     const TAB_GENERAL = 'general';
     const TAB_QUESTION = 'question';
     const TAB_OPTION = 'option';
     const TAB_MATCH = 'match';
-    
+
     private static $html_editor_options = array(
         FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
         FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
-    
+
     /**
      * Prepare all the different tabs
      */
@@ -55,8 +53,7 @@ class MatrixForm extends ContentObjectForm
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
                     true) . 'Form.js'));
-    
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_QUESTION,
@@ -66,7 +63,7 @@ class MatrixForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
                     'Tab/' . self :: TAB_QUESTION),
                 'build_question_form'));
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_OPTION,
@@ -76,7 +73,7 @@ class MatrixForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
                     'Tab/' . self :: TAB_OPTION),
                 'build_option_form'));
-        
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_MATCH,
@@ -86,11 +83,11 @@ class MatrixForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix',
                     'Tab/' . self :: TAB_MATCH),
                 'build_match_form'));
-    
+
         $this->addDefaultTab();
         $this->addMetadataTabs();
     }
-    
+
     /**
      * Add the question and instruction fields
      *
@@ -103,30 +100,30 @@ class MatrixForm extends ContentObjectForm
             Translation :: get('Question'),
             true,
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
-    
+
         $this->add_html_editor(
             Matrix :: PROPERTY_INSTRUCTION,
             Translation :: get('Instruction'),
             false,
             self :: $html_editor_options);
-    
+
         try
         {
             $configuration = $this->get_content_object_template_configuration();
-            
+
             $allowed_to_edit_question = $configuration->get_configuration(
                 Matrix :: PROPERTY_QUESTION,
                 TemplateConfiguration :: ACTION_EDIT);
-    
+
             if (! $allowed_to_edit_question)
             {
                 $this->getElement(Matrix :: PROPERTY_QUESTION)->freeze();
             }
-    
+
             $allowed_to_edit_instruction = $configuration->get_configuration(
                 Matrix :: PROPERTY_INSTRUCTION,
                 TemplateConfiguration :: ACTION_EDIT);
-    
+
             if (! $allowed_to_edit_instruction)
             {
                 $this->getElement(Matrix :: PROPERTY_INSTRUCTION)->freeze();
@@ -137,7 +134,7 @@ class MatrixForm extends ContentObjectForm
             throw $exception;
         }
     }
-  
+
     /**
      * Adds the options to the form
      */
@@ -146,7 +143,7 @@ class MatrixForm extends ContentObjectForm
         $this->update_number_of_options_and_matches();
         $this->add_options();
     }
-    
+
     /**
      * Adds the options to the form
      */
@@ -172,7 +169,7 @@ class MatrixForm extends ContentObjectForm
 
             $matches = $object->get_matches();
 
-            foreach ($matches as $match )
+            foreach ($matches as $match)
             {
                 $defaults[MatrixMatch :: PROPERTY_VALUE . '[' . ($match->get_display_order() - 1) . ']'] = $match->get_value();
             }

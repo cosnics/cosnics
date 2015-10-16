@@ -47,34 +47,34 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    Configuration :: class_name(), 
-                    Configuration :: PROPERTY_DISPLAY_ORDER, 
+                    Configuration :: class_name(),
+                    Configuration :: PROPERTY_DISPLAY_ORDER,
                     SORT_ASC)));
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID), 
+            new PropertyConditionVariable(Configuration :: class_name(), Configuration :: PROPERTY_PAGE_ID),
             new StaticConditionVariable($this->get_id()));
         $configurations = DataManager :: retrieves(
-            Configuration :: class_name(), 
+            Configuration :: class_name(),
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
-        
+
         return $configurations;
     }
 
     function get_allowed_types()
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            'Chamilo\Core\Repository\ContentObject\Survey', 
+            'Chamilo\Core\Repository\ContentObject\Survey',
             \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
             $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
-        
+
         return $types;
     }
 
@@ -83,31 +83,31 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER, 
+                    ComplexContentObjectItem :: class_name(),
+                    ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER,
                     SORT_ASC)));
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                ComplexContentObjectItem :: class_name(),
+                ComplexContentObjectItem :: PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id()));
         $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
+            ComplexContentObjectItem :: class_name(),
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
-        
+
         if ($complex_items)
         {
             return $complex_content_objects;
         }
-        
+
         $survey_questions = array();
-        
+
         foreach ($complex_content_objects as $complex_content_object)
         {
             $survey_questions[] = $complex_content_object->get_ref_object();
         }
-        
+
         return $survey_questions;
     }
 

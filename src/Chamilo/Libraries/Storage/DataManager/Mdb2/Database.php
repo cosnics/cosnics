@@ -1251,8 +1251,7 @@ class Database
     private $_transactionNestingLevel = 0;
 
     /**
-     * Flag that indicates whether the current transaction is marked for rollback only.
-     * The flag is set when nested
+     * Flag that indicates whether the current transaction is marked for rollback only. The flag is set when nested
      * transactions attempt to rollback, which poisons the enclosing transactions, forcing them to rollback as well. The
      * flag is unset as soons as an actual rollback occurs.
      *

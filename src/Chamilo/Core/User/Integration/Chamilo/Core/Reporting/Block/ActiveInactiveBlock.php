@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class ActiveInactiveBlock extends Block
 {
@@ -12,7 +13,8 @@ class ActiveInactiveBlock extends Block
     {
         $reporting_data = new ReportingData();
         $users = \Chamilo\Core\User\Storage\DataManager :: retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name());
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+            new DataClassRetrievesParameters());
         $active[Translation :: get('Active')] = 0;
         $active[Translation :: get('Inactive')] = 0;
         while ($user = $users->next_result())

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: local_setting.class.php 168 2009-11-12 11:53:23Z vanpouckesven $
@@ -31,8 +32,7 @@ class LocalSetting
     private static $instance;
 
     /**
-     * Parameters defined in the configuration.
-     * Stored as an associative array.
+     * Parameters defined in the configuration. Stored as an associative array.
      */
     private $params;
 
@@ -126,7 +126,7 @@ class LocalSetting
                 new StaticConditionVariable($user_id));
             $user_settings = \Chamilo\Core\User\Storage\DataManager :: retrieves(
                 UserSetting :: class_name(),
-                $condition);
+                new DataClassRetrievesParameters($condition));
 
             while ($user_setting = $user_settings->next_result())
             {

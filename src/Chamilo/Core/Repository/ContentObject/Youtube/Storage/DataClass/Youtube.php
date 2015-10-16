@@ -10,10 +10,11 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: youtube.class.php
- * 
+ *
  * @package repository.lib.content_object.youtube
  */
 class Youtube extends ContentObject implements Versionable, Includeable
@@ -29,7 +30,7 @@ class Youtube extends ContentObject implements Versionable, Includeable
     public function get_video_url()
     {
         $synchronization_data = $this->get_synchronization_data();
-        
+
         if ($synchronization_data)
         {
             return sprintf(self :: YOUTUBE_PLAYER_URI, $synchronization_data->get_external_object_id());
@@ -40,16 +41,16 @@ class Youtube extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
             new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('youtube')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            Instance :: class_name(), 
-            $condition);
+            Instance :: class_name(),
+            new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;
     }
 }

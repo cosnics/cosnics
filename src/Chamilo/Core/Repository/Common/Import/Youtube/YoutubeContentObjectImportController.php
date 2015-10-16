@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class YoutubeContentObjectImportController extends ContentObjectImportController
 {
@@ -61,7 +62,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
                     \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                    $condition);
+                    new DataClassRetrievesParameters($condition));
 
                 $external_repository = $external_repositories->next_result();
                 $youtube_connector = DataConnector :: get_instance($external_repository);
@@ -115,7 +116,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
 
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
             \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
         $youtube_connector_available = $external_repositories->size() == 1;
 
         return $youtube_object_available && $youtube_connector_available;
