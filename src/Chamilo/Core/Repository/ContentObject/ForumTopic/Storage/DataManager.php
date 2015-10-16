@@ -139,7 +139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self :: retrieves(ForumPost :: class_name(), $condition);
+        return self :: retrieves(ForumPost :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -280,7 +280,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ForumPostAttachment :: PROPERTY_FORUM_POST_ID),
             new StaticConditionVariable($forum_post_id));
 
-        return self :: retrieves(ForumPostAttachment :: class_name(), $condition);
+        return self :: retrieves(ForumPostAttachment :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /*
@@ -406,7 +406,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ForumTopicSubscribe :: PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
-        return self :: retrieves(ForumTopicSubscribe :: class_name(), $condition);
+        return self :: retrieves(ForumTopicSubscribe :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /**

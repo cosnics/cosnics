@@ -195,7 +195,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
-        $publications = self :: retrieves(ContentObjectPublication :: class_name(), $condition);
+        $publications = self :: retrieves(
+            ContentObjectPublication :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($publication = $publications->next_result())
         {

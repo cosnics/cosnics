@@ -324,7 +324,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
-        $publications = self :: retrieves(Publication :: class_name(), $condition);
+        $publications = self :: retrieves(Publication :: class_name(), new DataClassRetrievesParameters($condition));
 
         while ($publication = $publications->next_result())
         {

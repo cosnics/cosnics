@@ -68,8 +68,7 @@ class DataManager
     public static $instance;
 
     /**
-     * Uses a singleton pattern and a factory pattern to return the data manager.
-     * The configuration determines which
+     * Uses a singleton pattern and a factory pattern to return the data manager. The configuration determines which
      * data manager class is to be instantiated
      *
      * @return \libraries\storage\DoctrineDatabase
