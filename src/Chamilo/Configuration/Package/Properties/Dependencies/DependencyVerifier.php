@@ -121,7 +121,9 @@ class DependencyVerifier
                 new StaticConditionVariable($this->get_package()->get_code())));
         $condition = new OrCondition($conditions);
 
-        $registrations = DataManager :: retrieves(Registration :: class_name(), new DataClassRetrievesParameters($condition);
+        $registrations = DataManager :: retrieves(
+            Registration :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $failures = 0;
 

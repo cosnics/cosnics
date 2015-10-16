@@ -50,7 +50,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixTemplates()
     {
-        $existingTemplates = DataManager :: retrieves(TemplateRegistration :: class_name(), new DataClassRetrievesParameters();
+        $existingTemplates = DataManager :: retrieves(
+            TemplateRegistration :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingTemplate = $existingTemplates->next_result())
         {
@@ -315,7 +317,8 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
     }
 
     /**
-     * Takes an __PHP_Incomplete_Class and casts it to a stdClass object. All properties will be made public in this
+     * Takes an __PHP_Incomplete_Class and casts it to a stdClass object.
+     * All properties will be made public in this
      * step.
      *
      * @since 1.1.0

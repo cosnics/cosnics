@@ -46,6 +46,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      */
     private $userCourseCategoryId;
 
+    private $courseListRenderer;
+
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
@@ -67,13 +69,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface
 
     public function toHtml($view = '')
     {
-        $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
-            $this,
-            $this->getLinkTarget(),
-            $this->getCourseTypeId(),
-            $this->getUserCourseCategoryId());
-
-        if ($renderer->get_courses()->size() > 0)
+        if ($this->getCourseListRenderer()->get_courses()->size() > 0)
         {
             return parent :: toHtml($view);
         }
@@ -81,6 +77,20 @@ class FilteredCourseList extends Block implements ConfigurableInterface
         {
             return '';
         }
+    }
+
+    public function getCourseListRenderer()
+    {
+        if (! isset($this->courseListRenderer))
+        {
+            $this->courseListRenderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
+                $this,
+                $this->getLinkTarget(),
+                $this->getCourseTypeId(),
+                $this->getUserCourseCategoryId());
+        }
+
+        return $this->courseListRenderer;
     }
 
     /**
@@ -92,11 +102,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface
     {
         $html = array();
 
-        $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer(
-            $this,
-            $this->getLinkTarget(),
-            $this->getCourseTypeId(),
-            $this->getUserCourseCategoryId());
+        $renderer = $this->getCourseListRenderer();
 
         if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
         {

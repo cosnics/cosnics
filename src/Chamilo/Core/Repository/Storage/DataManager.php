@@ -1071,10 +1071,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         // Delete all subcategories by recursively repeating the entire process
         $categories = DataManager :: retrieves(
-            RepositoryCategory :: class_name(),new DataClassRetrievesParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
-                new StaticConditionVariable($category->get_id())));
+            RepositoryCategory :: class_name(),
+            new DataClassRetrievesParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RepositoryCategory :: class_name(),
+                        RepositoryCategory :: PROPERTY_PARENT),
+                    new StaticConditionVariable($category->get_id()))));
 
         while ($categories && $category = $categories->next_result())
         {
