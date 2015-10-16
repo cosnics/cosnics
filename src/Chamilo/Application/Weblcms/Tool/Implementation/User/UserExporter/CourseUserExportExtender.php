@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Application\Weblcms\UserExporter\UserExportExtender;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;

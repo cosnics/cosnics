@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Storage\ResultSet;
 
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
-use Chamilo\Libraries\Storage\Cache\DataClassResultCache;
+// use Chamilo\Libraries\Storage\Cache\DataClassCache;
+// use Chamilo\Libraries\Storage\Cache\DataClassResultCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Configuration\Configuration;
+// use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+// use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+// use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+// use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+// use Chamilo\Configuration\Configuration;
 
 /**
  *

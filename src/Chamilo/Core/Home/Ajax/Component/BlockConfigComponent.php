@@ -3,17 +3,8 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\BlockConfiguration;
 use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
