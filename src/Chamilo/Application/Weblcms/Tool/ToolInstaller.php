@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Abstract class to define the installation of a tool
@@ -110,8 +111,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
     }
 
     /**
-     * Retrieves a course section type from the package info.
-     * If no package info or course section definition is found
+     * Retrieves a course section type from the package info. If no package info or course section definition is found
      * the default section "tool" is selected.
      *
      * @return int
@@ -188,7 +188,9 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
      */
     protected function install_tool_for_existing_course_types()
     {
-        $course_types = CourseTypeDataManager :: retrieves(CourseType :: class_name());
+        $course_types = CourseTypeDataManager :: retrieves(
+            CourseType :: class_name(),
+            new DataClassRetrievesParameters());
         while ($course_type = $course_types->next_result())
         {
             if (! $this->install_static_tool_setting_relations_for_object(
@@ -221,7 +223,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
     {
         $course_management_rights = CourseManagementRights :: get_instance();
 
-        $courses = CourseDataManager :: retrieves(Course :: class_name());
+        $courses = CourseDataManager :: retrieves(Course :: class_name(), new DataClassRetrievesParameters());
         while ($course = $courses->next_result())
         {
             if (! $this->install_static_tool_setting_relations_for_object(

@@ -6,6 +6,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: user_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -104,7 +105,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $relations = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseGroupRelation :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $group_ids = array();
         while ($group = $relations->next_result())

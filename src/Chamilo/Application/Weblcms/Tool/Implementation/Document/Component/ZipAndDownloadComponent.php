@@ -77,8 +77,6 @@ class ZipAndDownloadComponent extends Manager
 
         $category_folder_mapping = $this->create_folder_structure($category_id, $is_course_admin);
 
-
-
         $target_path = array_shift($category_folder_mapping);
         foreach ($category_folder_mapping as $category_id => $dir)
         {
@@ -157,7 +155,6 @@ class ZipAndDownloadComponent extends Manager
                     0,
                     - 1,
                     $this->get_user_id());
-
             }
 
             if ($publications)
@@ -247,7 +244,7 @@ class ZipAndDownloadComponent extends Manager
 
         $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($category = $categories->next_result())
         {
