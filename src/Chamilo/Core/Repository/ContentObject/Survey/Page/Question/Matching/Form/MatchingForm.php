@@ -189,8 +189,7 @@ class MatchingForm extends ContentObjectForm
     }
 
     /**
-     * Adds the answer to the current learning object.
-     * This function adds the list of possible options and matches and
+     * Adds the answer to the current learning object. This function adds the list of possible options and matches and
      * the relation between the options and the matches to the question.
      */
     function add_answers()

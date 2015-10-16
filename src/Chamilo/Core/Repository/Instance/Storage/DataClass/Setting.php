@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use DOMDocument;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -206,7 +207,7 @@ class Setting extends DataClass
         $condition = new EqualityCondition(
             new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($external_id));
-        $settings = DataManager :: retrieves(self :: class_name(), $condition);
+        $settings = DataManager :: retrieves(self :: class_name(), new DataClassRetrievesParameters($condition));
 
         while ($setting = $settings->next_result())
         {

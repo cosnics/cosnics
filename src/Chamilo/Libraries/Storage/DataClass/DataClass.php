@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Exception;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Abstract class that describes a dataclass
@@ -31,8 +32,7 @@ abstract class DataClass
      */
 
     /**
-     * Properties of the data class object, stored in an associative array.
-     * Combination of different types of
+     * Properties of the data class object, stored in an associative array. Combination of different types of
      * properties. Default properties => properties that are a mapping of dataclass and data table Optional properties
      * => other properties that were added in join queries Foreign properties => objects of other dataclasses
      */
@@ -575,7 +575,7 @@ abstract class DataClass
         {
             $dependency_objects = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
                 $dependency_class,
-                $dependency_condition);
+                new DataClassRetrievesParameters($dependency_condition));
 
             while ($dependency_object = $dependency_objects->next_result())
             {
