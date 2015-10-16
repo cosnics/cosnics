@@ -55,7 +55,6 @@ class CourseListRenderer
         $this->parent = $parent;
         $this->new_publication_icons = false;
         $this->target = $target;
-        $this->tools = DataManager :: retrieves(CourseTool :: class_name())->as_array();
     }
 
     public function get_parent()
@@ -114,14 +113,21 @@ class CourseListRenderer
         return $this->display_courses();
     }
 
+    private $retrievedCourses;
+
     /**
      * Retrieves the courses for the user
      */
     protected function retrieve_courses()
     {
-        return CourseDataManager :: retrieve_all_courses_from_user(
+        if(!isset($this->retrievedCourses))
+        {
+        $this->retrievedCourses = CourseDataManager :: retrieve_all_courses_from_user(
             $this->get_user(),
             $this->get_retrieve_courses_condition());
+        }
+
+        return $this->retrievedCourses;
     }
 
     public function get_courses()
@@ -208,6 +214,16 @@ class CourseListRenderer
         return '<div class="normal-message">' . Translation :: get('NoCourses') . '</div>';
     }
 
+    private function getTools()
+    {
+        if (! isset($this->tools))
+        {
+            $this->tools = DataManager :: retrieves(CourseTool :: class_name())->as_array();
+        }
+
+        return $this->tools;
+    }
+
     /**
      * Displays the what's new icons
      *
@@ -220,7 +236,7 @@ class CourseListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        foreach ($this->tools as $tool)
+        foreach ($this->getTools() as $tool)
         {
             $active = $course_settings_controller->get_course_setting(
                 $course,
