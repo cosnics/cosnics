@@ -27,6 +27,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -341,11 +342,11 @@ abstract class Manager extends Application implements NoContextComponent
      */
     abstract public function get_menu_items();
 
-
-    public function get_menu( )
+    public function get_menu()
     {
         return null;
     }
+
     /**
      *
      * @param \core\repository\external\ExternalObject $object
@@ -580,7 +581,9 @@ abstract class Manager extends Application implements NoContextComponent
             new StaticConditionVariable($status));
         $condition = new AndCondition($conditions);
 
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(Registration :: class_name(), $condition);
+        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
+            Registration :: class_name(),
+            new DataClassRetrievesParameters($condition));
     }
 
     public static function get_repository_menu_parameter()

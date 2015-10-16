@@ -25,8 +25,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 
 /**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
+ * A user manager provides some functionalities to the admin to manage his users. For each functionality a component is
  * available.
  */
 abstract class Manager extends Application

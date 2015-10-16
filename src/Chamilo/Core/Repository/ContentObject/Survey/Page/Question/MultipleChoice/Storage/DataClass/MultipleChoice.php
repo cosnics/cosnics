@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class MultipleChoice extends ContentObject implements Versionable
 {
     const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_ANSWER_TYPE = 'answer_type';
     const PROPERTY_DISPLAY_TYPE = 'display_type';
@@ -29,11 +29,11 @@ class MultipleChoice extends ContentObject implements Versionable
     const PROPERTY_INSTRUCTION = 'instruction';
     // Pseudo-property, constant can be used when handling the collection of options
     const PROPERTY_OPTIONS = 'options';
-    
+
     // Display types
     const DISPLAY_TYPE_SELECT = 'select';
     const DISPLAY_TYPE_TABLE = 'table';
-    
+
     // Answer types
     const ANSWER_TYPE_RADIO = 1;
     const ANSWER_TYPE_CHECKBOX = 2;
@@ -48,16 +48,16 @@ class MultipleChoice extends ContentObject implements Versionable
     static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_ANSWER_TYPE, 
-            self :: PROPERTY_DISPLAY_TYPE, 
-            self :: PROPERTY_QUESTION, 
+            self :: PROPERTY_ANSWER_TYPE,
+            self :: PROPERTY_DISPLAY_TYPE,
+            self :: PROPERTY_QUESTION,
             self :: PROPERTY_INSTRUCTION);
     }
 
     public function create()
     {
         $success = parent :: create();
-        
+
         if ($success)
         {
             foreach ($this->options as $option)
@@ -79,17 +79,17 @@ class MultipleChoice extends ContentObject implements Versionable
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    MultipleChoiceOption :: class_name(), 
-                    MultipleChoiceOption :: PROPERTY_QUESTION_ID), 
+                    MultipleChoiceOption :: class_name(),
+                    MultipleChoiceOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($this->get_id()));
-            
+
             $order = new OrderBy(
                 new PropertyConditionVariable(
-                    MultipleChoiceOption :: class_name(), 
+                    MultipleChoiceOption :: class_name(),
                     MultipleChoiceOption :: PROPERTY_DISPLAY_ORDER));
-            
+
             $this->options = DataManager :: retrieves(
-                MultipleChoiceOption :: class_name(), 
+                MultipleChoiceOption :: class_name(),
                 new DataClassRetrievesParameters($condition, null, null, array($order)))->as_array();
             return $this->options;
         }
@@ -153,7 +153,7 @@ class MultipleChoice extends ContentObject implements Versionable
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return string[string]
      */
     protected function get_dependencies()
@@ -161,10 +161,10 @@ class MultipleChoice extends ContentObject implements Versionable
         $dependencies = parent :: get_dependencies();
         $dependencies[MultipleChoiceOption :: class_name()] = new EqualityCondition(
             new PropertyConditionVariable(
-                MultipleChoiceOption :: class_name(), 
-                MultipleChoiceOption :: PROPERTY_QUESTION_ID), 
+                MultipleChoiceOption :: class_name(),
+                MultipleChoiceOption :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         return $dependencies;
     }
 }

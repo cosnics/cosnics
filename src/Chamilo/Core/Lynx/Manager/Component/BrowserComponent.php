@@ -319,8 +319,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $breadcrumbs,
             1,
             0,
-            array(
-                new Breadcrumb($redirect->getUrl(), Translation :: get('Administration'))));
+            array(new Breadcrumb($redirect->getUrl(), Translation :: get('Administration'))));
         $breadcrumb_trail->set($breadcrumbs);
     }
 }

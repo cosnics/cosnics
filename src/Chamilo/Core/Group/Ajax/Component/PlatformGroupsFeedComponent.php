@@ -108,7 +108,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         $condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
             new StaticConditionVariable($filter_id));
-        $relations = DataManager :: retrieves(GroupRelUser :: class_name(), $condition);
+        $relations = DataManager :: retrieves(
+            GroupRelUser :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $user_ids = array();
 

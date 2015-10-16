@@ -1,8 +1,7 @@
 <?php
-
-
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -21,7 +20,7 @@ class HTML_QuickForm_Select_Language extends HTML_QuickForm_select
     {
         parent :: __construct($elementName, $elementLabel, $options, $attributes);
         // Get all languages
-        $languages = DataManager :: retrieves(Language :: class_name());
+        $languages = DataManager :: retrieves(Language :: class_name(), new DataClassRetrievesParameters());
 
         $this->_options = array();
         $this->_values = array();
