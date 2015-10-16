@@ -94,7 +94,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self :: retrieves(Instance :: class_name(), $condition);
+        return self :: retrieves(Instance :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
     public static function deactivate_instance_objects($external_instance_id, $user_id, $external_user_id)

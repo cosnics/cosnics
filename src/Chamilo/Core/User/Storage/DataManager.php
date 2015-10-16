@@ -259,7 +259,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new InCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
             $official_codes);
-        return self :: retrieves(User :: class_name(), $condition);
+        return self :: retrieves(User :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
     /**
@@ -275,7 +275,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
             new StaticConditionVariable($email));
-        return self :: retrieves(User :: class_name(), $condition)->as_array();
+        return self :: retrieves(User :: class_name(), new DataClassRetrievesParameters($condition))->as_array();
     }
 
     /**
@@ -425,7 +425,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_all_users()
     {
-        while ($user = self :: retrieves(User :: class_name())->next_result())
+        while ($user = self :: retrieves(User :: class_name(), new DataClassRetrievesParameters())->next_result())
         {
             $user->delete();
         }
