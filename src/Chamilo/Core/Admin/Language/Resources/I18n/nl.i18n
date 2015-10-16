@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = admin\language
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Translation Tools"
+Package = "Package"
+Language = "Taal"
+LocalVariableCount = "Lokaal aantal variabelen"
+ImportVariableCount = "Aantal variabelen in het geimporteerd bestand"
+LocalExtraCount = "Extra variabelen in lokaal bestand"
+LocalNonEmptyCount = "Niet-lege waarden in het lokaal bestand"
+ImporterComponent = "Importeer CSV"
+ExporterComponent = "Exporteer CSV"
+SourceFile = "Bronbestand"
+General = "Algemeen"
+BaseLanguage = "Basistaal"
+SourceLanguage = "Brontaal"
+TargetLanguages = "Doeltalen"

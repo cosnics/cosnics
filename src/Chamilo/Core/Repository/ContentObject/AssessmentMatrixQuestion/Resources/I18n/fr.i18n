@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matrix_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question de matrice"
+Options = "Options"
+SwitchToMultipleMatches = "Autoriser plusieurs correspondances"
+SwitchToSingleMatch = "Permettre seulement une correspondance"
+AddMatrixQuestionOption = "Ajouter une option"
+Answer = "Réponse"
+Matches = "Correspondances"
+Feedback = "Feedback"
+Score = "Score"
+Weight = "Poids"
+Title = "Titre"
+Description = "Description"
+AddMatch = "Ajouter une correspondance"
+Match = "Correspondance"
