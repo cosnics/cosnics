@@ -16,6 +16,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Extension of the generic installer for content objects
@@ -67,7 +68,9 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_PLATFORMADMIN),
                 new StaticConditionVariable(1));
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieves(User :: class_name(), $condition)->next_result();
+            $user = \Chamilo\Core\User\Storage\DataManager :: retrieves(
+                User :: class_name(),
+                new DataClassRetrievesParameters($condition))->next_result();
 
             \Chamilo\Libraries\Platform\Session\Session :: register('_uid', $user->get_id());
 

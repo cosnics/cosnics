@@ -43,7 +43,7 @@ class Matrix extends ContentObject implements Versionable
     public function create()
     {
         $success = parent :: create();
-        
+
         if ($success)
         {
             foreach ($this->options as $option)
@@ -51,7 +51,7 @@ class Matrix extends ContentObject implements Versionable
                 $option->set_question_id($this->get_id());
                 $option->create();
             }
-            
+
             foreach ($this->matches as $match)
             {
                 $match->set_question_id($this->get_id());
@@ -70,14 +70,14 @@ class Matrix extends ContentObject implements Versionable
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($this->get_id()));
-            
+
             $order = new OrderBy(
                 new PropertyConditionVariable(MatrixOption :: class_name(), MatrixOption :: PROPERTY_DISPLAY_ORDER));
-            
+
             $this->options = DataManager :: retrieves(
-                MatrixOption :: class_name(), 
+                MatrixOption :: class_name(),
                 new DataClassRetrievesParameters($condition, null, null, array($order)))->as_array();
             return $this->options;
         }
@@ -96,16 +96,16 @@ class Matrix extends ContentObject implements Versionable
         }
         else
         {
-            
+
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_QUESTION_ID), 
+                new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_QUESTION_ID),
                 new StaticConditionVariable($this->get_id()));
-            
+
             $order = new OrderBy(
                 new PropertyConditionVariable(MatrixMatch :: class_name(), MatrixMatch :: PROPERTY_DISPLAY_ORDER));
-            
+
             $this->matches = DataManager :: retrieves(
-                MatrixMatch :: class_name(), 
+                MatrixMatch :: class_name(),
                 new DataClassRetrievesParameters($condition, null, null, array($order)))->as_array();
             return $this->matches;
         }
@@ -176,7 +176,7 @@ class Matrix extends ContentObject implements Versionable
                 return false;
             }
         }
-        
+
         foreach ($this->get_matches()->as_array() as $match)
         {
             if (! $match->delete())
@@ -184,7 +184,7 @@ class Matrix extends ContentObject implements Versionable
                 return false;
             }
         }
-        
+
         return parent :: delete($only_version);
     }
 }

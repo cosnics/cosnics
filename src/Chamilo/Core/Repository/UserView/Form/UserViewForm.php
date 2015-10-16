@@ -46,9 +46,9 @@ class UserViewForm extends FormValidator
     public function __construct($form_type, $user_view, $action)
     {
         parent :: __construct('user_views_settings', 'post', $action);
-        
+
         $this->user_view = $user_view;
-        
+
         $this->form_type = $form_type;
         if ($this->form_type == self :: TYPE_EDIT)
         {
@@ -58,32 +58,32 @@ class UserViewForm extends FormValidator
         {
             $this->build_creation_form();
         }
-        
+
         $this->setDefaults();
     }
 
     public function build_basic_form()
     {
         $this->addElement(
-            'text', 
-            UserView :: PROPERTY_NAME, 
-            Translation :: get('Name', null, Utilities :: COMMON_LIBRARIES), 
+            'text',
+            UserView :: PROPERTY_NAME,
+            Translation :: get('Name', null, Utilities :: COMMON_LIBRARIES),
             array("size" => "50"));
         $this->addRule(
-            UserView :: PROPERTY_NAME, 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            UserView :: PROPERTY_NAME,
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
         $this->add_html_editor(
-            UserView :: PROPERTY_DESCRIPTION, 
-            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES), 
+            UserView :: PROPERTY_DESCRIPTION,
+            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES),
             false);
-        
+
         $registrations = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types();
         $hidden_types = \Chamilo\Core\Repository\Storage\DataManager :: get_active_helper_types();
-        
+
         $type_selector = TypeSelector :: populate(
             \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types());
-        
+
         foreach ($type_selector->get_categories() as $category)
         {
             foreach ($category->get_options() as $option)
@@ -91,32 +91,32 @@ class UserViewForm extends FormValidator
                 $content_object_template_ids[$option->get_template_registration_id()] = $option->get_label();
             }
         }
-        
+
         if ($this->form_type == self :: TYPE_EDIT)
         {
-            
+
             $relations = DataManager :: retrieves(
-                UserViewRelContentObject :: class_name(), 
+                UserViewRelContentObject :: class_name(),
                 new DataClassRetrievesParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
-                            UserViewRelContentObject :: class_name(), 
-                            UserViewRelContentObject :: PROPERTY_USER_VIEW_ID), 
+                            UserViewRelContentObject :: class_name(),
+                            UserViewRelContentObject :: PROPERTY_USER_VIEW_ID),
                         new StaticConditionVariable($this->get_user_view()->get_id()))));
-            
+
             while ($relation = $relations->next_result())
             {
                 $defaults[] = $relation->get_content_object_template_id();
             }
         }
-        
+
         $elem = &$this->addElement(
-            'advmultiselect', 
-            'types', 
-            Translation :: get('SelectTypesToShow'), 
-            $content_object_template_ids, 
+            'advmultiselect',
+            'types',
+            Translation :: get('SelectTypesToShow'),
+            $content_object_template_ids,
             array('style' => 'width:300px; height: 300px'));
-        
+
         // $template = '
         // <table{class}>
         // <!-- BEGIN label_3 --><tr><th>{label_3}</th></tr><!-- END label_3 -->
@@ -126,7 +126,7 @@ class UserViewForm extends FormValidator
         // </table>
         // ';
         // $elem->setElementTemplate($template);
-        
+
         $this->setDefaults(array('types' => $defaults));
     }
 
@@ -134,38 +134,38 @@ class UserViewForm extends FormValidator
     {
         $user_view = $this->user_view;
         $this->build_basic_form();
-        
+
         $this->addElement('hidden', UserView :: PROPERTY_ID);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive update'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_creation_form()
     {
         $this->build_basic_form();
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -177,29 +177,29 @@ class UserViewForm extends FormValidator
     {
         $user_view = $this->user_view;
         $values = $this->exportValues();
-        
+
         $user_view->set_name($values[UserView :: PROPERTY_NAME]);
         $user_view->set_description($values[UserView :: PROPERTY_DESCRIPTION]);
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                UserViewRelContentObject :: class_name(), 
-                UserViewRelContentObject :: PROPERTY_USER_VIEW_ID), 
+                UserViewRelContentObject :: class_name(),
+                UserViewRelContentObject :: PROPERTY_USER_VIEW_ID),
             new StaticConditionVariable($user_view->get_id()));
-        
+
         $types = DataManager :: retrieves(
-            UserViewRelContentObject :: class_name(), 
+            UserViewRelContentObject :: class_name(),
             new DataClassRetrievesParameters($condition));
         $existing_types = array();
         while ($type = $types->next_result())
         {
             $existing_types[] = $type->get_content_object_template_id();
         }
-        
+
         $new_types = $values['types'];
         $to_add = array_diff($new_types, $existing_types);
         $to_delete = array_diff($existing_types, $new_types);
-        
+
         foreach ($to_add as $type_to_add)
         {
             $user_view_type = new UserViewRelContentObject();
@@ -207,7 +207,7 @@ class UserViewForm extends FormValidator
             $user_view_type->set_content_object_template_id($type_to_add);
             $user_view_type->create();
         }
-        
+
         $types->reset();
         while ($type = $types->next_result())
         {
@@ -216,7 +216,7 @@ class UserViewForm extends FormValidator
                 $type->delete();
             }
         }
-        
+
         return $user_view->update();
     }
 
@@ -227,10 +227,10 @@ class UserViewForm extends FormValidator
     public function create_user_view()
     {
         $values = $this->exportValues();
-        
+
         $this->user_view->set_name($values[UserView :: PROPERTY_NAME]);
         $this->user_view->set_description($values[UserView :: PROPERTY_DESCRIPTION]);
-        
+
         if ($this->user_view->create())
         {
             foreach ($values['types'] as $template_id)
@@ -238,13 +238,13 @@ class UserViewForm extends FormValidator
                 $relation = new UserViewRelContentObject();
                 $relation->set_user_view_id($this->user_view->get_id());
                 $relation->set_content_object_template_id($template_id);
-                
+
                 if (! $relation->create())
                 {
                     return false;
                 }
             }
-            
+
             return true;
         }
         else

@@ -21,8 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * ============================================================================== This is an application that creates a
- * fully fledged web-based learning content management system.
- * The Web-LCMS is based on so-called "tools", which each
+ * fully fledged web-based learning content management system. The Web-LCMS is based on so-called "tools", which each
  * represent a segment in the application.
  *
  * @author Tim De Pauw ==============================================================================
@@ -173,7 +172,7 @@ abstract class Manager extends Application
      *
      * @param $tree array The category tree
      * @param $categories array In this array the new category titles (with prefix) will be stored. The keys in this
-     *        array are the category ids, the values are the new titles
+     *            array are the category ids, the values are the new titles
      * @param $level int The current level in the tree structure
      */
     private static function translate_category_tree($tree, $categories, $level = 0)
@@ -227,7 +226,9 @@ abstract class Manager extends Application
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable(Request :: get(self :: PARAM_COURSE)));
-            $sections = DataManager :: retrieves(CourseSection :: class_name(), $condition);
+            $sections = DataManager :: retrieves(
+                CourseSection :: class_name(),
+                new DataClassRetrievesParameters($condition));
 
             while ($section = $sections->next_result())
             {
@@ -308,9 +309,9 @@ abstract class Manager extends Application
      * Gets the date of the last visit of current user to the current location
      *
      * @param $tool string If $tool equals null, current active tool will be taken into account. If no tool is given or
-     *        no tool is active the date of last visit to the course homepage will be returned.
+     *            no tool is active the date of last visit to the course homepage will be returned.
      * @param $category_id int The category in the given tool of which the last visit date is requested. If $category_id
-     *        equals null, the current active category will be used.
+     *            equals null, the current active category will be used.
      * @return int
      */
     public function get_last_visit_date($tool = null, $category_id = null)

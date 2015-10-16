@@ -37,7 +37,7 @@ class Matching extends ContentObject implements Versionable
     public function create()
     {
         $success = parent :: create();
-        
+
         if ($success)
         {
             foreach ($this->options as $option)
@@ -45,7 +45,7 @@ class Matching extends ContentObject implements Versionable
                 $option->set_question_id($this->get_id());
                 $option->create();
             }
-            
+
             foreach ($this->matches as $match)
             {
                 $match->set_question_id($this->get_id());
@@ -58,63 +58,47 @@ class Matching extends ContentObject implements Versionable
     public function get_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatchingOption :: class_name(), 
-                MatchingOption :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $order = new OrderBy(
-            new PropertyConditionVariable(
-                MatchingOption :: class_name(), 
-                MatchingOption :: PROPERTY_DISPLAY_ORDER));
-        
+            new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_DISPLAY_ORDER));
+
         return DataManager :: retrieves(
-            MatchingOption :: class_name(), 
+            MatchingOption :: class_name(),
             new DataClassRetrievesParameters($condition, null, null, array($order)));
     }
 
     public function get_number_of_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatchingOption :: class_name(), 
-                MatchingOption :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(MatchingOption :: class_name(), MatchingOption :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
-        return DataManager :: count(
-            MatchingOption :: class_name(), 
-            new DataClassCountParameters($condition));
+
+        return DataManager :: count(MatchingOption :: class_name(), new DataClassCountParameters($condition));
     }
 
     public function get_matches()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatchingMatch :: class_name(), 
-                MatchingMatch :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $order = new OrderBy(
-            new PropertyConditionVariable(
-                MatchingMatch :: class_name(), 
-                MatchingMatch :: PROPERTY_DISPLAY_ORDER));
-        
+            new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_DISPLAY_ORDER));
+
         return DataManager :: retrieves(
-            MatchingMatch :: class_name(), 
+            MatchingMatch :: class_name(),
             new DataClassRetrievesParameters($condition, null, null, array($order)));
     }
 
     public function get_number_of_matches()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                MatchingMatch :: class_name(), 
-                MatchingMatch :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(MatchingMatch :: class_name(), MatchingMatch :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
-        return DataManager :: count(
-            MatchingMatch :: class_name(), 
-            new DataClassCountParameters($condition));
+
+        return DataManager :: count(MatchingMatch :: class_name(), new DataClassCountParameters($condition));
     }
 
     public function add_option(MatchingOption $option)
@@ -167,7 +151,7 @@ class Matching extends ContentObject implements Versionable
                 return false;
             }
         }
-        
+
         foreach ($this->get_matches()->as_array() as $match)
         {
             if (! $match->delete())
@@ -175,7 +159,7 @@ class Matching extends ContentObject implements Versionable
                 return false;
             }
         }
-        
+
         return parent :: delete($only_version);
     }
 }

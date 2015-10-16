@@ -21,20 +21,20 @@ abstract class AggregateTracker extends Tracker
     public function run(array $parameters = array())
     {
         $this->validate_parameters($parameters);
-        
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($this :: class_name(), self :: PROPERTY_TYPE), 
+            new PropertyConditionVariable($this :: class_name(), self :: PROPERTY_TYPE),
             new StaticConditionVariable($this->get_type()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($this :: class_name(), self :: PROPERTY_NAME), 
+            new PropertyConditionVariable($this :: class_name(), self :: PROPERTY_NAME),
             new StaticConditionVariable($this->get_name()));
         $condition = new AndCondition($conditions);
-        
+
         $tracker_items = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            $this->class_name(), 
+            $this->class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         if ($tracker_items->size() != 0)
         {
             $current_aggregrate_tracker = $tracker_items->next_result();
@@ -51,7 +51,7 @@ abstract class AggregateTracker extends Tracker
 
     /**
      * Get the default properties of all aggregate trackers.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())

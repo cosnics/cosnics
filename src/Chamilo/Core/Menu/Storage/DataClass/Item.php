@@ -356,6 +356,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
             $this->titles = new ItemTitles($titles);
         }
+
         return $this->titles;
     }
 

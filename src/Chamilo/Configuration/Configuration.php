@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This class represents the current configuration
@@ -271,7 +272,7 @@ class Configuration
         }
         else
         {
-            $settings = DataManager :: retrieves(Setting :: class_name());
+            $settings = DataManager :: retrieves(Setting :: class_name(), new DataClassRetrievesParameters());
 
             while ($setting = $settings->next_result())
             {
@@ -295,7 +296,7 @@ class Configuration
         }
         else
         {
-            $registrations = DataManager :: retrieves(Registration :: class_name());
+            $registrations = DataManager :: retrieves(Registration :: class_name(), new DataClassRetrievesParameters());
 
             while ($registration = $registrations->next_result())
             {

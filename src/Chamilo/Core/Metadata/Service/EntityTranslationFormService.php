@@ -7,6 +7,7 @@ use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -85,7 +86,9 @@ class EntityTranslationFormService
 
         $this->getFormValidator()->addElement('category', Translation :: get('Translations'));
 
-        $languages = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(Language :: class_name());
+        $languages = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
+            Language :: class_name(),
+            new DataClassRetrievesParameters());
         $platformLanguage = Configuration :: get('Chamilo\Core\Admin', 'platform_language');
 
         while ($language = $languages->next_result())

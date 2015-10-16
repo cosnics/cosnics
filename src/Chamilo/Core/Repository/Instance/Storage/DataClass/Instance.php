@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -164,7 +165,7 @@ class Instance extends CompositeDataClass
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
                 new StaticConditionVariable($this->get_id()));
-            $settings = DataManager :: retrieves(Setting :: class_name(), $condition);
+            $settings = DataManager :: retrieves(Setting :: class_name(), new DataClassRetrievesParameters($condition));
 
             while ($setting = $settings->next_result())
             {
