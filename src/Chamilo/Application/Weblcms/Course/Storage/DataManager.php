@@ -38,7 +38,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class represents the data manager for this package
@@ -487,10 +486,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         $conditions = array();
 
-        // $course_ids = array_merge(
-        // self :: get_subscribed_course_ids_by_user_relation($user->get_id(), $user_status),
-        // self :: get_subscribed_course_ids_by_group_relation($user->get_groups(true), $user_status));
-
         $course_ids = self :: getSubscribedCourseIdentifiersByRelation($user, $user_status);
 
         $conditions[] = new InCondition(
@@ -559,85 +554,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         return self :: distinct(
             \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation :: class_name(),
             $parameters);
-    }
-
-    /**
-     * Returns the course ids where a user is subscribed to directly by a CourseUserRelation record, optionally limited
-     * by the status of the user in that course
-     *
-     * @param int $user_id
-     * @param int $user_status
-     *
-     * @return array
-     */
-    protected static function get_subscribed_course_ids_by_user_relation($userIdentifier, $userStatus = null)
-    {
-        if (empty($userIdentifier) || ! is_numeric($userIdentifier))
-        {
-            return array();
-        }
-
-        $conditions = array();
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier));
-
-        if ($userStatus)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_STATUS),
-                new StaticConditionVariable($userStatus));
-        }
-
-        $condition = new AndCondition($conditions);
-
-        $parameters = new DataClassDistinctParameters($condition, CourseUserRelation :: PROPERTY_COURSE_ID);
-
-        return self :: distinct(CourseUserRelation :: class_name(), $parameters);
-    }
-
-    /**
-     * Returns the course ids where a user is subscribed to through one of his groups by a given array of group ids,
-     * Optionally limited by the status of the groups in the course
-     *
-     * @param int[] $group_ids
-     * @param int $status
-     *
-     * @return array
-     */
-    protected static function get_subscribed_course_ids_by_group_relation(array $group_ids = array(), $status = null)
-    {
-        if (empty($group_ids))
-        {
-            return array();
-        }
-
-        if (! is_array($group_ids))
-        {
-            $group_ids = array($group_ids);
-        }
-
-        $conditions = array();
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_GROUP_ID),
-            $group_ids);
-
-        if ($status)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_STATUS),
-                new StaticConditionVariable($status));
-        }
-
-        $condition = new AndCondition($conditions);
-
-        $parameters = new DataClassDistinctParameters($condition, CourseGroupRelation :: PROPERTY_COURSE_ID);
-
-        return self :: distinct(CourseGroupRelation :: class_name(), $parameters);
     }
 
     /**
