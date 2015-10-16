@@ -29,6 +29,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
  *
@@ -500,6 +501,9 @@ class Kernel
     private function runApplication()
     {
         $response = new Response($this->getApplication()->run());
+
+        // var_dump(DataClassCache :: get_instance()->hits);
+
         $response->send();
     }
 
