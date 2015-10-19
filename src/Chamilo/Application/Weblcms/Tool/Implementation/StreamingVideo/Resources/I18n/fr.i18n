@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\streaming_video
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Streaming vidéo"
+StreamingVideoToolBrowserComponent = "Regardez les vidéos en streaming"
+StreamingVideoToolViewerComponent = "Voir la vidéo en streaming"
+StreamingVideoToolIntroductionPublisherComponent = "Parcourir une introduction"
+StreamingVideoToolPublisherComponent = "Publier une vidéo en streaming"
+StreamingVideoToolUpdaterComponent = "Modifier une vidéo en streaming"
