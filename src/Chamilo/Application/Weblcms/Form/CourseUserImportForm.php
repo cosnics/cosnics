@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Application\Weblcms\Form;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * $Id: course_user_import_form.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course
  */
 ini_set("max_execution_time", - 1);
@@ -24,7 +24,7 @@ class CourseUserImportForm extends FormValidator
     public function __construct($form_type, $action)
     {
         parent :: __construct('course_user_import', 'post', $action);
-        
+
         $this->form_type = $form_type;
         $this->failedcsv = array();
         if ($this->form_type == self :: TYPE_IMPORT)
@@ -39,23 +39,23 @@ class CourseUserImportForm extends FormValidator
         // $this->addElement('submit', 'course_user_import', Translation ::
         // get('Ok'));
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES), 
+            'style_submit_button',
+            'submit',
+            Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES),
             array('class' => 'positive'));
         // $buttons[] = $this->createElement('style_reset_button', 'reset',
         // Translation :: get('Reset'), array('class' => 'normal empty'));
-        
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function import_course_users()
     {
         $course = $this->course;
-        
+
         $csvcourses = Import :: csv_to_array($_FILES['file']['tmp_name']);
         $failures = 0;
-        
+
         foreach ($csvcourses as $csvcourse)
         {
             if (! $this->validate_data($csvcourse))
@@ -64,22 +64,22 @@ class CourseUserImportForm extends FormValidator
                 $this->failedcsv[] = Translation :: get('Invalid') . ': ' . implode($csvcourse, ';');
             }
         }
-        
+
         if ($failures > 0)
         {
             return false;
         }
-        
+
         foreach ($csvcourses as $csvcourse)
         {
             $user_info = $this->get_user_info($csvcourse['username']);
-            
+
             $code = $csvcourse['coursecode'];
             $course = CourseDataManager :: retrieve_course_by_visual_code($code);
-            
-            $status = $csvcourse[CourseUserRelation :: PROPERTY_STATUS];
+
+            $status = $csvcourse[CourseEntityRelation :: PROPERTY_STATUS];
             $action = strtoupper($csvcourse['action']);
-            
+
             if ($action == 'D' || $action == 'U')
             {
                 if (! CourseDataManager :: unsubscribe_user_from_course($course->get_id(), $user_info->get_id()))
@@ -90,7 +90,7 @@ class CourseUserImportForm extends FormValidator
                     continue;
                 }
             }
-            
+
             if ($action == 'A' || $action == 'U')
             {
                 if (! CourseDataManager :: subscribe_user_to_course($course->get_id(), $status, $user_info->get_id()))
@@ -102,7 +102,7 @@ class CourseUserImportForm extends FormValidator
                 }
             }
         }
-        
+
         if ($failures > 0)
         {
             return false;
@@ -112,7 +112,7 @@ class CourseUserImportForm extends FormValidator
             return true;
         }
     }
-    
+
     // TODO: Temporary solution pending implementation of user object
     public function get_user_info($user_name)
     {
@@ -134,7 +134,7 @@ class CourseUserImportForm extends FormValidator
     public function validate_data($csvcourse)
     {
         $failures = 0;
-        
+
         // 1. check if user exists
         // TODO: Change to appropriate property once the user-class is
         // operational
@@ -143,32 +143,32 @@ class CourseUserImportForm extends FormValidator
         {
             $failures ++;
         }
-        
+
         if ($csvcourse['coursecode'])
         {
             $csvcourse['course'] = $csvcourse['coursecode'];
         }
-        
+
         // 2. check if course code exists
         if (! $this->is_course($csvcourse['course']))
         {
             $failures ++;
         }
-        
+
         // 3. Status valid ?
-        if ($csvcourse[CourseUserRelation :: PROPERTY_STATUS] != 1 &&
-             $csvcourse[CourseUserRelation :: PROPERTY_STATUS] != 5)
+        if ($csvcourse[CourseEntityRelation :: PROPERTY_STATUS] != 1 &&
+             $csvcourse[CourseEntityRelation :: PROPERTY_STATUS] != 5)
         {
             $failures ++;
         }
-        
+
         // 4. Action valid ?
         $action = strtoupper($csvcourse['action']);
         if ($action != 'A' && $action != 'D' && $action != 'U')
         {
             $failures ++;
         }
-        
+
         if ($failures > 0)
         {
             return false;

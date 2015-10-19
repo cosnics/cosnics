@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -20,6 +18,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * Feed to return users of this course
@@ -98,39 +98,62 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
         $course_id = $this->getPostDataValue(self :: PARAM_COURSE_ID);
 
         // Retrieve the users directly subscribed to the course
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
+        $userConditions = array();
+        $userConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
-        $course_user_relation_result_set = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseUserRelation :: class_name(),
-            new DataClassRetrievesParameters($relation_condition));
+        $userConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
 
-        $user_ids = array();
-        while ($course_user = $course_user_relation_result_set->next_result())
-        {
-            $user_ids[] = $course_user->get_user_id();
-        }
+        $parameters = new DataClassDistinctParameters(
+            new AndCondition($userConditions),
+            CourseEntityRelation :: PROPERTY_ENTITY_ID);
+
+        $user_ids = self :: distinct(
+            \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation :: class_name(),
+            $parameters);
 
         // Retrieve the users subscribed through platform groups
-        $relationCondition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $groupConditions = array();
+        $groupConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
+        $groupConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             Group :: class_name(),
             new DataClassRetrievesParameters(
-                $relationCondition,
+                new AndCondition($groupConditions),
                 null,
                 null,
                 array(),
                 new Joins(
                     new Join(
-                        CourseGroupRelation :: class_name(),
+                        CourseEntityRelation :: class_name(),
                         new EqualityCondition(
                             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                             new PropertyConditionVariable(
-                                CourseGroupRelation :: class_name(),
-                                CourseGroupRelation :: PROPERTY_GROUP_ID))))));
+                                CourseEntityRelation :: class_name(),
+                                CourseEntityRelation :: PROPERTY_GROUP_ID))))));
+
+        $parameters = new DataClassDistinctParameters(
+            new AndCondition($userConditions),
+            CourseEntityRelation :: PROPERTY_ENTITY_ID);
+
+        $groupIdentifiers = self :: distinct(
+            \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation :: class_name(),
+            $parameters);
 
         $group_users = array();
 
@@ -141,7 +164,7 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
             $group_users = array_merge($group_users, $group_user_ids);
         }
 
-        $user_ids = array_merge($user_ids, $group_users);
+        $user_ids = array_unique(array_merge($user_ids, $group_users));
 
         if (count($user_ids) == 0)
         {

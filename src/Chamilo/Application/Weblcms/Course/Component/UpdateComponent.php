@@ -2,13 +2,13 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class describes an action to update a course
@@ -69,12 +69,13 @@ class UpdateComponent extends CourseFormActionComponent
 
             if (! $course_user_relation)
             {
-                $course_user_relation = new CourseUserRelation();
-                $course_user_relation->set_course($course);
-                $course_user_relation->set_user($titular);
+                $courseEntityRelation = new CourseEntityRelation();
+                $courseEntityRelation->set_course_id($course->getId());
+                $courseEntityRelation->setEntityId($titular->getId());
+                $courseEntityRelation->setEntityType(CourseEntityRelation :: ENTITY_TYPE_USER);
             }
 
-            $course_user_relation->set_status(CourseUserRelation :: STATUS_TEACHER);
+            $course_user_relation->set_status(CourseEntityRelation :: STATUS_TEACHER);
 
             return $course_user_relation->save();
         }
