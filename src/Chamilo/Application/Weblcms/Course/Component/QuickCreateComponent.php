@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class describes an action to create a course quickly without going through the browser.
@@ -45,13 +45,14 @@ class QuickCreateComponent extends CreateComponent
 
         if ($course->get_titular_id() != $this->get_user_id())
         {
-            $course_user_relation = new CourseUserRelation();
+            $courseEntityRelation = new CourseEntityRelation();
 
-            $course_user_relation->set_course($course);
-            $course_user_relation->set_user($this->get_user());
-            $course_user_relation->set_status(CourseUserRelation :: STATUS_TEACHER);
+            $courseEntityRelation->set_course_id($course->get_id());
+            $courseEntityRelation->setEntityId($this->get_user());
+            $courseEntityRelation->setEntityType(CourseEntityRelation :: ENTITY_TYPE_USER);
+            $courseEntityRelation->set_status(CourseEntityRelation :: STATUS_TEACHER);
 
-            if (! $course_user_relation->create())
+            if (! $courseEntityRelation->create())
             {
                 return false;
             }

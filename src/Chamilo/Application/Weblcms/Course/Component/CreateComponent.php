@@ -2,12 +2,12 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class describes an action to create a course
@@ -60,14 +60,18 @@ class CreateComponent extends CourseFormActionComponent
         {
             return false;
         }
-        $course_user_relation = new CourseUserRelation();
-        $course_user_relation->set_course($course);
-        $course_user_relation->set_user_id($course->get_titular_id());
-        $course_user_relation->set_status(CourseUserRelation :: STATUS_TEACHER);
-        if (! $course_user_relation->create())
+
+        $courseEntityRelation = new CourseEntityRelation();
+        $courseEntityRelation->set_course_id($course->get_id());
+        $courseEntityRelation->setEntityType(CourseEntityRelation :: ENTITY_TYPE_USER);
+        $courseEntityRelation->setEntityId($course->get_titular_id());
+        $courseEntityRelation->set_status(CourseEntityRelation :: STATUS_TEACHER);
+
+        if (! $courseEntityRelation->create())
         {
             return false;
         }
+
         return true;
     }
 

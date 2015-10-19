@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Admin;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class NoOfUsersSubscribedCourseBlock extends CourseBlock
 {
@@ -20,15 +22,19 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
             \Chamilo\Core\User\Storage\DataClass\User :: class_name());
 
         $courses = \Chamilo\Application\Weblcms\Storage\DataManager :: count(
-            CourseUserRelation :: class_name(),
+            CourseEntityRelation :: class_name(),
             new DataClassCountParameters(
-                null,
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER)),
                 array(),
                 new FunctionConditionVariable(
                     FunctionConditionVariable :: DISTINCT,
                     new PropertyConditionVariable(
-                        CourseUserRelation :: class_name(),
-                        CourseUserRelation :: PROPERTY_USER_ID))));
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_ID))));
 
         $reporting_data->set_categories(
             array(Translation :: get('UsersSubscribedToCourse'), Translation :: get('UsersNotSubscribedToCourse')));
