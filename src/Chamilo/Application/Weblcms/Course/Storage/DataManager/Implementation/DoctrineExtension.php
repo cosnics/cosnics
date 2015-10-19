@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -24,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Doctrine implementation of the datamanager
@@ -251,8 +251,8 @@ class DoctrineExtension
 
         $properties->add(
             new FixedPropertyConditionVariable(
-                CourseUserRelation :: class_name(),
-                CourseUserRelation :: PROPERTY_STATUS,
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_STATUS,
                 self :: PARAM_SUBSCRIPTION_STATUS));
 
         $properties->add(new StaticConditionVariable('1 AS ' . self :: PARAM_SUBSCRIPTION_TYPE, false));
@@ -265,14 +265,21 @@ class DoctrineExtension
                 new EqualityCondition(
                     new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                     new PropertyConditionVariable(
-                        CourseUserRelation :: class_name(),
-                        CourseUserRelation :: PROPERTY_USER_ID))));
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_ID))));
 
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
 
         if (isset($condition))
         {
@@ -283,7 +290,7 @@ class DoctrineExtension
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
-        return $this->database->build_records_sql(CourseUserRelation :: class_name(), $parameters);
+        return $this->database->build_records_sql(CourseEntityRelation :: class_name(), $parameters);
     }
 
     /**

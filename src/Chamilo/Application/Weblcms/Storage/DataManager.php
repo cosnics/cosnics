@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
@@ -49,7 +48,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -61,6 +59,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Exception;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class represents the data manager for this package
@@ -535,84 +534,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), new Joins(array($join)));
 
         return self :: records(ContentObjectPublication :: class_name(), $parameters);
-    }
-
-    /**
-     * Returns the user_id with the most publications in a given course
-     *
-     * @static Static method
-     * @param int $course_id
-     * @param bool $only_teachers
-     *
-     * @return int
-     */
-    public static function get_user_with_most_publications_in_course($course_id, $only_teachers = true)
-    {
-        $joins = array();
-
-        $join_conditions = array();
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
-            new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID));
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID),
-            new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_PUBLISHER_ID));
-
-        $joins[] = new Join(
-            ContentObjectPublication :: class_name(),
-            new AndCondition($join_conditions),
-            Join :: TYPE_LEFT);
-
-        $conditions = array();
-
-        if ($only_teachers)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_STATUS),
-                new StaticConditionVariable(CourseUserRelation :: STATUS_TEACHER));
-        }
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
-
-        $condition = new AndCondition($conditions);
-
-        $properties = new DataClassProperties();
-
-        $properties->add(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID));
-
-        $count_alias = 'count';
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable :: COUNT,
-                new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_ID),
-                $count_alias));
-
-        $order_by = array(new OrderBy(new StaticConditionVariable($count_alias)));
-
-        $group_by = new GroupBy();
-        $group_by->add(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID));
-
-        $parameters = new RecordRetrieveParameters($properties, $condition, $order_by, new Joins($joins), $group_by);
-
-        $record = self :: record(CourseUserRelation :: class_name(), $parameters);
-
-        if ($record[$count_alias] >= 0)
-        {
-            return $record[CourseUserRelation :: PROPERTY_USER_ID];
-        }
     }
 
     /**
@@ -2383,21 +2304,31 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = new DataClassProperties();
 
         $properties->add(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID));
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID));
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID),
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_ID),
             new StaticConditionVariable($user_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
 
-        $parameters = new RecordRetrievesParameters($properties, $condition);
+        $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
 
-        $directly_subscribed_course_ids = self :: records(CourseUserRelation :: class_name(), $parameters);
+        $directly_subscribed_course_ids = self :: records(CourseEntityRelation :: class_name(), $parameters);
 
         $course_ids = array();
 
         foreach ($directly_subscribed_course_ids->as_array() as $course_id)
         {
-            $course_ids[] = $course_id[CourseUserRelation :: PROPERTY_COURSE_ID];
+            $course_ids[] = $course_id[CourseEntityRelation :: PROPERTY_COURSE_ID];
         }
 
         // Second, if any groups have been specified, retrieve any *additional* courses these groups are subscribed to.
@@ -2436,7 +2367,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             foreach ($indirectly_subscribed_course_ids->as_array() as $course_id)
             {
-                $course_ids[] = $course_id[CourseUserRelation :: PROPERTY_COURSE_ID];
+                $course_ids[] = $course_id[CourseGroupRelation :: PROPERTY_COURSE_ID];
             }
         }
 

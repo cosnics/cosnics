@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubscribed;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed
@@ -45,9 +45,9 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer imple
             case User :: PROPERTY_STATUS :
                 switch ($user_with_subscription_status->get_status())
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         return Translation :: get('CourseAdmin');
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         return Translation :: get('Student');
                     default :
                         return Translation :: get('Unknown');

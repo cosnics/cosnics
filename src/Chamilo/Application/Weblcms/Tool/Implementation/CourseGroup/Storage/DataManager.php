@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -10,7 +9,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -482,55 +480,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * Retrieves the possible users for a course group
-     *
-     * @param CourseGroup $course_group
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param ObjectTableOrder[]$order_property
-     * @return \core\user\User[]
-     */
-    public static function retrieve_possible_course_group_users($course_group, $condition = null, $offset = null, $count = null,
-        $order_property = null)
-    {
-        $condition = self :: get_possible_course_group_users_condition($course_group, $condition);
-
-        return \Chamilo\Core\User\Storage\DataManager :: retrieves(
-            User :: class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
-    }
-
-    /**
-     * Counts the possible users for a course group
-     *
-     * @param CourseGroup $course_group
-     * @param Condition $conditions
-     *
-     * @return int
-     */
-    public static function count_possible_course_group_users($course_group, $conditions = null)
-    {
-        $condition = self :: get_possible_course_group_users_condition($course_group, $conditions);
-        return \Chamilo\Core\User\Storage\DataManager :: count(User :: class_name(), $condition);
-    }
-
-    /**
      * Returns the course groups for a given user
-     *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      *
      * @param int $user_id
      * @param int $course_id
@@ -562,64 +512,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $course_groups_recursive;
-    }
-
-    /**
-     * **************************************************************************************************************
-     * CourseGroupUserRelation Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the condition for the possible course group users
-     *
-     * @static
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * @param CourseGroup $course_group
-     * @param Condition $condition
-     *
-     * @return Condition
-     */
-    protected static function get_possible_course_group_users_condition($course_group, $condition)
-    {
-        $course_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_group->get_course_code()));
-
-        $course_users = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseUserRelation :: class_name(),
-            $course_condition);
-
-        $group_user_ids = DataManager :: retrieve_course_group_user_ids($course_group->get_id());
-
-        $course_user_ids = array();
-
-        while ($course_user = $course_users->next_result())
-        {
-            $course_user_ids[] = $course_user->get_user();
-        }
-
-        $conditions = array();
-        $conditions[] = $condition;
-
-        $user_id_variable = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID);
-
-        $conditions[] = new InCondition($user_id_variable, new $course_user_ids());
-
-        $conditions[] = new NotCondition(new InCondition($user_id_variable, $group_user_ids));
-
-        return new AndCondition($conditions);
     }
 }
