@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscribed;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -16,6 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Cell renderer for a direct subscribed course user browser table, or users in a direct subscribed group.
@@ -46,12 +46,12 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
-            case CourseUserRelation :: PROPERTY_STATUS :
-                switch ($user_with_subscription_status[CourseUserRelation :: PROPERTY_STATUS])
+            case CourseEntityRelation :: PROPERTY_STATUS :
+                switch ($user_with_subscription_status[CourseEntityRelation :: PROPERTY_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         return Translation :: get('CourseAdmin');
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         return Translation :: get('Student');
                     default :
                         return Translation :: get('Unknown');
@@ -156,12 +156,12 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
 
                 $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager :: context();
 
-                switch ($user_with_subscription_status[CourseUserRelation :: PROPERTY_STATUS])
+                switch ($user_with_subscription_status[CourseEntityRelation :: PROPERTY_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_STUDENT);
+                            CourseEntityRelation :: STATUS_STUDENT);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -172,10 +172,10 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                                 $status_change_url,
                                 ToolbarItem :: DISPLAY_ICON));
                         break;
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_TEACHER);
+                            CourseEntityRelation :: STATUS_TEACHER);
 
                         $toolbar->add_item(
                             new ToolbarItem(

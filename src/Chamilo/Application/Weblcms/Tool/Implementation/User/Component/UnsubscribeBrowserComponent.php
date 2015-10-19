@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribed\AllSubscribedUserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\DirectSubscribedGroup\DirectSubscribedPlatformGroupTable;
@@ -32,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  *
@@ -449,8 +449,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseUserRelation :: class_name(),
-                    CourseUserRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->get_course_id()));
         }
         elseif ($this->current_tab == self :: TAB_PLATFORM_GROUPS_SUBGROUPS)
