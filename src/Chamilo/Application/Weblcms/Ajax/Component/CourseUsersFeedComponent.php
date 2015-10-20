@@ -145,7 +145,7 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
                             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                             new PropertyConditionVariable(
                                 CourseEntityRelation :: class_name(),
-                                CourseEntityRelation :: PROPERTY_GROUP_ID))))));
+                                CourseEntityRelation :: PROPERTY_ENTITY_ID))))));
 
         $parameters = new DataClassDistinctParameters(
             new AndCondition($userConditions),
