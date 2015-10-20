@@ -25,7 +25,6 @@ abstract class StatusChangerComponent extends Manager
         }
 
         $objects = Request :: get(self :: PARAM_OBJECTS);
-        // $status = Request :: get(self :: PARAM_STATUS);
 
         if (! $objects /* || !$status*/)
         {

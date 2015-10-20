@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -195,7 +194,7 @@ class DoctrineExtension
         $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE));
 
         $properties->add(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_STATUS));
+            new PropertyConditionVariable(CourseEntityRelation :: class_name(), CourseEntityRelation :: PROPERTY_STATUS));
 
         $joins = new Joins();
 
@@ -205,16 +204,25 @@ class DoctrineExtension
                 new EqualityCondition(
                     new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_GROUP_ID))));
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_ID))));
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+        $condition = new AndCondition($conditions);
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
-        return $this->database->records(CourseGroupRelation :: class_name(), $parameters);
+        return $this->database->records(CourseEntityRelation :: class_name(), $parameters);
     }
 
     /**
@@ -331,7 +339,7 @@ class DoctrineExtension
 
                 $case_condition_variable->add(
                     new CaseElementConditionVariable(
-                        $group[CourseGroupRelation :: PROPERTY_STATUS],
+                        $group[CourseEntityRelation :: PROPERTY_STATUS],
                         $direct_group_condition));
             }
 

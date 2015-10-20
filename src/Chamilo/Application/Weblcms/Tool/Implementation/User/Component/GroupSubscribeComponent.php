@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * $Id: subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -61,7 +61,7 @@ class GroupSubscribeComponent extends Manager
                     if (! $this->get_parent()->subscribe_group_to_course(
                         $course,
                         $group_id,
-                        CourseGroupRelation :: STATUS_STUDENT))
+                        CourseEntityRelation :: STATUS_STUDENT))
                     {
                         $failures ++;
                     }
