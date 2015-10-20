@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Course\Storage;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation\DoctrineExtension;
@@ -833,7 +832,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function is_group_direct_subscribed_to_course($course_id, $group_id)
     {
         return self :: count(
-            CourseGroupRelation :: class_name(),
+            CourseEntityRelation :: class_name(),
             self :: get_course_group_relation_by_course_and_group_condition($course_id, $group_id)) > 0;
     }
 
@@ -1022,7 +1021,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * **************************************************************************************************************
-     * CourseGroupRelation Functionality *
+     * CourseEntityRelation Functionality *
      * **************************************************************************************************************
      */
 
@@ -1057,26 +1056,32 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             {
                 $conditions[] = new InCondition(
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_GROUP_ID),
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_ID),
                     $group_ids);
 
-                $conditions[] = new EqualityCondition(
+                $conditions[] = new InCondition(
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_STATUS),
-                    new StaticConditionVariable(CourseGroupRelation :: STATUS_TEACHER));
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                    CourseEntityRelation :: ENTITY_TYPE_GROUP);
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_COURSE_ID),
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_STATUS),
+                    new StaticConditionVariable(CourseEntityRelation :: STATUS_TEACHER));
+
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_COURSE_ID),
                     new StaticConditionVariable($course_id));
 
                 $condition = new AndCondition($conditions);
 
                 self :: $is_teacher_cache[$course_id][$user->get_id()] = DataManager :: count(
-                    CourseGroupRelation :: class_name(),
+                    CourseEntityRelation :: class_name(),
                     $condition) > 0;
             }
         }
@@ -1097,6 +1102,25 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_groups_directly_subscribed_to_course($condition = null, $offset = null, $count = null,
         $order_property = null)
     {
+        $entityTypeCondition = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
+        if ($condition instanceof Condition)
+        {
+            $conditions = array();
+            $conditions[] = $condition;
+            $conditions[] = $entityTypeCondition;
+
+            $condition = new AndCondition($conditions);
+        }
+        else
+        {
+            $condition = $entityTypeCondition;
+        }
+
         $properties = new DataClassProperties();
 
         $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID));
@@ -1105,12 +1129,12 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_CODE));
 
         $properties->add(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_STATUS));
+            new PropertyConditionVariable(CourseEntityRelation :: class_name(), CourseEntityRelation :: PROPERTY_STATUS));
 
         $joins = self :: get_course_rel_group_joins();
         $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
 
-        return self :: records(CourseGroupRelation :: class_name(), $parameters);
+        return self :: records(CourseEntityRelation :: class_name(), $parameters);
     }
 
     /**
@@ -1122,9 +1146,28 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function count_groups_directly_subscribed_to_course($condition = null)
     {
+        $entityTypeCondition = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
+        if ($condition instanceof Condition)
+        {
+            $conditions = array();
+            $conditions[] = $condition;
+            $conditions[] = $entityTypeCondition;
+
+            $condition = new AndCondition($conditions);
+        }
+        else
+        {
+            $condition = $entityTypeCondition;
+        }
+
         $parameters = new DataClassCountParameters($condition, self :: get_course_rel_group_joins());
 
-        return self :: count(CourseGroupRelation :: class_name(), $parameters);
+        return self :: count(CourseEntityRelation :: class_name(), $parameters);
     }
 
     /**
@@ -1144,15 +1187,24 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $properties->add($left_value_variable);
         $properties->add($right_value_variable);
 
-        $condition = new InCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $conditions = array();
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             $course_ids);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+        $condition = new AndCondition($conditions);
 
         $joins = self :: get_course_rel_group_joins();
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
 
-        $direct_subscribed_groups = self :: records(CourseGroupRelation :: class_name(), $parameters);
+        $direct_subscribed_groups = self :: records(CourseEntityRelation :: class_name(), $parameters);
 
         /**
          * Make sure that no results are returned, because otherwise no conditions would be build and all platform
@@ -1198,13 +1250,14 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function subscribe_group_to_course($course_id, $group_id, $status)
     {
-        $course_group_relation = new CourseGroupRelation();
+        $courseEntityRelation = new CourseEntityRelation();
 
-        $course_group_relation->set_course_id($course_id);
-        $course_group_relation->set_group_id($group_id);
-        $course_group_relation->set_status($status);
+        $courseEntityRelation->set_course_id($course_id);
+        $courseEntityRelation->setEntityId($group_id);
+        $courseEntityRelation->setEntityType(CourseEntityRelation :: ENTITY_TYPE_GROUP);
+        $courseEntityRelation->set_status($status);
 
-        return $course_group_relation->create();
+        return $courseEntityRelation->create();
     }
 
     /**
@@ -1218,7 +1271,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function unsubscribe_group_from_course($course_id, $group_id)
     {
         return self :: deletes(
-            CourseGroupRelation :: class_name(),
+            CourseEntityRelation :: class_name(),
             self :: get_course_group_relation_by_course_and_group_condition($course_id, $group_id));
     }
 
@@ -1232,19 +1285,21 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_STATUS),
-            new StaticConditionVariable(1));
+            new PropertyConditionVariable(CourseEntityRelation :: class_name(), CourseEntityRelation :: PROPERTY_STATUS),
+            new StaticConditionVariable(CourseEntityRelation :: STATUS_TEACHER));
 
         return self :: retrieve_groups_directly_subscribed_to_course(new AndCondition($conditions));
     }
 
     /**
      * **************************************************************************************************************
-     * CourseGroupRelation Helper Functionality *
+     * CourseEntityRelation Helper Functionality *
      * **************************************************************************************************************
      */
 
@@ -1255,12 +1310,20 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     protected static function get_course_rel_group_joins()
     {
-        $join_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_GROUP_ID),
+        $joinConditions = array();
+        $joinConditions = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_ID),
             new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID));
+        $joinConditions = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
         $joins = new Joins();
-        $joins->add(new Join(Group :: class_name(), $join_condition));
+        $joins->add(new Join(Group :: class_name(), new AndCondition($joinConditions)));
 
         return $joins;
     }
@@ -1278,11 +1341,21 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_ID),
             new StaticConditionVariable($group_id));
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
 
         return new AndCondition($conditions);
@@ -1326,19 +1399,25 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
                 $conditions[] = new InCondition(
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_GROUP_ID),
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_ID),
                     $user->get_groups(true));
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_COURSE_ID),
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_COURSE_ID),
                     new StaticConditionVariable($course_id));
 
                 $condition = new AndCondition($conditions);
 
-                $has_group_relations = self :: count(CourseGroupRelation :: class_name(), $condition) > 0;
+                $has_group_relations = self :: count(CourseEntityRelation :: class_name(), $condition) > 0;
             }
             else
             {

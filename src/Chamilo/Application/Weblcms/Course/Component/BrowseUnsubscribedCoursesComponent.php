@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Course\Table\UnsubscribedCourse\UnsubscribedCourseTable;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -70,23 +69,30 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
                 Course :: get_table_name()));
 
         $groups = $user->get_groups(true);
+
         if ($groups)
         {
-            $groups_condition = new InCondition(
+            $groupsConditions = array();
+            $groupsConditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_GROUP_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID),
                 $user->get_groups(true),
-                CourseGroupRelation :: get_table_name());
+                CourseEntityRelation :: get_table_name());
+            $groupsConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
             $conditions[] = new NotCondition(
                 new SubselectCondition(
                     new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),
                     new PropertyConditionVariable(
-                        CourseGroupRelation :: class_name(),
-                        CourseGroupRelation :: PROPERTY_COURSE_ID),
-                    CourseGroupRelation :: get_table_name(),
-                    $groups_condition,
+                        CourseEntityRelation :: class_name(),
+                        CourseEntityRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: get_table_name(),
+                    new AndCondition($groupsConditions),
                     Course :: get_table_name()));
         }
 

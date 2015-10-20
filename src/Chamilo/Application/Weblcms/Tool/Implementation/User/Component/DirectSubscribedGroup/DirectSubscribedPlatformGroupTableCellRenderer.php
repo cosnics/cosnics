@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\DirectSubscribedGroup;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Cell renderer for a direct subscribed course group browser table.
@@ -47,12 +47,12 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
             case Group :: PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent :: render_cell($column, $group_with_subscription_status));
                 return StringUtilities :: getInstance()->truncate($description);
-            case CourseGroupRelation :: PROPERTY_STATUS :
-                switch ($group_with_subscription_status[CourseGroupRelation :: PROPERTY_STATUS])
+            case CourseEntityRelation :: PROPERTY_STATUS :
+                switch ($group_with_subscription_status[CourseEntityRelation :: PROPERTY_STATUS])
                 {
-                    case CourseGroupRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         return Translation :: get('CourseAdmin');
-                    case CourseGroupRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         return Translation :: get('Student');
                     default :
                         return Translation :: get('Unknown');
@@ -99,12 +99,12 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
             $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager :: context();
 
             // change status
-            switch ($group_with_subscription_status[CourseGroupRelation :: PROPERTY_STATUS])
+            switch ($group_with_subscription_status[CourseEntityRelation :: PROPERTY_STATUS])
             {
-                case CourseGroupRelation :: STATUS_TEACHER :
+                case CourseEntityRelation :: STATUS_TEACHER :
                     $status_change_url = $this->get_component()->get_platformgroup_status_changer_url(
                         $group_id,
-                        CourseGroupRelation :: STATUS_STUDENT);
+                        CourseEntityRelation :: STATUS_STUDENT);
 
                     $toolbar->add_item(
                         new ToolbarItem(
@@ -114,10 +114,10 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                             ToolbarItem :: DISPLAY_ICON));
 
                     break;
-                case CourseGroupRelation :: STATUS_STUDENT :
+                case CourseEntityRelation :: STATUS_STUDENT :
                     $status_change_url = $this->get_component()->get_platformgroup_status_changer_url(
                         $group_id,
-                        CourseGroupRelation :: STATUS_TEACHER);
+                        CourseEntityRelation :: STATUS_TEACHER);
 
                     $toolbar->add_item(
                         new ToolbarItem(

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -27,6 +26,9 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
  *
@@ -206,21 +208,24 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             }
 
             // retrieve platform groups subscribed to course
-            $cgr_condition = new EqualityCondition(
+            $cgrConditions = array();
+            $cgrConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($this->get_course()->get_id()));
+            $cgrConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
-            $cgr_resultset = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-                CourseGroupRelation :: class_name(),
-                $cgr_condition);
+            $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
+                CourseEntityRelation :: class_name(),
+                new DataClassDistinctParameters(
+                    new AndCondition($cgrConditions),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID));
 
-            $group_ids = array();
-            while ($course_group_rel = $cgr_resultset->next_result())
-            {
-                $group_ids[] = $course_group_rel->get_group_id();
-            }
             // ***********************************************************************************************//
             // DMTODO Problem with caching. Once caching problems fixed, remove the following line of code. //
             // ***********************************************************************************************//

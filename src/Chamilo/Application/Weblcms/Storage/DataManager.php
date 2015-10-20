@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Storage;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Manager;
@@ -60,6 +59,7 @@ use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Exception;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * This class represents the data manager for this package
@@ -1997,22 +1997,23 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if ($target_entities[0])
         {
-            $cgr_condition = new EqualityCondition(
+            $cgrConditions = array();
+            $cgrConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($course_id));
+            $cgrConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
-            $cgr_resultset = $course_group_relations = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-                CourseGroupRelation :: class_name(),
-                $cgr_condition);
-
-            $group_ids = array();
-
-            while ($course_group_rel = $cgr_resultset->next_result())
-            {
-                $group_ids[] = $course_group_rel->get_group_id();
-            }
+            $group_ids = \Chamilo\Application\Weblcms\Storage\DataManager :: distinct(
+                CourseEntityRelation :: class_name(),
+                new DataClassDistinctParameters(
+                    new AndCondition($cgrConditions),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID));
 
             return \Chamilo\Core\Group\Storage\DataManager :: retrieve_groups_and_subgroups(
                 $group_ids,
@@ -2338,37 +2339,37 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $properties->add(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_COURSE_ID));
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID));
 
             $conditions = array();
 
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_GROUP_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID),
                 $group_ids);
+
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
             if (count($course_ids) > 0) // Exclude the courses we already know about
             {
                 $conditions[] = new NotCondition(
                     new InCondition(
                         new PropertyConditionVariable(
-                            CourseGroupRelation :: class_name(),
-                            CourseGroupRelation :: PROPERTY_COURSE_ID),
+                            CourseEntityRelation :: class_name(),
+                            CourseEntityRelation :: PROPERTY_COURSE_ID),
                         $course_ids));
             }
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new RecordRetrievesParameters($properties, $condition);
-
-            $indirectly_subscribed_course_ids = self :: records(CourseGroupRelation :: class_name(), $parameters);
-
-            foreach ($indirectly_subscribed_course_ids->as_array() as $course_id)
-            {
-                $course_ids[] = $course_id[CourseGroupRelation :: PROPERTY_COURSE_ID];
-            }
+            $parameters = new DataClassDistinctParameters($condition, CourseEntityRelation :: PROPERTY_COURSE_ID);
+            $course_ids = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
         }
 
         // Finally, retrieve information about the course, as well as labels the user applied to allow sorting the
