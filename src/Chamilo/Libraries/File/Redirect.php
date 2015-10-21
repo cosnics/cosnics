@@ -217,21 +217,11 @@ class Redirect
             $protocol = 'http://';
         }
         $host = $_SERVER['HTTP_HOST'];
-        if ($_SERVER['SERVER_PORT'] != '' && (($protocol == 'http://' && $_SERVER['SERVER_PORT'] != '80') ||
-             ($protocol == 'https://' && $_SERVER['SERVER_PORT'] != '443')))
-        {
-            $port = ':' . $_SERVER['SERVER_PORT'];
-        }
-        else
-        {
-            $port = '';
-        }
 
         $parts = array();
 
         $parts[] = $protocol;
         $parts[] = $host;
-        $parts[] = $port;
 
         if ($includeRequest)
         {
