@@ -1,12 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\CourseType\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class describes the relation between a course type and a course setting
@@ -23,6 +18,8 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
     const PROPERTY_LOCKED = 'locked';
+    const PROPERTY_DEFAULT_VALUE = 'default_value';
+    const PROPERTY_LIMITED = 'limited';
 
     /**
      * **************************************************************************************************************
@@ -46,52 +43,10 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
     {
         $extended_property_names[] = self :: PROPERTY_COURSE_TYPE_ID;
         $extended_property_names[] = self :: PROPERTY_LOCKED;
+        $extended_property_names[] = self :: PROPERTY_DEFAULT_VALUE;
+        $extended_property_names[] = self :: PROPERTY_LIMITED;
 
         return parent :: get_default_property_names($extended_property_names);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Course Settings Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Adds a value for this course type rel course setting object
-     *
-     * @param $value string
-     *
-     * @return CourseTypeRelCourseSettingValue
-     */
-    public function add_course_setting_value($value)
-    {
-        $course_type_rel_setting_value = new CourseTypeRelCourseSettingValue();
-        $course_type_rel_setting_value->set_course_type_rel_course_setting($this);
-        $course_type_rel_setting_value->set_value($value);
-
-        if (! $course_type_rel_setting_value->create())
-        {
-            throw new \Exception(Translation :: get('CouldNotCreateCourseTypeRelCourseSettingValue'));
-        }
-
-        return $course_type_rel_setting_value;
-    }
-
-    /**
-     * Truncates the values for this given course type rel course setting object If this course type rel course setting
-     * object is locked than all the values for the courses connected to this course type are deleted.
-     *
-     * @return boolean
-     */
-    public function truncate_values()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseTypeRelCourseSettingValue :: class_name(),
-                CourseTypeRelCourseSettingValue :: PROPERTY_COURSE_TYPE_REL_COURSE_SETTING_ID),
-            new StaticConditionVariable($this->get_id()));
-
-        return DataManager :: deletes(CourseTypeRelCourseSettingValue :: class_name(), $condition);
     }
 
     /**
@@ -138,6 +93,46 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
     public function set_locked($locked)
     {
         $this->set_default_property(self :: PROPERTY_LOCKED, $locked);
+    }
+
+    /**
+     * Returns the default_value of this CourseTypeRelCourseSetting object
+     *
+     * @return String
+     */
+    public function is_default_value()
+    {
+        return $this->get_default_property(self :: PROPERTY_DEFAULT_VALUE);
+    }
+
+    /**
+     * Sets the default_value of this CourseTypeRelCourseSetting object
+     *
+     * @param $default_value String
+     */
+    public function set_default_value($default_value)
+    {
+        $this->set_default_property(self :: PROPERTY_DEFAULT_VALUE, $default_value);
+    }
+
+    /**
+     * Returns the limited of this CourseTypeRelCourseSetting object
+     *
+     * @return String
+     */
+    public function is_limited()
+    {
+        return $this->get_limited_property(self :: PROPERTY_LIMITED);
+    }
+
+    /**
+     * Sets the limited of this CourseTypeRelCourseSetting object
+     *
+     * @param $limited String
+     */
+    public function set_limited($limited)
+    {
+        $this->set_limited_property(self :: PROPERTY_LIMITED, $limited);
     }
 
     /**
