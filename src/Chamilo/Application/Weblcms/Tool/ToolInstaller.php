@@ -194,9 +194,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             if (! $this->install_static_tool_setting_relations_for_object(
                 $course_type,
                 '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting',
-                '\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSettingValue',
-                'set_course_type_id',
-                'set_course_type_rel_course_setting'))
+                'set_course_type_id'))
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer :: TYPE_NORMAL,
@@ -227,9 +225,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             if (! $this->install_static_tool_setting_relations_for_object(
                 $course,
                 '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting',
-                '\Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue',
-                'set_course_id',
-                'set_course_rel_course_setting'))
+                'set_course_id'))
             {
                 return $this->failed(
                     \Chamilo\Configuration\Package\Action\Installer :: TYPE_NORMAL,
@@ -282,20 +278,9 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
 
             call_user_func(array($course_setting_relation, $set_object_function), $object->get_id());
 
+            $course_setting_relation->set_value(0);
+
             if (! $course_setting_relation->create())
-            {
-                return false;
-            }
-
-            $course_setting_relation_value = new $course_setting_relation_value_class_name();
-
-            call_user_func(
-                array($course_setting_relation_value, $set_object_relation_function),
-                $course_setting_relation);
-
-            $course_setting_relation_value->set_value(0);
-
-            if (! $course_setting_relation_value->create())
             {
                 return false;
             }

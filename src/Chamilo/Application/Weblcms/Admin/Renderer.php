@@ -224,6 +224,7 @@ class Renderer extends CourseListRenderer
 
             $html[] = '<ul>';
             $count = 0;
+
             foreach ($courses as $course_properties)
             {
                 $course = DataClass :: factory(Course :: class_name(), $course_properties);
@@ -252,7 +253,8 @@ class Renderer extends CourseListRenderer
                     $icon = Theme :: getInstance()->getCommonImagePath('Action/Lock');
 
                     $locked = '<img style="float: left; margin-left: -30px; padding-top: 1px;"
-                                src="' . Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
+                                src="' .
+                         Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
                 }
 
                 if ($course_visible)
@@ -270,7 +272,8 @@ class Renderer extends CourseListRenderer
                 }
 
                 $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-                        list-style-image: url(' . $icon . '); margin-left: 15px;' . $text_style . '">';
+                        list-style-image: url(' . $icon .
+                     '); margin-left: 15px;' . $text_style . '">';
                 $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
                      $course->get_title();
                 $html[] = '</a>';
@@ -292,6 +295,7 @@ class Renderer extends CourseListRenderer
 
                 $count ++;
             }
+
             $html[] = '</ul>';
 
             return implode($html, "\n");

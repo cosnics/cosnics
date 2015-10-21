@@ -59,19 +59,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                foreach ($expanded_entity_ids as $expanded_entity_id)
-                {
-                    $expanded_entity_conditions = array();
+                $expanded_entity_conditions = array();
 
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
-                        new StaticConditionVariable($expanded_entity_type));
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
-                        new StaticConditionVariable($expanded_entity_id));
+                $expanded_entity_conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable($expanded_entity_type));
+                $expanded_entity_conditions[] = new InCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                    $expanded_entity_ids);
 
-                    $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
-                }
+                $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
             }
 
             $condition = new OrCondition($expanded_entities_conditions);
@@ -98,19 +95,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                foreach ($expanded_entity_ids as $expanded_entity_id)
-                {
-                    $expanded_entity_conditions = array();
+                $expanded_entity_conditions = array();
 
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
-                        new StaticConditionVariable($expanded_entity_type));
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
-                        new StaticConditionVariable($expanded_entity_id));
+                $expanded_entity_conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable($expanded_entity_type));
+                $expanded_entity_conditions[] = new InCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                    $expanded_entity_ids);
 
-                    $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
-                }
+                $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
             }
 
             $conditions[] = new OrCondition($expanded_entities_conditions);
@@ -130,19 +124,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             foreach ($expanded_targets as $expanded_target_type => $expanded_target_ids)
             {
-                foreach ($expanded_target_ids as $expanded_target_id)
-                {
-                    $expanded_target_conditions = array();
+                $expanded_target_conditions = array();
 
-                    $expanded_target_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_TYPE),
-                        new StaticConditionVariable($expanded_target_type));
-                    $expanded_target_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_ID),
-                        new StaticConditionVariable($expanded_target_id));
+                $expanded_target_conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_TYPE),
+                    new StaticConditionVariable($expanded_target_type));
+                $expanded_target_conditions[] = new InCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_ID),
+                    $expanded_target_ids);
 
-                    $expanded_targets_conditions[] = new AndCondition($expanded_target_conditions);
-                }
+                $expanded_targets_conditions[] = new AndCondition($expanded_target_conditions);
             }
 
             $conditions[] = new OrCondition($expanded_targets_conditions);
@@ -167,19 +158,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                foreach ($expanded_entity_ids as $expanded_entity_id)
-                {
-                    $expanded_entity_conditions = array();
+                $expanded_entity_conditions = array();
 
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
-                        new StaticConditionVariable($expanded_entity_type));
-                    $expanded_entity_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
-                        new StaticConditionVariable($expanded_entity_id));
+                $expanded_entity_conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable($expanded_entity_type));
+                $expanded_entity_conditions[] = new InCondition(
+                    new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                    $expanded_entity_ids);
 
-                    $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
-                }
+                $expanded_entities_conditions[] = new AndCondition($expanded_entity_conditions);
             }
 
             $condition = new OrCondition($expanded_entities_conditions);
