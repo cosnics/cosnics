@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Admin extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_ORIGIN = 'origin';

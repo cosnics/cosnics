@@ -213,7 +213,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
             $condition = new AndCondition($conditions);
 
             $submission_trackers = AssignmentSubmission :: get_data(
-                AssignmentSubmission :: CLASS_NAME,
+                AssignmentSubmission :: class_name(),
                 \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
                 $condition)->as_array();
 
@@ -229,7 +229,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
                 $submission_tracker_ids);
             $score_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: get_data(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: CLASS_NAME,
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
                 \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
                 $condition)->as_array();
 

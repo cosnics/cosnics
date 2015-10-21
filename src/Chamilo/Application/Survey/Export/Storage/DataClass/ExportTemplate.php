@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ExportTemplate extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'export_template';
     const PROPERTY_ID = 'id';
     const PROPERTY_OWNER_ID = 'owner_id';
@@ -17,17 +16,17 @@ class ExportTemplate extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     static function get_default_property_names()
     {
         return array(
-            self :: PROPERTY_PUBLICATION_ID, 
-            self :: PROPERTY_EXPORT_REGISTRATION_ID, 
-            self :: PROPERTY_OWNER_ID, 
-            self :: PROPERTY_ID, 
-            self :: PROPERTY_NAME, 
+            self :: PROPERTY_PUBLICATION_ID,
+            self :: PROPERTY_EXPORT_REGISTRATION_ID,
+            self :: PROPERTY_OWNER_ID,
+            self :: PROPERTY_ID,
+            self :: PROPERTY_NAME,
             self :: PROPERTY_DESCRIPTION);
     }
 
@@ -38,7 +37,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Returns the publication_id of this ExportTemplate.
-     * 
+     *
      * @return the publication_id.
      */
     function get_publication_id()
@@ -48,7 +47,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Sets the publication_id of this ExportTemplate.
-     * 
+     *
      * @param publication_id
      */
     function set_publication_id($publication_id)
@@ -58,7 +57,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Returns the export_registration_id of this ExportTemplate.
-     * 
+     *
      * @return the export_registration_id.
      */
     function get_export_registration_id()
@@ -68,7 +67,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Sets the export_registration_id of this ExportTemplate.
-     * 
+     *
      * @param export_registration_id
      */
     function set_export_registration_id($export_registration_id)
@@ -78,7 +77,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Sets the owner of this ExportTemplate.
-     * 
+     *
      * @param owner
      */
     function set_owner_id($owner)
@@ -88,7 +87,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Returns the owner of this ExportTemplate.
-     * 
+     *
      * @return owner.
      */
     function get_owner_id()
@@ -98,7 +97,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Sets the name of this ExportTemplate.
-     * 
+     *
      * @param name
      */
     function set_name($name)
@@ -108,7 +107,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Returns the name of this ExportTemplate.
-     * 
+     *
      * @return name.
      */
     function get_name()
@@ -118,7 +117,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Sets the description of this ExportTemplate.
-     * 
+     *
      * @param description
      */
     function set_description($description)
@@ -128,7 +127,7 @@ class ExportTemplate extends DataClass
 
     /**
      * Returns the description of this ExportTemplate.
-     * 
+     *
      * @return description.
      */
     function get_description()
@@ -138,11 +137,9 @@ class ExportTemplate extends DataClass
 
     function get_type()
     {
-        $export_registration = DataManager :: retrieve_export_registration_by_id(
-            $this->get_export_registration_id());
+        $export_registration = DataManager :: retrieve_export_registration_by_id($this->get_export_registration_id());
         return $export_registration->get_type();
     }
-
 }
 
 ?>

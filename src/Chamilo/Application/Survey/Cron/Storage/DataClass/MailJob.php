@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class MailJob extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'mail_job';
     const PROPERTY_USER_MAIL_ID = 'user_mail_id';
     const PROPERTY_UUID = 'UUID';
@@ -27,7 +26,7 @@ class MailJob extends DataClass
 
     /**
      * Returns the publication_mail_tracker_id of this MailJob.
-     * 
+     *
      * @return the publication_mail_tracker_id.
      */
     function get_user_mail_id()
@@ -37,7 +36,7 @@ class MailJob extends DataClass
 
     /**
      * Sets the publication_mail_tracker_id of this MailJob.
-     * 
+     *
      * @param publication_mail_tracker_id
      */
     function set_user_mail_id($user_mail_id)
@@ -47,7 +46,7 @@ class MailJob extends DataClass
 
     /**
      * Returns the UUID of this MailJob.
-     * 
+     *
      * @return the UUID.
      */
     function get_UUID()
@@ -57,7 +56,7 @@ class MailJob extends DataClass
 
     /**
      * Sets the UUID of this MailJob.
-     * 
+     *
      * @param UUID
      */
     function set_UUID($UUID)
@@ -67,7 +66,7 @@ class MailJob extends DataClass
 
     /**
      * Returns the status of this MailJob.
-     * 
+     *
      * @return the status.
      */
     function get_status()
@@ -77,14 +76,13 @@ class MailJob extends DataClass
 
     /**
      * Sets the status of this MailJob.
-     * 
+     *
      * @param status
      */
     function set_status($status)
     {
         $this->set_default_property(self :: PROPERTY_STATUS, $status);
     }
-
 }
 
 ?>

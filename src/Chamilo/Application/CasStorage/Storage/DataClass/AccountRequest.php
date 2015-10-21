@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class AccountRequest extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'request';
 
     /**

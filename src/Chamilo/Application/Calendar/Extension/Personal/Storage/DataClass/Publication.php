@@ -10,15 +10,14 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * A content object publication in the personal calendar application
- * 
+ *
  * @package application\calendar$Publication
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
  */
 class Publication extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_PUBLISHER = 'publisher_id';
@@ -38,7 +37,7 @@ class Publication extends DataClass
 
     /**
      * Get the default properties of all Publications.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -57,7 +56,7 @@ class Publication extends DataClass
 
     /**
      * Returns the content object id from this Publication object
-     * 
+     *
      * @return int The content object ID
      */
     public function get_content_object_id()
@@ -67,7 +66,7 @@ class Publication extends DataClass
 
     /**
      * Returns the user of this Publication object
-     * 
+     *
      * @return int the user
      */
     public function get_publisher()
@@ -77,7 +76,7 @@ class Publication extends DataClass
 
     /**
      * Returns the published timestamp of this Publication object
-     * 
+     *
      * @return Timestamp the published date
      */
     public function get_published()
@@ -87,7 +86,7 @@ class Publication extends DataClass
 
     /**
      * Sets the content object id of this Publication.
-     * 
+     *
      * @param Int $id the calendar_event ID.
      */
     public function set_content_object_id($id)
@@ -97,7 +96,7 @@ class Publication extends DataClass
 
     /**
      * Sets the user of this Publication.
-     * 
+     *
      * @param int $user the User.
      */
     public function set_publisher($publisher)
@@ -107,7 +106,7 @@ class Publication extends DataClass
 
     /**
      * Sets the published date of this Publication.
-     * 
+     *
      * @param int $published the timestamp of the published date.
      */
     public function set_published($published)
@@ -124,7 +123,7 @@ class Publication extends DataClass
         if (! isset($this->publication_object))
         {
             $this->publication_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 $this->get_content_object_id());
         }
         return $this->publication_object;
@@ -137,7 +136,7 @@ class Publication extends DataClass
     public function get_publication_publisher()
     {
         return \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
             (int) $this->get_publisher());
     }
 
@@ -148,17 +147,17 @@ class Publication extends DataClass
     public function create()
     {
         $this->set_published(time());
-        
+
         if (! parent :: create())
         {
             return false;
         }
-        
+
         if (! $this->process_users_and_groups())
         {
             return false;
         }
-        
+
         return true;
     }
 
@@ -172,55 +171,55 @@ class Publication extends DataClass
         {
             return false;
         }
-        
+
         if (! DataManager :: truncate_users_and_groups_for_publication($this->get_id()))
         {
             return false;
         }
-        
+
         if (! $this->process_users_and_groups())
         {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Process the selected target users and groups
-     * 
+     *
      * @return boolean
      */
     public function process_users_and_groups()
     {
         $users = $this->get_target_users();
-        
+
         foreach ($users as $index => $user_id)
         {
             $publication_user = new PublicationUser();
             $publication_user->set_publication($this->get_id());
             $publication_user->set_user($user_id);
-            
+
             if (! $publication_user->create())
             {
                 return false;
             }
         }
-        
+
         $groups = $this->get_target_groups();
-        
+
         foreach ($groups as $index => $group_id)
         {
             $publication_group = new PublicationGroup();
             $publication_group->set_publication($this->get_id());
             $publication_group->set_group_id($group_id);
-            
+
             if (! $publication_group->create())
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -242,7 +241,7 @@ class Publication extends DataClass
         {
             $this->target_users = DataManager :: retrieve_target_users($this);
         }
-        
+
         return $this->target_users;
     }
 
@@ -256,7 +255,7 @@ class Publication extends DataClass
         {
             $this->target_groups = DataManager :: retrieve_target_groups($this);
         }
-        
+
         return $this->target_groups;
     }
 
@@ -298,14 +297,14 @@ class Publication extends DataClass
         {
             return false;
         }
-        
+
         $user_id = $user->get_id();
-        
+
         $target_users = $this->get_target_users();
         $target_groups = $this->get_target_groups();
-        
+
         $user_groups = $user->get_groups(true);
-        
+
         if (in_array($user_id, $target_users))
         {
             return true;
@@ -320,23 +319,23 @@ class Publication extends DataClass
                 }
             }
         }
-        
+
         return false;
     }
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return \libraries\storage\Condition[string]
      */
     protected function get_dependencies()
     {
         return array(
             PublicationUser :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(PublicationUser :: class_name(), PublicationUser :: PROPERTY_PUBLICATION), 
-                new StaticConditionVariable($this->get_id())), 
+                new PropertyConditionVariable(PublicationUser :: class_name(), PublicationUser :: PROPERTY_PUBLICATION),
+                new StaticConditionVariable($this->get_id())),
             PublicationGroup :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(PublicationGroup :: class_name(), PublicationGroup :: PROPERTY_PUBLICATION), 
+                new PropertyConditionVariable(PublicationGroup :: class_name(), PublicationGroup :: PROPERTY_PUBLICATION),
                 new StaticConditionVariable($this->get_id())));
     }
 }

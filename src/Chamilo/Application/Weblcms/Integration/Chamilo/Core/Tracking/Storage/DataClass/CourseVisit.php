@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 class CourseVisit extends Tracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_TOOL_ID = 'tool_id';
@@ -54,8 +53,7 @@ class CourseVisit extends Tracker
     }
 
     /**
-     * Validates the given parameters and sets the parameters to this dataclass.
-     * Retrieves and updates or creates a new
+     * Validates the given parameters and sets the parameters to this dataclass. Retrieves and updates or creates a new
      * record.
      *
      * @param array $parameters

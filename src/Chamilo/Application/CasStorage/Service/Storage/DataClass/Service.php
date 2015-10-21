@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Service extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * CasAccount properties
@@ -167,10 +166,14 @@ class Service extends DataClass
         switch ($this->get_enabled())
         {
             case self :: STATUS_ENABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Enabled');
+                $path = Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\CasStorage\Service',
+                    'Enabled/Enabled');
                 break;
             case self :: STATUS_DISABLED :
-                $path = Theme :: getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Disabled');
+                $path = Theme :: getInstance()->getImagePath(
+                    'Chamilo\Application\CasStorage\Service',
+                    'Enabled/Disabled');
                 break;
         }
 

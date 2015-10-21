@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class Participant extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'participant';
     const CREATE_PARTICIPANT_EVENT = 'create_survey_participant';
     const PROPERTY_USER_ID = 'user_id';
@@ -26,15 +25,15 @@ class Participant extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_SURVEY_PUBLICATION_ID, 
-                self :: PROPERTY_DATE, 
-                self :: PROPERTY_PROGRESS, 
-                self :: PROPERTY_STATUS, 
-                self :: PROPERTY_PARENT_ID, 
-                self :: PROPERTY_START_TIME, 
-                self :: PROPERTY_TOTAL_TIME, 
-                self :: PROPERTY_CONTEXT_ID, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_SURVEY_PUBLICATION_ID,
+                self :: PROPERTY_DATE,
+                self :: PROPERTY_PROGRESS,
+                self :: PROPERTY_STATUS,
+                self :: PROPERTY_PARENT_ID,
+                self :: PROPERTY_START_TIME,
+                self :: PROPERTY_TOTAL_TIME,
+                self :: PROPERTY_CONTEXT_ID,
                 self :: PROPERTY_CONTEXT_TEMPLATE_ID));
     }
 

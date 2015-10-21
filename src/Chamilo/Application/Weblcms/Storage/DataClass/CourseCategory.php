@@ -24,7 +24,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
  */
 class CourseCategory extends PlatformCategory implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_CODE = 'code';
     const PROPERTY_STATE = 'state';
     const STATE_ARCHIVE = 0;

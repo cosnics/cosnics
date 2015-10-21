@@ -9,8 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class Publication extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // DataClass properties
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_PUBLISHER_ID = 'publisher_id';
@@ -40,12 +39,12 @@ class Publication extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_CONTENT_OBJECT_ID, 
-                self :: PROPERTY_PUBLISHER_ID, 
-                self :: PROPERTY_PUBLISHED, 
-                self :: PROPERTY_MODIFIED, 
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_FROM_DATE, 
+                self :: PROPERTY_CONTENT_OBJECT_ID,
+                self :: PROPERTY_PUBLISHER_ID,
+                self :: PROPERTY_PUBLISHED,
+                self :: PROPERTY_MODIFIED,
+                self :: PROPERTY_TITLE,
+                self :: PROPERTY_FROM_DATE,
                 self :: PROPERTY_TO_DATE));
     }
 
@@ -67,10 +66,10 @@ class Publication extends DataClass
         if (! isset($this->content_object))
         {
             $this->content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 $this->getContentObjectId());
         }
-        
+
         return $this->content_object;
     }
 
@@ -101,10 +100,10 @@ class Publication extends DataClass
         if (! isset($this->publisher))
         {
             $this->publisher = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $this->getPublisherId());
         }
-        
+
         return $this->publisher;
     }
 
@@ -155,7 +154,7 @@ class Publication extends DataClass
 
     /**
      * Returns the title of this Publication.
-     * 
+     *
      * @return the title.
      */
     function getTitle()
@@ -165,7 +164,7 @@ class Publication extends DataClass
 
     /**
      * Sets the title of this Publication.
-     * 
+     *
      * @param title
      */
     function setTitle($title)
@@ -175,7 +174,7 @@ class Publication extends DataClass
 
     /**
      * Returns the from_date of this Publication.
-     * 
+     *
      * @return the from_date.
      */
     function getFromDate()
@@ -185,7 +184,7 @@ class Publication extends DataClass
 
     /**
      * Sets the from_date of this Publication.
-     * 
+     *
      * @param from_date
      */
     function setFromDate($fromDate)
@@ -195,7 +194,7 @@ class Publication extends DataClass
 
     /**
      * Returns the to_date of this Publication.
-     * 
+     *
      * @return the to_date.
      */
     function getToDate()
@@ -205,7 +204,7 @@ class Publication extends DataClass
 
     /**
      * Sets the to_date of this Publication.
-     * 
+     *
      * @param to_date
      */
     function setToDate($toDate)
@@ -221,9 +220,9 @@ class Publication extends DataClass
         {
             return true;
         }
-        
+
         $time = time();
-        
+
         if ($time < $fromDate || $time > $toDate)
         {
             return false;

@@ -35,7 +35,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         {
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else
@@ -126,7 +126,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
     function get_allowed_content_object_types()
     {
-        return array(Survey :: CLASS_NAME);
+        return array(Survey :: class_name());
     }
 }
 ?>

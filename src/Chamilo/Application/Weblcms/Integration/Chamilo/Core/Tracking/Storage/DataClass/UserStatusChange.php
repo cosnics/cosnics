@@ -9,7 +9,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class UserStatusChange extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id'; // by whom
     const PROPERTY_SUBJECT_ID = 'subject_id'; // to whom
     const PROPERTY_NEW_STATUS = 'new_status';
@@ -29,10 +28,10 @@ class UserStatusChange extends SimpleTracker
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_SUBJECT_ID, 
-                self :: PROPERTY_COURSE_ID, 
-                self :: PROPERTY_NEW_STATUS, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_SUBJECT_ID,
+                self :: PROPERTY_COURSE_ID,
+                self :: PROPERTY_NEW_STATUS,
                 self :: PROPERTY_DATE));
     }
 

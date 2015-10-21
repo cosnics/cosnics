@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ATTEMPT_STATUS_ID = 'attempt_status_id';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_FEEDBACK = 'feedback';
@@ -31,7 +30,7 @@ class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Si
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments
