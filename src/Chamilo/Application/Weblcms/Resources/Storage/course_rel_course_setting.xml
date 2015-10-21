@@ -4,6 +4,7 @@
 		<property name="id" type="integer" notnull="1" autoincrement="true" />
 		<property name="course_setting_id" type="integer" notnull="1" />
 		<property name="course_id" type="integer" notnull="1" />
+		<property name="value" type="text" length="20" notnull="1" />
 	</properties>
 	<index name="course_setting_id">
 		<indexproperty name="course_setting_id" />

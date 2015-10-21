@@ -2,10 +2,8 @@
 namespace Chamilo\Application\Weblcms\Storage;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting;
-use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
@@ -1424,19 +1422,22 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return RecordResultSet
      */
-    public static function retrieve_course_settings_with_course_type_values($course_type_id)
+    public static function retrieve_course_settings_with_course_type_values($courseTypeIdentifiers)
     {
-        $condition = new EqualityCondition(
+        if(!is_array($courseTypeIdentifiers))
+        {
+            $courseTypeIdentifiers = array($courseTypeIdentifiers);
+        }
+
+        $condition = new InCondition(
             new PropertyConditionVariable(
                 CourseTypeRelCourseSetting :: class_name(),
                 CourseTypeRelCourseSetting :: PROPERTY_COURSE_TYPE_ID),
-            new StaticConditionVariable($course_type_id));
+            $courseTypeIdentifiers);
 
         $parameters = self :: get_course_settings_with_values_parameters(
             CourseTypeRelCourseSetting :: class_name(),
-            CourseTypeRelCourseSettingValue :: class_name(),
             CourseTypeRelCourseSetting :: PROPERTY_COURSE_SETTING_ID,
-            CourseTypeRelCourseSettingValue :: PROPERTY_COURSE_TYPE_REL_COURSE_SETTING_ID,
             $condition);
 
         return self :: records(CourseSetting :: class_name(), $parameters);
@@ -1449,19 +1450,22 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return RecordResultSet
      */
-    public static function retrieve_course_settings_with_course_values($course_id)
+    public static function retrieve_course_settings_with_course_values($courseIdentifiers)
     {
-        $condition = new EqualityCondition(
+        if(!is_array($courseIdentifiers))
+        {
+            $courseIdentifiers = array($courseIdentifiers);
+        }
+
+        $condition = new InCondition(
             new PropertyConditionVariable(
                 CourseRelCourseSetting :: class_name(),
                 CourseRelCourseSetting :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
+            $courseIdentifiers);
 
         $parameters = self :: get_course_settings_with_values_parameters(
             CourseRelCourseSetting :: class_name(),
-            CourseRelCourseSettingValue :: class_name(),
             CourseRelCourseSetting :: PROPERTY_COURSE_SETTING_ID,
-            CourseRelCourseSettingValue :: PROPERTY_COURSE_REL_COURSE_SETTING_ID,
             $condition);
 
         return self :: records(CourseSetting :: class_name(), $parameters);
@@ -1490,16 +1494,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return RecordRetrievesParameters
      */
     private static function get_course_settings_with_values_parameters($course_setting_relation_class,
-        $course_setting_relation_value_class, $course_setting_foreign_property,
-        $course_setting_relation_foreign_property, $condition = null, $offset = null, $count = null, $order_by = array())
+        $course_setting_foreign_property, $condition = null, $offset = null, $count = null, $order_by = array())
     {
         $data_class_properties = array();
 
         $data_class_properties[] = new PropertiesConditionVariable(CourseSetting :: class_name());
 
+        $data_class_properties[] = new FixedPropertyConditionVariable(
+            $course_setting_relation_class,
+            $course_setting_relation_class :: PROPERTY_OBJECT_ID, 'object_id');
+
         $data_class_properties[] = new PropertyConditionVariable(
-            $course_setting_relation_value_class,
-            $course_setting_relation_value_class :: PROPERTY_VALUE);
+            $course_setting_relation_class,
+            $course_setting_relation_class :: PROPERTY_VALUE);
 
         $joins = array();
 
@@ -1508,16 +1515,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new EqualityCondition(
                 new PropertyConditionVariable(CourseSetting :: class_name(), CourseSetting :: PROPERTY_ID),
                 new PropertyConditionVariable($course_setting_relation_class, $course_setting_foreign_property)));
-
-        $joins[] = new Join(
-            $course_setting_relation_value_class :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    $course_setting_relation_class,
-                    $course_setting_relation_class :: PROPERTY_ID),
-                new PropertyConditionVariable(
-                    $course_setting_relation_value_class,
-                    $course_setting_relation_foreign_property)));
 
         return new RecordRetrievesParameters(
             new DataClassProperties($data_class_properties),

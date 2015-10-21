@@ -173,6 +173,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE));
             $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE));
+            $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID));
+            $properties->add(new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID));
 
             $join_conditions = array();
 
@@ -193,26 +195,38 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             // Second: retrieve the (ids of) directly subscribed groups and their ancestors
             if (count($directly_subscribed_group_nesting_values) > 0)
             {
-                $conditions = array();
-
-                $or_conditions = array();
+                $treeConditions = array();
+                $alreadyIncludedParents = array();
+                $directGroupIds = array();
 
                 foreach ($directly_subscribed_group_nesting_values as $descendent)
                 {
-                    $or_conditions[] = new AndCondition(
-                        array(
-                            new InequalityCondition(
-                                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
-                                InequalityCondition :: LESS_THAN_OR_EQUAL,
-                                new StaticConditionVariable($descendent[Group :: PROPERTY_LEFT_VALUE])),
+                    if (! in_array($descendent[Group :: PROPERTY_PARENT_ID], $alreadyIncludedParents))
+                    {
 
-                            new InequalityCondition(
-                                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
-                                InequalityCondition :: GREATER_THAN_OR_EQUAL,
-                                new StaticConditionVariable($descendent[Group :: PROPERTY_RIGHT_VALUE]))));
+                        $treeConditions[] = new AndCondition(
+                            array(
+                                new InequalityCondition(
+                                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_LEFT_VALUE),
+                                    InequalityCondition :: LESS_THAN_OR_EQUAL,
+                                    new StaticConditionVariable($descendent[Group :: PROPERTY_LEFT_VALUE])),
+
+                                new InequalityCondition(
+                                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_RIGHT_VALUE),
+                                    InequalityCondition :: GREATER_THAN_OR_EQUAL,
+                                    new StaticConditionVariable($descendent[Group :: PROPERTY_RIGHT_VALUE]))));
+
+                        $alreadyIncludedParents[] = $descendent[Group :: PROPERTY_PARENT_ID];
+                    }
+
+                    $directGroupIds[] = $descendent[Group :: PROPERTY_ID];
                 }
 
-                $condition = new OrCondition($or_conditions);
+                $treeConditions[] = new InCondition(
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
+                    $directGroupIds);
+
+                $condition = new OrCondition($treeConditions);
 
                 if ($only_retrieve_ids)
                 {
