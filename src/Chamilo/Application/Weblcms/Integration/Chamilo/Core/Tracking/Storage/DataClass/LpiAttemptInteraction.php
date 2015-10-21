@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class LpiAttemptInteraction extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
     const PROPERTY_INTERACTION_ID = 'interaction_id';
     const PROPERTY_INTERACTION_TYPE = 'interaction_type';
@@ -33,15 +32,15 @@ class LpiAttemptInteraction extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_LPI_VIEW_ID, 
-                self :: PROPERTY_INTERACTION_ID, 
-                self :: PROPERTY_INTERACTION_TYPE, 
-                self :: PROPERTY_WEIGHT, 
-                self :: PROPERTY_COMPLETION_TIME, 
-                self :: PROPERTY_CORRECT_RESPONSES, 
-                self :: PROPERTY_STUDENT_RESPONSES, 
-                self :: PROPERTY_RESULT, 
-                self :: PROPERTY_LATENCY, 
+                self :: PROPERTY_LPI_VIEW_ID,
+                self :: PROPERTY_INTERACTION_ID,
+                self :: PROPERTY_INTERACTION_TYPE,
+                self :: PROPERTY_WEIGHT,
+                self :: PROPERTY_COMPLETION_TIME,
+                self :: PROPERTY_CORRECT_RESPONSES,
+                self :: PROPERTY_STUDENT_RESPONSES,
+                self :: PROPERTY_RESULT,
+                self :: PROPERTY_LATENCY,
                 self :: PROPERTY_DISPLAY_ORDER));
     }
 

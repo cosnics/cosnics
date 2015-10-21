@@ -6,8 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class Mail extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Mail properties
      */
@@ -27,25 +26,25 @@ class Mail extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     static function get_default_property_names()
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_SEND_DATE, 
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_FROM_ADDRESS, 
-                self :: PROPERTY_FROM_ADDRESS_NAME, 
-                self :: PROPERTY_REPLY_ADDRESS, 
-                self :: PROPERTY_REPLY_ADDRESS_NAME, 
-                self :: PROPERTY_MAIL_CONTENT, 
-                self :: PROPERTY_MAIL_HEADER, 
+                self :: PROPERTY_SEND_DATE,
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_FROM_ADDRESS,
+                self :: PROPERTY_FROM_ADDRESS_NAME,
+                self :: PROPERTY_REPLY_ADDRESS,
+                self :: PROPERTY_REPLY_ADDRESS_NAME,
+                self :: PROPERTY_MAIL_CONTENT,
+                self :: PROPERTY_MAIL_HEADER,
                 self :: PROPERTY_SENDER_USER_ID));
     }
-    
+
     // public function delete()
     // {
     // $condition = new EqualityCondition(MailTracker :: PROPERTY_SURVEY_PUBLICATION_MAIL_ID, $this->get_id());
@@ -64,7 +63,7 @@ class Mail extends DataClass
 
     /**
      * Returns the mail_header of this Mail.
-     * 
+     *
      * @return the mail_header.
      */
     function get_mail_header()
@@ -74,7 +73,7 @@ class Mail extends DataClass
 
     /**
      * Sets the mail_header of this Mail.
-     * 
+     *
      * @param mail_header
      */
     function set_mail_header($mail_header)
@@ -84,7 +83,7 @@ class Mail extends DataClass
 
     /**
      * Sets the mail_content of this Mail.
-     * 
+     *
      * @param mail_content
      */
     function set_mail_content($mail_content)
@@ -94,7 +93,7 @@ class Mail extends DataClass
 
     /**
      * Returns the mail_content of this Mail.
-     * 
+     *
      * @return the mail_content.
      */
     function get_mail_content()
@@ -104,7 +103,7 @@ class Mail extends DataClass
 
     /**
      * Returns the from_address of this Mail.
-     * 
+     *
      * @return the from_address.
      */
     function get_from_address()
@@ -114,7 +113,7 @@ class Mail extends DataClass
 
     /**
      * Sets the from_address of this Mail.
-     * 
+     *
      * @param from_address_name
      */
     function set_from_address($from_address)
@@ -129,7 +128,7 @@ class Mail extends DataClass
 
     /**
      * Sets the from_address of this Mail.
-     * 
+     *
      * @param from_address_name
      */
     function set_from_address_name($from_address_name)
@@ -139,7 +138,7 @@ class Mail extends DataClass
 
     /**
      * Returns the reply_address of this Mail.
-     * 
+     *
      * @return the reply_address.
      */
     function get_reply_address()
@@ -149,7 +148,7 @@ class Mail extends DataClass
 
     /**
      * Sets the reply_address of this Mail.
-     * 
+     *
      * @param reply_address
      */
     function set_reply_address($reply_address)
@@ -159,7 +158,7 @@ class Mail extends DataClass
 
     /**
      * Returns the reply_address of this Mail.
-     * 
+     *
      * @return the reply_address_name.
      */
     function get_reply_address_name()
@@ -169,7 +168,7 @@ class Mail extends DataClass
 
     /**
      * Sets the reply_address of this Mail.
-     * 
+     *
      * @param reply_address_name
      */
     function set_reply_address_name($reply_address_name)
@@ -179,7 +178,7 @@ class Mail extends DataClass
 
     /**
      * Returns the sender_user_id of this Mail.
-     * 
+     *
      * @return the sender_user_id.
      */
     function get_sender_user_id()
@@ -189,7 +188,7 @@ class Mail extends DataClass
 
     /**
      * Sets the sender_user_id of this Mail.
-     * 
+     *
      * @param sender_user_id
      */
     function set_sender_user_id($sender_user_id)
@@ -199,7 +198,7 @@ class Mail extends DataClass
 
     /**
      * Returns the publication_id of this Mail.
-     * 
+     *
      * @return the publication_id.
      */
     function get_publication_id()
@@ -209,7 +208,7 @@ class Mail extends DataClass
 
     /**
      * Sets the publication_id of this Mail.
-     * 
+     *
      * @param publication_id
      */
     function set_publication_id($publication_id)
@@ -219,7 +218,7 @@ class Mail extends DataClass
 
     /**
      * Returns the type of this Mail.
-     * 
+     *
      * @return the type.
      */
     function get_type()
@@ -229,7 +228,7 @@ class Mail extends DataClass
 
     /**
      * Sets the type of this Mail.
-     * 
+     *
      * @param type
      */
     function set_type($type)
@@ -239,7 +238,7 @@ class Mail extends DataClass
 
     /**
      * Returns the send_date of this Mail.
-     * 
+     *
      * @return the send_date.
      */
     function get_send_date()
@@ -249,13 +248,12 @@ class Mail extends DataClass
 
     /**
      * Sets the send_date of this Mail.
-     * 
+     *
      * @param send_date
      */
     function set_send_date($send_date)
     {
         $this->set_default_property(self :: PROPERTY_SEND_DATE, $send_date);
     }
-
 }
 ?>

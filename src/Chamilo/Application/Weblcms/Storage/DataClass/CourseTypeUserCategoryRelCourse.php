@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
  */
 class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_COURSE_TYPE_USER_CATEGORY_ID = 'course_type_user_category_id';
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_USER_ID = 'user_id';

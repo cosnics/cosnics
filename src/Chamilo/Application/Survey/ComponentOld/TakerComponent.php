@@ -57,14 +57,14 @@ class TakerComponent extends Manager implements DelegateComponent
         $this->survey = $this->publication->getContentObject();
 
         $this->started();
-        
+
         $factory = new ApplicationFactory(
             \Chamilo\Core\Repository\ContentObject\Survey\Display\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-         
+
         $component = $factory->getComponent();
-        $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
-        
+        $component->set_parameter(self :: PARAM_PUBLICATION_ID, $this->publication_id);
+
         return $component->run();
     }
 
@@ -92,7 +92,7 @@ class TakerComponent extends Manager implements DelegateComponent
 
     function save_answer($complex_question_id, $answer, $context_path)
     {
-       $conditions[] = new EqualityCondition(
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
         $conditions[] = new EqualityCondition(
@@ -105,9 +105,8 @@ class TakerComponent extends Manager implements DelegateComponent
             new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_CONTEXT_PATH),
             new StaticConditionVariable($context_path));
         $condition = new AndCondition($conditions);
-        $answer_object = DataManager :: retrieve(Answer :: CLASS_NAME, new DataClassRetrieveParameters($condition));
-       
-        
+        $answer_object = DataManager :: retrieve(Answer :: class_name(), new DataClassRetrieveParameters($condition));
+
         if ($answer_object)
         {
             $answer_object->set_answer($answer);
@@ -142,7 +141,7 @@ class TakerComponent extends Manager implements DelegateComponent
             new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_CONTEXT_PATH),
             new StaticConditionVariable($context_path));
         $condition = new AndCondition($conditions);
-        $answer_object = DataManager :: retrieve(Answer :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        $answer_object = DataManager :: retrieve(Answer :: class_name(), new DataClassRetrieveParameters($condition));
 
         if ($answer_object)
         {

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class Answer extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const SAVE_QUESTION_ANSWER_EVENT = 'save_question_answer';
     const PROPERTY_CONTEXT_ID = 'context_id';
     const PROPERTY_COMPLEX_QUESTION_ID = 'question_cid';
@@ -19,12 +18,12 @@ class Answer extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_COMPLEX_QUESTION_ID, 
-                self :: PROPERTY_ANSWER, 
-                self :: PROPERTY_CONTEXT_PATH, 
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_CONTEXT_TEMPLATE_ID, 
+                self :: PROPERTY_COMPLEX_QUESTION_ID,
+                self :: PROPERTY_ANSWER,
+                self :: PROPERTY_CONTEXT_PATH,
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_CONTEXT_TEMPLATE_ID,
                 self :: PROPERTY_CONTEXT_ID));
     }
 
@@ -71,7 +70,7 @@ class Answer extends DataClass
     function get_answer()
     {
         $answer = unserialize($this->get_default_property(self :: PROPERTY_ANSWER));
-        
+
         if ($answer)
         {
             return $answer;

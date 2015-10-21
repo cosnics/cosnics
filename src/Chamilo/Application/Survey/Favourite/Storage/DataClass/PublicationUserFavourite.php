@@ -14,8 +14,7 @@ use Chamilo\Application\Survey\Storage\DataClass\Publication;
  */
 class PublicationUserFavourite extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_USER_ID = 'user_id';
@@ -54,7 +53,7 @@ class PublicationUserFavourite extends DataClass
         {
             $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->get_publication_id());
         }
-        
+
         return $this->publication;
     }
 

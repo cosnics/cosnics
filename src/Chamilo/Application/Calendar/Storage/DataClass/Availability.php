@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Availability extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_CALENDAR_TYPE = 'calendar_type';
@@ -30,10 +29,10 @@ class Availability extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_CALENDAR_TYPE, 
-                self :: PROPERTY_CALENDAR_ID, 
-                self :: PROPERTY_AVAILABILITY, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_CALENDAR_TYPE,
+                self :: PROPERTY_CALENDAR_ID,
+                self :: PROPERTY_AVAILABILITY,
                 self :: PROPERTY_COLOUR));
     }
 

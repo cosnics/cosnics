@@ -425,7 +425,7 @@ class ExcelMedianExporterComponent extends Manager
         $conditions[] = new InCondition(Answer :: PROPERTY_SURVEY_PARTICIPANT_ID, $participant_ids);
         $conditions[] = new EqualityCondition(Answer :: PROPERTY_COMPLEX_QUESTION_ID, $question->get_id());
         $condition = new AndCondition($conditions);
-//         $trackers = Tracker :: get_data(Answer :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
+        // $trackers = Tracker :: get_data(Answer :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
 
         // option and matches of question
         $options = array();
@@ -475,28 +475,28 @@ class ExcelMedianExporterComponent extends Manager
 
                 // count answers from all answer trackers
 
-//                 while ($tracker = $trackers->next_result())
-//                 {
-//                     $answer = $tracker->get_answer();
-//                     $options_answered = array();
-//                     foreach ($answer as $key => $option)
-//                     {
-//                         $options_answered[] = $key;
-//                         $totals = array();
-//                         foreach ($option as $match_key => $match)
-//                         {
-//                             if ($question->get_matrix_type() == SurveyMatrixQuestion :: MATRIX_TYPE_CHECKBOX)
-//                             {
-//                                 $answer_count[$key][$match_key] ++;
-//                             }
-//                             else
-//                             {
-//                                 $answer_count[$key][$match] ++;
-//                             }
-//                             $answer_count[$key][$total_key] ++;
-//                         }
-//                     }
-//                 }
+                // while ($tracker = $trackers->next_result())
+                // {
+                // $answer = $tracker->get_answer();
+                // $options_answered = array();
+                // foreach ($answer as $key => $option)
+                // {
+                // $options_answered[] = $key;
+                // $totals = array();
+                // foreach ($option as $match_key => $match)
+                // {
+                // if ($question->get_matrix_type() == SurveyMatrixQuestion :: MATRIX_TYPE_CHECKBOX)
+                // {
+                // $answer_count[$key][$match_key] ++;
+                // }
+                // else
+                // {
+                // $answer_count[$key][$match] ++;
+                // }
+                // $answer_count[$key][$total_key] ++;
+                // }
+                // }
+                // }
 
                 // creating actual reporing data
 
@@ -698,21 +698,21 @@ class ExcelMedianExporterComponent extends Manager
 
                 // count answers from all answer trackers
 
-//                 while ($tracker = $trackers->next_result())
-//                 {
-//                     $answer = $tracker->get_answer();
-//                     foreach ($answer as $key => $option)
-//                     {
-//                         if ($question->get_answer_type() == SurveyMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX)
-//                         {
-//                             $answer_count[$key] ++;
-//                         }
-//                         else
-//                         {
-//                             $answer_count[$option] ++;
-//                         }
-//                     }
-//                 }
+                // while ($tracker = $trackers->next_result())
+                // {
+                // $answer = $tracker->get_answer();
+                // foreach ($answer as $key => $option)
+                // {
+                // if ($question->get_answer_type() == SurveyMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX)
+                // {
+                // $answer_count[$key] ++;
+                // }
+                // else
+                // {
+                // $answer_count[$option] ++;
+                // }
+                // }
+                // }
 
                 // totalcount
                 $total_count = 0;
@@ -780,7 +780,11 @@ class ExcelMedianExporterComponent extends Manager
             $this->surveys[] = $survey;
             $survey_title = $survey->get_title();
             $survey_description = $survey->get_description();
-            $sv[self :: SURVEY_NAME] = StringUtilities :: getInstance()->truncate(trim(strip_tags($survey_title)), 20, true, '');
+            $sv[self :: SURVEY_NAME] = StringUtilities :: getInstance()->truncate(
+                trim(strip_tags($survey_title)),
+                20,
+                true,
+                '');
             $sv[self :: SURVEY_DESCRIPTION] = StringUtilities :: getInstance()->truncate(
                 trim(strip_tags($survey_description)),
                 20,
@@ -839,7 +843,7 @@ class ExcelMedianExporterComponent extends Manager
         $conditions[] = new InCondition(Participant :: PROPERTY_USER_ID, $total_users_ids);
         $condition = new AndCondition($conditions);
 
-//         $trackers = Tracker :: get_data(Participant :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
+        // $trackers = Tracker :: get_data(Participant :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
 
         $all_participants = array();
         $started_participants = array();
@@ -848,27 +852,27 @@ class ExcelMedianExporterComponent extends Manager
         $started_users = array();
         $not_started_users = array();
 
-//         while ($tracker = $trackers->next_result())
-//         {
+        // while ($tracker = $trackers->next_result())
+        // {
 
-//             $all_participants[] = $tracker->get_id();
+        // $all_participants[] = $tracker->get_id();
 
-//             switch ($tracker->get_status())
-//             {
-//                 case Participant :: STATUS_NOTSTARTED :
-//                     $not_started_participants[] = $tracker->get_id();
-//                     $not_started_users[] = $tracker->get_user_id();
-//                     break;
-//                 case Participant :: STATUS_STARTED :
-//                     $started_participants[] = $tracker->get_id();
-//                     $started_users[] = $tracker->get_user_id();
-//                     break;
-//                 case Participant :: STATUS_FINISHED :
-//                     $started_participants[] = $tracker->get_id();
-//                     $started_users[] = $tracker->get_user_id();
-//                     break;
-//             }
-//         }
+        // switch ($tracker->get_status())
+        // {
+        // case Participant :: STATUS_NOTSTARTED :
+        // $not_started_participants[] = $tracker->get_id();
+        // $not_started_users[] = $tracker->get_user_id();
+        // break;
+        // case Participant :: STATUS_STARTED :
+        // $started_participants[] = $tracker->get_id();
+        // $started_users[] = $tracker->get_user_id();
+        // break;
+        // case Participant :: STATUS_FINISHED :
+        // $started_participants[] = $tracker->get_id();
+        // $started_users[] = $tracker->get_user_id();
+        // break;
+        // }
+        // }
 
         $this->participants[self :: ALL_PARTICIPANTS] = $all_participants;
         $all_participant_count = count($all_participants);

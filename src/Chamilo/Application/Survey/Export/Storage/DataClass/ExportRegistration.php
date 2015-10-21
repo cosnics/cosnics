@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ExportRegistration extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'export_registration';
     const PROPERTY_TEMPLATE = 'template';
     const PROPERTY_TYPE = 'type';

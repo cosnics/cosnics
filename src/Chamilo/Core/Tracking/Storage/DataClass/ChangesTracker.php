@@ -7,7 +7,6 @@ namespace Chamilo\Core\Tracking\Storage\DataClass;
  */
 abstract class ChangesTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_REFERENCE_ID = 'reference_id';
     const PROPERTY_ACTION = 'action';
@@ -15,16 +14,16 @@ abstract class ChangesTracker extends SimpleTracker
 
     /**
      * Get the default properties of all aggregate trackers.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_REFERENCE_ID, 
-                self :: PROPERTY_ACTION, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_REFERENCE_ID,
+                self :: PROPERTY_ACTION,
                 self :: PROPERTY_DATE));
     }
 
@@ -102,7 +101,7 @@ abstract class ChangesTracker extends SimpleTracker
 
     /**
      * Implemented
-     * 
+     *
      * @param array $parameters
      */
     public function validate_parameters(array $parameters = array())

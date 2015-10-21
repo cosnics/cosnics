@@ -53,7 +53,7 @@ class MailJobManager
         {
             $job_count ++;
             $mail_tracker = DataManager :: retrieve_by_id(
-                \Chamilo\Application\Survey\Mail\Storage\DataClass\Mail :: CLASS_NAME,
+                \Chamilo\Application\Survey\Mail\Storage\DataClass\Mail :: class_name(),
                 $mail_job->get_publication_mail_tracker_id());
 
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($mail_tracker->get_user_id());

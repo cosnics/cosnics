@@ -7,7 +7,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  */
 class PeerAssessmentAttemptStatus extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ATTEMPT_ID = 'attempt_id';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_FACTOR = 'factor';
@@ -19,7 +18,7 @@ class PeerAssessmentAttemptStatus extends \Chamilo\Core\Tracking\Storage\DataCla
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     public function validate_parameters(array $parameters = array())
@@ -41,13 +40,13 @@ class PeerAssessmentAttemptStatus extends \Chamilo\Core\Tracking\Storage\DataCla
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_ATTEMPT_ID, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_FACTOR, 
-                self :: PROPERTY_PROGRESS, 
-                self :: PROPERTY_CLOSED, 
-                self :: PROPERTY_CLOSED_BY, 
-                self :: PROPERTY_CREATED, 
+                self :: PROPERTY_ATTEMPT_ID,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_FACTOR,
+                self :: PROPERTY_PROGRESS,
+                self :: PROPERTY_CLOSED,
+                self :: PROPERTY_CLOSED_BY,
+                self :: PROPERTY_CREATED,
                 self :: PROPERTY_MODIFIED));
     }
 

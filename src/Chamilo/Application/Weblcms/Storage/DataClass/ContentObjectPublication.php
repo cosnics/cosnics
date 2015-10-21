@@ -31,13 +31,11 @@ use Chamilo\Application\Weblcms\Manager;
  */
 
 /**
- * This class represents a learning object publication.
- * When publishing a learning object from the repository in the
+ * This class represents a learning object publication. When publishing a learning object from the repository in the
  * weblcms application, a new object of this type is created.
  */
 class ContentObjectPublication extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
 
     /*
      * #@+ Constant defining a property of the publication

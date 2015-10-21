@@ -5,8 +5,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 
 class CourseChange extends ChangesTracker
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Can be used for subscribsion of users / classes
     const PROPERTY_TARGET_REFERENCE_ID = 'target_reference_id';
 
@@ -18,7 +17,7 @@ class CourseChange extends ChangesTracker
     public function validate_parameters(array $parameters = array())
     {
         parent :: validate_parameters($parameters);
-        
+
         if ($parameters[self :: PROPERTY_TARGET_REFERENCE_ID])
         {
             $this->set_target_reference_id($parameters[self :: PROPERTY_TARGET_REFERENCE_ID]);

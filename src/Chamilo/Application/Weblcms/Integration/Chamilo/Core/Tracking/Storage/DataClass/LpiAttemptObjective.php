@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class LpiAttemptObjective extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
     const PROPERTY_OBJECTIVE_ID = 'objective_id';
     const PROPERTY_SCORE_RAW = 'score_raw';
@@ -27,12 +26,12 @@ class LpiAttemptObjective extends \Chamilo\Core\Tracking\Storage\DataClass\Simpl
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_LPI_VIEW_ID, 
-                self :: PROPERTY_OBJECTIVE_ID, 
-                self :: PROPERTY_SCORE_RAW, 
-                self :: PROPERTY_SCORE_MAX, 
-                self :: PROPERTY_SCORE_MIN, 
-                self :: PROPERTY_STATUS, 
+                self :: PROPERTY_LPI_VIEW_ID,
+                self :: PROPERTY_OBJECTIVE_ID,
+                self :: PROPERTY_SCORE_RAW,
+                self :: PROPERTY_SCORE_MAX,
+                self :: PROPERTY_SCORE_MIN,
+                self :: PROPERTY_STATUS,
                 self :: PROPERTY_DISPLAY_ORDER));
     }
 

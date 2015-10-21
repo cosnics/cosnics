@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class ForumTopicView extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_DATE = 'date';
     const PROPERTY_PUBLICATION_ID = 'publication_id';
@@ -21,9 +20,9 @@ class ForumTopicView extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTrac
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_FORUM_TOPIC_ID, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_FORUM_TOPIC_ID,
                 self :: PROPERTY_DATE));
     }
 
