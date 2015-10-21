@@ -416,6 +416,7 @@ abstract class Manager extends Application implements NoContextComponent
                         self :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
                 ToolbarItem :: DISPLAY_ICON);
         }
+
         if ($object->is_usable())
         {
             if (! $this->is_stand_alone())
