@@ -1,0 +1,31 @@
+<?php
+namespace application\weblcms\tool\implementation\note;
+
+use libraries\storage\DataManager;
+
+/**
+ * This class represents the data manager for this package
+ *
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @package application.weblcms.tool.assignment
+ */
+class DataManager extends DataManager
+{
+    const PREFIX = 'weblcms_';
+
+    /**
+     * **************************************************************************************************************
+     * Inherited Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Gets the type of DataManager to be instantiated
+     *
+     * @return string
+     */
+    public static function get_type()
+    {
+        return 'doctrine';
+    }
+}
