@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSettingValue;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
@@ -1432,7 +1431,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * **************************************************************************************************************
-     * CourseRelCourseSettingValue Functionality *
+     * CourseRelCourseSetting Functionality *
      * **************************************************************************************************************
      */
 
@@ -1446,11 +1445,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function copy_course_settings_from_course_type($course_type_id, $course_setting_id = null)
     {
         $course_settings_controller = CourseSettingsController :: get_instance();
-
-        if (! self :: delete_values_for_course_setting_and_course_type($course_type_id, $course_setting_id))
-        {
-            return false;
-        }
 
         $course_setting_relations = self :: retrieve_course_setting_relations_from_course_type(
             $course_type_id,
@@ -1487,31 +1481,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     }
 
     /**
-     * Deletes the values of a given course setting for all the courses that belong to the given course type id
-     *
-     * @param $course_type_id int - [OPTIONAL] default 0
-     * @param $course_setting_id int - [OPTIONAL] default null
-     * @return boolean
-     */
-    public static function delete_values_for_course_setting_and_course_type($course_type_id = 0,
-        $course_setting_id = null)
-    {
-        $course_rel_course_setting_condition = self :: get_condition_for_course_settings_from_course_type(
-            $course_type_id,
-            $course_setting_id);
-
-        $condition = new SubselectCondition(
-            new PropertyConditionVariable(
-                CourseRelCourseSettingValue :: class_name(),
-                CourseRelCourseSettingValue :: PROPERTY_COURSE_REL_COURSE_SETTING_ID),
-            new PropertyConditionVariable(CourseRelCourseSetting :: class_name(), CourseRelCourseSetting :: PROPERTY_ID),
-            CourseRelCourseSetting :: get_table_name(),
-            $course_rel_course_setting_condition);
-
-        return self :: deletes(CourseRelCourseSettingValue :: class_name(), $condition);
-    }
-
-    /**
      * Returns the course setting relations for a given course type Can be limited by a given course setting
      *
      * @param $course_type_id int - [OPTIONAL] default 0
@@ -1528,7 +1497,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
     /**
      * **************************************************************************************************************
-     * CourseRelCourseSettingValue Helper Functionality *
+     * CourseRelCourseSetting Helper Functionality *
      * **************************************************************************************************************
      */
 
