@@ -43,6 +43,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -640,7 +641,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         foreach ($formats as $format)
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_CONFIGURATION),
+                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
                 '*' . $format . '*');
         }
 

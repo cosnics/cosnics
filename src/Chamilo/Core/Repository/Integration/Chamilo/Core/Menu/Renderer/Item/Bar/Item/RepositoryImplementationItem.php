@@ -39,7 +39,7 @@ class RepositoryImplementationItem extends Bar
 
         if ($this->get_item()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath($this->get_item()->get_implementation(), 'Logo/16');
+            $imagePath = Theme :: getInstance()->getImagePath($this->get_item()->get_implementation(), 'Menu');
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
