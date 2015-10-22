@@ -1,13 +1,13 @@
 <?php
-
-
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
 
 $packages = \Chamilo\Configuration\Storage\DataManager :: retrieves(
-    \Chamilo\Configuration\Storage\DataClass\Registration :: class_name())->as_array();
+    \Chamilo\Configuration\Storage\DataClass\Registration :: class_name(),
+    new DataClassRetrievesParameters())->as_array();
 
 // July 1, 2013 00:00:00
 $unix_timestamp = 1372636800;

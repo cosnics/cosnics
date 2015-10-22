@@ -343,9 +343,11 @@ class ResultToHtmlConverter
         }
         else
         {
-            $html[] = "<span class='report_table_header'>" . Translation :: get(
-                'LocalReport',
-                array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) . "</span>";
+            $html[] = "<span class='report_table_header'>" .
+                 Translation :: get(
+                    'LocalReport',
+                    array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) .
+                 "</span>";
         }
 
         $html[] = "</td>";

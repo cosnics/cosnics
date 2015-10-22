@@ -192,7 +192,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
-        $publications = self :: retrieves(ContentObjectPublication :: class_name(), $condition);
+        $publications = self :: retrieves(
+            ContentObjectPublication :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($publication = $publications->next_result())
         {
@@ -1281,7 +1283,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $result_set = DataManager :: retrieves(CourseTypeUserCategoryRelCourse :: class_name(), $condition);
+        $result_set = DataManager :: retrieves(
+            CourseTypeUserCategoryRelCourse :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($course_type_user_category_rel_course = $result_set->next_result())
         {
@@ -1478,8 +1482,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
 
     /**
-     * Builds the parameters to retrieve course settings with a course setting relation table.
-     * Returns course settings
+     * Builds the parameters to retrieve course settings with a course setting relation table. Returns course settings
      * with their compliant values.
      *
      * @param $course_setting_relation_class String - The class name for the course setting relation table
@@ -1738,7 +1741,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $group_condition = new InCondition(
                         new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                         $entity_ids);
-                    $groups_resultset = DataManager :: retrieves(Group :: class_name(), $group_condition);
+                    $groups_resultset = DataManager :: retrieves(
+                        Group :: class_name(),
+                        new DataClassRetrievesParameters($group_condition));
 
                     while ($group = $groups_resultset->next_result())
                     {
@@ -1872,7 +1877,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                         $group_user_rels = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
                             GroupRelUser :: class_name(),
-                            $condition);
+                            new DataClassRetrievesParameters($condition));
                         while ($group_user_rel = $group_user_rels->next_result())
                         {
                             if ($user_id == $group_user_rel->get_user_id())

@@ -395,7 +395,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                                  Translation :: get('ViewLastPost', null, 'Chamilo\Core\Repository\ContentObject\Forum') .
                                  '" src="' . Theme :: getInstance()->getImagePath(
                                     'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                    'Forum/IconTopicLatest', 'gif') . '" /></a>';
+                                    'Forum/IconTopicLatest',
+                                    'gif') . '" /></a>';
 
                             $table->setCellContents($row, 4, $content);
                         }
@@ -423,7 +424,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                                         null,
                                         'Chamilo\Core\Repository\ContentObject\Forum') . '" src="' . Theme :: getInstance()->getImagePath(
                                         'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                                        'Forum/IconTopicLatest', 'gif') . '" /></a>';
+                                        'Forum/IconTopicLatest',
+                                        'gif') . '" /></a>';
 
                                 $table->setCellContents($row, 4, $content);
                             }

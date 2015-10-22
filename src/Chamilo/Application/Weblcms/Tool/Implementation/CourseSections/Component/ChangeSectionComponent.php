@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataM
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use HTML_Table;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: course_sections_change_section.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -36,7 +37,7 @@ class ChangeSectionComponent extends Manager
         $sources = explode('_', $source);
         $source = $sources[1];
 
-        $tools = DataManager :: retrieves(CourseTool :: class_name());
+        $tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters());
 
         foreach ($tools as $tool)
         {

@@ -37,18 +37,6 @@ abstract class StreamingMediaExternalObject extends ExternalObject
         }
     }
 
-    public function is_usable()
-    {
-        if ($this->get_status() == self :: STATUS_AVAILABLE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     /**
      *
      * @return the $thumbnail

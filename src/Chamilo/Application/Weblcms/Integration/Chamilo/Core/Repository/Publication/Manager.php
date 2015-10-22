@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class Manager implements PublicationInterface
 {
@@ -120,7 +121,9 @@ class Manager implements PublicationInterface
                 new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_COURSE_TYPE_ID),
                 $excludedCourseTypes));
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user, $condition);
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user(
+            $user,
+            $condition);
 
         $possible_courses = array();
 
@@ -135,7 +138,7 @@ class Manager implements PublicationInterface
         $course_settings_controller = CourseSettingsController :: get_instance();
         $course_management_rights = CourseManagementRights :: get_instance();
 
-        $tools = DataManager :: retrieves(CourseTool :: class_name());
+        $tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters());
 
         $tool_names = array();
 

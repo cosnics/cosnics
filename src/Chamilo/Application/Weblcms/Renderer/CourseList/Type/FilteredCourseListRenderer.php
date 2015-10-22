@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Course list renderer to render the course list filtered by a given course type and user course category
@@ -101,7 +102,7 @@ class FilteredCourseListRenderer extends CourseListRenderer
 
             $course_type_user_categories = DataManager :: retrieves(
                 CourseTypeUserCategory :: class_name(),
-                $course_user_category_condition);
+                new DataClassRetrievesParameters($course_user_category_condition));
 
             $course_type_user_category_ids = array();
             while ($course_type_user_category = $course_type_user_categories->next_result())
@@ -117,7 +118,7 @@ class FilteredCourseListRenderer extends CourseListRenderer
 
             $course_type_user_category_rel_courses = DataManager :: retrieves(
                 CourseTypeUserCategoryRelCourse :: class_name(),
-                $course_type_user_category_condition);
+                new DataClassRetrievesParameters($course_type_user_category_condition));
 
             $course_type_user_category_rel_course_ids = array();
             while ($course_type_user_category_rel_course = $course_type_user_category_rel_courses->next_result())

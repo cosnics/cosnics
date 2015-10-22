@@ -40,6 +40,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -640,7 +641,7 @@ class BrowserComponent extends Manager
 
         $objects = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         return $objects->next_result();
     }
@@ -664,8 +665,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * Returns the default object table order for the browser.
-     * Can be "overridden" by the individual component to force
+     * Returns the default object table order for the browser. Can be "overridden" by the individual component to force
      * a different order if needed. Because the individual component is not an actual implementation but merely this
      * parent, there is a check if the method exists.
      *

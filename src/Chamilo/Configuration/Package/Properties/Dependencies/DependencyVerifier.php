@@ -12,10 +12,11 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: package_dependency_verifier.class.php 126 2009-11-09 13:11:05Z vanpouckesven $
- * 
+ *
  * @package admin.lib.package_installer
  */
 class DependencyVerifier
@@ -58,12 +59,12 @@ class DependencyVerifier
     public function is_installable()
     {
         $dependencies = $this->get_package()->get_pre_depends();
-        
+
         if (is_null($dependencies))
         {
             return true;
         }
-        
+
         if (! $dependencies->check())
         {
             $this->logger->add_message($dependencies->get_logger()->render());
@@ -73,7 +74,7 @@ class DependencyVerifier
         {
             $this->logger->add_message($dependencies->get_logger()->render());
         }
-        
+
         return true;
     }
 
@@ -86,22 +87,24 @@ class DependencyVerifier
     {
         $condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT), 
+                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
                 new StaticConditionVariable($this->get_package()->get_context())));
-        
-        $registrations = DataManager :: retrieves(Registration :: class_name(), $condition);
-        
+
+        $registrations = DataManager :: retrieves(
+            Registration :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
         while ($registration = $registrations->next_result())
         {
             $package = Package :: get($registration->get_context());
             $dependencies = $package->get_pre_depends();
-            
+
             if (! is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -110,22 +113,24 @@ class DependencyVerifier
         $conditions = array();
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_TYPE), 
+                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_TYPE),
                 new StaticConditionVariable($this->get_package()->get_section())));
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_NAME), 
+                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_NAME),
                 new StaticConditionVariable($this->get_package()->get_code())));
         $condition = new OrCondition($conditions);
-        
-        $registrations = DataManager :: retrieves(Registration :: class_name(), $condition);
-        
+
+        $registrations = DataManager :: retrieves(
+            Registration :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
         $failures = 0;
-        
+
         while ($registration = $registrations->next_result())
         {
             $package_data = Package :: get($registration->get_context());
-            
+
             if ($package_data)
             {
                 switch ($this->get_package()->get_section())
@@ -139,9 +144,9 @@ class DependencyVerifier
                     default :
                         return true;
                 }
-                
+
                 $dependencies = $package_data->get_dependencies();
-                
+
                 if (isset($dependencies[$dependency_type]))
                 {
                     foreach ($dependencies[$dependency_type]['dependency'] as $dependency)
@@ -159,13 +164,13 @@ class DependencyVerifier
                             {
                                 $package_dependency = Dependency :: factory($dependency_type, $dependency);
                                 $result = Dependency :: version_compare(
-                                    $package_dependency->get_operator(), 
-                                    $package_dependency->get_version_number(), 
+                                    $package_dependency->get_operator(),
+                                    $package_dependency->get_version_number(),
                                     $this->get_package()->get_version());
                                 $message = '<em>' . $package_data->get_name() . ' (' . $package_data->get_code() . ') ' .
                                      $package_dependency->get_operator_name($package_dependency->get_operator()) . ' ' .
                                      $package_dependency->get_version_number() . '</em>';
-                                
+
                                 if (! $result && $package_dependency->is_fatal())
                                 {
                                     $failures ++;
@@ -189,7 +194,7 @@ class DependencyVerifier
                 }
             }
         }
-        
+
         if ($failures > 0)
         {
             $message = Translation :: get('VerificationFailed');

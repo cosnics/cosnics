@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class NoOfUsersPictureBlock extends Block
 {
@@ -12,7 +13,8 @@ class NoOfUsersPictureBlock extends Block
     {
         $reporting_data = new ReportingData();
         $users = \Chamilo\Core\User\Storage\DataManager :: retrieves(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name());
+            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+            new DataClassRetrievesParameters());
         $picturetext = Translation :: get('Picture');
         $nopicturetext = Translation :: get('NoPicture');
         $picture[$picturetext] = 0;

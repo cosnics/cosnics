@@ -75,22 +75,22 @@ class LearningPathAttempt extends AbstractAttempt
     public function delete()
     {
         $succes = parent :: delete();
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathItemAttempt :: class_name(), 
-                LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ATTEMPT_ID), 
+                LearningPathItemAttempt :: class_name(),
+                LearningPathItemAttempt :: PROPERTY_LEARNING_PATH_ATTEMPT_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $trackers = DataManager :: retrieves(
-            LearningPathItemAttempt :: class_name(), 
+            LearningPathItemAttempt :: class_name(),
             new DataClassRetrievesParameters($condition));
-        
+
         while ($tracker = $trackers->next_result())
         {
             $succes &= $tracker->delete();
         }
-        
+
         return $succes;
     }
 }

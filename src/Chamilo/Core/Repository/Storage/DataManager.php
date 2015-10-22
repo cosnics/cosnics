@@ -43,6 +43,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -640,7 +641,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         foreach ($formats as $format)
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_CONFIGURATION),
+                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
                 '*' . $format . '*');
         }
 
@@ -1072,9 +1073,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Delete all subcategories by recursively repeating the entire process
         $categories = DataManager :: retrieves(
             RepositoryCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
-                new StaticConditionVariable($category->get_id())));
+            new DataClassRetrievesParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RepositoryCategory :: class_name(),
+                        RepositoryCategory :: PROPERTY_PARENT),
+                    new StaticConditionVariable($category->get_id()))));
 
         while ($categories && $category = $categories->next_result())
         {
@@ -1189,9 +1193,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Delete all subcategories by recursively repeating the entire process
         $categories = self :: retrieves(
             RepositoryCategory :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory :: class_name(), RepositoryCategory :: PROPERTY_PARENT),
-                new StaticConditionVariable($category->get_id())));
+            new DataClassRetrievesParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        RepositoryCategory :: class_name(),
+                        RepositoryCategory :: PROPERTY_PARENT),
+                    new StaticConditionVariable($category->get_id()))));
         while ($category = $categories->next_result())
         {
             if (! self :: delete_workspace_category_recursive($category, false))

@@ -92,13 +92,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                     $blocks[$packageId]['components'][] = array(
                         BlockRendition :: BLOCK_PROPERTY_ID => $blockId,
-                        BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get(
-                            $blockName,
-                            null,
-                            $packageId),
-                        BlockRendition :: BLOCK_PROPERTY_IMAGE => BlockRendition :: getImagePath(
-                            $packageId,
-                            $blockName));
+                        BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get($blockName, null, $packageId),
+                        BlockRendition :: BLOCK_PROPERTY_IMAGE => BlockRendition :: getImagePath($packageId, $blockName));
                 }
             }
         }

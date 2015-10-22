@@ -164,7 +164,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $user_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseEntityRelation :: class_name(),
-            $userCondition);
+            new DataClassRetrievesParameters($user_condition));
 
         $users = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             User :: class_name(),
@@ -195,9 +195,10 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $groups = DataManager :: retrieves(
             CourseGroup :: class_name(),
-            new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
-                new StaticConditionVariable($course)));
+            new DataClassRetrievesParameters(
+                new EqualityCondition(
+                    new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
+                    new StaticConditionVariable($course))));
 
         if ($groups->size() > 0)
         {

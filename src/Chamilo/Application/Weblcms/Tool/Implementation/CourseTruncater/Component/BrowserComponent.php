@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /*
  * Component for emptying the course publication,publication categories and sections @author Maarten Volckaert -
@@ -41,7 +42,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $common_sections = array(
             CourseSection :: TYPE_TOOL,
@@ -163,7 +164,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($course_section = $course_sections->next_result())
         {
@@ -195,7 +196,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                 ContentObjectPublicationCategory :: class_name(),
-                $condition);
+                new DataClassRetrievesParameters($condition));
 
             while ($category = $categories->next_result())
             {
@@ -261,7 +262,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $subcategries = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($cat = $subcategries->next_result())
         {

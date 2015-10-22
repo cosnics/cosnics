@@ -7,10 +7,11 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Reporting block with scores for the course groups.
- * 
+ *
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class AssignmentCourseGroupScoresBlock extends AssignmentGroupScoresBlock
@@ -18,7 +19,7 @@ class AssignmentCourseGroupScoresBlock extends AssignmentGroupScoresBlock
 
     /**
      * Returns the submitter type for this reporting block.
-     * 
+     *
      * @return int The submitter type
      */
     public function get_current_submitter_type()
@@ -28,21 +29,23 @@ class AssignmentCourseGroupScoresBlock extends AssignmentGroupScoresBlock
 
     /**
      * Returns the groups for this reporting block.
-     * 
+     *
      * @return array The groups
      */
     public function get_groups()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID), 
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->course_id));
-        
-        return CourseGroupDataManager :: retrieves(CourseGroup :: class_name(), $condition)->as_array();
+
+        return CourseGroupDataManager :: retrieves(
+            CourseGroup :: class_name(),
+            new DataClassRetrievesParameters($condition))->as_array();
     }
 
     /**
      * Returns true if the group with the given group id belongs to the given target entities and false otherwise.
-     * 
+     *
      * @param $target_entities array The target entities
      * @param $group_id int The group id
      * @return boolean True if the given group id belongs to the given target entities
@@ -56,7 +59,7 @@ class AssignmentCourseGroupScoresBlock extends AssignmentGroupScoresBlock
                 return true;
             }
         }
-        
+
         return false;
     }
 }

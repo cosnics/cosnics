@@ -38,6 +38,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This is the base class for all tools used in applications.
@@ -253,7 +254,9 @@ abstract class Manager extends Application
     {
         $tools = array();
 
-        $course_tools = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(CourseTool :: class_name());
+        $course_tools = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
+            CourseTool :: class_name(),
+            new DataClassRetrievesParameters());
 
         $edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
 

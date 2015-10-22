@@ -38,12 +38,12 @@ class CategoryItem extends Item
         if (! isset($this->children))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT), 
+                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id()));
             $parameters = new DataClassRetrievesParameters(
-                $condition, 
-                null, 
-                null, 
+                $condition,
+                null,
+                null,
                 new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
             $items = DataManager :: retrieves(Item :: class_name(), $parameters);
             $this->children = $items->as_array();
@@ -87,7 +87,7 @@ class CategoryItem extends Item
                 return false;
             }
         }
-        
+
         return parent :: delete();
     }
 }
