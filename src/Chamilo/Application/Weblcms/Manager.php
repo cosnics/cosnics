@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * ============================================================================== This is an application that creates a
@@ -225,7 +226,9 @@ abstract class Manager extends Application
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable(Request :: get(self :: PARAM_COURSE)));
-            $sections = DataManager :: retrieves(CourseSection :: class_name(), $condition);
+            $sections = DataManager :: retrieves(
+                CourseSection :: class_name(),
+                new DataClassRetrievesParameters($condition));
 
             while ($section = $sections->next_result())
             {

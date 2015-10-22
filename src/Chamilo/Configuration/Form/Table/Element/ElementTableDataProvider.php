@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Table data provider for the schema
- * 
+ *
  * @package configuration\form
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -18,7 +18,7 @@ class ElementTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     * 
+     *
      * @param \common\libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -30,13 +30,13 @@ class ElementTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        
+
         return DataManager :: retrieves(Element :: class_name(), $parameters);
     }
 
     /**
      * Counts the data
-     * 
+     *
      * @param \common\libraries\storage\Condition $condition
      *
      * @return int

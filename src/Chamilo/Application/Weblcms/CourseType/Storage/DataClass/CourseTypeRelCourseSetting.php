@@ -20,6 +20,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
     const PROPERTY_LOCKED = 'locked';
     const PROPERTY_DEFAULT_VALUE = 'default_value';
     const PROPERTY_LIMITED = 'limited';
+    const PROPERTY_OBJECT_ID = self :: PROPERTY_COURSE_TYPE_ID;
 
     /**
      * **************************************************************************************************************

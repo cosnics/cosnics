@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -21,7 +22,9 @@ class RepositoryImplementationCategoryItem extends CategoryItem
     {
         $html = array();
         $sub_html = array();
-        $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(Instance :: class_name());
+        $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
+            Instance :: class_name(),
+            new DataClassRetrievesParameters());
 
         if ($instances->size())
         {
@@ -45,13 +48,13 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         }
 
         $html[] = '<ul>';
-        
+
         $selected = $this->get_item()->is_selected();
         $class = $selected ? 'class="current" ' : '';
-        
+
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
         $html[] = '<a ' . $class . 'href="#">';
-        
+
         $title = Translation :: get('Instance');
 
         if ($this->get_item()->show_icon())

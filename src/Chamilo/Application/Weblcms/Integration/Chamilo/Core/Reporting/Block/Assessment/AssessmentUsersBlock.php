@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -214,7 +215,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     {
         return WeblcmsTrackingDataManager :: retrieves(
             AssessmentAttempt :: class_name(),
-            $this->get_assessment_attempts_condition());
+            new DataClassRetrievesParameters($this->get_assessment_attempts_condition()));
     }
 
     /**

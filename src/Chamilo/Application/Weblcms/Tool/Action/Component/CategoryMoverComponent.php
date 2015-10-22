@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: move_selected_to_category.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -79,7 +80,7 @@ class CategoryMoverComponent extends Manager
                             new StaticConditionVariable($publication->get_tool()));
                         $course_modules = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
                             CourseTool :: class_name(),
-                            $condition)->as_array();
+                            new DataClassRetrievesParameters($condition))->as_array();
 
                         $course_module_id = $course_modules[0]->get_id();
                         $new_parent_id = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
@@ -288,7 +289,7 @@ class CategoryMoverComponent extends Manager
 
         $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($cat = $categories->next_result())
         {

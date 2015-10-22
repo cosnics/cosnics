@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: course_group.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -327,7 +328,9 @@ class CourseGroup extends NestedTreeNode
         {
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
 
-            $course_group_user_relations = DataManager :: retrieves(CourseGroupUserRelation :: class_name(), $condition);
+            $course_group_user_relations = DataManager :: retrieves(
+                CourseGroupUserRelation :: class_name(),
+                new DataClassRetrievesParameters($condition));
 
             $users = array();
 

@@ -49,8 +49,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * Updates the parent of the node.
-     * Marked private as users are expected to use the move method to change the
+     * Updates the parent of the node. Marked private as users are expected to use the move method to change the
      * location of a node into the tree.
      *
      * @param int $parent_id
@@ -71,8 +70,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * Updates the pre-order entry time of the node.
-     * Marked private as users are expected to use the move method to
+     * Updates the pre-order entry time of the node. Marked private as users are expected to use the move method to
      * change the location of a node into the tree.
      *
      * @param int $left_value
@@ -93,8 +91,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * Updates the pre-order exit time of the node.
-     * Marked private as users are expected to use the move method to
+     * Updates the pre-order exit time of the node. Marked private as users are expected to use the move method to
      * change the location of a node into the tree.
      *
      * @param int $right_value
@@ -107,8 +104,7 @@ abstract class NestedSet extends DataClass
     // Private methods that pertain to query construction
 
     /**
-     * Returns an array of conditions that specify which nested set should be queried/altered.
-     * By default, it returns an
+     * Returns an array of conditions that specify which nested set should be queried/altered. By default, it returns an
      * empty array. When representing multiple trees within a single table, one should return conditions that identify
      * the correct tree (root).
      */
@@ -121,7 +117,7 @@ abstract class NestedSet extends DataClass
      * Build the conditions for the get / count _ children / descendants methods
      *
      * @param $recursive boolean - whether to find all descendants using left / right values or only the node's
-     *        immediate children using parent_id
+     *            immediate children using parent_id
      * @param $condition Condition - any additional conditions imposed by the query
      */
     public function build_offspring_condition($recursive = false, $include_self = false, $condition = null)
@@ -241,8 +237,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * Orders the tree-structured data in pre-order (i.e.
-     * the order in which a depth-first traversal would enter the
+     * Orders the tree-structured data in pre-order (i.e. the order in which a depth-first traversal would enter the
      * nodes). When applied to a list of ancestors, this coincides with an ordering according to the node's level (root
      * -> ... -> leaf). When applied to a list of siblings, this coincides with an ordering from left to right.
      */
@@ -253,8 +248,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * Orders the tree-structured data in post-order (i.e.
-     * the order in which a depth-first traversal would leave the
+     * Orders the tree-structured data in post-order (i.e. the order in which a depth-first traversal would leave the
      * nodes). When applied to a list of ancestors, this coincides with an inverse ordering according to the node's
      * level (leaf -> ... -> root). When applied to a list of siblings, this coincides with an ordering from right to
      * left.
@@ -522,8 +516,7 @@ abstract class NestedSet extends DataClass
         $nested_set = $this;
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager :: transactional(
-            function ($c) use($nested_set, $insert_after)
-            { // Correct the left and right values wherever necessary.
+            function ($c) use($nested_set, $insert_after) { // Correct the left and right values wherever necessary.
                 if (! $nested_set->pre_insert($insert_after, 1))
                 {
                     return False;
@@ -588,8 +581,7 @@ abstract class NestedSet extends DataClass
         $nested_set = $this;
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager :: transactional(
-            function ($c) use($nested_set, $insert_after)
-            { // Step 0: Compute the auxiliary values used by this
+            function ($c) use($nested_set, $insert_after) { // Step 0: Compute the auxiliary values used by this
               // algorithm
               // This is the initial position of the node to be moved
                 $initial_left = $nested_set->get_left_value();
@@ -719,8 +711,7 @@ abstract class NestedSet extends DataClass
         $nested_set = $this;
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager :: transactional(
-            function ($c) use($condition, $nested_set)
-            { // Keep track the descendants that need their related data
+            function ($c) use($condition, $nested_set) { // Keep track the descendants that need their related data
               // cleaned up.
                 $descendants = $nested_set->get_descendants($condition);
 
@@ -761,8 +752,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * This method is a hook which allows subclasses to clean up related data that is stored in another table.
-     * For
+     * This method is a hook which allows subclasses to clean up related data that is stored in another table. For
      * instance, it could be used to remove the users in a group.
      *
      * @return boolean - true iff the cleanup succeeded.
@@ -777,10 +767,10 @@ abstract class NestedSet extends DataClass
      * left/right values of all nodes that are traversed after the insertion point to the right.
      *
      * @param $insert_after int - the right value of the node who will act as the left sibling of the left-most inserted
-     *        node. In absence of such a left sibling, the left value of the parent of the left-most inserted node.
+     *            node. In absence of such a left sibling, the left value of the parent of the left-most inserted node.
      * @param $number_of_elements int - the number of elements that have to be inserted
      * @param $condition Condition - additional condition (which filters out some nodes that will not be updated: should
-     *        only be used when supporting multiple roots in a single database table)
+     *            only be used when supporting multiple roots in a single database table)
      */
     public function pre_insert($insert_after, $number_of_elements = 1, $condition = null)
     {

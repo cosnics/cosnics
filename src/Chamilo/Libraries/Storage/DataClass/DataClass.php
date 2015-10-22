@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Exception;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Abstract class that describes a dataclass
@@ -573,7 +574,7 @@ abstract class DataClass
         {
             $dependency_objects = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
                 $dependency_class,
-                $dependency_condition);
+                new DataClassRetrievesParameters($dependency_condition));
 
             while ($dependency_object = $dependency_objects->next_result())
             {

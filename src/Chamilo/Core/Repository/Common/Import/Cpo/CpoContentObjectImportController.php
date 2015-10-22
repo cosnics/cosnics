@@ -26,6 +26,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class CpoContentObjectImportController extends ContentObjectImportController
 {
@@ -479,7 +480,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
                     $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
                         \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                        $condition);
+                        new DataClassRetrievesParameters($condition));
                     while ($external_instance = $external_instances->next_result())
                     {
                         $setting_node_list = $this->dom_xpath->query('setting', $external_instance_node);

@@ -63,8 +63,6 @@ class AttemptComponent extends Manager
                         $parameters[self :: PARAM_STEP] = null;
                     }
                 }
-
-                // var_dump('Delete the given item attempt for the given step');
             }
             else
             {
@@ -89,8 +87,6 @@ class AttemptComponent extends Manager
                     self :: RESULT_TYPE_DELETED);
 
                 $parameters[self :: PARAM_STEP] = null;
-
-                // var_dump('Delete all item attempts for the given step');
             }
         }
         else
@@ -114,8 +110,6 @@ class AttemptComponent extends Manager
             }
 
             $parameters[self :: PARAM_STEP] = null;
-
-            // var_dump('Delete the entire learning path attempt');
         }
 
         $this->redirect($message, $is_error, $parameters);

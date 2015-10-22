@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Class for the specific Forum data management, it receives data calls and delegates it to the mdb2 class.
@@ -77,7 +78,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumSubscribe :: class_name(), ForumSubscribe :: PROPERTY_FORUM_ID),
             new StaticConditionVariable($forum_id));
 
-        $subscriptions = DataManager :: retrieves(ForumSubscribe :: class_name(), $condition);
+        $subscriptions = DataManager :: retrieves(
+            ForumSubscribe :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         $users = array();
 

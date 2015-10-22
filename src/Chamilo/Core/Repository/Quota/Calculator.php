@@ -26,6 +26,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -674,7 +675,7 @@ class Calculator
             }
             else
             {
-                $users = DataManager :: retrieves(User :: class_name());
+                $users = DataManager :: retrieves(User :: class_name(), new DataClassRetrievesParameters());
 
                 $totalQuota = 0;
 

@@ -175,7 +175,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
             new StaticConditionVariable($category_id));
         $subcategries = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($cat = $subcategries->next_result())
         {

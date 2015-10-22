@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: vimeo.class.php 2010-06-08 package repository.lib.content_object.vimeo
@@ -48,7 +49,7 @@ class Vimeo extends ContentObject implements Versionable, Includeable
 
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
             Instance :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
         return $external_repositories->size() == 1;
     }
 }

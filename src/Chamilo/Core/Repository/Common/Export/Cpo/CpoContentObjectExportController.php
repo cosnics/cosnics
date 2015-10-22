@@ -551,7 +551,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             new StaticConditionVariable($content_object->get_id()));
         $content_object_attachments = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
             ContentObjectAttachment :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         if ($content_object_attachments->size() > 0)
         {
@@ -595,7 +595,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             new StaticConditionVariable($content_object->get_id()));
         $content_object_includes = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
             ContentObjectInclude :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         if ($content_object_includes->size() > 0)
         {

@@ -33,22 +33,56 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->client = new \Google_Client();
         $this->client->setDeveloperKey($key);
 
+        $this->setSessionToken();
+
+        $this->client->setAccessType('offline');
+        $this->client->setApprovalPrompt('force');
+        $this->youtube = new \Google_Service_YouTube($this->client);
+    }
+
+    public function setSessionToken()
+    {
+        $sessionToken = $this->getSetting('session_token');
+
+        if ($sessionToken instanceof Setting)
+        {
+            $this->client->setAccessToken($sessionToken->get_value());
+
+            if ($this->client->isAccessTokenExpired())
+            {
+                $refreshToken = $this->getSetting('refresh_token');
+
+                $newAccessToken = $this->client->refreshToken($refreshToken->get_value());
+                $this->client->setAccessToken($newAccessToken);
+
+                $sessionToken->set_value($newAccessToken);
+                $sessionToken->update();
+
+                $newRefreshToken = $this->client->getRefreshToken();
+                $refreshToken->set_value($newRefreshToken);
+                $refreshToken->update();
+            }
+        }
+    }
+
+    /**
+     */
+    private function getSetting($setting)
+    {
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
-            new StaticConditionVariable('session_token'));
+            new StaticConditionVariable($setting));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
             new StaticConditionVariable(Session :: get_user_id()));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
+            new StaticConditionVariable($this->get_external_repository_instance_id()));
+
         $condition = new AndCondition($conditions);
 
-        $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
-        if ($setting instanceof Setting)
-        {
-            $this->client->setAccessToken($setting->get_value());
-        }
-
-        $this->youtube = new \Google_Service_YouTube($this->client);
+        return DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     public function login()
@@ -87,14 +121,44 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
             $user_setting->set_external_id($this->get_external_repository_instance_id());
+            $user_setting->create();
 
-            return $user_setting->create();
+            $user_setting = new Setting();
+            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_variable('channel_id');
+            $user_setting->set_value($this->retrieveCurrentUserId($token));
+            $user_setting->set_external_id($this->get_external_repository_instance_id());
+            $user_setting->create();
+
+            $user_setting = new Setting();
+            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_variable('refresh_token');
+            $user_setting->set_value($this->client->getRefreshToken());
+            $user_setting->set_external_id($this->get_external_repository_instance_id());
+            $user_setting->create();
+
+            return true;
         }
         else
         {
             $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/youtube');
             header('Location: ' . $url);
             exit();
+        }
+    }
+
+    public function retrieveCurrentUserId($sessionToken)
+    {
+        if ($sessionToken)
+        {
+            $channelResults = $this->youtube->channels->listChannels('id', array('mine' => 'true'));
+            $channel = array_pop($channelResults->getItems());
+
+            return $channel->getId();
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -131,15 +195,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function is_editable($id)
     {
-        $videoEntry = $this->get_youtube_video_entry($id);
-        if ($videoEntry->getEditLink() !== null)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $this->retrieve_external_repository_object($id)->get_owner_id() == $this->getCurrentUserId();
+    }
+
+    public function getCurrentUserId()
+    {
+        $setting = $this->getSetting('channel_id');
+        return $setting instanceof Setting ? $setting->get_value() : false;
     }
 
     public static function translate_search_query($query)
@@ -149,11 +211,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_categories()
     {
-        $categories = $this->youtube->videoCategories->listVideoCategories('snippet', array('regionCode' => 'BE'));
+        $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('regionCode' => 'BE'));
         $list_categories = array();
-        foreach ($categories['modelData']['items'] as $category)
+        foreach ($categories->getItems() as $videoCategory)
         {
-            $list_categories[(int) $category['id']] = $category['snippet']['title'];
+            if ($videoCategory->getSnippet()->getAssignable())
+            {
+                $list_categories[$videoCategory->getId()] = $videoCategory->getSnippet()->getTitle();
+            }
         }
 
         asort($list_categories);
@@ -193,13 +258,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         fclose($handle);
         $this->client->setDefer(false);
 
-        $playlist = new PlayList();
-        $playlist->set_title('test');
-        $playlist->set_description('test descr');
-        $playlist->set_date(date("Y-m-d H:i:s"));
-
-        $this->create_playlist($playlist);
-
         return $media;
     }
 
@@ -230,6 +288,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_external_repository_objects($query, $order_property, $offset, $count)
     {
+        if (count($order_property) > 0)
+        {
+            $order = $order_property[0]->get_property();
+        }
+        else
+        {
+            $order = 'date';
+        }
+
         if (($count + $offset) >= 900)
         {
             $temp = ($offset + $count) - 900;
@@ -241,11 +308,18 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
 
         $pageNumber = ($offset / $count) + 1;
-        $pageToken = PageTokenGenerator :: getInstance()->getToken($count, $pageNumber);
+        // $pageToken = PageTokenGenerator :: getInstance()->getToken($count, $pageNumber);
 
-        $searchResponse = $this->youtube->search->listSearch(
-            'id,snippet',
-            array('type' => 'video', 'q' => $query, 'maxResults' => $max_result, 'pageToken' => $pageToken));
+        $parameters = array('q' => $query, 'maxResults' => $max_result, 'order' => $order, 'type' => 'video',
+            /*'pageToken' => $pageToken*/);
+
+        $feedType = Request :: get(Manager :: PARAM_FEED_TYPE);
+        if ($feedType == Manager :: FEED_TYPE_MYVIDEOS)
+        {
+            $parameters['forMine'] = 'true';
+        }
+
+        $searchResponse = $this->youtube->search->listSearch('id,snippet', $parameters);
 
         foreach ($searchResponse['modelData']['items'] as $response)
         {
@@ -264,10 +338,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_owner_name($videosResponse['modelData']['items'][0]['snippet']['channelTitle']);
 
             $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
-            $parts_duration = array();
-            preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
-
-            $object->set_duration($parts_duration[0][0] * 60 + $parts_duration[0][1]);
+            $date_interval = new \DateInterval($iso_duration);
+            $object->set_duration($date_interval->format('%s'));
 
             if (count($response['snippet']['thumbnails']) > 0)
             {
@@ -291,11 +363,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_tags($videosResponse['modelData']['items'][0]['snippet']['tags']);
 
             $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
-
+            $object->set_rights($this->determine_rights($object));
             $objects[] = $object;
         }
 
-        // $object->set_rights($this->determine_rights($videoEntry));
         return new ArrayResultSet($objects);
     }
 
@@ -331,10 +402,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_modified(strtotime($videosResponse['modelData']['items'][0]['snippet']['publishedAt']));
 
         $iso_duration = $videosResponse['modelData']['items'][0]['contentDetails']['duration'];
-        $parts_duration = array();
-        preg_match_all('/(\d+)/', $iso_duration, $parts_duration);
-
-        $object->set_duration($parts_duration[0][0] * 60 + $parts_duration[0][1]);
+        $date_interval = new \DateInterval($iso_duration);
+        $object->set_duration($date_interval->format('%s'));
 
         $thumbnails = $videosResponse['modelData']['items'][0]['snippet']['thumbnails'];
 
@@ -360,7 +429,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $object->set_status($videosResponse['modelData']['items'][0]['status']['uploadStatus']);
 
-        $object->set_rights($this->determine_rights());
+        $object->set_rights($this->determine_rights($object));
 
         return $object;
     }
@@ -436,8 +505,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $rights = array();
         $rights[ExternalObject :: RIGHT_USE] = true;
-        // $rights[ExternalObject :: RIGHT_EDIT] = ($video_entry->getEditLink() !== null ? true : false);
-        // $rights[ExternalObject :: RIGHT_DELETE] = ($video_entry->getEditLink() !== null ? true : false);
+        $rights[ExternalObject :: RIGHT_EDIT] = $video_entry->get_owner_id() == $this->getCurrentUserId();
+        $rights[ExternalObject :: RIGHT_DELETE] = $video_entry->get_owner_id() == $this->getCurrentUserId();
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
         return $rights;
     }

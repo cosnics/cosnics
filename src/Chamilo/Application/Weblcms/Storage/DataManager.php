@@ -192,7 +192,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($object_id));
-        $publications = self :: retrieves(ContentObjectPublication :: class_name(), $condition);
+        $publications = self :: retrieves(
+            ContentObjectPublication :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($publication = $publications->next_result())
         {
@@ -1281,7 +1283,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $result_set = DataManager :: retrieves(CourseTypeUserCategoryRelCourse :: class_name(), $condition);
+        $result_set = DataManager :: retrieves(
+            CourseTypeUserCategoryRelCourse :: class_name(),
+            new DataClassRetrievesParameters($condition));
 
         while ($course_type_user_category_rel_course = $result_set->next_result())
         {
@@ -1424,7 +1428,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_course_settings_with_course_type_values($courseTypeIdentifiers)
     {
-        if(!is_array($courseTypeIdentifiers))
+        if (! is_array($courseTypeIdentifiers))
         {
             $courseTypeIdentifiers = array($courseTypeIdentifiers);
         }
@@ -1452,7 +1456,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_course_settings_with_course_values($courseIdentifiers)
     {
-        if(!is_array($courseIdentifiers))
+        if (! is_array($courseIdentifiers))
         {
             $courseIdentifiers = array($courseIdentifiers);
         }
@@ -1478,8 +1482,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
 
     /**
-     * Builds the parameters to retrieve course settings with a course setting relation table.
-     * Returns course settings
+     * Builds the parameters to retrieve course settings with a course setting relation table. Returns course settings
      * with their compliant values.
      *
      * @param $course_setting_relation_class String - The class name for the course setting relation table
@@ -1502,7 +1505,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $data_class_properties[] = new FixedPropertyConditionVariable(
             $course_setting_relation_class,
-            $course_setting_relation_class :: PROPERTY_OBJECT_ID, 'object_id');
+            $course_setting_relation_class :: PROPERTY_OBJECT_ID,
+            'object_id');
 
         $data_class_properties[] = new PropertyConditionVariable(
             $course_setting_relation_class,
@@ -1737,7 +1741,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $group_condition = new InCondition(
                         new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
                         $entity_ids);
-                    $groups_resultset = DataManager :: retrieves(Group :: class_name(), $group_condition);
+                    $groups_resultset = DataManager :: retrieves(
+                        Group :: class_name(),
+                        new DataClassRetrievesParameters($group_condition));
 
                     while ($group = $groups_resultset->next_result())
                     {
@@ -1871,7 +1877,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                         $group_user_rels = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
                             GroupRelUser :: class_name(),
-                            $condition);
+                            new DataClassRetrievesParameters($condition));
                         while ($group_user_rel = $group_user_rels->next_result())
                         {
                             if ($user_id == $group_user_rel->get_user_id())
@@ -2366,7 +2372,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
 
             $parameters = new DataClassDistinctParameters($condition, CourseEntityRelation :: PROPERTY_COURSE_ID);
-            $course_ids = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+            $groupCourseIds = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+            $course_ids = array_merge($course_ids, $groupCourseIds);
         }
 
         // Finally, retrieve information about the course, as well as labels the user applied to allow sorting the

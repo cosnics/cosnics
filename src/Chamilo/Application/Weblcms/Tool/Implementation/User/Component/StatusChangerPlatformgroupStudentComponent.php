@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 class StatusChangerPlatformgroupStudentComponent extends StatusChangerComponent
 {
 
+ // 1 = teacher, 5 = student
     public function get_relation()
     {
         $conditions = array();

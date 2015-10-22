@@ -16,6 +16,9 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
         $html[] = '<a href="' . $this->get_component()->get_external_repository_object_viewing_url($object) .
              '"><img class="thumbnail" src="' . $object->get_thumbnail() . '"/></a> <br/>';
         $html[] = '<i>' . StringUtilities :: getInstance()->truncate($object->get_description(), 100) . '</i><br/>';
+        $html[] = '<div class="thumbnail_action">';
+        $html[] = $this->get_actions($object);
+        $html[] = '</div>';
         return implode(PHP_EOL, $html);
     }
 }

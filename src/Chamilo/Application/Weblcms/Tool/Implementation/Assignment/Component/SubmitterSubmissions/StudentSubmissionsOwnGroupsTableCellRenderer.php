@@ -63,7 +63,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
      */
     private function get_submitter_name($submission)
     {
-        return DataManager :: get_instance()->retrieve_user($submission->get_user_id())->get_fullname();
+        return DataManager :: retrieve_by_id(User :: class_name(), $submission->get_user_id())->get_fullname();
     }
 
     /**

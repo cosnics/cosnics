@@ -42,7 +42,8 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $searchUrl = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => 'Chamilo\Application\Weblcms\Ajax',
-                \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager :: ACTION_XML_COURSE_USER_GROUP_FEED, \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $this->parent->get_course_id()));
+                \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager :: ACTION_XML_COURSE_USER_GROUP_FEED,
+                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $this->parent->get_course_id()));
 
         $url = Path :: getInstance()->getBasePath(true) .
              'index.php?go=XmlCourseUserGroupFeed&application=Chamilo%5CApplication%5CWeblcms%5CAjax&course=' .
