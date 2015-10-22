@@ -18,10 +18,11 @@ class ObjectTable extends DataClassTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(
-                    Manager :: PARAM_ACTION => Manager :: ACTION_SELECT_QUESTIONS,
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
-                        \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID)),
+                $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_SELECT_QUESTIONS,
+                        \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
+                            \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID))),
                 Translation :: get('AddSelectedQuestions'),
                 false));
 

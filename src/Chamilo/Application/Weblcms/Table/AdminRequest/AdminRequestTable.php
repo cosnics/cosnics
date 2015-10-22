@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: admin_request_browser_table.class.php 218 2009-11-13 14:21:26Z Yannick $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component.admin_request_browser
  */
 /**
@@ -24,20 +24,23 @@ class AdminRequestTable extends DataClassTable implements TableFormActionsSuppor
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: PARAM_REMOVE_SELECTED_REQUESTS), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: PARAM_REMOVE_SELECTED_REQUESTS)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: PARAM_ALLOW_SELECTED_REQUESTS), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: PARAM_ALLOW_SELECTED_REQUESTS)),
                 Translation :: get('AcceptSelected')));
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: PARAM_REFUSE_SELECTED_REQUESTS), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: PARAM_REFUSE_SELECTED_REQUESTS)),
                 Translation :: get('RejectSelected')));
     }
 }

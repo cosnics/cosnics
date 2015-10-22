@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table to display a list of groups directly subscribed to a course.
- * 
+ *
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
@@ -24,10 +24,10 @@ class DirectSubscribedPlatformGroupBrowserTable extends RecordTable implements T
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the implemented form actions
-     * 
+     *
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
@@ -35,31 +35,34 @@ class DirectSubscribedPlatformGroupBrowserTable extends RecordTable implements T
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $actions = new TableFormActions(__NAMESPACE__);
-            
+
             // unsubscribe
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE_GROUPS), 
-                    Translation :: get('UnsubscribeSelectedGroups'), 
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE_GROUPS)),
+                    Translation :: get('UnsubscribeSelectedGroups'),
                     false));
-            
+
             // make teacher
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER), 
-                    Translation :: get('MakeTeacher'), 
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER)),
+                    Translation :: get('MakeTeacher'),
                     false));
-            
+
             // make student
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT), 
-                    Translation :: get('MakeStudent'), 
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT)),
+                    Translation :: get('MakeStudent'),
                     false));
-            
+
             return $actions;
         }
     }

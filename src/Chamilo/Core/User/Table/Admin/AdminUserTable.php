@@ -36,7 +36,8 @@ class AdminUserTable extends DataClassTable implements TableFormActionsSupport
                 Translation :: get('DeactivateSelected', null, Utilities :: COMMON_LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_RESET_PASSWORD_MULTI)),
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_RESET_PASSWORD_MULTI)),
                 Translation :: get('ResetPassword')));
 
         if (PlatformSetting :: get('active_online_email_editor'))

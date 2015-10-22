@@ -16,7 +16,10 @@ class GroupTable extends DataClassTable implements TableFormActionsSupport
     {
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
-            new TableFormAction(Manager :: ACTION_DELETE_PARTICIPANT, Translation :: get('CancelInvitation'), true));
+            new TableFormAction(
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_PARTICIPANT)),
+                Translation :: get('CancelInvitation'),
+                true));
         return $actions;
     }
 }

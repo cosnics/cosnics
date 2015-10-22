@@ -20,11 +20,11 @@ class UserApprovalTable extends DataClassTable implements TableFormActionsSuppor
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_APPROVE_USER), 
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_APPROVE_USER)),
                 Translation :: get('ApproveSelected')));
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DENY_USER), 
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DENY_USER)),
                 Translation :: get('DenySelected')));
         return $actions;
     }

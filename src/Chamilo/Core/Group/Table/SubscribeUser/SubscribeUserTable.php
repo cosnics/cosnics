@@ -18,13 +18,14 @@ class SubscribeUserTable extends DataClassTable implements TableFormActionsSuppo
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE_USER_TO_GROUP), 
-                Translation :: get('SubscribeSelected'), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE_USER_TO_GROUP)),
+                Translation :: get('SubscribeSelected'),
                 false));
-        
+
         return $actions;
     }
 }

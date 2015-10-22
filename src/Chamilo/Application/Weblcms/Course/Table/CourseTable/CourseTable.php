@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class describes a table for the course object
- * 
+ *
  * @package \application\weblcms\course
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -25,19 +25,19 @@ class CourseTable extends RecordTable implements TableFormActionsSupport
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the available table actions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE), 
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
-        
+
         return $actions;
     }
 }

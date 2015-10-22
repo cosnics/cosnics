@@ -159,7 +159,9 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         return array(
             new TableFormAction(
-                array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SELECTED_PUBLICATIONS),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SELECTED_PUBLICATIONS)),
                 Translation :: get('DownloadSelected'),
                 true));
     }

@@ -26,30 +26,31 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
             // add subscribe options
             $actions = new TableFormActions(__NAMESPACE__);
 
-            //Allowed to subscribe an user
+            // Allowed to subscribe an user
             $actions->add_form_action(
                 new TableFormAction(
-                    array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE),
+                    $this->get_component()->get_url(
+                        array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE)),
                     Translation :: get('SubscribeSelectedAsStudent'),
                     false));
 
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE_AS_ADMIN),
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE_AS_ADMIN)),
                     Translation :: get('SubscribeSelectedAsAdmin'),
                     false));
 
-            //Allowed to request to subscribe an user
+            // Allowed to request to subscribe an user
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_REQUEST_SUBSCRIBE_USERS),
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_REQUEST_SUBSCRIBE_USERS)),
                     Manager :: ACTION_REQUEST_SUBSCRIBE_USERS,
-                    Translation::get('RequestUsers'),
-                    false
-                    )
-                );
+                    Translation :: get('RequestUsers'),
+                    false));
 
             return $actions;
         }
