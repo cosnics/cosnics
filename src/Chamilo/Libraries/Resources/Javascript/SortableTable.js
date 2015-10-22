@@ -5,8 +5,9 @@
 
         var result = true;
 
-        if (!any_checkbox_checked(table_name))
-            return false;
+        if (!$('input:checked', $(this)).length > 0) {
+        return false;
+        }
 
         var actions = $('#actions_' + table_name);
         var selectedOption = $('option:selected', actions);
@@ -16,16 +17,6 @@
         var confirmMessage = selectedOption.data('message');
         return confirm(confirmMessage);
         }
-    }
-
-    function any_checkbox_checked(table_name) {
-        var result = false;
-        $('.' + table_name + '_id:checked').each(function() {
-            result = true;
-            return false;
-        });
-
-        return result;
     }
 
     function ucfirst(string) {
@@ -104,7 +95,7 @@
         $('.data_table').on('click', ':checkbox', checkboxClicked);
         $(document).on('click', 'a.sortable_table_select_all', selectAll);
         $(document).on('click', 'a.sortable_table_select_none', selectNone);
-        $(document).on('change', 'select', changeAction);
+        $(document).on('change', 'form.table_form select', changeAction);
     });
 
 })(jQuery);

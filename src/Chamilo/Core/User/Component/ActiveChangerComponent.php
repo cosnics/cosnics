@@ -24,7 +24,7 @@ class ActiveChangerComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
         $active = Request :: get(self :: PARAM_ACTIVE);
 
         if (! is_array($ids))

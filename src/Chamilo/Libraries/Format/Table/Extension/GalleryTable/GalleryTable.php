@@ -42,8 +42,8 @@ abstract class GalleryTable extends Table
 
         $table = new GalleryHTMLTable(
             $this->get_name(),
-            array($this, 'count_data'),
-            array($this, 'get_data'),
+            array($this, 'countData'),
+            array($this, 'getData'),
             array($this, 'get_property_model'),
             $count,
             0,
@@ -76,7 +76,7 @@ abstract class GalleryTable extends Table
      */
     public function getData($offset, $count, $order_column, $order_direction)
     {
-        $table_data = parent :: get_data($offset, $count, $order_column, $order_direction);
+        $table_data = parent :: getData($offset, $count, $order_column, $order_direction);
 
         if (count($this->current_row) > 0)
         {
