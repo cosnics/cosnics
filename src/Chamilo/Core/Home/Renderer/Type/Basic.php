@@ -230,9 +230,9 @@ class Basic extends Renderer
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $html[] = '<div class="portal_tab" id="portal_tab_' . $tab->get_id() . '" style="display: ' . (((! isset(
-                $currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) || $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') .
-                 ';">';
+            $html[] = '<div class="portal_tab" id="portal_tab_' . $tab->get_id() . '" style="display: ' .
+                 (((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
+                 $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') . ';">';
 
             $columns = $this->getElements(Column :: class_name(), $tab->get_id());
 
@@ -246,7 +246,12 @@ class Basic extends Renderer
 
                 foreach ($blocks as $block)
                 {
-                    $html[] = BlockRendition :: factory($this, $block)->toHtml();
+                    $blockRendition = BlockRendition :: factory($this, $block);
+
+                    if ($blockRendition->isVisible())
+                    {
+                        $html[] = $blockRendition->toHtml();
+                    }
                 }
 
                 $footer_style = (count($blocks) > 0) ? 'style="display:none;"' : '';
