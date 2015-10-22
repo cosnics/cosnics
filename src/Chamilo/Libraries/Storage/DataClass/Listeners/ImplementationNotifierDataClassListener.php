@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Dataclass listener which manipulates the crud methods to notify the implementation packages
@@ -188,7 +189,9 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
             $packages = array();
 
-            $package_registrations = DataManager :: retrieves(Registration :: class_name(), $condition);
+            $package_registrations = DataManager :: retrieves(
+                Registration :: class_name(),
+                new DataClassRetrievesParameters($condition));
             while ($package_registration = $package_registrations->next_result())
             {
                 $packages[] = $package_registration->get_context();

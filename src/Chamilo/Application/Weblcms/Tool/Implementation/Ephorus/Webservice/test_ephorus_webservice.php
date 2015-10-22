@@ -23,6 +23,5 @@ curl_setopt(
 $result = curl_exec($ch);
 
 echo '<pre>';
-var_dump(htmlentities($result));
 
 curl_close($ch);

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This class represents the current configuration
@@ -64,7 +65,9 @@ class Configuration
         }
         else
         {
-            $registrations = DataManager :: retrieves(TemplateRegistration :: class_name());
+            $registrations = DataManager :: retrieves(
+                TemplateRegistration :: class_name(),
+                new DataClassRetrievesParameters());
 
             while ($registration = $registrations->next_result())
             {

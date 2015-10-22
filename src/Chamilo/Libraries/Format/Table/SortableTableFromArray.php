@@ -76,7 +76,7 @@ class SortableTableFromArray extends SortableTable
      *
      * @return multitype:multitype
      */
-    public function get_data()
+    public function getData()
     {
         return $this->table_data;
     }

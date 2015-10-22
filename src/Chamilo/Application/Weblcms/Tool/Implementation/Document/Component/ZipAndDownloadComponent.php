@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: document_zip_and_download.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -76,8 +77,6 @@ class ZipAndDownloadComponent extends Manager
         $this->zip_name = str_replace(" ", "_", $this->zip_name);
 
         $category_folder_mapping = $this->create_folder_structure($category_id, $is_course_admin);
-
-
 
         $target_path = array_shift($category_folder_mapping);
         foreach ($category_folder_mapping as $category_id => $dir)
@@ -157,7 +156,6 @@ class ZipAndDownloadComponent extends Manager
                     0,
                     - 1,
                     $this->get_user_id());
-
             }
 
             if ($publications)
@@ -247,7 +245,7 @@ class ZipAndDownloadComponent extends Manager
 
         $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             ContentObjectPublicationCategory :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         while ($category = $categories->next_result())
         {

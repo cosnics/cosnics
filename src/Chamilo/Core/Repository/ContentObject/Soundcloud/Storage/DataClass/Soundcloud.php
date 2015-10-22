@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: soundcloud.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -49,7 +50,8 @@ class Soundcloud extends ContentObject implements Versionable, Includeable
 
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
             Instance :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
+
         return $external_repositories->size() == 1;
     }
 }

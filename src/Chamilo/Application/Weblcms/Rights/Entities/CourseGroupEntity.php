@@ -60,7 +60,7 @@ class CourseGroupEntity implements NestedRightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return CourseGroupDataManager :: retrieves(
+        return CourseGroupDataManager:: retrieves(
             CourseGroup :: class_name(),
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }

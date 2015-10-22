@@ -14,9 +14,11 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * Enter description here . ..
+ * Enter description here .
+ * ..
  *
  * @author admin
  */
@@ -83,7 +85,9 @@ class UserResultsViewerComponent extends Manager
 
         if ($this->user_id != $this->get_user()->get_id())
         {
-            $subject_user = \Chamilo\Core\User\Storage\Datamanager :: get_instance()->retrieve_user($this->user_id);
+            $subject_user = \Chamilo\Core\User\Storage\Datamanager :: retrieve_by_id(
+                User :: class_name(),
+                $this->user_id);
         }
         else
         {

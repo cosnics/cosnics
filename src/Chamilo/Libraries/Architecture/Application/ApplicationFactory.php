@@ -32,6 +32,18 @@ class ApplicationFactory
 
     /**
      *
+     * @var string
+     */
+    private $applicationAction;
+
+    /**
+     *
+     * @var string
+     */
+    private $applicationComponentClassName;
+
+    /**
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $context
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
@@ -103,12 +115,8 @@ class ApplicationFactory
      */
     public function getComponent()
     {
-        $actionParameter = $this->getActionParameter();
-        $action = $this->getAction($actionParameter);
-        $component = $this->createComponent($action);
-
+        $component = $this->createComponent();
         $component->get_breadcrumb_generator()->generate_breadcrumbs();
-
         return $component;
     }
 
@@ -144,9 +152,10 @@ class ApplicationFactory
      * @param string $action
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    private function createComponent($action)
+    private function createComponent()
     {
-        $class = $this->getClassName($action);
+        $action = $this->getAction();
+        $class = $this->getClassName();
 
         $component = new $class($this->getApplicationConfiguration());
 
@@ -169,11 +178,11 @@ class ApplicationFactory
 
     /**
      *
-     * @param string $actionParameter
      * @return string
      */
-    private function getAction($actionParameter)
+    private function getAction()
     {
+        $actionParameter = $this->getActionParameter();
         $managerClass = $this->getManagerClass();
         $level = $this->determineLevel();
         $actions = $this->getRequestedAction($actionParameter);
@@ -192,7 +201,7 @@ class ApplicationFactory
         }
         else
         {
-            $action = $this->getRequestedAction($actionParameter);
+            $action = $actions;
         }
 
         $tableAction = $this->processTableAction($actionParameter);
@@ -201,8 +210,6 @@ class ApplicationFactory
         {
             $action = $tableAction;
         }
-
-        $this->getRequest()->query->set($actionParameter, $action);
 
         return $action;
     }
@@ -263,7 +270,17 @@ class ApplicationFactory
      * @param string $action
      * @return string
      */
-    private function getClassName($action)
+    private function getClassName()
+    {
+        return $this->buildClassName($this->getAction());
+    }
+
+    public function determineClassName()
+    {
+        return $this->getClassName();
+    }
+
+    private function buildClassName($action)
     {
         $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 

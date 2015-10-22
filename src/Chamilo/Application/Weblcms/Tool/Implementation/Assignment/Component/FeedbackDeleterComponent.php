@@ -56,7 +56,6 @@ class FeedbackDeleterComponent extends Manager
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
                 new DataClassRetrievesParameters($condition))->as_array();
 
-
             foreach ($feedbacks as $feedback)
             {
                 $submission_id = $feedback->get_submission_id();

@@ -91,7 +91,7 @@ class CourseTruncaterForm extends FormValidator
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $common_sections = array(
             CourseSection :: TYPE_TOOL,

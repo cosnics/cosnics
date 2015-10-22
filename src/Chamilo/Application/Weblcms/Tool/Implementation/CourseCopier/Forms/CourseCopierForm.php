@@ -87,7 +87,7 @@ class CourseCopierForm extends FormValidator
             new StaticConditionVariable($this->parent->get_course_id()));
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $common_sections = array(
             CourseSection :: TYPE_TOOL,

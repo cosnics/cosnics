@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: course_section_tool_selector_form.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -74,7 +75,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new PropertyConditionVariable(CourseTool :: class_name(), CourseTool :: PROPERTY_SECTION_TYPE),
             new StaticConditionVariable(CourseSection :: TYPE_TOOL));
 
-        $tools = DataManager :: retrieves(CourseTool :: class_name(), $condition);
+        $tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters($condition));
 
         $active_tools = array();
 
@@ -110,7 +111,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         return $registered_tools_resultset = DataManager :: retrieves(
             CourseToolRelCourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
     }
 
     public function update_course_modules()
@@ -125,7 +126,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable(Request :: get('course')));
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
             CourseSection :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
 
         $course_section_ids = array();
         while ($course_section = $course_sections->next_result())
@@ -170,7 +171,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
             $course_tool_rel_course_sections = DataManager :: retrieves(
                 CourseToolRelCourseSection :: class_name(),
-                $condition);
+                new DataClassRetrievesParameters($condition));
 
             if ($course_tool_rel_course_sections->size() > 0)
             {

@@ -22,6 +22,7 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestionOption;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -49,7 +50,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixTemplates()
     {
-        $existingTemplates = DataManager :: retrieves(TemplateRegistration :: class_name());
+        $existingTemplates = DataManager :: retrieves(
+            TemplateRegistration :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingTemplate = $existingTemplates->next_result())
         {
@@ -68,7 +71,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMatchNumericQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentMatchNumericQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentMatchNumericQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -94,7 +99,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMatchTextQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentMatchTextQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentMatchTextQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -119,7 +126,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMatchingQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentMatchingQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentMatchingQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -145,7 +154,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMatrixQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentMatrixQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentMatrixQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -171,7 +182,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMultipleChoiceQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentMultipleChoiceQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentMultipleChoiceQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -197,7 +210,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentSelectQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(AssessmentSelectQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            AssessmentSelectQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -223,7 +238,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixHotspotQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(HotspotQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            HotspotQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -249,7 +266,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixOrderingQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(OrderingQuestion :: class_name());
+        $existingQuestions = DataManager :: retrieves(
+            OrderingQuestion :: class_name(),
+            new DataClassRetrievesParameters());
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -275,7 +294,7 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssignmentAllowedTypes()
     {
-        $existingAssignments = DataManager :: retrieves(Assignment :: class_name());
+        $existingAssignments = DataManager :: retrieves(Assignment :: class_name(), new DataClassRetrievesParameters());
 
         while ($existingAssignment = $existingAssignments->next_result())
         {
@@ -299,7 +318,8 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     /**
      * Takes an __PHP_Incomplete_Class and casts it to a stdClass object.
-     * All properties will be made public in this step.
+     * All properties will be made public in this
+     * step.
      *
      * @since 1.1.0
      * @param object $object __PHP_Incomplete_Class

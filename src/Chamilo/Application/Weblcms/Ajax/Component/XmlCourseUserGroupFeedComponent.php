@@ -135,7 +135,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 new AndCondition($userConditions),
                 CourseEntityRelation :: PROPERTY_ENTITY_ID);
 
-            $user_ids = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+            $user_ids = DataManager :: distinct(CourseEntityRelation :: class_name(), $parameters);
 
             // Add users from subscribed platform groups to user ids array
             $group_relations = $course->get_subscribed_groups();

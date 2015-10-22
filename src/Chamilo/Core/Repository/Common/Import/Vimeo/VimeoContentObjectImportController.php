@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class VimeoContentObjectImportController extends ContentObjectImportController
 {
@@ -62,7 +63,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
 
                 $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
                     \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                    $condition);
+                    new DataClassRetrievesParameters($condition));
 
                 $external_repository = $external_repositories->next_result();
                 $vimeo_connector = DataConnector :: get_instance($external_repository);
@@ -116,7 +117,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
 
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
             \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-            $condition);
+            new DataClassRetrievesParameters($condition));
         $vimeo_connector_available = $external_repositories->size() == 1;
 
         return $vimeo_object_available && $vimeo_connector_available;

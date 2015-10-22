@@ -18,7 +18,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const PARAM_FEED_IDENTIFIER = 'identifier';
     const FEED_TYPE_GENERAL = 1;
     const FEED_TYPE_MYVIDEOS = 2;
-    const FEED_STANDARD_TYPE = 3;
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
 
@@ -28,11 +27,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        if (Request :: get(self :: PARAM_FEED_TYPE) == self :: FEED_TYPE_MYVIDEOS)
-        {
-            Request :: set_get(self :: PARAM_FEED_TYPE, self :: FEED_TYPE_GENERAL);
-        }
-
         parent :: __construct($external_repository, $application);
         $this->set_parameter(self :: PARAM_FEED_TYPE, Request :: get(self :: PARAM_FEED_TYPE));
     }
@@ -100,8 +94,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $menu_items[] = $browser;
 
         $feeds = $this->get_external_repository_manager_connector()->get_video_feeds();
-
-        // var_dump($feeds);
 
         return $menu_items;
     }

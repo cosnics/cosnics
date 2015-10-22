@@ -14,6 +14,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Course list renderer to render the course list (used in courses home, courses sorter, courses block...)
@@ -233,7 +234,7 @@ class CourseListRenderer
     {
         if (! isset($this->tools))
         {
-            $this->tools = DataManager :: retrieves(CourseTool :: class_name())->as_array();
+            $this->tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters())->as_array();
         }
 
         return $this->tools;

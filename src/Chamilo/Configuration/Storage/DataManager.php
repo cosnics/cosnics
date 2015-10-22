@@ -130,7 +130,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $options = array();
 
-        $languages = self :: retrieves(Language :: class_name());
+        $languages = self :: retrieves(Language :: class_name(), new DataClassRetrievesParameters());
         while ($language = $languages->next_result())
         {
             if ($use_folder_name_as_key)

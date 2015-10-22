@@ -224,7 +224,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                 Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager :: context(),
                 \Chamilo\Application\Weblcms\Ajax\Manager :: PARAM_ACTION => 'XmlCourseUserGroupFeed',
                 \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => Request :: get(
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE), 'show_groups' => 1));
+                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE),
+                'show_groups' => 1));
         return $redirect->getUrl();
     }
 

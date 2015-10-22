@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
 use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -57,7 +58,7 @@ class CourseGroupMenu extends HTML_Menu
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_group int The ID of the current group in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
+     *            string "?category=%s".
      */
     public function __construct($course, $current_group,
         $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&course=%s&course_group=%s')
@@ -114,7 +115,7 @@ class CourseGroupMenu extends HTML_Menu
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id));
-        $groups = DataManager :: retrieves(CourseGroup :: class_name(), $condition);
+        $groups = DataManager :: retrieves(CourseGroup :: class_name(), new DataClassRetrievesParameters($condition));
 
         // $current_group = $this->current_group;
 

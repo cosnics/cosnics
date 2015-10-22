@@ -128,7 +128,9 @@ class Rights extends RightsUtil
                         RightsLocationEntityRightGroup :: class_name(),
                         RightsLocationEntityRightGroup :: PROPERTY_LOCATION_ENTITY_RIGHT_ID),
                     new StaticConditionVariable($location_entity_right->get_id()));
-                $right_groups = DataManager :: retrieves(RightsLocationEntityRightGroup :: class_name(), $condition);
+                $right_groups = DataManager :: retrieves(
+                    RightsLocationEntityRightGroup :: class_name(),
+                    new DataClassRetrievesParameters($condition));
 
                 while ($right_group = $right_groups->next_result())
                 {
@@ -153,7 +155,9 @@ class Rights extends RightsUtil
                             RightsLocationEntityRightGroup :: class_name(),
                             RightsLocationEntityRightGroup :: PROPERTY_LOCATION_ENTITY_RIGHT_ID),
                         new StaticConditionVariable($location_entity_right->get_id()));
-                    $right_groups = DataManager :: retrieves(RightsLocationEntityRightGroup :: class_name(), $condition);
+                    $right_groups = DataManager :: retrieves(
+                        RightsLocationEntityRightGroup :: class_name(),
+                        new DataClassRetrievesParameters($condition));
 
                     while ($right_group = $right_groups->next_result())
                     {
@@ -178,7 +182,7 @@ class Rights extends RightsUtil
                     $allowed_groups);
                 $groups = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
                     \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(),
-                    $condition);
+                    new DataClassRetrievesParameters($condition));
 
                 while ($group = $groups->next_result())
                 {
@@ -218,7 +222,9 @@ class Rights extends RightsUtil
                         RightsLocationEntityRightGroup :: class_name(),
                         RightsLocationEntityRightGroup :: PROPERTY_GROUP_ID),
                     new StaticConditionVariable($user_group_id));
-                $right_groups = DataManager :: retrieves(RightsLocationEntityRightGroup :: class_name(), $condition);
+                $right_groups = DataManager :: retrieves(
+                    RightsLocationEntityRightGroup :: class_name(),
+                    new DataClassRetrievesParameters($condition));
 
                 while ($right_group = $right_groups->next_result())
                 {

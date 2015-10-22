@@ -4,6 +4,7 @@ namespace Chamilo\Core\Metadata;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -22,7 +23,7 @@ class SettingsConnector
      */
     public function retrieve_namespaces()
     {
-        $namespaces = DataManager :: retrieves(Schema :: class_name());
+        $namespaces = DataManager :: retrieves(Schema :: class_name(), new DataClassRetrievesParameters());
 
         if ($namespaces->size())
         {
