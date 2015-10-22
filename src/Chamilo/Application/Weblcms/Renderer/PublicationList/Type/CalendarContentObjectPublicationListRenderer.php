@@ -164,7 +164,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $user_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             CourseEntityRelation :: class_name(),
-            new DataClassRetrievesParameters($user_condition));
+            new DataClassRetrievesParameters(new AndCondition($userCondition)));
 
         $users = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
             User :: class_name(),
@@ -202,7 +202,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         if ($groups->size() > 0)
         {
-            if ($user_relations->size() > 0)
+            if ($users->size() > 0)
             {
                 $targets[] = '';
             }
