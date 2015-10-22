@@ -27,7 +27,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 
 /**
  *
@@ -267,7 +266,7 @@ class Kernel
      */
     private function checkAuthentication()
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName();
+        $applicationClassName = $this->getApplicationFactory()->determineClassName();
         $applicationRequiresAuthentication = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
@@ -441,7 +440,7 @@ class Kernel
      */
     private function traceVisit()
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName();
+        $applicationClassName = $this->getApplicationFactory()->determineClassName();
         $applicationRequiresTracing = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');

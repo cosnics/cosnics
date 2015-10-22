@@ -182,43 +182,36 @@ class ApplicationFactory
      */
     private function getAction()
     {
-        if (! isset($this->applicationAction))
-        {
-            $actionParameter = $this->getActionParameter();
-            $managerClass = $this->getManagerClass();
-            $level = $this->determineLevel();
-            $actions = $this->getRequestedAction($actionParameter);
+        $actionParameter = $this->getActionParameter();
+        $managerClass = $this->getManagerClass();
+        $level = $this->determineLevel();
+        $actions = $this->getRequestedAction($actionParameter);
 
-            if (is_array($actions))
+        if (is_array($actions))
+        {
+            if (isset($actions[$level]))
             {
-                if (isset($actions[$level]))
-                {
-                    $action = $actions[$level];
-                }
-                else
-                {
-                    // TODO: Catch the fact that there might not be a default action
-                    $action = $managerClass :: DEFAULT_ACTION;
-                }
+                $action = $actions[$level];
             }
             else
             {
-                $action = $this->getRequestedAction($actionParameter);
+                // TODO: Catch the fact that there might not be a default action
+                $action = $managerClass :: DEFAULT_ACTION;
             }
-
-            $tableAction = $this->processTableAction($actionParameter);
-
-            if ($tableAction)
-            {
-                $action = $tableAction;
-            }
-
-            $this->getRequest()->query->set($actionParameter, $action);
-
-            $this->applicationAction = $action;
+        }
+        else
+        {
+            $action = $actions;
         }
 
-        return $this->applicationAction;
+        $tableAction = $this->processTableAction($actionParameter);
+
+        if ($tableAction)
+        {
+            $action = $tableAction;
+        }
+
+        return $action;
     }
 
     /**
@@ -277,32 +270,36 @@ class ApplicationFactory
      * @param string $action
      * @return string
      */
-    public function getClassName()
+    private function getClassName()
     {
-        if (! isset($this->applicationComponentClassName))
+        return $this->buildClassName($this->getAction());
+    }
+
+    public function determineClassName()
+    {
+        return $this->getClassName();
+    }
+
+    private function buildClassName($action)
+    {
+        $classname = $this->getContext() . '\Component\\' . $action . 'Component';
+
+        if (! class_exists($classname))
         {
-            $action = $this->getAction();
-            $classname = $this->getContext() . '\Component\\' . $action . 'Component';
+            // TODO: Temporary fallback for backwards compatibility
+            $classname = $this->getContext() . '\Component\\' .
+                 (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
 
             if (! class_exists($classname))
             {
-                // TODO: Temporary fallback for backwards compatibility
-                $classname = $this->getContext() . '\Component\\' .
-                     (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
+                $trail = BreadcrumbTrail :: get_instance();
+                $trail->add(new Breadcrumb('#', Translation :: get($classname)));
 
-                if (! class_exists($classname))
-                {
-                    $trail = BreadcrumbTrail :: get_instance();
-                    $trail->add(new Breadcrumb('#', Translation :: get($classname)));
-
-                    throw new ClassNotExistException($classname);
-                }
+                throw new ClassNotExistException($classname);
             }
-
-            $this->applicationComponentClassName = $classname;
         }
 
-        return $this->applicationComponentClassName;
+        return $classname;
     }
 
     /**
