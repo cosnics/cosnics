@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -28,7 +27,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 
 /**
  *
@@ -79,6 +77,12 @@ class Kernel
      * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Architecture\Application\ApplicationFactory
+     */
+    private $applicationFactory;
 
     /**
      *
@@ -262,23 +266,20 @@ class Kernel
      */
     private function checkAuthentication()
     {
-        if (! $this->getApplication() instanceof Application)
-        {
-            throw new \Exception(
-                'No application available to check the authentication. Please call Kernel::buildApplication() before calling Kernel::checkAuthentication()');
-        }
-        else
-        {
-            $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
+        $applicationClassName = $this->getApplicationFactory()->determineClassName();
+        $applicationRequiresAuthentication = ! is_subclass_of(
+            $applicationClassName,
+            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
 
-            if (! $this->getApplication() instanceof NoAuthenticationSupport && ! $authenticationValidator->validate() &&
-                 ! Authentication :: anonymous_user_exists())
-            {
-                throw new NotAllowedException();
-            }
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
 
-            return $this;
+        if ($applicationRequiresAuthentication && ! $authenticationValidator->validate() &&
+             ! Authentication :: anonymous_user_exists())
+        {
+            throw new NotAllowedException();
         }
+
+        return $this;
     }
 
     /**
@@ -439,38 +440,36 @@ class Kernel
      */
     private function traceVisit()
     {
-        if (! $this->getApplication() instanceof Application)
+        $applicationClassName = $this->getApplicationFactory()->determineClassName();
+        $applicationRequiresTracing = ! is_subclass_of(
+            $applicationClassName,
+            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
+
+        if ($applicationRequiresTracing)
         {
-            throw new \Exception(
-                'No application available to trace. Please call Kernel::buildApplication() before calling Kernel::traceVisit()');
-        }
-        else
-        {
-            if (! $this->getApplication() instanceof NoVisitTraceComponentInterface)
+            if ($this->getUser() instanceof User)
             {
-                if ($this->getUser() instanceof User)
+                Event :: trigger(
+                    'Online',
+                    \Chamilo\Core\Admin\Manager :: context(),
+                    array('user' => $this->getUser()->get_id()));
+
+                $requestUri = $this->getRequest()->server->get('REQUEST_URI');
+
+                if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
+                     $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent')
                 {
-                    Event :: trigger(
-                        'Online',
-                        \Chamilo\Core\Admin\Manager :: context(),
-                        array('user' => $this->getUser()->get_id()));
-
-                    $requestUri = $this->getRequest()->server->get('REQUEST_URI');
-
-                    if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                         $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent')
-                    {
-                        $return = Event :: trigger(
-                            'Enter',
-                            \Chamilo\Core\User\Manager :: context(),
-                            array(
-                                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_USER_ID => $this->getUser()->get_id()));
-                    }
+                    $return = Event :: trigger(
+                        'Enter',
+                        \Chamilo\Core\User\Manager :: context(),
+                        array(
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_USER_ID => $this->getUser()->get_id()));
                 }
             }
-            return $this;
         }
+
+        return $this;
     }
 
     /**
@@ -484,12 +483,25 @@ class Kernel
 
     /**
      *
+     * @return \Chamilo\Libraries\Architecture\Application\ApplicationFactory
+     */
+    private function getApplicationFactory()
+    {
+        if (! $this->applicationFactory)
+        {
+            $this->applicationFactory = new ApplicationFactory($this->getContext(), $this->getApplicationConfiguration());
+        }
+
+        return $this->applicationFactory;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
     private function buildApplication()
     {
-        $applicationFactory = new ApplicationFactory($this->getContext(), $this->getApplicationConfiguration());
-        $this->application = $applicationFactory->getComponent();
+        $this->application = $this->getApplicationFactory()->getComponent();
 
         return $this;
     }
@@ -557,7 +569,7 @@ class Kernel
             }
             else
             {
-                $this->checkUpgrade()->checkMaintenance()->setup()->loadUser()->displayTerms()->handleOAuth2()->buildApplication()->traceVisit()->checkAuthentication()->runApplication();
+                $this->checkUpgrade()->checkMaintenance()->setup()->loadUser()->displayTerms()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (\Exception $exception)

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribed;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -17,6 +16,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Configuration\Configuration;
 
 /**
  * Cell renderer for an all subscribed course user browser table.
@@ -79,9 +80,9 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             case AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS :
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         return Translation :: get('CourseAdmin');
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         return Translation :: get('Student');
                     default :
                         return Translation :: get('Unknown');
@@ -189,10 +190,10 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
 
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_STUDENT);
+                            CourseEntityRelation :: STATUS_STUDENT);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -203,10 +204,10 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                                 $status_change_url,
                                 ToolbarItem :: DISPLAY_ICON));
                         break;
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_TEACHER);
+                            CourseEntityRelation :: STATUS_TEACHER);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -244,38 +245,45 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                     ToolbarItem :: DISPLAY_ICON));
         }
 
+        $userViewAllowed = Configuration :: get_instance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
+
         // add action for view as user
-        if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // ->get_parent()->is_teacher())
+        if ($userViewAllowed ||
+             $this->get_component()->get_user()->is_platform_admin())
         {
-            if ($user_id != $this->get_component()->get_user()->get_id())
+            if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // ->get_parent()->is_teacher())
             {
-                $course_settings_controller = CourseSettingsController :: get_instance();
-                $course_access = $course_settings_controller->get_course_setting(
-                    $this->get_component()->get_course(),
-                    CourseSettingsConnector :: COURSE_ACCESS);
-
-                if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+                if ($user_id != $this->get_component()->get_user()->get_id())
                 {
-                    $parameters = array();
-                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
-                    $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
-                    $view_as_url = $this->get_component()->get_url($parameters);
+                    $course_settings_controller = CourseSettingsController :: get_instance();
+                    $course_access = $course_settings_controller->get_course_setting(
+                        $this->get_component()->get_course(),
+                        CourseSettingsConnector :: COURSE_ACCESS);
 
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('ViewAsUser'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Login'),
-                            $view_as_url,
-                            ToolbarItem :: DISPLAY_ICON));
-                }
-                else
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
-                            Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
-                            null,
-                            ToolbarItem :: DISPLAY_ICON));
+                    if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+                    {
+                        $parameters = array();
+                        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
+                        $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
+                        $view_as_url = $this->get_component()->get_url($parameters);
+
+                        $toolbar->add_item(
+                            new ToolbarItem(
+                                Translation :: get('ViewAsUser'),
+                                Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                                $view_as_url,
+                                ToolbarItem :: DISPLAY_ICON));
+                    }
+                    else
+                    {
+                        $toolbar->add_item(
+                            new ToolbarItem(
+                                Translation :: get('ViewAsUserNotAvailableWhenCourseClosed'),
+                                Theme :: getInstance()->getCommonImagePath('Action/LoginNa'),
+                                null,
+                                ToolbarItem :: DISPLAY_ICON));
+                    }
                 }
             }
         }

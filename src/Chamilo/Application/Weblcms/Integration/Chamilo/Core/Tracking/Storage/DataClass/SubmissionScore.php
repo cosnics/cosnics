@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class SubmissionScore extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_SCORE = 'score';
     const PROPERTY_SUBMISSION_ID = 'submission_id';
     const PROPERTY_CREATED = 'created';
@@ -23,10 +22,10 @@ class SubmissionScore extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTra
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_SCORE, 
-                self :: PROPERTY_SUBMISSION_ID, 
-                self :: PROPERTY_CREATED, 
-                self :: PROPERTY_MODIFIED, 
+                self :: PROPERTY_SCORE,
+                self :: PROPERTY_SUBMISSION_ID,
+                self :: PROPERTY_CREATED,
+                self :: PROPERTY_MODIFIED,
                 self :: PROPERTY_USER_ID));
     }
 

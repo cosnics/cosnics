@@ -95,8 +95,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
         $feeds = $this->get_external_repository_manager_connector()->get_video_feeds();
 
-        // var_dump($feeds);
-
         return $menu_items;
     }
 

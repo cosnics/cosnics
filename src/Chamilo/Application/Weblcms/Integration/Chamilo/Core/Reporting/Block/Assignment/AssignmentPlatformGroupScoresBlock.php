@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
  * Reporting block with score for the platform groups.
@@ -33,19 +34,21 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentGroupScoresBlock
      */
     public function get_groups()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->course_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
-        $course_groups_rels_resultset = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseGroupRelation :: class_name(),
-            new DataClassRetrievesParameters($condition));
-
-        $group_ids = array();
-        while ($group_rel = $course_groups_rels_resultset->next_result())
-        {
-            $group_ids[] = $group_rel->get_group_id();
-        }
+        $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
+            CourseEntityRelation :: class_name(),
+            new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation :: PROPERTY_ENTITY_ID));
 
         return \Chamilo\Core\Group\Storage\DataManager :: retrieve_groups_and_subgroups($group_ids)->as_array();
     }

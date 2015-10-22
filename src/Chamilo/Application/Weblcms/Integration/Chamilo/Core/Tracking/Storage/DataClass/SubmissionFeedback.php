@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class SubmissionFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_SUBMISSION_ID = 'submission_id';
     const PROPERTY_CREATED = 'created';
     const PROPERTY_MODIFIED = 'modified';

@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 class PeerAssessmentAttempt extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_TITLE = 'title';
     const PROPERTY_DESCRIPTION = 'description';
@@ -27,12 +26,12 @@ class PeerAssessmentAttempt extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_START_DATE, 
-                self :: PROPERTY_END_DATE, 
-                self :: PROPERTY_HIDDEN, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_TITLE,
+                self :: PROPERTY_DESCRIPTION,
+                self :: PROPERTY_START_DATE,
+                self :: PROPERTY_END_DATE,
+                self :: PROPERTY_HIDDEN,
                 self :: PROPERTY_WEIGHT));
     }
 
@@ -46,7 +45,7 @@ class PeerAssessmentAttempt extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

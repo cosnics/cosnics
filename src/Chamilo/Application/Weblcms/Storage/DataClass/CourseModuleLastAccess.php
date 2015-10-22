@@ -5,19 +5,18 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: course_module_last_access.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course
  */
 
 /**
  * This class describes a CourseModuleLastAccess data object
- * 
+ *
  * @author Hans De Bisschop
  */
 class CourseModuleLastAccess extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
      * CourseModuleLastAccess properties
      */
@@ -29,7 +28,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @param string[] $extended_property_names
      *
      * @return string[] The property names.
@@ -38,16 +37,16 @@ class CourseModuleLastAccess extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_COURSE_CODE, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_MODULE_NAME, 
-                self :: PROPERTY_CATEGORY_ID, 
+                self :: PROPERTY_COURSE_CODE,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_MODULE_NAME,
+                self :: PROPERTY_CATEGORY_ID,
                 self :: PROPERTY_ACCESS_DATE));
     }
 
     /**
      * Returns the course_code of this CourseModuleLastAccess.
-     * 
+     *
      * @return the course_code.
      */
     public function get_course_code()
@@ -57,7 +56,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Sets the course_code of this CourseModuleLastAccess.
-     * 
+     *
      * @param course_code
      */
     public function set_course_code($course_code)
@@ -67,7 +66,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Returns the user_id of this CourseModuleLastAccess.
-     * 
+     *
      * @return the user_id.
      */
     public function get_user_id()
@@ -77,7 +76,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Sets the user_id of this CourseModuleLastAccess.
-     * 
+     *
      * @param user_id
      */
     public function set_user_id($user_id)
@@ -87,7 +86,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Returns the module_name of this CourseModuleLastAccess.
-     * 
+     *
      * @return the module_name.
      */
     public function get_module_name()
@@ -97,7 +96,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Sets the module_name of this CourseModuleLastAccess.
-     * 
+     *
      * @param module_name
      */
     public function set_module_name($module_name)
@@ -107,7 +106,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Returns the category_id of this CourseModuleLastAccess.
-     * 
+     *
      * @return the category_id.
      */
     public function get_category_id()
@@ -117,7 +116,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Sets the category_id of this CourseModuleLastAccess.
-     * 
+     *
      * @param category_id
      */
     public function set_category_id($category_id)
@@ -127,7 +126,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Returns the access_date of this CourseModuleLastAccess.
-     * 
+     *
      * @return the access_date.
      */
     public function get_access_date()
@@ -137,7 +136,7 @@ class CourseModuleLastAccess extends DataClass
 
     /**
      * Sets the access_date of this CourseModuleLastAccess.
-     * 
+     *
      * @param access_date
      */
     public function set_access_date($access_date)

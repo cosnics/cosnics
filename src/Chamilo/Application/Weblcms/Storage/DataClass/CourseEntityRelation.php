@@ -1,7 +1,8 @@
 <?php
-namespace Chamilo\Application\Weblcms\Course\Storage\DataClass;
+namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  * This class represents a relation between a weblcms course and an entity (a
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @package application\weblcms\course;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class CourseEntityRelation extends DataClass
+class CourseEntityRelation extends DataClass
 {
     /**
      * **************************************************************************************************************
@@ -19,6 +20,14 @@ abstract class CourseEntityRelation extends DataClass
      */
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_STATUS = 'status';
+    const PROPERTY_ENTITY_TYPE = 'entity_type';
+    const PROPERTY_ENTITY_ID = 'entity_id';
+
+    /**
+     * Entity Types
+     */
+    const ENTITY_TYPE_USER = 1;
+    const ENTITY_TYPE_GROUP = 2;
 
     /**
      * **************************************************************************************************************
@@ -50,6 +59,8 @@ abstract class CourseEntityRelation extends DataClass
     {
         $extended_property_names[] = self :: PROPERTY_COURSE_ID;
         $extended_property_names[] = self :: PROPERTY_STATUS;
+        $extended_property_names[] = self :: PROPERTY_ENTITY_TYPE;
+        $extended_property_names[] = self :: PROPERTY_ENTITY_ID;
 
         return parent :: get_default_property_names($extended_property_names);
     }
@@ -121,8 +132,28 @@ abstract class CourseEntityRelation extends DataClass
      *
      * @param $course \application\weblcms\course\Course
      */
-    public function set_course(\Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course)
+    public function set_course(Course $course)
     {
         $this->set_foreign_property(self :: FOREIGN_PROPERTY_COURSE, $course);
+    }
+
+    public function getEntityType()
+    {
+        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+    }
+
+    public function setEntityType($entityType)
+    {
+        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+    }
+
+    public function getEntityId()
+    {
+        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+    }
+
+    public function setEntityId($entityId)
+    {
+        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entityId);
     }
 }

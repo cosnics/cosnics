@@ -111,7 +111,7 @@ class CourseCopierForm extends FormValidator
 
         $this->setDefaults($defaults);
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user(
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_courses_from_user_where_user_is_teacher(
             $this->parent->get_user());
 
         $this->addElement('html', '<h3>' . Translation :: get('SelectCourse') . '</h3>');
@@ -121,7 +121,7 @@ class CourseCopierForm extends FormValidator
 
         while ($course = $courses->next_result())
         {
-            if ($course->get_id() != $current_code && $course->is_course_admin($this->parent->get_user()))
+            if ($course->get_id() != $current_code)
             {
                 $options[$course->get_id()] = $course->get_title() . ' (' . $course->get_visual_code() . ')';
             }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribedUserBrowser;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Cell renderer for an all subscribed course user browser table.
@@ -80,9 +80,9 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
             case AllSubscribedUserBrowserTableColumnModel :: SUBSCRIPTION_STATUS :
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         return Translation :: get('CourseAdmin');
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         return Translation :: get('Student');
                     default :
                         return Translation :: get('Unknown');
@@ -190,10 +190,10 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
 
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserBrowserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
-                    case CourseUserRelation :: STATUS_TEACHER :
+                    case CourseEntityRelation :: STATUS_TEACHER :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_STUDENT);
+                            CourseEntityRelation :: STATUS_STUDENT);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -204,10 +204,10 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
                                 $status_change_url,
                                 ToolbarItem :: DISPLAY_ICON));
                         break;
-                    case CourseUserRelation :: STATUS_STUDENT :
+                    case CourseEntityRelation :: STATUS_STUDENT :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseUserRelation :: STATUS_TEACHER);
+                            CourseEntityRelation :: STATUS_TEACHER);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -249,7 +249,8 @@ class AllSubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer 
         $userViewAllowed = Configuration :: get_instance()->get_setting(
             array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
 
-        if ($userViewAllowed && $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // ->get_parent()->is_teacher())
+        if (($userViewAllowed || $this->get_component()->get_user()->is_platform_admin()) &&
+             $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // ->get_parent()->is_teacher())
         {
             if ($user_id != $this->get_component()->get_user()->get_id())
             {

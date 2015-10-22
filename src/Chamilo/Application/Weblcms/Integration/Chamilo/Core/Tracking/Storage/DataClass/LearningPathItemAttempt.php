@@ -10,7 +10,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class LearningPathItemAttempt extends AbstractItemAttempt
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

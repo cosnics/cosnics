@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider
 /**
  * Data provider for a direct subscribed course user browser table, or users
  * in a direct subscribed group.
- * 
+ *
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to RecordTable
  */
@@ -18,10 +18,10 @@ class SubscribedUserTableDataProvider extends RecordTableDataProvider
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Gets the users
-     * 
+     *
      * @param $condition
      * @param int $offset
      * @param int $count
@@ -32,15 +32,15 @@ class SubscribedUserTableDataProvider extends RecordTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_users_directly_subscribed_to_course(
-            $condition, 
-            $offset, 
-            $count, 
+            $condition,
+            $offset,
+            $count,
             $order_property);
     }
 
     /**
      * Gets the number of users.
-     * 
+     *
      * @param \libraries\storage\Condition $condition
      *
      * @return int

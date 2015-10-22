@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 
 /**
  * Controller for the course settings With this class you can - Install course settings for a given installer by parsing
@@ -412,6 +413,11 @@ class CourseSettingsController
         }
     }
 
+    public function loadSettingsForCoursesByIdentifiers($courseIdentifiers)
+    {
+        return $this->load_settings(self :: SETTING_TYPE_COURSE, $courseIdentifiers);
+    }
+
     /**
      * Loads the settings for a given type and a given object Currently the only supported objects are course type and
      * course
@@ -420,12 +426,14 @@ class CourseSettingsController
      * @param $object_id int - The id of either the course type or the course (depending on the type)
      * @return String[int][String] - The settings
      */
-    protected function load_settings($setting_type, $object_id)
+    protected function load_settings($setting_type, $object_ids)
     {
-        $setting_type_caching_hash = $this->get_setting_type_caching_hash($setting_type, $object_id);
-        $this->course_settings_values_cache[$setting_type_caching_hash] = array();
+        if (! is_array($object_ids))
+        {
+            $object_ids = array($object_ids);
+        }
 
-        $course_setting_objects = $this->retrieve_course_setting_objects($setting_type, $object_id);
+        $course_setting_objects = $this->retrieve_course_setting_objects($setting_type, $object_ids);
 
         if (is_null($course_setting_objects))
         {
@@ -434,6 +442,15 @@ class CourseSettingsController
 
         while ($course_setting_object = $course_setting_objects->next_result())
         {
+            $setting_type_caching_hash = $this->get_setting_type_caching_hash(
+                $setting_type,
+                $course_setting_object[CourseSettingRelation :: ALIAS_OBJECT_ID]);
+
+            if (! isset($this->course_settings_values_cache[$setting_type_caching_hash]))
+            {
+                $this->course_settings_values_cache[$setting_type_caching_hash] = array();
+            }
+
             $setting_caching_hash = $this->get_setting_caching_hash(
                 $course_setting_object[CourseSetting :: PROPERTY_NAME],
                 $course_setting_object[CourseSetting :: PROPERTY_TOOL_ID]);
@@ -452,16 +469,16 @@ class CourseSettingsController
      *
      * @return ResultSet<CourseSetting>
      */
-    protected function retrieve_course_setting_objects($setting_type, $object_id)
+    protected function retrieve_course_setting_objects($settingType, $objectIdentifiers)
     {
         RecordResultSetCache :: truncate();
 
-        switch ($setting_type)
+        switch ($settingType)
         {
             case self :: SETTING_TYPE_COURSE :
-                return DataManager :: retrieve_course_settings_with_course_values($object_id);
+                return DataManager :: retrieve_course_settings_with_course_values($objectIdentifiers);
             case self :: SETTING_TYPE_COURSE_TYPE :
-                return DataManager :: retrieve_course_settings_with_course_type_values($object_id);
+                return DataManager :: retrieve_course_settings_with_course_type_values($objectIdentifiers);
             case self :: SETTING_TYPE_DEFAULT :
                 return DataManager :: retrieve_course_settings_with_default_values();
         }

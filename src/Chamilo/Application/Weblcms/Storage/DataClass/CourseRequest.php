@@ -3,12 +3,11 @@ namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 /**
  * $Id: course_request.class.php 216 2010-02-25 11:06:00Z Yannick & Tristan$
- * 
+ *
  * @package application.lib.weblcms.course
  */
 class CourseRequest extends CommonRequest
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_COURSE_ID = 'course_id';
 
     public static function get_default_property_names($extended_property_names = array())

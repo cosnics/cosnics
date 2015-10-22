@@ -11,14 +11,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class defines a course section in which tools can be arranged
- * 
+ *
  * @package application\weblcms;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class CourseSection extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
      * **************************************************************************************************************
      * Table Properties *
@@ -29,7 +28,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     const PROPERTY_TYPE = 'type';
     const PROPERTY_VISIBLE = 'visible';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
-    
+
     /**
      * **************************************************************************************************************
      * Type Definitions *
@@ -53,10 +52,10 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     }
 
     private static $type_name_mapping = array(
-        self :: TYPE_DISABLED => self :: TYPE_DISABLED_NAME, 
-        self :: TYPE_TOOL => self :: TYPE_TOOL_NAME, 
-        self :: TYPE_LINK => self :: TYPE_LINK_NAME, 
-        self :: TYPE_ADMIN => self :: TYPE_ADMIN_NAME, 
+        self :: TYPE_DISABLED => self :: TYPE_DISABLED_NAME,
+        self :: TYPE_TOOL => self :: TYPE_TOOL_NAME,
+        self :: TYPE_LINK => self :: TYPE_LINK_NAME,
+        self :: TYPE_ADMIN => self :: TYPE_ADMIN_NAME,
         self :: TYPE_CUSTOM => self :: TYPE_CUSTOM_NAME);
 
     /**
@@ -64,10 +63,10 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      * Type Mapping Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the type from the given type name
-     * 
+     *
      * @param $type_name String
      *
      * @return int
@@ -75,18 +74,18 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     public static function get_type_from_type_name($type_name)
     {
         $type = array_search($type_name, self :: $type_name_mapping);
-        
+
         if (! $type)
         {
             throw new \Exception(Translation :: get('CouldNotFindSectionTypeName', array('TYPE_NAME' => $type_name)));
         }
-        
+
         return $type;
     }
 
     /**
      * Returns the type name from a given type
-     * 
+     *
      * @param $type int
      *
      * @return String
@@ -97,7 +96,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         {
             throw new \Exception(Translation :: get('CouldNotFindSectionType', array('TYPE' => $type)));
         }
-        
+
         return self :: $type_name_mapping[$type];
     }
 
@@ -106,38 +105,38 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the default properties of this dataclass
-     * 
+     *
      * @return String[] - The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_COURSE_ID, 
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_VISIBLE, 
+                self :: PROPERTY_COURSE_ID,
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_VISIBLE,
                 self :: PROPERTY_DISPLAY_ORDER));
     }
 
     /**
      * Returns the dependencies for this dataclass
-     * 
+     *
      * @return string[string]
      *
      */
     protected function get_dependencies()
     {
         $id = $this->get_id();
-        
+
         return array(
             CourseToolRelCourseSection :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection :: class_name(), 
-                    CourseToolRelCourseSection :: PROPERTY_SECTION_ID), 
+                    CourseToolRelCourseSection :: class_name(),
+                    CourseToolRelCourseSection :: PROPERTY_SECTION_ID),
                 new StaticConditionVariable($id)));
     }
 
@@ -146,10 +145,10 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      * Getters and Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the course_id property of this object
-     * 
+     *
      * @return String
      */
     public function get_course_id()
@@ -159,7 +158,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the course_id property of this object
-     * 
+     *
      * @param $course_id String
      */
     public function set_course_id($course_id)
@@ -169,7 +168,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the name property of this object
-     * 
+     *
      * @return String
      */
     public function get_name()
@@ -179,7 +178,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the name property of this object
-     * 
+     *
      * @param $name String
      */
     public function set_name($name)
@@ -189,7 +188,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the type property of this object
-     * 
+     *
      * @return int
      */
     public function get_type()
@@ -199,7 +198,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the type property of this object
-     * 
+     *
      * @param $type int
      */
     public function set_type($type)
@@ -209,7 +208,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the tool_id property of this object
-     * 
+     *
      * @return boolean
      */
     public function is_visible()
@@ -219,7 +218,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the visible property of this object
-     * 
+     *
      * @param $visible boolean
      */
     public function set_visible($visible)
@@ -229,7 +228,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the display_order property of this object
-     * 
+     *
      * @return int
      */
     public function get_display_order()
@@ -239,7 +238,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the display_order property of this object
-     * 
+     *
      * @param $display_order int
      */
     public function set_display_order($display_order)
@@ -249,7 +248,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -259,7 +258,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()

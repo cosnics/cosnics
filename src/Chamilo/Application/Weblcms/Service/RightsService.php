@@ -5,7 +5,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  *
@@ -58,12 +58,12 @@ class RightsService
             return true;
         }
 
-        $courseUserRelation = CourseDataManager :: retrieve_course_user_relation_by_course_and_user(
+        $courseEntityRelation = CourseDataManager :: retrieve_course_user_relation_by_course_and_user(
             $course->getId(),
             $user->getId());
 
-        if ($courseUserRelation instanceof CourseUserRelation &&
-             $courseUserRelation->get_status() == CourseUserRelation :: STATUS_TEACHER)
+        if ($courseEntityRelation instanceof CourseEntityRelation &&
+             $courseEntityRelation->get_status() == CourseEntityRelation :: STATUS_TEACHER)
         {
             return true;
         }

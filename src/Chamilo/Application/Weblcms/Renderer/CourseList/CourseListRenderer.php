@@ -114,14 +114,21 @@ class CourseListRenderer
         return $this->display_courses();
     }
 
+    private $retrievedCourses;
+
     /**
      * Retrieves the courses for the user
      */
     protected function retrieve_courses()
     {
-        return CourseDataManager :: retrieve_all_courses_from_user(
-            $this->get_user(),
-            $this->get_retrieve_courses_condition());
+        if (! isset($this->retrievedCourses))
+        {
+            $this->retrievedCourses = CourseDataManager :: retrieve_all_courses_from_user(
+                $this->get_user(),
+                $this->get_retrieve_courses_condition());
+        }
+
+        return $this->retrievedCourses;
     }
 
     public function get_courses()
@@ -137,13 +144,26 @@ class CourseListRenderer
         return null;
     }
 
+    protected function loadCourseSettings($courses)
+    {
+        $courseIdentifiers = array();
+
+        foreach ($courses as $course)
+        {
+            $courseIdentifiers[] = $course->getId();
+        }
+
+        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController->loadSettingsForCoursesByIdentifiers($courseIdentifiers);
+    }
+
     /**
      * Displays the courses
      */
     protected function display_courses()
     {
         $html = array();
-        $courses = $this->retrieve_courses();
+        $courses = $this->retrieve_courses()->as_array();
 
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
 
@@ -156,13 +176,15 @@ class CourseListRenderer
             $html[] = $this->get_oversized_warning();
         }
 
-        if ($courses->size() > 0)
+        $this->loadCourseSettings($courses);
+
+        if (count($courses) > 0)
         {
             $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
 
             $course_settings_controller = CourseSettingsController :: get_instance();
 
-            while ($course = $courses->next_result())
+            foreach ($courses as $course)
             {
                 $id = $course->get_id();
 

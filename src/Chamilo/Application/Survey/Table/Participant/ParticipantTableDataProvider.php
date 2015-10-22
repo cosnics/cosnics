@@ -19,7 +19,7 @@ class ParticipantTableDataProvider extends DataClassTableDataProvider
 
     function count_data($condition)
     {
-        return DataManager :: count(Participant :: CLASS_NAME, new DataClassCountParameters($condition));
+        return DataManager :: count(Participant :: class_name(), new DataClassCountParameters($condition));
     }
 }
 ?>

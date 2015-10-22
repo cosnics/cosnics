@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class SynchronizeAnswer extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'synchronize_answer';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SURVEY_PUBLICATION_ID = 'survey_publication_id';
@@ -22,9 +21,9 @@ class SynchronizeAnswer extends DataClass
     static function get_default_property_names()
     {
         return array(
-            self :: PROPERTY_USER_ID, 
-            self :: PROPERTY_SURVEY_PUBLICATION_ID, 
-            self :: PROPERTY_CREATED, 
+            self :: PROPERTY_USER_ID,
+            self :: PROPERTY_SURVEY_PUBLICATION_ID,
+            self :: PROPERTY_CREATED,
             self :: PROPERTY_STATUS);
     }
 
@@ -67,6 +66,5 @@ class SynchronizeAnswer extends DataClass
     {
         $this->set_default_property(self :: PROPERTY_STATUS, $status);
     }
-
 }
 ?>

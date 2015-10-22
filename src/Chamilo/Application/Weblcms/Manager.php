@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
@@ -13,7 +12,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -290,19 +288,6 @@ abstract class Manager extends Application
     public function retrieve_course_user_relation($course_code, $user_id)
     {
         return CourseDataManager :: retrieve_course_user_relation_by_course_and_user($course_code, $user_id);
-    }
-
-    /**
-     * Retrieves a set of course user relations
-     *
-     * @param $user_id int
-     * @param $course_user_category string
-     */
-    public function retrieve_course_user_relations($condition = null, $offset = null, $count = null, $order_property = null)
-    {
-        return CourseDataManager :: retrieves(
-            CourseUserRelation :: class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**

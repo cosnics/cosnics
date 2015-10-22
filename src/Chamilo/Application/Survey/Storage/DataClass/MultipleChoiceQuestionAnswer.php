@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class MultipleChoiceQuestionAnswer extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_SURVEY_PARTICIPANT_ID = 'survey_participant_id';
     const PROPERTY_CONTEXT_ID = 'context_id';
     const PROPERTY_COMPLEX_QUESTION_ID = 'complex_question_id';
@@ -19,13 +18,13 @@ class MultipleChoiceQuestionAnswer extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_SURVEY_PARTICIPANT_ID, 
-                self :: PROPERTY_COMPLEX_QUESTION_ID, 
-                self :: PROPERTY_OPTION_ID, 
-                self :: PROPERTY_CONTEXT_PATH, 
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_CONTEXT_TEMPLATE_ID, 
+                self :: PROPERTY_SURVEY_PARTICIPANT_ID,
+                self :: PROPERTY_COMPLEX_QUESTION_ID,
+                self :: PROPERTY_OPTION_ID,
+                self :: PROPERTY_CONTEXT_PATH,
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_CONTEXT_TEMPLATE_ID,
                 self :: PROPERTY_CONTEXT_ID));
     }
 

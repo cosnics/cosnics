@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class UserMail extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_SEND_DATE = 'send_date';
@@ -22,10 +21,10 @@ class UserMail extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_SEND_DATE, 
-                self :: PROPERTY_STATUS, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_SEND_DATE,
+                self :: PROPERTY_STATUS,
                 self :: PROPERTY_MAIL_ID));
     }
 
@@ -78,6 +77,5 @@ class UserMail extends DataClass
     {
         $this->set_default_property(self :: PROPERTY_STATUS, $status);
     }
-
 }
 ?>

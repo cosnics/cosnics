@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -21,7 +20,11 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Join;
 
 /**
  * Renderer to display events in a week calendar
@@ -139,29 +142,53 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         $targets = array();
 
-        $user_conditions = array();
-        $user_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
+        $userConditions = array();
+        $userConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course));
-        $user_conditions[] = new NotCondition(
+        $userConditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_USER_ID),
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID),
                 new StaticConditionVariable($this->get_user_id())));
-        $user_condition = new AndCondition($user_conditions);
+        $userConditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER)));
+        $userCondition = new AndCondition($userConditions);
 
         $user_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseUserRelation :: class_name(),
+            CourseEntityRelation :: class_name(),
             new DataClassRetrievesParameters($user_condition));
 
-        if ($user_relations->size() > 0)
+        $users = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
+            User :: class_name(),
+            new DataClassRetrievesParameters(
+                $userCondition,
+                null,
+                null,
+                array(),
+                new Joins(
+                    new Join(
+                        CourseEntityRelation :: class_name(),
+                        new EqualityCondition(
+                            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
+                            new PropertyConditionVariable(
+                                CourseEntityRelation :: class_name(),
+                                CourseEntityRelation :: PROPERTY_ENTITY_ID))))));
+
+        if ($users->size() > 0)
         {
             $targets[] = Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context());
             $targets[] = '----------';
 
-            while ($user_relation = $user_relations->next_result())
+            while ($user = $users->next_result())
             {
-                $user = $user_relation->get_user_object();
-
                 $targets['user|' . $user->get_id()] = $user->get_fullname() . ' (' . $user->get_username() . ')';
             }
         }

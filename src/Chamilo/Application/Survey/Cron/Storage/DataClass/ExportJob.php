@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ExportJob extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'export_job';
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_EXPORT_TEMPLATE_ID = 'export_template_id';
@@ -24,11 +23,11 @@ class ExportJob extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_EXPORT_TEMPLATE_ID, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_UUID, 
-                self :: PROPERTY_STATUS, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_EXPORT_TEMPLATE_ID,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_UUID,
+                self :: PROPERTY_STATUS,
                 self :: PROPERTY_EXPORT_TYPE));
     }
 
@@ -39,7 +38,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the publication_id of this ExportJob.
-     * 
+     *
      * @return the publication_id.
      */
     function get_publication_id()
@@ -49,7 +48,7 @@ class ExportJob extends DataClass
 
     /**
      * Sets the publication_id of this ExportJob.
-     * 
+     *
      * @param publication_id
      */
     function set_publication_id($publication_id)
@@ -59,7 +58,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the export_template_id of this ExportJob.
-     * 
+     *
      * @return the export_template_id.
      */
     function get_export_template_id()
@@ -69,7 +68,7 @@ class ExportJob extends DataClass
 
     /**
      * Sets the export_template_id of this ExportJob.
-     * 
+     *
      * @param export_template_id
      */
     function set_export_template_id($export_template_id)
@@ -79,7 +78,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the user_id of this ExportJob.
-     * 
+     *
      * @return the user_id.
      */
     function get_user_id()
@@ -89,7 +88,7 @@ class ExportJob extends DataClass
 
     /**
      * Sets the user_id of this ExportJob.
-     * 
+     *
      * @param user_id
      */
     function set_user_id($user_id)
@@ -99,7 +98,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the UUID of this ExportJob.
-     * 
+     *
      * @return the UUID.
      */
     function get_UUID()
@@ -109,7 +108,7 @@ class ExportJob extends DataClass
 
     /**
      * Sets the UUID of this ExportJob.
-     * 
+     *
      * @param UUID
      */
     function set_UUID($UUID)
@@ -119,7 +118,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the status of this ExportJob.
-     * 
+     *
      * @return the status.
      */
     function get_status()
@@ -129,7 +128,7 @@ class ExportJob extends DataClass
 
     /**
      * Sets the status of this ExportJob.
-     * 
+     *
      * @param status
      */
     function set_status($status)
@@ -139,7 +138,7 @@ class ExportJob extends DataClass
 
     /**
      * Returns the export_type of this ExportJob.
-     * 
+     *
      * @return the export_type.
      */
     function get_export_type()
@@ -149,15 +148,13 @@ class ExportJob extends DataClass
 
     /**
      * Sets the export_type of this ExportJob.
-     * 
+     *
      * @param export_type
      */
     function set_export_type($export_type)
     {
         $this->set_default_property(self :: PROPERTY_EXPORT_TYPE, $export_type);
     }
-
-   
 }
 
 ?>

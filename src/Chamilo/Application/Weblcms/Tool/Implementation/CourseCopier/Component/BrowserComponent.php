@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseUserRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
@@ -77,11 +76,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new \Exception(Translation :: get('NoPublications'));
         }
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_STATUS),
-            new StaticConditionVariable(1));
-        if (\Chamilo\Application\Weblcms\Storage\DataManager :: count(CourseUserRelation :: class_name(), $condition) <=
-             1)
+        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager :: count_courses_from_user_where_user_is_teacher(
+            $this->getUser()) <= 1)
         {
             throw new \Exception(Translation :: get('NoCoursesToCopy'));
         }

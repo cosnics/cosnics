@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseGroupRelation;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -17,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * Feed to return the platform groups of this course
@@ -70,21 +71,23 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         {
             $course_id = Request :: post(self :: PARAM_COURSE_ID);
 
-            $group_condition = new EqualityCondition(
+            $groupConditions = array();
+            $groupConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($course_id));
+            $groupConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
-            $subscribed_groups = $course_group_relations = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-                CourseGroupRelation :: class_name(),
-                new DataClassRetrievesParameters($group_condition));
-
-            $subscribed_group_ids = array();
-            while ($subscribed_group = $subscribed_groups->next_result())
-            {
-                $subscribed_group_ids[] = $subscribed_group->get_group_id();
-            }
+            $subscribed_group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
+                CourseEntityRelation :: class_name(),
+                new DataClassDistinctParameters(
+                    new AndCondition($groupConditions),
+                    CourseEntityRelation :: PROPERTY_ENTITY_ID));
 
             if (count($subscribed_group_ids) == 0)
             {

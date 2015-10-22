@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Request extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Request properties

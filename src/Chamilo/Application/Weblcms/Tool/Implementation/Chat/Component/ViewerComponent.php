@@ -48,7 +48,6 @@ class ViewerComponent extends Manager implements DelegateComponent
         $params["btn_sh_whosonline"] = false;
         $params["btn_sh_smileys"] = false;
         $params["displaytabimage"] = false;
-//         var_dump($params);
 
         $chat = new phpFreeChat($params);
 

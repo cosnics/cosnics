@@ -11,6 +11,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * *************************************************************************** Cell renderer for a platform group rel
@@ -28,9 +30,10 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
         {
             case GroupRelUser :: PROPERTY_USER_ID :
                 $user_id = parent :: render_cell($column, $groupreluser);
-                $user = \Chamilo\Core\User\Manager :: retrieve_user($user_id);
+                $user = DataManager :: retrieve_by_id(User :: class_name(), $user_id);
                 return $user->get_fullname();
         }
+
         return parent :: render_cell($column, $groupreluser);
     }
 

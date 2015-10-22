@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Account extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * CasAccount properties

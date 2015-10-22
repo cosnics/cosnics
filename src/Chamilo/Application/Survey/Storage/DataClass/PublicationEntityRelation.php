@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class PublicationEntityRelation extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
@@ -35,9 +34,9 @@ class PublicationEntityRelation extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_ENTITY_TYPE, 
-                self :: PROPERTY_ENTITY_ID, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_ENTITY_TYPE,
+                self :: PROPERTY_ENTITY_ID,
                 self :: PROPERTY_RIGHTS));
     }
 
@@ -60,7 +59,7 @@ class PublicationEntityRelation extends DataClass
         {
             $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $this->get_publication());
         }
-        
+
         return $this->publication;
     }
 

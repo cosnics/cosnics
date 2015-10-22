@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class Export extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const TABLE_NAME = 'export';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_PUBLICATION_ID = 'publication_id';
@@ -30,14 +29,14 @@ class Export extends DataClass
     static function get_default_property_names()
     {
         return array(
-            self :: PROPERTY_USER_ID, 
-            self :: PROPERTY_PUBLICATION_ID, 
-            self :: PROPERTY_CREATED, 
-            self :: PROPERTY_STATUS, 
-            self :: PROPERTY_FINISHED, 
-            self :: PROPERTY_EXPORT_REGISTRATION_ID, 
-            self :: PROPERTY_TEMPLATE_NAME, 
-            self :: PROPERTY_TEMPLATE_DESCRIPTION, 
+            self :: PROPERTY_USER_ID,
+            self :: PROPERTY_PUBLICATION_ID,
+            self :: PROPERTY_CREATED,
+            self :: PROPERTY_STATUS,
+            self :: PROPERTY_FINISHED,
+            self :: PROPERTY_EXPORT_REGISTRATION_ID,
+            self :: PROPERTY_TEMPLATE_NAME,
+            self :: PROPERTY_TEMPLATE_DESCRIPTION,
             self :: PROPERTY_EXPORT_JOB_ID);
     }
 
@@ -115,8 +114,8 @@ class Export extends DataClass
     function get_status_names()
     {
         return array(
-            self :: STATUS_EXPORT_CREATED => self :: STATUS_EXPORT_CREATED_NAME, 
-            self :: STATUS_EXPORT_IN_QUEUE => self :: STATUS_EXPORT_IN_QUEUE_NAME, 
+            self :: STATUS_EXPORT_CREATED => self :: STATUS_EXPORT_CREATED_NAME,
+            self :: STATUS_EXPORT_IN_QUEUE => self :: STATUS_EXPORT_IN_QUEUE_NAME,
             self :: STATUS_EXPORT_NOT_CREATED => self :: STATUS_EXPORT_NOT_CREATED_NAME);
     }
 
@@ -144,6 +143,5 @@ class Export extends DataClass
     {
         $this->set_default_property(self :: PROPERTY_TEMPLATE_DESCRIPTION, $template_description);
     }
-
 }
 ?>

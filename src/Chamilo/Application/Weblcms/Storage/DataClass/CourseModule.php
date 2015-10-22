@@ -6,19 +6,18 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: course_module.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.course
  */
 
 /**
  * This class describes a CourseModule data object
- * 
+ *
  * @author Hans De Bisschop
  */
 class CourseModule extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
      * CourseModule properties
      */
@@ -30,23 +29,23 @@ class CourseModule extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_COURSE_CODE, 
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_VISIBLE, 
-                self :: PROPERTY_SECTION, 
+                self :: PROPERTY_COURSE_CODE,
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_VISIBLE,
+                self :: PROPERTY_SECTION,
                 self :: PROPERTY_SORT));
     }
 
     /**
      * Returns the course_code of this CourseModule.
-     * 
+     *
      * @return the course_code.
      */
     public function get_course_code()
@@ -56,7 +55,7 @@ class CourseModule extends DataClass
 
     /**
      * Sets the course_code of this CourseModule.
-     * 
+     *
      * @param course_code
      */
     public function set_course_code($course_code)
@@ -66,7 +65,7 @@ class CourseModule extends DataClass
 
     /**
      * Returns the name of this CourseModule.
-     * 
+     *
      * @return the name.
      */
     public function get_name()
@@ -76,7 +75,7 @@ class CourseModule extends DataClass
 
     /**
      * Sets the name of this CourseModule.
-     * 
+     *
      * @param name
      */
     public function set_name($name)
@@ -86,7 +85,7 @@ class CourseModule extends DataClass
 
     /**
      * Returns the visible of this CourseModule.
-     * 
+     *
      * @return the visible.
      */
     public function get_visible()
@@ -96,7 +95,7 @@ class CourseModule extends DataClass
 
     /**
      * Sets the visible of this CourseModule.
-     * 
+     *
      * @param visible
      */
     public function set_visible($visible)
@@ -106,7 +105,7 @@ class CourseModule extends DataClass
 
     /**
      * Returns the section of this CourseModule.
-     * 
+     *
      * @return the section.
      */
     public function get_section()
@@ -116,7 +115,7 @@ class CourseModule extends DataClass
 
     /**
      * Sets the section of this CourseModule.
-     * 
+     *
      * @param section
      */
     public function set_section($section)
@@ -126,7 +125,7 @@ class CourseModule extends DataClass
 
     /**
      * Returns the sort of this CourseModule.
-     * 
+     *
      * @return the sort.
      */
     public function get_sort()
@@ -136,7 +135,7 @@ class CourseModule extends DataClass
 
     /**
      * Sets the sort of this CourseModule.
-     * 
+     *
      * @param sort
      */
     public function set_sort($sort)
@@ -147,7 +146,7 @@ class CourseModule extends DataClass
     public static function convert_tools($tools, $course_code = null, $course_type_tools = false, $form = null)
     {
         $tools_array = array();
-        
+
         foreach ($tools as $index => $tool)
         {
             $tool_visible = 1;
@@ -156,7 +155,7 @@ class CourseModule extends DataClass
                 $tool_visible = $tool->get_visible_default();
                 $tool = $tool->get_name();
             }
-            
+
             $element_default = $tool . "elementdefaulte";
             $course_module = new CourseModule();
             $course_module->set_course_code($course_code);
@@ -177,20 +176,20 @@ class CourseModule extends DataClass
         {
             return false;
         }
-        
+
         return WeblcmsRights :: get_instance()->create_location_in_courses_subtree(
-            WeblcmsRights :: TYPE_COURSE_MODULE, 
-            $this->get_id(), 
-            WeblcmsRights :: get_instance()->get_courses_subtree_root_id($this->get_course_code()), 
-            $this->get_course_code(), 
+            WeblcmsRights :: TYPE_COURSE_MODULE,
+            $this->get_id(),
+            WeblcmsRights :: get_instance()->get_courses_subtree_root_id($this->get_course_code()),
+            $this->get_course_code(),
             $create_in_batch);
     }
 
     public function delete()
     {
         $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights :: TYPE_COURSE_MODULE, 
-            $this->get_id(), 
+            WeblcmsRights :: TYPE_COURSE_MODULE,
+            $this->get_id(),
             $this->get_course_code());
         if ($location)
         {

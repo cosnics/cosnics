@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 class PeerAssessmentGroupForm extends FormValidator
 {
@@ -253,7 +254,8 @@ class PeerAssessmentGroupForm extends FormValidator
                                     }
                                     else
                                     {
-                                        $user = \Chamilo\Core\User\Storage\DataManager :: get_instance()->retrieve_user(
+                                        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
+                                            User :: class_name(),
                                             $user_id);
                                         $already_enrolled[] = $user->get_firstname() . ' ' . $user->get_lastname();
                                         unset($group_users[$user_id]);

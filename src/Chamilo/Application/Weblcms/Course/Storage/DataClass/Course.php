@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class represents a course in the weblcms.
@@ -87,14 +88,14 @@ class Course extends DataClass
     /**
      * Caches the users that are course admins in this course
      *
-     * @var \application\weblcms\course\CourseUserRelation[]
+     * @var \application\weblcms\course\CourseEntityRelation[]
      */
     private $course_admin_users_cache;
 
     /**
      * Caches the groups that are course admins in this course
      *
-     * @var \application\weblcms\course\CourseGroupRelation[]
+     * @var \application\weblcms\course\CourseEntityRelation[]
      */
     private $course_admin_groups_cache;
 
@@ -243,15 +244,10 @@ class Course extends DataClass
                     CourseModuleLastAccess :: class_name(),
                     CourseModuleLastAccess :: PROPERTY_COURSE_CODE),
                 new StaticConditionVariable($id)),
-            CourseGroupRelation :: class_name() => new EqualityCondition(
+            CourseEntityRelation :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupRelation :: class_name(),
-                    CourseGroupRelation :: PROPERTY_COURSE_ID),
-                new StaticConditionVariable($id)),
-            CourseUserRelation :: class_name() => new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseUserRelation :: class_name(),
-                    CourseUserRelation :: PROPERTY_COURSE_ID),
+                    CourseEntityRelation :: class_name(),
+                    CourseEntityRelation :: PROPERTY_COURSE_ID),
                 new StaticConditionVariable($id)),
             CourseRequest :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(CourseRequest :: class_name(), CourseRequest :: PROPERTY_COURSE_ID),
@@ -512,7 +508,8 @@ class Course extends DataClass
     }
 
     /**
-     * Returns whether or not a given course setting is locked for this object. Since courses do not support locking of
+     * Returns whether or not a given course setting is locked for this object.
+     * Since courses do not support locking of
      * course settings the course settings are never locked
      *
      * @param mixed[string] CourseSetting
@@ -781,25 +778,43 @@ class Course extends DataClass
      */
     public function has_subscribed_users()
     {
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
-        return DataManager :: count(CourseUserRelation :: class_name(), $relation_condition) > 0;
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
+
+        return DataManager :: count(CourseEntityRelation :: class_name(), new AndCondition($relationConditions)) > 0;
     }
 
     /**
      * Gets the subscribed users of this course
      *
-     * @return \application\weblcms\course\CourseUserRelation[]
+     * @return \application\weblcms\course\CourseEntityRelation[]
      */
     public function get_subscribed_users()
     {
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseUserRelation :: class_name(), CourseUserRelation :: PROPERTY_COURSE_ID),
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
+
         return DataManager :: retrieves(
-            CourseUserRelation :: class_name(),
-            new DataClassRetrievesParameters($relation_condition))->as_array();
+            CourseEntityRelation :: class_name(),
+            new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
     }
 
     /**
@@ -809,25 +824,43 @@ class Course extends DataClass
      */
     public function has_subscribed_groups()
     {
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
-        return DataManager :: count(CourseGroupRelation :: class_name(), $relation_condition) > 0;
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
+        return DataManager :: count(CourseEntityRelation :: class_name(), new AndCondition($relationConditions)) > 0;
     }
 
     /**
      * Gets the subscribed groups of this course
      *
-     * @return \application\weblcms\course\CourseGroupRelation[]
+     * @return \application\weblcms\course\CourseEntityRelation[]
      */
     public function get_subscribed_groups()
     {
-        $relation_condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroupRelation :: class_name(), CourseGroupRelation :: PROPERTY_COURSE_ID),
+        $relationConditions = array();
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id()));
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseEntityRelation :: class_name(),
+                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+
         return DataManager :: retrieves(
-            CourseGroupRelation :: class_name(),
-            new DataClassRetrievesParameters($relation_condition))->as_array();
+            CourseEntityRelation :: class_name(),
+            new DataClassRetrievesParameters(new AndCondition($relationConditions)))->as_array();
     }
 
     /**
