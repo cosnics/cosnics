@@ -32,6 +32,18 @@ class ApplicationFactory
 
     /**
      *
+     * @var string
+     */
+    private $applicationAction;
+
+    /**
+     *
+     * @var string
+     */
+    private $applicationComponentClassName;
+
+    /**
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $context
      * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
@@ -103,12 +115,8 @@ class ApplicationFactory
      */
     public function getComponent()
     {
-        $actionParameter = $this->getActionParameter();
-        $action = $this->getAction($actionParameter);
-        $component = $this->createComponent($action);
-
+        $component = $this->createComponent();
         $component->get_breadcrumb_generator()->generate_breadcrumbs();
-
         return $component;
     }
 
@@ -144,9 +152,10 @@ class ApplicationFactory
      * @param string $action
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    private function createComponent($action)
+    private function createComponent()
     {
-        $class = $this->getClassName($action);
+        $action = $this->getAction();
+        $class = $this->getClassName();
 
         $component = new $class($this->getApplicationConfiguration());
 
@@ -169,42 +178,47 @@ class ApplicationFactory
 
     /**
      *
-     * @param string $actionParameter
      * @return string
      */
-    private function getAction($actionParameter)
+    private function getAction()
     {
-        $managerClass = $this->getManagerClass();
-        $level = $this->determineLevel();
-        $actions = $this->getRequestedAction($actionParameter);
-
-        if (is_array($actions))
+        if (! isset($this->applicationAction))
         {
-            if (isset($actions[$level]))
+            $actionParameter = $this->getActionParameter();
+            $managerClass = $this->getManagerClass();
+            $level = $this->determineLevel();
+            $actions = $this->getRequestedAction($actionParameter);
+
+            if (is_array($actions))
             {
-                $action = $actions[$level];
+                if (isset($actions[$level]))
+                {
+                    $action = $actions[$level];
+                }
+                else
+                {
+                    // TODO: Catch the fact that there might not be a default action
+                    $action = $managerClass :: DEFAULT_ACTION;
+                }
             }
             else
             {
-                // TODO: Catch the fact that there might not be a default action
-                $action = $managerClass :: DEFAULT_ACTION;
+                $action = $this->getRequestedAction($actionParameter);
             }
+
+            $tableAction = $this->processTableAction($actionParameter);
+
+            if ($tableAction)
+            {
+                $action = $tableAction;
+            }
+
+            $this->getRequest()->query->set($actionParameter, $action);
+
+            $this->applicationAction = $action;
         }
-        else
-        {
-            $action = $this->getRequestedAction($actionParameter);
-        }
 
-        $tableAction = $this->processTableAction($actionParameter);
-
-        if ($tableAction)
-        {
-            $action = $tableAction;
-        }
-
-        $this->getRequest()->query->set($actionParameter, $action);
-
-        return $action;
+        return $this->applicationAction;
     }
 
     /**
@@ -263,26 +277,32 @@ class ApplicationFactory
      * @param string $action
      * @return string
      */
-    private function getClassName($action)
+    public function getClassName()
     {
-        $classname = $this->getContext() . '\Component\\' . $action . 'Component';
-
-        if (! class_exists($classname))
+        if (! isset($this->applicationComponentClassName))
         {
-            // TODO: Temporary fallback for backwards compatibility
-            $classname = $this->getContext() . '\Component\\' .
-                 (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
+            $action = $this->getAction();
+            $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 
             if (! class_exists($classname))
             {
-                $trail = BreadcrumbTrail :: get_instance();
-                $trail->add(new Breadcrumb('#', Translation :: get($classname)));
+                // TODO: Temporary fallback for backwards compatibility
+                $classname = $this->getContext() . '\Component\\' .
+                     (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
 
-                throw new ClassNotExistException($classname);
+                if (! class_exists($classname))
+                {
+                    $trail = BreadcrumbTrail :: get_instance();
+                    $trail->add(new Breadcrumb('#', Translation :: get($classname)));
+
+                    throw new ClassNotExistException($classname);
+                }
             }
+
+            $this->applicationComponentClassName = $classname;
         }
 
-        return $classname;
+        return $this->applicationComponentClassName;
     }
 
     /**
