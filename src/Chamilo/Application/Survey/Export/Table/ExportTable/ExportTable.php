@@ -18,7 +18,7 @@ class ExportTable extends DataClassTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                Manager :: ACTION_DELETE_EXPORT, 
+                $this->get_component()->get_url(array(Manager :: ACTION_DELETE_EXPORT)),
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES)));
         return $actions;
     }

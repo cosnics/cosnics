@@ -25,21 +25,28 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM);
 
         $actions->add_form_action(
-            new TableFormAction($action, Translation :: get('CopySelected', null, Utilities :: COMMON_LIBRARIES)),
+            new TableFormAction(
+                $this->get_component()->get_url($action),
+                Translation :: get('CopySelected', null, Utilities :: COMMON_LIBRARIES)),
             true);
 
         $action = array(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM);
 
         $actions->add_form_action(
-            new TableFormAction($action, Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)),
+            new TableFormAction(
+                $this->get_component()->get_url($action),
+                Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)),
             true);
 
         $action = array(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_CHANGE_PARENT);
 
         $actions->add_form_action(
-            new TableFormAction($action, Translation :: get('MoveSelected', null, Utilities :: COMMON_LIBRARIES), false));
+            new TableFormAction(
+                $this->get_component()->get_url($action),
+                Translation :: get('MoveSelected', null, Utilities :: COMMON_LIBRARIES),
+                false));
 
         return $actions;
     }

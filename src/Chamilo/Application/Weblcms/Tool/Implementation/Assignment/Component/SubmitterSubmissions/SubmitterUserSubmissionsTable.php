@@ -29,12 +29,14 @@ class SubmitterUserSubmissionsTable extends DataClassTable implements TableFormA
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS),
+                    $this->get_component()->get_url(
+                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS)),
                     Translation :: get('DownloadSelected'),
                     false));
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION),
+                    $this->get_component()->get_url(
+                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION)),
                     Translation :: get('DeleteSelected')));
         }
         return $actions;

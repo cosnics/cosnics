@@ -33,7 +33,7 @@ class RelationTable extends DataClassTable implements TableFormActionsSupport
 
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
 
         return $actions;

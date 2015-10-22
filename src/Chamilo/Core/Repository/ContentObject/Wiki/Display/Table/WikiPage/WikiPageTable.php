@@ -24,7 +24,8 @@ class WikiPageTable extends DataClassTable implements TableFormActionsSupport
 
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
         return $actions;
     }

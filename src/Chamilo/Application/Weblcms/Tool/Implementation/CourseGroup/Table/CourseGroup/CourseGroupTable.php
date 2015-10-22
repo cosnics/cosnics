@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: course_group_subscribed_user_browser_table.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTable extends DataClassTable implements TableFormActionsSupport
@@ -25,10 +25,12 @@ class CourseGroupTable extends DataClassTable implements TableFormActionsSupport
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COURSE_GROUP), 
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COURSE_GROUP)),
                     Translation :: get('RemoveSelected')));
         }
-        
+
         return $actions;
     }
 }

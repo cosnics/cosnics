@@ -18,13 +18,15 @@ class RecycleBinTable extends DataClassTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_RESTORE_CONTENT_OBJECTS), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_RESTORE_CONTENT_OBJECTS)),
                 Translation :: get('RestoreSelected', null, Utilities :: COMMON_LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
-                array(
-                    Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONTENT_OBJECTS, 
-                    Manager :: PARAM_DELETE_PERMANENTLY => 1), 
+                $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONTENT_OBJECTS,
+                        Manager :: PARAM_DELETE_PERMANENTLY => 1)),
                 Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES)));
         return $actions;
     }
