@@ -39,7 +39,8 @@ abstract class RecordTableCellRenderer extends TableCellRenderer
     }
 
     /**
-     * Define the unique identifier for the row needed for e.g. checkboxes
+     * Define the unique identifier for the row needed for e.g.
+     * checkboxes
      *
      * @param string[] $row
      *

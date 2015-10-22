@@ -204,12 +204,12 @@ class ApplicationFactory
             $action = $actions;
         }
 
-        $tableAction = $this->processTableAction($actionParameter);
+//         $tableAction = $this->processTableAction($actionParameter);
 
-        if ($tableAction)
-        {
-            $action = $tableAction;
-        }
+//         if ($tableAction)
+//         {
+//             $action = $tableAction;
+//         }
 
         return $action;
     }
@@ -323,18 +323,18 @@ class ApplicationFactory
                 $this->getRequest()->query->set($classname :: TABLE_IDENTIFIER, $ids);
                 Request :: set_get($classname :: TABLE_IDENTIFIER, $ids);
 
-                $tableParameters = unserialize(base64_decode(Request :: post($tableName . '_action_value')));
+//                 $tableParameters = unserialize(base64_decode(Request :: post($tableName . '_action_value')));
 
-                foreach ($tableParameters as $parameter => $value)
-                {
-                    $this->getRequest()->query->set($parameter, $value);
-                    Request :: set_get($parameter, $value);
-                }
+//                 foreach ($tableParameters as $parameter => $value)
+//                 {
+//                     $this->getRequest()->query->set($parameter, $value);
+//                     Request :: set_get($parameter, $value);
+//                 }
 
-                if (array_key_exists($actionParameter, $tableParameters))
-                {
-                    return $tableParameters[$actionParameter];
-                }
+//                 if (array_key_exists($actionParameter, $tableParameters))
+//                 {
+//                     return $tableParameters[$actionParameter];
+//                 }
             }
         }
 
