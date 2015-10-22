@@ -219,7 +219,9 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer imp
             array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
 
         // add action for view as user
-        if ($userViewAllowed && $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // get_parent()->is_teacher())
+        if (($userViewAllowed ||
+             $this->get_component()->get_user()->is_platform_admin()) &&
+             $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // get_parent()->is_teacher())
         {
             if ($user_id != $this->get_component()->get_user()->get_id())
             {

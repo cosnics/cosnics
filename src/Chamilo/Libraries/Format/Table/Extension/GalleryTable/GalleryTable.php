@@ -74,7 +74,7 @@ abstract class GalleryTable extends Table
      *
      * @return string[][]
      */
-    public function get_data($offset, $count, $order_column, $order_direction)
+    public function getData($offset, $count, $order_column, $order_direction)
     {
         $table_data = parent :: get_data($offset, $count, $order_column, $order_direction);
 

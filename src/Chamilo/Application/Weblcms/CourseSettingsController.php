@@ -444,7 +444,7 @@ class CourseSettingsController
         {
             $setting_type_caching_hash = $this->get_setting_type_caching_hash(
                 $setting_type,
-                $course_setting_object[CourseSettingRelation :: PROPERTY_OBJECT_ID]);
+                $course_setting_object[CourseSettingRelation :: ALIAS_OBJECT_ID]);
 
             if (! isset($this->course_settings_values_cache[$setting_type_caching_hash]))
             {

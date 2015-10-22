@@ -113,6 +113,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
+            CourseEntityRelation :: class_name(),
             new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation :: PROPERTY_ENTITY_ID));
     }
 }

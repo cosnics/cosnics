@@ -1424,7 +1424,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_course_settings_with_course_type_values($courseTypeIdentifiers)
     {
-        if(!is_array($courseTypeIdentifiers))
+        if (! is_array($courseTypeIdentifiers))
         {
             $courseTypeIdentifiers = array($courseTypeIdentifiers);
         }
@@ -1452,7 +1452,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_course_settings_with_course_values($courseIdentifiers)
     {
-        if(!is_array($courseIdentifiers))
+        if (! is_array($courseIdentifiers))
         {
             $courseIdentifiers = array($courseIdentifiers);
         }
@@ -1502,7 +1502,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $data_class_properties[] = new FixedPropertyConditionVariable(
             $course_setting_relation_class,
-            $course_setting_relation_class :: PROPERTY_OBJECT_ID, 'object_id');
+            $course_setting_relation_class :: PROPERTY_OBJECT_ID,
+            'object_id');
 
         $data_class_properties[] = new PropertyConditionVariable(
             $course_setting_relation_class,

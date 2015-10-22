@@ -99,6 +99,7 @@ abstract class Table
         }
 
         $interface_class = $this->get_class('Interface');
+
         if (interface_exists($interface_class))
         {
             if (! $component instanceof $interface_class)
@@ -149,8 +150,8 @@ abstract class Table
     {
         $table = new SortableTable(
             $this->get_name(),
-            array($this, 'count_data'),
-            array($this, 'get_data'),
+            array($this, 'countData'),
+            array($this, 'getData'),
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(),
             $this->get_column_model()->get_default_order_direction(),
@@ -205,7 +206,7 @@ abstract class Table
      *
      * @return string[][]
      */
-    public function get_data($offset, $count, $order_column, $order_direction)
+    public function getData($offset, $count, $order_column, $order_direction)
     {
         // Calculates the order column on whether or not the table uses form actions (because sortable
         // table uses data arrays)
@@ -242,7 +243,7 @@ abstract class Table
      *
      * @return int
      */
-    public function count_data()
+    public function countData()
     {
         return $this->get_data_provider()->count_data($this->get_condition());
     }
