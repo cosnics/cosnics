@@ -2367,7 +2367,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
 
             $parameters = new DataClassDistinctParameters($condition, CourseEntityRelation :: PROPERTY_COURSE_ID);
-            $course_ids = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+            $groupCourseIds = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+            $course_ids = array_merge($course_ids, $groupCourseIds);
         }
 
         // Finally, retrieve information about the course, as well as labels the user applied to allow sorting the
