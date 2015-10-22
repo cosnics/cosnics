@@ -47,7 +47,7 @@ class FixedPropertyConditionVariable extends PropertyConditionVariable
 
     public function getHashParts()
     {
-        $hashParts = ConditionVariable :: getHashParts();
+        $hashParts = parent :: getHashParts();
 
         $hashParts[] = $this->get_alias();
 

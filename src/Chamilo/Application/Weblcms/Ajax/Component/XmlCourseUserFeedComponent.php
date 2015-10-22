@@ -16,6 +16,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
@@ -91,7 +92,7 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
             new AndCondition($userConditions),
             CourseEntityRelation :: PROPERTY_ENTITY_ID);
 
-        $user_ids = self :: distinct(
+        $user_ids = DataManager :: distinct(
             \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation :: class_name(),
             $parameters);
 
@@ -128,7 +129,7 @@ class XmlCourseUserFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
             new AndCondition($userConditions),
             CourseEntityRelation :: PROPERTY_ENTITY_ID);
 
-        $groupIdentifiers = self :: distinct(
+        $groupIdentifiers = DataManager :: distinct(
             \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation :: class_name(),
             $parameters);
 

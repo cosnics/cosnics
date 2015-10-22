@@ -66,8 +66,6 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $document->set_description($title);
             $document->create();
 
-            // var_dump($document);
-
             $dimensions = getimagesize($full_path);
 
             $path = Path :: getInstance()->getBasePath(true) .

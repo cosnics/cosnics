@@ -19,8 +19,7 @@ abstract class CourseSettingRelation extends DataClass
      */
     const PROPERTY_COURSE_SETTING_ID = 'course_setting_id';
     const PROPERTY_VALUE = 'value';
-
-    const PROPERTY_OBJECT_ID = 'object_id';
+    const ALIAS_OBJECT_ID = 'object_id';
 
     /**
      * **************************************************************************************************************

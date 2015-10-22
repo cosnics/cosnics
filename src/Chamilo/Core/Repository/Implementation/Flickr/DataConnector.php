@@ -500,14 +500,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function create_external_repository_object($values, $photo_path)
     {
-
         $tags = explode(',', $values[ExternalObject :: PROPERTY_TAGS]);
         $tags = '"' . implode('" "', $tags) . '"';
-var_dump($this->flickr->sync_upload(
-            $photo_path,
-            $values[ExternalObject :: PROPERTY_TITLE],
-            $values[ExternalObject :: PROPERTY_DESCRIPTION],
-            $tags));
+
         return $this->flickr->sync_upload(
             $photo_path,
             $values[ExternalObject :: PROPERTY_TITLE],
