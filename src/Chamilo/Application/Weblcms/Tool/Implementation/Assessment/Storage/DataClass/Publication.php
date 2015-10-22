@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Publication extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Assessment publication properties

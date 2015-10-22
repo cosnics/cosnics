@@ -9,13 +9,12 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentGroupSubscriptionTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_GROUP_ID = 'group_id';
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
@@ -29,10 +28,9 @@ class WeblcmsPeerAssessmentGroupSubscriptionTracker extends SimpleTracker
      */
     static function get_default_property_names()
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_USER_ID, self :: PROPERTY_GROUP_ID));
+        return parent :: get_default_property_names(array(self :: PROPERTY_USER_ID, self :: PROPERTY_GROUP_ID));
     }
-    
+
     /*
      * function get_user_id() { return $this->get_default_property(self :: PROPERTY_USER_ID); } function
      * set_user_id($user_id) { $this->set_default_property(self :: PROPERTY_USER_ID, $user_id); } function
@@ -49,7 +47,7 @@ class WeblcmsPeerAssessmentGroupSubscriptionTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

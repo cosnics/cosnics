@@ -9,7 +9,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_TITLE = 'title';
     const PROPERTY_DESCRIPTION = 'description';
@@ -20,7 +19,7 @@ class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
@@ -41,15 +40,15 @@ class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_START_DATE, 
-                self :: PROPERTY_END_DATE, 
-                self :: PROPERTY_HIDDEN, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_TITLE,
+                self :: PROPERTY_DESCRIPTION,
+                self :: PROPERTY_START_DATE,
+                self :: PROPERTY_END_DATE,
+                self :: PROPERTY_HIDDEN,
                 self :: PROPERTY_WEIGHT));
     }
-    
+
     /*
      * function get_publication_id() { return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID); } function
      * set_publication_id($publication_id) { $this->set_default_property(self :: PROPERTY_PUBLICATION_ID,
@@ -70,7 +69,7 @@ class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

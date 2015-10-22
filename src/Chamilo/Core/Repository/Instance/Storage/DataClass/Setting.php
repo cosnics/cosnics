@@ -15,7 +15,6 @@ use DOMDocument;
  */
 class Setting extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_EXTERNAL_ID = 'external_id';
     const PROPERTY_VARIABLE = 'variable';
     const PROPERTY_VALUE = 'value';
@@ -127,7 +126,7 @@ class Setting extends DataClass
 
     public static function get_class_name()
     {
-        return self :: CLASS_NAME;
+        return self :: class_name();
     }
 
     public static function initialize(Instance $external_instance)

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This class represents an match in a matrix question.
- * 
+ *
  * @package repository.content_object.survey_matrix_question
  * @author Eduard Vossen
  * @author Magali Gillard
@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_VALUE = 'match_value';
     const PROPERTY_QUESTION_ID = 'question_id';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
@@ -30,7 +29,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     static function get_default_property_names()
@@ -46,7 +45,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Gets the value of this match
-     * 
+     *
      * @return string
      */
     function get_value()
@@ -56,7 +55,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Sets the value of this match
-     * 
+     *
      * @return string
      */
     function set_value($value)
@@ -66,7 +65,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Gets the question_id of this match
-     * 
+     *
      * @return int
      */
     function get_question_id()
@@ -76,7 +75,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Sets the question_id of this match
-     * 
+     *
      * @return int
      */
     function set_question_id($question_id)
@@ -96,7 +95,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -106,7 +105,7 @@ class MatrixMatch extends DataClass implements DisplayOrderDataClassListenerSupp
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()

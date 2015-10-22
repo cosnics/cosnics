@@ -18,7 +18,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        return array(Glossary :: CLASS_NAME);
+        return array(Glossary :: class_name());
     }
 
     public function get_available_browser_types()

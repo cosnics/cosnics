@@ -7,14 +7,12 @@ use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 
 /**
  *
- * @package repository.content_object.assignment.php
- *          This class represents an assignment
+ * @package repository.content_object.assignment.php This class represents an assignment
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
 class Assignment extends ContentObject implements AttachmentSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_START_TIME = 'start_time';
     const PROPERTY_END_TIME = 'end_time';
     const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
@@ -30,20 +28,20 @@ class Assignment extends ContentObject implements AttachmentSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_START_TIME, 
-            self :: PROPERTY_END_TIME, 
-            self :: PROPERTY_VISIBILITY_SUBMISSIONS, 
-            self :: PROPERTY_ALLOW_GROUP_SUBMISSIONS, 
-            self :: PROPERTY_ALLOW_LATE_SUBMISSIONS, 
-            self :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT, 
-            self :: PROPERTY_VISIBILTY_FEEDBACK, 
-            self :: PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, 
+            self :: PROPERTY_START_TIME,
+            self :: PROPERTY_END_TIME,
+            self :: PROPERTY_VISIBILITY_SUBMISSIONS,
+            self :: PROPERTY_ALLOW_GROUP_SUBMISSIONS,
+            self :: PROPERTY_ALLOW_LATE_SUBMISSIONS,
+            self :: PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
+            self :: PROPERTY_VISIBILTY_FEEDBACK,
+            self :: PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
             self :: PROPERTY_ALLOWED_TYPES);
     }
 

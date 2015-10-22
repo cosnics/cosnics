@@ -20,7 +20,6 @@ class LinkApplicationItem extends Item
     const TARGET_SELF = 1;
     const TARGET_PARENT = 2;
     const TARGET_TOP = 3;
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -30,7 +29,7 @@ class LinkApplicationItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_section()

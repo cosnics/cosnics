@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: assessment_rating_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.rating_question
  */
 /**
@@ -21,11 +21,10 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
     const PROPERTY_CORRECT = 'correct';
     const PROPERTY_FEEDBACK = 'feedback';
     const PROPERTY_HINT = 'hint';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_correct()
@@ -86,16 +85,16 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_LOW, 
-            self :: PROPERTY_HIGH, 
-            self :: PROPERTY_CORRECT, 
-            self :: PROPERTY_FEEDBACK, 
+            self :: PROPERTY_LOW,
+            self :: PROPERTY_HIGH,
+            self :: PROPERTY_CORRECT,
+            self :: PROPERTY_FEEDBACK,
             self :: PROPERTY_HINT);
     }
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

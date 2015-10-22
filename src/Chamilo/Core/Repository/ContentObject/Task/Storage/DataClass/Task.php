@@ -17,11 +17,10 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class Task extends ContentObject implements Versionable, AttachmentSupport, Includeable
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     /**

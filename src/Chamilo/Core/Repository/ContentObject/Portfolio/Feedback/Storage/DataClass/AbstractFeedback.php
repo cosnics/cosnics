@@ -5,14 +5,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Portfolio feedback object
- * 
+ *
  * @package repository\content_object\portfolio\feedback
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractFeedback extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_COMMENT = 'comment';
@@ -27,16 +26,16 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Get the default properties of all feedback
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_COMMENT, 
-                self :: PROPERTY_CREATION_DATE, 
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_COMMENT,
+                self :: PROPERTY_CREATION_DATE,
                 self :: PROPERTY_MODIFICATION_DATE));
     }
 
@@ -58,16 +57,16 @@ abstract class AbstractFeedback extends DataClass
         if (! isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $this->get_user_id());
         }
-        
+
         return $this->user;
     }
 
     /**
      * Returns the feedback comment
-     * 
+     *
      * @return string
      */
     public function get_comment()
@@ -86,7 +85,7 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Sets the comment
-     * 
+     *
      * @param string $comment
      */
     public function set_comment($comment)
@@ -96,7 +95,7 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Returns creation_date
-     * 
+     *
      * @return integer the creation_date
      */
     public function get_creation_date()
@@ -106,7 +105,7 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Sets the creation_date of this feedback.
-     * 
+     *
      * @param $creation_date integer the creation_date.
      */
     public function set_creation_date($creation_date)
@@ -116,7 +115,7 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Returns modification_date
-     * 
+     *
      * @return integer the modification_date
      */
     public function get_modification_date()
@@ -126,7 +125,7 @@ abstract class AbstractFeedback extends DataClass
 
     /**
      * Sets the modification_date of this feedback.
-     * 
+     *
      * @param $modification_date integer the modification_date.
      */
     public function set_modification_date($modification_date)

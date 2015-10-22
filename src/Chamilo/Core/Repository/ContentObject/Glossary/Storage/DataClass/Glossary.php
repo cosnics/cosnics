@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 
 /**
  * $Id: glossary.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.glossary
  */
 /**
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
  */
 class Glossary extends ContentObject implements ComplexContentObjectSupport
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

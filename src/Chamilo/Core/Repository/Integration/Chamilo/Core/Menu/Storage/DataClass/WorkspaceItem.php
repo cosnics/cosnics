@@ -16,7 +16,6 @@ class WorkspaceItem extends Item
 {
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_NAME = 'name';
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -26,7 +25,7 @@ class WorkspaceItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function getWorkspaceId()

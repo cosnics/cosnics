@@ -290,7 +290,7 @@ class Kernel
         $user_id = Session :: get_user_id();
         if ($user_id)
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: CLASS_NAME, $user_id);
+            $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: class_name(), $user_id);
         }
 
         if (! $this->getUser() instanceof User)

@@ -12,40 +12,35 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Language extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
-     * E.g.
-     * Français
-     * 
+     * E.g. Français
+     *
      * @var string
      */
     const PROPERTY_ORIGINAL_NAME = 'original_name';
-    
+
     /**
-     * E.g.
-     * French
-     * 
+     * E.g. French
+     *
      * @var string
      */
     const PROPERTY_ENGLISH_NAME = 'english_name';
-    
+
     /**
-     * E.g.
-     * romance
-     * 
+     * E.g. romance
+     *
      * @var string
      */
     const PROPERTY_FAMILY = 'family';
-    
+
     /**
-     * E.g.
-     * fr
-     * 
+     * E.g. fr
+     *
      * @var string
      */
     const PROPERTY_ISOCODE = 'isocode';
-    
+
     /**
      *
      * @var int
@@ -54,7 +49,7 @@ class Language extends DataClass
 
     /**
      * Get the default properties of all languages
-     * 
+     *
      * @param multitype:string $extended_property_names
      * @return multitype:string
      */
@@ -62,10 +57,10 @@ class Language extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_ORIGINAL_NAME, 
-                self :: PROPERTY_ENGLISH_NAME, 
-                self :: PROPERTY_FAMILY, 
-                self :: PROPERTY_ISOCODE, 
+                self :: PROPERTY_ORIGINAL_NAME,
+                self :: PROPERTY_ENGLISH_NAME,
+                self :: PROPERTY_FAMILY,
+                self :: PROPERTY_ISOCODE,
                 self :: PROPERTY_AVAILABLE));
     }
 
@@ -80,7 +75,7 @@ class Language extends DataClass
 
     /**
      * Get the native name of the language
-     * 
+     *
      * @return string
      */
     public function get_original_name()
@@ -90,7 +85,7 @@ class Language extends DataClass
 
     /**
      * Get the english name of the language
-     * 
+     *
      * @return string
      */
     public function get_english_name()
@@ -100,7 +95,7 @@ class Language extends DataClass
 
     /**
      * Get the family of the language
-     * 
+     *
      * @return string
      */
     public function get_family()
@@ -110,7 +105,7 @@ class Language extends DataClass
 
     /**
      * Get the ISO 639-1 code of the language
-     * 
+     *
      * @return string
      */
     public function get_isocode()
@@ -120,7 +115,7 @@ class Language extends DataClass
 
     /**
      * Get the availability of the language
-     * 
+     *
      * @return int
      */
     public function get_available()
@@ -130,7 +125,7 @@ class Language extends DataClass
 
     /**
      * Set the native name of the language
-     * 
+     *
      * @param string $original_name
      */
     public function set_original_name($original_name)
@@ -140,7 +135,7 @@ class Language extends DataClass
 
     /**
      * Set the english name of the language
-     * 
+     *
      * @param string $original_name
      */
     public function set_english_name($english_name)
@@ -150,7 +145,7 @@ class Language extends DataClass
 
     /**
      * Set the family of the language
-     * 
+     *
      * @param string $family
      */
     public function set_family($family)
@@ -160,7 +155,7 @@ class Language extends DataClass
 
     /**
      * Set the ISO 639-1 code of the language
-     * 
+     *
      * @param string $isocode
      */
     public function set_isocode($isocode)
@@ -175,7 +170,7 @@ class Language extends DataClass
 
     /**
      * Set the availability of the language
-     * 
+     *
      * @return int
      */
     public function is_available()

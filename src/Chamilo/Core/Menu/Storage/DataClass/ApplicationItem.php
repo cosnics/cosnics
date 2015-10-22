@@ -15,7 +15,6 @@ class ApplicationItem extends Item
 {
     const PROPERTY_USE_TRANSLATION = 'use_translation';
     const PROPERTY_APPLICATION = 'application';
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -25,7 +24,7 @@ class ApplicationItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_use_translation()

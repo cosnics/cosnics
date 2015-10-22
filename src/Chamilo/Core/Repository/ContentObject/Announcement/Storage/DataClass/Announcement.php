@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: announcement.class.php 200 2009-11-13
- * 
+ *
  * @package repository.lib.content_object.announcement
  */
 /**
@@ -16,10 +16,9 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class Announcement extends ContentObject implements Versionable, AttachmentSupport
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 }

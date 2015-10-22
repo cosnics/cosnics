@@ -8,14 +8,14 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: fill_in_blanks_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.question_types.fill_in_blanks_question
  */
 class FillInBlanksQuestion extends ContentObject implements Versionable
 {
 
     private $answers;
-    
+
     // const PROPERTY_ANSWERS = 'answers';
     const PROPERTY_ANSWER_TEXT = 'answer_text';
     const PROPERTY_CASE_SENSITIVE = 'case_sensitive';
@@ -38,18 +38,17 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     const MARK_MAX = 2;
     const HINT_CHARACTER = 1;
     const HINT_ANSWER = 2;
-    
+
     // we need a special css class that sets the inputfield with a monospaced font, needed to make the *magic* of fixed
     // size fields work :-)
     const TEXT_INPUT_FIELD_CSS_CLASS = 'fill_in_the_blanks_input_field';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
         ;
     }
-    
+
     /*
      * public function add_answer($answer) { $answers = $this->get_answers(); $answers[] = $answer; return
      * $this->set_additional_property(self :: PROPERTY_ANSWERS, serialize($answers)); } public function
@@ -58,12 +57,12 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     public function get_answers($index = -1)
     {
         $text = $this->get_answer_text();
-        
+
         if (! $this->answers)
         {
             $this->answers = FillInBlanksQuestionAnswer :: parse($text, $this->get_default_positive_score());
         }
-        
+
         if ($index < 0)
         {
             $result = $this->answers;
@@ -85,7 +84,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     public function count_positive_answers($index)
     {
         $count = 0;
-        
+
         foreach ($this->get_answers($index) as $answer)
         {
             if ($answer->get_weight() > 0)
@@ -93,7 +92,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                 $count ++;
             }
         }
-        
+
         return $count;
     }
 
@@ -105,7 +104,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     public function get_hint_for_question($type, $index)
     {
         $answer = $this->get_best_answer_for_question($index);
-        
+
         switch ($type)
         {
             case self :: HINT_CHARACTER :
@@ -221,20 +220,20 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                 $maximum[$position] = max($maximum[$position], $weight);
             }
         }
-        
+
         $result = 0;
-        
+
         foreach ($maximum as $weight)
         {
             $result += $weight;
         }
-        
+
         return $result;
     }
 
     /**
      * Returns the maximum weight for a specific question.
-     * 
+     *
      * @param int index question's index
      * @return maximum possible weight for the question
      */
@@ -258,7 +257,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     {
         $answers = $this->get_answers();
         $longest = new FillInBlanksQuestionAnswer();
-        
+
         foreach ($answers as $answer)
         {
             if (isset($index))
@@ -270,20 +269,20 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                     continue;
                 }
             }
-            
+
             // process after indexcheck
             if ($answer->get_size() > $longest->get_size())
             {
                 $longest = $answer;
             }
         }
-        
+
         return $longest;
     }
 
     /**
      * Calculates the size of the inputfield based on the internal parameters.
-     * 
+     *
      * @param $index
      * @return int size
      */
@@ -299,19 +298,19 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
             {
                 $option = 0;
             }
-            
+
             // calculate a random increment based on the manipulation value
             $random_increment = mt_rand(0, $option);
-            
+
             // determine size, and add random increment
             $best = $this->get_best_answer_for_question($index);
             $size = $best->get_size();
-            
+
             if (! $size)
             {
                 $size = FillInBlanksQuestionForm :: DEFAULT_FIELD_OPTION_SIZE;
             }
-            
+
             $size += $random_increment;
             return $size;
         }
@@ -331,7 +330,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                     $size = $option;
                     break;
             }
-            
+
             if (! $size)
             {
                 $size = FillInBlanksQuestionForm :: DEFAULT_FIELD_OPTION_SIZE;
@@ -341,13 +340,13 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
         {
             $size = FillInBlanksQuestionForm :: DEFAULT_FIELD_OPTION_SIZE;
         }
-        
+
         return $size;
     }
 
     /**
      * Returns one of the MARK_ constants of this class indicating the correctness of the answer.
-     * 
+     *
      * @param $question_index
      * @param $answer
      * @return constant: If the score is the max, MARK_MAX will be returned; if the score is negative, lower than or
@@ -358,7 +357,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     {
         $weight = $this->get_weight_from_answer($question_index, $answer);
         $max_question_weight = $this->get_question_maximum_weight($question_index);
-        
+
         if ($weight == $max_question_weight)
         {
             $score = self :: MARK_MAX;
@@ -371,13 +370,13 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
         {
             $score = self :: MARK_CORRECT;
         }
-        
+
         return $score;
     }
 
     /**
      * Will evaluate all answers and return the highest possible score.
-     * 
+     *
      * @param int $question_index
      * @param string $answer
      * @return int
@@ -397,12 +396,12 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                 }
             }
         }
-        
+
         if (! empty($scores))
         {
             return max($scores);
         }
-        
+
         return $this->get_default_negative_score();
     }
 
@@ -423,12 +422,12 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_ANSWER_TEXT, 
-            self :: PROPERTY_CASE_SENSITIVE, 
-            self :: PROPERTY_QUESTION_TYPE, 
-            self :: PROPERTY_FIELD_OPTION, 
-            self :: PROPERTY_DEFAULT_POSITIVE_SCORE, 
-            self :: PROPERTY_DEFAULT_NEGATIVE_SCORE, 
+            self :: PROPERTY_ANSWER_TEXT,
+            self :: PROPERTY_CASE_SENSITIVE,
+            self :: PROPERTY_QUESTION_TYPE,
+            self :: PROPERTY_FIELD_OPTION,
+            self :: PROPERTY_DEFAULT_POSITIVE_SCORE,
+            self :: PROPERTY_DEFAULT_NEGATIVE_SCORE,
             self :: PROPERTY_SHOW_INLINE);
     }
 
@@ -441,10 +440,10 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {

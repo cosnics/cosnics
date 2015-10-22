@@ -5,22 +5,22 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * keeps track of browser session of last login.
- * used to compare stored browser session with actual browser session this
+ * keeps track of browser session of last login. used to compare stored browser session with actual browser session this
  * way the user can be prevented from logging in twice or more
  */
 class UserLoginSession extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SESSION_ID = 'session_id';
 
-    public static $checked = false; // has the browser session been checked already?
-    public static $single_login = null; // are there more than one active sessions for a certain user
-    
+    public static $checked = false;
+ // has the browser session been checked already?
+    public static $single_login = null;
+ // are there more than one active sessions for a certain user
+
     /**
      * Get the default properties of all users.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -38,7 +38,7 @@ class UserLoginSession extends DataClass
 
     /**
      * Returns the
-     * 
+     *
      * @return String The lastname
      */
     public function get_user_id()
@@ -48,7 +48,7 @@ class UserLoginSession extends DataClass
 
     /**
      * Sets the
-     * 
+     *
      * @param String $firstname the firstname.
      */
     public function set_user_id($user_id)
@@ -58,7 +58,7 @@ class UserLoginSession extends DataClass
 
     /**
      * Returns the
-     * 
+     *
      * @return String The lastname
      */
     public function get_session_id()
@@ -68,7 +68,7 @@ class UserLoginSession extends DataClass
 
     /**
      * Sets the
-     * 
+     *
      * @param String $firstname the firstname.
      */
     public function set_session_id($session_id)
@@ -79,7 +79,7 @@ class UserLoginSession extends DataClass
     /**
      * checks if user is logged in more than once by checking if the active session is the same as the one store in
      * userloginsession
-     * 
+     *
      * @param type $update ?update the session table when session_id is different?
      */
     public static function check_single_login($update = true)
@@ -87,9 +87,9 @@ class UserLoginSession extends DataClass
         if (self :: $checked == false)
         {
             $current_user_id = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
-            
+
             $user_login = DataManager :: retrieve_user_login_session_by_user_id($current_user_id);
-            
+
             $current_session_id = session_id();
             if ($user_login)
             {

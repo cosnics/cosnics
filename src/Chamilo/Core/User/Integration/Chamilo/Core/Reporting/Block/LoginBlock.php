@@ -33,7 +33,7 @@ class LoginBlock extends Block
         $condition = new AndCondition($conditions);
 
         $count = Tracker :: count_data(
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: CLASS_NAME,
+            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
             \Chamilo\Core\User\Manager :: context(),
             $condition);
 

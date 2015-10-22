@@ -11,18 +11,14 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  * @author Eduard Vossen
  * @author Magali Gillard
  */
-/**
- * A Open
- */
 class Open extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_INSTRUCTION = 'instruction';
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_question()

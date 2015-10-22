@@ -13,7 +13,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class PeerAssessment extends ContentObject implements ComplexContentObjectSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ASSESSMENT_TYPE = 'assessment_type';
     const PROPERTY_SCALE = 'scale';
     const TYPE_SCORES = 1;
@@ -22,7 +21,7 @@ class PeerAssessment extends ContentObject implements ComplexContentObjectSuppor
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public static function get_additional_property_names()

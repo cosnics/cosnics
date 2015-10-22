@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 class WorkspaceEntityRelation extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
@@ -35,9 +34,9 @@ class WorkspaceEntityRelation extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_WORKSPACE_ID, 
-                self :: PROPERTY_ENTITY_TYPE, 
-                self :: PROPERTY_ENTITY_ID, 
+                self :: PROPERTY_WORKSPACE_ID,
+                self :: PROPERTY_ENTITY_TYPE,
+                self :: PROPERTY_ENTITY_ID,
                 self :: PROPERTY_RIGHTS));
     }
 
@@ -60,7 +59,7 @@ class WorkspaceEntityRelation extends DataClass
         {
             $this->workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $this->get_workspace_id());
         }
-        
+
         return $this->workspace;
     }
 

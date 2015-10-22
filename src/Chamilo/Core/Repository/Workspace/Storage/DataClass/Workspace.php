@@ -19,7 +19,6 @@ use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserF
  */
 class Workspace extends DataClass implements WorkspaceInterface
 {
-    const CLASS_NAME = __CLASS__;
     const WORKSPACE_TYPE = 2;
 
     // Properties
@@ -164,8 +163,7 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /*
-     * (non-PHPdoc)
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
+     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
      */
     public function getWorkspaceType()
     {
@@ -173,8 +171,7 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /*
-     * (non-PHPdoc)
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
+     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
      */
     public function getTitle()
     {

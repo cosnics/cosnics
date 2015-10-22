@@ -14,7 +14,6 @@ use DOMXPath;
  */
 class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_SOURCE_ID = 'source_id';
 
     /**
@@ -35,7 +34,7 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
 
     /**
      * Returns the source_id of this Package.
-     * 
+     *
      * @return the source_id.
      */
     public function get_source_id()
@@ -45,7 +44,7 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
 
     /**
      * Sets the source_id of this Package.
-     * 
+     *
      * @param source_id
      */
     public function set_source_id($source_id)
@@ -62,7 +61,7 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
         if (! isset($this->source))
         {
             $this->source = \Chamilo\Core\Lynx\Source\DataManager :: retrieve_by_id(
-                Source :: class_name(), 
+                Source :: class_name(),
                 (int) $this->get_source_id());
         }
         return $this->source;
@@ -78,18 +77,18 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
         $dom_document = new DOMDocument('1.0', 'UTF-8');
         $dom_document->load($source->get_uri() . '/packages.xml');
         $dom_xpath = new DOMXPath($dom_document);
-        
+
         $package_list = $dom_xpath->query('/packages/package');
-        
+
         $packages = array();
         foreach ($package_list as $package_node)
         {
             $package = static :: parse_package($dom_xpath, $package_node);
             $package->set_source_id($source->get_id());
-            
+
             $packages[] = $package;
         }
-        
+
         return $packages;
     }
 
@@ -100,15 +99,15 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
         {
             return false;
         }
-        
+
         // Check whether the location already exists
         $path = Path :: getInstance()->namespaceToFullPath($this->get_context());
-        
+
         if (is_dir($path))
         {
             return false;
         }
-        
+
         return true;
     }
 

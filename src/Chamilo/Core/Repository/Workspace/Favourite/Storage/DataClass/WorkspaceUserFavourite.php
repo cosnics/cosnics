@@ -14,7 +14,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
  */
 class WorkspaceUserFavourite extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';

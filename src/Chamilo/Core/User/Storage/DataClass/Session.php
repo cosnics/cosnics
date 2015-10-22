@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Session extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Session properties

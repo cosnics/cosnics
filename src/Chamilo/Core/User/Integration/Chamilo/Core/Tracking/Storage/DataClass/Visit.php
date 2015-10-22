@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 class Visit extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_ENTER_DATE = 'enter_date';
     const PROPERTY_LEAVE_DATE = 'leave_date';

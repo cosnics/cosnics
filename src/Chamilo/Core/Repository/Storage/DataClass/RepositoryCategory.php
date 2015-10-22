@@ -21,7 +21,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
  */
 class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * **************************************************************************************************************

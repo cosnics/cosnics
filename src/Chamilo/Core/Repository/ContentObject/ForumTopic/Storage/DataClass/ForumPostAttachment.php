@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class ForumPostAttachment extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /*
      * The id of the forum post.

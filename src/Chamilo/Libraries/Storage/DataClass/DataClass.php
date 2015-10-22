@@ -18,7 +18,6 @@ abstract class DataClass
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Constants
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ID = 'id';
     const NO_UID = - 1;
 
@@ -31,8 +30,7 @@ abstract class DataClass
      */
 
     /**
-     * Properties of the data class object, stored in an associative array.
-     * Combination of different types of
+     * Properties of the data class object, stored in an associative array. Combination of different types of
      * properties. Default properties => properties that are a mapping of dataclass and data table Optional properties
      * => other properties that were added in join queries Foreign properties => objects of other dataclasses
      */

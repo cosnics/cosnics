@@ -10,8 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Source extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     /**
      * Source properties
      */
@@ -24,7 +23,7 @@ class Source extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
@@ -35,7 +34,7 @@ class Source extends DataClass
 
     /**
      * Returns the name of this Source.
-     * 
+     *
      * @return string
      */
     public function get_name()
@@ -45,7 +44,7 @@ class Source extends DataClass
 
     /**
      * Sets the name of this Source.
-     * 
+     *
      * @param string
      */
     public function set_name($name)
@@ -55,7 +54,7 @@ class Source extends DataClass
 
     /**
      * Returns the description of this Source.
-     * 
+     *
      * @return string
      */
     public function get_description()
@@ -65,7 +64,7 @@ class Source extends DataClass
 
     /**
      * Sets the description of this Source.
-     * 
+     *
      * @param string
      */
     public function set_description($description)
@@ -75,7 +74,7 @@ class Source extends DataClass
 
     /**
      * Returns the uri of this Source.
-     * 
+     *
      * @return string
      */
     public function get_uri()
@@ -85,7 +84,7 @@ class Source extends DataClass
 
     /**
      * Sets the uri of this Source.
-     * 
+     *
      * @param string uri
      */
     public function set_uri($uri)
@@ -95,7 +94,7 @@ class Source extends DataClass
 
     /**
      * Returns the status of this Source.
-     * 
+     *
      * @return int
      */
     public function get_status()
@@ -105,7 +104,7 @@ class Source extends DataClass
 
     /**
      * Sets the status of this Source.
-     * 
+     *
      * @param int status
      */
     public function set_status($status)

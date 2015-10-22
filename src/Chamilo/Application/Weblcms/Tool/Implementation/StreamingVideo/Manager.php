@@ -21,7 +21,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Youtube :: CLASS_NAME, Vimeo :: CLASS_NAME, Matterhorn :: class_name());
+        return array(Youtube :: class_name(), Vimeo :: class_name(), Matterhorn :: class_name());
     }
 
     public function get_available_browser_types()

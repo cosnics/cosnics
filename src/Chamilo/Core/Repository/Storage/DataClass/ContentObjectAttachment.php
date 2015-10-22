@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ContentObjectAttachment extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_ATTACHMENT_ID = 'attachment_id';
     const PROPERTY_TYPE = 'type';

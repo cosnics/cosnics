@@ -35,7 +35,7 @@ class LoginMonthBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = Tracker :: get_data(
-            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: CLASS_NAME,
+            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout :: class_name(),
             \Chamilo\Core\User\Manager :: context(),
             $condition);
 
@@ -74,11 +74,6 @@ class LoginMonthBlock extends Block
 
     public function get_views()
     {
-        return array(
-            Html :: VIEW_TABLE,
-            Html :: VIEW_PIE,
-            Html :: VIEW_CSV,
-            Html :: VIEW_XLSX,
-            Html :: VIEW_XML);
+        return array(Html :: VIEW_TABLE, Html :: VIEW_PIE, Html :: VIEW_CSV, Html :: VIEW_XLSX, Html :: VIEW_XML);
     }
 }

@@ -90,7 +90,7 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
                     new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                     $user_ids);
                 $users = DataManager :: retrieves(
-                    User :: CLASS_NAME,
+                    User :: class_name(),
                     new DataClassRetrievesParameters($condition, $retrieve_limit, null, $order_properties))->as_array();
                 break;
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :

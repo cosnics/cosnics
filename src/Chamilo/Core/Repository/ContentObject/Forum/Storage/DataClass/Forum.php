@@ -32,7 +32,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
     const PROPERTY_TOTAL_POSTS = 'total_posts';
     const PROPERTY_LAST_POST = 'last_post_id';
     const PROPERTY_LAST_TOPIC_CHANGED_CLOI = 'last_topic_changed_cloi';
-    const CLASS_NAME = __CLASS__;
     const NAME_SPACE = __NAMESPACE__;
 
     /**
@@ -321,8 +320,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     /**
      * This function sets the total posts of a forum, the last topic which is change, the last post and sets his
-     * subscribers on the emailnotification.
-     * Then checks wether the forum has parents(here if the forum is a subforum)
+     * subscribers on the emailnotification. Then checks wether the forum has parents(here if the forum is a subforum)
      * and calls in a recursien function the add_post
      *
      * @param type $posts

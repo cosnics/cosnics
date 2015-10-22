@@ -24,7 +24,6 @@ class SystemAnnouncement extends ContentObject implements Versionable
     const ICON_STOP = 4;
     const ICON_QUESTION = 5;
     const ICON_CONFIG = 6;
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

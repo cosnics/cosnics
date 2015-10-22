@@ -26,7 +26,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_PARENT = 'parent';

@@ -19,7 +19,6 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
  */
 class RepositoryImplementationCategoryItem extends Item
 {
-    const CLASS_NAME = __CLASS__;
 
     private $children;
 
@@ -31,7 +30,7 @@ class RepositoryImplementationCategoryItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_children()

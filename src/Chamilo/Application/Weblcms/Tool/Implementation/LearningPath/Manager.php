@@ -46,7 +46,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(LearningPath :: CLASS_NAME);
+        return array(LearningPath :: class_name());
     }
 
     public function add_content_object_publication_actions($toolbar, $publication)

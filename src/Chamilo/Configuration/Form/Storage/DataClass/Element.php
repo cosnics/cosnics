@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Element extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_DYNAMIC_FORM_ID = 'dynamic_form_id';
     const PROPERTY_NAME = 'name';
     const PROPERTY_TYPE = 'type';
@@ -118,7 +117,7 @@ class Element extends DataClass
     public function load_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Option :: class_name(), Option :: PROPERTY_DYNAMIC_FORM_ELEMENT_ID), 
+            new PropertyConditionVariable(Option :: class_name(), Option :: PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new StaticConditionVariable($this->get_id()));
         $options = DataManager :: retrieve_dynamic_form_element_options($condition);
         $this->set_options($options->as_array());
@@ -127,17 +126,17 @@ class Element extends DataClass
 
     /**
      * Get the default properties of all user course categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_DYNAMIC_FORM_ID, 
-                self :: PROPERTY_NAME, 
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_REQUIRED, 
+                self :: PROPERTY_DYNAMIC_FORM_ID,
+                self :: PROPERTY_NAME,
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_REQUIRED,
                 self :: PROPERTY_DISPLAY_ORDER));
     }
 
@@ -152,10 +151,10 @@ class Element extends DataClass
     public static function get_types()
     {
         return array(
-            Translation :: get('Textbox') => self :: TYPE_TEXTBOX, 
-            Translation :: get('HtmlEditor') => self :: TYPE_HTMLEDITOR, 
-            Translation :: get('Checkbox') => self :: TYPE_CHECKBOX, 
-            Translation :: get('RadioButtons') => self :: TYPE_RADIO_BUTTONS, 
+            Translation :: get('Textbox') => self :: TYPE_TEXTBOX,
+            Translation :: get('HtmlEditor') => self :: TYPE_HTMLEDITOR,
+            Translation :: get('Checkbox') => self :: TYPE_CHECKBOX,
+            Translation :: get('RadioButtons') => self :: TYPE_RADIO_BUTTONS,
             Translation :: get('SelectBox') => self :: TYPE_SELECT_BOX);
     }
 

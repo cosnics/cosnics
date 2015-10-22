@@ -18,7 +18,6 @@ class LinkItem extends Item
     const TARGET_SELF = 1;
     const TARGET_PARENT = 2;
     const TARGET_TOP = 3;
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -28,7 +27,7 @@ class LinkItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_url()
@@ -91,12 +90,12 @@ class LinkItem extends Item
     public function get_target_types($types_only = false)
     {
         $types = array();
-        
+
         $types[self :: TARGET_BLANK] = self :: target_string(self :: TARGET_BLANK);
         $types[self :: TARGET_SELF] = self :: target_string(self :: TARGET_SELF);
         $types[self :: TARGET_PARENT] = self :: target_string(self :: TARGET_PARENT);
         $types[self :: TARGET_TOP] = self :: target_string(self :: TARGET_TOP);
-        
+
         return ($types_only ? array_keys($types) : $types);
     }
 }

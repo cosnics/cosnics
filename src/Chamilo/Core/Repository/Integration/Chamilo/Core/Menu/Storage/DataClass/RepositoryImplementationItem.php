@@ -17,7 +17,6 @@ class RepositoryImplementationItem extends Item
     const PROPERTY_IMPLEMENTATION = 'implementation';
     const PROPERTY_INSTANCE_ID = 'instance_id';
     const PROPERTY_NAME = 'name';
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -27,7 +26,7 @@ class RepositoryImplementationItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_implementation()

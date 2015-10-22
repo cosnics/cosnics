@@ -14,7 +14,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class RssFeed extends ContentObject implements Versionable, Includeable
 {
     const PROPERTY_URL = 'url';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

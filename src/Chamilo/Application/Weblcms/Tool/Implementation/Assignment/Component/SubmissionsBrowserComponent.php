@@ -545,7 +545,7 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
     private function has_submissions()
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: count_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $this->get_table_conditions()) > 0;
     }

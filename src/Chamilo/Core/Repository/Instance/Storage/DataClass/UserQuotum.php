@@ -5,19 +5,18 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Description of external_repository_user_quotumclass
- * 
+ *
  * @author jevdheyd
  */
 class UserQuotum extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_EXTERNAL_REPOSITORY_ID = 'external_repository_id';
     const PROPERTY_QUOTUM = 'quotum';
 
     /**
      * Get the default properties of all server_objects.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())

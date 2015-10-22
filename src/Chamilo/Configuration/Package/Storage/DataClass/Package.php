@@ -12,11 +12,11 @@ use DOMXPath;
 use Exception;
 
 /**
+ *
  * @author Hans De Bisschop
  */
 class Package extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Package properties

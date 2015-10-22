@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: assessment_open_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.assessment_open_question
  */
 
@@ -24,11 +24,10 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
     const TYPE_OPEN = 1;
     const TYPE_OPEN_WITH_DOCUMENT = 2;
     const TYPE_DOCUMENT = 3;
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public static function get_additional_property_names()
@@ -79,7 +78,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
         $types[self :: TYPE_DOCUMENT] = Translation :: get('DocumentQuestion');
         return $types;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -88,7 +87,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

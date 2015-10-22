@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: glossary_item.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.glossary_item
  */
 /**
@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class GlossaryItem extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

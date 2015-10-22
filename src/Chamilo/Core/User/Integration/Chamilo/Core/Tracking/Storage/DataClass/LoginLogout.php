@@ -7,7 +7,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class LoginLogout extends \Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_DATE = 'date';
     const PROPERTY_IP = 'ip';

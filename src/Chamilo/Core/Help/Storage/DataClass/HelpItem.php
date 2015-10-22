@@ -6,12 +6,11 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: help_item.class.php 226 2009-11-13 14:44:03Z chellee $
- * 
+ *
  * @package help.lib
  */
 class HelpItem extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_CONTEXT = 'context';
     const PROPERTY_IDENTIFIER = 'identifier';
     const PROPERTY_LANGUAGE = 'language';
@@ -19,16 +18,16 @@ class HelpItem extends DataClass
 
     /**
      * Get the default properties of all groups.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_CONTEXT, 
-                self :: PROPERTY_IDENTIFIER, 
-                self :: PROPERTY_URL, 
+                self :: PROPERTY_CONTEXT,
+                self :: PROPERTY_IDENTIFIER,
+                self :: PROPERTY_URL,
                 self :: PROPERTY_LANGUAGE));
     }
 
@@ -42,7 +41,7 @@ class HelpItem extends DataClass
 
     /**
      * Returns the name of this group.
-     * 
+     *
      * @return String The name
      */
     public function get_context()
@@ -57,7 +56,7 @@ class HelpItem extends DataClass
 
     /**
      * Returns the url of this group.
-     * 
+     *
      * @return String The url
      */
     public function get_url()
@@ -72,7 +71,7 @@ class HelpItem extends DataClass
 
     /**
      * Sets the name of this group.
-     * 
+     *
      * @param String $name the name.
      */
     public function set_context($context)
@@ -87,7 +86,7 @@ class HelpItem extends DataClass
 
     /**
      * Sets the url of this group.
-     * 
+     *
      * @param String $url the url.
      */
     public function set_url($url)

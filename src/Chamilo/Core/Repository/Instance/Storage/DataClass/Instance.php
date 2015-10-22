@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class Instance extends CompositeDataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_TITLE = 'title';
     const PROPERTY_IMPLEMENTATION = 'implementation';
     const PROPERTY_ENABLED = 'enabled';

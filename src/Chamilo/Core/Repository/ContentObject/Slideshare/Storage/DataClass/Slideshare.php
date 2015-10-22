@@ -12,17 +12,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: slideshare.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.slideshare
  */
 class Slideshare extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_EMBED = 'embed';
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_embed()
@@ -35,15 +34,15 @@ class Slideshare extends ContentObject implements Versionable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
             new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('slideshare')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $condition);
         return $external_repositories->size() == 1;
     }

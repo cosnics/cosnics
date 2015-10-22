@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class ContentObjectInclude extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_INCLUDE_ID = 'include_id';
 

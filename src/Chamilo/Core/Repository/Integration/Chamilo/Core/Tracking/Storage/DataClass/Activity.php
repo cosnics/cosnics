@@ -8,15 +8,14 @@ use Chamilo\Libraries\Platform\Translation;
 
 class Activity extends Tracker
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Default properties
     const PROPERTY_TYPE = 'type';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_DATE = 'date';
     const PROPERTY_CONTENT = 'content';
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-    
+
     // Activity types
     const ACTIVITY_CREATED = 1;
     const ACTIVITY_DELETED = 2;
@@ -36,17 +35,17 @@ class Activity extends Tracker
 
     /**
      * Get the default properties of all activity
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_TYPE, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_DATE, 
-                self :: PROPERTY_CONTENT, 
+                self :: PROPERTY_TYPE,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_DATE,
+                self :: PROPERTY_CONTENT,
                 self :: PROPERTY_CONTENT_OBJECT_ID));
     }
 
@@ -80,10 +79,10 @@ class Activity extends Tracker
         if (! isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $this->get_user_id());
         }
-        
+
         return $this->user;
     }
 
@@ -114,7 +113,7 @@ class Activity extends Tracker
 
     /**
      * Runs this tracker
-     * 
+     *
      * @param array $parameters
      *
      * @return bool
@@ -124,7 +123,7 @@ class Activity extends Tracker
         $this->validate_parameters($parameters);
         return $this->save();
     }
-    
+
     /*
      * (non-PHPdoc) @see \tracking\Tracker::validate_parameters()
      */
@@ -176,7 +175,7 @@ class Activity extends Tracker
             default :
                 break;
         }
-        
+
         return Translation :: get($activity);
     }
 
@@ -197,10 +196,10 @@ class Activity extends Tracker
     public static function type_image($type_id)
     {
         return Theme :: getInstance()->getImage(
-            'type/' . $type_id, 
-            'png', 
-            Translation :: get(self :: type_string($type_id)), 
-            null, 
+            'type/' . $type_id,
+            'png',
+            Translation :: get(self :: type_string($type_id)),
+            null,
             ToolbarItem :: DISPLAY_ICON);
     }
 

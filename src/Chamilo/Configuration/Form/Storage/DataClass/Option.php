@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Option extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
     const PROPERTY_NAME = 'name';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
@@ -49,7 +48,7 @@ class Option extends DataClass
 
     /**
      * Get the default properties of all user course categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())

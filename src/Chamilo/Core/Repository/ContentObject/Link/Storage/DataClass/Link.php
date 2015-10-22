@@ -8,19 +8,17 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: link.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.link
  */
 class Link extends ContentObject implements Versionable, Includeable
 {
     const PROPERTY_URL = 'url';
     const PROPERTY_SHOW_IN_IFRAME = 'show_in_iframe';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
-        ;
     }
 
     public function get_url()
@@ -51,9 +49,8 @@ class Link extends ContentObject implements Versionable, Includeable
 
     /**
      * Validates the url, URL beginning with / are internal URL's and considered complete, URLS that contain :// are
-     * considered complete as well.
-     * In any other case the URL is appended with 'http://' at the beginning.
-     * 
+     * considered complete as well. In any other case the URL is appended with 'http://' at the beginning.
+     *
      * @param String $url
      * @return String completed url
      */

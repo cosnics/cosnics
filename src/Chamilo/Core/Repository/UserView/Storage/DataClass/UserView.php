@@ -16,8 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class UserView extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_NAME = 'name';
@@ -96,8 +95,8 @@ class UserView extends DataClass
         return array(
             UserViewRelContentObject :: class_name() => new EqualityCondition(
                 new PropertyConditionVariable(
-                    UserViewRelContentObject :: class_name(), 
-                    UserViewRelContentObject :: PROPERTY_USER_VIEW_ID), 
+                    UserViewRelContentObject :: class_name(),
+                    UserViewRelContentObject :: PROPERTY_USER_VIEW_ID),
                 new StaticConditionVariable($this->get_id())));
     }
 }

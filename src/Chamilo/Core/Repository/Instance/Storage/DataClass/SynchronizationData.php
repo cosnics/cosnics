@@ -18,7 +18,6 @@ use Exception;
  */
 class SynchronizationData extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_CREATED = 'created';

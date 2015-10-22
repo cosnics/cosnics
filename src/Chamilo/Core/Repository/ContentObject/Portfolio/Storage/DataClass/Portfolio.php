@@ -8,13 +8,12 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 
 /**
  * Portfolio constent object
- * 
+ *
  * @package repository\content_object\portfolio$Portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Portfolio extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *
@@ -33,17 +32,17 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
     public function get_allowed_types()
     {
         $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            'Chamilo\Core\Repository\ContentObject\Portfolio' , 
+            'Chamilo\Core\Repository\ContentObject\Portfolio',
             \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
             $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
-            $types[] = $namespace.'\Storage\DataClass\\'.$classname;
+            $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
-        
+
         return $types;
     }
 }

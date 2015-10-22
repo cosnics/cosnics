@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This class represents an option in a Matching question.
- * 
+ *
  * @package repository.content_object.survey_matching_question
  * @author Eduard Vossen
  * @author Magali Gillard
@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class MatchingOption extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_VALUE = 'option_value';
     const PROPERTY_QUESTION_ID = 'question_id';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
@@ -30,7 +29,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     static function get_default_property_names()
@@ -46,7 +45,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Gets the value of this option
-     * 
+     *
      * @return string
      */
     function get_value()
@@ -56,7 +55,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Sets the value of this option
-     * 
+     *
      * @return string
      */
     function set_value($value)
@@ -66,7 +65,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Gets the question_id of this option
-     * 
+     *
      * @return int
      */
     function get_question_id()
@@ -76,7 +75,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Sets the question_id of this option
-     * 
+     *
      * @return int
      */
     function set_question_id($question_id)
@@ -96,7 +95,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Returns the property for the display order
-     * 
+     *
      * @return string
      */
     public function get_display_order_property()
@@ -106,7 +105,7 @@ class MatchingOption extends DataClass implements DisplayOrderDataClassListenerS
 
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     * 
+     *
      * @return Condition
      */
     public function get_display_order_context_properties()

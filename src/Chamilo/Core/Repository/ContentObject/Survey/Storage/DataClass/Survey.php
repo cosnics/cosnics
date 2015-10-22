@@ -21,13 +21,12 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
     const PROPERTY_FINISH_TEXT = 'finish_text';
     const PROPERTY_MENU = 'menu';
     const PROPERTY_PROGRESS_BAR = 'progress_bar';
-    const CLASS_NAME = __CLASS__;
 
     private $survey_pages;
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     static function get_additional_property_names()

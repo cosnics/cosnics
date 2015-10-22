@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Select extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ANSWER_TYPE = 'answer_type';
     const ANSWER_TYPE_RADIO = 1;
     const ANSWER_TYPE_CHECKBOX = 2;
@@ -29,13 +28,13 @@ class Select extends ContentObject implements Versionable
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function create()
     {
         $success = parent :: create();
-        
+
         if ($success)
         {
             foreach ($this->options as $option)
@@ -50,32 +49,24 @@ class Select extends ContentObject implements Versionable
     public function get_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                SelectOption :: class_name(), 
-                SelectOption :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
+
         $order = new OrderBy(
-            new PropertyConditionVariable(
-                SelectOption :: class_name(), 
-                SelectOption :: PROPERTY_DISPLAY_ORDER));
-        
+            new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_DISPLAY_ORDER));
+
         return DataManager :: retrieves(
-            SelectOption :: class_name(), 
+            SelectOption :: class_name(),
             new DataClassRetrievesParameters($condition, null, null, array($order)));
     }
 
     public function get_number_of_options()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                SelectOption :: class_name(), 
-                SelectOption :: PROPERTY_QUESTION_ID), 
+            new PropertyConditionVariable(SelectOption :: class_name(), SelectOption :: PROPERTY_QUESTION_ID),
             new StaticConditionVariable($this->get_id()));
-        
-        return DataManager :: count(
-            SelectOption :: class_name(), 
-            new DataClassCountParameters($condition));
+
+        return DataManager :: count(SelectOption :: class_name(), new DataClassCountParameters($condition));
     }
 
     public function add_option(SelectOption $option)

@@ -144,7 +144,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_STATUS),
             new StaticConditionVariable(User :: STATUS_ANONYMOUS));
-        return self :: retrieve(User :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -156,7 +156,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_fullname_from_user($id, $unknown_user_translation = null)
     {
-        $user = self :: retrieve_by_id(User :: CLASS_NAME, $id);
+        $user = self :: retrieve_by_id(User :: class_name(), $id);
         if ($user instanceof User)
         {
             return $user->get_fullname();
@@ -177,7 +177,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_current_user()
     {
-        return self :: retrieve_by_id(User :: CLASS_NAME, \Chamilo\Libraries\Platform\Session\Session :: get_user_id());
+        return self :: retrieve_by_id(
+            User :: class_name(),
+            \Chamilo\Libraries\Platform\Session\Session :: get_user_id());
     }
 
     /**
@@ -191,7 +193,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
             new StaticConditionVariable($official_code));
-        return self :: retrieve(User :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -205,7 +207,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
             new StaticConditionVariable($username));
-        return self :: retrieve(User :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -219,7 +221,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EXTERNAL_UID),
             new StaticConditionVariable($external_uid));
-        return self :: retrieve(User :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -233,7 +235,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_SECURITY_TOKEN),
             new StaticConditionVariable($security_token));
-        return self :: retrieve(User :: CLASS_NAME, new DataClassRetrieveParameters($condition));
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**

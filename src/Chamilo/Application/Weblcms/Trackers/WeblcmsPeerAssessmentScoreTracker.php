@@ -9,7 +9,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ATTEMPT_STATUS_ID = 'attempt_status_id';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_INDICATOR_ID = 'indicator_id';
@@ -17,7 +16,7 @@ class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
@@ -35,12 +34,12 @@ class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_ATTEMPT_STATUS_ID, 
-                self :: PROPERTY_USER_ID, 
-                self :: PROPERTY_INDICATOR_ID, 
+                self :: PROPERTY_ATTEMPT_STATUS_ID,
+                self :: PROPERTY_USER_ID,
+                self :: PROPERTY_INDICATOR_ID,
                 self :: PROPERTY_SCORE));
     }
-    
+
     /*
      * function get_attempt_id() { return $this->get_default_property(self :: PROPERTY_ATTEMPT_STATUS_ID); } function
      * set_attempt_id($attempt_id) { $this->set_default_property(self :: PROPERTY_ATTEMPT_STATUS_ID, $attempt_id); }
@@ -70,7 +69,7 @@ class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

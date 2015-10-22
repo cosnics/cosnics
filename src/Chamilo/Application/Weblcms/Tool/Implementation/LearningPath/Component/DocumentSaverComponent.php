@@ -116,7 +116,7 @@ class DocumentSaverComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $question_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
 

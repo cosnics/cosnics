@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class Online extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PARAM_USER = 'user';
     const PARAM_TIME = 'time';
     const PROPERTY_USER_ID = 'user_id';

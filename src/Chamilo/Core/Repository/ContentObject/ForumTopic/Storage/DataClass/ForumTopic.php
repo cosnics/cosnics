@@ -35,7 +35,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     const PROPERTY_LOCKED = 'locked';
     const PROPERTY_TOTAL_POSTS = 'total_posts';
     const PROPERTY_LAST_POST = 'last_post_id';
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Variable that contains the first post of a forum topic.

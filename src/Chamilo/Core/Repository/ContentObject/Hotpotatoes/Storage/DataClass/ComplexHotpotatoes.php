@@ -13,12 +13,10 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
 {
     const PROPERTY_PATH = 'path';
     const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
-        ;
     }
 
     public static function get_assessment_type_name()

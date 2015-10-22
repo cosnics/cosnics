@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: introduction.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.introduction
  */
 /**
@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class Introduction extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

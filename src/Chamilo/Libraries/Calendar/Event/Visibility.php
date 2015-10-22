@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Visibility extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     // Properties
     const PROPERTY_USER_ID = 'user_id';

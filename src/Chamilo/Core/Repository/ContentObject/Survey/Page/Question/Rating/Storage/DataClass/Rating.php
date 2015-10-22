@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class Rating extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_LOW = 'low';
     const PROPERTY_HIGH = 'high';
     const PROPERTY_QUESTION = 'question';
@@ -24,7 +23,7 @@ class Rating extends ContentObject implements Versionable
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     function get_low()
@@ -76,9 +75,9 @@ class Rating extends ContentObject implements Versionable
     static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_LOW, 
-            self :: PROPERTY_HIGH, 
-            self :: PROPERTY_QUESTION, 
+            self :: PROPERTY_LOW,
+            self :: PROPERTY_HIGH,
+            self :: PROPERTY_QUESTION,
             self :: PROPERTY_INSTRUCTION);
     }
 }

@@ -13,8 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class UserViewRelContentObject extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_USER_VIEW_ID = 'user_view_id';
     const PROPERTY_CONTENT_OBJECT_TEMPLATE_ID = 'content_object_template_id';

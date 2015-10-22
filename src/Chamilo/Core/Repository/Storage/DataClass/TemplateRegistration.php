@@ -6,13 +6,12 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * The registration of a template for a specific content object type
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TemplateRegistration extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Default properties
     const PROPERTY_CONTENT_OBJECT_TYPE = 'content_object_type';
     const PROPERTY_NAME = 'name';
@@ -90,10 +89,10 @@ class TemplateRegistration extends DataClass
         if (! isset($this->user))
         {
             $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $this->get_user_id());
         }
-        
+
         return $this->user;
     }
 
@@ -124,10 +123,10 @@ class TemplateRegistration extends DataClass
         if (! isset($this->creator))
         {
             $this->creator = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $this->get_creator_id());
         }
-        
+
         return $this->creator;
     }
 
@@ -180,7 +179,7 @@ class TemplateRegistration extends DataClass
         $extended_property_names[] = self :: PROPERTY_CREATOR_ID;
         $extended_property_names[] = self :: PROPERTY_DEFAULT;
         $extended_property_names[] = self :: PROPERTY_TEMPLATE;
-        
+
         return parent :: get_default_property_names($extended_property_names);
     }
 

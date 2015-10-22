@@ -57,7 +57,7 @@ class DocumentSaverComponent extends Manager
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication_id));
         $assessment_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $assessment_attempt_tracker_ids = array();
@@ -73,7 +73,7 @@ class DocumentSaverComponent extends Manager
      *
      * @param $open_document_question_ids array The ids of the open questions where documents may be added.
      * @param $assessment_attempt_tracker_ids array The ids of the assessment attempts for which the added documents are
-     *        to be downloaded.
+     *            to be downloaded.
      */
     protected function retrieve_assessment_attempts_documents($open_document_question_ids,
         $assessment_attempt_tracker_ids)
@@ -99,7 +99,7 @@ class DocumentSaverComponent extends Manager
             $assessment_attempt_tracker_ids);
         $condition = new AndCondition($conditions);
         $question_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $document_ids = array();
@@ -134,7 +134,7 @@ class DocumentSaverComponent extends Manager
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: PROPERTY_ID),
             new StaticConditionVariable($assessment_attempt_tracker_id));
         $assessment_attempts = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $open_document_question_ids = $this->retrieve_open_document_question_ids(

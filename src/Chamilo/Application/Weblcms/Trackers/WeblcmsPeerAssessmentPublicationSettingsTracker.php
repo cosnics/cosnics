@@ -9,7 +9,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE = 'direct_subscribe_available';
     const PROPERTY_UNSUBSCRIBE_AVAILABLE = 'unsubscribe_available';
@@ -21,7 +20,7 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
@@ -43,16 +42,16 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID, 
-                self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE, 
-                self :: PROPERTY_UNSUBSCRIBE_AVAILABLE, 
-                self :: PROPERTY_SUBSCRIPTION_DEADLINE, 
-                self :: PROPERTY_MIN_GROUP_MEMBERS, 
-                self :: PROPERTY_MAX_GROUP_MEMBERS, 
-                self :: PROPERTY_FILTER_MIN_MAX, 
+                self :: PROPERTY_PUBLICATION_ID,
+                self :: PROPERTY_DIRECT_SUBSCRIBE_AVAILABLE,
+                self :: PROPERTY_UNSUBSCRIBE_AVAILABLE,
+                self :: PROPERTY_SUBSCRIPTION_DEADLINE,
+                self :: PROPERTY_MIN_GROUP_MEMBERS,
+                self :: PROPERTY_MAX_GROUP_MEMBERS,
+                self :: PROPERTY_FILTER_MIN_MAX,
                 self :: PROPERTY_FILTER_SELF));
     }
-    
+
     /*
      * function get_publication_id() { return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID); } function
      * set_publication_id($publication_id) { $this->set_default_property(self :: PROPERTY_PUBLICATION_ID,
@@ -68,7 +67,7 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

@@ -14,11 +14,10 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class Description extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 }
 

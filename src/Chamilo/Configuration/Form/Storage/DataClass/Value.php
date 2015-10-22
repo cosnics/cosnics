@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Value extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
     const PROPERTY_VALUE = 'value';
     const PROPERTY_USER_ID = 'user_id';
@@ -60,16 +59,16 @@ class Value extends DataClass
 
     /**
      * Get the default properties of all user course categories.
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_DYNAMIC_FORM_ELEMENT_ID, 
-                self :: PROPERTY_VALUE, 
-                self :: PROPERTY_USER_ID, 
+                self :: PROPERTY_DYNAMIC_FORM_ELEMENT_ID,
+                self :: PROPERTY_VALUE,
+                self :: PROPERTY_USER_ID,
                 self :: PROPERTY_TIME));
     }
 

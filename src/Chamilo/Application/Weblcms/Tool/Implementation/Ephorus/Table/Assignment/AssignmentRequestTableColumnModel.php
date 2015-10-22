@@ -11,10 +11,10 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Column model for ephorus requests browser table.
- * 
+ *
  * @author Tom Goethals
  */
-class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implements 
+class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implements
     TableColumnModelActionsColumnSupport
 {
     const COLUMN_NAME_AUTHOR = 'author';
@@ -31,16 +31,17 @@ class AssignmentRequestTableColumnModel extends DataClassTableColumnModel implem
         $this->add_column(new StaticTableColumn(self :: COLUMN_NAME_AUTHOR));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                AssignmentSubmission :: class_name(), 
+                AssignmentSubmission :: class_name(),
                 AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE));
-        
+
         $this->add_column(
             new DataClassPropertyTableColumn(
-                AssignmentSubmission :: class_name(), 
+                AssignmentSubmission :: class_name(),
                 AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: CLASS_NAME, Request :: PROPERTY_REQUEST_TIME));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: CLASS_NAME, Request :: PROPERTY_PERCENTAGE));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: CLASS_NAME, Request :: PROPERTY_STATUS));
-        $this->add_column(new DataClassPropertyTableColumn(Request :: CLASS_NAME, Request :: PROPERTY_VISIBLE_IN_INDEX));
+        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_REQUEST_TIME));
+        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_PERCENTAGE));
+        $this->add_column(new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_STATUS));
+        $this->add_column(
+            new DataClassPropertyTableColumn(Request :: class_name(), Request :: PROPERTY_VISIBLE_IN_INDEX));
     }
 }

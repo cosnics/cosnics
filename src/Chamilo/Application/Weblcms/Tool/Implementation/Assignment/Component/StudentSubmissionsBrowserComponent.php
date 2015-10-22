@@ -211,7 +211,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 // DMTODO Problem with caching. Once caching problems fixed,
                 // remove the following line of code. //
                 // ******************************************************************************************//
-                DataClassCache :: truncate(Group :: CLASS_NAME);
+                DataClassCache :: truncate(Group :: class_name());
                 // ******************************************************************************************//
                 // DMTODO End remove code. //
                 // ******************************************************************************************//
@@ -253,8 +253,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the reporting block as HTML code.
-     * This block contains the automatic feedback of the assignment and the
+     * Returns the reporting block as HTML code. This block contains the automatic feedback of the assignment and the
      * average score of the user or group.
      *
      * @return array The HTML code
@@ -386,8 +385,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the url for the add submission button.
-     * When it's not a group assignment the url will have the extra
+     * Returns the url for the add submission button. When it's not a group assignment the url will have the extra
      * parameters target id and submitter type.
      *
      * @return array The url

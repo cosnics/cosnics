@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: physical_location.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.physical_location
  */
 /**
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class PhysicalLocation extends ContentObject implements Versionable
 {
     const PROPERTY_LOCATION = 'location';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

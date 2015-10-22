@@ -13,7 +13,6 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
  */
 class WorkspaceCategoryItem extends Item
 {
-    const CLASS_NAME = __CLASS__;
 
     private $children;
 
@@ -25,7 +24,7 @@ class WorkspaceCategoryItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_children()

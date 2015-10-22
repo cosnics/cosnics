@@ -9,7 +9,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        return array(CalendarEvent :: CLASS_NAME);
+        return array(CalendarEvent :: class_name());
     }
 
     public function get_available_browser_types()

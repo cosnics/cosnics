@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class User extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const CONTEXT = __NAMESPACE__;
     const PROPERTY_LASTNAME = 'lastname';
     const PROPERTY_FIRSTNAME = 'firstname';
@@ -191,8 +190,7 @@ class User extends DataClass
 
     /**
      * Returns the external authentication system unique id for this user (useful for instance with : Shibboleth,
-     * OpenID, LDAP, .
-     * ..)
+     * OpenID, LDAP, . ..)
      *
      * @return String The external unique id
      */
@@ -362,8 +360,7 @@ class User extends DataClass
     }
 
     /**
-     * Sets the password of this user.
-     * If Chamilo configuration is set to encrypt the password, this function will also
+     * Sets the password of this user. If Chamilo configuration is set to encrypt the password, this function will also
      * take care of that.
      *
      * @param $password String the password.
@@ -385,8 +382,7 @@ class User extends DataClass
 
     /**
      * Sets the external authentication system unique id for this user (useful for instance with : Shibboleth, OpenID,
-     * LDAP, .
-     * ..)
+     * LDAP, . ..)
      *
      * @param $external_uid String the external unique id
      */

@@ -9,14 +9,13 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
  */
 class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
 
     /**
      * Inherited
-     * 
+     *
      * @see MainTracker :: track()
      */
     function validate_parameters(array $parameters = array())
@@ -45,7 +44,7 @@ class WeblcmsPeerAssessmentGroupTracker extends SimpleTracker
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: CLASS_NAME . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

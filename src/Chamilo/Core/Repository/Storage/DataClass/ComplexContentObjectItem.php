@@ -23,7 +23,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_REF = 'ref_id';
     const PROPERTY_PARENT = 'parent_id';
     const PROPERTY_USER_ID = 'user_id';

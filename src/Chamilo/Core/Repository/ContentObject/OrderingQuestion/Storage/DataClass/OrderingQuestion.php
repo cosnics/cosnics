@@ -8,18 +8,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: ordering_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.ordering_question
  */
 class OrderingQuestion extends ContentObject implements Versionable
 {
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_HINT = 'hint';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function add_option($option)
@@ -74,15 +73,15 @@ class OrderingQuestion extends ContentObject implements Versionable
     public function get_maximum_score()
     {
         $score = 0;
-        
+
         foreach ($this->get_options() as $option)
         {
             $score += $option->get_score();
         }
-        
+
         return $score;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -91,7 +90,7 @@ class OrderingQuestion extends ContentObject implements Versionable
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())

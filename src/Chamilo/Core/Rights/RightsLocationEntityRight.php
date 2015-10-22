@@ -8,7 +8,6 @@ class RightsLocationEntityRight extends DataClass
 {
     // Keep track of the context so we know which table to call
     private $context;
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_ENTITY_ID = 'entity_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
     const PROPERTY_LOCATION_ID = 'location_id';
@@ -18,9 +17,9 @@ class RightsLocationEntityRight extends DataClass
     {
         return parent :: get_default_property_names(
             array(
-                self :: PROPERTY_RIGHT_ID, 
-                self :: PROPERTY_ENTITY_ID, 
-                self :: PROPERTY_ENTITY_TYPE, 
+                self :: PROPERTY_RIGHT_ID,
+                self :: PROPERTY_ENTITY_ID,
+                self :: PROPERTY_ENTITY_TYPE,
                 self :: PROPERTY_LOCATION_ID));
     }
 

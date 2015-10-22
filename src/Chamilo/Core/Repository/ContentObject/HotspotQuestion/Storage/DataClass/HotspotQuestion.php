@@ -17,7 +17,6 @@ class HotspotQuestion extends ContentObject implements Versionable
 {
     const PROPERTY_ANSWERS = 'answers';
     const PROPERTY_IMAGE = 'image';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {

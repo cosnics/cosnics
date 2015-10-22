@@ -6,7 +6,6 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 
 abstract class User extends AggregateTracker
 {
-    const CLASS_NAME = __CLASS__;
     const TYPE_BROWSER = 'browser';
     const TYPE_COUNTRY = 'country';
     const TYPE_OPERATING_SYSTEM = 'operating_system';

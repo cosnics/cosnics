@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class MailLog extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_SENDER = 'sender';
     const PROPERTY_RECIPIENT = 'recipient';
     const PROPERTY_DATE = 'date';

@@ -9,10 +9,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class Indicator extends ContentObject
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 }

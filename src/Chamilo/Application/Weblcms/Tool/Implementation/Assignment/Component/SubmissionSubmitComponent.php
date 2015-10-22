@@ -229,7 +229,7 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
             // ***********************************************************************************************//
             // DMTODO Problem with caching. Once caching problems fixed, remove the following line of code. //
             // ***********************************************************************************************//
-            DataClassCache :: truncate(Group :: CLASS_NAME);
+            DataClassCache :: truncate(Group :: class_name());
             // ***********************************************************************************************//
             // DMTODO End remove code. //
             // ***********************************************************************************************//

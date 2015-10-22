@@ -12,7 +12,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentMatchNumericQuestion extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_TOLERANCE_TYPE = 'tolerance_type';
     const PROPERTY_HINT = 'hint';
@@ -30,7 +29,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public static function get_additional_property_names()
@@ -72,7 +71,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -119,7 +118,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         }
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {
@@ -128,7 +127,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     * 
+     *
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())
@@ -140,7 +139,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
     {
         $best_score = 0;
         $best_option = null;
-        
+
         foreach ($this->get_options() as $key => $option)
         {
             if ($option->get_score() >= $best_score)
@@ -149,7 +148,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 $best_option = $option;
             }
         }
-        
+
         return $best_option;
     }
 
@@ -162,7 +161,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
                 return $option;
             }
         }
-        
+
         return null;
     }
 }

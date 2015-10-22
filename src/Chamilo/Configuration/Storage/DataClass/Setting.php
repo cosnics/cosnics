@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Setting extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

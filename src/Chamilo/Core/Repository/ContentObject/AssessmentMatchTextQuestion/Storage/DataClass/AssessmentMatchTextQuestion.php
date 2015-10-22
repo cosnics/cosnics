@@ -12,7 +12,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_USE_WILDCARDS = 'use_wildcards';
     const PROPERTY_IGNORE_CASE = 'ignore_case';
@@ -20,7 +19,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public static function get_additional_property_names()

@@ -23,7 +23,6 @@ class RightsLocation extends NestedTreeNode
 {
     // Keep track of the context so we know which table to call
     private $context;
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_TREE_IDENTIFIER = 'tree_identifier';
     const PROPERTY_TREE_TYPE = 'tree_type';
     const PROPERTY_TYPE = 'type';
@@ -270,8 +269,7 @@ class RightsLocation extends NestedTreeNode
     }
 
     /**
-     * Inherited method which specifies how to identify the tree this location is situated in.
-     * Should be used as the
+     * Inherited method which specifies how to identify the tree this location is situated in. Should be used as the
      * basic set of condition whenever one makes a query.
      */
     public function get_nested_set_condition_array()

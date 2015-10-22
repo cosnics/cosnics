@@ -15,14 +15,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class SelectOption extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_VALUE = 'option_value';
     const PROPERTY_QUESTION_ID = 'question_id';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     static function get_default_property_names()
@@ -38,7 +37,7 @@ class SelectOption extends DataClass
 
     /**
      * Gets the value of this option
-     * 
+     *
      * @return string
      */
     function get_value()
@@ -48,7 +47,7 @@ class SelectOption extends DataClass
 
     /**
      * Sets the value of this option
-     * 
+     *
      * @return string
      */
     function set_value($value)
@@ -58,7 +57,7 @@ class SelectOption extends DataClass
 
     /**
      * Gets the question_id of this option
-     * 
+     *
      * @return int
      */
     function get_question_id()
@@ -68,7 +67,7 @@ class SelectOption extends DataClass
 
     /**
      * Sets the question_id of this option
-     * 
+     *
      * @return int
      */
     function set_question_id($question_id)

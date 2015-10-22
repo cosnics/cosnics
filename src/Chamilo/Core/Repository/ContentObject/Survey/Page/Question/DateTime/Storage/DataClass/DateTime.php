@@ -16,17 +16,15 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class DateTime extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_QUESTION = 'question';
     const PROPERTY_INSTRUCTION = 'instruction';
     const PROPERTY_QUESTION_TYPE = 'question_type';
-    
     const TYPE_DATE = 1;
     const TYPE_TIME = 2;
 
     static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_question()
@@ -67,10 +65,7 @@ class DateTime extends ContentObject implements Versionable
 
     static function get_additional_property_names()
     {
-        return array(
-            self :: PROPERTY_QUESTION, 
-            self :: PROPERTY_INSTRUCTION, 
-            self :: PROPERTY_QUESTION_TYPE);
+        return array(self :: PROPERTY_QUESTION, self :: PROPERTY_INSTRUCTION, self :: PROPERTY_QUESTION_TYPE);
     }
 }
 

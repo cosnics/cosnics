@@ -8,9 +8,6 @@ use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 
 class Configuration extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    
-    const CLASS_NAME = __CLASS__;
-   
     const PROPERTY_PAGE_ID = 'page_id';
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
@@ -21,13 +18,12 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
     const PROPERTY_UPDATED = 'updated';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
-    
     public function __construct($default_properties = array(), $additional_properties = null)
     {
         parent :: __construct($default_properties, $additional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
-    
+
     static function get_default_property_names()
     {
         return parent :: get_default_property_names(
@@ -40,8 +36,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
                 self :: PROPERTY_ANSWER_MATCHES,
                 self :: PROPERTY_CREATED,
                 self :: PROPERTY_UPDATED,
-                self :: PROPERTY_DISPLAY_ORDER
-            ));
+                self :: PROPERTY_DISPLAY_ORDER));
     }
 
     /**
@@ -53,7 +48,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
     {
         $this->set_default_property(self :: PROPERTY_PAGE_ID, $pageId);
     }
-    
+
     /**
      * Returns the name of this Configuration.
      *
@@ -63,10 +58,10 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
     {
         return $this->get_default_property(self :: PROPERTY_PAGE_ID);
     }
-    
+
     /**
      * Sets the name of this Configuration.
-     * 
+     *
      * @param name
      */
     function setName($name)
@@ -76,7 +71,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the name of this Configuration.
-     * 
+     *
      * @return the name.
      */
     function getName()
@@ -86,7 +81,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the description of this Configuration.
-     * 
+     *
      * @return the description.
      */
     function getDescription()
@@ -96,7 +91,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the description of this Configuration.
-     * 
+     *
      * @param from_visible_question_id
      */
     function setDescription($description)
@@ -111,7 +106,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the description of this Configuration.
-     * 
+     *
      * @param complex_question_id
      */
     function setComplexQuestionId($complex_question_id)
@@ -121,7 +116,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the to_visible_question_ids of this Configuration.
-     * 
+     *
      * @return the to_visible_question_ids.
      */
     function getToVisibleQuestionIds()
@@ -131,7 +126,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the to_visible_question_ids of this Configuration.
-     * 
+     *
      * @param to_visible_question_ids
      */
     function setToVisibleQuestionIds($toVisibleQuestionIds)
@@ -141,27 +136,29 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the answer_matches of this Configuration.
-     * 
+     *
      * @return the answer_matches.
      */
     function getAnswerMatches($prefix = null)
     {
         $answerMatches = unserialize($this->get_default_property(self :: PROPERTY_ANSWER_MATCHES));
-        if($prefix){
-            
+        if ($prefix)
+        {
+
             $prefixAnswerMatches = array();
-            foreach ($answerMatches as $answerId => $answerMatch){
-                $prefixAnswerMatches[$prefix.'_'.$answerId] = $answerMatch;
+            foreach ($answerMatches as $answerId => $answerMatch)
+            {
+                $prefixAnswerMatches[$prefix . '_' . $answerId] = $answerMatch;
             }
             $answerMatches = $prefixAnswerMatches;
         }
-        
+
         return $answerMatches;
     }
 
     /**
      * Sets the answer_matches of this Configuration.
-     * 
+     *
      * @param answer_matches
      */
     function setAnswerMatches($answer_matches)
@@ -171,7 +168,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the created of this Configuration.
-     * 
+     *
      * @return the created.
      */
     function getCreated()
@@ -181,7 +178,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the created of this Configuration.
-     * 
+     *
      * @param created
      */
     function setCreated($created)
@@ -191,7 +188,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Returns the updated of this Configuration.
-     * 
+     *
      * @return the updated.
      */
     function getUpdated()
@@ -201,24 +198,24 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
 
     /**
      * Sets the updated of this Configuration.
-     * 
+     *
      * @param updated
      */
     function setUpdated($updated)
     {
         $this->set_default_property(self :: PROPERTY_UPDATED, $updated);
     }
-    
+
     public function get_display_order()
     {
         return $this->get_default_property(self :: PROPERTY_DISPLAY_ORDER);
     }
-    
+
     public function set_display_order($display_order)
     {
         $this->set_default_property(self :: PROPERTY_DISPLAY_ORDER, $display_order);
     }
-    
+
     /**
      * Returns the property for the display order
      *
@@ -228,7 +225,7 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
     {
         return new PropertyConditionVariable(Configuration :: class_name(), self :: PROPERTY_DISPLAY_ORDER);
     }
-    
+
     /**
      * Returns the properties that define the context for the display order (the properties on which has to be limited)
      *
@@ -238,7 +235,6 @@ class Configuration extends DataClass implements DisplayOrderDataClassListenerSu
     {
         return array(new PropertyConditionVariable(Configuration :: class_name(), self :: PROPERTY_PAGE_ID));
     }
-    
 }
 
 ?>

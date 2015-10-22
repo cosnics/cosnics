@@ -183,7 +183,7 @@ class SubmissionViewerComponent extends SubmissionsManager
 
         // Submission
         $submissions = AssignmentSubmission :: get_data(
-            AssignmentSubmission :: CLASS_NAME,
+            AssignmentSubmission :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition)->as_array();
         $this->submission = $submissions[0]->get_content_object();

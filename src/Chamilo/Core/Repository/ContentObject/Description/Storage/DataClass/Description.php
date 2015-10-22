@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: description.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.description
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -17,10 +17,9 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  */
 class Description extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 }

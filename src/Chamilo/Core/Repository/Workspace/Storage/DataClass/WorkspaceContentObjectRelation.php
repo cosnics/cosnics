@@ -14,8 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class WorkspaceContentObjectRelation extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_CATEGORY_ID = 'category_id';
@@ -80,7 +79,7 @@ class WorkspaceContentObjectRelation extends DataClass
         {
             $this->workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $this->getWorkspaceId());
         }
-        
+
         return $this->workspace;
     }
 
@@ -111,10 +110,10 @@ class WorkspaceContentObjectRelation extends DataClass
         if (! isset($this->contentObject))
         {
             $this->contentObject = DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 $this->getContentObjectId());
         }
-        
+
         return $this->contentObject;
     }
 

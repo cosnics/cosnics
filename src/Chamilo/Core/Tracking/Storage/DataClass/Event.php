@@ -19,7 +19,6 @@ class Event extends DataClass
 {
 
     private $trackers;
-    const CLASS_NAME = __CLASS__;
 
     /**
      * Event properties

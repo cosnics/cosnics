@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Registration extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_TYPE = 'type';
     const PROPERTY_CATEGORY = 'category';
     const PROPERTY_NAME = 'name';

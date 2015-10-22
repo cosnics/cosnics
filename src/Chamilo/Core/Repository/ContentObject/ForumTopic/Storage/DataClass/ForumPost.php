@@ -33,7 +33,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     const PROPERTY_FORUM_TOPIC_ID = 'forum_topic_id';
     const PROPERTY_CREATION_DATE = 'created';
     const PROPERTY_MODIFICATION_DATE = 'modified';
-    const CLASS_NAME = __CLASS__;
     const ATTACHMENT_ALL = 'all';
     const ATTACHMENT_NORMAL = 'normal';
     const PROPERTIES_ADDITIONAL = 'additional_properties';

@@ -13,18 +13,17 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: soundcloud.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.soundcloud
  */
 class Soundcloud extends ContentObject implements Versionable, Includeable
 {
-    const CLASS_NAME = __CLASS__;
     const SOUNDCLOUD_TRACK_API_URI = 'http://api.soundcloud.com/tracks/%s';
     const SOUNDCLOUD_PLAYER_URI = 'http://player.soundcloud.com/player.swf?url=%s&secret_url=false';
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_track_api_uri()
@@ -41,15 +40,15 @@ class Soundcloud extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
             new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('soundcloud')));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED), 
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-        
+
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $condition);
         return $external_repositories->size() == 1;
     }

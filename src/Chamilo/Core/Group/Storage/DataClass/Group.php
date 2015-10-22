@@ -30,7 +30,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
  */
 class Group extends NestedSet
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_NAME = 'name';
     const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_SORT = 'sort';

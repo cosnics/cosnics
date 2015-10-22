@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupport
 {
     const PROPERTY_REFERENCE = 'reference_id';
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

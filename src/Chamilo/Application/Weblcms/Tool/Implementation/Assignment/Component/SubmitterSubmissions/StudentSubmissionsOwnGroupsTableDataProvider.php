@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Description of student_submissions_browser_own_groups_table_data_provider
- * 
+ *
  * @author Anthony Hurst (Hogeschool Gent)
  */
 class StudentSubmissionsOwnGroupsTableDataProvider extends DataClassTableDataProvider
@@ -20,15 +20,15 @@ class StudentSubmissionsOwnGroupsTableDataProvider extends DataClassTableDataPro
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    AssignmentSubmission :: class_name(), 
+                    AssignmentSubmission :: class_name(),
                     AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
         }
         return AssignmentSubmission :: get_data(
-            AssignmentSubmission :: CLASS_NAME, 
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME, 
-            $condition, 
-            $offset, 
-            $count, 
+            AssignmentSubmission :: class_name(),
+            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            $condition,
+            $offset,
+            $count,
             $order_property);
     }
 

@@ -7,12 +7,11 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: assessment_matrix_question.class.php $
- * 
+ *
  * @package repository.lib.content_object.matrix_question
  */
 class AssessmentMatrixQuestion extends ContentObject implements Versionable
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_OPTIONS = 'options';
     const PROPERTY_MATCHES = 'matches';
     const PROPERTY_MATRIX_TYPE = 'matrix_type';
@@ -105,7 +104,7 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
         }
         return $max;
     }
-    
+
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
     public function get_default_weight()
     {

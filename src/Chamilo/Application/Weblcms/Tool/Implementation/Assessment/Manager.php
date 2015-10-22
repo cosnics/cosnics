@@ -44,7 +44,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Assessment :: CLASS_NAME, Hotpotatoes :: CLASS_NAME);
+        return array(Assessment :: class_name(), Hotpotatoes :: class_name());
     }
 
     public function get_available_browser_types()

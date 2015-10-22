@@ -23,7 +23,6 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     const PROPERTY_QUESTIONS_PER_PAGE = 'questions_per_page';
     const PROPERTY_MAXIMUM_TIME = 'max_time';
     const PROPERTY_RANDOM_QUESTIONS = 'random_questions';
-    const CLASS_NAME = __CLASS__;
 
     /**
      * The number of questions in this assessment

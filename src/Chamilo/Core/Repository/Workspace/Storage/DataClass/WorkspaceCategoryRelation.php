@@ -14,8 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
  */
 class WorkspaceCategoryRelation extends DataClass
 {
-    const CLASS_NAME = __CLASS__;
-    
+
     // Properties
     const PROPERTY_WORKSPACE_ID = 'workspace_id';
     const PROPERTY_CATEGORY_ID = 'category_id';
@@ -60,7 +59,7 @@ class WorkspaceCategoryRelation extends DataClass
         {
             $this->workspace = DataManager :: retrieve_by_id(Workspace :: class_name(), $this->getWorkspaceId());
         }
-        
+
         return $this->workspace;
     }
 
@@ -92,7 +91,7 @@ class WorkspaceCategoryRelation extends DataClass
         {
             $this->category = DataManager :: retrieve_by_id(RepositoryCategory :: class_name(), $this->getCategoryId());
         }
-        
+
         return $this->category;
     }
 

@@ -100,7 +100,7 @@ class FeedbackUpdaterComponent extends Manager
             new DataClassRetrieveParameters($condition));
 
         $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $condition,
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
@@ -160,8 +160,7 @@ class FeedbackUpdaterComponent extends Manager
     }
 
     /**
-     * Returns the name of the submitter as a string.
-     * When submitted as a group, it will return the name of the user who
+     * Returns the name of the submitter as a string. When submitted as a group, it will return the name of the user who
      * submitted followed by the group name.
      *
      * @return string The name of the submitter

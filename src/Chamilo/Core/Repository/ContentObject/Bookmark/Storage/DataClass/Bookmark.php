@@ -8,14 +8,13 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: bookmark.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.content_object.bookmark
  */
 class Bookmark extends ContentObject implements Versionable, Includeable
 {
     const PROPERTY_URL = 'url';
     const PROPERTY_APPLICATION = 'application';
-    const CLASS_NAME = __CLASS__;
 
     public static function get_type_name()
     {
@@ -24,9 +23,8 @@ class Bookmark extends ContentObject implements Versionable, Includeable
 
     /**
      * If the content object "accept" the properties passed as argument it returns a new instance of itself based on
-     * properties passed as argument.
-     * Otherwise returns false.
-     * 
+     * properties passed as argument. Otherwise returns false.
+     *
      * @param array $properties
      * @return ContentObject | array | false
      */

@@ -19,12 +19,11 @@ use Chamilo\Libraries\File\Path;
  */
 class Blog extends ContentObject implements ComplexContentObjectSupport
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_BLOG_LAYOUT = 'blog_layout';
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME, true);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
     }
 
     public function get_allowed_types()

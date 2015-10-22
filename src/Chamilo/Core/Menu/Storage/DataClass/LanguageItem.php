@@ -14,7 +14,6 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 class LanguageItem extends Item
 {
     const PROPERTY_LANGUAGE = 'language';
-    const CLASS_NAME = __CLASS__;
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
@@ -24,7 +23,7 @@ class LanguageItem extends Item
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: CLASS_NAME);
+        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
     }
 
     public function get_language()
