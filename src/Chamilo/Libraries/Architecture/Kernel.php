@@ -441,38 +441,36 @@ class Kernel
      */
     private function traceVisit()
     {
-        if (! $this->getApplication() instanceof Application)
+        $applicationClassName = $this->getApplicationFactory()->getClassName();
+        $applicationRequiresTracing = ! is_subclass_of(
+            $applicationClassName,
+            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
+
+        if ($applicationRequiresTracing)
         {
-            throw new \Exception(
-                'No application available to trace. Please call Kernel::buildApplication() before calling Kernel::traceVisit()');
-        }
-        else
-        {
-            if (! $this->getApplication() instanceof NoVisitTraceComponentInterface)
+            if ($this->getUser() instanceof User)
             {
-                if ($this->getUser() instanceof User)
+                Event :: trigger(
+                    'Online',
+                    \Chamilo\Core\Admin\Manager :: context(),
+                    array('user' => $this->getUser()->get_id()));
+
+                $requestUri = $this->getRequest()->server->get('REQUEST_URI');
+
+                if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
+                     $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent')
                 {
-                    Event :: trigger(
-                        'Online',
-                        \Chamilo\Core\Admin\Manager :: context(),
-                        array('user' => $this->getUser()->get_id()));
-
-                    $requestUri = $this->getRequest()->server->get('REQUEST_URI');
-
-                    if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                         $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent')
-                    {
-                        $return = Event :: trigger(
-                            'Enter',
-                            \Chamilo\Core\User\Manager :: context(),
-                            array(
-                                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_USER_ID => $this->getUser()->get_id()));
-                    }
+                    $return = Event :: trigger(
+                        'Enter',
+                        \Chamilo\Core\User\Manager :: context(),
+                        array(
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_USER_ID => $this->getUser()->get_id()));
                 }
             }
-            return $this;
         }
+
+        return $this;
     }
 
     /**
