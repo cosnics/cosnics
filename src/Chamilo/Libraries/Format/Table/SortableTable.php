@@ -330,7 +330,7 @@ class SortableTable extends HTML_Table
                             null,
                             Utilities :: COMMON_LIBRARIES);
 
-                        $html[] = '<option value="' . base64_encode(serialize($form_action->get_action())) . '"' .
+                        $html[] = '<option value="' . $form_action->get_action() . '"' .
                              ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') .
                              '>' . $form_action->get_title() . '</option>';
                     }

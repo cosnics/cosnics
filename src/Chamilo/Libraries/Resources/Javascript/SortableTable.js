@@ -95,11 +95,16 @@
         $(':checkbox', $(this).parentsUntil('form').parent()).attr('checked', false);
     }
 
+    function changeAction(e, ui) {
+        $(this).closest('form').attr('action', $(this).val());
+    }
+
     $(document).ready(function() {
         $(document).on('submit', '.table_form', form_submitted);
         $('.data_table').on('click', ':checkbox', checkboxClicked);
         $(document).on('click', 'a.sortable_table_select_all', selectAll);
         $(document).on('click', 'a.sortable_table_select_none', selectNone);
+        $(document).on('change', 'select', changeAction);
     });
 
 })(jQuery);
