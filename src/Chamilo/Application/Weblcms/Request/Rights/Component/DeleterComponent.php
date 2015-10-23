@@ -18,7 +18,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = \Chamilo\Libraries\Platform\Session\Request :: get(self :: PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
         $failures = 0;
 
         if (! empty($ids))

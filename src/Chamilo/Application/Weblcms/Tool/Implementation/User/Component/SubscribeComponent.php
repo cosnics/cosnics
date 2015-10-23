@@ -30,12 +30,12 @@ class SubscribeComponent extends Manager
         }
 
         $course_id = $this->get_course_id();
-        $users = Request :: get(self :: PARAM_OBJECTS);
+        $users = $this->getRequest()->get(self :: PARAM_OBJECTS);
         if (isset($users) && ! is_array($users))
         {
             $users = array($users);
         }
-        
+
         if (isset($course_id))
         {
             if (isset($users) && count($users) > 0)
@@ -100,7 +100,7 @@ class SubscribeComponent extends Manager
                     $success = false;
                     $message = 'PartialUsersNotSubscribedToCourse';
                 }
-               
+
                 $this->redirect(
                     Translation :: get($message),
                     ($success ? false : true),

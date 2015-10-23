@@ -17,6 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class SubmitterGroupSubmissionsTable extends DataClassTable implements TableFormActionsSupport
 {
+    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_SUBMISSION;
     const DEFAULT_NAME = 'submitter_group_submissions_table';
 
     /*

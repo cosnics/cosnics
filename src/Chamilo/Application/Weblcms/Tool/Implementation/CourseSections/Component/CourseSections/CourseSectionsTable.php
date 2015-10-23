@@ -25,7 +25,8 @@ class CourseSectionsTable extends DataClassTable implements TableFormActionsSupp
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: PARAM_REMOVE_SELECTED)),
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_REMOVE_COURSE_SECTION)),
                 Translation :: get('RemoveSelected')));
         return $actions;
     }

@@ -42,7 +42,8 @@ class CategoryMoverComponent extends Manager
                 return implode(PHP_EOL, $html);
             }
 
-            $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+            $publication_ids = $this->getRequest()->get(
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
             if (! is_array($publication_ids))
             {

@@ -42,7 +42,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
             throw new NotAllowedException();
         }
 
-        $target_ids = Request :: get(self :: PARAM_TARGET_ID);
+        $target_ids = $this->getRequest()->get(self :: PARAM_TARGET_ID);
         $table_name = Request :: post('table_name');
         if ($table_name)
         {
