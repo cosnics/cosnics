@@ -82,7 +82,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
      *
      * @return string
      */
-    public function get_current_renderer_type()
+    public function getCurrentRendererType()
     {
         return Request :: get(ViewRenderer :: PARAM_TYPE, ViewRenderer :: TYPE_MONTH);
     }
