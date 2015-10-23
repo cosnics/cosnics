@@ -25,7 +25,7 @@ class ItemTable extends DataClassTable implements TableFormActionsSupport
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
         if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object(
             $this->get_component()->get_current_node()))

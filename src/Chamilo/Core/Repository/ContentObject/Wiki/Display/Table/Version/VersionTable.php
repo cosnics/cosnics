@@ -11,7 +11,7 @@ class VersionTable extends \Chamilo\Core\Repository\Table\ContentObject\Version\
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_HISTORY)),
