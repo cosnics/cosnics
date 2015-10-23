@@ -24,6 +24,12 @@ class TableFormActions
     private $formActions;
 
     /**
+     *
+     * @var string
+     */
+    private $identifierName;
+
+    /**
      * The namespace of the table
      *
      * @var string
@@ -43,9 +49,10 @@ class TableFormActions
      * @param TableFormAction[] $formActions
      * @param string $namespace
      */
-    public function __construct($tableNamespace, $formActions = array())
+    public function __construct($tableNamespace, $identifierName, $formActions = array())
     {
         $this->formActions = $formActions;
+        $this->identifierName = $identifierName;
         $this->tableNamespace = $tableNamespace;
     }
 
@@ -119,5 +126,23 @@ class TableFormActions
     public function has_form_actions()
     {
         return count($this->formActions) >= 1;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getIdentifierName()
+    {
+        return $this->identifierName;
+    }
+
+    /**
+     *
+     * @param string $identifierName
+     */
+    public function setIdentifierName($identifierName)
+    {
+        $this->identifierName = $identifierName;
     }
 }

@@ -127,9 +127,10 @@ abstract class Table
     public function as_html()
     {
         $table = $this->initialize_table();
+
         if ($this->has_form_actions())
         {
-            $table->set_form_actions($this->get_form_actions(), $this->get_checkbox_name());
+            $table->set_form_actions($this->get_form_actions());
         }
 
         return $table->as_html();
@@ -155,10 +156,9 @@ abstract class Table
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(),
             $this->get_column_model()->get_default_order_direction(),
-            $this->supports_ajax(),
             ! $this->prohibits_page_selection());
 
-        $table->set_additional_parameters($this->get_parameters());
+        $table->setAdditionalParameters($this->get_parameters());
 
         if ($this->has_form_actions())
         {
@@ -505,16 +505,6 @@ abstract class Table
     {
         return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
              $this->get_form_actions()->has_form_actions());
-    }
-
-    /**
-     * Returns the checkbox name
-     *
-     * @return string
-     */
-    protected function get_checkbox_name()
-    {
-        return static :: TABLE_IDENTIFIER;
     }
 
     /**

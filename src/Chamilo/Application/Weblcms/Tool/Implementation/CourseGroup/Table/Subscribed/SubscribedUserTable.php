@@ -20,7 +20,7 @@ class SubscribedUserTable extends DataClassTable implements TableFormActionsSupp
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
         $browser = $this->get_component();
 
         if ($browser->is_allowed(WeblcmsRights :: EDIT_RIGHT))

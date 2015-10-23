@@ -78,7 +78,7 @@ class AnnouncementComponent extends Manager
         }
 
         $table = new SortableTableFromArray($data);
-        $table->set_additional_parameters($this->get_parameters());
+        $table->setAdditionalParameters($this->get_parameters());
         $table->set_header(0, Translation :: get('Date'));
         $table->set_header(1, Translation :: get('Course'));
         $table->set_header(2, Translation :: get('Announcement'));

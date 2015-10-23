@@ -52,7 +52,7 @@ abstract class GalleryTable extends Table
             $this->supports_ajax(),
             $this->prohibits_page_selection());
 
-        $table->set_additional_parameters($this->get_parameters());
+        $table->setAdditionalParameters($this->get_parameters());
 
         return $table;
     }
