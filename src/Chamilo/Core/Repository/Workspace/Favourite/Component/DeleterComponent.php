@@ -23,7 +23,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $workspaceIdentifiers = $this->getRequest()->query->get(
+        $workspaceIdentifiers = $this->getRequest()->get(
             \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
         try

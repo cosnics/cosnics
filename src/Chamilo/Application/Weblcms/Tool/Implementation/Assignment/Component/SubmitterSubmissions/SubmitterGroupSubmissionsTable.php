@@ -17,6 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class SubmitterGroupSubmissionsTable extends DataClassTable implements TableFormActionsSupport
 {
+    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_SUBMISSION;
     const DEFAULT_NAME = 'submitter_group_submissions_table';
 
     /*
@@ -29,12 +30,14 @@ class SubmitterGroupSubmissionsTable extends DataClassTable implements TableForm
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS),
+                    $this->get_component()->get_url(
+                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS)),
                     Translation :: get('DownloadSelected'),
                     false));
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION),
+                    $this->get_component()->get_url(
+                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION)),
                     Translation :: get('DeleteSelected')));
         }
         return $actions;

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Portfolio item table
- * 
+ *
  * @package repository\content_object\page\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -20,23 +20,23 @@ class ItemTable extends DataClassTable implements TableFormActionsSupport
 
     /**
      * Returns the implemented form actions
-     * 
+     *
      * @return TableFormActions
      */
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object(
             $this->get_component()->get_current_node()))
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), 
+                    $this->get_component()->get_url(
+                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM)),
                     Translation :: get('RemoveSelected')));
-          
         }
-               
+
         return $actions;
     }
 }

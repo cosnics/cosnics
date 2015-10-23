@@ -18,7 +18,7 @@ class ShareTable extends DataClassTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_SHARE),
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_SHARE)),
                 Translation :: get('ShareSelected', null, Utilities :: COMMON_LIBRARIES),
                 false));
 

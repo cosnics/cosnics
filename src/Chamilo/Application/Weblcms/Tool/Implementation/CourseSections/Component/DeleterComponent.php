@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Compone
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -26,7 +25,7 @@ class DeleterComponent extends Manager
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
-        $ids = Request :: get(self :: PARAM_COURSE_SECTION_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_COURSE_SECTION_ID);
         $failures = 0;
 
         if (! empty($ids))

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -22,7 +21,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_VIEW_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_USER_VIEW_ID);
 
         $failures = 0;
 

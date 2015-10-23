@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -24,7 +23,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $selected_steps = Request :: get(self :: PARAM_STEP);
+        $selected_steps = $this->getRequest()->get(self :: PARAM_STEP);
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);

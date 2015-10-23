@@ -27,7 +27,9 @@ class SubscribedUserTable extends DataClassTable implements TableFormActionsSupp
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE),
+                    $this->get_component()->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE)),
                     Translation :: get('UnsubscribeUsers')));
         }
 

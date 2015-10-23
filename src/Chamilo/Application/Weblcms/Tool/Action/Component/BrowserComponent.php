@@ -93,14 +93,16 @@ class BrowserComponent extends Manager
 
         $actions->add_form_action(
             new TableFormAction(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
 
         $actions->add_form_action(
             new TableFormAction(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
                 Translation :: get('ToggleVisibility'),
                 false));
 
@@ -108,8 +110,9 @@ class BrowserComponent extends Manager
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY)),
                     Translation :: get('MoveSelected', null, Utilities :: COMMON_LIBRARIES),
                     false));
         }

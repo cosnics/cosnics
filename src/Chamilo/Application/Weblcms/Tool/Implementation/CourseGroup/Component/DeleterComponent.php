@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: course_group_deleter.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.course_group.component
  */
 class DeleterComponent extends Manager
@@ -26,7 +26,7 @@ class DeleterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         if (Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID))
         {
             $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
@@ -35,39 +35,40 @@ class DeleterComponent extends Manager
         {
             $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID];
         }
-        
+
         if (! is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
-        
+
         foreach ($publication_ids as $pid)
         {
             if ($publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(), 
+                ContentObjectPublication :: class_name(),
                 $pid))
             {
                 $publication->delete();
             }
         }
-        
-        $ids = Request :: get(self :: PARAM_COURSE_GROUP);
+
+        $ids = $this->getRequest()->get(self :: PARAM_COURSE_GROUP);
+
         if ($ids)
         {
             if (! is_array($ids))
                 $ids = array($ids);
-                
+
                 // Make the course group deletable
             foreach ($ids as $group_id)
             {
                 $cg = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $group_id);
-                
+
                 if ($cg->get_document_category_id())
                 {
                     $cat = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                        ContentObjectPublicationCategory :: class_name(), 
+                        ContentObjectPublicationCategory :: class_name(),
                         $cg->get_document_category_id());
-                    
+
                     if ($cat)
                     {
                         $cat->set_allow_change(1);
@@ -76,11 +77,11 @@ class DeleterComponent extends Manager
                 }
                 if ($cg->get_forum_category_id())
                 {
-                    
+
                     $cat = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                        ContentObjectPublicationCategory :: class_name(), 
+                        ContentObjectPublicationCategory :: class_name(),
                         $cg->get_forum_category_id());
-                    
+
                     if ($cat)
                     {
                         $cat->set_allow_change(1);
@@ -89,10 +90,10 @@ class DeleterComponent extends Manager
                 }
                 $cg->delete();
             }
-            
+
             $message = Translation :: get(
-                'ObjectDeleted', 
-                array('OBJECT' => Translation :: get('CourseGroup')), 
+                'ObjectDeleted',
+                array('OBJECT' => Translation :: get('CourseGroup')),
                 Utilities :: COMMON_LIBRARIES);
             $this->redirect($message, '', array('course_group' => null, self :: PARAM_ACTION => null));
         }

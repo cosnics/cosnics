@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Display\Action\Component;
 
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -25,7 +24,7 @@ class DeleterComponent extends Manager
              * $_POST['selected_cloi']; }
              */
 
-            $complex_content_object_item_ids = Request :: get(
+            $complex_content_object_item_ids = $this->getRequest()->get(
                 \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
             if (! is_array($complex_content_object_item_ids))

@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -36,7 +35,7 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
 
         if (! empty($ids))
         {

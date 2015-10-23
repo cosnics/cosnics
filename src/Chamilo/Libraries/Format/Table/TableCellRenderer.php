@@ -52,13 +52,7 @@ abstract class TableCellRenderer extends TableComponent
      *
      * @param TableColumn $column
      * @param mixed $result
-     *
      * @return string
-     *
-     * @abstract
-     *
-     *
-     *
      */
     public function render_cell($column, $result)
     {
@@ -78,13 +72,7 @@ abstract class TableCellRenderer extends TableComponent
      * checkboxes
      *
      * @param mixed $result
-     *
      * @return int
-     *
-     * @abstract
-     *
-     *
-     *
      */
     abstract public function render_id_cell($result);
 }

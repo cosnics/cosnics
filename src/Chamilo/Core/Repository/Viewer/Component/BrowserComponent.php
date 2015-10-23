@@ -71,7 +71,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_additional_parameters()
     {
-       return array(self :: PROPERTY_CATEGORY);
+        return array(self :: PROPERTY_CATEGORY);
     }
 
     /*

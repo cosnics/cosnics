@@ -26,26 +26,27 @@ class AnswerFeedbackTypeTable extends DataClassTable implements TableFormActions
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         $types = array(
-            Configuration :: ANSWER_FEEDBACK_TYPE_NONE, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-            Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
+            Configuration :: ANSWER_FEEDBACK_TYPE_NONE,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT,
+            Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
+            Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT,
+            Configuration :: ANSWER_FEEDBACK_TYPE_WRONG,
             Configuration :: ANSWER_FEEDBACK_TYPE_ALL);
-        
+
         foreach ($types as $type)
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_ANSWER_FEEDBACK_TYPE, 
-                        Manager :: PARAM_ANSWER_FEEDBACK_TYPE => $type), 
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_ANSWER_FEEDBACK_TYPE,
+                            Manager :: PARAM_ANSWER_FEEDBACK_TYPE => $type)),
                     Configuration :: answer_feedback_string($type)));
         }
-        
+
         return $actions;
     }
 }

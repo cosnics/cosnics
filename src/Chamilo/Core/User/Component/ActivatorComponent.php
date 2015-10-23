@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
-
 /**
  *
  * @package user.lib.user_manager.component
@@ -11,12 +9,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 class ActivatorComponent extends ActiveChangerComponent
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
-    public function run()
+    private function getState()
     {
-        Request :: set_get(self :: PARAM_ACTIVE, 1);
-        parent :: run();
+        return 1;
     }
 }

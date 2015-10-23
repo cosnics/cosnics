@@ -7,7 +7,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -17,24 +16,26 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @package user.lib.user_manager.component
  */
-class UserApproverComponent extends Manager
+abstract class UserApproverComponent extends Manager
 {
     const PARAM_CHOICE = 'choice';
     const CHOICE_APPROVE = 1;
     const CHOICE_DENY = 0;
+
+    abstract private function getChoice();
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
-        $choice = Request :: get(self :: PARAM_CHOICE);
-
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
+
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $choice = $this->getChoice();
 
         if (! is_array($ids))
         {

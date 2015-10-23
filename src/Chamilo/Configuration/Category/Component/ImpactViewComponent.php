@@ -5,7 +5,6 @@ use Chamilo\Configuration\Category\Form\ImpactViewForm;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -127,7 +126,7 @@ class ImpactViewComponent extends Manager
      */
     protected function get_selected_category_ids()
     {
-        $category_ids = Request :: get(self :: PARAM_CATEGORY_ID);
+        $category_ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
 
         if (! isset($category_ids))
         {

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
@@ -22,7 +21,7 @@ class ConfigurationDeleterComponent extends Manager
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
 
-            $config_ids = Request :: get(self :: PARAM_CONFIGURATION_ID);
+            $config_ids = $this->getRequest()->get(self :: PARAM_CONFIGURATION_ID);
 
             if (! is_array($config_ids))
             {

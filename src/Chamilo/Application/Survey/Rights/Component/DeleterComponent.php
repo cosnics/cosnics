@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $entityRelationIdentifiers = $this->getRequest()->query->get(self :: PARAM_ENTITY_RELATION_ID);
+        $entityRelationIdentifiers = $this->getRequest()->get(self :: PARAM_ENTITY_RELATION_ID);
 
         try
         {
@@ -46,9 +46,7 @@ class DeleterComponent extends Manager
             {
                 $entityRelation = $entityRelationService->getEntityRelationByIdentifier($entityRelationIdentifier);
 
-                if ($rightsService->hasPublicationCreatorRights(
-                    $this->get_user(),
-                    $this->getCurrentPublication()))
+                if ($rightsService->hasPublicationCreatorRights($this->get_user(), $this->getCurrentPublication()))
                 {
                     if (! $entityRelationService->deleteEntityRelation($entityRelation))
                     {

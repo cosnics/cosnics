@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRigh
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -101,7 +100,7 @@ class RightsComponent extends TabComponent
      */
     public function get_available_nodes()
     {
-        $selected_steps = Request :: get(self :: PARAM_STEP);
+        $selected_steps = $this->getRequest()->get(self :: PARAM_STEP);
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);

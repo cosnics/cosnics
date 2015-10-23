@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -28,7 +27,7 @@ class MoverComponent extends TabComponent
      */
     public function build()
     {
-        $selected_steps = Request :: get(self :: PARAM_STEP);
+        $selected_steps = $this->getRequest()->get(self :: PARAM_STEP);
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);

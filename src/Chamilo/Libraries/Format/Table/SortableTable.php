@@ -290,7 +290,11 @@ class SortableTable extends HTML_Table
             if ($this->form_actions->has_form_actions())
             {
                 $params = $this->get_additional_url_paramstring();
-                $html[] = '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?' . $params . '" name="form_' .
+                $formActions = $this->form_actions->get_form_actions();
+                $firstFormAction = array_shift($formActions);
+
+                // $html[] = '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?' . $params . '" name="form_' .
+                $html[] = '<form method="post" action="' . $firstFormAction->get_action() . '" name="form_' .
                      $this->table_name . '" class="table_form">';
                 $html[] = ResourceManager :: get_instance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'SortableTable.js');
@@ -312,11 +316,10 @@ class SortableTable extends HTML_Table
             {
                 $html[] = '<div class="sortable_table_selection_controls">';
                 $html[] = '<span class="sortable_table_selection_controls_options">';
-                $html[] = '<a href="?' . $params . '&amp;' . $this->param_prefix .
-                     'selectall=1" class="sortable_table_select_all">' .
+                $html[] = '<a href="#" class="sortable_table_select_all">' .
                      Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES) . '</a>';
                 $html[] = '&nbsp;-&nbsp;';
-                $html[] = '<a href="?' . $params . '" class="sortable_table_select_none">' .
+                $html[] = '<a href="#" class="sortable_table_select_none">' .
                      Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES) . '</a> ';
                 $html[] = '</span>';
                 $html[] = '<select id="actions_' . $this->table_name . '" name="' . $this->table_name . '_action_value">';
@@ -330,7 +333,7 @@ class SortableTable extends HTML_Table
                             null,
                             Utilities :: COMMON_LIBRARIES);
 
-                        $html[] = '<option value="' . base64_encode(serialize($form_action->get_action())) . '"' .
+                        $html[] = '<option value="' . $form_action->get_action() . '"' .
                              ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') .
                              '>' . $form_action->get_title() . '</option>';
                     }
@@ -412,10 +415,12 @@ class SortableTable extends HTML_Table
         {
             $this->setCellAttributes(0, $column, $attributes);
         }
+
         foreach ($this->td_attributes as $column => & $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }
+
         return parent :: toHTML();
     }
 
@@ -571,6 +576,7 @@ class SortableTable extends HTML_Table
             if (Request :: get($tablename . '_column'))
                 $parameters[$tablename . '_column'] = Request :: get($tablename . '_column');
         }
+
         return http_build_query($parameters, '', Redirect :: ARGUMENT_SEPARATOR);
     }
 
@@ -583,11 +589,14 @@ class SortableTable extends HTML_Table
         $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
         $param[$this->param_prefix . 'per_page'] = $this->per_page;
         $param[$this->param_prefix . 'column'] = $this->column;
+
         $param_string_parts = array();
+
         foreach ($param as $key => & $value)
         {
             $param_string_parts[] = urlencode($key) . '=' . urlencode($value);
         }
+
         return implode('&amp;', $param_string_parts);
     }
 
@@ -663,12 +672,13 @@ class SortableTable extends HTML_Table
         {
             if (strlen($row[0]) > 0)
             {
-                $row[0] = '<input class="' . $this->checkbox_name . '" type="checkbox" name="' . $this->checkbox_name .
-                     '[]" value="' . $row[0] . '"';
+                $row[0] = '<input type="checkbox" name="' . $this->checkbox_name . '[]" value="' . $row[0] . '"';
+
                 if (Request :: get($this->param_prefix . 'selectall'))
                 {
                     $row[0] .= ' checked="checked"';
                 }
+
                 $row[0] .= '/>';
             }
         }

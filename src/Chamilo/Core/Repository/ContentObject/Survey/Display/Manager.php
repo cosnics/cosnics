@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const ANSWER_SERVICE_KEY = 'answerService';
-    
     const ACTION_ACTIVITY = 'Activity';
     const ACTION_MOVE = 'Mover';
     const ACTION_SORT = 'Sorter';
@@ -18,7 +17,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_DELETE_CONFIGURATION = 'ConfigurationDeleter';
     const ACTION_UPDATE_CONFIG = 'ConfigUpdater';
     const ACTION_CHANGE_QUESTION_VISIBILITY = 'VisibilityChanger';
-    
+
     // Parameters
     const PARAM_STEP = 'step';
     const PARAM_PAGE_ITEM_ID = 'page_item_id';
@@ -27,15 +26,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_AJAX_CONTEXT = 'ajax_context';
     const PARAM_CONFIGURATION_ID = 'config_id';
     const PARAM_COMPLEX_QUESTION_ITEM_ID = 'complex_question_item_id';
-        
+
     // Sorting
     const SORT_UP = 'Up';
     const SORT_DOWN = 'Down';
-    
+
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-    
     /**
      *
      * @var int
@@ -44,7 +42,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        if($applicationConfiguration->get(self :: ANSWER_SERVICE_KEY) == null){
+        if ($applicationConfiguration->get(self :: ANSWER_SERVICE_KEY) == null)
+        {
             $answerServiceFactory = new AnswerServiceFactory('Chamilo\Core\Repository\ContentObject\Survey');
             $answerService = $answerServiceFactory->getAnswerService();
             $applicationConfiguration->set(self :: ANSWER_SERVICE_KEY, $answerService);
@@ -54,7 +53,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the id of the currently requested step
-     * 
+     *
      * @return int
      */
     public function get_current_step()
@@ -67,13 +66,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->current_step = $this->current_step[0];
             }
         }
-        
+
         return $this->current_step;
     }
 
     /**
      * Get the content object linked to the current step
-     * 
+     *
      * @return \core\repository\ContentObject
      */
     public function get_current_content_object()
@@ -83,28 +82,28 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the complex content object item linked to the current step
-     * 
+     *
      * @return \core\repository\storage\data_class\ComplexContentObjectItem
      */
     public function get_current_complex_content_object_item()
     {
         return $this->get_current_node()->get_complex_content_object_item();
     }
-    
+
     public function get_current_complex_content_object_path_node()
     {
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
             $this->get_current_step());
     }
-    
+
     public function count_steps()
     {
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->count_nodes();
     }
-    
+
     /**
      * Get the node linked to the current step
-     * 
+     *
      * @return \core\repository\common\path\ComplexContentObjectPathNode
      */
     public function get_current_node()
@@ -112,10 +111,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
             $this->get_current_step());
     }
-    
+
     public function get_complex_content_object_path()
     {
-       return $this->get_parent()->get_root_content_object()->get_complex_content_object_path();
+        return $this->get_parent()->get_root_content_object()->get_complex_content_object_path();
     }
 }
 ?>

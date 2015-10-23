@@ -17,14 +17,7 @@ class ToggleVisibilityComponent extends Manager
 
     public function run()
     {
-        if (Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID))
-        {
-            $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-        }
-        else
-        {
-            $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID];
-        }
+        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
         if (isset($publication_ids))
         {

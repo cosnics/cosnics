@@ -7,7 +7,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -50,7 +49,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
     {
         parent :: __construct($name, $parent);
 
-        $ids = Request :: get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        $ids = $parent->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
 
         if (empty($ids))
         {

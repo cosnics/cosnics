@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -99,7 +98,7 @@ abstract class Manager extends Application
      */
     protected function get_selected_course_type_ids()
     {
-        $course_type_ids = Request :: get(self :: PARAM_COURSE_TYPE_ID);
+        $course_type_ids = $this->getRequest()->get(self :: PARAM_COURSE_TYPE_ID);
 
         if (! isset($course_type_ids))
         {

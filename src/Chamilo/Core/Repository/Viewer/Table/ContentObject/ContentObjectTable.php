@@ -32,7 +32,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
 
     /**
      * Constructor.
-     * 
+     *
      * @param int $owner The id of the current user.
      * @param array $types The types of objects that can be published in current location.
      * @param string $query The search query, or null if none.
@@ -51,15 +51,16 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
+
         if ($this->get_component()->get_maximum_select() != Manager :: SELECT_SINGLE)
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_PUBLISHER), 
-                    Translation :: get('PublishSelected'), 
+                    $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_PUBLISHER)),
+                    Translation :: get('PublishSelected'),
                     false));
         }
-        
+
         return $actions;
     }
 

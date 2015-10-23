@@ -55,11 +55,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $this->render_header();
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
+        $users = $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
 
-        if (Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS))
+        if ($users)
         {
-
-            $users = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
             if (! is_array($users))
             {
                 $users = array($users);

@@ -7,25 +7,32 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: deleter.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
  *
  * @package user.lib.user_manager.component
  */
-class ActiveChangerComponent extends Manager
+abstract class ActiveChangerComponent extends Manager
 {
+
+    abstract private function getState();
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
-        $active = Request :: get(self :: PARAM_ACTIVE);
+        if (! $this->get_user()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $active = $this->getState();
 
         if (! is_array($ids))
         {
