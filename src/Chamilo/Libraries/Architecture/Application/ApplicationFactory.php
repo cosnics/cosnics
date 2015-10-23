@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
@@ -204,13 +203,6 @@ class ApplicationFactory
             $action = $actions;
         }
 
-//         $tableAction = $this->processTableAction($actionParameter);
-
-//         if ($tableAction)
-//         {
-//             $action = $tableAction;
-//         }
-
         return $action;
     }
 
@@ -270,14 +262,9 @@ class ApplicationFactory
      * @param string $action
      * @return string
      */
-    private function getClassName()
+    public function getClassName()
     {
         return $this->buildClassName($this->getAction());
-    }
-
-    public function determineClassName()
-    {
-        return $this->getClassName();
     }
 
     private function buildClassName($action)
@@ -300,44 +287,5 @@ class ApplicationFactory
         }
 
         return $classname;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    private function processTableAction($actionParameter)
-    {
-        $tableName = $this->getRequest()->request->get('table_name');
-
-        if (isset($tableName))
-        {
-            $namespace = $this->getRequest()->request->get($tableName . '_namespace');
-            $class = (string) StringUtilities :: getInstance()->createString($tableName)->upperCamelize();
-
-            $classname = $namespace . '\\' . $class;
-            if (class_exists($classname))
-            {
-                $ids = $classname :: get_selected_ids();
-
-                $this->getRequest()->query->set($classname :: TABLE_IDENTIFIER, $ids);
-                Request :: set_get($classname :: TABLE_IDENTIFIER, $ids);
-
-//                 $tableParameters = unserialize(base64_decode(Request :: post($tableName . '_action_value')));
-
-//                 foreach ($tableParameters as $parameter => $value)
-//                 {
-//                     $this->getRequest()->query->set($parameter, $value);
-//                     Request :: set_get($parameter, $value);
-//                 }
-
-//                 if (array_key_exists($actionParameter, $tableParameters))
-//                 {
-//                     return $tableParameters[$actionParameter];
-//                 }
-            }
-        }
-
-        return null;
     }
 }

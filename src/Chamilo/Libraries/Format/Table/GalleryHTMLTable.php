@@ -218,11 +218,6 @@ class GalleryHTMLTable extends HTML_Table
         return $this->as_html();
     }
 
-    public function toHTML_export()
-    {
-        return $this->as_html(true);
-    }
-
     /**
      * Returns the complete table HTML.
      */

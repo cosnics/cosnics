@@ -139,28 +139,16 @@ class SortableTable extends HTML_Table
         $this->table_name = $table_name;
         $this->additional_parameters = array();
         $this->param_prefix = $table_name . '_';
-        // $this->page_nr = isset($_SESSION[$this->param_prefix . 'page_nr']) ? $_SESSION[$this->param_prefix .
-        // 'page_nr'] : 1;
         $this->page_nr = Request :: get($this->param_prefix . 'page_nr') ? Request :: get(
             $this->param_prefix . 'page_nr') : 1;
-        // $this->column = isset($_SESSION[$this->param_prefix . 'column']) ? $_SESSION[$this->param_prefix . 'column']
-        // : $default_column;
         $this->column = ! is_null(Request :: get($this->param_prefix . 'column')) ? Request :: get(
             $this->param_prefix . 'column') : $default_column;
-        // $this->direction = isset($_SESSION[$this->param_prefix . 'direction']) ? $_SESSION[$this->param_prefix .
-        // 'direction'] : $default_order_direction;
         $this->direction = Request :: get($this->param_prefix . 'direction') ? Request :: get(
             $this->param_prefix . 'direction') : $default_order_direction;
-        // $this->per_page = isset($_SESSION[$this->param_prefix . 'per_page']) ? $_SESSION[$this->param_prefix .
-        // 'per_page'] : $default_items_per_page;
         $this->per_page = Request :: get($this->param_prefix . 'per_page') ? Request :: get(
             $this->param_prefix . 'per_page') : $default_items_per_page;
         $this->allow_page_selection = $allow_page_selection;
         $this->allow_page_navigation = $allow_page_navigation;
-        // $_SESSION[$this->param_prefix . 'per_page'] = $this->per_page;
-        // $_SESSION[$this->param_prefix . 'direction'] = $this->direction;
-        // $_SESSION[$this->param_prefix . 'page_nr'] = $this->page_nr;
-        // $_SESSION[$this->param_prefix . 'column'] = $this->column;
 
         $this->pager = null;
         $this->default_items_per_page = $default_items_per_page;
@@ -239,30 +227,33 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Returns the complete table HTML.
-     * Alias of as_html().
+     *
+     * @return string
+     * @deprecated Use toHtml() now
      */
-    public function toHTML()
+    public function as_html()
     {
-        return $this->as_html();
+        return $this->toHtml();
     }
 
-    public function toHTML_export()
+    public function getEmptyTable()
     {
-        return $this->as_html(true);
+        $cols = $this->getHeader()->getColCount();
+
+        $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
+        $this->setCellContents(0, 0, Translation :: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
+
+        return parent :: toHTML();
     }
 
     /**
      * Returns the complete table HTML.
      */
-    public function as_html($empty_table = false)
+    public function toHtml($empty_table = false)
     {
         if ($this->total_number_of_items == 0)
         {
-            $cols = $this->getHeader()->getColCount();
-            $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
-            $this->setCellContents(0, 0, Translation :: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
-            $empty_table = true;
+            return $this->getEmptyTable();
         }
 
         if (! $empty_table)
