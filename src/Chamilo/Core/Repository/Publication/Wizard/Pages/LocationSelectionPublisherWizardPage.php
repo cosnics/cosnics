@@ -50,7 +50,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
     {
         parent :: __construct($name, $parent);
 
-        $ids = Request :: get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        $ids = $parent->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
 
         if (empty($ids))
         {

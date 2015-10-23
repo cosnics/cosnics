@@ -31,7 +31,7 @@ class TruncaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = Request :: get(self :: PARAM_GROUP_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_GROUP_ID);
         $failures = 0;
 
         if (! empty($ids))

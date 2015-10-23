@@ -43,7 +43,7 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        $content_object_ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $content_object_ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
         $category_ids = Request :: get(self :: PARAM_CATEGORY_ID);
 
         if (! is_array($content_object_ids) && ! is_null($content_object_ids))
@@ -89,21 +89,17 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CONTENT_OBJECT_ID,
-                                    $this->get_export_types_cache($export_type),
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CONTENT_OBJECT_ID,
+                                $this->get_export_types_cache($export_type),
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' .
-                                 $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CATEGORY_ID,
-                                    $category_ids,
-                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
-                                 '</a>';
+                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
+                                self :: PARAM_CATEGORY_ID,
+                                $category_ids,
+                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
                         }
                     }
                     else

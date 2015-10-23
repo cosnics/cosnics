@@ -22,7 +22,7 @@ class ConfigurationDeleterComponent extends Manager
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
 
-            $config_ids = Request :: get(self :: PARAM_CONFIGURATION_ID);
+            $config_ids = $this->getRequest()->get(self :: PARAM_CONFIGURATION_ID);
 
             if (! is_array($config_ids))
             {

@@ -17,7 +17,7 @@ abstract class Manager extends Application
     const ACTION_CREATE_CATEGORY = 'Creator';
     const ACTION_UPDATE_CATEGORY = 'Updater';
     const ACTION_DELETE_CATEGORY = 'Deleter';
-    const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'Visibility_toggler';
+    const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'VisibilityToggler';
     const ACTION_MOVE_CATEGORY = 'Mover';
     const ACTION_CHANGE_CATEGORY_PARENT = 'ParentChanger';
     const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';

@@ -17,22 +17,22 @@ class DeleterComponent extends Manager
     function run()
     {
         $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $ids = Request :: get(self :: PARAM_EXPORT_TEMPLATE_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_EXPORT_TEMPLATE_ID);
         $failures = 0;
-        
+
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-            
+
             if (RightsService :: getInstance())
             {
                 foreach ($ids as $id)
                 {
                     $template = DataManager :: retrieve_export_template_by_id($id);
-                    
+
                     if (! $template->delete())
                     {
                         $failures ++;
@@ -63,13 +63,13 @@ class DeleterComponent extends Manager
                 }
                 $tab = BrowserComponent :: TAB_EXPORT_TEMPLATES;
             }
-            
+
             $this->redirect(
-                Translation :: get($message), 
-                ($failures ? true : false), 
+                Translation :: get($message),
+                ($failures ? true : false),
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                    Manager :: PARAM_PUBLICATION_ID => $publication_id, 
+                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
+                    Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     DynamicTabsRenderer :: PARAM_SELECTED_TAB => $tab));
         }
         else

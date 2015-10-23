@@ -6,7 +6,6 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -28,7 +27,7 @@ class DeleterComponent extends Manager
     public function run()
     {
         $this->check_allowed();
-        $items = Request :: get(Manager :: PARAM_ITEM);
+        $items = $this->getRequest()->get(Manager :: PARAM_ITEM);
         $parent_ids = array();
         $failures = 0;
 

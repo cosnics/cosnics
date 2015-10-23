@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -22,7 +21,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $failures = 0;
 
         if (! empty($ids))

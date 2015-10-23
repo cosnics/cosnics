@@ -36,7 +36,8 @@ class RestorerComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
+
         if (! empty($ids))
         {
             if (! is_array($ids))

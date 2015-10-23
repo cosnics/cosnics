@@ -42,7 +42,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
                 ComplexContentObjectItem :: class_name(),
                 $this->complex_wiki_page_id);
 
-            $compare_object_ids = VersionTable :: get_selected_ids();
+            $compare_object_ids = $this->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
 
             $html = array();
 
