@@ -26,7 +26,7 @@ class SubscribedUserBrowserTable extends RecordTable implements TableFormActions
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
         if ($this->get_component()->is_course_admin($this->get_component()->get_user()))
         {

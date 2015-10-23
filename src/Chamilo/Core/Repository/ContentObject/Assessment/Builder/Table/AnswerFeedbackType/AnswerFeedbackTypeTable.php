@@ -25,7 +25,7 @@ class AnswerFeedbackTypeTable extends DataClassTable implements TableFormActions
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
         $types = array(
             Configuration :: ANSWER_FEEDBACK_TYPE_NONE,

@@ -226,7 +226,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $table = new SortableTableFromArray($table_data, 0, 20, 'registered_packages');
-        $table->set_additional_parameters($this->get_parameters());
+        $table->setAdditionalParameters($this->get_parameters());
         $table->set_header(0, Translation :: get('Package'));
         $table->set_header(1, '', false);
         return $table->as_html();
@@ -269,7 +269,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $table = new SortableTableFromArray($table_data, 0, 20, 'available_packages');
-        $table->set_additional_parameters($this->get_parameters());
+        $table->setAdditionalParameters($this->get_parameters());
         $table->set_header(0, Translation :: get('Package'));
         $table->set_header(1, '', false);
         return $table->as_html();

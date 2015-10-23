@@ -19,7 +19,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__);
+        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
         $action = array(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM);

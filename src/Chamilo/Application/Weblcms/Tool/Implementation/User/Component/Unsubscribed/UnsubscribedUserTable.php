@@ -24,7 +24,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
         if (! Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP))
         {
             // add subscribe options
-            $actions = new TableFormActions(__NAMESPACE__);
+            $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
             // Allowed to subscribe an user
             $actions->add_form_action(
