@@ -70,23 +70,6 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                         $icon_suffix = 'New';
                         $title .= ' (' . Translation :: get('New') . ')';
                     }
-                    // else
-                    // {
-                    // $feedbacks = \core\admin\storage\DataManager :: retrieve_feedback_publications(
-                    // $publication[ContentObjectPublication :: PROPERTY_ID],
-                    // null,
-                    // Manager :: APPLICATION_NAME);
-
-                    // while ($feedback = $feedbacks->next_result())
-                    // {
-                    // if ($feedback->get_modification_date() >= $last_visit_date)
-                    // {
-                    // $icon_suffix = '_new';
-                    // $title .= ' (' . Translation :: get('New') . ')';
-                    // break;
-                    // }
-                    // }
-                    // }
                 }
                 return '<img title="' . $title . '" src="' .
                      $content_object->get_icon_path(Theme :: ICON_MINI . $icon_suffix) . '" />';
@@ -132,8 +115,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                 if ($publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
                 {
                     $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""
-                        style="vertical-align: middle;" title="' .
-                         Translation :: get('SentByEmail') . '"/>';
+                        style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
                      $email_icon;
