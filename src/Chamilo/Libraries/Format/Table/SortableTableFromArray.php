@@ -12,13 +12,13 @@ class SortableTableFromArray extends SortableTable
      *
      * @var multitype:multitype
      */
-    private $table_data;
+    private $tableData;
 
     /**
      *
      * @var boolean
      */
-    private $enable_sorting;
+    private $enableSorting;
 
     /**
      * Constructor
@@ -27,27 +27,31 @@ class SortableTableFromArray extends SortableTable
      * @param $default_column int
      * @param $default_items_per_page int
      */
-    public function __construct($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',
-        $default_direction = SORT_ASC, $allow_page_selection = true, $enable_sorting = true, $allow_page_navigation = true)
+    public function __construct($tableData, $defaultOrderColumn = 1, $defaultPerPage = 20, $tableName = 'tablename',
+        $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $enableSorting = true, $allowPageNavigation = true)
     {
-        $this->table_data = $table_data;
-        $this->enable_sorting = $enable_sorting;
+        $this->tableData = $tableData;
+        $this->enableSorting = $enableSorting;
 
-        if (! $allow_page_selection)
+        if (! $allowPageSelection)
         {
-            $default_items_per_page = count($table_data);
+            $defaultPerPage = count($tableData);
         }
 
         parent :: __construct(
-            $tablename,
-            array($this, 'get_total_number_of_items'),
-            array($this, 'get_table_data'),
-            $default_column,
-            $default_items_per_page,
-            $default_direction,
-            false,
-            $allow_page_selection,
-            $allow_page_navigation);
+            $tableName,
+            array($this, 'countData'),
+            array($this, 'getData'),
+            $defaultOrderColumn,
+            $defaultPerPage,
+            $defaultOrderDirection,
+            $allowPageSelection,
+            $allowPageNavigation);
+    }
+
+    public function getEnableSorting()
+    {
+        return $this->enableSorting;
     }
 
     /**
@@ -55,13 +59,13 @@ class SortableTableFromArray extends SortableTable
      *
      * @see SortableTable#get_table_data
      */
-    public function get_table_data($from = 1)
+    public function getData($from = 1)
     {
-        $content = $this->table_data;
+        $content = $this->getTableData();
 
-        if ($this->enable_sorting)
+        if ($this->getEnableSorting())
         {
-            $content = TableSort :: sort_table($this->table_data, $this->get_column(), $this->get_direction());
+            $content = TableSort :: sort_table($content, $this->get_column(), $this->get_direction());
         }
 
         if ($this->isPageSelectionAllowed())
@@ -76,27 +80,27 @@ class SortableTableFromArray extends SortableTable
      *
      * @return multitype:multitype
      */
-    public function getData()
+    public function getTableData()
     {
-        return $this->table_data;
+        return $this->tableData;
     }
 
     /**
      *
      * @param $table_data multitype:multitype
      */
-    public function set_data($table_data)
+    public function setTableData($tableData)
     {
-        $this->table_data = $table_data;
+        $this->tableData = $tableData;
     }
 
     /**
      *
      * @param $data_row multitype:mixed
      */
-    public function add_data($data_row)
+    public function addTableData($dataRow)
     {
-        $this->table_data[] = $data_row;
+        $this->tableData[] = $dataRow;
     }
 
     /**
@@ -104,8 +108,15 @@ class SortableTableFromArray extends SortableTable
      *
      * @see SortableTable#get_total_number_of_items
      */
-    public function get_total_number_of_items()
+    public function countData()
     {
-        return count($this->table_data);
+        return count($this->getTableData());
+    }
+
+    public function getFrom()
+    {
+        $pager = $this->getPager();
+        $offset = $pager->getOffsetByPageId();
+        return $offset[0] - 1;
     }
 }

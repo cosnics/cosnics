@@ -24,7 +24,7 @@ class UnsubscribedGroupTable extends DataClassTable implements TableFormActionsS
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             // add subscribe options
-            $actions = new TableFormActions(__NAMESPACE__);
+            $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
             $actions->add_form_action(
                 new TableFormAction(

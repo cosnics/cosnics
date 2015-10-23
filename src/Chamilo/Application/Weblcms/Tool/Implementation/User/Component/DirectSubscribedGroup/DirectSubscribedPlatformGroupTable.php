@@ -34,7 +34,7 @@ class DirectSubscribedPlatformGroupTable extends RecordTable implements TableFor
     {
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
-            $actions = new TableFormActions(__NAMESPACE__);
+            $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
 
             // unsubscribe
             $actions->add_form_action(

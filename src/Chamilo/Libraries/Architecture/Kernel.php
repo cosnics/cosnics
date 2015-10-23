@@ -266,7 +266,7 @@ class Kernel
      */
     private function checkAuthentication()
     {
-        $applicationClassName = $this->getApplicationFactory()->determineClassName();
+        $applicationClassName = $this->getApplicationFactory()->getClassName();
         $applicationRequiresAuthentication = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
@@ -440,7 +440,7 @@ class Kernel
      */
     private function traceVisit()
     {
-        $applicationClassName = $this->getApplicationFactory()->determineClassName();
+        $applicationClassName = $this->getApplicationFactory()->getClassName();
         $applicationRequiresTracing = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
