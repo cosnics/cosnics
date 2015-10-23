@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Translation;
@@ -29,12 +28,10 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
         $translation = Translation :: get('AssignmentSubmission', array(), 'Chamilo\Core\Tracking');
 
         $ids = \Chamilo\Libraries\Platform\Session\Request :: get(Manager :: PARAM_CONTENT_OBJECT_IDS);
+
         if (! $ids)
         {
-            $ids = \Chamilo\Libraries\Platform\Session\Request :: get(AssignmentRequestTable :: TABLE_IDENTIFIER); // ['assignment_request_table_id'];
-                                                                                                                       // //from
-                                                                                                                       // table
-                                                                                                                       // actions
+            $ids = $this->getRequest()->get(Manager :: PARAM_REQUEST_IDS);
         }
 
         if (! $ids)

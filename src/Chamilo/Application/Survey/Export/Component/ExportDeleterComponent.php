@@ -18,23 +18,23 @@ class ExportDeleterComponent extends Manager
     function run()
     {
         $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $ids = Request :: get(self :: PARAM_EXPORT_TRACKER_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_EXPORT_TRACKER_ID);
         $failures = 0;
-        
+
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-            
+
             if (RightsService :: getInstance())
             {
                 foreach ($ids as $id)
                 {
-                    
+
                     $export = DataManager :: retrieve_by_id(Export :: class_name(), $id);
-                    
+
                     if ($export->get_status() == Export :: STATUS_EXPORT_IN_QUEUE)
                     {
                         if (! $export->delete())
@@ -72,13 +72,13 @@ class ExportDeleterComponent extends Manager
                 }
                 $tab = BrowserComponent :: TAB_EXPORT_TACKERS;
             }
-            
+
             $this->redirect(
-                Translation :: get($message), 
-                ($failures ? true : false), 
+                Translation :: get($message),
+                ($failures ? true : false),
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                    Manager :: PARAM_PUBLICATION_ID => $publication_id, 
+                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
+                    Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     DynamicTabsRenderer :: PARAM_SELECTED_TAB => $tab));
         }
         else

@@ -26,7 +26,7 @@ class DenierComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = \Chamilo\Libraries\Platform\Session\Request :: get(self :: PARAM_REQUEST_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_REQUEST_ID);
 
         if (! empty($ids))
         {

@@ -13,7 +13,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -74,7 +73,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     * This method will look for selected user_ids in the HTTP header or the form. When first visiting the page the
+     * This method will look for selected user_ids in the HTTP header or the form.
+     * When first visiting the page the
      * user_ids will be located in the HTTP header. They are inserted into the form as an invisible field to store this
      * information.
      *
@@ -83,7 +83,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      */
     public function get_selected_user_ids()
     {
-        $user_ids = Request :: get(self :: PARAM_OBJECTS);
+        $user_ids = $this->getRequest()->get(self :: PARAM_OBJECTS);
 
         if (! $user_ids)
         {
@@ -138,7 +138,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     * Will retrieve the selected users from the database. Ignores and removes users from the array that are not allowed
+     * Will retrieve the selected users from the database.
+     * Ignores and removes users from the array that are not allowed
      * to be subscribed.
      *
      * @return array

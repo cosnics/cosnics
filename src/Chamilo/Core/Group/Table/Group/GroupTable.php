@@ -18,11 +18,11 @@ class GroupTable extends DataClassTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_GROUP), 
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_GROUP)),
                 Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE_GROUP), 
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE_GROUP)),
                 Translation :: get('TruncateSelected')));
         return $actions;
     }

@@ -17,8 +17,9 @@ class GroupRelUserTable extends DataClassTable implements TableFormActionsSuppor
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE_USER_FROM_GROUP), 
-                Translation :: get('UnsubscribeSelected'), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE_USER_FROM_GROUP)),
+                Translation :: get('UnsubscribeSelected'),
                 false));
         return $actions;
     }

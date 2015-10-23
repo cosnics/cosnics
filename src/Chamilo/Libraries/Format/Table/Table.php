@@ -514,7 +514,7 @@ abstract class Table
      */
     protected function get_checkbox_name()
     {
-        return $this->get_name() . static :: CHECKBOX_NAME_SUFFIX;
+        return static :: TABLE_IDENTIFIER;
     }
 
     /**

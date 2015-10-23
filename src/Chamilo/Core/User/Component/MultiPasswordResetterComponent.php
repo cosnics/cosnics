@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -30,7 +29,7 @@ class MultiPasswordResetterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
 
         if (! $this->get_user()->is_platform_admin())
         {

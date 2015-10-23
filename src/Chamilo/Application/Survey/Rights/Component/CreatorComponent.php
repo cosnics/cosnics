@@ -66,5 +66,4 @@ class CreatorComponent extends TabComponent
             return implode(PHP_EOL, $html);
         }
     }
-    
 }

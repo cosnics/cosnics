@@ -150,7 +150,7 @@ abstract class Manager extends Application
 
     public function get_selected_entity_id()
     {
-        return Request :: get(self :: PARAM_ENTITY_ID);
+        return $this->getRequest()->get(self :: PARAM_ENTITY_ID);
     }
 
     public function get_selected_target_id()

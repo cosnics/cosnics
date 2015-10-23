@@ -18,8 +18,9 @@ class ConfigurationTable extends DataClassTable implements TableFormActionsSuppo
         $actions = new TableFormActions(__NAMESPACE__);
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONFIGURATION), 
-                Translation :: getInstance()->getTranslation('RemoveSelected', array(), Utilities :: COMMON_LIBRARIES), 
+                $this->get_component()->get_url(
+                    array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_CONFIGURATION)),
+                Translation :: getInstance()->getTranslation('RemoveSelected', array(), Utilities :: COMMON_LIBRARIES),
                 false));
         return $actions;
     }

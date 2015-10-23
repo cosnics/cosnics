@@ -30,15 +30,16 @@ class PublicationTable extends DataClassTable implements TableFormActionsSupport
 
         $actions->add_form_action(
             new TableFormAction(
-                array(
-                    Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                    \Chamilo\Application\Survey\Favourite\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager :: ACTION_CREATE),
+                $this->get_component()->get_url(
+                    array(
+                        Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
+                        \Chamilo\Application\Survey\Favourite\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Favourite\Manager :: ACTION_CREATE)),
                 Translation :: get('FavouriteSelected', null, Utilities :: COMMON_LIBRARIES),
                 true));
 
         $actions->add_form_action(
             new TableFormAction(
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE),
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
                 Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES),
                 true));
 

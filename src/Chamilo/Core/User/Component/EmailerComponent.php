@@ -6,7 +6,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -23,7 +22,7 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
 
         if (! is_array($ids))
         {

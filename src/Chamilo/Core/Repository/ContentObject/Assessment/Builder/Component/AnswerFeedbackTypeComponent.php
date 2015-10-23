@@ -27,7 +27,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
     public function run()
     {
         $answer_feedback_type = Request :: get(self :: PARAM_ANSWER_FEEDBACK_TYPE);
-        $complex_question_id = Request :: get(self :: PARAM_COMPLEX_QUESTION_ID);
+        $complex_question_id = $this->getRequest()->get(self :: PARAM_COMPLEX_QUESTION_ID);
 
         if (is_null($complex_question_id) || is_null($answer_feedback_type))
         {

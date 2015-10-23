@@ -16,16 +16,16 @@ class ImportTable extends DataClassTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
-        
+
         if ($this->get_component()->get_maximum_select() != Manager :: SELECT_SINGLE)
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_PUBLISHER), 
-                    Translation :: get('PublishSelected'), 
+                    $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_PUBLISHER)),
+                    Translation :: get('PublishSelected'),
                     false));
         }
-        
+
         return $actions;
     }
 }

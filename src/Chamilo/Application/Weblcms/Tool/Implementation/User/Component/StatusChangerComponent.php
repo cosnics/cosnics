@@ -24,7 +24,7 @@ abstract class StatusChangerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $objects = Request :: get(self :: PARAM_OBJECTS);
+        $objects = $this->getRequest()->get(self :: PARAM_OBJECTS);
 
         if (! $objects /* || !$status*/)
         {

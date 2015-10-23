@@ -36,7 +36,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CATEGORY_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
 
         if (! $this->get_user())
         {

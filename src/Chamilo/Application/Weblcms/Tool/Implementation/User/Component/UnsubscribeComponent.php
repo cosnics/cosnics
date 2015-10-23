@@ -33,7 +33,7 @@ class UnsubscribeComponent extends Manager
         }
 
         $course = $this->get_course();
-        $users = Request :: get(self :: PARAM_OBJECTS);
+        $users = $this->getRequest()->get(self :: PARAM_OBJECTS);
         if (! is_array($users))
         {
             $users = array($users);

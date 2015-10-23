@@ -4,7 +4,6 @@ namespace Chamilo\Core\Metadata\Provider\Component;
 use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
@@ -31,7 +30,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $providerLinkIds = Request :: get(self :: PARAM_PROVIDER_LINK_ID);
+        $providerLinkIds = $this->getRequest()->get(self :: PARAM_PROVIDER_LINK_ID);
 
         try
         {

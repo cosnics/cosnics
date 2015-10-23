@@ -10,7 +10,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -36,7 +35,8 @@ class RestorerComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
+
         if (! empty($ids))
         {
             if (! is_array($ids))

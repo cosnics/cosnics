@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
@@ -30,7 +29,7 @@ class GroupSubscribeComponent extends Manager
         }
 
         $course = $this->get_course();
-        $group_ids = Request :: get(self :: PARAM_OBJECTS);
+        $group_ids = $this->getRequest()->get(self :: PARAM_OBJECTS);
 
         if (isset($group_ids) && ! is_array($group_ids))
         {

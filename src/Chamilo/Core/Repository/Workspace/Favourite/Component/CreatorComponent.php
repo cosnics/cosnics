@@ -23,7 +23,7 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $workspaceIdentifier = $this->getRequest()->query->get(
+        $workspaceIdentifier = $this->getRequest()->get(
             \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
         if (! $workspaceIdentifier)

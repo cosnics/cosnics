@@ -40,7 +40,7 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_FAVOURITE;
-    
+
     /**
      *
      * @return \Chamilo\Application\Survey\Storage\DataClass\Publication
@@ -49,17 +49,19 @@ abstract class Manager extends Application
     {
         $publicationService = new PublicationService(new PublicationRepository());
         $publicationId = $this->getCurrentPublicationIdentifier();
-        if($publicationId){
+        if ($publicationId)
+        {
             return $publicationService->getPublicationByIdentifier($this->getCurrentPublicationIdentifier());
-        }else{
+        }
+        else
+        {
             $publication = new Publication();
             $publication->setId(0);
             $publication->setPublisherId(0);
             return $publication;
         }
-         
     }
-    
+
     /**
      *
      * @return \Symfony\Component\HttpFoundation\mixed
@@ -68,5 +70,4 @@ abstract class Manager extends Application
     {
         return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
     }
-    
 }
