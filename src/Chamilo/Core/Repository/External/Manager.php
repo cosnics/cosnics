@@ -31,7 +31,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 abstract class Manager extends Application implements NoContextComponent
 {
-    const CLASS_NAME = __CLASS__;
 
     // Actions
     const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';

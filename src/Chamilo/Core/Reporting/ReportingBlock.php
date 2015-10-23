@@ -9,7 +9,6 @@ abstract class ReportingBlock
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Constants
-    const CLASS_NAME = __CLASS__;
     const PARAM_DISPLAY_MODE = "display_mode";
 
     private $id;
@@ -101,9 +100,8 @@ abstract class ReportingBlock
     }
 
     /**
-     * @brief Return block style containing properties such as title font size or title color.
-     * Default implementation retrieves values from the cental configuration. See
-     * src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
+     * @brief Return block style containing properties such as title font size or title color. Default implementation
+     * retrieves values from the cental configuration. See src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
      * Blocks can override this function and return a ReportingBlockStyle object with custom properties.
      */
     public function getStyle()

@@ -295,7 +295,7 @@ class Group extends NestedSet
             new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_id()));
 
-        return DataManager :: deletes(GroupRelUser :: CLASS_NAME, $condition);
+        return DataManager :: deletes(GroupRelUser :: class_name(), $condition);
     }
 
     public function create($previous_id = 0)

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class WebpageProperties
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_TITLE = 'title';
     const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_CONTENT_TYPE = 'content_type';

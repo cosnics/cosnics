@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class ItemTitles
 {
-    const CLASS_NAME = __CLASS__;
 
     private $titles_by_isocode = array();
 

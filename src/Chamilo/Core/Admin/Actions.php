@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin;
 
 class Actions
 {
-    const CLASS_NAME = __CLASS__;
 
     private $context;
 
