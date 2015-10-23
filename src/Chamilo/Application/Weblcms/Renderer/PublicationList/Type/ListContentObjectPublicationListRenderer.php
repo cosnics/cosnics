@@ -192,22 +192,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             {
                 $icon_suffix = 'New';
             }
-            // else
-            // {
-            // $feedbacks = \core\admin\storage\DataManager :: retrieve_feedback_publications(
-            // $publication[ContentObjectPublication :: PROPERTY_ID],
-            // null,
-            // Manager :: APPLICATION_NAME);
-
-            // while ($feedback = $feedbacks->next_result())
-            // {
-            // if ($feedback->get_modification_date() >= $last_visit_date)
-            // {
-            // $icon_suffix = '_new';
-            // break;
-            // }
-            // }
-            // }
         }
 
         $left = $position % 2;

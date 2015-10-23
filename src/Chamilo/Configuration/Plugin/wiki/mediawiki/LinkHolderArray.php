@@ -248,7 +248,7 @@ class MediawikiLinkHolderArray
                     ComplexContentObjectItem :: PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
 
-            $current_complex_wiki_page = \core\repository\storage\DataManager :: retrieve_complex_content_object_items(
+            $current_complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
                 ComplexContentObjectItem :: class_name(),
                 new DataClassRetrievesParameters(new AndCondition($complex_wiki_page_conditions)))->next_result();
             $wiki_complex_ids[$pdbk] = $current_complex_wiki_page->get_id();
