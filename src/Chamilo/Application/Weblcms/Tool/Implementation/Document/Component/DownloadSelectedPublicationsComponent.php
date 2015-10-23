@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
@@ -23,9 +22,10 @@ class DownloadSelectedPublicationsComponent extends Manager
 
     public function run()
     {
-        $publications_ids = Request :: get('publication');
+        $publications_ids = $this->getRequest()->get('publication');
 
         $content_object_ids = array();
+
         foreach ($publications_ids as $publication_id)
         {
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publication_with_content_object(

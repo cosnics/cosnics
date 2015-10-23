@@ -34,15 +34,7 @@ class SubmissionDeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if (Request :: get(self :: PARAM_SUBMISSION))
-        {
-            $submission_ids = Request :: get(self :: PARAM_SUBMISSION);
-        }
-        else
-        {
-            $table_name = Request :: post('table_name');
-            $submission_ids = Request :: post($table_name . '_id');
-        }
+        $submission_ids = $this->getRequest()->get(self :: PARAM_SUBMISSION);
 
         if (! is_array($submission_ids))
         {

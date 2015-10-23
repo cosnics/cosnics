@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
-use Chamilo\Application\Weblcms\Request\Table\Request\RequestTable;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -113,19 +111,7 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
      */
     public function get_ids()
     {
-        $request_class = $this->get_request_class();
-
-        $ids = $request_class :: get(self :: PARAM_REQUEST_IDS);
-        if (! $ids)
-        {
-            $ids = \Chamilo\Libraries\Platform\Session\Request :: get(AssignmentRequestTable :: TABLE_IDENTIFIER);
-        }
-        if (! $ids)
-        {
-            $ids = \Chamilo\Libraries\Platform\Session\Request :: get(RequestTable :: TABLE_IDENTIFIER);
-        }
-
-        return $ids;
+        return $this->getRequest()->get(self :: PARAM_REQUEST_IDS);
     }
 
     /**
