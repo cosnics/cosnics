@@ -33,7 +33,7 @@ class SubscriberComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $users = Request :: get(self :: PARAM_USER_ID);
+        $users = $this->getRequest()->get(self :: PARAM_USER_ID);
 
         $failures = 0;
 

@@ -172,7 +172,7 @@ class ShareComponent extends Manager implements TableSupport
     {
         if (! isset($this->selectedWorkspaceIdentifiers))
         {
-            $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->query->get(
+            $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->get(
                 Manager :: PARAM_SELECTED_WORKSPACE_ID,
                 array());
         }
@@ -188,7 +188,7 @@ class ShareComponent extends Manager implements TableSupport
     {
         if (! isset($this->selectedContentObjectIdentifiers))
         {
-            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->query->get(
+            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
                 \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID,
                 array());
         }

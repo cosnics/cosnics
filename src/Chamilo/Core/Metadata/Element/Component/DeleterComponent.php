@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -28,7 +27,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $element_ids = Request :: get(self :: PARAM_ELEMENT_ID);
+        $element_ids = $this->getRequest()->get(self :: PARAM_ELEMENT_ID);
 
         try
         {

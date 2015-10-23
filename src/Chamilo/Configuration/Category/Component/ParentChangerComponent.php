@@ -32,7 +32,7 @@ class ParentChangerComponent extends Manager
     {
         $user = $this->get_user();
 
-        $ids = Request :: get(self :: PARAM_CATEGORY_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
 
         if (! $user)
         {

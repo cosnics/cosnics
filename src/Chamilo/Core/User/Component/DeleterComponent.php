@@ -6,7 +6,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -29,7 +28,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = Request :: get(self :: PARAM_USER_USER_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
 
         if (! is_array($ids))
         {

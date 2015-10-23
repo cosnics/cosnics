@@ -23,7 +23,7 @@ class CopierComponent extends Manager
 
     public function run()
     {
-        $complexContentObjectItemIdentifiers = Request :: get(
+        $complexContentObjectItemIdentifiers = $this->getRequest()->get(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if (! $complexContentObjectItemIdentifiers)

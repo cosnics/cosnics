@@ -23,8 +23,7 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $publicationIdentifier = $this->getRequest()->query->get(
-            \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        $publicationIdentifier = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
 
         if (! $publicationIdentifier)
         {

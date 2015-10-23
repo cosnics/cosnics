@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class WikiPageTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_WIKI_PAGE_ID;
+    const TABLE_IDENTIFIER = \Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
     public function get_implemented_form_actions()
     {

@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $publicationIdentifiers = $this->getRequest()->query->get(self :: PARAM_PUBLICATION_ID);
+        $publicationIdentifiers = $this->getRequest()->get(self :: PARAM_PUBLICATION_ID);
 
         try
         {

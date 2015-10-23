@@ -24,9 +24,9 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     {
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            $factory = new ApplicationFactory(              
+            $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
         else

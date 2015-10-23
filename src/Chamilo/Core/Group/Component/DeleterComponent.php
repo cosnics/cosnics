@@ -56,7 +56,7 @@ class DeleterComponent extends Manager
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('DeleteGroup')));
         $trail->add_help('group general');
 
-        $ids = Request :: get(self :: PARAM_GROUP_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_GROUP_ID);
         $failures = 0;
 
         if (! empty($ids))

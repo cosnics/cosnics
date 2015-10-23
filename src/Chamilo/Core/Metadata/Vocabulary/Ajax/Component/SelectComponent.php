@@ -241,7 +241,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
      */
     public function getSelectedVocabularyId()
     {
-        return (array) $this->getRequest()->query->get(\Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_VOCABULARY_ID);
+        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_VOCABULARY_ID);
     }
 
     /**

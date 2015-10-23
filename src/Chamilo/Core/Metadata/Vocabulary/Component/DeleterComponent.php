@@ -5,7 +5,6 @@ use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
@@ -26,7 +25,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $vocabulary_ids = Request :: get(self :: PARAM_VOCABULARY_ID);
+        $vocabulary_ids = $this->getRequest()->get(self :: PARAM_VOCABULARY_ID);
 
         try
         {

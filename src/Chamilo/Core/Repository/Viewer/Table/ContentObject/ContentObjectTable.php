@@ -51,6 +51,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__);
+
         if ($this->get_component()->get_maximum_select() != Manager :: SELECT_SINGLE)
         {
             $actions->add_form_action(

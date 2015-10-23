@@ -101,7 +101,7 @@ class RightsComponent extends TabComponent
      */
     public function get_available_nodes()
     {
-        $selected_steps = Request :: get(self :: PARAM_STEP);
+        $selected_steps = $this->getRequest()->get(self :: PARAM_STEP);
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);

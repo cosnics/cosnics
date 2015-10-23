@@ -22,13 +22,14 @@ class VisibilityTogglerComponent extends Manager
 {
 
     /**
-     * Toggles the visibility of the category passed by id, if possible. If no category is found or the user has
+     * Toggles the visibility of the category passed by id, if possible.
+     * If no category is found or the user has
      * insufficient rights, an error is shown. Otherwise, the change is made and the user is redirected to the previous
      * page.
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CATEGORY_ID);
+        $ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
 
         if (! $this->get_user())
         {
