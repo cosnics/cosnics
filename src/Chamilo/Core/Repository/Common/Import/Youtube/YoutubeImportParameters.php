@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class YoutubeImportParameters extends ImportParameters
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

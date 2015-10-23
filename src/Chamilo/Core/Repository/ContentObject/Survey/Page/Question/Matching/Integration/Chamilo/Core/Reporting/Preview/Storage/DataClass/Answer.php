@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Integration\Chamilo\Core\Reporting\Preview\Storage\DataClass;
 
-class Answer implements \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Integration\Chamilo\Core\Reporting\Answer
+class Answer implements
+    \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Integration\Chamilo\Core\Reporting\Answer
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_QUESTION_ID = 'question_id';
     const PROPERTY_OPTION_ID = 'option_id';
     const PROPERTY_MATCH_ID = 'match_id';

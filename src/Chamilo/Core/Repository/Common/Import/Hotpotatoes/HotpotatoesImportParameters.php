@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class HotpotatoesImportParameters extends ImportParameters
 {
-    const CLASS_NAME = __CLASS__;
 
     private $file;
 

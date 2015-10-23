@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 class WebpageImportParameters extends ImportParameters
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

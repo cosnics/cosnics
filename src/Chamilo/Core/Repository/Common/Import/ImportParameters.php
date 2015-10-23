@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 abstract class ImportParameters
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *

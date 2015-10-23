@@ -309,7 +309,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     private function has_submissions()
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: count_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $this->get_own_table_conditions()) > 0;
     }
@@ -325,7 +325,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
         $total_score = 0;
 
         $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: CLASS_NAME,
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
             \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
             $this->get_own_table_conditions(),
             null,

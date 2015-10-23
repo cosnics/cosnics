@@ -20,10 +20,8 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 // use Chamilo\Core\Repository\Workspace\Service\RightsService;
-
 class ExportParameters
 {
-    const CLASS_NAME = __CLASS__;
 
     private $content_object_ids = array();
 

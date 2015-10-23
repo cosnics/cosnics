@@ -48,7 +48,7 @@ class Mail extends DataClass
     // public function delete()
     // {
     // $condition = new EqualityCondition(MailTracker :: PROPERTY_SURVEY_PUBLICATION_MAIL_ID, $this->get_id());
-    // $trackers = Tracker :: get_data(MailTracker :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
+    // $trackers = Tracker :: get_data(MailTracker :: class_name(), Manager :: APPLICATION_NAME, $condition);
     // while ($tracker = $trackers->next_result())
     // {
     // $tracker->delete();

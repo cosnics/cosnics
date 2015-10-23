@@ -5,7 +5,6 @@ use finfo;
 
 class FileProperties
 {
-    const CLASS_NAME = __CLASS__;
     const PROPERTY_NAME = 'name';
     const PROPERTY_EXTENSION = 'extension';
     const PROPERTY_TYPE = 'type';

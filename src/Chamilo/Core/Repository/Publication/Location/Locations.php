@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class Locations
 {
-    const CLASS_NAME = __CLASS__;
 
     /**
      *
