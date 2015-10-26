@@ -127,9 +127,9 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements C
 
         $table = new SortableTable($data);
         $table->setAttribute('class', 'data_table invisible_table');
-        $table->set_header(0, null, false);
+        $table->setColumnHeader(0, null, false);
         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
-        $table->set_header(1, null, false);
+        $table->setColumnHeader(1, null, false);
         $table->getHeader()->setColAttributes(1, 'class="invisible"');
 
         $html[] = $table->as_html();

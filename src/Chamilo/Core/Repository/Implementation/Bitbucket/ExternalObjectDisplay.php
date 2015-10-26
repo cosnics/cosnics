@@ -77,11 +77,11 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             }
 
             $table = new SortableTableFromArray($data);
-            $table->set_header(0, Translation :: get('Name'));
-            $table->set_header(1, Translation :: get('Author'));
-            $table->set_header(2, Translation :: get('Time'));
-            $table->set_header(3, Translation :: get('Branch'));
-            $table->set_header(4, Translation :: get('Download'));
+            $table->setColumnHeader(0, Translation :: get('Name'));
+            $table->setColumnHeader(1, Translation :: get('Author'));
+            $table->setColumnHeader(2, Translation :: get('Time'));
+            $table->setColumnHeader(3, Translation :: get('Branch'));
+            $table->setColumnHeader(4, Translation :: get('Download'));
             $html[] = '<h3>' . Translation :: get('Tags') . '</h3>';
             $html[] = $table->as_html();
         }
@@ -112,12 +112,12 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
             }
 
             $table = new SortableTableFromArray($data);
-            $table->set_header(0, Translation :: get('Revision'));
-            $table->set_header(1, Translation :: get('Author'));
-            $table->set_header(2, Translation :: get('Message'));
-            $table->set_header(3, Translation :: get('Time'));
-            $table->set_header(4, Translation :: get('Branch'));
-            $table->set_header(5, Translation :: get('Download'));
+            $table->setColumnHeader(0, Translation :: get('Revision'));
+            $table->setColumnHeader(1, Translation :: get('Author'));
+            $table->setColumnHeader(2, Translation :: get('Message'));
+            $table->setColumnHeader(3, Translation :: get('Time'));
+            $table->setColumnHeader(4, Translation :: get('Branch'));
+            $table->setColumnHeader(5, Translation :: get('Download'));
             $html[] = '<h3>' . Translation :: get('Changesets') . '</h3>';
             $html[] = $table->as_html();
         }

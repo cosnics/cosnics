@@ -116,13 +116,13 @@ class ExporterComponent extends Manager
                 $table_data[] = $table_row;
 
                 $export_table = new ExportTable($table_data);
-                $export_table->set_header(0, '', false);
-                $export_table->set_header(1, Translation :: get('Type'), false);
-                $export_table->set_header(2, Translation :: get('ShortCount'), false);
+                $export_table->setColumnHeader(0, '', false);
+                $export_table->setColumnHeader(1, Translation :: get('Type'), false);
+                $export_table->setColumnHeader(2, Translation :: get('ShortCount'), false);
 
                 foreach (ContentObjectExport :: get_types() as $key => $export_type)
                 {
-                    $export_table->set_header(
+                    $export_table->setColumnHeader(
                         $key + 3,
                         Translation :: get(
                             'ImportType' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()),

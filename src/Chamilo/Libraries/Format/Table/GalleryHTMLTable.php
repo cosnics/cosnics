@@ -796,33 +796,7 @@ class GalleryHTMLTable extends HTML_Table
         return $out;
     }
 
-    /**
-     * Gets the AJAX status of the table
-     *
-     * @return boolean Whether or not the table should have AJAX functionality
-     */
-    public function is_ajax_enabled()
-    {
-        return $this->ajax_enabled;
-    }
-
-    /**
-     * Sets the table's AJAX status to true
-     */
-    public function enable_ajax()
-    {
-        $this->ajax_enabled = true;
-    }
-
-    /**
-     * Sets the table's AJAX status to false
-     */
-    public function disable_ajax()
-    {
-        $this->ajax_enabled = false;
-    }
-
-    public function get_per_page()
+    public function getNumberOfItemsPerPage()
     {
         return $this->per_page;
     }

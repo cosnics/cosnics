@@ -91,13 +91,13 @@ foreach ($extensions as $extension)
 
 $table = new SortableTableFromArray($data, 0, 200);
 $header = $table->getHeader();
-$table->set_header(0, 'Application');
+$table->setColumnHeader(0, 'Application');
 
 foreach ($sizes as $key => $header_size)
 {
-    $table->set_header(($key * 3) + 1, $header_size);
-    $table->set_header(($key * 3) + 2, $header_size . ' NA');
-    $table->set_header(($key * 3) + 3, $header_size . ' NEW');
+    $table->setColumnHeader(($key * 3) + 1, $header_size);
+    $table->setColumnHeader(($key * 3) + 2, $header_size . ' NA');
+    $table->setColumnHeader(($key * 3) + 3, $header_size . ' NEW');
 }
 
 $page = Page :: getInstance();

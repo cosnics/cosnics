@@ -113,11 +113,11 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
         $table = new SortableTableFromArray($table_data, 0);
 
-        $table->set_header(0, '#', false);
-        $table->set_header(1, Translation :: get('Type'), false);
-        $table->set_header(2, Translation :: get('Video'), false);
-        $table->set_header(3, Translation :: get('Audio'), false);
-        $table->set_header(4, '', false);
+        $table->setColumnHeader(0, '#', false);
+        $table->setColumnHeader(1, Translation :: get('Type'), false);
+        $table->setColumnHeader(2, Translation :: get('Video'), false);
+        $table->setColumnHeader(3, Translation :: get('Audio'), false);
+        $table->setColumnHeader(4, '', false);
 
         return $table->as_html();
     }

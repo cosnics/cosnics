@@ -352,9 +352,9 @@ foreach ($packages as $key => $package)
 
 $table = new SortableTableFromArray($rows, 0, 500, 'packages_list');
 $header = $table->getHeader();
-$table->set_header(0, '#');
-$table->set_header(1, 'Package');
-$table->set_header(2, ' ');
+$table->setColumnHeader(0, '#');
+$table->setColumnHeader(1, 'Package');
+$table->setColumnHeader(2, ' ');
 
 $page = Page :: getInstance();
 $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);

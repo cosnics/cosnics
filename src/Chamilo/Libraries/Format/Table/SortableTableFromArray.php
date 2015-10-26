@@ -65,12 +65,12 @@ class SortableTableFromArray extends SortableTable
 
         if ($this->getEnableSorting())
         {
-            $content = TableSort :: sort_table($content, $this->get_column(), $this->get_direction());
+            $content = TableSort :: sort_table($content, $this->getOrderColumn(), $this->getOrderDirection());
         }
 
         if ($this->isPageSelectionAllowed())
         {
-            $content = array_slice($content, $from, $this->get_per_page());
+            $content = array_slice($content, $from, $this->getNumberOfItemsPerPage());
         }
 
         return $content;

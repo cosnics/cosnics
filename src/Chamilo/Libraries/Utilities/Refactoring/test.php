@@ -44,9 +44,9 @@ require __DIR__ . '/../../Architecture/Bootstrap.php';
 // }
 
 // $action_table = new SortableTableFromArray($data, 0, 600);
-// $action_table->set_header(0, 'context');
-// $action_table->set_header(1, 'constant');
-// $action_table->set_header(2, 'component');
+// $action_table->setColumnHeader(0, 'context');
+// $action_table->setColumnHeader(1, 'constant');
+// $action_table->setColumnHeader(2, 'component');
 
 $data = array();
 
@@ -96,8 +96,8 @@ foreach ($registrations as $registration_type => $packages)
 }
 
 $component_table = new SortableTableFromArray($data, 0, 600);
-$component_table->set_header(0, 'context');
-$component_table->set_header(1, 'component');
+$component_table->setColumnHeader(0, 'context');
+$component_table->setColumnHeader(1, 'component');
 
 $page = Page :: getInstance();
 $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);

@@ -156,14 +156,14 @@ abstract class LocationResult
 
         foreach ($headers as $key => $header)
         {
-            $this->table->set_header($key, $header, false);
+            $this->table->setColumnHeader($key, $header, false);
         }
         $key ++;
 
-        $this->table->set_header($key ++, Translation :: get('ContentObject'), false);
+        $this->table->setColumnHeader($key ++, Translation :: get('ContentObject'), false);
 
         $table_header->setColAttributes($key, 'class="action"');
-        $this->table->set_header(
+        $this->table->setColumnHeader(
             $key ++,
             Theme :: getInstance()->getCommonImage(
                 'Action/Search',
@@ -174,7 +174,7 @@ abstract class LocationResult
             false);
 
         $table_header->setColAttributes($key, 'class="action"');
-        $this->table->set_header(
+        $this->table->setColumnHeader(
             $key ++,
             Theme :: getInstance()->getCommonImage(
                 'Status/NormalMini',
