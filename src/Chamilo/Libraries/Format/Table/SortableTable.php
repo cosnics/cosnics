@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
 use Pager;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * This class allows you to display a sortable data-table.
@@ -549,6 +550,7 @@ class SortableTable extends HTML_Table
             {
                 $link .= $this->parameterPrefix . $key . '=' . urlencode($value) . '&amp;';
             }
+            $link .= http_build_query($this->additionalParameters, '', Redirect :: ARGUMENT_SEPARATOR);
             $link .= '">' . $label . '</a>';
             if ($this->column == $column)
             {
@@ -639,7 +641,8 @@ class SortableTable extends HTML_Table
      */
     public function filterData($row)
     {
-        $url_params = $this->get_sortable_table_param_string();
+        $url_params = $this->get_sortable_table_param_string() . '&amp;' .
+             http_build_query($this->additionalParameters, '', Redirect :: ARGUMENT_SEPARATOR);
 
         foreach ($this->columnFilters as $column => $function)
         {
