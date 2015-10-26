@@ -238,7 +238,14 @@ abstract class Manager extends Application
      */
     public static function get_selected_objects()
     {
-        return $this->getRequest()->get(self :: PARAM_ID);
+        $requestedObjects = Request :: get(self :: PARAM_ID);
+
+        if (! $requestedObjects)
+        {
+            $requestedObjects = Request :: post(self :: PARAM_ID);
+        }
+
+        return $requestedObjects;
     }
 
     /**
