@@ -102,7 +102,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             array(
                 Application :: PARAM_CONTEXT => Manager :: package(),
                 Manager :: PARAM_ACTION => Manager :: ACTION_LOGIN,
-                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()));
+                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id(),
+                \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED => Request :: get(
+                    \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED)));
 
         $this->client->setRedirectUri($redirect->getUrl());
 
