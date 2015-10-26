@@ -71,11 +71,11 @@ class PrivilegesViewerComponent extends Manager
                     }
 
                     $table = new SortableTableFromArray($data);
-                    $table->set_header(0, Translation :: get('Username'));
-                    $table->set_header(1, Translation :: get('Privilege'));
-                    $table->set_header(2, Translation :: get('FirstName'));
-                    $table->set_header(3, Translation :: get('LastName'));
-                    $table->set_header(4, '');
+                    $table->setColumnHeader(0, Translation :: get('Username'));
+                    $table->setColumnHeader(1, Translation :: get('Privilege'));
+                    $table->setColumnHeader(2, Translation :: get('FirstName'));
+                    $table->setColumnHeader(3, Translation :: get('LastName'));
+                    $table->setColumnHeader(4, '');
 
                     $html[] = $table->as_html();
                 }
@@ -104,9 +104,9 @@ class PrivilegesViewerComponent extends Manager
                     }
 
                     $table = new SortableTableFromArray($data);
-                    $table->set_header(0, Translation :: get('Group'));
-                    $table->set_header(1, Translation :: get('Privilege'));
-                    $table->set_header(2, '');
+                    $table->setColumnHeader(0, Translation :: get('Group'));
+                    $table->setColumnHeader(1, Translation :: get('Privilege'));
+                    $table->setColumnHeader(2, '');
 
                     $html[] = $table->as_html();
                 }

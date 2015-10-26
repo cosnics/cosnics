@@ -25,7 +25,7 @@ class SortableTable extends SortableTableFromArray
         {
             $this->setCellAttributes(0, $column, $attributes);
         }
-        foreach ($this->getCellAttributes() as $column => & $attributes)
+        foreach ($this->getContentCellAttributes() as $column => & $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }

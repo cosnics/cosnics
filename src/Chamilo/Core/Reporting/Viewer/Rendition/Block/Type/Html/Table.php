@@ -37,13 +37,13 @@ class Table extends Html
 
         if ($reporting_data->is_categories_visible())
         {
-            $table->set_header(0, '', false, $this->th_attributes, $this->td_attributes);
+            $table->setColumnHeader(0, '', false, $this->th_attributes, $this->td_attributes);
             $j ++;
         }
 
         foreach ($reporting_data->get_rows() as $row)
         {
-            $table->set_header($j, $row, true, $this->th_attributes, $this->td_attributes);
+            $table->setColumnHeader($j, $row, true, $this->th_attributes, $this->td_attributes);
             $j ++;
         }
         return $table->toHTML();

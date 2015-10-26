@@ -76,7 +76,7 @@ class ConfigurerComponent extends Manager
     public function renderEntityTypeSelectionTable()
     {
         $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData());
-        $table->set_header(
+        $table->setColumnHeader(
             0,
             Theme :: getInstance()->getImage(
                 'Action/Category',
@@ -86,8 +86,8 @@ class ConfigurerComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 'Chamilo\Configuration'));
-        $table->set_header(1, Translation :: get('EntityType'));
-        $table->set_header(2, '');
+        $table->setColumnHeader(1, Translation :: get('EntityType'));
+        $table->setColumnHeader(2, '');
 
         $html = array();
 

@@ -27,7 +27,7 @@ class ExportTable extends SortableTableFromArray
             $this->setCellAttributes(0, $column, $attributes);
         }
 
-        foreach ($this->getCellAttributes() as $column => & $attributes)
+        foreach ($this->getContentCellAttributes() as $column => & $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }
@@ -40,7 +40,7 @@ class ExportTable extends SortableTableFromArray
 
             $this->addRow($dataRow);
             $this->setCellAttributes(
-                ($this->get_total_number_of_items()),
+                ($this->countData()),
                 0,
                 'colspan="' . ($totalColumn) . '" style="font-weight:bold; text-transform:uppercase; text-align:right;"');
             $this->setCellAttributes(

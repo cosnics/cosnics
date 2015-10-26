@@ -150,9 +150,9 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
         $table = new SortableTableFromArray($table_data, 1, count($table_data), 'selected-content-objects');
         $table_header = $table->getHeader();
-        $table->set_header(0, $type_image, false);
+        $table->setColumnHeader(0, $type_image, false);
         $table_header->setColAttributes(0, 'class="action"');
-        $table->set_header(1, Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()), false);
+        $table->setColumnHeader(1, Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()), false);
 
         $this->addElement('html', $table->as_html());
 

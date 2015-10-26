@@ -130,7 +130,7 @@ abstract class Table
 
         if ($this->has_form_actions())
         {
-            $table->set_form_actions($this->get_form_actions());
+            $table->setTableFormActions($this->get_form_actions());
         }
 
         return $table->as_html();
@@ -162,17 +162,18 @@ abstract class Table
 
         if ($this->has_form_actions())
         {
-            $table->set_header(0, '', false);
+            $table->setColumnHeader(0, '', false);
         }
 
         // refactored the column model out of the loop.
         $column_model = &$this->get_column_model();
         $column_count = $column_model->get_column_count();
+
         for ($i = 0; $i < $column_count; $i ++)
         {
             $column = $column_model->get_column($i);
 
-            $table->set_header(
+            $table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
                 Security :: remove_XSS($column->get_title()),
                 $column->is_sortable());
@@ -181,10 +182,10 @@ abstract class Table
         // store the actual direction of the sortable table in the table column
         // model, to be used for a correct mover action implementation.
         // The prefix 'default_' is not relevant.
-        $direction = intval($table->get_direction());
+        $direction = intval($table->getOrderDirection());
         $column_model->set_default_order_direction($direction);
 
-        $column_model->set_default_order_column($table->get_column());
+        $column_model->set_default_order_column($table->getOrderColumn());
 
         return $table;
     }

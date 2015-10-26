@@ -353,8 +353,8 @@ class ImporterComponent extends Manager
         }
 
         $table = new SortableTableFromArray($data, 0, count($data), 'language_import_' . time());
-        $table->set_header(0, Translation :: get('Package'));
-        $table->set_header(
+        $table->setColumnHeader(0, Translation :: get('Package'));
+        $table->setColumnHeader(
             1,
             Theme :: getInstance()->getImage(
                 'Action/Language',
@@ -364,7 +364,7 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->set_header(
+        $table->setColumnHeader(
             2,
             Theme :: getInstance()->getImage(
                 'Action/Local',
@@ -374,7 +374,7 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->set_header(
+        $table->setColumnHeader(
             3,
             Theme :: getInstance()->getImage(
                 'Action/Import',
@@ -384,7 +384,7 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->set_header(
+        $table->setColumnHeader(
             4,
             Theme :: getInstance()->getImage(
                 'Action/Extra',
@@ -394,7 +394,7 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->set_header(
+        $table->setColumnHeader(
             5,
             Theme :: getInstance()->getImage(
                 'Action/Empty',

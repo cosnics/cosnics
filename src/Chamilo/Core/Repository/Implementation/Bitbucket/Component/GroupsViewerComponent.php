@@ -81,10 +81,10 @@ class GroupsViewerComponent extends Manager
             }
 
             $table = new SortableTableFromArray($list_groups);
-            $table->set_header(0, Translation :: get('Name'));
-            $table->set_header(1, Translation :: get('Permission'));
-            $table->set_header(2, Translation :: get('Members'));
-            $table->set_header(3, '');
+            $table->setColumnHeader(0, Translation :: get('Name'));
+            $table->setColumnHeader(1, Translation :: get('Permission'));
+            $table->setColumnHeader(2, Translation :: get('Members'));
+            $table->setColumnHeader(3, '');
 
             $html[] = $table->as_html();
         }
