@@ -38,8 +38,9 @@ class DirectSubscribedPlatformGroupTable extends RecordTable implements TableFor
 
             // unsubscribe
             $actions->add_form_action(
-                $this->get_component()->get_url(
-                    new TableFormAction(
+
+                new TableFormAction(
+                    $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE_GROUPS)),
                     Translation :: get('UnsubscribeSelectedGroups'),
