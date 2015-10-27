@@ -22,6 +22,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Description of student_submissions_browser_own_groups_table_cell_renderer
@@ -76,8 +77,8 @@ class StudentSubmissionsOwnGroupsTableCellRenderer extends DataClassTableCellRen
     {
         $retrieve_limit = 21;
         $order_properties = array();
-        $order_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
-        $order_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
+        $order_properties[] = new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME));
+        $order_properties[] = new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME));
         $users = array();
 
         switch ($submission->get_submitter_type())

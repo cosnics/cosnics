@@ -635,6 +635,17 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
                 $conditions[] = $this->get_own_table_conditions();
 
                 return new AndCondition($conditions);
+            case StudentSubmissionsOwnGroupsTable :: class_name() :
+                $conditions = array();
+
+                if ($this->action_bar->get_query() != '')
+                {
+                    $conditions[] = $this->get_search_condition();
+                }
+
+                $conditions[] = $this->get_own_table_conditions();
+
+                return new AndCondition($conditions);
         }
 
         return $this->get_search_condition();
