@@ -39,6 +39,7 @@ class ExportTable extends SortableTableFromArray
             $dataRow[0] = Translation :: get('Total');
 
             $this->addRow($dataRow);
+
             $this->setCellAttributes(
                 ($this->countData()),
                 0,
@@ -50,6 +51,6 @@ class ExportTable extends SortableTableFromArray
                      '" style="font-weight:bold; text-transform:uppercase;"');
         }
 
-        return HTML_Table :: toHtml();
+        return \HTML_Table :: toHtml();
     }
 }

@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\SortableTable;
 
