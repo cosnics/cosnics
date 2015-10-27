@@ -2,34 +2,29 @@
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home;
 
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use HTML_Table;
 
+/**
+ *
+ * @package Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class SortableTable extends SortableTableFromArray
 {
 
-    public function toHtml()
+    protected function initializeTable()
     {
-        $tableData = $this->getData($this->getFrom());
+        $table = parent :: initializeTable();
 
-        foreach ($tableData as $index => & $row)
+        $table->setAttribute('class', 'data_table invisible_table');
+        $headers = $table->getHeader();
+
+        for ($i = 1; $i <= $headers->_cols; $i ++)
         {
-            $rowId = $row[0];
-            $row = $this->filterData($row);
-            $currentRow = $this->addRow($row);
-            $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowId), true);
+            $headers->setColAttributes($i, 'class="action invisible"');
         }
 
-        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
-
-        foreach ($this->getHeaderAttributes() as $column => & $attributes)
-        {
-            $this->setCellAttributes(0, $column, $attributes);
-        }
-        foreach ($this->getContentCellAttributes() as $column => & $attributes)
-        {
-            $this->setColAttributes($column, $attributes);
-        }
-
-        return HTML_Table :: toHtml();
+        return $table;
     }
 }

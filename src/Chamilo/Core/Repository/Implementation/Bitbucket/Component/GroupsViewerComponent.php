@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class GroupsViewerComponent extends Manager
 {
@@ -80,13 +81,15 @@ class GroupsViewerComponent extends Manager
                 $list_groups[] = $group_row;
             }
 
-            $table = new SortableTableFromArray($list_groups);
-            $table->setColumnHeader(0, Translation :: get('Name'));
-            $table->setColumnHeader(1, Translation :: get('Permission'));
-            $table->setColumnHeader(2, Translation :: get('Members'));
-            $table->setColumnHeader(3, '');
+            $headers = array();
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Name'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Permission'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Members'));
+            $headers[] = new SortableStaticTableColumn('');
 
-            $html[] = $table->as_html();
+            $table = new SortableTableFromArray($list_groups, $headers);
+
+            $html[] = $table->toHtml();
         }
         else
         {

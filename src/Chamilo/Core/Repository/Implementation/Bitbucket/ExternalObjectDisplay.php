@@ -6,6 +6,8 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {
@@ -76,14 +78,18 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $data[] = $row;
             }
 
-            $table = new SortableTableFromArray($data);
-            $table->setColumnHeader(0, Translation :: get('Name'));
-            $table->setColumnHeader(1, Translation :: get('Author'));
-            $table->setColumnHeader(2, Translation :: get('Time'));
-            $table->setColumnHeader(3, Translation :: get('Branch'));
-            $table->setColumnHeader(4, Translation :: get('Download'));
+            $headers = array();
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Name'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Author'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Time'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Branch'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Download'));
+            $headers[] = new StaticTableColumn('');
+
+            $table = new SortableTableFromArray($data, $headers);
+
             $html[] = '<h3>' . Translation :: get('Tags') . '</h3>';
-            $html[] = $table->as_html();
+            $html[] = $table->toHtml();
         }
 
         // changesets
@@ -111,15 +117,19 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
                 $data[] = $row;
             }
 
-            $table = new SortableTableFromArray($data);
-            $table->setColumnHeader(0, Translation :: get('Revision'));
-            $table->setColumnHeader(1, Translation :: get('Author'));
-            $table->setColumnHeader(2, Translation :: get('Message'));
-            $table->setColumnHeader(3, Translation :: get('Time'));
-            $table->setColumnHeader(4, Translation :: get('Branch'));
-            $table->setColumnHeader(5, Translation :: get('Download'));
+            $headers = array();
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Revision'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Author'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Message'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Time'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Branch'));
+            $headers[] = new SortableStaticTableColumn(Translation :: get('Download'));
+            $headers[] = new StaticTableColumn('');
+
+            $table = new SortableTableFromArray($data, $headers);
+
             $html[] = '<h3>' . Translation :: get('Changesets') . '</h3>';
-            $html[] = $table->as_html();
+            $html[] = $table->toHtml();
         }
 
         return implode(PHP_EOL, $html);

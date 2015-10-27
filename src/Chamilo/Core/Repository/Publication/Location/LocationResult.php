@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  *
@@ -149,42 +150,36 @@ abstract class LocationResult
 
     public function as_html()
     {
-        $this->table = new SortableTableFromArray($this->table_data, 0, count($this->table_data));
-        $table_header = $this->table->getHeader();
+        $tableColumns = array();
 
         $headers = $this->get_header();
 
         foreach ($headers as $key => $header)
         {
-            $this->table->setColumnHeader($key, $header, false);
+            $tableColumns[] = new StaticTableColumn($header);
         }
-        $key ++;
 
-        $this->table->setColumnHeader($key ++, Translation :: get('ContentObject'), false);
+        $tableColumns[] = new StaticTableColumn(Translation :: get('ContentObject'));
 
-        $table_header->setColAttributes($key, 'class="action"');
-        $this->table->setColumnHeader(
-            $key ++,
+        $tableColumns[] = new StaticTableColumn(
             Theme :: getInstance()->getCommonImage(
                 'Action/Search',
                 'png',
                 Translation :: get('ViewPublication'),
                 null,
-                ToolbarItem :: DISPLAY_ICON),
-            false);
+                ToolbarItem :: DISPLAY_ICON));
 
-        $table_header->setColAttributes($key, 'class="action"');
-        $this->table->setColumnHeader(
-            $key ++,
+        $tableColumns[] = new StaticTableColumn(
             Theme :: getInstance()->getCommonImage(
                 'Status/NormalMini',
                 'png',
                 Translation :: get('Result'),
                 null,
-                ToolbarItem :: DISPLAY_ICON),
-            false);
+                ToolbarItem :: DISPLAY_ICON));
 
-        return $this->table->as_html();
+        $this->table = new SortableTableFromArray($this->table_data, $tableColumns, array(), 0, count($this->table_data));
+
+        return $this->table->toHtml();
     }
 
     /**

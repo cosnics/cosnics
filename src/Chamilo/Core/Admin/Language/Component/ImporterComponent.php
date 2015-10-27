@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class ImporterComponent extends Manager
 {
@@ -352,10 +353,9 @@ class ImporterComponent extends Manager
             }
         }
 
-        $table = new SortableTableFromArray($data, 0, count($data), 'language_import_' . time());
-        $table->setColumnHeader(0, Translation :: get('Package'));
-        $table->setColumnHeader(
-            1,
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Package'));
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Language',
                 'png',
@@ -364,8 +364,7 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->setColumnHeader(
-            2,
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Local',
                 'png',
@@ -374,8 +373,8 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->setColumnHeader(
-            3,
+
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Import',
                 'png',
@@ -384,8 +383,8 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->setColumnHeader(
-            4,
+
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Extra',
                 'png',
@@ -394,8 +393,8 @@ class ImporterComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 __NAMESPACE__));
-        $table->setColumnHeader(
-            5,
+
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Empty',
                 'png',
@@ -405,7 +404,16 @@ class ImporterComponent extends Manager
                 false,
                 __NAMESPACE__));
 
-        return $table->toHTML();
+        $table = new SortableTableFromArray(
+            $data,
+            $headers,
+            $this->get_parameters(),
+            0,
+            20,
+            SORT_ASC,
+            'language_import_' . time());
+
+        return $table->toHtml();
     }
 
     public function is_repository_based($packages)

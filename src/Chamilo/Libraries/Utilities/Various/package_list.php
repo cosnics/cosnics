@@ -5,6 +5,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -350,11 +351,12 @@ foreach ($packages as $key => $package)
     $rows[] = $row;
 }
 
-$table = new SortableTableFromArray($rows, 0, 500, 'packages_list');
-$header = $table->getHeader();
-$table->setColumnHeader(0, '#');
-$table->setColumnHeader(1, 'Package');
-$table->setColumnHeader(2, ' ');
+$headers = array();
+$headers[] = new StaticTableColumn('#');
+$headers[] = new StaticTableColumn('Package');
+$headers[] = new StaticTableColumn('');
+
+$table = new SortableTableFromArray($rows, $headers, array(), 0, 500, SORT_ASC, 'packages_list');
 
 $page = Page :: getInstance();
 $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);

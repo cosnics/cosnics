@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 /**
  *
@@ -77,13 +78,14 @@ class AnnouncementComponent extends Manager
             $data[] = $row;
         }
 
-        $table = new SortableTableFromArray($data);
-        $table->setAdditionalParameters($this->get_parameters());
-        $table->setColumnHeader(0, Translation :: get('Date'));
-        $table->setColumnHeader(1, Translation :: get('Course'));
-        $table->setColumnHeader(2, Translation :: get('Announcement'));
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Date'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Course'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Announcement'));
 
-        $html[] = $table->as_html();
+        $table = new SortableTableFromArray($data, $headers, $this->get_parameters());
+
+        $html[] = $table->toHtml();
 
         return implode(PHP_EOL, $html);
     }
