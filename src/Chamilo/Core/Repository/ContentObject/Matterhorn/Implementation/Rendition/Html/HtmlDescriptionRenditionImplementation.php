@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -111,14 +112,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $table_data[] = $table_row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0);
+        $headers = array();
+        $headers[] = new StaticTableColumn('#');
+        $headers[] = new StaticTableColumn(Translation :: get('Type'));
+        $headers[] = new StaticTableColumn(Translation :: get('Video'));
+        $headers[] = new StaticTableColumn(Translation :: get('Audio'));
+        $headers[] = new StaticTableColumn('');
 
-        $table->setColumnHeader(0, '#', false);
-        $table->setColumnHeader(1, Translation :: get('Type'), false);
-        $table->setColumnHeader(2, Translation :: get('Video'), false);
-        $table->setColumnHeader(3, Translation :: get('Audio'), false);
-        $table->setColumnHeader(4, '', false);
-
-        return $table->as_html();
+        $table = new SortableTableFromArray($table_data, $headers);
+        return $table->toHtml();
     }
 }

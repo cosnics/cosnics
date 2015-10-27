@@ -12,6 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * $Id: location_selection_publisher_wizard_page.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -148,13 +149,20 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             null,
             ToolbarItem :: DISPLAY_ICON);
 
-        $table = new SortableTableFromArray($table_data, 1, count($table_data), 'selected-content-objects');
-        $table_header = $table->getHeader();
-        $table->setColumnHeader(0, $type_image, false);
-        $table_header->setColAttributes(0, 'class="action"');
-        $table->setColumnHeader(1, Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()), false);
+        $header = array();
+        $header[] = new StaticTableColumn($type_image);
+        $header[] = new StaticTableColumn(
+            Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()));
 
-        $this->addElement('html', $table->as_html());
+        $table = new SortableTableFromArray(
+            $table_data,
+            $header,
+            array(),
+            1,
+            count($table_data),
+            SORT_ASC,
+            'selected-content-objects');
+        $this->addElement('html', $table->toHtml());
 
         $this->addElement('category');
     }

@@ -5,6 +5,8 @@ use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 /**
  *
@@ -21,32 +23,32 @@ class Table extends Html
 
         $reporting_data = $block->get_data();
 
-        $table = new SortableTableFromArray(
-            $this->convert_reporting_data($reporting_data),
-            $this->column,
-            20,
-            ClassnameUtilities :: getInstance()->getClassnameFromObject($block, true),
-            $this->direction);
-
         $parameters = $this->get_context()->get_context()->get_parameters();
         $parameters[Manager :: PARAM_BLOCK_ID] = $this->get_block()->get_id();
         $parameters[Manager :: PARAM_VIEWS] = $this->get_view();
 
-        $table->setAdditionalParameters($parameters);
-        $j = 0;
+        $headers = array();
 
         if ($reporting_data->is_categories_visible())
         {
-            $table->setColumnHeader(0, '', false, $this->th_attributes, $this->td_attributes);
-            $j ++;
+            $headers[] = new StaticTableColumn(); // $this->th_attributes, $this->td_attributes);
         }
 
         foreach ($reporting_data->get_rows() as $row)
         {
-            $table->setColumnHeader($j, $row, true, $this->th_attributes, $this->td_attributes);
-            $j ++;
+            $headers[] = new SortableStaticTableColumn($row); // , true, $this->th_attributes, $this->td_attributes);
         }
-        return $table->toHTML();
+
+        $table = new SortableTableFromArray(
+            $this->convert_reporting_data($reporting_data),
+            $headers,
+            $parameters,
+            $this->column,
+            20,
+            $this->direction,
+            ClassnameUtilities :: getInstance()->getClassnameFromObject($block, true));
+
+        return $table->toHtml();
     }
 
     public function convert_reporting_data($data)

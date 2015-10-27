@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 require_once __DIR__ . '/../../../Architecture/Bootstrap.php';
 \Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
@@ -136,21 +137,22 @@ foreach ($package_list as $category => $packages)
         }
     }
 
-    $table = new SortableTableFromArray($data, 0, 200);
-    $header = $table->getHeader();
-    $table->setColumnHeader(0, 'Application');
+    $headers = array();
+    $headers[] = new StaticTableColumn('Application');
 
     foreach ($sizes as $key => $header_size)
     {
-        $table->setColumnHeader(($key * 3) + 1, $header_size);
-        $table->setColumnHeader(($key * 3) + 2, $header_size . ' NA');
-        $table->setColumnHeader(($key * 3) + 3, $header_size . ' NEW');
+        $headers[] = new StaticTableColumn(($key * 3) + 1, $header_size);
+        $headers[] = new StaticTableColumn(($key * 3) + 2, $header_size . ' NA');
+        $headers[] = new StaticTableColumn(($key * 3) + 3, $header_size . ' NEW');
     }
+
+    $table = new SortableTableFromArray($data, $headers, array(), 0, 200);
 
     if ($failures || Request :: get('show_all'))
     {
         $html[] = '<h3>' . $category . ' ( ' . count($packages) . ' packages)</h3>';
-        $html[] = $table->as_html();
+        $html[] = $table->toHtml();
         $html[] = '<b>Missing icons: ' . $failures . '</b>';
 
         $total_failures += $failures;

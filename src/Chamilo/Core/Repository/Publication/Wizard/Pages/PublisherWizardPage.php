@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Publication\Wizard\Pages;
 
 use Chamilo\Libraries\Format\Form\FormValidatorPage;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
@@ -33,7 +32,7 @@ abstract class PublisherWizardPage extends FormValidatorPage
             array(
                 'action' => $parent->get_url(
                     array(
-                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => Request :: get(
+                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $parent->getRequest()->get(
                             \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID)))));
     }
 

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class PrivilegesViewerComponent extends Manager
 {
@@ -70,14 +71,16 @@ class PrivilegesViewerComponent extends Manager
                         $data[] = $row;
                     }
 
-                    $table = new SortableTableFromArray($data);
-                    $table->setColumnHeader(0, Translation :: get('Username'));
-                    $table->setColumnHeader(1, Translation :: get('Privilege'));
-                    $table->setColumnHeader(2, Translation :: get('FirstName'));
-                    $table->setColumnHeader(3, Translation :: get('LastName'));
-                    $table->setColumnHeader(4, '');
+                    $headers = array();
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('Username'));
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('Privilege'));
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('FirstName'));
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('LastName'));
+                    $headers[] = new SortableStaticTableColumn('');
 
-                    $html[] = $table->as_html();
+                    $table = new SortableTableFromArray($data, $headers);
+
+                    $html[] = $table->toHtml();
                 }
 
                 if (count($privileges_groups) > 0)
@@ -103,12 +106,14 @@ class PrivilegesViewerComponent extends Manager
                         $data[] = $row;
                     }
 
-                    $table = new SortableTableFromArray($data);
-                    $table->setColumnHeader(0, Translation :: get('Group'));
-                    $table->setColumnHeader(1, Translation :: get('Privilege'));
-                    $table->setColumnHeader(2, '');
+                    $headers = array();
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('Group'));
+                    $headers[] = new SortableStaticTableColumn(Translation :: get('Privilege'));
+                    $headers[] = new SortableStaticTableColumn('');
 
-                    $html[] = $table->as_html();
+                    $table = new SortableTableFromArray($data, $headers);
+
+                    $html[] = $table->toHtml();
                 }
             }
             else

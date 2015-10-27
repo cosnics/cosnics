@@ -24,7 +24,7 @@ class BrowserComponent extends Manager
     {
         $table = new SortableTableFromArray($this->get_table_data());
 
-        $html[] = $table->as_html();
+        $html[] = $table->toHtml();
 
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';

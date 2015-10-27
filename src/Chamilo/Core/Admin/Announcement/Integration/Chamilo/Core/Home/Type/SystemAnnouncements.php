@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\SortableTable;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Redirect;
@@ -9,6 +8,9 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\SortableTable;
 
 class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {
@@ -125,14 +127,18 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements C
             $data[] = array($icon, $link);
         }
 
-        $table = new SortableTable($data);
-        $table->setAttribute('class', 'data_table invisible_table');
-        $table->setColumnHeader(0, null, false);
-        $table->getHeader()->setColAttributes(0, 'class="action invisible"');
-        $table->setColumnHeader(1, null, false);
-        $table->getHeader()->setColAttributes(1, 'class="invisible"');
+        $headers = array();
+        $headers[] = new StaticTableColumn('');
+        $headers[] = new StaticTableColumn('');
 
-        $html[] = $table->as_html();
+        $table = new SortableTable($data, $headers, array(), 0, 20, SORT_ASC, 'announcements', false, false, false);
+//         $table->setAttribute('class', 'data_table invisible_table');
+//         $table->setColumnHeader(0, null, false);
+//         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
+//         $table->setColumnHeader(1, null, false);
+//         $table->getHeader()->setColAttributes(1, 'class="invisible"');
+
+        $html[] = $table->toHtml();
 
         return implode(PHP_EOL, $html);
     }

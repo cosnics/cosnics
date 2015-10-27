@@ -15,6 +15,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 /**
  *
@@ -306,15 +308,16 @@ $(document).ready(function(){
             $table_data[] = $table_row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0);
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('#'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Type'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Video'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Audio'));
+        $headers[] = new StaticTableColumn('');
 
-        $table->setColumnHeader(0, '#', false);
-        $table->setColumnHeader(1, Translation :: get('Type'), false);
-        $table->setColumnHeader(2, Translation :: get('Video'), false);
-        $table->setColumnHeader(3, Translation :: get('Audio'), false);
-        $table->setColumnHeader(4, '', false);
+        $table = new SortableTableFromArray($table_data, $headers);
 
-        return $table->as_html();
+        return $table->toHtml();
     }
 
     public function get_attachments_table()
@@ -340,13 +343,14 @@ $(document).ready(function(){
             $table_data[] = $table_row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0);
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Type'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('ContentType'));
+        $headers[] = new StaticTableColumn('');
 
-        $table->setColumnHeader(0, Translation :: get('Type'), false);
-        $table->setColumnHeader(1, Translation :: get('ContentType'), false);
-        $table->setColumnHeader(2, '', false);
+        $table = new SortableTableFromArray($table_data, $headers, array(), 0);
 
-        return $table->as_html();
+        return $table->toHtml();
     }
 
     public function get_metadata_table()
@@ -372,11 +376,12 @@ $(document).ready(function(){
             $table_data[] = $table_row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0);
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Type'));
+        $headers[] = new SortableStaticTableColumn(Translation :: get('ContentType'));
+        $headers[] = new StaticTableColumn('');
 
-        $table->setColumnHeader(0, Translation :: get('Type'), false);
-        $table->setColumnHeader(1, Translation :: get('ContentType'), false);
-        $table->setColumnHeader(2, '', false);
+        $table = new SortableTableFromArray($table_data, $headers, array(), 0);
 
         return $table->as_html();
     }

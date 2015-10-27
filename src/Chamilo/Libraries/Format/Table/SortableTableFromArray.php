@@ -4,15 +4,57 @@ namespace Chamilo\Libraries\Format\Table;
 /**
  * Sortable table which can be used for data available in an array
  */
-class SortableTableFromArray extends SortableTable
+class SortableTableFromArray
 {
 
     /**
      * The array containing all data for this table
      *
-     * @var multitype:multitype
+     * @var string[]
      */
     private $tableData;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Table\Column\TableColumn[]
+     */
+    private $tableColumns;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $additionalParameters;
+
+    /**
+     *
+     * @var integer
+     */
+    private $defaultOrderColumn;
+
+    /**
+     *
+     * @var integer
+     */
+    private $defaultPerPage;
+
+    /**
+     *
+     * @var string
+     */
+    private $tableName;
+
+    /**
+     *
+     * @var integer
+     */
+    private $defaultOrderDirection;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $allowPageSelection;
 
     /**
      *
@@ -21,56 +63,102 @@ class SortableTableFromArray extends SortableTable
     private $enableSorting;
 
     /**
-     * Constructor
      *
-     * @param $table_data array
-     * @param $default_column int
-     * @param $default_items_per_page int
+     * @var boolean
      */
-    public function __construct($tableData, $defaultOrderColumn = 1, $defaultPerPage = 20, $tableName = 'tablename',
-        $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $enableSorting = true, $allowPageNavigation = true)
+    private $allowPageNavigation;
+
+    /**
+     *
+     * @param string[] $tableData
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     * @param string[] $additionalParameters
+     * @param integer $defaultOrderColumn
+     * @param integer $defaultPerPage
+     * @param integer $defaultOrderDirection
+     * @param string $tableName
+     * @param boolean $allowPageSelection
+     * @param boolean $enableSorting
+     * @param boolean $allowPageNavigation
+     */
+    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
+        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
+        $allowPageNavigation = true)
     {
         $this->tableData = $tableData;
+        $this->tableColumns = $tableColumns;
+        $this->additionalParameters = $additionalParameters;
+        $this->defaultOrderColumn = $defaultOrderColumn;
+        $this->defaultPerPage = $defaultPerPage;
+        $this->tableName = $tableName;
+        $this->allowPageSelection = $allowPageSelection;
+        $this->defaultOrderDirection = $defaultOrderDirection;
+        $this->allowPageSelection = $allowPageSelection;
         $this->enableSorting = $enableSorting;
+        $this->allowPageNavigation = $allowPageNavigation;
 
         if (! $allowPageSelection)
         {
-            $defaultPerPage = count($tableData);
+            $this->defaultPerPage = count($tableData);
         }
-
-        parent :: __construct(
-            $tableName,
-            array($this, 'countData'),
-            array($this, 'getData'),
-            $defaultOrderColumn,
-            $defaultPerPage,
-            $defaultOrderDirection,
-            $allowPageSelection,
-            $allowPageNavigation);
-    }
-
-    public function getEnableSorting()
-    {
-        return $this->enableSorting;
     }
 
     /**
-     * Get table data to show on current page
      *
-     * @see SortableTable#get_table_data
+     * @return string
      */
-    public function getData($from = 1)
+    public function toHtml()
+    {
+        $table = $this->initializeTable();
+        return $table->toHtml();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Table\SortableTable
+     */
+    protected function initializeTable()
+    {
+        $table = new SortableTable(
+            $this->getTableName(),
+            array($this, 'countData'),
+            array($this, 'getData'),
+            $this->getDefaultOrderColumn(),
+            $this->getDefaultPerPage(),
+            $this->getDefaultOrderDirection(),
+            $this->getAllowPageSelection(),
+            $this->getAllowPageNavigation());
+
+        $table->setAdditionalParameters($this->getAdditionalParameters());
+
+        foreach ($this->getTableColumns() as $key => $tableColumn)
+        {
+            $table->setColumnHeader($key, $tableColumn->get_title(), $tableColumn->is_sortable());
+        }
+
+        return $table;
+    }
+
+    /**
+     *
+     * @param integer $offset
+     * @param integer $count
+     * @param integer $orderColumn
+     * @param integer $orderDirection
+     * @return string[]
+     */
+    public function getData($offset, $count, $orderColumn, $orderDirection)
     {
         $content = $this->getTableData();
 
         if ($this->getEnableSorting())
         {
-            $content = TableSort :: sort_table($content, $this->getOrderColumn(), $this->getOrderDirection());
+            $content = TableSort :: sort_table($content, $orderColumn, $orderDirection);
         }
 
-        if ($this->isPageSelectionAllowed())
+        if ($this->getAllowPageSelection())
         {
-            $content = array_slice($content, $from, $this->getNumberOfItemsPerPage());
+            $content = array_slice($content, $offset, $count);
         }
 
         return $content;
@@ -78,7 +166,23 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @return multitype:multitype
+     * @return integer
+     */
+    public function countData()
+    {
+        return count($this->getTableData());
+    }
+
+    // public function getFrom()
+    // {
+    // $pager = $this->getPager();
+    // $offset = $pager->getOffsetByPageId();
+    // return $offset[0] - 1;
+    // }
+
+    /**
+     *
+     * @return string[]
      */
     public function getTableData()
     {
@@ -87,7 +191,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param $table_data multitype:multitype
+     * @param string[] $tableData
      */
     public function setTableData($tableData)
     {
@@ -96,7 +200,7 @@ class SortableTableFromArray extends SortableTable
 
     /**
      *
-     * @param $data_row multitype:mixed
+     * @param string[] $dataRow
      */
     public function addTableData($dataRow)
     {
@@ -104,19 +208,164 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     * Get total number of items
      *
-     * @see SortableTable#get_total_number_of_items
+     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
-    public function countData()
+    public function getTableColumns()
     {
-        return count($this->getTableData());
+        return $this->tableColumns;
     }
 
-    public function getFrom()
+    /**
+     *
+     * @param string[] $tableColumns
+     */
+    public function setTableColumns($tableColumns)
     {
-        $pager = $this->getPager();
-        $offset = $pager->getOffsetByPageId();
-        return $offset[0] - 1;
+        $this->tableColumns = $tableColumns;
+    }
+
+    /**
+     *
+     * @return multitype:\Chamilo\Libraries\Format\Table\string
+     */
+    public function getAdditionalParameters()
+    {
+        return $this->additionalParameters;
+    }
+
+    /**
+     *
+     * @param multitype:\Chamilo\Libraries\Format\Table\string $additionalParameters
+     */
+    public function setAdditionalParameters($additionalParameters)
+    {
+        $this->additionalParameters = $additionalParameters;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultOrderColumn()
+    {
+        return $this->defaultOrderColumn;
+    }
+
+    /**
+     *
+     * @param integer $defaultOrderColumn
+     */
+    public function setDefaultOrderColumn($defaultOrderColumn)
+    {
+        $this->defaultOrderColumn = $defaultOrderColumn;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultPerPage()
+    {
+        return $this->defaultPerPage;
+    }
+
+    /**
+     *
+     * @param integer $defaultPerPage
+     */
+    public function setDefaultPerPage($defaultPerPage)
+    {
+        $this->defaultPerPage = $defaultPerPage;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     *
+     * @param string $tableName
+     */
+    public function setTableName($tableName)
+    {
+        $this->tableName = $tableName;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getDefaultOrderDirection()
+    {
+        return $this->defaultOrderDirection;
+    }
+
+    /**
+     *
+     * @param integer $defaultOrderDirection
+     */
+    public function setDefaultOrderDirection($defaultOrderDirection)
+    {
+        $this->defaultOrderDirection = $defaultOrderDirection;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getAllowPageSelection()
+    {
+        return $this->allowPageSelection;
+    }
+
+    /**
+     *
+     * @param boolean $allowPageSelection
+     */
+    public function setAllowPageSelection($allowPageSelection)
+    {
+        $this->allowPageSelection = $allowPageSelection;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getEnableSorting()
+    {
+        return $this->enableSorting;
+    }
+
+    /**
+     *
+     * @param boolean $enableSorting
+     */
+    public function setEnableSorting($enableSorting)
+    {
+        $this->enableSorting = $enableSorting;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getAllowPageNavigation()
+    {
+        return $this->allowPageNavigation;
+    }
+
+    /**
+     *
+     * @param boolean $allowPageNavigation
+     */
+    public function setAllowPageNavigation($allowPageNavigation)
+    {
+        $this->allowPageNavigation = $allowPageNavigation;
     }
 }

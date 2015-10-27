@@ -4,49 +4,10 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 require __DIR__ . '/../../Architecture/Bootstrap.php';
 
 \Chamilo\Libraries\Architecture\Bootstrap :: launch();
-
-// $data = array();
-
-// $registrations = Configuration :: registrations();
-
-// foreach ($registrations as $registration_type => $packages)
-// {
-// foreach ($packages as $blah)
-// {
-// foreach ($blah as $package)
-// {
-// $context = $package->get_context();
-// $manager_class = $context . '\Manager';
-
-// if (class_exists($manager_class))
-// {
-// $reflection = new ReflectionClass($manager_class);
-// $constants = $reflection->getConstants();
-
-// foreach ($constants as $constant => $value)
-// {
-// if (substr($constant, 0, 7) == 'ACTION_')
-// {
-// $component_path = Path :: getInstance()->namespaceToFullPath($context) . 'php/lib/manager/component/' .
-// $value . '.class.php';
-// if (! file_exists($component_path))
-// {
-// $data[] = array($context, $constant, $value);
-// }
-// }
-// }
-// }
-// }
-// }
-// }
-
-// $action_table = new SortableTableFromArray($data, 0, 600);
-// $action_table->setColumnHeader(0, 'context');
-// $action_table->setColumnHeader(1, 'constant');
-// $action_table->setColumnHeader(2, 'component');
 
 $data = array();
 
@@ -95,9 +56,11 @@ foreach ($registrations as $registration_type => $packages)
     }
 }
 
-$component_table = new SortableTableFromArray($data, 0, 600);
-$component_table->setColumnHeader(0, 'context');
-$component_table->setColumnHeader(1, 'component');
+$headers = array();
+$headers[] = new StaticTableColumn('context');
+$headers[] = new StaticTableColumn('component');
+
+$component_table = new SortableTableFromArray($data, $headers, array(), 0, 600);
 
 $page = Page :: getInstance();
 $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);

@@ -15,6 +15,8 @@ use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Provider\Form\ProviderLinkForm;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  *
@@ -75,9 +77,9 @@ class ConfigurerComponent extends Manager
      */
     public function renderEntityTypeSelectionTable()
     {
-        $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData());
-        $table->setColumnHeader(
-            0,
+        $headers = array();
+
+        $headers[] = new SortableStaticTableColumn(
             Theme :: getInstance()->getImage(
                 'Action/Category',
                 'png',
@@ -86,13 +88,15 @@ class ConfigurerComponent extends Manager
                 ToolbarItem :: DISPLAY_ICON,
                 false,
                 'Chamilo\Configuration'));
-        $table->setColumnHeader(1, Translation :: get('EntityType'));
-        $table->setColumnHeader(2, '');
+        $headers[] = new SortableStaticTableColumn(Translation :: get('EntityType'));
+        $headers[] = new StaticTableColumn('');
+
+        $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData(), $headers);
 
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $table->as_html();
+        $html[] = $table->toHtml();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

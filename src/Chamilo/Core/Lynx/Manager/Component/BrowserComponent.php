@@ -28,6 +28,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -225,11 +227,20 @@ class BrowserComponent extends Manager implements DelegateComponent
             $table_data[] = $row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0, 20, 'registered_packages');
-        $table->setAdditionalParameters($this->get_parameters());
-        $table->setColumnHeader(0, Translation :: get('Package'));
-        $table->setColumnHeader(1, '', false);
-        return $table->as_html();
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Package'));
+        $headers[] = new StaticTableColumn('');
+
+        $table = new SortableTableFromArray(
+            $table_data,
+            $headers,
+            $this->get_parameters(),
+            0,
+            20,
+            SORT_ASC,
+            'registered_packages');
+
+        return $table->toHtml();
     }
 
     public function get_available_packages_table()
@@ -268,11 +279,20 @@ class BrowserComponent extends Manager implements DelegateComponent
             $table_data[] = $row;
         }
 
-        $table = new SortableTableFromArray($table_data, 0, 20, 'available_packages');
-        $table->setAdditionalParameters($this->get_parameters());
-        $table->setColumnHeader(0, Translation :: get('Package'));
-        $table->setColumnHeader(1, '', false);
-        return $table->as_html();
+        $headers = array();
+        $headers[] = new SortableStaticTableColumn(Translation :: get('Package'));
+        $headers[] = new StaticTableColumn('');
+
+        $table = new SortableTableFromArray(
+            $table_data,
+            $headers,
+            $this->get_parameters(),
+            0,
+            20,
+            SORT_ASC,
+            'available_packages');
+
+        return $table->toHtml();
     }
 
     public function get_action_bar()
