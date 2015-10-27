@@ -17,12 +17,12 @@ class PublicationGroup extends DataClass
 
     /**
      * Get the default properties
-     * 
+     *
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return array(self :: PROPERTY_PUBLICATION, self :: PROPERTY_GROUP_ID);
+        return parent :: get_default_property_names(array(self :: PROPERTY_PUBLICATION, self :: PROPERTY_GROUP_ID));
     }
 
     /**
