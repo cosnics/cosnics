@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 
 class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
@@ -146,7 +147,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
                 foreach ($group_relations as $group_relation)
                 {
-                    $group = $group_relation->get_group();
+                    $group = DataManager :: retrieve_by_id(Group::class_name(), $group_relation->getEntityId());
                     $group_user_ids = $group->get_users(true, true);
 
                     $group_users = array_merge($group_users, $group_user_ids);
