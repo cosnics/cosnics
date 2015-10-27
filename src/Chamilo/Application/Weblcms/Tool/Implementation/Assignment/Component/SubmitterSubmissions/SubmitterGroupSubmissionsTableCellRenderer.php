@@ -80,6 +80,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
         $tracker = new \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
             new StaticConditionVariable($submission_id));
 
