@@ -101,7 +101,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
 
         if ($this->form->validate())
         {
-            $this->display_time = $this->form->get_time();
+            $this->display_time = $this->form->getTime();
         }
 
         $html = array();
