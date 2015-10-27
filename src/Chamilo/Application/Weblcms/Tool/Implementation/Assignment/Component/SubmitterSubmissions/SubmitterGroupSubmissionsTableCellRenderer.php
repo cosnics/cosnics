@@ -143,7 +143,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
      * @param $submission type
      * @return string The HTML code that represents the actions.
      */
-    private function get_actions($submission)
+    public function get_actions($submission)
     {
         $toolbar = new Toolbar();
 
