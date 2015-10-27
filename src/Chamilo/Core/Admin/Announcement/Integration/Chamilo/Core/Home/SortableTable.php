@@ -20,7 +20,7 @@ class SortableTable extends SortableTableFromArray
         $table->setAttribute('class', 'data_table invisible_table');
         $headers = $table->getHeader();
 
-        for ($i = 1; $i <= count($headers->_cols); $i ++)
+        for ($i = 0; $i <= count($headers->_cols); $i ++)
         {
             $headers->setColAttributes($i, 'class="invisible"');
         }
