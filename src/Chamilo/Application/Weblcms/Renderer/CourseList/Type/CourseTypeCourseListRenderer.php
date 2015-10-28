@@ -343,6 +343,19 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         return implode($html, "\n");
     }
 
+    protected function loadCourseSettings($courses)
+    {
+        $courseIdentifiers = array();
+
+        foreach ($courses as $course)
+        {
+            $courseIdentifiers[] = $course[Course :: PROPERTY_ID];
+        }
+
+        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController->loadSettingsForCoursesByIdentifiers($courseIdentifiers);
+    }
+
     /**
      * Displays the courses for a user course category
      *
@@ -355,10 +368,21 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $courses = $this->get_courses_for_course_type_user_category($course_type_user_category);
         $size = count($courses);
 
+        $this->loadCourseSettings($courses);
+
         $html = array();
 
         if ($size > 0)
         {
+            $course_instances = array();
+            foreach ($courses as $course_properties)
+            {
+                $course_instances[$course_properties[Course :: PROPERTY_ID]] = DataClass :: factory(Course :: class_name(), $course_properties);
+            }
+
+            // Accelerate notification icon generation by querying all courses at ones and storing the results in a cache.
+            DataManager :: fill_new_publications_cache($this->get_user(), $course_instances);
+
             $course_settings_controller = CourseSettingsController :: get_instance();
 
             $html[] = '<ul>';

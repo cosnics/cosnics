@@ -184,6 +184,15 @@ class CourseListRenderer
 
             $course_settings_controller = CourseSettingsController :: get_instance();
 
+            if ($this->get_new_publication_icons())
+            {
+                // Accelerate notification icon generation by querying all courses at ones and storing the results in a
+                // cache.
+                DataManager :: fill_new_publications_cache(
+                    $this->get_user(),
+                    DataManager :: create_courses_array($courses));
+            }
+
             foreach ($courses as $course)
             {
                 $id = $course->get_id();

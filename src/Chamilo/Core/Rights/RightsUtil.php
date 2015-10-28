@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 
 /**
  * New version of rights utilities to work with entities and the application specific location tables
@@ -365,6 +366,155 @@ class RightsUtil
         return DataManager :: count_location_overview_with_rights_granted($context, $condition, $entities_condition);
     }
 
+    // PERFORMANCE-TWEAKS-START
+
+    /**
+     * Filters given identifiers and returns those which the given user has access rights to.
+     * Why this function?: This function is an accelerated version of is_allowed(...) when called many times after each
+     * other. The number
+     * of database queries is minimized by processing identifiers all at once.
+     * Steps:
+     * -# Retrieve all locations belonging to any of the identifiers.
+     * -# Retrieve all parent location recursively of all locations found in step 1. Store them in a simple array
+     * mapping child onto parent location ID's.
+     * -# Concatenate all locations ID's of step 1 and all parent ID's of step 2 into an array.
+     * -# Remove those location ID's which user has not access right to.
+     * -# Loop over all locations retrieved in step 1: recursively visit all parent locations using the array created in
+     * step 2, and check
+     * is user has access to any of them. If yes, add the corresponding identifier to the result array.
+     * -# Return collected identifiers.
+     *
+     * @return array of identifiers.
+     */
+    public function filter_location_identifiers_by_granted_right($context, $user, $entities, $right, $identifiers, $type)
+    {
+        if ($user->is_platform_admin())
+        {
+            return $identifiers;
+        }
+
+        $location_ids = DataManager :: retrieve_location_ids_by_identifiers($context, $identifiers, $type);
+        $location_parent_ids = $this->get_location_parent_ids_recursive($context, $location_ids);
+
+        $all_location_ids = array_merge(array_values($location_ids), array_values($location_parent_ids));
+        $entities_condition = $this->get_entities_condition($context, $user->get_id(), $entities);
+        $all_location_ids_with_granted_right = DataManager :: filter_location_identifiers_by_granted_right(
+            $context,
+            $right,
+            $entities_condition,
+            $all_location_ids);
+
+        $identifiers_with_granted_right = array();
+
+        foreach ($identifiers as $identifier)
+        {
+            if ($this->has_right_recursive(
+                $location_ids[$identifier],
+                $location_parent_ids,
+                $all_location_ids_with_granted_right))
+            {
+                $identifiers_with_granted_right[] = $identifier;
+            }
+        }
+
+        return $identifiers_with_granted_right;
+    }
+
+    /**
+     * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
+     *
+     * @param int $location_id location we check whether user has access rigth to.
+     * @param array $location_parent_ids mapping of child location ID's onto parent location ID's. @see
+     *            get_location_parent_ids_recursive(...)
+     * @param array $location_ids_with_granted_right All location ID's which user has access rigth to. Keys: location
+     *            ID's Values: True.
+     * @see DataManager :: filter_location_identifiers_by_granted_right.
+     * @return boolean
+     */
+    private function has_right_recursive($location_id, $location_parent_ids, $location_ids_with_granted_right)
+    {
+        if (isset($location_ids_with_granted_right[$location_id]))
+        {
+            return true;
+        }
+
+        if (! isset($location_parent_ids[$location_id]))
+        {
+            return false;
+        }
+
+        return $this->has_right_recursive(
+            $location_parent_ids[$location_id],
+            $location_parent_ids,
+            $location_ids_with_granted_right);
+    }
+
+    /**
+     * Returns an array mapping child location ID's onto parent location ID's.
+     * Idea: Retrieve the child-parent relation of location with as few queries as possible and store them in the
+     * memory. The function
+     * has_right_recursive(...) will loop over the child-parent tree, which is much faster than the recursive function
+     * calls to DataManager
+     * :: retrieve_granted_rights_array(...). This function actually retrieves the location tree level-by-level starting
+     * with the leaf
+     * level, followed by parent level, then grandparents until an empty level is found.
+     * Result is a flat array mapping each ID in $location_ids onto its parent ID and each parent onto its grand parent
+     * ID, etc.
+     * Result will only contain child location ID's if the 'inherit' property of the location is true and the parent is
+     * not null.
+     *
+     * @return array Keys: child location ID's Values: parent location ID's.
+     */
+    public function get_location_parent_ids_recursive($context, $location_ids)
+    {
+        $all_location_parent_ids = array();
+
+        $location_parent_ids = $location_ids;
+
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+
+        while (true)
+        {
+            $conditions = array();
+            $conditions[] = new InCondition(
+                new PropertyConditionVariable($context_location, $context_location :: PROPERTY_ID),
+                array_unique($location_parent_ids));
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable($context_location, $context_location :: PROPERTY_INHERIT),
+                new StaticConditionVariable(1));
+            $conditions[] = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        $context_location,
+                        $context_location :: PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(0)));
+            $condition = new AndCondition($conditions);
+
+            $location_parent_ids = DataManager :: retrieve_location_parent_ids($context, $condition);
+
+            if (count($location_parent_ids) == 0)
+            {
+                break;
+            }
+
+            $all_location_parent_ids = $all_location_parent_ids + $location_parent_ids;
+        }
+
+        return $all_location_parent_ids;
+    }
+    // PERFORMANCE-TWEAKS-END
+
+    /**
+     *
+     * @param integer $right_id
+     * @param string $context
+     * @param integer $identifier
+     * @param integer $type
+     * @param integer $tree_identifier
+     * @param integer $tree_type
+     * @throws Exception
+     * @return \Chamilo\Core\Rights\Storage\<array>
+     */
     public function get_target_entities($right_id, $context, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
         $tree_type = self :: TREE_TYPE_ROOT)
     {

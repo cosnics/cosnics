@@ -201,7 +201,8 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
     }
 
     /**
-     * Recursively checks the visibility of a category and its parent. This is needed because when a category is
+     * Recursively checks the visibility of a category and its parent.
+     * This is needed because when a category is
      * invisible, its children are not necessarily marked invisible too.
      */
     public function is_recursive_visible()
@@ -226,6 +227,43 @@ class ContentObjectPublicationCategory extends \Chamilo\Configuration\Category\S
             return false;
         }
     }
+
+    // PERFORMANCE-TWEAKS-START
+
+    /**
+     * Returns whether given category is visible.
+     * Reimplementation of is_recursive_visible() working on arrays instead of queuring the database.
+     *
+     * @param int $category_id to check visibility of.
+     * @param array $category_parent_ids mapping of child categories onto parent categories.
+     * @see DataManager :: retrieve_publication_category_parent_ids_recursive(...)
+     * @param array $visibility Keys: category ID's Values: True or False. @see DataManager ::
+     *            retrieve_publication_category_visibility(...)
+     */
+    public static function is_recursive_visible_on_arrays($category_id, $category_parent_ids, $visibility)
+    {
+        if ($category_id == 0)
+        {
+            return true;
+        }
+
+        if (! $visibility[$category_id])
+        {
+            return false;
+        }
+
+        if (! isset($category_parent_ids[$category_id]))
+        {
+            return true;
+        }
+
+        return self :: is_recursive_visible_on_arrays(
+            $category_parent_ids[$category_id],
+            $category_parent_ids,
+            $visibility);
+    }
+
+    // PERFORMANCE-TWEAKS-END
 
     /**
      * Returns the dependencies for this dataclass

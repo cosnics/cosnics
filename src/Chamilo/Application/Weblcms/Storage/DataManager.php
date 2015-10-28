@@ -418,11 +418,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $conditions = array();
 
-        $conditions[] = new EqualityCondition(
+        $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
+            $course_id);
 
         if (! is_null($tool))
         {
@@ -512,6 +512,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     new PropertyConditionVariable(
                         ContentObjectPublication :: class_name(),
                         ContentObjectPublication :: PROPERTY_TOOL)));
+            $properties->add(
+                new PropertyConditionVariable(
+                    ContentObjectPublication :: class_name(),
+                    ContentObjectPublication :: PROPERTY_COURSE_ID));
         }
         else
         {
@@ -529,6 +533,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new PropertyConditionVariable(
                     ContentObjectPublication :: class_name(),
                     ContentObjectPublication :: PROPERTY_CATEGORY_ID));
+            $properties->add(
+                new PropertyConditionVariable(
+                    ContentObjectPublication :: class_name(),
+                    ContentObjectPublication :: PROPERTY_COURSE_ID));
         }
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), new Joins(array($join)));
@@ -864,77 +872,333 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     private static $new_publications_cache;
 
+    // PERFORMANCE-TWEAKS-START
+
     /**
      * Determines if a tool has new publications since the last time the current user visited the tool.
      *
+     * @see fill_new_publications_cache(...) for more information.
      * @param string $tool string
      * @param User $user
      * @param Course $course
      *
      * @return bool
      */
-    public static function tool_has_new_publications($tool, User $user, Course $course = null)
+    public static function tool_has_new_publications($tool, User $user, Course $course)
     {
-        $key = $user->get_id() . $course->get_id();
+        $key = self :: create_new_publications_cache_key($user->get_id(), $course->get_id());
 
         if (! isset(self :: $is_cached[$key]))
         {
-            self :: $is_cached[$key] = true;
+            // Fill cache for given course.
+            self :: fill_new_publications_cache($user, self :: create_courses_array($course));
+            assert(self :: $is_cached[$key]);
 
-            if (! $course || $course->get_id() == 0)
-            {
-                return false;
-            }
-
-            $weblcms_rights = WeblcmsRights :: get_instance();
-
-            if ($course->is_course_admin($user))
-            {
-                $tools_with_new_publications = DataManager :: retrieve_new_publication_icon_ids(
-                    $course->get_id(),
-                    $user->get_id(),
-                    true);
-
-                while ($publication = $tools_with_new_publications->next_result(false))
-                {
-                    self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
-                }
-            }
-            else
-            {
-                $publications = DataManager :: retrieve_new_publication_icon_ids($course->get_id(), $user->get_id());
-
-                while ($publication = $publications->next_result(false))
-                {
-                    if (! isset(
-                        self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]]) && $weblcms_rights->is_allowed_in_courses_subtree(
-                        WeblcmsRights :: VIEW_RIGHT,
-                        $publication[ContentObjectPublication :: PROPERTY_ID],
-                        WeblcmsRights :: TYPE_PUBLICATION,
-                        $course->get_id()))
-                    {
-                        // check if the publication is visible
-                        $visible = true;
-                        if ($publication[ContentObjectPublication :: PROPERTY_CATEGORY_ID] != 0)
-                        {
-                            // categories can be made invisible
-                            $category = DataManager :: retrieve_by_id(
-                                ContentObjectPublicationCategory :: class_name(),
-                                $publication[ContentObjectPublication :: PROPERTY_CATEGORY_ID]);
-
-                            $visible = $category->is_recursive_visible();
-                        }
-                        if ($visible)
-                        {
-                            self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
-                        }
-                    }
-                }
-            }
+            /*
+             * This piece of code has been optimized and replaced by fill_new_publications_cache. We keep it for a while
+             * for debugging
+             * purposes. (02-07-2015).
+             * $weblcms_rights = WeblcmsRights :: get_instance();
+             * if ($course->is_course_admin($user))
+             * {
+             * $tools_with_new_publications = DataManager :: retrieve_new_publication_icon_ids(
+             * $course->get_id(),
+             * $user->get_id(),
+             * true);
+             * while ($publication = $tools_with_new_publications->next_result(false))
+             * {
+             * self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
+             * }
+             * }
+             * else
+             * {
+             * $publications = DataManager :: retrieve_new_publication_icon_ids($course->get_id(), $user->get_id());
+             * while ($publication = $publications->next_result(false))
+             * {
+             * if (! isset(
+             * self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]]) &&
+             * $weblcms_rights->is_allowed_in_courses_subtree(
+             * WeblcmsRights :: VIEW_RIGHT,
+             * $publication[ContentObjectPublication :: PROPERTY_ID],
+             * WeblcmsRights :: TYPE_PUBLICATION,
+             * $course->get_id()))
+             * {
+             * // check if the publication is visible
+             * $visible = true;
+             * if ($publication[ContentObjectPublication :: PROPERTY_CATEGORY_ID] != 0)
+             * {
+             * // categories can be made invisible
+             * $category = DataManager :: retrieve_by_id(
+             * ContentObjectPublicationCategory :: class_name(),
+             * $publication[ContentObjectPublication :: PROPERTY_CATEGORY_ID]);
+             * $visible = $category->is_recursive_visible();
+             * }
+             * if ($visible)
+             * {
+             * self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
+             * }
+             * }
+             * }
+             * }
+             */
         }
 
         return self :: $new_publications_cache[$key][$tool];
     }
+
+    /**
+     * Fills the $new_publications_cache cache with given courses for given user.
+     * Ideas:
+     * - In order to speed multiple calls to tool_has_new_publications(...) we use the cache $new_publications_cache. If
+     * the cache is not
+     * filled for a user and course pair yet, this function is activated automatically.
+     * - Further acceleration of the code can be achieved if this function is called with a list of courses before
+     * looping over the courses
+     * starts. Why? It is more efficient to execute large queries including several 100 courses than executing small
+     * queries for each
+     * course separately. This function fills the cache for all given courses, resulting in fast execution of subsequent
+     * calls to
+     * tool_has_new_publications.
+     * Steps:
+     * -# Retrieve all tools with new publications for all courses. @see DataManager ::
+     * retrieve_new_publication_icon_ids
+     * -# Filter out all publications which user has no access right to. @see RighsUtils ::
+     * filter_location_identifiers_by_granted_right(...)
+     * -# Filter out all publication whose category is not visible. @see
+     * retrieve_publication_category_parent_ids_recursive(...),
+     * retrieve_publication_category_visibility(...), and ContentObjectPublicationCategory ::
+     * is_recursive_visible_on_arrays(...).
+     * -# Fill cache $new_publications_cache with the remaining publications.
+     *
+     * @param array $courses mapping of course ID's onto course objects @see create_courses_array($courses).
+     */
+    public static function fill_new_publications_cache($user, $courses)
+    {
+        $weblcms_rights = WeblcmsRights :: get_instance();
+
+        foreach (array_keys($courses) as $course_id)
+        {
+            self :: $is_cached[self :: create_new_publications_cache_key($user->get_id(), $course_id)] = true;
+        }
+
+        $tools_with_new_publications = DataManager :: retrieve_new_publication_icon_ids(
+            array_keys($courses),
+            $user->get_id(),
+            false,
+            null,
+            null);
+
+        $identifiers = array();
+        $publications = array();
+
+        while ($publication = $tools_with_new_publications->next_result(false))
+        {
+            $course = $courses[$publication[ContentObjectPublication :: PROPERTY_COURSE_ID]];
+
+            if ($course->is_course_admin($user))
+            {
+                $key = self :: create_new_publications_cache_key(
+                    $user->get_id(),
+                    $publication[ContentObjectPublication :: PROPERTY_COURSE_ID]);
+                self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
+            }
+            else
+            {
+                $identifiers[] = $publication[ContentObjectPublication :: PROPERTY_ID];
+                $publications[$publication[ContentObjectPublication :: PROPERTY_ID]] = $publication;
+            }
+        }
+
+        $entities = array();
+        $entities[] = CourseUserEntity :: get_instance();
+        $entities[] = CourseGroupEntity :: get_instance(null);
+        $entities[] = CoursePlatformGroupEntity :: get_instance(null);
+
+        $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
+            Manager :: context(),
+            $user,
+            $entities,
+            WeblcmsRights :: VIEW_RIGHT,
+            $identifiers,
+            WeblcmsRights :: TYPE_PUBLICATION);
+
+        $category_ids = array();
+
+        foreach ($publication_ids_with_right_view as $publication_id)
+        {
+            $category_ids[] = $publications[$publication_id][ContentObjectPublication :: PROPERTY_CATEGORY_ID];
+        }
+
+        $category_parent_ids = self :: retrieve_publication_category_parent_ids_recursive($category_ids);
+        $all_category_ids = array_merge($category_ids, array_values($category_parent_ids));
+        $category_visibility = self :: retrieve_publication_category_visibility($all_category_ids);
+
+        foreach ($publication_ids_with_right_view as $publication_id)
+        {
+            $publication = $publications[$publication_id];
+
+            if (ContentObjectPublicationCategory :: is_recursive_visible_on_arrays(
+                $publication[ContentObjectPublication :: PROPERTY_CATEGORY_ID],
+                $category_parent_ids,
+                $category_visibility))
+            {
+                $key = self :: create_new_publications_cache_key(
+                    $user->get_id(),
+                    $publication[ContentObjectPublication :: PROPERTY_COURSE_ID]);
+                self :: $new_publications_cache[$key][$publication[ContentObjectPublication :: PROPERTY_TOOL]] = true;
+            }
+        }
+    }
+
+    /**
+     * Creates the key for the cache new_publications_cache.
+     */
+    private static function create_new_publications_cache_key($user_id, $course_id)
+    {
+        return $user_id . '_' . $course_id;
+    }
+
+    /**
+     * \brief Creates an array of courses where the keys are course ID's and the values are course instances.
+     *
+     * @param $courses Course instance or an array of course instances.
+     */
+    public static function create_courses_array($courses)
+    {
+        if (! is_array($courses))
+        {
+            $courses = array($courses);
+        }
+
+        $courses_with_ids = array();
+        foreach ($courses as $course)
+        {
+            $courses_with_ids[$course->get_id()] = $course;
+        }
+
+        return $courses_with_ids;
+    }
+
+    /**
+     * Retrieves the visibility property of given publication categories.
+     *
+     * @return array Key: publication category ID Value: true or false.
+     */
+    public static function retrieve_publication_category_visibility($publication_category_ids)
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_ID),
+            $publication_category_ids);
+
+        $properties = new DataClassProperties();
+        $properties->add(
+            new PropertiesConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_ID));
+        $properties->add(
+            new PropertiesConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_VISIBLE));
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $categories = self :: records(ContentObjectPublicationCategory :: class_name(), $parameters);
+
+        $visibilities = array();
+        while ($category = $categories->next_result(false))
+        {
+            $visibilities[$category[ContentObjectPublicationCategory :: PROPERTY_ID]] = $category[ContentObjectPublicationCategory :: PROPERTY_VISIBLE];
+        }
+        return $visibilities;
+    }
+
+    /**
+     * Returns an array mapping child publication category ID's onto parent ID's.
+     * Idea: Retrieve the child-parent relation of publication categories with as few queries as possible and store them
+     * in the memory. The function
+     * ContentObjectPublicationCategory :: is_recursive_visible_on_arrays(...) will loop over the child-parent tree,
+     * which is much faster
+     * than the recursive function calls to ContentObjectPublicationCategory :: is_recursive_visible(...). This function
+     * actually retrieves
+     * the publication category tree level-by-level starting with the leaf level, followed by parent level, then
+     * grandparents until an empty level is
+     * found.
+     * Result is a flat array mapping each ID in $publication_category_ids onto its parent ID and each parent onto its
+     * grand parent ID, etc.
+     * Result will only contain child ID's if the 'inherit' property of the location is true and the parent is not null.
+     *
+     * @return array Keys: child location ID's Values: parent location ID's.
+     */
+    public static function retrieve_publication_category_parent_ids_recursive($publication_category_ids)
+    {
+        $all_parent_ids = array();
+
+        $parent_ids = $publication_category_ids;
+
+        while (true)
+        {
+            $parent_ids = self :: retrieve_publication_category_parent_ids($parent_ids);
+
+            if (count($parent_ids) == 0)
+            {
+                break;
+            }
+
+            $all_parent_ids = $all_parent_ids + $parent_ids;
+        }
+
+        return $all_parent_ids;
+    }
+
+    /**
+     * Retrieves parent ID's of given publication categories.
+     * Result contains only child ID's whose parent ID is not null.
+     *
+     * @return array Key: child publication category ID's Value: parent publication category ID's.
+     */
+    public static function retrieve_publication_category_parent_ids($publication_category_ids)
+    {
+        $conditions = array();
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_ID),
+            $publication_category_ids);
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory :: class_name(),
+                    ContentObjectPublicationCategory :: PROPERTY_PARENT),
+                new StaticConditionVariable(0)));
+        $condition = new AndCondition($conditions);
+
+        $properties = new DataClassProperties();
+        $properties->add(
+            new PropertiesConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_ID));
+        $properties->add(
+            new PropertiesConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_PARENT));
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $categories = self :: records(ContentObjectPublicationCategory :: class_name(), $parameters);
+
+        $parent_ids = array();
+
+        while ($category = $categories->next_result(false))
+        {
+            $parent_ids[$category[ContentObjectPublicationCategory :: PROPERTY_ID]] = $category[ContentObjectPublicationCategory :: PROPERTY_PARENT];
+        }
+
+        return $parent_ids;
+    }
+
+    // PERFORMANCE-TWEAKS-END
 
     /**
      * Returns if a category inside a tool has new publications
@@ -1482,7 +1746,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
 
     /**
-     * Builds the parameters to retrieve course settings with a course setting relation table. Returns course settings
+     * Builds the parameters to retrieve course settings with a course setting relation table.
+     * Returns course settings
      * with their compliant values.
      *
      * @param $course_setting_relation_class String - The class name for the course setting relation table

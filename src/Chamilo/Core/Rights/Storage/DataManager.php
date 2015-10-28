@@ -183,6 +183,98 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $context_dm :: count($context_location :: class_name(), $parameters);
     }
 
+    // PERFORMANCE-TWEAKS-START
+
+    /**
+     * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
+     *
+     * @return array Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
+     */
+    public static function filter_location_identifiers_by_granted_right($context, $right, $entity_condition,
+        $location_ids)
+    {
+        $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
+
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable($context_class, $context_class :: PROPERTY_LOCATION_ID));
+
+        $conditions[] = $entity_condition;
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($context_class, $context_class :: PROPERTY_LOCATION_ID),
+            $location_ids);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_class, $context_class :: PROPERTY_RIGHT_ID),
+            new StaticConditionVariable($right));
+        $condition = new AndCondition($conditions);
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $rights_location_entity_rights = self :: records($context_class, $parameters);
+
+        $location_ids = array();
+
+        while ($rights_location_entity_right = $rights_location_entity_rights->next_result())
+        {
+            $location_ids[$rights_location_entity_right[$context_class :: PROPERTY_LOCATION_ID]] = 1;
+        }
+
+        return $location_ids;
+    }
+
+    public static function retrieve_location_ids_by_identifiers($context, $identifiers, $type)
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($context_location, $context_location :: PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($context_location, $context_location :: PROPERTY_IDENTIFIER));
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable($context_location, $context_location :: PROPERTY_IDENTIFIER),
+            $identifiers);
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($context_location, $context_location :: PROPERTY_TYPE),
+            new StaticConditionVariable($type));
+        $condition = new AndCondition($conditions);
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $locations = self :: records($context_location, $parameters);
+
+        $location_ids = array();
+
+        while ($location = $locations->next_result())
+        {
+            $location_ids[$location[$context_location :: PROPERTY_IDENTIFIER]] = $location[$context_location :: PROPERTY_ID];
+        }
+
+        return $location_ids;
+    }
+
+    public static function retrieve_location_parent_ids($context, $condition)
+    {
+        $context_location = ($context . '\Storage\DataClass\RightsLocation');
+
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable($context_location, $context_location :: PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable($context_location, $context_location :: PROPERTY_PARENT_ID));
+
+        $parameters = new RecordRetrievesParameters($properties, $condition);
+
+        $locations = self :: records($context_location, $parameters);
+
+        $location_parent_ids = array();
+        while ($location = $locations->next_result())
+        {
+            $location_parent_ids[$location[$context_location :: PROPERTY_ID]] = $location[$context_location :: PROPERTY_PARENT_ID];
+        }
+        return $location_parent_ids;
+    }
+
+    // PERFORMANCE-TWEAKS-END
+
     /*
      * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
      * This could be easily replaced with a generic retrieve, as is evidenced from the method body.
