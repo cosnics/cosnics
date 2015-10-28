@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\link
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Link"
+LinkToolBrowserComponent = "Links durchsuchen"
+DeleteSelected = "Ausgewählten Link löschen"
+LinkToolViewerComponent = "Link ansehen"
+LinkToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
+LinkToolMoverComponent = "Link verschieben"
+LinkToolPublisherComponent = "Link veröffentlichen"
+LinkToolUpdaterComponent = "Link bearbeiten"
+LinkToolCategoryMovercomponent = "Links verschieben"
+Properties = ""
+URL = ""
