@@ -680,6 +680,8 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                     null,
                     null,
                     $order_property)->as_array();
+            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
+
                 $order_property = new OrderBy(
                     new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME),
                     SORT_ASC,
@@ -690,6 +692,8 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                     null,
                     null,
                     $order_property)->as_array();
+            case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER :
+
                 $order_property = new OrderBy(
                     new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
                     SORT_ASC,
