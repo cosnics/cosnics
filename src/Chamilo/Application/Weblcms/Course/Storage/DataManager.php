@@ -952,12 +952,12 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     protected static function get_users_not_subscribed_to_course_condition($course_id, Condition $condition)
     {
         $courseConditions = array();
-        $courseConditions = new EqualityCondition(
+        $courseConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseEntityRelation :: class_name(),
                 CourseEntityRelation :: PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
-        $courseConditions = new EqualityCondition(
+        $courseConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseEntityRelation :: class_name(),
                 CourseEntityRelation :: PROPERTY_ENTITY_TYPE),

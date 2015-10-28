@@ -301,7 +301,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (! is_null($userIdentifier))
         {
-            $conditions = new EqualityCondition(
+            $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
                 new StaticConditionVariable($userIdentifier));
         }

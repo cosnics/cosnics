@@ -39,10 +39,10 @@ class MailTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
             case Translation :: get('SentMails') :
                 $conditions = array();
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID),
                     new StaticConditionVariable($object->get_id()));
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS),
                     new StaticConditionVariable(UserMail :: STATUS_MAIL_SEND));
                 $parameters = new DataClassCountParameters(new AndCondition($conditions));
@@ -52,10 +52,10 @@ class MailTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
             case Translation :: get('UnsentMails') :
                 $conditions = array();
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID),
                     new StaticConditionVariable($object->get_id()));
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS),
                     new StaticConditionVariable(UserMail :: STATUS_MAIL_NOT_SEND));
                 $parameters = new DataClassCountParameters(new AndCondition($conditions));
@@ -65,10 +65,10 @@ class MailTableCellRenderer extends DataClassTableCellRenderer implements TableC
                      '" title="' . $title . '">' . DataManager :: count(UserMail :: class_name(), $parameters) . '</a>';
             case Translation :: get('MailsInQueue') :
                 $conditions = array();
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID),
                     new StaticConditionVariable($object->get_id()));
-                $conditions = new EqualityCondition(
+                $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS),
                     new StaticConditionVariable(UserMail :: STATUS_MAIL_IN_QUEUE));
                 $parameters = new DataClassCountParameters(new AndCondition($conditions));
