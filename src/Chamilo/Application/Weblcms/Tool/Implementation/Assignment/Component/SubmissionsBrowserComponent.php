@@ -460,12 +460,14 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         }
         else
         {
-            $users = \Chamilo\Core\User\Storage\DataManager :: get_instance()->retrieve_users(
-                new InCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
-                    \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                        Group :: class_name(),
-                        $this->submitter_id)->get_users(true, true)))->as_array();
+            $users = \Chamilo\Core\User\Storage\DataManager :: retrieves(
+                User :: class_name(),
+                new DataClassRetrievesParameters(
+                    new InCondition(
+                        new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
+                        \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
+                            Group :: class_name(),
+                            $this->submitter_id)->get_users(true, true))))->as_array();
         }
 
         $user_names = array();

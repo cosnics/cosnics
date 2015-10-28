@@ -84,26 +84,6 @@ class SubmissionGroupsBrowserTableCellRenderer extends SubmissionBrowserTableCel
     /**
      * Returns whether or not the current user is the submitter or part of the submitter entity
      *
-     * @abstract
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
      * @param int $submitter_id - the id of the submitter entity
      * @param int $user_id - the id of the logged in user
      * @return bool
