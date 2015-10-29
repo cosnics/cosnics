@@ -169,7 +169,7 @@ class ApplicationFactory
 
         foreach ($parameters as $parameter)
         {
-            $component->set_parameter($parameter, $this->getRequest()->query->get($parameter));
+            $component->set_parameter($parameter, $this->getRequest()->get($parameter));
         }
 
         return $component;

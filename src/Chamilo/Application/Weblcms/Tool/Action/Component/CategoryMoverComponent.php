@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -159,12 +158,12 @@ class CategoryMoverComponent extends Manager
 
     public function build_move_to_category_form()
     {
-        $publication_ids = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+
         if (! is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
-
         if (count($publication_ids) > 0)
         {
             $pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
@@ -207,8 +206,7 @@ class CategoryMoverComponent extends Manager
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY,
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID))));
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_ids)));
                 foreach ($publication_ids as $publication_id)
                 {
                     $publications[] = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(

@@ -6,7 +6,7 @@
         var result = true;
 
         if (!$('input:checked', $(this)).length > 0) {
-        return false;
+        	return false;
         }
 
         var actions = $('#actions_' + table_name);

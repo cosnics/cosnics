@@ -49,6 +49,9 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->set_parameter(ViewRenderer :: PARAM_TYPE, $this->getCurrentRendererType());
+        $this->set_parameter(ViewRenderer :: PARAM_TIME, $this->getCurrentRendererTime());
+
         $this->form = new JumpForm($this->get_url(), $this->getCurrentRendererTime());
 
         if ($this->form->validate())
@@ -253,15 +256,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('calendar_browser');
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(ViewRenderer :: PARAM_TYPE, ViewRenderer :: PARAM_TIME);
     }
 
     /**

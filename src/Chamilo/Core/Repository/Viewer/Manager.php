@@ -228,8 +228,7 @@ abstract class Manager extends Application
      */
     public function any_object_selected()
     {
-        $object = Request :: get(self :: PARAM_ID);
-        return isset($object);
+        return ! is_null(self :: get_selected_objects());
     }
 
     /**
@@ -251,19 +250,10 @@ abstract class Manager extends Application
     /**
      *
      * @return boolean
+     * @Deprecated any_object_selected()
      */
     public static function is_ready_to_be_published()
     {
-        $action = Request :: get(self :: PARAM_ACTION);
-
-        $table_name = Request :: post('table_name');
-        $table_parameters = unserialize(base64_decode(Request :: post($table_name . '_action_value')));
-
-        if (isset($table_parameters[self :: PARAM_ACTION]))
-        {
-            $action = $table_parameters[self :: PARAM_ACTION];
-        }
-
-        return (self :: any_object_selected() && $action == self :: ACTION_PUBLISHER);
+        return (self :: any_object_selected());
     }
 }

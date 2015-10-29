@@ -27,7 +27,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
             throw new NotAllowedException();
         }
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+        if (! \Chamilo\Core\Repository\Viewer\Manager :: any_object_selected())
         {
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
@@ -37,21 +37,21 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         else
         {
             $objects = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
-            
+
             $mode = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE);
-                                
+
             $publish_type = PlatformSetting :: get('display_publication_screen', 'Chamilo\Application\Weblcms');
-                    
+
             $show_form = (($publish_type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_TYPE_FORM) || ($publish_type ==
                  \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_TYPE_BOTH &&
                  $mode != \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_MODE_QUICK));
-             
+
             $publisher = new ContentObjectPublisher($this, $objects, $show_form);
-            
+
             if ($publisher->ready_to_publish())
             {
                $success = $publisher->publish();
-               
+
                 $message = Translation :: get(
                     ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
                     array('OBJECT' => Translation :: get('Object')),

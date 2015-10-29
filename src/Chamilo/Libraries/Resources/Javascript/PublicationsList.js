@@ -35,7 +35,14 @@
 	$(document).ready(function () 
     {
 		$(document).on('submit', '.publication_list', form_submitted);
+        $(document).on('change', 'form.publication_list select', changeAction);
 	});
+	
+
+    function changeAction(e, ui) {
+        $(this).closest('form').attr('action', $(this).val());
+    }
+
 
     function translation(string, application) {
 		var translated_string = $.ajax({
