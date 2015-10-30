@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Configuration\Configuration;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -126,25 +127,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self :: retrieve(Language :: class_name(), $parameters);
     }
 
-    public static function get_languages($use_folder_name_as_key = true)
+    public static function get_languages()
     {
-        $options = array();
-
-        $languages = self :: retrieves(Language :: class_name(), new DataClassRetrievesParameters());
-        while ($language = $languages->next_result())
-        {
-            if ($use_folder_name_as_key)
-            {
-                $key = $language->get_isocode();
-            }
-            else
-            {
-                $key = $language->get_id();
-            }
-            $options[$key] = $language->get_original_name();
-        }
-
-        return $options;
+        return Configuration :: get_instance()->getLanguages();
     }
 
     /**
