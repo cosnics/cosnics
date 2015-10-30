@@ -369,11 +369,6 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         $this->titles = $titles;
     }
 
-    public function is_selected()
-    {
-        return false;
-    }
-
     /*
      * (non-PHPdoc) @see \libraries\storage\DisplayOrderDataClassListenerSupport::get_display_order_property()
      */

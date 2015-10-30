@@ -155,10 +155,6 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
 
-    // Sections
-    const SECTION_IMPLEMENTATION = 'Implementation';
-    const SECTION_WORKSPACE = 'Workspace';
-
     /**
      * Property of this repository manager.
      */
