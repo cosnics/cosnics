@@ -17,7 +17,7 @@ class ApplicationItem extends SiteMap
 
     public function get_item_url()
     {
-        $application = $this->get_item()->get_application();
+        $application = $this->getItem()->get_application();
 
         if (Application :: is_active($application))
         {
@@ -30,17 +30,17 @@ class ApplicationItem extends SiteMap
         }
         else
         {
-            $url = 'index.php?application=' . $this->get_item()->get_application();
+            $url = 'index.php?application=' . $this->getItem()->get_application();
         }
 
         $html = array();
-        if ($this->get_item()->get_use_translation())
+        if ($this->getItem()->get_use_translation())
         {
-            $title = Translation :: get('TypeName', null, $this->get_item()->get_application());
+            $title = Translation :: get('TypeName', null, $this->getItem()->get_application());
         }
         else
         {
-            $title = $this->get_item()->get_titles()->get_translation(
+            $title = $this->getItem()->get_titles()->get_translation(
                 Translation :: getInstance()->getLanguageIsocode());
         }
 

@@ -10,17 +10,30 @@ use Chamilo\Core\Menu\Renderer\Item\Renderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Bar extends Renderer
+abstract class Bar extends Renderer
 {
+
+    public function isSelected()
+    {
+        return $this->isItemSelected() || $this->isParentSelected();
+    }
+
+    abstract function isItemSelected();
+
+    public function isParentSelected()
+    {
+        return $this->getItem()->hasParent() && $this->getParentRenderer()->isSelected();
+    }
 
     public function render()
     {
         $html = array();
 
-        if ($this->get_item()->get_parent() == 0)
+        $selected = $this->isSelected();
+
+        if ($this->getItem()->get_parent() == 0)
         {
             $html[] = '<ul>';
-            $selected = $this->get_item()->is_selected();
         }
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
@@ -28,7 +41,7 @@ class Bar extends Renderer
 
         $html[] = '</li>';
 
-        if ($this->get_item()->get_parent() == 0)
+        if ($this->getItem()->get_parent() == 0)
         {
             $html[] = '</ul>';
         }
