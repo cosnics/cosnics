@@ -104,8 +104,9 @@ class Footer
                     $output[] = '<div id="sitemap">';
                     $output[] = '<div class="categories">';
 
-                    $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
+                    $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
                         \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
+                        $this->getApplication()->getRequest(),
                         $this->getApplication()->get_user());
 
                     $output[] = '<div class="clear"></div>';

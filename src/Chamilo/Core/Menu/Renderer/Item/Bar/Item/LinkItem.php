@@ -14,14 +14,19 @@ use Chamilo\Libraries\Platform\Translation;
 class LinkItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        return false;
+    }
+
     public function getContent()
     {
         $html = array();
-        $html[] = '<a href="' . $this->get_item()->get_url() . '" target="' . $this->get_item()->get_target_string() .
+        $html[] = '<a href="' . $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() .
              '">';
 
         $html[] = '<div class="label">' .
-             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
+             $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
              '</div>';
 
         $html[] = '</a>';

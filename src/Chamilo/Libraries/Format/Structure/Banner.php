@@ -131,8 +131,9 @@ class Banner
             if ($registration instanceof Registration && $registration->is_active())
             {
                 $output[] = '<div class="applications">';
-                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
+                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
                     \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
+                    $this->getApplication()->getRequest(),
                     $this->getApplication()->getUser());
                 $output[] = '<div class="clear">&nbsp;</div>';
                 $output[] = '</div>';

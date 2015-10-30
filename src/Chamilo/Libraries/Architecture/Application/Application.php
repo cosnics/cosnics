@@ -67,7 +67,6 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
-        Page :: getInstance()->setSection($this->package());
     }
 
     /**

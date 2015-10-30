@@ -16,9 +16,18 @@ use Chamilo\Libraries\Format\Theme;
 class WorkspaceItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        $currentWorkspace = $this->getMenuRenderer()->getRequest()->get(
+            \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID);
+        return ($currentContext == \Chamilo\Core\Repository\Manager :: package() &&
+             $currentWorkspace == $this->getItem()->getWorkspaceId());
+    }
+
     public function getContent()
     {
-        $selected = $this->get_item()->is_selected();
+        $selected = $this->isSelected();
 
         if ($selected)
         {
@@ -32,21 +41,21 @@ class WorkspaceItem extends Bar
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: package(),
-                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $this->get_item()->getWorkspaceId()));
+                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $this->getItem()->getWorkspaceId()));
 
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->get_item()->getName();
+        $title = $this->getItem()->getName();
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/16');
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 
