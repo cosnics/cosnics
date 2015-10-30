@@ -16,6 +16,13 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\MenuItem;
 class AccountItem extends MenuItem
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        $currentAction = $this->getMenuRenderer()->getRequest()->get(Manager :: PARAM_ACTION);
+        return ($currentContext == Manager :: package() && $currentAction == Manager :: ACTION_VIEW_ACCOUNT);
+    }
+
     public function get_url()
     {
         $redirect = new Redirect(

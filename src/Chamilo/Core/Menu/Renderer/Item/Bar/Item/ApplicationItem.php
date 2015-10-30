@@ -16,9 +16,15 @@ use Chamilo\Libraries\Format\Theme;
 class ApplicationItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        return ($currentContext == $this->getItem()->get_application());
+    }
+
     public function getContent()
     {
-        $application = $this->get_item()->get_application();
+        $application = $this->getItem()->get_application();
 
         if (! Application :: is_active($application))
         {
@@ -31,13 +37,10 @@ class ApplicationItem extends Bar
         }
         else
         {
-            $url = 'index.php?application=' . $this->get_item()->get_application();
+            $url = 'index.php?application=' . $this->getItem()->get_application();
         }
 
-        $selected = $this->get_item()->is_selected() ||
-             ($this->get_item()->get_parent() != 0 && $this->get_item()->get_parent_object()->is_selected());
-
-        if ($selected && $this->get_item()->get_parent() == 0)
+        if ($this->isSelected())
         {
             $class = 'class="current" ';
         }
@@ -48,31 +51,30 @@ class ApplicationItem extends Bar
 
         $html = array();
 
-        if ($this->get_item()->get_use_translation())
+        if ($this->getItem()->get_use_translation())
         {
-            $title = Translation :: get('TypeName', null, $this->get_item()->get_application());
+            $title = Translation :: get('TypeName', null, $this->getItem()->get_application());
         }
         else
         {
-            $title = $this->get_item()->get_titles()->get_translation(
-                Translation :: getInstance()->getLanguageIsocode());
+            $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         }
 
         $html[] = '<a ' . $class . 'href="' . $url . '">';
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
-            $integrationNamespace = $this->get_item()->get_application() . '\Integration\Chamilo\Core\Menu';
+            $integrationNamespace = $this->getItem()->get_application() . '\Integration\Chamilo\Core\Menu';
             $imagePath = Theme :: getInstance()->getImagePath(
                 $integrationNamespace,
-                'Menu' . ($selected ? 'Selected' : ''));
+                'Menu' . ($this->isSelected() ? 'Selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 

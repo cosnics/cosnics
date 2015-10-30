@@ -5,7 +5,6 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -44,8 +43,6 @@ class UserSettingsComponent extends ProfileComponent
      */
     public function run()
     {
-        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
-
         $this->context = Request :: get(self :: PARAM_CONTEXT);
 
         if (! $this->context)

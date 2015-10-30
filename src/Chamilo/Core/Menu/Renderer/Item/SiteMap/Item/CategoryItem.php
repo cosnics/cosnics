@@ -17,24 +17,24 @@ class CategoryItem extends Renderer
     public function render()
     {
         $html = array();
-        
+
         $html[] = '<div class="category">';
         $html[] = '<h1>';
         $html[] = '<a href="#">' .
-             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) . '</a>';
+             $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) . '</a>';
         $html[] = '</h1>';
-        
-        if ($this->get_item()->has_children())
+
+        if ($this->getItem()->has_children())
         {
-            foreach ($this->get_item()->get_children() as $child)
+            foreach ($this->getItem()->get_children() as $child)
             {
-                $html[] = Renderer :: as_html($this->get_menu_renderer(), $child);
+                $html[] = Renderer :: toHtml($this->getMenuRenderer(), $child);
             }
         }
-        
+
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

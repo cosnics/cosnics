@@ -14,35 +14,66 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Renderer
 {
 
-    private $menu_renderer;
+    /**
+     *
+     * @var \Chamilo\Core\Menu\Renderer\Menu\Renderer
+     */
+    private $menuRenderer;
 
+    /**
+     *
+     * @var \Chamilo\Core\Menu\Storage\DataClass\Item
+     */
     private $item;
 
     /**
      *
-     * @param User|null $user
+     * @var \Chamilo\Core\Menu\Renderer\Item\Renderer
      */
-    public function __construct($menu_renderer, $item)
+    private $parentRenderer;
+
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param Renderer $parentRenderer
+     */
+    public function __construct($menuRenderer, $item, Renderer $parentRenderer = null)
     {
         $this->item = $item;
-        $this->menu_renderer = $menu_renderer;
+        $this->menuRenderer = $menuRenderer;
+        $this->parentRenderer = $parentRenderer;
     }
 
-    public static function factory($menu_renderer, $item)
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param Renderer $parentRenderer
+     * @return Renderer
+     */
+    public static function factory($menuRenderer, $item, $parentRenderer = null)
     {
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($item->get_type());
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
 
         $class = $namespace . '\Renderer\Item\\' .
-             (string) StringUtilities :: getInstance()->createString($menu_renderer :: TYPE)->upperCamelize() . '\Item\\' .
+             (string) StringUtilities :: getInstance()->createString($menuRenderer :: TYPE)->upperCamelize() . '\Item\\' .
              ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($item->get_type());
 
-        return new $class($menu_renderer, $item);
+        return new $class($menuRenderer, $item, $parentRenderer);
     }
 
-    public static function as_html($menu_renderer, $item)
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param Renderer $parentRenderer
+     * @return string
+     */
+    public static function toHtml($menuRenderer, $item, $parentRenderer)
     {
-        return self :: factory($menu_renderer, $item)->render();
+        return self :: factory($menuRenderer, $item, $parentRenderer)->render();
     }
 
     /**
@@ -52,13 +83,22 @@ abstract class Renderer
      */
     abstract public function render();
 
-    public function get_item()
+    public function getItem()
     {
         return $this->item;
     }
 
-    public function get_menu_renderer()
+    public function getMenuRenderer()
     {
-        return $this->menu_renderer;
+        return $this->menuRenderer;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Menu\Renderer\Item\Renderer
+     */
+    public function getParentRenderer()
+    {
+        return $this->parentRenderer;
     }
 }

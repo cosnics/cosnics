@@ -3,7 +3,6 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\User\Form\PictureForm;
@@ -34,8 +33,6 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
         {
             throw new NotAllowedException();
         }
-
-        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
         $this->form = new PictureForm($this->get_user(), $this->get_url());
 

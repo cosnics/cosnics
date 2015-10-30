@@ -16,9 +16,18 @@ use Chamilo\Libraries\Format\Theme;
 class RepositoryImplementationItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        $currentInstance = $this->getMenuRenderer()->getRequest()->get(
+            \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY);
+        return ($currentContext == $this->getItem()->get_implementation() &&
+             $currentInstance == $this->getItem()->get_instance_id());
+    }
+
     public function getContent()
     {
-        $selected = $this->get_item()->is_selected();
+        $selected = $this->isSelected();
 
         if ($selected)
         {
@@ -31,22 +40,22 @@ class RepositoryImplementationItem extends Bar
 
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => $this->get_item()->get_implementation(),
-                \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_item()->get_instance_id()));
+                Application :: PARAM_CONTEXT => $this->getItem()->get_implementation(),
+                \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $this->getItem()->get_instance_id()));
 
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->get_item()->get_name();
+        $title = $this->getItem()->get_name();
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath($this->get_item()->get_implementation(), 'Menu');
+            $imagePath = Theme :: getInstance()->getImagePath($this->getItem()->get_implementation(), 'Menu');
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 

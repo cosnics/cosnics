@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -19,8 +18,6 @@ class AdditionalAccountInformationComponent extends ProfileComponent
      */
     public function run()
     {
-        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
-
         return $this->renderPage();
     }
 

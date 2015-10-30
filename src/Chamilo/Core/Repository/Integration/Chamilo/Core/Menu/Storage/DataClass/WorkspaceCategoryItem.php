@@ -58,19 +58,6 @@ class WorkspaceCategoryItem extends Item
         $this->children[] = $child;
     }
 
-    public function is_selected()
-    {
-        foreach ($this->get_children() as $child)
-        {
-            if ($child->is_selected())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function delete()
     {
         foreach ($this->get_children() as $child)

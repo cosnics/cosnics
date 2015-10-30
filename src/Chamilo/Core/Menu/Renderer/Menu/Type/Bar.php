@@ -14,11 +14,11 @@ class Bar extends Renderer
 {
     const TYPE = 'bar';
 
-    public function display_menu_header($current_section)
+    public function display_menu_header()
     {
         $html = array();
         $html[] = '<div class="navbar">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
