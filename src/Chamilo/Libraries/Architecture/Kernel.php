@@ -365,6 +365,7 @@ class Kernel
 
             if (! $postContext)
             {
+                $this->getRequest()->query->set(Application :: PARAM_CONTEXT, 'Chamilo\Core\Home');
                 return 'Chamilo\Core\Home';
             }
             else

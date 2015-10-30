@@ -14,20 +14,26 @@ use Chamilo\Libraries\Platform\Translation;
 class LinkApplicationItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        // TODO: Implement this correctly?
+        return false;
+    }
+
     public function getContent()
     {
         $html = array();
 
-        if ($this->get_item()->get_parent() == 0)
+        if ($this->getItem()->get_parent() == 0)
         {
-            $selected = $this->get_item()->is_selected();
+            $selected = $this->isSelected();
         }
 
-        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_item()->get_url() . '" target="' .
-             $this->get_item()->get_target_string() . '">';
+        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->getItem()->get_url() . '" target="' .
+             $this->getItem()->get_target_string() . '">';
 
         $html[] = '<div class="label">' .
-             $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
+             $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
              '</div>';
 
         $html[] = '</a>';

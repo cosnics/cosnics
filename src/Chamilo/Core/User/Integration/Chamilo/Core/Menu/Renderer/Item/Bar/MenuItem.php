@@ -16,6 +16,11 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 abstract class MenuItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        return false;
+    }
+
     /**
      *
      * @return string
@@ -24,27 +29,26 @@ abstract class MenuItem extends Bar
     {
         $html = array();
 
-        $selected = $this->get_item()->is_selected() ||
-             ($this->get_item()->get_parent() != 0 && $this->get_item()->get_parent_object()->is_selected());
+        $selected = $this->isSelected();
 
         $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_url() . '">';
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-                $this->get_item()->get_type());
+                $this->getItem()->get_type());
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($itemNamespace, 2);
-            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->get_item()->get_type());
+            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->getItem()->get_type());
             $imagePath = Theme :: getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 

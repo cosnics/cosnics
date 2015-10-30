@@ -17,7 +17,7 @@ class SiteMap extends Renderer
     {
         $html = array();
         
-        if ($this->get_item()->get_parent() == 0)
+        if ($this->getItem()->get_parent() == 0)
         {
             $html[] = '<div class="category">';
             $html[] = '<h1>';

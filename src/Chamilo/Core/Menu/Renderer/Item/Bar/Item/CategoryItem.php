@@ -8,6 +8,8 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 
 /**
  *
@@ -16,17 +18,51 @@ use Chamilo\Libraries\Format\Theme;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CategoryItem extends Renderer
+class CategoryItem extends Bar
 {
+
+    /**
+     *
+     * @var boolean
+     */
+    private $isItemSelected;
+
+    /**
+     *
+     * @var \Chamilo\Core\Menu\Renderer\Item\Renderer[]
+     */
+    private $itemRenderers = array();
+
+    /**
+     * @see \Chamilo\Core\Menu\Renderer\Item\Bar\Bar::isItemSelected()
+     */
+    public function isItemSelected()
+    {
+        if (! isset($this->isItemSelected))
+        {
+            $this->isItemSelected = false;
+
+            foreach ($this->getItem()->get_children() as $child)
+            {
+                if ($this->getItemRenderer($this->getMenuRenderer(), $child, $this)->isItemSelected())
+                {
+                    $this->isItemSelected = true;
+                    break;
+                }
+            }
+        }
+
+        return $this->isItemSelected;
+    }
 
     public function render()
     {
         $html = array();
 
         $sub_html = array();
-        $selected = $this->get_item()->is_selected();
+        $selected = $this->isSelected();
 
-        if ($this->get_item()->has_children())
+        if ($this->getItem()->has_children())
         {
             $sub_html[] = '<ul>';
 
@@ -34,7 +70,7 @@ class CategoryItem extends Renderer
             $entities[] = new UserEntity();
             $entities[] = new PlatformGroupEntity();
 
-            foreach ($this->get_item()->get_children() as $child)
+            foreach ($this->getItem()->get_children() as $child)
             {
                 if (($child->get_id() && Rights :: get_instance()->is_allowed(
                     Rights :: VIEW_RIGHT,
@@ -46,7 +82,7 @@ class CategoryItem extends Renderer
                 {
                     if (! $child->is_hidden())
                     {
-                        $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $child);
+                        $sub_html[] = $this->getItemRenderer($this->getMenuRenderer(), $child, $this)->render();
                     }
                 }
             }
@@ -55,14 +91,14 @@ class CategoryItem extends Renderer
             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
         $html[] = '<ul>';
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
         $html[] = '<a ' . ($selected ? ' class="current"' : '') . 'href="#">';
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $imagePath = Theme :: getInstance()->getImagePath(
                 Manager :: context(),
@@ -71,9 +107,9 @@ class CategoryItem extends Renderer
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 
@@ -86,5 +122,22 @@ class CategoryItem extends Renderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @return \Chamilo\Core\Menu\Renderer\Item\Bar\Bar
+     */
+    public function getItemRenderer(\Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer, Item $item,
+        \Chamilo\Core\Menu\Renderer\Item\Bar\Bar $parentRenderer)
+    {
+        if (! isset($this->itemRenderers[$item->get_id()]))
+        {
+            $this->itemRenderers[$item->get_id()] = Renderer :: factory($menuRenderer, $item, $parentRenderer);
+        }
+
+        return $this->itemRenderers[$item->get_id()];
     }
 }

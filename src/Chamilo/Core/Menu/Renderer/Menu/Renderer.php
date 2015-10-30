@@ -24,6 +24,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\File\Path;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -44,6 +45,12 @@ abstract class Renderer
     private $user;
 
     /**
+     *
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
      * The layout of the menubar
      *
      * @var String
@@ -54,9 +61,10 @@ abstract class Renderer
      *
      * @param $user User|null
      */
-    public function __construct($user = null)
+    public function __construct(Request $request, $user = null)
     {
         $this->user = $user;
+        $this->request = $request;
     }
 
     /**
@@ -68,17 +76,21 @@ abstract class Renderer
         return $this->user;
     }
 
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
     /**
      *
      * @param $type string
      * @param $user User|null
      * @return Renderer
      */
-    public static function factory($type, $user)
+    public static function factory($type, Request $request, $user)
     {
         $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
-        $renderer = new $class($user);
-        return $renderer;
+        return new $class($request, $user);
     }
 
     /**
@@ -87,18 +99,19 @@ abstract class Renderer
      * @param $user User|null
      * @return string
      */
-    public static function as_html($type, $user)
+    public static function toHtml($type, Request $request, $user)
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cacheIdentifier = md5(serialize(array(__METHOD__, $type, $user->get_id())));
+        // $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+        // $cacheIdentifier = md5(serialize(array(__METHOD__, $type, $user->get_id())));
 
-        if (! $cache->contains($cacheIdentifier))
-        {
-            $menu = self :: factory($type, $user)->render();
-            $cache->save($cacheIdentifier, $menu);
-        }
+        // if (! $cache->contains($cacheIdentifier))
+        // {
+        $menu = self :: factory($type, $request, $user)->render();
+        return $menu;
+        // $cache->save($cacheIdentifier, $menu);
+        // }
 
-        return $cache->fetch($cacheIdentifier);
+        // return $cache->fetch($cacheIdentifier);
     }
 
     public function get_menu_items()
@@ -153,7 +166,7 @@ abstract class Renderer
             {
                 if (! $item->is_hidden())
                 {
-                    $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: as_html($this, $item);
+                    $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
                 }
             }
         }
