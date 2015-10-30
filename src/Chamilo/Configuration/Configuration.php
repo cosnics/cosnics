@@ -11,6 +11,7 @@ use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\File\Cache\PhpFileCache;
 use Chamilo\Libraries\File\Cache\FilesystemCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Configuration\Storage\DataClass\Language;
 
 /**
  * This class represents the current configuration
@@ -41,6 +42,12 @@ class Configuration
      * @var \Chamilo\Configuration\Storage\DataClass\Registration[]
      */
     private $registrations;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $languages;
 
     /**
      *
@@ -257,6 +264,7 @@ class Configuration
     {
         $this->loadSettings();
         $this->loadRegistrations();
+        $this->loadLanguages();
     }
 
     /**
@@ -305,6 +313,27 @@ class Configuration
             }
 
             $cache->save('configuration.registrations', $this->registrations);
+        }
+    }
+
+    private function loadLanguages()
+    {
+        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+
+        if ($cache->contains('configuration.languages'))
+        {
+            $this->languages = $cache->fetch('configuration.languages');
+        }
+        else
+        {
+            $languages = DataManager :: retrieves(Language :: class_name(), new DataClassRetrievesParameters());
+
+            while ($language = $languages->next_result())
+            {
+                $this->languages[$language->get_isocode()] = $language->get_original_name();
+            }
+
+            $cache->save('configuration.languages', $this->languages);
         }
     }
 
@@ -371,6 +400,11 @@ class Configuration
     {
         $registration = self :: registration($context);
         return ($registration instanceof Registration);
+    }
+
+    public function getLanguages()
+    {
+        return $this->languages;
     }
 
     /**
@@ -456,6 +490,7 @@ class Configuration
 
         $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
         $cache->delete('configuration.settings');
+        $cache->delete('configuration.languages');
 
         $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
         $cache->delete('configuration.registrations');

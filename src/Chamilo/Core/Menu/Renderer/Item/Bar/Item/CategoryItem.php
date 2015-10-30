@@ -34,6 +34,7 @@ class CategoryItem extends Bar
     private $itemRenderers = array();
 
     /**
+     *
      * @see \Chamilo\Core\Menu\Renderer\Item\Bar\Bar::isItemSelected()
      */
     public function isItemSelected()
@@ -42,7 +43,7 @@ class CategoryItem extends Bar
         {
             $this->isItemSelected = false;
 
-            foreach ($this->getItem()->get_children() as $child)
+            foreach ($this->getChildren() as $child)
             {
                 if ($this->getItemRenderer($this->getMenuRenderer(), $child, $this)->isItemSelected())
                 {
@@ -70,7 +71,7 @@ class CategoryItem extends Bar
             $entities[] = new UserEntity();
             $entities[] = new PlatformGroupEntity();
 
-            foreach ($this->getItem()->get_children() as $child)
+            foreach ($this->getChildren() as $child)
             {
                 if (($child->get_id() && Rights :: get_instance()->is_allowed(
                     Rights :: VIEW_RIGHT,
@@ -139,5 +140,10 @@ class CategoryItem extends Bar
         }
 
         return $this->itemRenderers[$item->get_id()];
+    }
+
+    public function getChildren()
+    {
+        return $this->getMenuRenderer()->getItemService()->getItemsByParentIdentifier($this->getItem()->get_id());
     }
 }
