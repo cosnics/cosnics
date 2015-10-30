@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  *
@@ -45,16 +44,6 @@ class LinkApplicationItem extends Item
     public static function get_additional_property_names()
     {
         return array(self :: PROPERTY_SECTION, self :: PROPERTY_URL, self :: PROPERTY_TARGET);
-    }
-
-    public function is_selected()
-    {
-        $current_section = Page :: getInstance()->getSection();
-        if ($current_section == $this->get_section())
-        {
-            return true;
-        }
-        return false;
     }
 
     public function get_url()

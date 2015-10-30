@@ -21,9 +21,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
-use Chamilo\Libraries\File\Path;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -101,17 +98,7 @@ abstract class Renderer
      */
     public static function toHtml($type, Request $request, $user)
     {
-        // $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        // $cacheIdentifier = md5(serialize(array(__METHOD__, $type, $user->get_id())));
-
-        // if (! $cache->contains($cacheIdentifier))
-        // {
-        $menu = self :: factory($type, $request, $user)->render();
-        return $menu;
-        // $cache->save($cacheIdentifier, $menu);
-        // }
-
-        // return $cache->fetch($cacheIdentifier);
+        return self :: factory($type, $request, $user)->render();
     }
 
     public function get_menu_items()
@@ -142,11 +129,9 @@ abstract class Renderer
 
         $items = $this->get_menu_items();
 
-        $current_section = Page :: getInstance()->getSection();
-
         $html = array();
 
-        $html[] = $this->display_menu_header($current_section);
+        $html[] = $this->display_menu_header();
 
         $category_items = array();
 
@@ -176,7 +161,7 @@ abstract class Renderer
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function display_menu_header($current_section);
+    abstract public function display_menu_header();
 
     abstract public function display_menu_footer();
 
