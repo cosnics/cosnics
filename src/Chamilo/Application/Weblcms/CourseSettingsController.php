@@ -457,7 +457,7 @@ class CourseSettingsController
 
             $value = $course_setting_object[self :: PROPERTY_VALUE];
 
-            $this->course_settings_values_cache[$setting_type_caching_hash][$setting_caching_hash][] = $value;
+            $this->course_settings_values_cache[$setting_type_caching_hash][$setting_caching_hash] = $value;
         }
     }
 
