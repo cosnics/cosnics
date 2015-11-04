@@ -62,7 +62,7 @@ class ItemForm extends FormValidator
         $this->addElement('category');
 
         $this->addElement('category', Translation :: get('Titles'));
-        $active_languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
+        $active_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
         $platform_language = PlatformSetting :: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {
@@ -150,7 +150,8 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.
@@ -158,7 +159,7 @@ class ItemForm extends FormValidator
     public function setDefaults($defaults = array ())
     {
         $item = $this->item;
-        $active_languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
+        $active_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
         $platform_language = PlatformSetting :: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Publication\Location;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -136,7 +137,8 @@ abstract class LocationSelector
     public function get_checkbox_name($context, $location)
     {
         $registration = Configuration :: registration($context);
-        return Manager :: WIZARD_LOCATION . '[' . $registration->get_id() . '][' . md5(serialize($location)) . ']';
+        return Manager :: WIZARD_LOCATION . '[' . $registration[Registration :: PROPERTY_ID] . '][' .
+             md5(serialize($location)) . ']';
     }
 
     /**

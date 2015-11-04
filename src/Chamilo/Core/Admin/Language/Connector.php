@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Admin\Language;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,7 +18,7 @@ class SettingsConnector
 
     public static function get_languages()
     {
-        return DataManager :: get_languages();
+        return \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
     }
 
     public static function get_themes()
@@ -47,16 +46,19 @@ class SettingsConnector
 
     public static function get_active_applications()
     {
-        $registrations = DataManager :: get_registrations_by_type(Registration :: TYPE_APPLICATION);
+        $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(Registration :: TYPE_APPLICATION);
 
         $options = array();
         $options['home'] = Translation :: get('Homepage', array(), 'home');
 
         foreach ($registrations as $registration)
         {
-            if ($registration->is_active())
+            if ($registration[Registration :: PROPERTY_STATUS])
             {
-                $options[$registration->get_name()] = Translation :: get('TypeName', null, $registration->get_context());
+                $options[$registration[Registration :: PROPERTY_NAME]] = Translation :: get(
+                    'TypeName',
+                    null,
+                    $registration[Registration :: PROPERTY_CONTEXT]);
             }
         }
 

@@ -640,7 +640,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
         // Add the publisher to the email address
         $target_email[] = $user->get_email();
 
-        $target_users = $this->get_filtered_email_recipients();
+        $target_users = DataManager :: get_publication_target_users($this);
 
         foreach ($target_users as $target_user)
         {
@@ -745,45 +745,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
 
         $this->set_email_sent(true);
         $this->update();
-    }
-
-    /**
-     * filters out target users using hook function in other registered apps implement [application]Manager ::
-     * weblcms_exclude_email_recipients($target_users) in any application to apply filtering from context Originally
-     * appeared in content_object_publication_form.class.php, refactored to support mailing after publication was
-     * published.
-     *
-     * @return array containing User objects
-     */
-    function get_filtered_email_recipients()
-    {
-        $target_users = DataManager :: get_publication_target_users($this);
-
-        // retrieve all applications
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_registrations();
-
-        foreach ($registrations[\Chamilo\Configuration\Storage\DataManager :: REGISTRATION_TYPE] as $type)
-        {
-            foreach ($type as $registration)
-            {
-                if ($registration->is_active())
-                {
-                    // see if app has method implemented
-                    $classname = $registration->get_context() . '\\' . $registration->get_name() . 'Manager';
-
-                    if (class_exists($classname))
-                    {
-                        $method_name = 'weblcms_filter_out_excluded__email_recipients';
-                        if (method_exists($classname, $method_name))
-                        {
-                            // filter out users
-                            $target_users = $classname :: $method_name($target_users);
-                        }
-                    }
-                }
-            }
-        }
-        return $target_users;
     }
 
     private function get_course_viewer_link()

@@ -21,6 +21,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -180,7 +181,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         foreach ($extensionRegistrations as $extensionRegistration)
         {
-            $actionRendererClass = $extensionRegistration->get_context() . '\Actions';
+            $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
             $actionRenderer = new $actionRendererClass($tabs);
             $extensionTabs = $actionRenderer->get();
 

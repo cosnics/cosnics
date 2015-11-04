@@ -40,6 +40,12 @@ interface CacheServiceInterface
 
     /**
      *
+     * @return boolean
+     */
+    public function clearAndFillCache();
+
+    /**
+     *
      * @return mixed
      */
     public function getCacheIdentifiers();

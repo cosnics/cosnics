@@ -68,6 +68,7 @@ class ItemRepository
                 $itemResultSet = DataManager :: retrieves(
                     Item :: class_name(),
                     new DataClassRetrievesParameters(null, null, null, $orderBy));
+
                 $itemsByParentIdentifier = $this->processItemResultSet($itemResultSet);
 
                 $cache->save($cacheIdentifier, $itemsByParentIdentifier);

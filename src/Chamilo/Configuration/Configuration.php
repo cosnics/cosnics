@@ -3,13 +3,10 @@ namespace Chamilo\Configuration;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Configuration\Service\ConfigurationCacheService;
 
 /**
@@ -276,34 +273,9 @@ class Configuration
      */
     private function loadFromStorage()
     {
-        $this->loadRegistrations();
+        $this->registrations = $this->getConfigurationCacheService()->getRegistrationsCache();
         $this->languages = $this->getConfigurationCacheService()->getLanguagesCache();
         $this->settings = $this->getConfigurationCacheService()->getSettingsCache();
-    }
-
-    /**
-     * Load registrations from storage
-     */
-    private function loadRegistrations()
-    {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-
-        if ($cache->contains('configuration.registrations'))
-        {
-            $this->registrations = $cache->fetch('configuration.registrations');
-        }
-        else
-        {
-            $registrations = DataManager :: retrieves(Registration :: class_name(), new DataClassRetrievesParameters());
-
-            while ($registration = $registrations->next_result())
-            {
-                $this->registrations[self :: REGISTRATION_TYPE][$registration->get_type()][$registration->get_context()] = $registration;
-                $this->registrations[self :: REGISTRATION_CONTEXT][$registration->get_context()] = $registration;
-            }
-
-            $cache->save('configuration.registrations', $this->registrations);
-        }
     }
 
     /**
@@ -365,15 +337,48 @@ class Configuration
         return self :: get_instance()->get_registrations();
     }
 
+    /**
+     *
+     * @param string $context
+     * @return boolean
+     */
     public static function is_registered($context)
     {
-        $registration = self :: registration($context);
-        return ($registration instanceof Registration);
+        return self :: get_instance()->isRegistered($context);
+    }
+
+    /**
+     *
+     * @param string $context
+     * @return boolean
+     */
+    public function isRegistered($context)
+    {
+        $registration = $this->get_registration($context);
+        return ! empty($registration);
+    }
+
+    /**
+     *
+     * @param string $context
+     * @return boolean
+     */
+    public function isRegisteredAndActive($context)
+    {
+        $registration = $this->get_registration($context);
+        return $this->isRegistered($context) &&
+             $registration[Registration :: PROPERTY_STATUS] == Registration :: STATUS_ACTIVE;
     }
 
     public function getLanguages()
     {
         return $this->languages;
+    }
+
+    public function getLanguageNameFromIsocode($isocode)
+    {
+        $languages = $this->getLanguages();
+        return $languages[$isocode];
     }
 
     /**
@@ -456,13 +461,7 @@ class Configuration
     public static function reset()
     {
         DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
-
-        $this->getConfigurationCacheService()->clearCache();
-        $this->getConfigurationCacheService()->fillCache();
-
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cache->delete('configuration.registrations');
-
+        $this->getConfigurationCacheService()->clearAndFillCache();
         self :: get_instance()->loadFromStorage();
     }
 

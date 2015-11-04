@@ -19,13 +19,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Registration extends DataClass
 {
+    // Properties
     const PROPERTY_TYPE = 'type';
     const PROPERTY_CATEGORY = 'category';
     const PROPERTY_NAME = 'name';
     const PROPERTY_STATUS = 'status';
     const PROPERTY_VERSION = 'version';
     const PROPERTY_CONTEXT = 'context';
-    const TYPE_APPLICATION = 'application';
+
+    // Types
+    const TYPE_APPLICATION = 'Chamilo\Application';
     const TYPE_CORE = 'core';
     const TYPE_EXTENSIONS = 'common\extensions';
     const TYPE_LIBRARIES = 'common\libraries';
@@ -35,6 +38,8 @@ class Registration extends DataClass
     const TYPE_LIBRARY = 'library';
     const TYPE_EXTERNAL_REPOSITORY_MANAGER = 'external_repository_manager';
     const TYPE_VIDEO_CONFERENCING_MANAGER = 'video_conferencing_manager';
+
+    // Status
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
 

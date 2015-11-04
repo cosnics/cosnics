@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -88,7 +89,7 @@ class PublisherComponent extends Manager
 
         foreach ($registrations as $registration)
         {
-            $namespace = $registration->get_context();
+            $namespace = $registration[Registration :: PROPERTY_CONTEXT];
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }

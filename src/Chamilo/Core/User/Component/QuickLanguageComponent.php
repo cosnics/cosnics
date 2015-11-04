@@ -22,7 +22,7 @@ class QuickLanguageComponent extends Manager
 
     private function getLanguages()
     {
-        return \Chamilo\Configuration\Storage\DataManager :: get_languages();
+        return \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
     }
 
     /**

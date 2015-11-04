@@ -144,7 +144,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             else
             {
 
-                $languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
+                $languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
                 $category = new CategoryItem();
                 $category->set_parent(0);
                 $category->set_display(CategoryItem :: DISPLAY_BOTH);

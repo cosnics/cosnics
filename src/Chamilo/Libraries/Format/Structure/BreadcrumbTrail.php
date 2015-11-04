@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -211,20 +210,16 @@ class BreadcrumbTrail
 
         if (is_array($help_item) && count($help_item) == 2)
         {
-            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration('core\help');
+            $item = \Chamilo\Core\Help\Manager :: get_tool_bar_help_item($help_item);
 
-            if ($registration instanceof Registration && $registration->is_active())
+            if ($item instanceof ToolbarItem)
             {
-                $item = \Chamilo\Core\Help\Manager :: get_tool_bar_help_item($help_item);
-                if ($item instanceof ToolbarItem)
-                {
-                    $html[] = '<div id="help_item">';
-                    $toolbar = new Toolbar();
-                    $toolbar->set_items(array($item));
-                    $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
-                    $html[] = $toolbar->as_html();
-                    $html[] = '</div>';
-                }
+                $html[] = '<div id="help_item">';
+                $toolbar = new Toolbar();
+                $toolbar->set_items(array($item));
+                $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
+                $html[] = $toolbar->as_html();
+                $html[] = '</div>';
             }
         }
 

@@ -212,7 +212,7 @@ abstract class Remover extends Action
 
     public function deregister_package()
     {
-        $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(static :: context());
+        $registration = \Chamilo\Configuration\Storage\DataManager :: retrieveRegistrationByContext(self :: context());
 
         if (! $registration->delete())
         {

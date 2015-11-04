@@ -57,9 +57,9 @@ class PackageTypeLinksMenu extends HTML_Menu
         $packages = $package_list->get_packages();
         foreach ($packages as $package)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package->get_context());
+            $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
 
-            if ($registration instanceof Registration && $registration->is_active())
+            if (! empty($registration) && $registration[Registration :: PROPERTY_STATUS])
             {
                 $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
 

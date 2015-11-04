@@ -82,7 +82,7 @@ class CourseSettingsConnector
     public static function get_languages()
     {
         return array_merge(
-            \Chamilo\Configuration\Storage\DataManager :: get_languages(),
+            \Chamilo\Configuration\Configuration :: get_instance()->getLanguages(),
             array('platform_language' => Translation :: get('PlatformLanguage', null, 'Chamilo\Core\Admin')));
     }
 

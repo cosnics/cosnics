@@ -206,9 +206,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             $classnameUtilities = ClassnameUtilities :: getInstance();
             $namespace = $classnameUtilities->getNamespaceFromClassname($type);
 
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(
-                $classnameUtilities->getNamespaceParent($namespace, 2));
-            if (! $registration || ! $registration->is_active())
+            $context = $classnameUtilities->getNamespaceParent($namespace, 2);
+            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }
