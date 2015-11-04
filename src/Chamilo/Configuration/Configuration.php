@@ -8,10 +8,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Service\ConfigurationCacheService;
 
 /**
@@ -212,7 +210,7 @@ class Configuration
     {
         if (! isset($this->isAvailable))
         {
-            $file = $this->getConfigurationCacheService()->getConfigurationPath();
+            $file = $this->getConfigurationCacheService()->getConfigurationFilePath();
 
             if (is_file($file) && is_readable($file))
             {
@@ -270,8 +268,7 @@ class Configuration
      */
     private function loadFile()
     {
-        $file = $this->getConfigurationCacheService()->getConfigurationPath();
-        $this->settings[__NAMESPACE__] = parse_ini_file($file, true);
+        $this->settings = $this->getConfigurationCacheService()->getConfigurationFileSettings();
     }
 
     /**
@@ -279,33 +276,9 @@ class Configuration
      */
     private function loadFromStorage()
     {
-        $this->loadSettings();
         $this->loadRegistrations();
-        $this->loadLanguages();
-    }
-
-    /**
-     * Load settings from storage
-     */
-    private function loadSettings()
-    {
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-
-        if ($cache->contains('configuration.settings'))
-        {
-            $this->settings = $cache->fetch('configuration.settings');
-        }
-        else
-        {
-            $settings = DataManager :: retrieves(Setting :: class_name(), new DataClassRetrievesParameters());
-
-            while ($setting = $settings->next_result())
-            {
-                $this->settings[$setting->get_application()][$setting->get_variable()] = $setting->get_value();
-            }
-
-            $cache->save('configuration.settings', $this->settings);
-        }
+        $this->languages = $this->getConfigurationCacheService()->getLanguagesCache();
+        $this->settings = $this->getConfigurationCacheService()->getSettingsCache();
     }
 
     /**
@@ -330,27 +303,6 @@ class Configuration
             }
 
             $cache->save('configuration.registrations', $this->registrations);
-        }
-    }
-
-    private function loadLanguages()
-    {
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-
-        if ($cache->contains('configuration.languages'))
-        {
-            $this->languages = $cache->fetch('configuration.languages');
-        }
-        else
-        {
-            $languages = DataManager :: retrieves(Language :: class_name(), new DataClassRetrievesParameters());
-
-            while ($language = $languages->next_result())
-            {
-                $this->languages[$language->get_isocode()] = $language->get_original_name();
-            }
-
-            $cache->save('configuration.languages', $this->languages);
         }
     }
 
@@ -505,9 +457,8 @@ class Configuration
     {
         DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
 
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cache->delete('configuration.settings');
-        $cache->delete('configuration.languages');
+        $this->getConfigurationCacheService()->clearCache();
+        $this->getConfigurationCacheService()->fillCache();
 
         $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
         $cache->delete('configuration.registrations');
