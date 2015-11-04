@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 

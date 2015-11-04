@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 

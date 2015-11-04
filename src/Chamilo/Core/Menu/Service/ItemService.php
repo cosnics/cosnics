@@ -8,7 +8,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Rights;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Cache\PhpFileCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 
 /**
  *

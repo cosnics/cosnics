@@ -21,9 +21,16 @@ interface CacheServiceInterface
 
     /**
      *
+     * @param string $identifier
      * @return boolean
      */
-    public function clearCacheForKeys($keys);
+    public function fillCacheForIdentifier($identifier);
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearCacheForIdentifiers($identifiers);
 
     /**
      *
@@ -35,5 +42,5 @@ interface CacheServiceInterface
      *
      * @return mixed
      */
-    public function getCache();
+    public function getCacheForIdentifier();
 }
