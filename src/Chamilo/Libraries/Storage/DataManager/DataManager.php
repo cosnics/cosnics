@@ -299,18 +299,18 @@ class DataManager
 
         if ($queryCacheEnabled)
         {
-            if (! RecordCache :: exists($parameters))
+            if (! RecordCache :: exists($class, $parameters))
             {
                 try
                 {
-                    $record = RecordResultCache :: add(static :: __record($class, $parameters), $parameters);
+                    $record = RecordResultCache :: add($class, static :: __record($class, $parameters), $parameters);
                 }
                 catch (NoRecordException $exception)
                 {
                     RecordResultCache :: no_result($exception);
                 }
             }
-            return RecordCache :: get($parameters);
+            return RecordCache :: get($class, $parameters);
         }
         else
         {
@@ -527,12 +527,12 @@ class DataManager
 
         if ($queryCacheEnabled)
         {
-            if (! RecordResultSetCache :: exists($parameters))
+            if (! RecordResultSetCache :: exists($class, $parameters))
             {
-                RecordResultSetCache :: add(static :: __records($class, $parameters), $parameters);
+                RecordResultSetCache :: add($class, static :: __records($class, $parameters), $parameters);
             }
 
-            $resultSet = RecordResultSetCache :: get($parameters);
+            $resultSet = RecordResultSetCache :: get($class, $parameters);
             $resultSet->reset();
 
             return $resultSet;

@@ -22,7 +22,7 @@ class RecordResultSetCache extends RecordCache
      * @throws \Exception
      * @return boolean
      */
-    public static function add(RecordResultSet $result_set, RecordRetrievesParameters $parameters)
+    public static function add($className, RecordResultSet $result_set, RecordRetrievesParameters $parameters)
     {
         if (! $parameters instanceof RecordRetrievesParameters)
         {
@@ -37,9 +37,9 @@ class RecordResultSetCache extends RecordCache
                      $type . '.');
         }
 
-        if (! self :: get($parameters))
+        if (! self :: get($className, $parameters))
         {
-            self :: set_cache($parameters->hash(), $result_set);
+            self :: set_cache($className, $parameters->hash(), $result_set);
         }
 
         return true;

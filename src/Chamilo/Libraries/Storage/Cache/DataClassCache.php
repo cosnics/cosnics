@@ -26,8 +26,6 @@ class DataClassCache
      */
     private $cache;
 
-    public $hits;
-
     /**
      * Get an instance of the DataClassCache
      *
@@ -76,14 +74,8 @@ class DataClassCache
         $instance = self :: get_instance();
         $hash = $parameters->hash();
 
-        // if($class == 'Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation')
-        // {
-        // xdebug_print_function_stack();
-        // }
-
         if (isset($instance->cache[$class][$hash]))
         {
-            // $instance->hits[$class][$hash] ++;
             return true;
         }
         else
