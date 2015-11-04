@@ -8,8 +8,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Libraries\File\Cache\PhpFileCache;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Configuration\Storage\DataClass\Language;
 

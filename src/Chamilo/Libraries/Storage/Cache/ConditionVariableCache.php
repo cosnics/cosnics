@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Cache;
 
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
-use Chamilo\Libraries\File\Cache\PhpFileCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Configuration\Configuration;
 

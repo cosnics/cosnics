@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
 use Sabre\VObject;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 
 /**
  * $Id: external_calendar.class.php 200 2009-11-13 12:30:04Z kariboe $

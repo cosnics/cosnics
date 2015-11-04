@@ -24,7 +24,7 @@ abstract class DoctrineCacheService implements CacheServiceInterface
      *
      * @return string
      */
-    abstract function getCacheIdentifier();
+    abstract function getCacheIdentifiers();
 
     /**
      *
@@ -79,7 +79,7 @@ abstract class DoctrineCacheService implements CacheServiceInterface
         return $this->getCacheProvider()->deleteAll();
     }
 
-    public function clearCacheForKeys($identifiers)
+    public function clearCacheForIdentifiers($identifiers)
     {
         foreach ($identifiers as $identifier)
         {
@@ -96,16 +96,16 @@ abstract class DoctrineCacheService implements CacheServiceInterface
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::getCache()
      */
-    public function getCache()
+    public function getCacheForIdentifier($identifier)
     {
-        if (! $this->getCacheProvider()->contains($this->getCacheIdentifier()))
+        if (! $this->getCacheProvider()->contains($identifier))
         {
-            if (! $this->fillCache())
+            if (! $this->fillCacheForIdentifier($identifier))
             {
                 throw new \Exception('CacheError');
             }
         }
 
-        return $this->getCacheProvider()->fetch($this->getCacheIdentifier());
+        return $this->getCacheProvider()->fetch($identifier);
     }
 }
