@@ -12,6 +12,7 @@ use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Service\ConfigurationCacheService;
 
 /**
  * This class represents the current configuration
@@ -56,11 +57,36 @@ class Configuration
     private $isAvailable;
 
     /**
+     *
+     * @var \Chamilo\Configuration\Service\ConfigurationCacheService
+     */
+    private $configurationCacheService;
+
+    /**
      * Constructor.
      */
-    private function __construct()
+    private function __construct(ConfigurationCacheService $configurationCacheService)
     {
+        $this->configurationCacheService = $configurationCacheService;
         $this->initialize();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\ConfigurationCacheService
+     */
+    public function getConfigurationCacheService()
+    {
+        return $this->configurationCacheService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationCacheService $configurationCacheService
+     */
+    public function setConfigurationCacheService($configurationCacheService)
+    {
+        $this->configurationCacheService = $configurationCacheService;
     }
 
     /**
@@ -72,7 +98,7 @@ class Configuration
     {
         if (! isset(self :: $instance))
         {
-            self :: $instance = new static();
+            self :: $instance = new static(new ConfigurationCacheService());
 
             if (self :: $instance->is_available() && self :: $instance->is_connectable())
             {
@@ -186,7 +212,7 @@ class Configuration
     {
         if (! isset($this->isAvailable))
         {
-            $file = $this->getConfigurationPath();
+            $file = $this->getConfigurationCacheService()->getConfigurationPath();
 
             if (is_file($file) && is_readable($file))
             {
@@ -240,20 +266,11 @@ class Configuration
     }
 
     /**
-     *
-     * @return string
-     */
-    private function getConfigurationPath()
-    {
-        return \Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/configuration.ini';
-    }
-
-    /**
      * Load the default base configuration file
      */
     private function loadFile()
     {
-        $file = $this->getConfigurationPath();
+        $file = $this->getConfigurationCacheService()->getConfigurationPath();
         $this->settings[__NAMESPACE__] = parse_ini_file($file, true);
     }
 

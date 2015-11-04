@@ -42,5 +42,5 @@ interface CacheServiceInterface
      *
      * @return mixed
      */
-    public function getCacheForIdentifier();
+    public function getCacheIdentifiers();
 }
