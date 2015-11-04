@@ -36,7 +36,7 @@ abstract class DoctrineCacheService implements CacheServiceInterface
      *
      * @return string
      */
-    private function getCachePath()
+    protected function getCachePath()
     {
         return Path :: getInstance()->getCachePath($this->getCachePathNamespace());
     }
