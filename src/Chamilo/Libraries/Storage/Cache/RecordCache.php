@@ -48,15 +48,16 @@ class RecordCache
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
      */
-    public static function get(DataClassParameters $parameters)
+    public static function get($class, DataClassParameters $parameters)
     {
         $instance = self :: get_instance();
 
-        if (self :: exists($parameters))
+        if (self :: exists($class, $parameters))
         {
-            return $instance->cache[$parameters->hash()];
+            return $instance->cache[$class][$parameters->hash()];
         }
         else
+
         {
             return false;
         }
@@ -69,11 +70,12 @@ class RecordCache
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return boolean
      */
-    public static function exists(DataClassParameters $parameters)
+    public static function exists($class, DataClassParameters $parameters)
     {
         $instance = self :: get_instance();
+        $hash = $parameters->hash();
 
-        if (isset($instance->cache[$parameters->hash()]))
+        if (isset($instance->cache[$class][$hash]))
         {
             return true;
         }
@@ -89,13 +91,32 @@ class RecordCache
      * @param string $class
      * @return boolean
      */
-    public static function truncate()
+    public static function truncate($class)
     {
         $instance = self :: get_instance();
 
-        if (isset($instance->cache))
+        if (isset($instance->cache[$class]))
         {
-            unset($instance->cache);
+            unset($instance->cache[$class]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Clear the cache for a set of specific DataClass types
+     *
+     * @param string[] $classes
+     * @return boolean
+     */
+    public static function truncates($classes = array())
+    {
+        foreach ($classes as $class)
+        {
+            if (! self :: truncate($class))
+            {
+                return false;
+            }
         }
 
         return true;
@@ -108,10 +129,10 @@ class RecordCache
      * @param string $hash
      * @param mixed $value
      */
-    public static function set_cache($hash, $value)
+    public static function set_cache($class, $hash, $value)
     {
         $instance = self :: get_instance();
-        $instance->cache[$hash] = $value;
+        $instance->cache[$class][$hash] = $value;
     }
 
     public static function reset()
