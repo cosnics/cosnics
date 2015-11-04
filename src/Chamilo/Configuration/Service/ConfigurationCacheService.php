@@ -18,13 +18,19 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 class ConfigurationCacheService extends DoctrinePhpFileCacheService
 {
     // Identifiers
-    const IDENTIFIER_SETTINGS = 'configuration.settings';
-    const IDENTIFIER_REGISTRATIONS = 'configuration.registrations';
-    const IDENTIFIER_LANGUAGES = 'configuration.languages';
+    const IDENTIFIER_SETTINGS = 'settings';
+    const IDENTIFIER_REGISTRATIONS = 'registrations';
+    const IDENTIFIER_LANGUAGES = 'languages';
 
     // Registration cache types
     const REGISTRATION_CONTEXT = 1;
     const REGISTRATION_TYPE = 2;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $configurationFileSettings;
 
     /**
      *
@@ -63,7 +69,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         }
     }
 
-    public function getConfigurationPath()
+    public function getConfigurationFilePath()
     {
         return \Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/configuration.ini';
     }
@@ -74,8 +80,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function fillSettingsCache()
     {
-        $settings = array();
-        $settings[$this->getCachePathNamespace()] = parse_ini_file($this->getConfigurationPath(), true);
+        $settings = $this->getConfigurationFileSettings();
 
         $settingObjects = DataManager :: records(Setting :: class_name(), new RecordRetrievesParameters());
 
@@ -85,6 +90,21 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         }
 
         return $this->getCacheProvider()->save(self :: IDENTIFIER_SETTINGS, $settings);
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getConfigurationFileSettings()
+    {
+        if (! isset($this->configurationFileSettings))
+        {
+            $this->configurationFileSettings = array(
+                $this->getCachePathNamespace() => parse_ini_file($this->getConfigurationFilePath(), true));
+        }
+
+        return $this->configurationFileSettings;
     }
 
     /**
@@ -137,6 +157,33 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getCacheIdentifiers()
     {
-        return array(self :: IDENTIFIER_SETTINGS);
+        return array(self :: IDENTIFIER_SETTINGS, self :: IDENTIFIER_REGISTRATIONS, self :: IDENTIFIER_LANGUAGES);
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getSettingsCache()
+    {
+        return $this->getCacheForIdentifier(self :: IDENTIFIER_SETTINGS);
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getRegistrationsCache()
+    {
+        return $this->getCacheForIdentifier(self :: IDENTIFIER_REGISTRATIONS);
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getLanguagesCache()
+    {
+        return $this->getCacheForIdentifier(self :: IDENTIFIER_LANGUAGES);
     }
 }
