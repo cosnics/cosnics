@@ -39,7 +39,8 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * This class represents a form to allow a user to publish a learning object. The form allows the user to set some
+ * This class represents a form to allow a user to publish a learning object.
+ * The form allows the user to set some
  * properties of the publication (publication dates, target users, visibility, ...)
  *
  * @author Sven Vanpoucke
@@ -169,7 +170,8 @@ class ContentObjectPublicationForm extends FormValidator
     }
 
     /**
-     * Sets the default values of the form. By default the publication is for everybody who has access to the tool and
+     * Sets the default values of the form.
+     * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
     public function setDefaults($defaults = array())
@@ -794,8 +796,6 @@ class ContentObjectPublicationForm extends FormValidator
 
         $target_users = DataManager :: get_publication_target_users($publication);
 
-        $target_users = $this->filter_out_excluded_email_recipients($target_users);
-
         foreach ($target_users as $target_user)
         {
             $target_email[] = $target_user[User :: PROPERTY_EMAIL];
@@ -900,42 +900,6 @@ class ContentObjectPublicationForm extends FormValidator
 
         $publication->set_email_sent(true);
         $publication->update();
-    }
-
-    /**
-     * filters out target users using hook function in other registered apps implement [application]Manager ::
-     * weblcms_exclude_email_recipients($target_users) in any application to apply filtering from context
-     *
-     * @param array $target_users containing User objects
-     * @return array containing User objects
-     */
-    function filter_out_excluded_email_recipients(array $target_users)
-    {
-        // retrieve all applications
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_registrations();
-
-        foreach ($registrations[\Chamilo\Configuration\Storage\DataManager :: REGISTRATION_TYPE] as $type)
-        {
-            foreach ($type as $registration)
-            {
-                if ($registration->is_active())
-                {
-                    // see if app has method implemented
-                    $classname = $registration->get_context() . '\\' . $registration->get_name() . 'Manager';
-
-                    if (class_exists($classname))
-                    {
-                        $method_name = 'weblcms_filter_out_excluded__email_recipients';
-                        if (method_exists($classname, $method_name))
-                        {
-                            // filter out users
-                            $target_users = $classname :: $method_name($target_users);
-                        }
-                    }
-                }
-            }
-        }
-        return $target_users;
     }
 
     /**

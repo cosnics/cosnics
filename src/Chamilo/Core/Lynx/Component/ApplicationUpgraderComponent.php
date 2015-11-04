@@ -1,22 +1,23 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 class ApplicationUpgraderComponent extends UpgraderComponent implements NoAuthenticationSupport
 {
 
     public function initialize()
     {
-        $application_registrations = DataManager :: get_registrations_by_type('application');
+        $application_registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
+            'Chamilo\Application');
 
         foreach ($application_registrations as $application_registration)
         {
-            $this->add_package($application_registration->get_context());
+            $this->add_package($application_registration[Registration :: PROPERTY_CONTEXT]);
         }
     }
 

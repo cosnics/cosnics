@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -45,7 +46,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getTargetEntities()
     {
-        $registrations = \Chamilo\Configuration\Configuration :: get_instance()->get_registrations_by_type(
+        $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
 
         $entities = array();
@@ -54,8 +55,9 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         foreach ($registrations as $registration)
         {
             $entities[] = $entityFactory->getEntity(
-                $registration->get_context() . '\Storage\DataClass\\' . $registration->get_name(),
-                DataClassEntity :: INSTANCE_IDENTIFIER);
+                $registration[Registration :: PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
+                     $registration[Registration :: PROPERTY_NAME],
+                    DataClassEntity :: INSTANCE_IDENTIFIER);
         }
 
         return $entities;

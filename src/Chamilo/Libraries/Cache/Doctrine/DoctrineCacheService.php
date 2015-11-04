@@ -108,4 +108,14 @@ abstract class DoctrineCacheService implements CacheServiceInterface
 
         return $this->getCacheProvider()->fetch($identifier);
     }
+
+    public function clearAndFillCache()
+    {
+        if (! $this->clearCache())
+        {
+            return false;
+        }
+
+        return $this->fillCache();
+    }
 }

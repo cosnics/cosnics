@@ -72,8 +72,9 @@ class RegistrationDependency extends Dependency
             'Found',
             array(),
             Utilities :: COMMON_LIBRARIES) . ': ';
-        $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($this->get_id());
-        if (! $registration instanceof Registration)
+        $registration = \Chamilo\Configuration\Configuration :: registration($this->get_id());
+
+        if (empty($registration))
         {
             $parameters['CURRENT'] = '--' . Translation :: get('Nothing', array(), Utilities :: COMMON_LIBRARIES) . '--';
             $this->logger->add_message(
@@ -86,7 +87,8 @@ class RegistrationDependency extends Dependency
             $target_version = Version :: compare(
                 $this->get_version()->get_operator(),
                 $this->get_version()->get_release(),
-                $registration->get_version());
+                $registration[Registration :: PROPERTY_VERSION]);
+
             if (! $target_version)
             {
                 $parameters['CURRENT'] = '--' .
@@ -98,7 +100,7 @@ class RegistrationDependency extends Dependency
             }
             else
             {
-                if (! $registration->is_active())
+                if (! $registration[Registration :: PROPERTY_STATUS])
                 {
                     $parameters['CURRENT'] = '--' . Translation :: get(
                         'InactiveObject',

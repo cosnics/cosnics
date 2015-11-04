@@ -195,8 +195,7 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Assignment::package(), true) .
-                     'UploadifyFeedback.js'));
+                Path :: getInstance()->getJavascriptPath(Assignment :: package(), true) . 'UploadifyFeedback.js'));
         $this->addElement(
             'static',
             'uploadify',
@@ -308,9 +307,8 @@ class AssignmentForm extends ContentObjectForm
         foreach ($types as $index => $type)
         {
             $packageClassName = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($packageClassName);
 
-            if (! $registration || ! $registration->is_active())
+            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($packageClassName))
             {
                 unset($types[$index]);
                 continue;

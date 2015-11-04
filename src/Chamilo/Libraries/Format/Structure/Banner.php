@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
@@ -125,19 +124,13 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration(
-                'Chamilo\Core\Menu');
-
-            if ($registration instanceof Registration && $registration->is_active())
-            {
-                $output[] = '<div class="applications">';
-                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
-                    \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
-                    $this->getApplication()->getRequest(),
-                    $this->getApplication()->getUser());
-                $output[] = '<div class="clear">&nbsp;</div>';
-                $output[] = '</div>';
-            }
+            $output[] = '<div class="applications">';
+            $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
+                \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
+                $this->getApplication()->getRequest(),
+                $this->getApplication()->getUser());
+            $output[] = '<div class="clear">&nbsp;</div>';
+            $output[] = '</div>';
 
             $output[] = '<div class="clear">&nbsp;</div>';
         }

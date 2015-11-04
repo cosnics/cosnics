@@ -97,7 +97,7 @@ abstract class Manager extends Application
         {
             if ($autocomplete_languages)
             {
-                $installed_languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
+                $installed_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
 
                 foreach ($installed_languages as $iso_code => $installed_language)
                 {

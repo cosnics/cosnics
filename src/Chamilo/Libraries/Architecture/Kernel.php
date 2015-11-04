@@ -27,6 +27,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -194,7 +195,7 @@ class Kernel
         $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package :: get('Chamilo\Configuration');
         $registration = \Chamilo\Configuration\Configuration :: registration('Chamilo\Configuration');
 
-        if ($package_info->get_version() != $registration->get_version())
+        if ($package_info->get_version() != $registration[Registration::PROPERTY_VERSION])
         {
             $theme = \Chamilo\Libraries\Platform\Session\Request :: get('theme');
             $server_type = \Chamilo\Libraries\Platform\Session\Request :: get('server_type');

@@ -27,7 +27,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->context = Request :: get(self :: PARAM_CONTEXT);
-        $this->registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($this->context);
+        $this->registration = \Chamilo\Configuration\Configuration :: registration($this->context);
 
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(
@@ -51,13 +51,14 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function get_action_bar()
     {
         $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+        $registration = $this->get_registration();
 
-        if ($this->get_registration() instanceof Registration)
+        if (! empty($registration))
         {
-            if ($this->get_registration()->is_active())
+            if ($registration[Registration :: PROPERTY_STATUS])
             {
                 if (! is_subclass_of(
-                    $this->get_registration()->get_context() . '\Deactivator',
+                    $registration[Registration :: PROPERTY_CONTEXT] . '\Deactivator',
                     'Chamilo\Configuration\Package\NotAllowed'))
                 {
                     $action_bar->add_common_action(
@@ -73,7 +74,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             else
             {
                 if (! is_subclass_of(
-                    $this->get_registration()->get_context() . '\Activator',
+                    $registration[Registration :: PROPERTY_CONTEXT] . '\Activator',
                     'Chamilo\Configuration\Package\NotAllowed'))
                 {
                     $action_bar->add_common_action(

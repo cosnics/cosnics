@@ -40,10 +40,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -328,14 +328,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $types = array();
 
-            $registrations = \Chamilo\Configuration\Storage\DataManager :: get_registrations_by_type(
+            $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
                 Manager :: package() . '\\ContentObject');
+
             foreach ($registrations as $registration)
             {
-                if ($registration->get_category() == 'Helper')
+                if ($registration[Registration :: PROPERTY_CATEGORY] == 'Helper')
                 {
-                    $types[] = $registration->get_context() . '\Storage\DataClass\\' . StringUtilities :: getInstance()->createString(
-                        $registration->get_name())->upperCamelize();
+                    $types[] = $registration[Registration :: PROPERTY_CONTEXT] . '\Storage\DataClass\\' . StringUtilities :: getInstance()->createString(
+                        $registration[Registration :: PROPERTY_NAME])->upperCamelize();
                 }
             }
 
@@ -605,16 +606,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (! (self :: $registered_types))
         {
-            $registrations = Configuration :: get_instance()->get_registrations_by_type(
+            $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
                 Manager :: package() . '\\ContentObject');
             $types = array();
 
             foreach ($registrations as $registration)
             {
-                if (! $show_active_only || $registration->is_active())
+                if (! $show_active_only || $registration[Registration :: PROPERTY_STATUS])
                 {
-                    $types[] = $registration->get_context() . '\Storage\DataClass\\' . StringUtilities :: getInstance()->createString(
-                        $registration->get_name())->upperCamelize();
+                    $types[] = $registration[Registration :: PROPERTY_CONTEXT] . '\Storage\DataClass\\' . StringUtilities :: getInstance()->createString(
+                        $registration[Registration :: PROPERTY_NAME])->upperCamelize();
                 }
             }
 
