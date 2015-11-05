@@ -2,7 +2,10 @@
 namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
+use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -16,9 +19,15 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
+     * @var string[]
+     */
+    private $internationalizationContexts;
+
+    /**
+     *
      * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
      */
-    public function getCacheIdentifiers()
+    public function getIdentifiers()
     {
         return array_keys(Configuration :: get_instance()->getLanguages());
     }
@@ -36,17 +45,72 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
      */
-    public function fillCache()
+    public function warmUp()
     {
-        // TODO Auto-generated method stub
+        foreach ($this->getIdentifiers() as $cacheIdentifier)
+        {
+            if (! $this->warmUpForIdentifier($cacheIdentifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    private function getInternationalizationContexts()
+    {
+        if (! isset($this->internationalizationContexts))
+        {
+            $internationalizationBundles = new InternationalizationBundles(PackageList :: ROOT);
+            $this->internationalizationContexts = $internationalizationBundles->getPackageNamespaces();
+        }
+
+        return $this->internationalizationContexts;
+    }
+
+    /**
+     *
+     * @param string $context
+     * @param string $isocode
+     * @return string
+     */
+    private function getInternationalizationPath($context, $isocode)
+    {
+        return Path :: getInstance()->getI18nPath($context) . $isocode . '.i18n';
     }
 
     /**
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
      */
-    public function fillCacheForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier)
     {
-        // TODO Auto-generated method stub
+        $i18nStrings = array();
+
+        foreach ($this->getInternationalizationContexts() as $internationalizationContext)
+        {
+            $i18nPath = $this->getInternationalizationPath($internationalizationContext, $identifier);
+
+            if (! is_readable($i18nPath))
+            {
+                continue;
+            }
+
+            $i18nContextStrings = parse_ini_file($i18nPath);
+
+            if (! $i18nContextStrings)
+            {
+                continue;
+            }
+
+            $i18nStrings[$internationalizationContext] = $i18nContextStrings;
+        }
+
+        return $this->getCacheProvider()->save($identifier, $i18nStrings);
     }
 }

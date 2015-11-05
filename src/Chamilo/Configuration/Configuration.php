@@ -461,7 +461,7 @@ class Configuration
     public static function reset()
     {
         DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
-        $this->getConfigurationCacheService()->clearAndFillCache();
+        $this->getConfigurationCacheService()->clearAndWarmUp();
         self :: get_instance()->loadFromStorage();
     }
 
