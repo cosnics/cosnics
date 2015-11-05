@@ -1,11 +1,18 @@
 <?php
 namespace Chamilo\Core\Repository\Quota;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -15,18 +22,6 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Core\Repository\Filter\FilterData;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *
@@ -80,6 +75,12 @@ class Calculator
      * @var integer
      */
     private $maximumDatabaseQuota;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
+     */
+    private $calculatorCacheService;
 
     /**
      *
@@ -637,61 +638,31 @@ class Calculator
         return implode(PHP_EOL, $html);
     }
 
+    private function getCalculatorCacheService()
+    {
+        if (! isset($this->calculatorCacheService))
+        {
+            $this->calculatorCacheService = new CalculatorCacheService();
+        }
+
+        return $this->calculatorCacheService;
+    }
+
     public function resetCache()
     {
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cache->delete('total_user_disk_quota');
+        $this->getCalculatorCacheService()->clearForIdentifiers(
+            array(CalculatorCacheService :: IDENTIFIER_TOTAL_USER_DISK_QUOTA));
     }
 
     public function getTotalUserDiskQuota($reset = false)
     {
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-
         if ($reset)
         {
-            $cache->delete('total_user_disk_quota');
+            $this->getCalculatorCacheService()->clearForIdentifiers(
+                array(CalculatorCacheService :: IDENTIFIER_TOTAL_USER_DISK_QUOTA));
         }
 
-        if ($cache->contains('total_user_disk_quota'))
-        {
-            $totalQuota = $cache->fetch('total_user_disk_quota');
-        }
-        else
-        {
-            $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
-            $fallback = PlatformSetting :: get('quota_fallback', __NAMESPACE__);
-
-            if ($policy == Calculator :: POLICY_USER && ! $fallback)
-            {
-                $property = new FunctionConditionVariable(
-                    FunctionConditionVariable :: SUM,
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_DISK_QUOTA),
-                    'disk_quota');
-
-                $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
-
-                $record = DataManager :: record(User :: class_name(), $parameters);
-                $totalQuota = $record['disk_quota'];
-            }
-            else
-            {
-                $users = DataManager :: retrieves(User :: class_name(), new DataClassRetrievesParameters());
-
-                $totalQuota = 0;
-
-                while ($user = $users->next_result())
-                {
-                    $calculator = new Calculator($user);
-                    $totalQuota += $calculator->getMaximumUserDiskQuota();
-                }
-
-                $totalQuota;
-            }
-
-            $cache->save('total_user_disk_quota', $totalQuota);
-        }
-
-        return $totalQuota;
+        return $this->getCalculatorCacheService()->getTotalUserDiskQuota();
     }
 
     /**
