@@ -21,12 +21,6 @@ class UpdateComponent extends CourseFormActionComponent
 {
 
     /**
-     * **************************************************************************************************************
-     * Implemented Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the course for this form action
      *
      * @return Course
@@ -107,8 +101,7 @@ class UpdateComponent extends CourseFormActionComponent
      */
 
     /**
-     * Breadcrumbs are built semi automatically with the given application, subapplication, component...
-     * Use this
+     * Breadcrumbs are built semi automatically with the given application, subapplication, component... Use this
      * function to add other breadcrumbs between the application / subapplication and the current component
      *
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail

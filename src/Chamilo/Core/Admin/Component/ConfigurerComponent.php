@@ -32,6 +32,8 @@ class ConfigurerComponent extends Manager
      */
     public function run()
     {
+        $this->set_parameter(self :: PARAM_CONTEXT, $this->get_context());
+
         $context = $this->get_context();
 
         if (! $this->get_user()->get_platformadmin())
@@ -130,11 +132,6 @@ class ConfigurerComponent extends Manager
             $this->get_tab(),
             $this->get_url(array(self :: PARAM_TAB => '__TYPE__', self :: PARAM_CONTEXT => null)));
         return $menu->render_as_tree();
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_CONTEXT);
     }
 
     public function get_context()

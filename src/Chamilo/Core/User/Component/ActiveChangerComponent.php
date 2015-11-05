@@ -32,7 +32,10 @@ abstract class ActiveChangerComponent extends Manager
         }
 
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
+
         $active = $this->getState();
+        $this->set_parameter(self :: PARAM_ACTIVE, $active);
 
         if (! is_array($ids))
         {
@@ -111,10 +114,5 @@ abstract class ActiveChangerComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_USER_APPROVAL_BROWSER)),
                 Translation :: get('UserManagerUserApprovalBrowserComponent')));
         $breadcrumbtrail->add_help('user_active_changer');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID, self :: PARAM_ACTIVE);
     }
 }

@@ -98,9 +98,4 @@ class CourseImporterComponent extends Manager
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Courses')));
         }
     }
-
-    public function get_additional_parameters()
-    {
-        return array();
-    }
 }

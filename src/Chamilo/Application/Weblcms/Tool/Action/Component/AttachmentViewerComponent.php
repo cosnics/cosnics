@@ -22,7 +22,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class AttachmentViewerComponent extends Manager
 {
-    // private $action_bar;
+
     public function run()
     {
         $trail = BreadcrumbTrail :: get_instance();
@@ -33,7 +33,7 @@ class AttachmentViewerComponent extends Manager
 
         // retrieve the publication
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
-
+        $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION, $publication_id);
         if (is_null($publication_id))
         {
             throw new ParameterNotDefinedException(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
@@ -118,12 +118,5 @@ class AttachmentViewerComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        $params = array();
-        $params[] = \Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION;
-        return $params;
     }
 }

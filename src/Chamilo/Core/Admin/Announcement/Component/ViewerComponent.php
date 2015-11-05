@@ -27,6 +27,7 @@ class ViewerComponent extends Manager implements NoContextComponent
     public function run()
     {
         $id = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
 
         if (! Rights :: get_instance()->is_allowed_in_publciation($id, $this->get_user()->get_id()))
         {
@@ -114,10 +115,5 @@ class ViewerComponent extends Manager implements NoContextComponent
         }
 
         return $action_bar;
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
     }
 }

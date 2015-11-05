@@ -48,11 +48,6 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $time = Request :: get(\Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TIME) ? intval(
-            Request :: get(\Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TIME)) : time();
-        $view = Request :: get(\Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TYPE) ? Request :: get(
-            \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TYPE) : \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: TYPE_MONTH;
-
         $id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
 
         if ($id)

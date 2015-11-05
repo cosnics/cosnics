@@ -37,7 +37,6 @@ class ViewComponent extends Manager
     public function run()
     {
         $html = array();
-
         $html[] = $this->render_header();
         $html[] = $this->get_html();
         $html[] = $this->render_footer();

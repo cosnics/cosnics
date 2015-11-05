@@ -31,6 +31,8 @@ class ChangeUserComponent extends Manager
         }
 
         $id = Request :: get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $id);
+
         if ($id)
         {
 
@@ -63,10 +65,5 @@ class ChangeUserComponent extends Manager
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
 
         $breadcrumbtrail->add_help('user_changer');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }
