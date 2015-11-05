@@ -36,11 +36,11 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
      */
-    public function fillCache()
+    public function warmUp()
     {
         foreach ($this->getCacheIdentifiers() as $identifier)
         {
-            if (! $this->fillCacheForIdentifier($identifier))
+            if (! $this->warmUpForIdentifier($identifier))
             {
                 throw new \Exception('CacheError: ' . $identifier);
             }
@@ -53,7 +53,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
      */
-    public function fillCacheForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier)
     {
         switch ($identifier)
         {
@@ -155,7 +155,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      *
      * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
      */
-    public function getCacheIdentifiers()
+    public function getIdentifiers()
     {
         return array(self :: IDENTIFIER_SETTINGS, self :: IDENTIFIER_REGISTRATIONS, self :: IDENTIFIER_LANGUAGES);
     }
@@ -166,7 +166,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getSettingsCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_SETTINGS);
+        return $this->getForIdentifier(self :: IDENTIFIER_SETTINGS);
     }
 
     /**
@@ -175,7 +175,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getRegistrationsCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_REGISTRATIONS);
+        return $this->getForIdentifier(self :: IDENTIFIER_REGISTRATIONS);
     }
 
     /**
@@ -184,6 +184,6 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getLanguagesCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_LANGUAGES);
+        return $this->getForIdentifier(self :: IDENTIFIER_LANGUAGES);
     }
 }

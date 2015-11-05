@@ -10,7 +10,7 @@ use Chamilo\Libraries\File\Path;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ResourceBundles extends BasicBundles
+class InternationalizationBundles extends BasicBundles
 {
 
     /**
@@ -29,7 +29,7 @@ class ResourceBundles extends BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $resourcePath = Path :: getInstance()->getResourcesPath($folderNamespace);
-        return file_exists($resourcePath) && is_dir($resourcePath);
+        $i18nPath = Path :: getInstance()->getI18nPath($folderNamespace);
+        return file_exists($i18nPath) && is_dir($i18nPath);
     }
 }
