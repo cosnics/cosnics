@@ -1,0 +1,32 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\forum_topic
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Forum topic"
+TypeCategory = "Content Objects"
+Topic = "Topic"
+Nothing = "Nothing"
+LastChangedAt = "Last changed at {TIME}"
+Top = "Top"
+ReplyOnTopic = "Reply on topic"
+ReplyOnPost = "Reply on post"
+Subscribe = "Follow topic"
+UnSubscribe = "Unfollow topic"
+SuccesSubscribe = "Succes follow topic"
+UnSuccesSubscribe = "Unsucces follow topic"
+SuccesUnSubscribe = "Succes topic not longer followed"
+UnSuccesUnSubscribe = "Unsucces topic not longer followed"
+Title = "Title"
+Description = "Desciption"
+Properties = "Properties"
+ForumTopicBuilderBrowserComponent = "Build forum topic"
+ForumTopicBuilderCreatorComponent = "Build forum topic"
+Content = "Content"
+AddAttachments = "Add attachments"
+Attachments = "Attachments"
+UploadDocument = "Upload Document"
+SelectAttachment = "Select attachment"
+EditPost = "Edit post"
+SuccesUnsubscribe = "Unsubscribed from topic"
+UnSuccesUnsubscribe = "Not unsubscribed from topic"
