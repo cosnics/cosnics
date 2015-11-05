@@ -26,11 +26,4 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW;
-
-    public function get_additional_parameters()
-    {
-        return array(
-            \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TIME,
-            \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer :: PARAM_TYPE);
-    }
 }

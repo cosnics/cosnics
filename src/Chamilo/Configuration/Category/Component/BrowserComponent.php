@@ -34,9 +34,11 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $this->set_parameter(self :: PARAM_CATEGORY_ID, Request :: get(self :: PARAM_CATEGORY_ID));
         $this->ab = $this->get_action_bar();
-        $menu = new CategoryMenu(Request :: get(self :: PARAM_CATEGORY_ID), $this->get_parent());
+        $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
+        $menu = new CategoryMenu($category_id, $this->get_parent());
+
+        $this->set_parameter(self :: PARAM_CATEGORY_ID, $category_id);
 
         $html = array();
 

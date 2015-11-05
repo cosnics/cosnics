@@ -227,11 +227,6 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         }
     }
 
-    public function get_additional_parameters()
-    {
-        return array();
-    }
-
     public function get_table_condition($table_class_name)
     {
         return $this->get_condition();

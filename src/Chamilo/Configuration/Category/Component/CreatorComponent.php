@@ -22,17 +22,17 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        $this->set_parameter(self :: PARAM_CATEGORY_ID, Request :: get(self :: PARAM_CATEGORY_ID));
+        $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
+        $this->set_parameter(self :: PARAM_CATEGORY_ID, $category_id);
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add_help('category_manager_creator');
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
 
-        if (Request :: get(self :: PARAM_CATEGORY_ID))
+        if ($category_id)
         {
-            $menu = new CategoryMenu(Request :: get(self :: PARAM_CATEGORY_ID), $this->get_parent());
+            $menu = new CategoryMenu($category_id, $this->get_parent());
         }
 
-        $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
         $user = $this->get_user();
 
         $category = $this->get_parent()->get_category();

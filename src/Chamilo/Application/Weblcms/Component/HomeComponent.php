@@ -198,7 +198,8 @@ class HomeComponent extends Manager implements DelegateComponent
                             Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Manager :: ACTION_BROWSE))) .
                  '">' .
                  htmlspecialchars(
-                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package())) . '</a></li>';
+                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package())) .
+                 '</a></li>';
         }
 
         return implode(PHP_EOL, $html);
@@ -305,11 +306,6 @@ class HomeComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_course_home');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array();
     }
 
     public function show_empty_courses()

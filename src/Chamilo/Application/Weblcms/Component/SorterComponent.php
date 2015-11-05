@@ -45,6 +45,10 @@ class SorterComponent extends Manager
      */
     public function run()
     {
+        $this->set_parameter(
+            CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE,
+            Request :: get(CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE));
+
         \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: fix_course_tab_user_orders_for_user(
             $this->get_user_id());
         DataManager :: fix_course_type_user_category_rel_course_for_user($this->get_user_id());
