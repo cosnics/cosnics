@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 
 /**
  *

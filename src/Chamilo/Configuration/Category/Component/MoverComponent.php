@@ -3,13 +3,13 @@ namespace Chamilo\Configuration\Category\Component;
 
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: mover.class.php 205 2009-11-13 12:57:33Z vanpouckesven $

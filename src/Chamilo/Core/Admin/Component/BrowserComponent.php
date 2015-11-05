@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
+use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Core\Admin\Form\AdminSearchForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -16,8 +18,6 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class BrowserComponent extends Manager
 {

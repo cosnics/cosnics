@@ -4,11 +4,11 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Publisher;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
 {

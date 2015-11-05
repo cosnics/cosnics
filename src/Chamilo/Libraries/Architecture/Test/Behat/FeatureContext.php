@@ -2,10 +2,10 @@
 namespace Chamilo\Libraries\Architecture\Test\Behat;
 
 use Behat\MinkExtension\Context\MinkContext;
+use Chamilo\Core\Install\Observer\Type\CommandLineInstaller;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Install\Observer\Type\CommandLineInstaller;
 
 /**
  * Extension on the mink context to define our own feature context for behat

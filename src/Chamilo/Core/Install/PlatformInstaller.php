@@ -8,8 +8,8 @@ use Chamilo\Core\Install\Observer\Type\WebInterfaceInstaller;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
-use Exception;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 class PlatformInstaller
 {

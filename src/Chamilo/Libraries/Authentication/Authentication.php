@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *

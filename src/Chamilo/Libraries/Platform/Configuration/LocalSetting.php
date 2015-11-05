@@ -3,15 +3,15 @@ namespace Chamilo\Libraries\Platform\Configuration;
 
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: local_setting.class.php 168 2009-11-12 11:53:23Z vanpouckesven $

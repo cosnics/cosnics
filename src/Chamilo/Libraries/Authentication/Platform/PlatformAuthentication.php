@@ -4,10 +4,10 @@ namespace Chamilo\Libraries\Authentication\Platform;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Authentication\AuthenticationException;
+use Chamilo\Libraries\Authentication\CredentialsAuthentication;
 use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Authentication\CredentialsAuthentication;
-use Chamilo\Libraries\Authentication\AuthenticationException;
 
 /**
  *

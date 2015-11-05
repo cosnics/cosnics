@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Form;
 
 use Chamilo\Core\Home\Form\ConfigurationForm;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Home\Integration\Chamilo\Core\Home\Connector;
 use Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type\Banner;
+use Chamilo\Libraries\Platform\Translation;
 
 class BannerForm extends ConfigurationForm
 {

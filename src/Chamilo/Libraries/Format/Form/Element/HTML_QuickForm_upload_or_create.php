@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: log_viewer.class.php 168 2009-11-12 11:53:23Z vanpouckesven $

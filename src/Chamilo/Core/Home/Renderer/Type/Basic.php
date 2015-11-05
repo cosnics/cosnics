@@ -4,6 +4,8 @@ namespace Chamilo\Core\Home\Renderer\Type;
 use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
@@ -14,8 +16,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Repository\HomeRepository;
 
 /**
  *

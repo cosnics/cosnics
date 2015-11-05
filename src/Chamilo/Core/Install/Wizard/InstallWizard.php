@@ -1,19 +1,16 @@
 <?php
 namespace Chamilo\Core\Install\Wizard;
 
-// use Chamilo\Core\Install\Wizard\Page\ApplicationPage;
-// use Chamilo\Core\Install\Wizard\Page\ContentObjectPage;
 use Chamilo\Core\Install\Wizard\Page\DatabasePage;
-// use Chamilo\Core\Install\Wizard\Page\ExternalInstancePage;
 use Chamilo\Core\Install\Wizard\Page\IntroductionPage;
 use Chamilo\Core\Install\Wizard\Page\LanguagePage;
 use Chamilo\Core\Install\Wizard\Page\LicensePage;
 use Chamilo\Core\Install\Wizard\Page\OverviewPage;
+use Chamilo\Core\Install\Wizard\Page\PackagePage;
 use Chamilo\Core\Install\Wizard\Page\PreconfiguredPage;
 use Chamilo\Core\Install\Wizard\Page\RequirementsPage;
 use Chamilo\Core\Install\Wizard\Page\SettingsPage;
 use HTML_QuickForm_Controller;
-use Chamilo\Core\Install\Wizard\Page\PackagePage;
 
 /**
  * $Id: install_wizard.class.php 225 2009-11-13 14:43:20Z vanpouckesven $

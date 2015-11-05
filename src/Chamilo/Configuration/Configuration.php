@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Configuration;
 
+use Chamilo\Configuration\Service\ConfigurationCacheService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
-use Chamilo\Configuration\Service\ConfigurationCacheService;
 
 /**
  * This class represents the current configuration

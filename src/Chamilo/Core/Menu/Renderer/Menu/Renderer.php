@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Menu;
 
+use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Request;
-use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Repository\ItemRepository;
 
 /**
  *

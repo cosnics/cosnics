@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * An "External" block.

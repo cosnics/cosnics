@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *

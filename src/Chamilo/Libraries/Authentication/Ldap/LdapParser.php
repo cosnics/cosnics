@@ -7,8 +7,8 @@ namespace Chamilo\Libraries\Authentication\Ldap;
  * be adapted for your company to work. Connection information can be added in the administrator settings of chamilo
  */
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Authentication\AuthenticationException;
+use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Translation;
 
 class LdapParser

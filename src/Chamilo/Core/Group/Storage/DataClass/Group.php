@@ -3,6 +3,8 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -10,11 +12,9 @@ use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * $Id: group.class.php 224 2009-11-13 14:40:30Z kariboe $

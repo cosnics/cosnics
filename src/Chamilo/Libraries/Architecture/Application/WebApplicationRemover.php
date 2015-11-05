@@ -3,10 +3,10 @@ namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * Base class for specific removal extensions of web applications

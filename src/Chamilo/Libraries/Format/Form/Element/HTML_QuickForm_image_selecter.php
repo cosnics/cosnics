@@ -1,9 +1,9 @@
 <?php
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: element_finder.php 128 2009-11-09 13:13:20Z vanpouckesven $

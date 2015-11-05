@@ -1,13 +1,22 @@
 <?php
 namespace Chamilo\Libraries\Architecture;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Authentication\Authentication;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Response\ExceptionResponse;
+use Chamilo\Libraries\Format\Response\Response;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -18,16 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Response\ExceptionResponse;
-use Chamilo\Libraries\Format\Response\Response;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *

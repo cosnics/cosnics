@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Menu\Package;
 
 use Chamilo\Core\Menu\Rights;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
+use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 
 /**
  *
