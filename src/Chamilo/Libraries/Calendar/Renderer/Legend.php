@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\NotificationMessage;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
 
 class Legend
 {

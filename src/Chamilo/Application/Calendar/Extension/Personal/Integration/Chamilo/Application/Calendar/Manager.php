@@ -1,11 +1,17 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar;
 
+use Chamilo\Application\Calendar\Architecture\MixedCalendar;
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,12 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Architecture\MixedCalendar;
 
 /**
  *

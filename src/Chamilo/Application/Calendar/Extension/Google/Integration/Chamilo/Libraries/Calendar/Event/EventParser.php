@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRulesIcalParser;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
