@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * $Id: course_importer.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -28,8 +27,6 @@ class CourseImporterComponent extends Manager
      */
     public function run()
     {
-        Page :: getInstance()->setSection('Chamilo\Core\Admin');
-
         if (! $this->get_user()->is_platform_admin())
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();

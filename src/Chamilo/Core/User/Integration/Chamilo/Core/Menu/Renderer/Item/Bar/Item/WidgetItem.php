@@ -20,6 +20,11 @@ use Chamilo\Configuration\Configuration;
 class WidgetItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        return false;
+    }
+
     /**
      *
      * @param string $action
@@ -76,41 +81,41 @@ class WidgetItem extends Bar
     {
         $html = array();
 
-        $title = $this->get_item()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
-        $selected = $this->get_item()->is_selected();
+        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $selected = $this->isSelected();
 
         $html[] = '<ul>';
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
         $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->getAccountUrl() . '">';
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
-                $this->get_item()->get_type());
+                $this->getItem()->get_type());
             $itemNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($itemNamespace, 2);
-            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->get_item()->get_type());
+            $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->getItem()->get_type());
             $imagePath = Theme :: getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
             $profilePhotoUrl = new Redirect(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->get_menu_renderer()->get_user()->get_id()));
+                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->getMenuRenderer()->get_user()->get_id()));
 
             $html[] = '<img class="item-icon item-icon-account" src="' . $profilePhotoUrl->getUrl() . '" title="' .
                  $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 
         $html[] = '</a>';
 
-        $user = $this->get_menu_renderer()->get_user();
+        $user = $this->getMenuRenderer()->get_user();
         $profilePhotoUrl = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),

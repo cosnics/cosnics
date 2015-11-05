@@ -65,13 +65,14 @@ class PackageTypeImportMenu extends HTML_Menu
 
         foreach ($packages as $package)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package->get_context());
+            $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
 
-            if ($registration instanceof Registration && $registration->is_active())
+            if (! empty($registration) && $registration[Registration :: PROPERTY_STATUS]())
             {
                 $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
 
-                if (class_exists($manager_class) && is_subclass_of($manager_class , 'Chamilo\Core\Admin\ImportActionsInterface', true))
+                if (class_exists($manager_class) &&
+                     is_subclass_of($manager_class, 'Chamilo\Core\Admin\ImportActionsInterface', true))
                 {
                     $has_links = true;
 

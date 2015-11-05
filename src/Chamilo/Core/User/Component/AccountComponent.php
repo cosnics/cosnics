@@ -3,7 +3,6 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
@@ -33,8 +32,6 @@ class AccountComponent extends ProfileComponent
         {
             throw new NotAllowedException();
         }
-
-        Page :: getInstance()->setSection(self :: SECTION_MY_ACCOUNT);
 
         $user = $this->get_user();
 

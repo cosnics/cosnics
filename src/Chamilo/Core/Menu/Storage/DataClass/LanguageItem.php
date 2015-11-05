@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -49,21 +48,5 @@ class LanguageItem extends Item
     public function setCurrentUrl($currentUrl)
     {
         $this->currentUrl = $currentUrl;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Menu\Storage\DataClass\Item::is_selected()
-     */
-    public function is_selected()
-    {
-        $current_language = LocalSetting :: get('platform_language');
-
-        if ($current_language == $this->get_language())
-        {
-            return true;
-        }
-
-        return false;
     }
 }

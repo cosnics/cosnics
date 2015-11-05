@@ -98,9 +98,9 @@ class PackageBundles extends BasicBundles
 
             $isAll = $this->mode == PackageList :: MODE_ALL;
             $isInstalled = $this->mode == PackageList :: MODE_INSTALLED &&
-                 \Chamilo\Configuration\Storage\DataManager :: get_registration($packageNamespace);
+                 \Chamilo\Configuration\Configuration :: is_registered($packageNamespace);
             $isAvailable = $this->mode == PackageList :: MODE_AVAILABLE &&
-                 ! \Chamilo\Configuration\Storage\DataManager :: get_registration($packageNamespace);
+                 ! \Chamilo\Configuration\Configuration :: is_registered($packageNamespace);
 
             if (($isAll || $isInstalled || $isAvailable) &&
                  ! $this->packageLists[$packageNamespaceParent]->has_package($packageNamespace))

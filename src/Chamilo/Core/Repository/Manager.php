@@ -155,10 +155,6 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_CONTENT_OBJECTS;
 
-    // Sections
-    const SECTION_IMPLEMENTATION = 'Implementation';
-    const SECTION_WORKSPACE = 'Workspace';
-
     /**
      * Property of this repository manager.
      */
@@ -483,10 +479,9 @@ abstract class Manager extends Application
 
         foreach ($types as $index => $type)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration(
-                ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3));
+            $context = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
 
-            if (! $registration || ! $registration->is_active())
+            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }

@@ -80,8 +80,8 @@ class ImporterComponent extends Manager
         foreach ($packages[$this->tab] as $package)
         {
 
-            $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
-            if (! $registration instanceof \Chamilo\Configuration\Storage\DataClass\Registration)
+            $registration = \Chamilo\Configuration\Configuration :: is_registered($package->get_context());
+            if (! $registration)
             {
                 continue;
             }
@@ -99,7 +99,7 @@ class ImporterComponent extends Manager
 
         foreach ($package_names as $package => $package_name)
         {
-            $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration($package);
+            $registration = \Chamilo\Configuration\Configuration :: is_registered($package);
 
             if (! $registration instanceof \Chamilo\Configuration\Storage\DataClass\Registration)
             {

@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 
 /**
  *

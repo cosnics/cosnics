@@ -6,8 +6,6 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: user_manager.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -68,22 +66,6 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_USERS;
-
-    // Section
-    const SECTION_MY_ACCOUNT = 'my_account';
-
-    /**
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent :: __construct($applicationConfiguration);
-
-        Page :: getInstance()->setSection('Chamilo\Core\Admin');
-    }
 
     public function retrieve_user_by_username($username)
     {

@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Lynx\Manager\Action;
 
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Lynx\Action;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Configuration\Configuration;
 
 set_time_limit(0);
 
@@ -96,7 +96,7 @@ class PackageInstaller extends Action
      */
     public function is_package_registered()
     {
-        return DataManager :: is_registered($this->get_package()->get_context());
+        return Configuration :: is_registered($this->get_package()->get_context());
     }
 
     /**

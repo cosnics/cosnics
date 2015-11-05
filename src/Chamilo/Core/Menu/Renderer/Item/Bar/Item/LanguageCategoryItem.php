@@ -34,7 +34,7 @@ class LanguageCategoryItem extends CategoryItem
         {
             $sub_html = array();
 
-            $languages = \Chamilo\Configuration\Storage\DataManager :: get_languages();
+            $languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
 
             if (count($languages) > 1)
             {
@@ -57,11 +57,11 @@ class LanguageCategoryItem extends CategoryItem
                     $languageItem = new \Chamilo\Core\Menu\Storage\DataClass\LanguageItem();
                     $languageItem->set_language($isocode);
                     $languageItem->setCurrentUrl($currentUrl);
-                    $languageItem->set_parent($this->get_item()->get_id());
+                    $languageItem->set_parent($this->getItem()->get_id());
 
                     if ($currentLanguage != $isocode)
                     {
-                        $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $languageItem);
+                        $sub_html[] = Renderer :: toHtml($this->getMenuRenderer(), $languageItem, $this);
                     }
                 }
 

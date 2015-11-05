@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 
 /**
@@ -53,8 +52,6 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        Page :: getInstance()->setSection('Chamilo\Core\Admin');
-
         $this->request_type = Request :: get(self :: PARAM_REQUEST_TYPE);
         $this->request_view = Request :: get(self :: PARAM_REQUEST_VIEW);
 

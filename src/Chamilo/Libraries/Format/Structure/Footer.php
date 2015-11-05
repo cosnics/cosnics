@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -91,28 +90,23 @@ class Footer
             $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
             $output[] = '</div> <!-- end of #main" -->';
 
-            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration(
-                'Chamilo\Core\Menu');
+            $show_sitemap = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Menu', 'show_sitemap');
 
-            if ($registration instanceof Registration && $registration->is_active())
+            if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User &&
+                 $show_sitemap == '1')
             {
-                $show_sitemap = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Menu', 'show_sitemap');
+                $output[] = '<div id="sitemap">';
+                $output[] = '<div class="categories">';
 
-                if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User &&
-                     $show_sitemap == '1')
-                {
-                    $output[] = '<div id="sitemap">';
-                    $output[] = '<div class="categories">';
+                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
+                    \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
+                    $this->getApplication()->getRequest(),
+                    $this->getApplication()->get_user());
 
-                    $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: as_html(
-                        \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
-                        $this->getApplication()->get_user());
-
-                    $output[] = '<div class="clear"></div>';
-                    $output[] = '</div>';
-                    $output[] = '<div class="clear"></div>';
-                    $output[] = '</div>';
-                }
+                $output[] = '<div class="clear"></div>';
+                $output[] = '</div>';
+                $output[] = '<div class="clear"></div>';
+                $output[] = '</div>';
             }
 
             $output[] = '<div id="footer"> <!-- start of #footer section -->';

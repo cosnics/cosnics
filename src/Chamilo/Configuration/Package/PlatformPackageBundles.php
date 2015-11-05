@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Configuration\Package\Finder\PackageBundles;
-use Chamilo\Libraries\File\Cache\FilesystemCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 
 /**
  *

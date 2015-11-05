@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -25,8 +24,7 @@ class WebApplicationRemover extends \Chamilo\Configuration\Package\Action\Remove
     {
         $context = $this->context();
 
-        $registration = \Chamilo\Configuration\Storage\DataManager :: get_registration('core\menu');
-        if (! $registration instanceof Registration || ! $registration->is_active())
+        if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive('Chamilo\Core\Menu'))
         {
             return true;
         }

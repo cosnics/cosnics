@@ -377,10 +377,13 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $course_instances = array();
             foreach ($courses as $course_properties)
             {
-                $course_instances[$course_properties[Course :: PROPERTY_ID]] = DataClass :: factory(Course :: class_name(), $course_properties);
+                $course_instances[$course_properties[Course :: PROPERTY_ID]] = DataClass :: factory(
+                    Course :: class_name(),
+                    $course_properties);
             }
 
-            // Accelerate notification icon generation by querying all courses at ones and storing the results in a cache.
+            // Accelerate notification icon generation by querying all courses at ones and storing the results in a
+            // cache.
             DataManager :: fill_new_publications_cache($this->get_user(), $course_instances);
 
             $course_settings_controller = CourseSettingsController :: get_instance();
@@ -451,7 +454,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     }
 
                     $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-                        list-style-image: url(' . $icon . '); margin-left: 15px;' . $text_style . '">';
+                        list-style-image: url(' . $icon .
+                         '); margin-left: 15px;' . $text_style . '">';
                     $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
                          $course->get_title();
 
@@ -489,10 +493,10 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                         if ($language != 'platform_language')
                         {
-                            $language_registration = \Chamilo\Configuration\Storage\DataManager :: retrieve_language_from_isocode(
+                            $languageName = \Chamilo\Configuration\Configuration :: get_instance()->getLanguageNameFromIsocode(
                                 $language);
 
-                            $text[] = isset($language_registration) ? $language_registration->get_original_name() : '';
+                            $text[] = $languageName;
                         }
                         else
                         {

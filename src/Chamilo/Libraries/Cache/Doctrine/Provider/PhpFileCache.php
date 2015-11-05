@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\File\Cache;
+namespace Chamilo\Libraries\Cache\Doctrine\Provider;
 
 /**
  *
- * @package Chamilo\Libraries\File\Cache
+ * @package Chamilo\Libraries\Cache\Doctrine\Provider
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

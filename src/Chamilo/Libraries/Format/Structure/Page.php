@@ -41,12 +41,6 @@ class Page
 
     /**
      *
-     * @var string
-     */
-    private $section;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Format\Structure\Page
      */
     protected static $instance = null;
@@ -175,23 +169,5 @@ class Page
     public function setFooter($footer)
     {
         $this->footer = $footer;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSection()
-    {
-        return $this->section;
-    }
-
-    /**
-     *
-     * @param string $section
-     */
-    public function setSection($section)
-    {
-        $this->section = $section;
     }
 }

@@ -14,7 +14,7 @@ class SiteMap extends Renderer
 {
     const TYPE = 'site_map';
 
-    public function display_menu_header($current_section)
+    public function display_menu_header()
     {
         return null;
     }

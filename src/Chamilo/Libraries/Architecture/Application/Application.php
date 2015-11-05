@@ -67,7 +67,6 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
-        Page :: getInstance()->setSection($this->package());
     }
 
     /**
@@ -645,9 +644,7 @@ abstract class Application
     {
         if (self :: exists($context))
         {
-            $registration = \Chamilo\Configuration\Configuration :: get_instance()->get_registration($context);
-
-            if ($registration && $registration->is_active())
+            if (\Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($context))
             {
                 return true;
             }
@@ -773,13 +770,13 @@ abstract class Application
      */
     public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
     {
-        $applications = \Chamilo\Configuration\Storage\DataManager :: get_registrations_by_type($type);
+        $applications = \Chamilo\Configuration\Configuration :: registrations_by_type($type);
 
         $active_applications = array();
 
         foreach ($applications as $application)
         {
-            if (! $application->is_active())
+            if (! $application[Registration :: PROPERTY_STATUS])
             {
                 continue;
             }

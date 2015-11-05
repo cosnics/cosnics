@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Lynx\Remote\DataClass;
 
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Lynx\Source\DataClass\Source;
 use Chamilo\Libraries\File\Path;
 use DOMDocument;
 use DOMXPath;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -95,7 +95,7 @@ class Package extends \Chamilo\Configuration\Package\Storage\DataClass\Package
     public function is_downloadable()
     {
         // Check whether there is a registration
-        if (DataManager :: is_registered($this->get_context()))
+        if (Configuration :: is_registered($this->get_context()))
         {
             return false;
         }

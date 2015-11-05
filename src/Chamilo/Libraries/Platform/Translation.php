@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Cache\PhpFileCache;
+use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Configuration\Configuration;
 
 /**

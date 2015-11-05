@@ -18,10 +18,15 @@ use Chamilo\Libraries\Platform\Translation;
 class WorkspaceConfigureItem extends Bar
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        return $currentContext == Manager :: package();
+    }
+
     public function getContent()
     {
-        $selected = $this->get_item()->is_selected();
-        $selected = true;
+        $selected = $this->isSelected();
 
         if ($selected)
         {
@@ -37,18 +42,18 @@ class WorkspaceConfigureItem extends Bar
         $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
         $title = Translation :: get('ConfigureWorkspaces');
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $imagePath = Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
-                'ConfigureWorkspaces');
+                'ConfigureWorkspaces' . ($this->isSelected() ? 'Selected' : ''));
 
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '"><em>' .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '"><em>' .
                  $title . '</em></div>';
         }
 

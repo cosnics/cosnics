@@ -8,6 +8,8 @@ use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Repository\Workspace\Manager;
 
 /**
  *
@@ -19,6 +21,12 @@ use Chamilo\Core\Repository\Workspace\Service\EntityService;
 class WorkspaceCategoryItem extends CategoryItem
 {
 
+    public function isItemSelected()
+    {
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+        return ($currentContext == Manager :: package());
+    }
+
     public function render()
     {
         $html = array();
@@ -28,7 +36,7 @@ class WorkspaceCategoryItem extends CategoryItem
         $entityService = new EntityService();
         $workspaces = $workspaceService->getWorkspaceFavouritesByUser(
             $entityService,
-            $this->get_menu_renderer()->get_user());
+            $this->getMenuRenderer()->get_user());
 
         $sub_html[] = '<ul>';
 
@@ -39,25 +47,25 @@ class WorkspaceCategoryItem extends CategoryItem
                 $workspaceItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem();
                 $workspaceItem->setWorkspaceId($workspace->getId());
                 $workspaceItem->setName($workspace->getName());
-                $workspaceItem->set_parent($this->get_item()->get_id());
-                $workspaceItem->set_display($this->get_item()->get_display());
+                $workspaceItem->set_parent($this->getItem()->get_id());
+                $workspaceItem->set_display($this->getItem()->get_display());
 
-                $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $workspaceItem);
+                $sub_html[] = Renderer :: toHtml($this->getMenuRenderer(), $workspaceItem, $this);
             }
         }
 
         $configurationItem = new \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceConfigureItem();
-        $configurationItem->set_parent($this->get_item()->get_id());
-        $configurationItem->set_display($this->get_item()->get_display());
+        $configurationItem->set_parent($this->getItem()->get_id());
+        $configurationItem->set_display($this->getItem()->get_display());
 
-        $sub_html[] = Renderer :: as_html($this->get_menu_renderer(), $configurationItem);
+        $sub_html[] = Renderer :: toHtml($this->getMenuRenderer(), $configurationItem, $this);
 
         $sub_html[] = '</ul>';
         $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
 
         $html[] = '<ul>';
 
-        $selected = $this->get_item()->is_selected();
+        $selected = $this->isSelected();
         $class = $selected ? 'class="current" ' : '';
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
@@ -65,7 +73,7 @@ class WorkspaceCategoryItem extends CategoryItem
 
         $title = Translation :: get('Workspaces');
 
-        if ($this->get_item()->show_icon())
+        if ($this->getItem()->show_icon())
         {
             $integrationNamespace = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
             $imagePath = Theme :: getInstance()->getImagePath(
@@ -75,9 +83,9 @@ class WorkspaceCategoryItem extends CategoryItem
             $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
         }
 
-        if ($this->get_item()->show_title())
+        if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->get_item()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 
