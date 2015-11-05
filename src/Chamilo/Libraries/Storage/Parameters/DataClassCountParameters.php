@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Exception;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Exception;
 
 /**
  *

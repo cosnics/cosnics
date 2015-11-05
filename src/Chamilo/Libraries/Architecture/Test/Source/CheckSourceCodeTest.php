@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture\Test\Source;
 
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Abstract test case that checks the php syntax for the php files of a package

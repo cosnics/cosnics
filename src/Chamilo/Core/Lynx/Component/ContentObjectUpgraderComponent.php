@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 
 class ContentObjectUpgraderComponent extends UpgraderComponent implements NoAuthenticationSupport
 {

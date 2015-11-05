@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Authentication\Cas;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Authentication\AuthenticationException;
+use Chamilo\Libraries\Authentication\ExternalAuthentication;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use phpCAS;
-use Chamilo\Libraries\Authentication\ExternalAuthentication;
-use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class represents a parameter not defined exception.

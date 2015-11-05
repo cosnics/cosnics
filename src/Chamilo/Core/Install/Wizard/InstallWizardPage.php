@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Install\Wizard;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Form\FormValidatorPage;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: install_wizard_page.class.php 225 2009-11-13 14:43:20Z vanpouckesven $

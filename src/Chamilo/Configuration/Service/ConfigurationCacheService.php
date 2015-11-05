@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
 /**

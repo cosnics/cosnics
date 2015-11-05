@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
+use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 /**
  *

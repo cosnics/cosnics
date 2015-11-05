@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\Install\Wizard\Page;
 
+use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Install\Wizard\InstallWizardPage;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 
 /**
  *

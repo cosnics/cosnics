@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  *

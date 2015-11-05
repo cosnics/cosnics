@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Lynx\Component;
 
 use Chamilo\Core\Lynx\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class RemoteComponent extends Manager implements DelegateComponent

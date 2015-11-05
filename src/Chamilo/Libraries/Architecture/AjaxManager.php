@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Architecture;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *

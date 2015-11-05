@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Repository\ItemRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Rights;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
+use Chamilo\Libraries\File\Path;
 
 /**
  *

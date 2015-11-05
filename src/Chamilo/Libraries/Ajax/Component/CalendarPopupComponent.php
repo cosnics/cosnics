@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
 /**
  *

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package\Finder;
 
+use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Configuration\Package\PackageList;
 
 /**
  *

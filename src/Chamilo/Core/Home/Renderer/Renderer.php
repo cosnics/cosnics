@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Home\Renderer;
 
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -92,7 +92,7 @@ abstract class Renderer
 
     /**
      * Gets a link to the personal calendar application
-     * 
+     *
      * @param array $parameters
      * @param boolean $encode
      */
@@ -109,7 +109,7 @@ abstract class Renderer
 
     /**
      * Returns the current URL parameters.
-     * 
+     *
      * @return array The parameters.
      */
     public function get_parameters()
@@ -119,7 +119,7 @@ abstract class Renderer
 
     /**
      * Returns the value of the given URL parameter.
-     * 
+     *
      * @param string $name The parameter name.
      * @return string The parameter value.
      */
@@ -131,7 +131,7 @@ abstract class Renderer
 
     /**
      * Sets the value of a URL parameter.
-     * 
+     *
      * @param string $name The parameter name.
      * @param string $value The parameter value.
      */

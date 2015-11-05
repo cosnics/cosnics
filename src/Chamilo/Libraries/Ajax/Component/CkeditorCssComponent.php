@@ -4,12 +4,12 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Assetic\Asset\AssetCollection;
 use Assetic\Filter\CssImportFilter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
