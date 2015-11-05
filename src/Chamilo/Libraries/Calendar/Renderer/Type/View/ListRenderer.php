@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

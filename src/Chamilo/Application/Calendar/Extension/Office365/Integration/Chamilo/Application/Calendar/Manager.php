@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
-use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
+use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
+use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

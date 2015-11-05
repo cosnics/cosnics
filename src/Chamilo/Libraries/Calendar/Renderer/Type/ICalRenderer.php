@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Sabre\VObject\Component\VCalendar;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use Chamilo\Libraries\Format\Response\Response;
+use Sabre\VObject\Component\VCalendar;
 
 /**
  *

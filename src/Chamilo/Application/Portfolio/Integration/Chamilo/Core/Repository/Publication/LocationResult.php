@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Core\Repository\Publication\Location\ContextLocationResult;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *

@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Repository;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  *
