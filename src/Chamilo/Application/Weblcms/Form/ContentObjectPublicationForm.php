@@ -212,7 +212,7 @@ class ContentObjectPublicationForm extends FormValidator
 
             if ($this->collaborate_possible && ! $force_collaborate)
             {
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: get(
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: getInstance()->get(
                     'collaborate_default',
                     Manager :: package());
             }

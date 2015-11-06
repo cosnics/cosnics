@@ -31,7 +31,7 @@ class HtmlEditorInstanceComponent extends \Chamilo\Libraries\Ajax\Manager
         $attributes = json_decode($attributes, true);
 
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             false,

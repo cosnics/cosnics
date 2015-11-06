@@ -34,23 +34,6 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
-     */
-    public function warmUp()
-    {
-        foreach ($this->getCacheIdentifiers() as $identifier)
-        {
-            if (! $this->warmUpForIdentifier($identifier))
-            {
-                throw new \Exception('CacheError: ' . $identifier);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)

@@ -111,7 +111,7 @@ class DatetimeUtilities
 
         if (! $timezone)
         {
-            $timezone = LocalSetting :: get('platform_timezone');
+            $timezone = LocalSetting :: getInstance()->get('platform_timezone');
             if (! $timezone)
             {
                 return self :: format_locale_date($format, $date);

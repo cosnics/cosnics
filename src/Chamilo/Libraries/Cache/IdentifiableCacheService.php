@@ -15,6 +15,29 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
+     */
+    public function warmUp()
+    {
+        return $this->warmUpForIdentifiers($this->getIdentifiers());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface::clearAndWarmUp()
+     */
+    public function clearAndWarmUp()
+    {
+        if (! $this->clear())
+        {
+            return false;
+        }
+
+        return $this->warmUp();
+    }
+
+    /**
+     *
      * @param string $identifier
      * @return boolean
      */
@@ -22,15 +45,77 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @param string[] $identifiers
      * @return boolean
      */
-    abstract public function clearForIdentifiers($identifiers);
+    public function warmUpForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (! $this->warmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param string $identifier
+     * @return boolean
+     */
+    abstract public function clearForIdentifier($identifier);
+
+    /**
+     *
+     * @param string[] $identifiers
+     * @return boolean
+     */
+    public function clearForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (! $this->clearForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      *
      * @return boolean
      */
-    abstract public function clearAndWarmUpForIdentifiers($identifiers);
+    public function clearAndWarmUpForIdentifiers($identifiers)
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (! $this->clearAndWarmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearAndWarmUpForIdentifier($identifier)
+    {
+        if (! $this->clearForIdentifier($identifier))
+        {
+            return false;
+        }
+
+        return $this->warmUpForIdentifier($identifier);
+    }
 
     /**
      *

@@ -55,23 +55,6 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
-     */
-    public function warmUp()
-    {
-        foreach ($this->getIdentifiers() as $identifier)
-        {
-            if (! $this->warmUpForIdentifier($identifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)

@@ -307,7 +307,7 @@ class Kernel
 
             if ($themeSelectionAllowed)
             {
-                Theme :: getInstance()->setTheme(LocalSetting :: get('theme'));
+                Theme :: getInstance()->setTheme(LocalSetting :: getInstance()->get('theme'));
             }
 
             $languageSelectionAllowed = $this->getConfiguration()->get_setting(
@@ -315,7 +315,7 @@ class Kernel
 
             if ($languageSelectionAllowed)
             {
-                Translation :: getInstance()->setLanguageIsocode(LocalSetting :: get('platform_language'));
+                Translation :: getInstance()->setLanguageIsocode(LocalSetting :: getInstance()->get('platform_language'));
             }
         }
 

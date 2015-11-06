@@ -81,7 +81,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
         $html[] = '<div style="margin-left:20px;display:block;" id="editor_html_content">';
         // $html[] = $this->_elements[3]->toHtml();
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             self :: ELEMENT_EDITOR,
             '',
             false,

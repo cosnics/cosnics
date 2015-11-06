@@ -20,7 +20,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $tabs = array();
 
         $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
-        $accessToken = LocalSetting :: get('token', $configurationContext);
+        $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
 
         if (! $accessToken)
         {
