@@ -110,7 +110,7 @@ class CalendarRepository
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
             $tenantId = $configuration->get_setting(array($configurationContext, 'tenant_id'));
             $tenantName = $configuration->get_setting(array($configurationContext, 'tenant_name'));
-            $token = json_decode(LocalSetting :: get('token', $configurationContext));
+            $token = json_decode(LocalSetting :: getInstance()->get('token', $configurationContext));
 
             self :: $instance = new static($clientId, $clientSecret, $tenantId, $tenantName, $token);
         }
@@ -243,7 +243,7 @@ class CalendarRepository
     public function saveToken($token)
     {
         $this->token = json_decode($token);
-        return LocalSetting :: create_local_setting(
+        return LocalSetting :: getInstance()->create(
             'token',
             $token,
             \Chamilo\Application\Calendar\Extension\Office365\Manager :: context());

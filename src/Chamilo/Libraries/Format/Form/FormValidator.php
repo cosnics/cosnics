@@ -391,7 +391,7 @@ EOT;
     public function add_html_editor($name, $label, $required = true, $options = array(), $attributes = array())
     {
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             $required,
@@ -450,7 +450,7 @@ EOT;
     public function create_html_editor($name, $label, $options = array(), $attributes = array())
     {
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             false,

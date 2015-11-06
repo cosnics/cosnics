@@ -43,7 +43,7 @@ class LanguageCategoryItem extends CategoryItem
 
                 $sub_html[] = '<ul>';
 
-                $currentLanguage = LocalSetting :: get('platform_language');
+                $currentLanguage = LocalSetting :: getInstance()->get('platform_language');
 
                 foreach ($languages as $isocode => $language)
                 {

@@ -26,15 +26,6 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
-     */
-    public function warmUp()
-    {
-        return $this->warmUpForIdentifier(self :: IDENTIFIER_TOTAL_USER_DISK_QUOTA);
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)

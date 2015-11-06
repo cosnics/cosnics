@@ -91,7 +91,7 @@ class CalendarRepository
             $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
-            $accessToken = LocalSetting :: get('token', $configurationContext);
+            $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
 
             self :: $instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
         }
@@ -256,7 +256,7 @@ class CalendarRepository
      */
     public function saveAccessToken($accessToken)
     {
-        return LocalSetting :: create_local_setting(
+        return LocalSetting :: getInstance()->create(
             'token',
             $accessToken,
             \Chamilo\Application\Calendar\Extension\Google\Manager :: context());

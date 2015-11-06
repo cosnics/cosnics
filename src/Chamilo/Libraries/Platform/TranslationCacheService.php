@@ -43,23 +43,6 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
-     */
-    public function warmUp()
-    {
-        foreach ($this->getIdentifiers() as $cacheIdentifier)
-        {
-            if (! $this->warmUpForIdentifier($cacheIdentifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
      * @return string[]
      */
     private function getInternationalizationContexts()
