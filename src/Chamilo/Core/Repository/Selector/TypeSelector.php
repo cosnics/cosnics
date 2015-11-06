@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  * A collection of TypeSelectorCategory instances in a TypeSelector
@@ -217,7 +218,7 @@ class TypeSelector
                     $registration = \Chamilo\Configuration\Configuration :: registration(
                         $templateRegistration->get_content_object_type());
 
-                    $categoryType = $registration->get_category();
+                    $categoryType = $registration[Registration :: PROPERTY_CATEGORY];
 
                     if (! $typeSelector->category_type_exists($categoryType))
                     {
