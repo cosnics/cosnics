@@ -34,7 +34,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
      */
     public function warmUp()
     {
@@ -51,7 +51,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)
     {
@@ -69,6 +69,10 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         }
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getConfigurationFilePath()
     {
         return \Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/configuration.ini';
@@ -153,7 +157,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
      */
     public function getIdentifiers()
     {
@@ -162,7 +166,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getSettingsCache()
     {
@@ -171,7 +175,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getRegistrationsCache()
     {
@@ -180,7 +184,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getLanguagesCache()
     {

@@ -28,6 +28,12 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @return boolean
+     */
+    abstract public function clearAndWarmUpForIdentifiers($identifiers);
+
+    /**
+     *
      * @param string $identifier
      * @return mixed
      */

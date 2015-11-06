@@ -147,6 +147,8 @@ class CasAuthentication extends ExternalAuthentication
         }
         else
         {
+            usleep(500);
+
             $settings = $this->getConfiguration();
 
             // initialize phpCAS

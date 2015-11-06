@@ -26,7 +26,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
      */
     public function warmUp()
     {
@@ -35,7 +35,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)
     {
@@ -97,7 +97,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
      */
     public function getIdentifiers()
     {
@@ -106,7 +106,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @return mixed
+     * @return integer
      */
     public function getTotalUserDiskQuota()
     {

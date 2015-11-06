@@ -123,7 +123,7 @@ abstract class Renderer
             return;
         }
 
-        $itemRights = $this->getItemService()->determineRightsForItemsAndUser($this->getRootItems(), $this->get_user());
+        $userRights = $this->getItemService()->determineRightsForUser($this->get_user());
 
         $html = array();
 
@@ -133,7 +133,7 @@ abstract class Renderer
 
         foreach ($this->getRootItems() as $item)
         {
-            if ($itemRights[$item->get_id()])
+            if ($userRights[$item->get_id()])
             {
                 if (! $item->is_hidden())
                 {

@@ -25,7 +25,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
      */
     public function getIdentifiers()
     {
@@ -43,7 +43,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
      */
     public function warmUp()
     {
@@ -86,7 +86,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)
     {

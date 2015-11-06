@@ -1,14 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Repository\ItemRepository;
-use Chamilo\Core\Menu\Rights;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
-use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -56,6 +50,7 @@ class ItemService
     /**
      *
      * @param integer $parentIdentifier
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public function getItemsByParentIdentifier($parentIdentifier)
     {
@@ -64,40 +59,22 @@ class ItemService
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function getRootItems()
+    {
+        return $this->getItemsByParentIdentifier(0);
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item[] $items
      * @param User $user
      * @return boolean[]
      */
-    public function determineRightsForItemsAndUser($items, User $user)
+    public function determineRightsForUser(User $user)
     {
-        $cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cacheIdentifier = md5(serialize(array(__METHOD__, $user->get_id())));
-
-        if (! $cache->contains($cacheIdentifier))
-        {
-            $itemRights = array();
-
-            $entities = array();
-            $entities[] = new UserEntity();
-            $entities[] = new PlatformGroupEntity();
-
-            foreach ($items as $item)
-            {
-                if (Rights :: get_instance()->is_allowed(
-                    Rights :: VIEW_RIGHT,
-                    Manager :: context(),
-                    null,
-                    $entities,
-                    $item->get_id(),
-                    Rights :: TYPE_ITEM))
-                {
-                    $itemRights[$item->get_id()] = true;
-                }
-            }
-
-            $cache->save($cacheIdentifier, $itemRights);
-        }
-
-        return $cache->fetch($cacheIdentifier);
+        $rightsCacheService = new RightsCacheService($this);
+        return $rightsCacheService->getForUser($user);
     }
 }
