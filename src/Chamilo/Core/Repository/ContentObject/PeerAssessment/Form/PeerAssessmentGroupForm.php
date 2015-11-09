@@ -105,10 +105,10 @@ class PeerAssessmentGroupForm extends FormValidator
             $attributes['exclude'] = array();
             $attributes['nodesSelectable'] = true;
             $attributes['locale']['Display'] = Translation :: get('SelectUsersOrGroups');
-            $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
-            $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
-            $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
-            $locale['load_elements'] = true;
+            $attributes['locale']['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
+            $attributes['locale']['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
+            $attributes['locale']['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+            $attributes['locale']['load_elements'] = true;
 
             $attributes['search_url'] = $this->viewer->get_group_feed_path();
             $attributes['options']['load_elements'] = true;
