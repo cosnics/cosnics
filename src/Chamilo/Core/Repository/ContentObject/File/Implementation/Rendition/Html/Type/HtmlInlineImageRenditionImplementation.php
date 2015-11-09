@@ -9,6 +9,13 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
     public function render($parameters)
     {
         $object = $this->get_content_object();
+
+        if (! in_array($object->get_extension(), array('jpg', 'jpeg', 'gif', 'png', 'svg', 'bmp')))
+        {
+            $rendition = new HtmlInlineDefaultRenditionImplementation($this->get_context(), $this->get_content_object());
+            return $rendition->render($parameters);
+        }
+
         $name = $object->get_filename();
 
         $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
