@@ -75,20 +75,22 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifiers()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifier()
      */
     public function clearForIdentifier($identifier)
     {
-        return $this->getCacheProvider()->delete($identifier);
+        return $this->getCacheProvider()->delete((string) $identifier);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::getCache()
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     * @throws \Exception
+     * @return mixed
      */
     public function getForIdentifier($identifier)
     {
-        if (! $this->getCacheProvider()->contains($identifier))
+        if (! $this->getCacheProvider()->contains((string) $identifier))
         {
             if (! $this->warmUpForIdentifier($identifier))
             {
@@ -96,6 +98,6 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
             }
         }
 
-        return $this->getCacheProvider()->fetch($identifier);
+        return $this->getCacheProvider()->fetch((string) $identifier);
     }
 }

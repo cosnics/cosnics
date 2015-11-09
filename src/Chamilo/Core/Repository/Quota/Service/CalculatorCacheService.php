@@ -30,20 +30,6 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        switch ($identifier)
-        {
-            case self :: IDENTIFIER_TOTAL_USER_DISK_QUOTA :
-                return $this->warmpUpTotalUserDiskQuota();
-                break;
-        }
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function warmpUpTotalUserDiskQuota()
-    {
         $policy = PlatformSetting :: get('quota_policy', $this->getCachePathNamespace());
         $fallback = PlatformSetting :: get('quota_fallback', $this->getCachePathNamespace());
 
@@ -74,7 +60,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
             $totalQuota;
         }
 
-        return $this->getCacheProvider()->save(self :: IDENTIFIER_TOTAL_USER_DISK_QUOTA, $totalQuota);
+        return $this->getCacheProvider()->save($identifier, $totalQuota);
     }
 
     /**
@@ -97,7 +83,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @return integer
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function getTotalUserDiskQuota()
     {

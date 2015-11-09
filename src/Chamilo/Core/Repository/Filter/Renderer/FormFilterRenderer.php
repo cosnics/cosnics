@@ -2,12 +2,14 @@
 namespace Chamilo\Core\Repository\Filter\Renderer;
 
 use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Filter\FilterRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
-use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
@@ -18,8 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Filter\FilterRenderer;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  *
@@ -224,7 +224,9 @@ class FormFilterRenderer extends FilterRenderer
 
         // type
         $this->form_validator->addElement('category', Translation :: get('ContentObjectType'));
-        $type_selector = TypeSelector :: populate($this->get_content_object_types());
+
+        $typeSelectorFactory = new TypeSelectorFactory($this->get_content_object_types());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
 
         $select = $this->form_validator->addElement('select', FilterData :: FILTER_TYPE, null, array(), 'class="full"');
 

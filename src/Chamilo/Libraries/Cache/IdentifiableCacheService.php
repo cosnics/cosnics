@@ -38,14 +38,14 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
-     * @param string $identifier
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      * @return boolean
      */
     abstract public function warmUpForIdentifier($identifier);
 
     /**
      *
-     * @param string[] $identifiers
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
      * @return boolean
      */
     public function warmUpForIdentifiers($identifiers)
@@ -63,14 +63,14 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
-     * @param string $identifier
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      * @return boolean
      */
     abstract public function clearForIdentifier($identifier);
 
     /**
      *
-     * @param string[] $identifiers
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
      * @return boolean
      */
     public function clearForIdentifiers($identifiers)
@@ -88,6 +88,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
      * @return boolean
      */
     public function clearAndWarmUpForIdentifiers($identifiers)
@@ -105,6 +106,7 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      * @return boolean
      */
     public function clearAndWarmUpForIdentifier($identifier)
@@ -119,14 +121,14 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
-     * @param string $identifier
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      * @return mixed
      */
     abstract public function getForIdentifier($identifier);
 
     /**
      *
-     * @return string[]
+     * @return \Chamilo\Libraries\Cache\ParameterBag[]|string[]
      */
     abstract public function getIdentifiers();
 }

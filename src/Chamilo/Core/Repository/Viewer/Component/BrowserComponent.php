@@ -27,6 +27,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -325,7 +326,9 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $type_selector = TypeSelector :: populate($this->get_types(), $this->get_user_id());
+        $typeSelectorFactory = new TypeSelectorFactory($this->get_types(), $this->get_user_id());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
+
         $all_types = $type_selector->get_unique_content_object_template_ids();
 
         $type_selection = TypeSelector :: get_selection();
