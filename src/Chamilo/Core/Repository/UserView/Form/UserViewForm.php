@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\UserView\Form;
 
-use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
 use Chamilo\Core\Repository\UserView\Storage\DataManager;
@@ -81,8 +81,9 @@ class UserViewForm extends FormValidator
         $registrations = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types();
         $hidden_types = \Chamilo\Core\Repository\Storage\DataManager :: get_active_helper_types();
 
-        $type_selector = TypeSelector :: populate(
+        $typeSelectorFactory = new TypeSelectorFactory(
             \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
 
         foreach ($type_selector->get_categories() as $category)
         {

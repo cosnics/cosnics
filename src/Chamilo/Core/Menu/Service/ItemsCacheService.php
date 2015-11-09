@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
-use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 
 /**
  *
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ItemsCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
+class ItemsCacheService extends DoctrineFilesystemCacheService
 {
     const IDENTIFIER_ITEMS = 'items';
 
@@ -55,12 +54,8 @@ class ItemsCacheService extends DoctrineFilesystemCacheService implements UserBa
      */
     public function warmUpForIdentifier($identifier)
     {
-        switch ($identifier)
-        {
-            case self :: IDENTIFIER_ITEMS :
-                return $this->warmUpItems();
-                break;
-        }
+        $itemsByParentIdentifier = $this->processItemResultSet($this->getItemRepository()->findItems());
+        return $this->getCacheProvider()->save($identifier, $itemsByParentIdentifier);
     }
 
     /**
@@ -84,16 +79,6 @@ class ItemsCacheService extends DoctrineFilesystemCacheService implements UserBa
         }
 
         return $itemsByParentIdentifier;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    private function warmUpItems()
-    {
-        $itemsByParentIdentifier = $this->processItemResultSet($this->getItemRepository()->findItems());
-        return $this->getCacheProvider()->save(self :: IDENTIFIER_ITEMS, $itemsByParentIdentifier);
     }
 
     /**

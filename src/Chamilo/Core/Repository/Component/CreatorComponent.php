@@ -23,6 +23,7 @@ use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 /**
  * $Id: creator.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -53,7 +54,9 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             throw new NotAllowedException();
         }
 
-        $type_selector = TypeSelector :: populate($this->get_allowed_content_object_types(), $this->get_user_id());
+        $typeSelectorFactory = new TypeSelectorFactory($this->get_allowed_content_object_types(), $this->get_user_id());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
+
         $type_selector_renderer = new FullTypeSelectorRenderer($this, $type_selector);
 
         $this->template_id = TypeSelector :: get_selection();

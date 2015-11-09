@@ -176,6 +176,6 @@ class StringUtilities
             $string = strip_tags($string);
         }
 
-        return (string) $this->createString($string)->safeTruncate($length, $character);
+        return (string) $this->createString($string)->truncate($length, $character);
     }
 }

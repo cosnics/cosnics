@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Form;
 
-use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Libraries\File\Path;
@@ -10,13 +12,11 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
-use Chamilo\Core\Repository\Filter\FilterData;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * $Id: repository_filter_form.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -87,7 +87,9 @@ class RepositoryFilterForm extends FormValidator
         $select->addOption('--------------------------', 'disabled_' . $disabled_counter, array('disabled'));
         $disabled_counter ++;
 
-        $type_selector = TypeSelector :: populate($this->get_allowed_content_object_types());
+        $typeSelectorFactory = new TypeSelectorFactory($this->get_allowed_content_object_types());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
+
         $types = $type_selector->as_tree();
         unset($types[0]);
 

@@ -2,11 +2,15 @@
 namespace Chamilo\Core\Repository\Filter\Renderer;
 
 use Chamilo\Core\Repository\Filter\FilterData;
-use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Filter\FilterRenderer;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -16,10 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\Filter\FilterRenderer;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 
 /**
  *
@@ -200,7 +200,8 @@ class ConditionFilterRenderer extends FilterRenderer
             // Category
             if (! is_numeric($type) && ! empty($type))
             {
-                $type_selector = TypeSelector :: populate(DataManager :: get_registered_types());
+                $typeSelectorFactory = new TypeSelectorFactory(DataManager :: get_registered_types());
+                $type_selector = $typeSelectorFactory->getTypeSelector();
 
                 try
                 {
