@@ -36,7 +36,7 @@ class UserDetailComponent extends Manager
         }
 
         $id = Request :: get(self :: PARAM_USER_USER_ID);
-
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $id);
         if ($id)
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
@@ -202,7 +202,7 @@ class UserDetailComponent extends Manager
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: package(),
+                        Application :: PARAM_CONTEXT => \Chamilo\Core\Group\Manager :: package(),
                         \Chamilo\Core\Group\Manager :: PARAM_ACTION => \Chamilo\Core\Group\Manager :: ACTION_VIEW_GROUP,
                         \Chamilo\Core\Group\Manager :: PARAM_GROUP_ID => $group->get_id()));
 
@@ -271,10 +271,5 @@ class UserDetailComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_detail');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }

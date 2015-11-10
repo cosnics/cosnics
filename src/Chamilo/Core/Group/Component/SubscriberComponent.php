@@ -27,6 +27,7 @@ class SubscriberComponent extends Manager
     {
         $user = $this->get_user();
         $group_id = Request :: get(self :: PARAM_GROUP_ID);
+        $this->set_parameter(self :: PARAM_GROUP_ID, $group_id);
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -124,10 +125,5 @@ class SubscriberComponent extends Manager
                         self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))),
                 Translation :: get('ViewerComponent')));
         $breadcrumbtrail->add_help('group general');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_GROUP_ID);
     }
 }

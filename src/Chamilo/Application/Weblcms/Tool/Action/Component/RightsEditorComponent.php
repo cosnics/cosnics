@@ -36,7 +36,6 @@ class RightsEditorComponent extends Manager
     public function run()
     {
         $course = $this->get_course();
-
         if (! $course->is_course_admin($this->get_user()) && ! $this->get_user()->is_platform_admin())
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();

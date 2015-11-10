@@ -22,6 +22,7 @@ class DeleterComponent extends Manager
     public function run()
     {
         $ids = $this->getRequest()->get(self :: PARAM_USER_VIEW_ID);
+        $this->set_parameter(self :: PARAM_USER_VIEW_ID, $ids);
 
         $failures = 0;
 
@@ -89,14 +90,5 @@ class DeleterComponent extends Manager
                         array('OBJECT' => Translation :: get('UserView')),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    /**
-     *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_VIEW_ID);
     }
 }

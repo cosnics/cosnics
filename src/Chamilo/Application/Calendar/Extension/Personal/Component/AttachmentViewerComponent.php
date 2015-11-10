@@ -95,15 +95,6 @@ class AttachmentViewerComponent extends Manager
 
     /**
      *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_OBJECT, self :: PARAM_PUBLICATION_ID);
-    }
-
-    /**
-     *
      * @param ContentObject $attachment
      * @return string>
      */

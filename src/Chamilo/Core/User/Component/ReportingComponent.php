@@ -20,6 +20,8 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $this->get_user_id());
+
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
@@ -29,10 +31,5 @@ class ReportingComponent extends Manager implements DelegateComponent
             \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }

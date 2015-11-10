@@ -65,6 +65,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     public function run()
     {
+        $this->set_parameter(self :: PARAM_USER_ID, $this->get_user_id());
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID),
             new StaticConditionVariable($this->get_current_user_id()));
@@ -558,15 +559,6 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         }
 
         return $this->rights_user_id;
-    }
-
-    /**
-     *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_ID);
     }
 
     /**

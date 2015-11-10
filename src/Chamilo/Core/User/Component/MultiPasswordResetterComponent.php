@@ -30,6 +30,7 @@ class MultiPasswordResetterComponent extends Manager
     public function run()
     {
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -112,10 +113,5 @@ class MultiPasswordResetterComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_password_resetter');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }

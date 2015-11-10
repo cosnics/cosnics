@@ -505,13 +505,12 @@ abstract class Manager extends Application
     }
 
     /**
-     * Gets the category menu.
-     * This menu contains all categories in the repository of the current user. Additionally
+     * Gets the category menu. This menu contains all categories in the repository of the current user. Additionally
      * some menu items are added - Recycle Bin - Create a new object - Quota - Search Results (ony if search is
      * performed)
      *
      * @param $force_search boolean Whether the user is searching. If true, overrides the default, which is to request
-     *        this information from the search form.
+     *            this information from the search form.
      * @return ContentObjectCategoryMenu The menu
      */
     private function get_category_menu($force_search = false)

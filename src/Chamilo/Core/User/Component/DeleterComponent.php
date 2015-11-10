@@ -29,6 +29,7 @@ class DeleterComponent extends Manager
         }
 
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
 
         if (! is_array($ids))
         {
@@ -95,10 +96,5 @@ class DeleterComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_deleter');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }

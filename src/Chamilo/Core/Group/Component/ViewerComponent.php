@@ -46,6 +46,7 @@ class ViewerComponent extends Manager implements TableSupport
     public function run()
     {
         $id = Request :: get(self :: PARAM_GROUP_ID);
+        $this->set_parameter(self :: PARAM_GROUP_ID, $id);
         if ($id)
         {
             $this->group = $this->retrieve_group($id);
@@ -231,11 +232,6 @@ class ViewerComponent extends Manager implements TableSupport
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)),
                 Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add_help('group general');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_GROUP_ID);
     }
 
     /*

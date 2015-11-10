@@ -30,6 +30,8 @@ class UpdaterComponent extends Manager
         }
 
         $id = Request :: get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $id);
+
         if ($id)
         {
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
@@ -79,10 +81,5 @@ class UpdaterComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_updater');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID);
     }
 }

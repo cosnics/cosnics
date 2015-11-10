@@ -31,6 +31,7 @@ class UpdaterComponent extends Manager
         }
 
         $id = Request :: Get(Manager :: PARAM_HELP_ITEM);
+        $this->set_parameter(Manager :: PARAM_HELP_ITEM, $id);
 
         if ($id)
         {
@@ -73,10 +74,5 @@ class UpdaterComponent extends Manager
                 $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_BROWSE_HELP_ITEMS)),
                 Translation :: get('HelpManagerBrowserComponent')));
         $breadcrumbtrail->add_help('help_updater');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(Manager :: PARAM_HELP_ITEM);
     }
 }

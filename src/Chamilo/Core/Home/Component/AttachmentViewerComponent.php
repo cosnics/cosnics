@@ -106,12 +106,6 @@ class AttachmentViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function get_additional_parameters()
-    {
-        $params = array();
-        return $params;
-    }
-
     /**
      * Constructs the attachment url for the given attachment and the current object.
      *

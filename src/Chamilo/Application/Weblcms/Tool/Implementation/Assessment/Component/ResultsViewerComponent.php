@@ -49,6 +49,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
     {
         $pid = Request :: get(self :: PARAM_ASSESSMENT);
 
+        $this->set_parameter(self :: PARAM_ASSESSMENT, $pid);
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $pid);
@@ -157,16 +158,6 @@ class ResultsViewerComponent extends Manager implements TableSupport
             Translation :: get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title())));
 
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
-    }
-
-    /**
-     * Returns the additional parameters needed for registration
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ASSESSMENT);
     }
 
     /**

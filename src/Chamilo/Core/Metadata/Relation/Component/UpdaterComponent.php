@@ -36,6 +36,8 @@ class UpdaterComponent extends Manager
         }
 
         $relation_id = Request :: get(self :: PARAM_RELATION_ID);
+        $this->set_parameter(self :: PARAM_RELATION_ID, $relation_id);
+
         $relation = DataManager :: retrieve_by_id(Relation :: class_name(), $relation_id);
 
         $form = new RelationForm($relation, new EntityTranslationFormService($relation), $this->get_url());
@@ -82,15 +84,5 @@ class UpdaterComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    /**
-     * Returns the additional parameters
-     *
-     * @return string[]
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_RELATION_ID);
     }
 }

@@ -28,6 +28,7 @@ class DeleterComponent extends Manager
         }
 
         $element_ids = $this->getRequest()->get(self :: PARAM_ELEMENT_ID);
+        $this->set_parameter(self :: PARAM_ELEMENT_ID, $element_ids);
 
         try
         {
@@ -89,15 +90,5 @@ class DeleterComponent extends Manager
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
                     array(self :: PARAM_ELEMENT_ID)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    /**
-     * Returns the additional parameters
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ELEMENT_ID);
     }
 }

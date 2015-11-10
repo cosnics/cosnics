@@ -23,6 +23,8 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
         $pid = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID) ? Request :: get(
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID) : $_POST[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID];
 
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $pid);
+
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $pid);
@@ -110,10 +112,5 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
     }
 }

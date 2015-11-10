@@ -43,6 +43,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
     public function run()
     {
         $group_id = Request :: get(self :: PARAM_GROUP_ID);
+        $this->set_parameter(self :: PARAM_GROUP_ID, $group_id);
 
         if (isset($group_id))
         {
@@ -159,10 +160,5 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
                         self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))),
                 Translation :: get('ViewerComponent')));
         $breadcrumbtrail->add_help('group general');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_GROUP_ID);
     }
 }

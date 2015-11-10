@@ -26,6 +26,9 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
+        $ids = $this->getRequest()->get(self :: PARAM_GROUP_ID);
+        $this->set_parameter(self :: PARAM_GROUP_ID, $ids);
+
         $user = $this->get_user();
 
         if (! $this->get_user()->is_platform_admin())
@@ -56,7 +59,6 @@ class DeleterComponent extends Manager
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('DeleteGroup')));
         $trail->add_help('group general');
 
-        $ids = $this->getRequest()->get(self :: PARAM_GROUP_ID);
         $failures = 0;
 
         if (! empty($ids))
@@ -147,10 +149,5 @@ class DeleterComponent extends Manager
                         self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))),
                 Translation :: get('ViewerComponent')));
         $breadcrumbtrail->add_help('group general');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_GROUP_ID);
     }
 }

@@ -36,6 +36,7 @@ class MoverComponent extends Manager
     public function run()
     {
         $ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $ids);
 
         if (! empty($ids))
         {
@@ -244,10 +245,5 @@ class MoverComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
                 Translation :: get('RepositoryManagerBrowserComponent')));
         $breadcrumbtrail->add_help('repository_mover');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

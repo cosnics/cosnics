@@ -22,6 +22,8 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->set_parameter(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID, $this->get_user_id());
+
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
@@ -29,8 +31,6 @@ class ViewerComponent extends Manager implements DelegateComponent
 
         $template_id = Request :: get(self :: PARAM_TEMPLATE_ID, 1);
         $this->set_parameter(self :: PARAM_TEMPLATE_ID, $template_id);
-
-        $template_id = Request :: get(self :: PARAM_TEMPLATE_ID, 1);
 
         switch ($template_id)
         {
@@ -65,11 +65,6 @@ class ViewerComponent extends Manager implements DelegateComponent
                         \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS)),
                 Translation :: get('UserManagerAdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_reporting');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
     }
 }
 

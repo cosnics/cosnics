@@ -101,9 +101,4 @@ class CourseUserImporterComponent extends Manager
 
         $breadcrumbtrail->add_help('weblcms_course_user_importer');
     }
-
-    public function get_additional_parameters()
-    {
-        return array();
-    }
 }

@@ -33,9 +33,11 @@ abstract class UserApproverComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
+
         $choice = $this->getChoice();
+        $this->set_parameter(self :: PARAM_USER_USER_ID, $choice);
 
         if (! is_array($ids))
         {
@@ -135,10 +137,5 @@ abstract class UserApproverComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_USER_APPROVAL_BROWSER)),
                 Translation :: get('UserManagerUserApprovalBrowserComponent')));
         $breadcrumbtrail->add_help('user_approver');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_USER_ID, self :: PARAM_CHOICE);
     }
 }

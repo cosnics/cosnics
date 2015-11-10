@@ -40,6 +40,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
             $mode = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE);
 
+            $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE, $mode);
             $publish_type = PlatformSetting :: get('display_publication_screen', 'Chamilo\Application\Weblcms');
 
             $show_form = (($publish_type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_TYPE_FORM) || ($publish_type ==
@@ -50,7 +51,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
             if ($publisher->ready_to_publish())
             {
-               $success = $publisher->publish();
+                $success = $publisher->publish();
 
                 $message = Translation :: get(
                     ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
@@ -88,10 +89,5 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
                 return implode(PHP_EOL, $html);
             }
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE);
     }
 }

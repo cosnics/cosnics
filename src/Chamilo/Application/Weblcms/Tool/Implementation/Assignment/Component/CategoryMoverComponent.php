@@ -14,8 +14,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 {
 
     /**
-     * #Override
-     * Returns the additional parameters as an array.
+     * #Override Returns the additional parameters as an array.
      *
      * @return array The additional parameters
      */

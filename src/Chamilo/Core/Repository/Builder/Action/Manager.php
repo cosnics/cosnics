@@ -13,8 +13,7 @@ use Exception;
  * @package repository.lib.complex_builder
  */
 /**
- * This class represents a basic complex builder structure.
- * When a builder is needed for a certain type of complex
+ * This class represents a basic complex builder structure. When a builder is needed for a certain type of complex
  * object an extension should be written. We will make use of the repoviewer for selection, creation of objects
  *
  * @author vanpouckesven
