@@ -364,7 +364,7 @@ class Translation
     {
         if (in_array(strtolower($variable), $this->reservedWords))
         {
-            continue;
+            return;
         }
 
         if (! in_array($variable, self :: $recentlyAdded[$language][$context]))
