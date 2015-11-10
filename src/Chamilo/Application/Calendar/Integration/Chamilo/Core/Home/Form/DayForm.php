@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Form;
 
+use Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type\Day;
 use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type\Day;
 
 class DayForm extends ConfigurationForm
 {

@@ -10,7 +10,7 @@
         "kriswallsmith/assetic" : "=v1.1.2",
         "natxet/CssMin" : "=3.0.2",
         "mrclay/minify" : "=2.2.0",
-        "danielstjules/stringy" : "1.*",
+        "danielstjules/stringy" : "2.*",
         "ensepar/html2pdf" : "=1.0.1",
         "phpoffice/phpexcel" : "=1.8.0",
         "kigkonsult/icalcreator": "*"

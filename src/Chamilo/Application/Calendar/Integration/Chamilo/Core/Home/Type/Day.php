@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *

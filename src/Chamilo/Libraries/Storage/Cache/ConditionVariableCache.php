@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\Cache;
 
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *

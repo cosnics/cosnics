@@ -4,10 +4,10 @@ namespace Chamilo\Core\Group\Component;
 use Chamilo\Core\Group\Form\GroupUserImportForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: $

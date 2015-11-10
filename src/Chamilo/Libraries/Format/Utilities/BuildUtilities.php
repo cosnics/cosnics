@@ -4,10 +4,10 @@ namespace Chamilo\Libraries\Format\Utilities;
 use Chamilo\Configuration\Package\Finder\BasicBundles;
 use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Filesystem;
-use Composer\Package\Loader\JsonLoader;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ArrayLoader;
+use Composer\Package\Loader\JsonLoader;
 use Composer\Script\Event;
 
 class BuildUtilities

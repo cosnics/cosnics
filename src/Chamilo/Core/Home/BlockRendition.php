@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\YearCalendar;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *

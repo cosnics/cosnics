@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Menu;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

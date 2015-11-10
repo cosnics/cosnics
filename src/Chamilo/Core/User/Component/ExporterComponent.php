@@ -106,7 +106,7 @@ class ExporterComponent extends Manager
         $user_array[$firstname_title] = $user->get_firstname();
         $user_array[$username_title] = $user->get_username();
         $user_array[$email_title] = $user->get_email();
-        $user_array[$language_title] = LocalSetting :: get('platform_language');
+        $user_array[$language_title] = LocalSetting :: getInstance()->get('platform_language');
         $user_array[$status_title] = $user->get_status();
         $user_array[$active_title] = $user->get_active();
         $user_array[$official_code_title] = $user->get_official_code();
@@ -135,7 +135,7 @@ class ExporterComponent extends Manager
         $user_array[User :: PROPERTY_FIRSTNAME] = $user->get_firstname();
         $user_array[User :: PROPERTY_USERNAME] = $user->get_username();
         $user_array[User :: PROPERTY_EMAIL] = $user->get_email();
-        $user_array['language'] = LocalSetting :: get('platform_language');
+        $user_array['language'] = LocalSetting :: getInstance()->get('platform_language');
         $user_array[User :: PROPERTY_STATUS] = $user->get_status();
         $user_array[User :: PROPERTY_ACTIVE] = $user->get_active();
         $user_array[User :: PROPERTY_OFFICIAL_CODE] = $user->get_official_code();

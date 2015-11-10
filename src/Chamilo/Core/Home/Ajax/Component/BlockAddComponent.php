@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\BlockRendition;
+use Chamilo\Core\Home\Renderer\Factory;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Renderer\Factory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

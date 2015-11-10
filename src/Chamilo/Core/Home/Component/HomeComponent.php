@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
-use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Renderer\Renderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Core\Home\Renderer\Factory;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Manager;
+use Chamilo\Core\Home\Renderer\Factory;
+use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *

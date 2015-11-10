@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Storage\DataClass\Column;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Theme;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Home\Storage\DataClass\Element;
 
 /**
  *

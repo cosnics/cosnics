@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
 /**
@@ -34,26 +34,9 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCache()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
-    public function fillCache()
-    {
-        foreach ($this->getCacheIdentifiers() as $identifier)
-        {
-            if (! $this->fillCacheForIdentifier($identifier))
-            {
-                throw new \Exception('CacheError: ' . $identifier);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::fillCacheForIdentifier()
-     */
-    public function fillCacheForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier)
     {
         switch ($identifier)
         {
@@ -69,6 +52,10 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         }
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getConfigurationFilePath()
     {
         return \Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/configuration.ini';
@@ -153,37 +140,37 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCacheIdentifiers()
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
      */
-    public function getCacheIdentifiers()
+    public function getIdentifiers()
     {
         return array(self :: IDENTIFIER_SETTINGS, self :: IDENTIFIER_REGISTRATIONS, self :: IDENTIFIER_LANGUAGES);
     }
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getSettingsCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_SETTINGS);
+        return $this->getForIdentifier(self :: IDENTIFIER_SETTINGS);
     }
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getRegistrationsCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_REGISTRATIONS);
+        return $this->getForIdentifier(self :: IDENTIFIER_REGISTRATIONS);
     }
 
     /**
      *
-     * @return mixed
+     * @return string[]
      */
     public function getLanguagesCache()
     {
-        return $this->getCacheForIdentifier(self :: IDENTIFIER_LANGUAGES);
+        return $this->getForIdentifier(self :: IDENTIFIER_LANGUAGES);
     }
 }

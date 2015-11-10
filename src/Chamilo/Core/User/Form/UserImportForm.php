@@ -14,6 +14,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 
 /**
  * $Id: user_import_form.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
@@ -168,11 +169,8 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    LocalSetting :: create_local_setting(
-                        'platform_language',
-                        $csvuser['language'],
-                        'Chamilo\Core\Admin',
-                        $user->get_id());
+                    $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+                    $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
 
                     $send_mail = intval($values['mail']['send_mail']);
                     if ($send_mail)
@@ -226,11 +224,8 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    LocalSetting :: create_local_setting(
-                        'platform_language',
-                        $csvuser['language'],
-                        'Chamilo\Core\Admin',
-                        $user->get_id());
+                    $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+                    $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
                 }
             }
             elseif ($action == 'D')
@@ -295,9 +290,8 @@ class UserImportForm extends FormValidator
         }
         // 1. Check if username exists
         if (($action == 'A' &&
-             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) ||
-             ($action != 'A' &&
-             \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
+             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) || ($action !=
+             'A' && \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
         {
             $failures ++;
         }

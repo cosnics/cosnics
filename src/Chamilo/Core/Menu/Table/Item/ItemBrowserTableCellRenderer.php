@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Table\Item;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataManager;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

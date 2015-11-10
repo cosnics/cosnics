@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -91,7 +91,7 @@ class CalendarRepository
             $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
             $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
-            $accessToken = LocalSetting :: get('token', $configurationContext);
+            $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
 
             self :: $instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
         }
@@ -256,7 +256,7 @@ class CalendarRepository
      */
     public function saveAccessToken($accessToken)
     {
-        return LocalSetting :: create_local_setting(
+        return LocalSetting :: getInstance()->create(
             'token',
             $accessToken,
             \Chamilo\Application\Calendar\Extension\Google\Manager :: context());

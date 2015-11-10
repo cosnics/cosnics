@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Core\Repository\Builder\Interfaces\MenuSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 abstract class Manager extends Application implements TabsTypeSelectorSupport, TableSupport
 {
@@ -377,7 +378,9 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
             $content_object_types = $content_object->get_allowed_types();
         }
 
-        $type_selector = TypeSelector :: populate($content_object_types, $this->get_user_id());
+        $typeSelectorFactory = new TypeSelectorFactory($content_object_types, $this->get_user_id());
+        $type_selector = $typeSelectorFactory->getTypeSelector();
+
         $type_selector_renderer = new FullTypeSelectorRenderer(
             $this,
             $type_selector,

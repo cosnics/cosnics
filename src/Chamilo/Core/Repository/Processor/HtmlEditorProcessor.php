@@ -23,7 +23,7 @@ abstract class HtmlEditorProcessor
 
     public static function factory($type, $parent, $selected_content_objects)
     {
-        $editor = LocalSetting :: get('html_editor');
+        $editor = LocalSetting :: getInstance()->get('html_editor');
         $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($editor)->upperCamelize() .
              '\Processor';
 

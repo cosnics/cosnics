@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Mail\Phpmailer;
 
+use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\Mail;
 use PHPMailer;
-use Chamilo\Configuration\Storage\DataClass\MailLog;
 
 /**
  * $Id: phpmailer_mail.class.php 128 2009-11-09 13:13:20Z vanpouckesven $

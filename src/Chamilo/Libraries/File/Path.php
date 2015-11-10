@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\File;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

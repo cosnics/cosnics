@@ -4,15 +4,15 @@ namespace Chamilo\Core\Repository\Filter\Renderer;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterRenderer;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  *
@@ -179,7 +179,8 @@ class HtmlFilterRenderer extends FilterRenderer
             // Category
             if (! is_numeric($type) && ! empty($type))
             {
-                $type_selector = TypeSelector :: populate(DataManager :: get_registered_types());
+                $typeSelectorFactory = new TypeSelectorFactory(DataManager :: get_registered_types());
+                $type_selector = $typeSelectorFactory->getTypeSelector();
 
                 try
                 {

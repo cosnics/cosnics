@@ -2,26 +2,26 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -232,9 +232,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
              $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
         {
-            $renderer->setStartHour(LocalSetting :: get('working_hours_start'));
-            $renderer->setEndHour(LocalSetting :: get('working_hours_end'));
-            $renderer->setHideOtherHours(LocalSetting :: get('hide_none_working_hours'));
+            $renderer->setStartHour(LocalSetting :: getInstance()->get('working_hours_start'));
+            $renderer->setEndHour(LocalSetting :: getInstance()->get('working_hours_end'));
+            $renderer->setHideOtherHours(LocalSetting :: getInstance()->get('hide_none_working_hours'));
         }
 
         $html = array();

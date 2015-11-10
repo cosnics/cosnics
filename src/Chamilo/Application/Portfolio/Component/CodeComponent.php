@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Portfolio\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**

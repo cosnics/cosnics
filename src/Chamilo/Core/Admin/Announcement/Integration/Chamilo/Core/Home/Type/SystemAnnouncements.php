@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\SortableTable;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home\SortableTable;
 
 class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
 {

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
@@ -19,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

@@ -2,11 +2,11 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * A content object publication in the personal calendar application

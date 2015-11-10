@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *

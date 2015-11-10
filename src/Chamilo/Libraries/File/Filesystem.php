@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\File;
 
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DirectoryIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: filesystem.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
