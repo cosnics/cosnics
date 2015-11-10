@@ -70,7 +70,7 @@ class Browser extends User
      */
     public function load_browser()
     {
-        $buffer = split(
+        $buffer = explode(
             "#",
             "Gecko|Gecko#Mozilla/3|Mozilla 3.x#Mozilla/4.0|Mozilla 4.0x#Mozilla/4.5|Mozilla 4.5x#Mozilla/4.6|Mozilla 4.6x#Mozilla/4.7|Mozilla 4.7x#Mozilla/5.0|Mozilla 5.0x#MSIE 1.2|MSIE 1.2#MSIE 3.01|MSIE 3.x#MSIE 3.02|MSIE 3.x#MSIE 4.0|MSIE 4.x#MSIE 4.01|MSIE 4.x#MSIE 4.5|MSIE 4.5#MSIE 5.0b1|MSIE 5.0x#MSIE 5.0b2|MSIE 5.0x#MSIE 5.0|MSIE 5.0x#MSIE 5.01|MSIE 5.0x#MSIE 5.1|MSIE 5.1#MSIE 5.1b1|MSIE 5.1#MSIE 5.5|MSIE 5.5#MSIE 5.5b1|MSIE 5.5#MSIE 5.5b2|MSIE 5.5#MSIE 6.0|MSIE 6#MSIE 6.0b|MSIE 6#MSIE 6.5a|MSIE 6.5#Lynx/2.8.0|Lynx 2#Lynx/2.8.1|Lynx 2#Lynx/2.8.2|Lynx 2#Lynx/2.8.3|Lynx 2#Lynx/2.8.4|Lynx 2#Lynx/2.8.5|Lynx 2#HTTrack 3.0x|HTTrack#OmniWeb/4.0.1|OmniWeb#Opera 3.60|Opera 3.60#Opera 4.0|Opera 4#Opera 4.01|Opera 4#Opera 4.02|Opera 4#Opera 5|Opera 5#Opera/3.60|Opera 3.60#Opera/4|Opera 4#Opera/5|Opera 5#Opera/6|Opera 6#Opera 6|Opera 6#Netscape6|NS 6#Netscape/6|NS 6#Netscape7|NS 7#Netscape/7|NS 7#Konqueror/2.0|Konqueror 2#Konqueror/2.0.1|Konqueror 2#Konqueror/2.1|Konqueror 2#Konqueror/2.1.1|Konqueror 2#Konqueror/2.1.2|Konqueror 2#Konqueror/2.2|Konqueror 2#Teleport Pro|Teleport Pro#WebStripper|WebStripper#WebZIP|WebZIP#Netcraft Web|NetCraft#Googlebot|Googlebot#WebCrawler|WebCrawler#InternetSeer|InternetSeer#ia_archiver|ia archiver");
 
@@ -79,8 +79,7 @@ class Browser extends User
         $i = 0;
         foreach ($buffer as $buffer1)
         {
-            list($list_browsers[$i][0], $list_browsers[$i][1]) = split('[|]', $buffer1);
-            $i ++;
+            $list_browsers[] = explode('[|]', $buffer1);
         }
         return $list_browsers;
     }
