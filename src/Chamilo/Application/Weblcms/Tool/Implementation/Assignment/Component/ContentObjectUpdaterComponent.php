@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  *
- * @package application.weblcms.tool.assignment.php.component
- *          ContentObject updater for assignments
+ * @package application.weblcms.tool.assignment.php.component ContentObject updater for assignments
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */

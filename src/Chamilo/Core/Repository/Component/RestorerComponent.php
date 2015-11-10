@@ -23,8 +23,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
  * @package repository.lib.repository_manager.component
  */
 /**
- * Repository manager component to restore objects.
- * This means moving objects from the recycle bin to there original
+ * Repository manager component to restore objects. This means moving objects from the recycle bin to there original
  * location.
  */
 class RestorerComponent extends Manager
@@ -36,7 +35,7 @@ class RestorerComponent extends Manager
     public function run()
     {
         $ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
-
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $ids);
         if (! empty($ids))
         {
             if (! is_array($ids))
@@ -163,10 +162,5 @@ class RestorerComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS)),
                 Translation :: get('RepositoryManagerRecycleBinBrowserComponent')));
         $breadcrumbtrail->add_help('repository_restorer');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

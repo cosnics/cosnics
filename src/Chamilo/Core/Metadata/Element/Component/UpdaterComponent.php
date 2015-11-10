@@ -32,6 +32,8 @@ class UpdaterComponent extends Manager
         }
 
         $element_id = Request :: get(self :: PARAM_ELEMENT_ID);
+        $this->set_parameter(self :: PARAM_ELEMENT_ID, $element_id);
+
         $element = DataManager :: retrieve_by_id(Element :: class_name(), $element_id);
 
         $form = new ElementForm($this->get_url(), $element);
@@ -94,15 +96,5 @@ class UpdaterComponent extends Manager
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
                     array(self :: PARAM_ELEMENT_ID)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    /**
-     * Returns the additional parameters
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ELEMENT_ID);
     }
 }

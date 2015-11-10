@@ -58,6 +58,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     public function run()
     {
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $id);
 
         if ($id)
         {
@@ -515,11 +516,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     public function get_object()
     {
         return $this->object;
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 
     public function get_export_types()

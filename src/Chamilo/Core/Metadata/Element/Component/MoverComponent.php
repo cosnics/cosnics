@@ -25,9 +25,13 @@ class MoverComponent extends Manager
     {
         if ($metadata_element_id = Request :: get(Manager :: PARAM_ELEMENT_ID))
         {
+            $this->set_parameter(self :: PARAM_ELEMENT_ID, $metadata_element_id);
+
             $metadata_element = DataManager :: retrieve_by_id(Element :: class_name(), $metadata_element_id);
             if ($move = Request :: get(Manager :: PARAM_MOVE))
             {
+                $this->set_parameter(self :: PARAM_MOVE, $move);
+
                 $metadata_element->move($move);
 
                 $this->redirect(
@@ -63,13 +67,5 @@ class MoverComponent extends Manager
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
                     $this->get_additional_parameters()),
                 Translation :: get('BrowserComponent')));
-    }
-
-    /**
-     * @inheritedDoc
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ELEMENT_ID, self :: PARAM_MOVE);
     }
 }

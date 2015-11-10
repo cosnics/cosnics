@@ -38,6 +38,8 @@ class UpdaterComponent extends Manager
         }
 
         $schema_id = Request :: get(self :: PARAM_SCHEMA_ID);
+        $this->set_parameter(self :: PARAM_SCHEMA_ID, $schema_id);
+
         $schema = DataManager :: retrieve_by_id(Schema :: class_name(), $schema_id);
 
         if ($schema->is_fixed())
@@ -107,15 +109,5 @@ class UpdaterComponent extends Manager
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
                     array(self :: PARAM_SCHEMA_ID)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    /**
-     * Returns the additional parameters
-     *
-     * @return string[]
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SCHEMA_ID);
     }
 }

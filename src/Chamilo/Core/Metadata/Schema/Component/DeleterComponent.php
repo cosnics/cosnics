@@ -34,6 +34,7 @@ class DeleterComponent extends Manager
         }
 
         $schema_ids = $this->getRequest()->get(self :: PARAM_SCHEMA_ID);
+        $this->set_parameter(self :: PARAM_SCHEMA_ID, $schema_ids);
 
         try
         {
@@ -94,14 +95,5 @@ class DeleterComponent extends Manager
                     array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
                     array(self :: PARAM_SCHEMA_ID)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SCHEMA_ID);
     }
 }

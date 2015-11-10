@@ -63,6 +63,10 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         {
             $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
+            $this->set_paramater(
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
+                $this->publication_id);
+
             $this->pub = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                 ContentObjectPublication :: class_name(),
                 $this->publication_id);
@@ -367,11 +371,6 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     public function get_assessment_parameters()
     {
         return array();
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
     }
 
     public function get_assessment_current_url()

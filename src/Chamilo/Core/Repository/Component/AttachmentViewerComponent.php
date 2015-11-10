@@ -22,6 +22,8 @@ class AttachmentViewerComponent extends Manager
     public function run()
     {
         $object_id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $object_id);
+
         $attachment_id = Request :: get(self :: PARAM_ATTACHMENT_ID);
 
         Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
@@ -76,10 +78,5 @@ class AttachmentViewerComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

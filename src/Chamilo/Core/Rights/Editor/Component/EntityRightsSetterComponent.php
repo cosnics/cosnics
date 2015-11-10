@@ -25,6 +25,10 @@ class EntityRightsSetterComponent extends Manager
 
         $entity_type = $this->get_selected_entity()->get_entity_type();
 
+        $this->set_parameter(self :: PARAM_ENTITY_ID, $entity_item_id);
+        $this->set_parameter(self :: PARAM_RIGHT_ID, $right_id);
+        $this->set_parameter(self :: PARAM_ENTITY_TYPE, $entity_type);
+
         $context = $this->get_context();
         $locations = $this->get_locations();
 
@@ -58,10 +62,5 @@ class EntityRightsSetterComponent extends Manager
             return $this->display_error_page(
                 htmlentities(Translation :: get('NoObjectsSelected', null, Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ENTITY_TYPE, self :: PARAM_ENTITY_ID, self :: PARAM_RIGHT_ID);
     }
 }

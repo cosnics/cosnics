@@ -26,6 +26,8 @@ class DeleterComponent extends Manager
     {
         $id = Request :: get(self :: PARAM_PUBLICATION_ID);
         $application = Request :: get(self :: PARAM_PUBLICATION_APPLICATION);
+        $this->set_parameter(self :: PARAM_PUBLICATION_ID, $id);
+        $this->set_parameter(self :: PARAM_PUBLICATION_APPLICATION, $application);
 
         if (! empty($id) && ! empty($application))
         {
@@ -57,10 +59,5 @@ class DeleterComponent extends Manager
                         array('OBJECT' => Translation :: get('ContentObject')),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_APPLICATION, self :: PARAM_PUBLICATION_ID);
     }
 }

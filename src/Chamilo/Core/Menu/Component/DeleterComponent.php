@@ -28,6 +28,7 @@ class DeleterComponent extends Manager
     {
         $this->check_allowed();
         $items = $this->getRequest()->get(Manager :: PARAM_ITEM);
+
         $parent_ids = array();
         $failures = 0;
 
