@@ -164,8 +164,7 @@ class FormValidator extends HTML_QuickForm
             'disk_quota',
             null,
             'HTML_QuickForm_Rule_DiskQuota',
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\Quota') .
-                 'php/lib/form/rule/HTML_QuickForm_Rule_DiskQuota.php');
+            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php');
 
         $this->registerRule(
             'jquery_date',
