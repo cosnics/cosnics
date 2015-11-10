@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
 
 /**
  *
@@ -190,7 +191,8 @@ class User extends DataClass
 
     /**
      * Returns the external authentication system unique id for this user (useful for instance with : Shibboleth,
-     * OpenID, LDAP, . ..)
+     * OpenID, LDAP, .
+     * ..)
      *
      * @return String The external unique id
      */
@@ -360,7 +362,8 @@ class User extends DataClass
     }
 
     /**
-     * Sets the password of this user. If Chamilo configuration is set to encrypt the password, this function will also
+     * Sets the password of this user.
+     * If Chamilo configuration is set to encrypt the password, this function will also
      * take care of that.
      *
      * @param $password String the password.
@@ -382,7 +385,8 @@ class User extends DataClass
 
     /**
      * Sets the external authentication system unique id for this user (useful for instance with : Shibboleth, OpenID,
-     * LDAP, . ..)
+     * LDAP, .
+     * ..)
      *
      * @param $external_uid String the external unique id
      */
@@ -698,9 +702,17 @@ class User extends DataClass
 
     public function get_groups($only_retrieve_ids = false)
     {
-        return \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
-            $this->get_id(),
-            $only_retrieve_ids);
+//         if (! $only_retrieve_ids)
+//         {
+            return \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
+                $this->getId(),
+                $only_retrieve_ids);
+//         }
+//         else
+//         {
+//             $userGroupMembershipCacheService = new UserGroupMembershipCacheService();
+//             return $userGroupMembershipCacheService->getMembershipsForUserAndType($this, $only_retrieve_ids);
+//         }
     }
 
     public function get_user_groups()

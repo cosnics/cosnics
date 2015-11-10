@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Lynx\Manager\Action;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Lynx\Action;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Configuration\Configuration;
 
 set_time_limit(0);
 

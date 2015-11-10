@@ -82,7 +82,7 @@ abstract class Manager extends Application
         $user_id = Session :: get_user_id();
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: class_name(), (int) $user_id);
 
-        $language = LocalSetting :: get('platform_language');
+        $language = LocalSetting :: getInstance()->get('platform_language');
 
         $help_item = DataManager :: retrieve_help_item_by_context($context, $identifier, $language);
 

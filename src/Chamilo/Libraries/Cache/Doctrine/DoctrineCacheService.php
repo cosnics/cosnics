@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache\Doctrine;
 
-use Chamilo\Libraries\Cache\CacheServiceInterface;
+use Chamilo\Libraries\Cache\IdentifiableCacheService;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -11,7 +11,7 @@ use Chamilo\Libraries\File\Path;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class DoctrineCacheService implements CacheServiceInterface
+abstract class DoctrineCacheService extends IdentifiableCacheService
 {
 
     /**
@@ -19,12 +19,6 @@ abstract class DoctrineCacheService implements CacheServiceInterface
      * @var \Doctrine\Common\Cache\CacheProvider
      */
     private $cacheProvider;
-
-    /**
-     *
-     * @return string
-     */
-    abstract function getCacheIdentifiers();
 
     /**
      *
@@ -74,48 +68,36 @@ abstract class DoctrineCacheService implements CacheServiceInterface
      *
      * @see \Chamilo\Libraries\Cache\CacheServiceInterface::clearCache()
      */
-    public function clearCache()
+    public function clear()
     {
         return $this->getCacheProvider()->deleteAll();
     }
 
-    public function clearCacheForIdentifiers($identifiers)
+    /**
+     *
+     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clearForIdentifier()
+     */
+    public function clearForIdentifier($identifier)
     {
-        foreach ($identifiers as $identifier)
-        {
-            if (! $this->getCacheProvider()->delete($identifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->getCacheProvider()->delete((string) $identifier);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Cache\CacheServiceInterface::getCache()
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     * @throws \Exception
+     * @return mixed
      */
-    public function getCacheForIdentifier($identifier)
+    public function getForIdentifier($identifier)
     {
-        if (! $this->getCacheProvider()->contains($identifier))
+        if (! $this->getCacheProvider()->contains((string) $identifier))
         {
-            if (! $this->fillCacheForIdentifier($identifier))
+            if (! $this->warmUpForIdentifier($identifier))
             {
                 throw new \Exception('CacheError');
             }
         }
 
-        return $this->getCacheProvider()->fetch($identifier);
-    }
-
-    public function clearAndFillCache()
-    {
-        if (! $this->clearCache())
-        {
-            return false;
-        }
-
-        return $this->fillCache();
+        return $this->getCacheProvider()->fetch((string) $identifier);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-
-
 use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -15,10 +13,11 @@ class Security
 {
 
     /**
-     * This function tackles the XSS injections. Filtering for XSS is very easily done by using the htmlentities()
+     * This function tackles the XSS injections.
+     * Filtering for XSS is very easily done by using the htmlentities()
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
      *
-     * @param string	The variable to filter for XSS
+     * @param string The variable to filter for XSS
      * @return string string
      */
     public function remove_XSS($variable, $is_admin = null)
@@ -133,7 +132,8 @@ class Security
 
     /**
      * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session. This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
+     * session.
+     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
      * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
      * time). Check the token with check_token()
      *
@@ -150,7 +150,7 @@ class Security
      * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
      * attacks)
      *
-     * @param string	The array in which to get the token ('get' or 'post')
+     * @param string The array in which to get the token ('get' or 'post')
      * @return bool if it's the right token, false otherwise
      */
     public function check_token($array = 'post')
@@ -195,7 +195,9 @@ class Security
 
         if (! empty($user_id))
         {
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User :: class_name(), $user_id);
+            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                $user_id);
 
             return $user->is_platform_admin() || $user->is_teacher();
         }

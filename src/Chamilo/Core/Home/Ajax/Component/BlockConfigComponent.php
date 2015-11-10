@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\BlockRendition;
+use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Core\Home\Renderer\Renderer;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  *

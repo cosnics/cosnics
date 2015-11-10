@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Lynx\Remote\DataClass;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Lynx\Source\DataClass\Source;
 use Chamilo\Libraries\File\Path;
 use DOMDocument;
 use DOMXPath;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

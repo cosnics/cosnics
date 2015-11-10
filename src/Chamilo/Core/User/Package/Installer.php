@@ -4,8 +4,9 @@ namespace Chamilo\Core\User\Package;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 
 /**
  * $Id: user_installer.class.php 187 2009-11-13 10:31:25Z vanpouckesven $
@@ -148,8 +149,8 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            LocalSetting :: create_local_setting('platform_language', 'nl', 'Chamilo\Core\Admin', $user->get_id());
-            return true;
+            $localSetting = new LocalSetting(new LocalSettingCacheService(), $user->get_id());
+            return $localSetting->create('platform_language', 'nl', 'Chamilo\Core\Admin');
         }
     }
 }

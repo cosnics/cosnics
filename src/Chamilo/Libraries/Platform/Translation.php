@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
-use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -88,9 +87,9 @@ class Translation
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Cache\Cache
+     * @var \Chamilo\Libraries\Platform\TranslationCacheService
      */
-    private $cache;
+    private $cacheService;
 
     /**
      *
@@ -114,10 +113,7 @@ class Translation
 
         if ($this->usesCaching)
         {
-            if ($this->getCache()->contains($this->languageIsocode))
-            {
-                $this->strings[$this->languageIsocode] = $this->getCache()->fetch($this->languageIsocode);
-            }
+            $this->strings[$this->languageIsocode] = $this->getCacheService()->getForIdentifier($this->languageIsocode);
         }
     }
 
@@ -230,16 +226,16 @@ class Translation
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Cache\PhpFileCache
+     * @return \Chamilo\Libraries\Platform\TranslationCacheService
      */
-    public function getCache()
+    public function getCacheService()
     {
-        if (! isset($this->cache))
+        if (! isset($this->cacheService))
         {
-            $this->cache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Translation'));
+            $this->cacheService = new TranslationCacheService();
         }
 
-        return $this->cache;
+        return $this->cacheService;
     }
 
     /**
@@ -305,11 +301,6 @@ class Translation
             $this->loadCache($language);
         }
 
-        if (! isset($strings[$language][$context]))
-        {
-            $this->loadLanguageTranslations($language, $context);
-        }
-
         if (isset($strings[$language][$context][$variable]))
         {
             $value = $strings[$language][$context][$variable];
@@ -357,51 +348,10 @@ class Translation
     /**
      *
      * @param string $language
-     * @param string $context
-     */
-    private function loadLanguageTranslations($languageIsocode, $context)
-    {
-        $path = $this->getPathUtilities()->getI18nPath($context) . $languageIsocode . '.i18n';
-
-        if (! is_readable($path))
-        {
-            return;
-        }
-
-        $languageStrings = parse_ini_file($path);
-
-        if (! $languageStrings)
-        {
-            return;
-        }
-
-        $this->strings[$languageIsocode][$context] = $languageStrings;
-
-        if ($this->usesCaching)
-        {
-            $this->cache($languageIsocode);
-        }
-    }
-
-    /**
-     *
-     * @param string $language
-     */
-    private function cache($language)
-    {
-        $this->getCache()->save($language, $this->strings[$language]);
-    }
-
-    /**
-     *
-     * @param string $language
      */
     private function loadCache($language)
     {
-        if ($this->getCache()->contains($language))
-        {
-            $this->strings[$language] = $this->getCache()->fetch($language);
-        }
+        $this->strings[$language] = $this->getCacheService()->getForIdentifier($language);
     }
 
     /**
@@ -420,6 +370,7 @@ class Translation
         if (! in_array($variable, self :: $recentlyAdded[$language][$context]))
         {
             $path = $this->getPathUtilities()->namespaceToFullPath($context) . '/resources/i18n/' . $language . '.i18n';
+
             if (is_writable(dirname($path)))
             {
                 if (! $handle = fopen($path, 'a'))

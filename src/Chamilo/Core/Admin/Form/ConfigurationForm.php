@@ -430,7 +430,7 @@ class ConfigurationForm extends FormValidator
             {
                 if ($setting['user_setting'] && $this->is_user_setting_form)
                 {
-                    $configuration_value = LocalSetting :: get($name, $this->context);
+                    $configuration_value = LocalSetting :: getInstance()->get($name, $this->context);
                 }
                 else
                 {

@@ -5,10 +5,11 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
 use Chamilo\Core\Group\Table\Group\GroupTable;
+use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -28,7 +29,6 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: browser.class.php 224 2009-11-13 14:40:30Z kariboe $

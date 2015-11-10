@@ -4,6 +4,7 @@ namespace Chamilo\Core\Help\Component;
 use Chamilo\Core\Help\Manager;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Core\Help\Table\Item\HelpItemTable;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -14,7 +15,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: browser.class.php 226 2009-11-13 14:44:03Z chellee $

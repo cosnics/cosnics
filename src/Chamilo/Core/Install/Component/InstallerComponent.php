@@ -3,10 +3,10 @@ namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Wizard\InstallWizard;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 
 /**
  *

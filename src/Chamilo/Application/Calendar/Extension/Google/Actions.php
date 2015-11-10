@@ -3,10 +3,10 @@ namespace Chamilo\Application\Calendar\Extension\Google;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Platform\Translation;
 
 class Actions extends \Chamilo\Application\Calendar\Actions
 {
@@ -20,7 +20,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $tabs = array();
 
         $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
-        $accessToken = LocalSetting :: get('token', $configurationContext);
+        $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
 
         if (! $accessToken)
         {

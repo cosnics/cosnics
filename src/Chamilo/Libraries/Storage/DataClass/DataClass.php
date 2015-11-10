@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Storage\DataClass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
-use Exception;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Exception;
 
 /**
  * Abstract class that describes a dataclass

@@ -3,11 +3,11 @@ namespace Chamilo\Core\Admin\Core;
 
 use Chamilo\Core\Admin\Component\BrowserComponent;
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Admin breadcrumb generator.

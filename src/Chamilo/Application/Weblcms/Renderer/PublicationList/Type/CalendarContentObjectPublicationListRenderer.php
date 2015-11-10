@@ -125,9 +125,9 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
              $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
         {
-            $renderer->setStartHour(LocalSetting :: get('working_hours_start'));
-            $renderer->setEndHour(LocalSetting :: get('working_hours_end'));
-            $renderer->setHideOtherHours(LocalSetting :: get('hide_none_working_hours'));
+            $renderer->setStartHour(LocalSetting :: getInstance()->get('working_hours_start'));
+            $renderer->setEndHour(LocalSetting :: getInstance()->get('working_hours_end'));
+            $renderer->setHideOtherHours(LocalSetting :: getInstance()->get('hide_none_working_hours'));
         }
 
         $html[] = $renderer->render();

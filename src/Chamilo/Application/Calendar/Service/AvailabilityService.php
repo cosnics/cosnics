@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 

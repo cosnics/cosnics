@@ -16,6 +16,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {
@@ -34,7 +35,9 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
             if ($type_selection)
             {
-                $type_selector = TypeSelector :: populate($this->get_types(), $this->get_user_id());
+                $typeSelectorFactory = new TypeSelectorFactory($this->get_types(), $this->get_user_id());
+                $type_selector = $typeSelectorFactory->getTypeSelector();
+
                 $all_types = $type_selector->get_unique_content_object_template_ids();
 
                 if (! in_array($type_selection, $all_types))
@@ -48,7 +51,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             else
             {
                 $types = $this->get_types();
-                $type_selector = TypeSelector :: populate($types, $this->get_user_id());
+                $typeSelectorFactory = new TypeSelectorFactory($types, $this->get_user_id());
+                $type_selector = $typeSelectorFactory->getTypeSelector();
 
                 if (count($types) == 1 && $type_selector->count_options() == 1)
                 {

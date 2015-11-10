@@ -4,6 +4,7 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\ItemTitles;
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
 
 /**
  *

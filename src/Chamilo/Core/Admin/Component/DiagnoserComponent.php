@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Support\Diagnoser;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: diagnoser.class.php 168 2009-11-12 11:53:23Z vanpouckesven $

@@ -6,11 +6,11 @@ use Chamilo\Core\Help\Manager;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Core\Help\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: updater.class.php 226 2009-11-13 14:44:03Z chellee $

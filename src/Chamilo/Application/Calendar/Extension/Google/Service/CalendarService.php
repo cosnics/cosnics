@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
-use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
+use Chamilo\Application\Calendar\Extension\Google\EventResultSet;
+use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 
 /**
  *

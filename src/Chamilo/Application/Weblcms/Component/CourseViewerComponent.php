@@ -253,7 +253,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         // set user selected language or general platform language
         if ($language == 'platform_language')
         {
-            $language = LocalSetting :: get('platform_language');
+            $language = LocalSetting :: getInstance()->get('platform_language');
         }
 
         Translation :: getInstance()->setLanguageIsocode($language);

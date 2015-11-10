@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *

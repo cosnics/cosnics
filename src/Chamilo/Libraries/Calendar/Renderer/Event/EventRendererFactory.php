@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

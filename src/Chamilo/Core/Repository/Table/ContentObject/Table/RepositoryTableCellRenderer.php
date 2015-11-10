@@ -26,7 +26,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                      '" title="' . htmlentities($content_object->get_type_string()) . '">' . $image . '</a>';
             case ContentObject :: PROPERTY_TITLE :
                 $title = parent :: render_cell($column, $content_object);
-                $title_short = StringUtilities :: getInstance()->truncate($title, 50, false);
+                $title_short = StringUtilities :: getInstance()->truncate($title, 50, true);
                 return '<a href="' .
                      Utilities :: htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                      '" title="' . $title . '">' . $title_short . '</a>';

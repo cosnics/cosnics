@@ -164,8 +164,7 @@ class FormValidator extends HTML_QuickForm
             'disk_quota',
             null,
             'HTML_QuickForm_Rule_DiskQuota',
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\Quota') .
-                 'php/lib/form/rule/HTML_QuickForm_Rule_DiskQuota.php');
+            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php');
 
         $this->registerRule(
             'jquery_date',
@@ -391,7 +390,7 @@ EOT;
     public function add_html_editor($name, $label, $required = true, $options = array(), $attributes = array())
     {
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             $required,
@@ -450,7 +449,7 @@ EOT;
     public function create_html_editor($name, $label, $options = array(), $attributes = array())
     {
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             false,

@@ -19,7 +19,7 @@ class ResourceBundles extends BasicBundles
      */
     protected function getBlacklistedFolders()
     {
-        return array('.hg', 'build', 'Build', 'plugin', 'Test', 'resources', 'Resources');
+        return array('.hg', 'build', 'Build', 'plugin', 'Plugin', 'Test', 'resources', 'Resources');
     }
 
     /**

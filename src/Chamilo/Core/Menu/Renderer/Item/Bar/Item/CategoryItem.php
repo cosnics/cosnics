@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
+use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Menu\Rights;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

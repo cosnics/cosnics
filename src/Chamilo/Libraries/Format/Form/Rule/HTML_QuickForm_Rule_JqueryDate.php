@@ -1,6 +1,4 @@
 <?php
-
-
 use Chamilo\Libraries\Platform\Translation;
 /**
  * @package common.html.formvalidator.Rule

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 
 /**
  *
@@ -31,7 +31,7 @@ class HtmlEditorInstanceComponent extends \Chamilo\Libraries\Ajax\Manager
         $attributes = json_decode($attributes, true);
 
         $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: get('html_editor'),
+            LocalSetting :: getInstance()->get('html_editor'),
             $name,
             $label,
             false,

@@ -39,7 +39,7 @@ class QuickLanguageComponent extends Manager
 
             if ($choice && in_array($choice, $languages))
             {
-                LocalSetting :: create_local_setting('platform_language', $choice);
+                LocalSetting :: getInstance()->create('platform_language', $choice);
             }
         }
 
