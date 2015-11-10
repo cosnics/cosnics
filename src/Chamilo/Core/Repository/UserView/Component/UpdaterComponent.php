@@ -28,6 +28,7 @@ class UpdaterComponent extends Manager
         $trail = BreadcrumbTrail :: get_instance();
 
         $id = Request :: get(self :: PARAM_USER_VIEW_ID);
+        $this->set_parameter(self :: PARAM_USER_VIEW_ID, $id);
         if ($id)
         {
             $user_view = DataManager :: retrieve_by_id(UserView :: class_name(), $id);
@@ -78,14 +79,5 @@ class UpdaterComponent extends Manager
                         array('OBJECT' => Translation :: get('UserView')),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    /**
-     *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_USER_VIEW_ID);
     }
 }

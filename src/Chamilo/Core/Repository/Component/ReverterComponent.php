@@ -30,6 +30,8 @@ class ReverterComponent extends Manager
     public function run()
     {
         $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $ids);
+
         if (! empty($ids))
         {
             if (! is_array($ids))
@@ -96,10 +98,5 @@ class ReverterComponent extends Manager
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
                 Translation :: get('RepositoryManagerBrowserComponent')));
         $breadcrumbtrail->add_help('repository_reverter');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

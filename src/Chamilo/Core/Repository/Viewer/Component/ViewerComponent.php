@@ -20,8 +20,11 @@ class ViewerComponent extends Manager
 
     public function run()
     {
-        if (Request :: get(self :: PARAM_ID))
+        $param_id = Request :: get(self :: PARAM_ID);
+
+        if ($param_id)
         {
+            $this->set_parameter(self :: PARAM_ID, $param_id);
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
                 Request :: get(self :: PARAM_ID));
@@ -80,10 +83,5 @@ class ViewerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSER)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ID);
     }
 }

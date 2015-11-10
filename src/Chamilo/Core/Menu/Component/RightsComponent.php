@@ -25,7 +25,7 @@ class RightsComponent extends Manager implements DelegateComponent
         $this->check_allowed();
 
         $item_id = Request :: get(self :: PARAM_ITEM);
-
+        $this->set_parameter(self :: PARAM_ITEM, $item_id);
         if (! $item_id)
         {
             $location = array(Rights :: get_instance()->get_root(self :: package()));
@@ -55,10 +55,5 @@ class RightsComponent extends Manager implements DelegateComponent
     public function get_available_rights($location)
     {
         return Rights :: get_instance()->get_available_rights();
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ITEM);
     }
 }

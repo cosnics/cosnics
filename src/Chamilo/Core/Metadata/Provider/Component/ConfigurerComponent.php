@@ -37,6 +37,7 @@ class ConfigurerComponent extends Manager
         }
 
         $selectedEntity = $this->getSelectedEntity();
+        $this->set_parameter(self :: PARAM_ENTITY_TYPE, $selectedEntity);
 
         if ($selectedEntity instanceof DataClassEntity)
         {
@@ -168,14 +169,5 @@ class ConfigurerComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_ENTITY_TYPE);
     }
 }

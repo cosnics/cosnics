@@ -34,6 +34,10 @@ class LinkDeleterComponent extends Manager
         $contentObjectIdentifier = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         $linkIdentifiers = Request :: get(self :: PARAM_LINK_ID);
 
+        $this->set_parameter(self :: PARAM_LINK_TYPE, $linkType);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $contentObjectIdentifier);
+        $this->set_parameter(self :: PARAM_LINK_ID, $linkIdentifiers);
+
         if (! $contentObjectIdentifier)
         {
             throw new NoObjectSelectedException(Translation :: get('ContentObject'));
@@ -232,11 +236,5 @@ class LinkDeleterComponent extends Manager
                         self :: PARAM_CONTENT_OBJECT_ID => Request :: get(self :: PARAM_CONTENT_OBJECT_ID))),
                 Translation :: get('RepositoryManagerViewerComponent')));
         $breadcrumbtrail->add_help('repository_link_deleter');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(
-            array(self :: PARAM_CONTENT_OBJECT_ID, self :: PARAM_LINK_TYPE, self :: PARAM_LINK_ID));
     }
 }

@@ -25,6 +25,7 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
+        $this->set_parameter(\Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID, $this->getSchemaId());
 
         $element = new Element();
         $element->set_schema_id($this->getSchemaId());
@@ -82,10 +83,5 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE)),
                 Translation :: get('BrowserComponent')));
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID);
     }
 }
